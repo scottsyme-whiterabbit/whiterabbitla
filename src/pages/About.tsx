@@ -1,5 +1,5 @@
 import AnimatedSection from "@/components/AnimatedSection";
-import scottPhoto from "@/assets/scott-syme-photo.jpg";
+import scottPhoto from "@/assets/about-hero-desert.jpg";
 import creditsPhoto from "@/assets/credits-photo.png";
 import scottCouchImg from "@/assets/scott-couch.jpg";
 import cardsMotionImg from "@/assets/cards-motion-curtain.jpg";
