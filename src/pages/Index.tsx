@@ -115,10 +115,10 @@ const Index = () => {
                 More Than Magic.<br />A Feeling.
               </h2>
                <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">
-                Think of the feeling of flying first class — there's no product you take home, but the experience 
-                stays with you. That's what Scott Syme delivers through White Rabbit. Guests don't just watch magic; 
-                they feel seen, taken care of, and truly alive. They walk away with a story to tell and a memory 
-                that lingers long after the last card is turned.
+                 Scott Syme blends sleight of hand, mentalism, impossible coincidences, and classics of magic with 
+                 humor, audience participation, and moments that engage all the senses. Every showcase is built around 
+                 genuine hospitality — guests don't just watch, they feel seen, taken care of, and truly alive. They 
+                 walk away with a story to tell and a memory that lingers long after the last card is turned.
                </p>
               <Link
                 to="/experience"
