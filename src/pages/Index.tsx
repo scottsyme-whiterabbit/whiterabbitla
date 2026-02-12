@@ -5,6 +5,8 @@ import AnimatedSection from "@/components/AnimatedSection";
 import heroImage from "@/assets/hero-magic.jpg";
 import experienceImg from "@/assets/experience-closeup.jpg";
 import eventCardsImg from "@/assets/event-cards.jpg";
+import penthouseImg from "@/assets/event-penthouse-show.jpg";
+import cocktailImg from "@/assets/event-closeup-cocktail.jpg";
 
 
 import netflixLogo from "@/assets/logos/netflix.png";
@@ -159,6 +161,22 @@ const Index = () => {
         </section>
       </AnimatedSection>
 
+      {/* Photo Break */}
+      <section className="py-0">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <AnimatedSection>
+            <div className="aspect-[4/3] overflow-hidden">
+              <img src={penthouseImg} alt="Scott Syme performing White Rabbit parlor magic show in a luxury Los Angeles penthouse with panoramic city views" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.2}>
+            <div className="aspect-[4/3] overflow-hidden">
+              <img src={cocktailImg} alt="Guests laughing and reacting to close-up magic by Scott Syme at a luxury cocktail event in Los Angeles" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
       {/* Final CTA */}
       <AnimatedSection>
         <section className="py-24 lg:py-32 text-center">
@@ -173,7 +191,6 @@ const Index = () => {
             <Link
               to="/contact"
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors">
-
               Book Now
             </Link>
           </div>

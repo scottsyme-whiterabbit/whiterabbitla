@@ -3,6 +3,8 @@ import scottPhoto from "@/assets/scott-syme-photo.jpg";
 import creditsPhoto from "@/assets/credits-photo.png";
 import scottPerformingImg from "@/assets/event-scott-performing.jpg";
 import guestReactionImg from "@/assets/event-guest-reaction.jpg";
+import cardsDetailImg from "@/assets/event-cards-detail.jpg";
+import silhouetteImg from "@/assets/event-silhouette.jpg";
 import { Link } from "react-router-dom";
 
 const About = () => {
@@ -57,13 +59,18 @@ const About = () => {
 
       {/* In Action */}
       <section className="py-24">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           <AnimatedSection>
             <div className="aspect-[3/4] overflow-hidden">
               <img src={scottPerformingImg} alt="Scott Syme performing close-up magic at a luxury private event in Los Angeles" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
-          <AnimatedSection delay={0.2}>
+          <AnimatedSection delay={0.15}>
+            <div className="aspect-[3/4] overflow-hidden">
+              <img src={cardsDetailImg} alt="Elegant card sleight of hand detail with emerald curtain and cinematic lighting at White Rabbit show" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.3}>
             <div className="aspect-[3/4] overflow-hidden">
               <img src={guestReactionImg} alt="Guest reacting to White Rabbit magic show at a corporate event in Los Angeles" className="w-full h-full object-cover" />
             </div>
