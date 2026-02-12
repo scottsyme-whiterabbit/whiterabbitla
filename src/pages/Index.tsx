@@ -9,15 +9,13 @@ import experienceImg from "@/assets/experience-closeup.jpg";
 import netflixLogo from "@/assets/logos/netflix.png";
 import disneyLogo from "@/assets/logos/disney.png";
 import rollsroyceLogo from "@/assets/logos/rollsroyce.png";
-import morganstanleyLogo from "@/assets/logos/morganstanley.svg";
+import morganstanleyLogo from "@/assets/logos/morganstanley.png";
 import youtubeLogo from "@/assets/logos/youtube.png";
 import hyattLogo from "@/assets/logos/hyatt.png";
 import rivianLogo from "@/assets/logos/rivian.png";
 import paramountLogo from "@/assets/logos/paramount.png";
 import oliviarodrigoLogo from "@/assets/logos/oliviarodrigo.png";
 import taittingerLogo from "@/assets/logos/taittinger.png";
-import blackrabbitroseLogo from "@/assets/logos/blackrabbitrose.svg";
-import fosterallLogo from "@/assets/logos/fosterall.svg";
 import pistolaLogo from "@/assets/logos/pistola-new.png";
 import lionsgateLogo from "@/assets/logos/lionsgate.png";
 import agtLogo from "@/assets/logos/agt.png";
@@ -34,9 +32,6 @@ const clients = [
   { name: "Olivia Rodrigo", logo: oliviarodrigoLogo },
   { name: "Taittinger", logo: taittingerLogo },
   { name: "Lionsgate", logo: lionsgateLogo },
-  { name: "America's Got Talent", logo: agtLogo },
-  { name: "Black Rabbit Rose", logo: blackrabbitroseLogo },
-  { name: "FosterAll", logo: fosterallLogo },
   { name: "Pistola", logo: pistolaLogo },
 ];
 
