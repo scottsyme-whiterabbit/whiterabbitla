@@ -22,8 +22,9 @@ import fosterallLogo from "@/assets/logos/fosterall.png";
 import whowhatwearLogo from "@/assets/logos/whowhatwear.png";
 import sohohouseLogo from "@/assets/logos/sohohouse.png";
 import rideauLogo from "@/assets/logos/rideau.png";
+import lionsgateLogo from "@/assets/logos/lionsgate.png";
 
-// display: 'invert' = white silhouette, 'natural' = show as-is (green bg logos), 'whiteBg' = subtle bg container
+// display: 'invert' = white silhouette, 'natural' = show as-is
 const clients = [
   { name: "Netflix", logo: netflixLogo, display: 'invert' as const },
   { name: "Disney", logo: disneyLogo, display: 'invert' as const },
@@ -36,6 +37,7 @@ const clients = [
   { name: "Olivia Rodrigo", logo: oliviarodrigoLogo, display: 'invert' as const },
   { name: "Hollywood Roosevelt", logo: hollywoodrooseveltLogo, display: 'natural' as const },
   { name: "Taittinger", logo: taittingerLogo, display: 'invert' as const },
+  { name: "Lionsgate", logo: lionsgateLogo, display: 'invert' as const },
   { name: "Black Rabbit Rose", logo: blackrabbitroseLogo, display: 'invert' as const },
   { name: "FosterAll", logo: fosterallLogo, display: 'invert' as const },
   { name: "Who What Wear", logo: whowhatwearLogo, display: 'invert' as const },
