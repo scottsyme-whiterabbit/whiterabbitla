@@ -25,7 +25,7 @@ const Contact = () => {
     const body = encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nEvent Type: ${formData.eventType}\nDate: ${formData.date}\nEvent Location: ${formData.location}\n\n${formData.message}`
     );
-    window.location.href = `mailto:scott.syme@whiterabbitla.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:events@whiterabbitla.com?subject=${subject}&body=${body}`;
     toast({
       title: "Opening your email client",
       description: "Your inquiry details have been prepared.",
@@ -93,6 +93,7 @@ const Contact = () => {
                     Phone Number
                   </label>
                   <Input
+                    required
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -119,6 +120,7 @@ const Contact = () => {
                     Event Date
                   </label>
                   <Input
+                    required
                     type="date"
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
@@ -130,6 +132,7 @@ const Contact = () => {
                     Event Location
                   </label>
                   <Input
+                    required
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                     className="bg-background border-border"
@@ -168,8 +171,8 @@ const Contact = () => {
                 </p>
               </div>
               <div className="space-y-4">
-                <a href="mailto:scott.syme@whiterabbitla.com" className="flex items-center gap-3 font-sans text-sm text-foreground hover:text-accent transition-colors">
-                  <Mail size={18} className="text-accent" /> scott.syme@whiterabbitla.com
+                <a href="mailto:events@whiterabbitla.com" className="flex items-center gap-3 font-sans text-sm text-foreground hover:text-accent transition-colors">
+                  <Mail size={18} className="text-accent" /> events@whiterabbitla.com
                 </a>
                 <a href="tel:+14243941850" className="flex items-center gap-3 font-sans text-sm text-foreground hover:text-accent transition-colors">
                   <Phone size={18} className="text-accent" /> (424) 394-1850
