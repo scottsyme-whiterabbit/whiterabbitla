@@ -44,11 +44,11 @@ const Index = () => {
       {/* Hero */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroImage} alt="Scott Syme performing luxury close-up magic at a private event in Los Angeles" className="w-full h-full object-cover object-[center_30%]" />
+          <img src={heroImage} alt="Scott Syme performing luxury close-up magic at a private event in Los Angeles" className="w-full h-full object-cover object-[center_40%]" />
           <div className="absolute inset-0 bg-forest-dark/60" />
         </div>
 
-        <div className="relative z-10 text-center px-6 max-w-4xl flex flex-col items-center justify-end pb-24 h-full">
+        <div className="relative z-10 text-center px-6 max-w-4xl flex flex-col items-center justify-end pb-10 h-full">
           <motion.p
             className="text-xl text-cream/90 tracking-wide font-bold text-center font-serif md:text-4xl lg:text-5xl"
             initial={{ opacity: 0, y: 20 }}
