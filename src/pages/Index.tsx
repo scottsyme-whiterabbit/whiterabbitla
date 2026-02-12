@@ -34,7 +34,7 @@ const clients = [
   { name: "YouTube", logo: youtubeLogo, display: 'invert' as const },
   { name: "Hyatt", logo: hyattLogo, display: 'invert' as const },
   { name: "Rivian", logo: rivianLogo, display: 'invert' as const },
-  { name: "Paramount", logo: paramountLogo, display: 'natural' as const },
+  { name: "Paramount", logo: paramountLogo, display: 'invert' as const },
   { name: "Olivia Rodrigo", logo: oliviarodrigoLogo, display: 'invert' as const },
   { name: "Hollywood Roosevelt", logo: hollywoodrooseveltLogo, display: 'natural' as const },
   { name: "Taittinger", logo: taittingerLogo, display: 'invert' as const },
@@ -70,11 +70,11 @@ const Index = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1 }}
-            className="mt-10"
+            className="absolute bottom-24 left-1/2 -translate-x-1/2"
           >
             <Link
               to="/contact"
-              className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors"
+              className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-10 py-4 hover:bg-accent hover:text-accent-foreground transition-colors"
             >
               Book an Experience
             </Link>
@@ -99,8 +99,8 @@ const Index = () => {
             </p>
           </div>
           <div className="relative">
-            <div className="flex animate-scroll-logos">
-              {[...clients, ...clients].map((client, i) => (
+            <div className="flex animate-scroll-logos" style={{ width: 'max-content' }}>
+              {[...clients, ...clients, ...clients].map((client, i) => (
                 <div key={`${client.name}-${i}`} className="flex-shrink-0 mx-8 md:mx-12 flex items-center justify-center" style={{ width: '140px', height: '50px' }}>
                   <img
                     src={client.logo}
