@@ -37,7 +37,7 @@ const Experience = () => {
       {/* Hero */}
       <section className="relative min-h-[85vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroDesertImg} alt="Scott Syme in the desert, White Rabbit luxury magician Los Angeles" className="w-full h-full object-cover object-center" style={{ filter: 'contrast(1.1) saturate(0.85) brightness(0.95) sepia(0.15)' }} />
+          <img src={heroDesertImg} alt="Scott Syme in the desert, White Rabbit luxury magician Los Angeles" className="w-full h-full object-cover" style={{ objectPosition: 'center 35%', filter: 'contrast(1.15) saturate(0.8) brightness(0.92) sepia(0.2)' }} />
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark via-forest-dark/30 to-forest-dark/10" />
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-6 pb-16 w-full text-center">
