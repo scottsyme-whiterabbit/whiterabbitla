@@ -5,6 +5,9 @@ import scottPerformingImg from "@/assets/event-scott-performing.jpg";
 import guestReactionImg from "@/assets/event-guest-reaction.jpg";
 import cardsDetailImg from "@/assets/event-cards-detail.jpg";
 import silhouetteImg from "@/assets/event-silhouette.jpg";
+import parlorShowImg from "@/assets/event-parlor-show.jpg";
+import closeupCocktailImg from "@/assets/event-closeup-cocktail.jpg";
+import penthouseShowImg from "@/assets/event-penthouse-show.jpg";
 import { Link } from "react-router-dom";
 
 const About = () => {
@@ -59,20 +62,35 @@ const About = () => {
 
       {/* In Action */}
       <section className="py-12">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-3 gap-4">
           <AnimatedSection>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={scottPerformingImg} alt="Scott Syme performing close-up magic at a luxury private event in Los Angeles" className="w-full h-full object-cover" />
+              <img src={scottPerformingImg} alt="Scott Syme performing close-up magic at a luxury private event" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
-          <AnimatedSection delay={0.15}>
+          <AnimatedSection delay={0.1}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={cardsDetailImg} alt="Elegant card sleight of hand detail with emerald curtain and cinematic lighting at White Rabbit show" className="w-full h-full object-cover" />
+              <img src={cardsDetailImg} alt="Card sleight of hand detail at White Rabbit show" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.2}>
+            <div className="aspect-[3/4] overflow-hidden">
+              <img src={guestReactionImg} alt="Guest reacting to White Rabbit magic show" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.1}>
+            <div className="aspect-[3/4] overflow-hidden">
+              <img src={parlorShowImg} alt="White Rabbit parlor show with emerald curtain backdrop" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.2}>
+            <div className="aspect-[3/4] overflow-hidden">
+              <img src={closeupCocktailImg} alt="Close-up magic at a cocktail event" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.3}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={guestReactionImg} alt="Guest reacting to White Rabbit magic show at a corporate event in Los Angeles" className="w-full h-full object-cover" />
+              <img src={penthouseShowImg} alt="Penthouse magic show performance" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
         </div>
