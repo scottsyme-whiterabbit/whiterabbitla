@@ -3,11 +3,14 @@ import scottPhoto from "@/assets/scott-syme-photo.jpg";
 import creditsPhoto from "@/assets/credits-photo.png";
 import scottPerformingImg from "@/assets/event-scott-performing.jpg";
 import guestReactionImg from "@/assets/event-guest-reaction.jpg";
-import cardsDetailImg from "@/assets/event-cards-detail.jpg";
 import silhouetteImg from "@/assets/event-silhouette.jpg";
 import parlorShowImg from "@/assets/event-parlor-show.jpg";
 import closeupCocktailImg from "@/assets/event-closeup-cocktail.jpg";
 import penthouseShowImg from "@/assets/event-penthouse-show.jpg";
+import scottCouchImg from "@/assets/scott-couch.jpg";
+import cardsMotionImg from "@/assets/cards-motion-curtain.jpg";
+import cardsStackImg from "@/assets/cards-stack-curtain.jpg";
+import cardsFanImg from "@/assets/cards-fan-closeup.jpg";
 import { Link } from "react-router-dom";
 
 const About = () => {
