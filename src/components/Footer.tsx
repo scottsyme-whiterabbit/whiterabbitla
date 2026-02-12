@@ -29,7 +29,7 @@ const Footer = () => {
           {/* Contact */}
           <div className="flex flex-col items-center md:items-end gap-4">
             <h4 className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Get in Touch</h4>
-            <a href="mailto:scott.syme@whiterabbitla.com" className="flex items-center gap-2 text-sm hover:text-cream transition-colors">
+            <a href="mailto:scott.syme@whiterabbitla.com" className="flex items-center gap-2 text-sm hover:text-cream transition-colors">events@whiterabbitla.com
               <Mail size={16} /> scott.syme@whiterabbitla.com
             </a>
             <a href="tel:+14243941850" className="flex items-center gap-2 text-sm hover:text-cream transition-colors">
