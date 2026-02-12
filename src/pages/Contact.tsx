@@ -45,7 +45,8 @@ const Contact = () => {
               Let's Create Magic
             </h1>
             <p className="font-sans text-base text-cream/70 max-w-xl mx-auto">
-              Tell us about your event and Scott will craft the perfect White Rabbit experience.
+              Tell us about your event and Scott will design an atmosphere of wonder and hospitality 
+              that makes your guests feel truly alive.
             </p>
           </AnimatedSection>
         </div>

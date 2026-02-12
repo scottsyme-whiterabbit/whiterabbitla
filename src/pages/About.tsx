@@ -32,19 +32,21 @@ const About = () => {
             <div className="space-y-6 font-sans text-base text-muted-foreground leading-relaxed">
               <p>
                 Based in Los Angeles, Scott Syme is the creative force behind White Rabbit — a luxury magic 
-                experience designed for the world's most discerning audiences. With a career spanning Fortune 500 
-                corporate events, A-list celebrity gatherings, and intimate private affairs, Scott has redefined 
-                what it means to experience magic.
+                experience built on a simple belief: the best entertainment makes people feel truly alive. 
+                Not through tricks, but through an atmosphere of joy, genuine hospitality, and human connection 
+                that guests carry with them long after the night ends.
               </p>
               <p>
-                His client roster reads like a who's who of global excellence: Netflix, Disney, Rolls Royce, 
-                Morgan Stanley, YouTube, Rivian, Hyatt Hotels, Lionsgate, and countless private clients 
-                including billionaires and industry leaders.
+                Think of the feeling of flying first class. There's no product you take home — it's the way 
+                you're treated. The warmth. The feeling of being seen and cared for. That's what Scott delivers, 
+                and it's why the world's most discerning clients — Netflix, Disney, Rolls Royce, Morgan Stanley, 
+                and countless private collectors and industry leaders — trust him with their most important events.
               </p>
               <p>
-                Every White Rabbit performance is a bespoke creation — tailored to the audience, the occasion, 
-                and the atmosphere. Scott doesn't just perform tricks; he crafts moments of genuine wonder that 
-                forge connections and leave lasting impressions.
+                For premium White Rabbit parlor shows, Scott transforms spaces with emerald curtain drapes, 
+                cinematic uplighting, and a curated soundtrack — creating an atmosphere that feels like stepping 
+                into an upscale hotel lobby. The show is bigger emotionally than it is physically. Guests don't 
+                just leave entertained; they leave feeling changed, carrying stories they'll tell for years.
               </p>
             </div>
           </AnimatedSection>
@@ -73,8 +75,8 @@ const About = () => {
           <div className="max-w-3xl mx-auto px-6 text-center">
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">The Mission</p>
             <h2 className="font-serif text-3xl md:text-4xl text-cream italic leading-relaxed">
-              "To elevate magic beyond entertainment — creating immersive, 
-              personalized experiences that redefine what's possible."
+              "To make people feel alive — creating an encounter with joy, wonder, 
+              and hospitality that stays with them long after the last card is turned."
             </h2>
           </div>
         </section>

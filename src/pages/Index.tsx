@@ -109,13 +109,14 @@ const Index = () => {
           <AnimatedSection>
             <div>
               <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">The Experience</p>
-              <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 leading-tight">
-                Magic That Transcends Entertainment
+            <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 leading-tight">
+                More Than Magic.<br />A Feeling.
               </h2>
                <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">
-                Magician Scott Syme delivers bespoke magical experiences through White Rabbit — crafted 
-                for the world's most discerning audiences. From intimate close-up performances to grand 
-                parlor shows, every moment is designed to leave a lasting impression of wonder.
+                Think of the feeling of flying first class — there's no product you take home, but the experience 
+                stays with you. That's what Scott Syme delivers through White Rabbit. Guests don't just watch magic; 
+                they feel seen, taken care of, and truly alive. They walk away with a story to tell and a memory 
+                that lingers long after the last card is turned.
                </p>
               <Link
                 to="/experience"
@@ -148,8 +149,8 @@ const Index = () => {
               )}
             </div>
             <blockquote className="font-serif text-2xl md:text-3xl text-cream/90 italic leading-relaxed mb-8">
-              "Scott's performance was the highlight of our entire event. Our guests are still talking about it 
-              months later. Truly world-class entertainment."
+              "Our guests didn't just enjoy the show — they came alive. Months later, they still talk about 
+              how Scott made them feel. That's not entertainment. That's something else entirely."
             </blockquote>
             <p className="font-sans text-sm tracking-[0.2em] uppercase text-cream/50">
               — Morgan Stanley, Private Client Event
@@ -163,10 +164,11 @@ const Index = () => {
         <section className="py-24 lg:py-32 text-center">
           <div className="max-w-2xl mx-auto px-6">
             <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">
-              Create an Unforgettable Moment
+              Make Your Guests Feel Alive
             </h2>
              <p className="font-sans text-base text-muted-foreground mb-10">
-               Let Scott Syme elevate your next event with a White Rabbit experience your guests will never forget.
+               Scott Syme transforms any space into something extraordinary — an atmosphere of joy, wonder, and genuine 
+               hospitality that your guests will talk about for years to come.
              </p>
             <Link
               to="/contact"
