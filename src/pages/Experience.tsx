@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
-import closeupImg from "@/assets/experience-closeup.jpg";
-import parlorImg from "@/assets/experience-parlor.jpg";
-import corporateImg from "@/assets/experience-corporate.jpg";
-import privateImg from "@/assets/experience-private.jpg";
+import closeupImg from "@/assets/event-closeup-reaction.jpg";
+import parlorImg from "@/assets/event-parlor-show.jpg";
+import corporateImg from "@/assets/event-scott-cards.jpg";
+import privateImg from "@/assets/event-crowd.jpg";
 
 const services = [
   {
