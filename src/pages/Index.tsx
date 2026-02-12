@@ -18,7 +18,6 @@ import oliviarodrigoLogo from "@/assets/logos/oliviarodrigo.png";
 import taittingerLogo from "@/assets/logos/taittinger.png";
 import blackrabbitroseLogo from "@/assets/logos/blackrabbitrose.svg";
 import fosterallLogo from "@/assets/logos/fosterall.svg";
-import sohohouseLogo from "@/assets/logos/sohohouse.png";
 import pistolaLogo from "@/assets/logos/pistola-new.png";
 import lionsgateLogo from "@/assets/logos/lionsgate.png";
 import agtLogo from "@/assets/logos/agt.png";
@@ -38,7 +37,6 @@ const clients = [
   { name: "America's Got Talent", logo: agtLogo },
   { name: "Black Rabbit Rose", logo: blackrabbitroseLogo },
   { name: "FosterAll", logo: fosterallLogo },
-  { name: "Soho House", logo: sohohouseLogo },
   { name: "Pistola", logo: pistolaLogo },
 ];
 
