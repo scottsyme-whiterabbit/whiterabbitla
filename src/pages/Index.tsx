@@ -27,7 +27,7 @@ import rideauLogo from "@/assets/logos/rideau.png";
 const clients = [
   { name: "Netflix", logo: netflixLogo, display: 'invert' as const },
   { name: "Disney", logo: disneyLogo, display: 'invert' as const },
-  { name: "Rolls Royce", logo: rollsroyceLogo, display: 'natural' as const },
+  { name: "Rolls Royce", logo: rollsroyceLogo, display: 'invert' as const },
   { name: "Morgan Stanley", logo: morganstanleyLogo, display: 'invert' as const },
   { name: "YouTube", logo: youtubeLogo, display: 'natural' as const },
   { name: "Hyatt", logo: hyattLogo, display: 'whiteBg' as const },
@@ -35,12 +35,12 @@ const clients = [
   { name: "Paramount", logo: paramountLogo, display: 'natural' as const },
   { name: "Olivia Rodrigo", logo: oliviarodrigoLogo, display: 'invert' as const },
   { name: "Hollywood Roosevelt", logo: hollywoodrooseveltLogo, display: 'natural' as const },
-  { name: "Taittinger", logo: taittingerLogo, display: 'natural' as const },
+  { name: "Taittinger", logo: taittingerLogo, display: 'invert' as const },
   { name: "Black Rabbit Rose", logo: blackrabbitroseLogo, display: 'invert' as const },
   { name: "FosterAll", logo: fosterallLogo, display: 'invert' as const },
   { name: "Who What Wear", logo: whowhatwearLogo, display: 'invert' as const },
   { name: "Soho House", logo: sohohouseLogo, display: 'invert' as const },
-  { name: "Rideau", logo: rideauLogo, display: 'natural' as const },
+  { name: "Rideau", logo: rideauLogo, display: 'invert' as const },
 ];
 
 const Index = () => {
