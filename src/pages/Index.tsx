@@ -115,11 +115,11 @@ const Index = () => {
                 More Than Magic.<br />A Feeling.
               </h2>
                <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">
-                 With a background in luxury real estate and a deep study of world-class hospitality, Scott Syme 
-                 brings a first-class sensibility to every performance. Expect a sophisticated blend of mentalism, 
-                 sleight of hand, and impossible coincidences — woven with humor, audience participation, and moments 
-                 that engage all the senses. Every space is transformed with cinematic lighting and curated atmosphere, 
-                 leaving guests feeling seen, taken care of, and truly alive.
+                 A Scott Syme experience is built on one belief: every guest deserves to feel like the most 
+                 important person in the room. Expect mentalism, sleight of hand, and impossible coincidences 
+                 — all woven with humor, warmth, and moments that pull you in with every sense. The space 
+                 transforms, the atmosphere shifts, and for a brief window of time, the world feels a little 
+                 more alive.
                </p>
               <Link
                 to="/experience"
