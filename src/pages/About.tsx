@@ -113,7 +113,7 @@ const About = () => {
 
       {/* CTA */}
       <AnimatedSection>
-        <section className="py-24 text-center">
+        <section className="py-12 text-center">
           <div className="max-w-2xl mx-auto px-6">
             <h2 className="font-serif text-4xl text-foreground mb-6">Let's Create Something Extraordinary</h2>
             <Link
