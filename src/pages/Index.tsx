@@ -6,9 +6,24 @@ import heroImage from "@/assets/hero-magic.jpg";
 import wrLogo from "@/assets/wr-primary-logo.png";
 import experienceImg from "@/assets/experience-closeup.jpg";
 
+import netflixLogo from "@/assets/logos/netflix.png";
+import disneyLogo from "@/assets/logos/disney.png";
+import rollsroyceLogo from "@/assets/logos/rollsroyce.png";
+import morganstanleyLogo from "@/assets/logos/morganstanley.png";
+import youtubeLogo from "@/assets/logos/youtube.png";
+import hyattLogo from "@/assets/logos/hyatt.png";
+import rivianLogo from "@/assets/logos/rivian.png";
+import lionsgateLogo from "@/assets/logos/lionsgate.png";
+
 const clients = [
-  "Netflix", "Disney", "Rolls Royce", "Morgan Stanley", "YouTube",
-  "Hyatt", "Rivian", "Lionsgate",
+  { name: "Netflix", logo: netflixLogo },
+  { name: "Disney", logo: disneyLogo },
+  { name: "Rolls Royce", logo: rollsroyceLogo },
+  { name: "Morgan Stanley", logo: morganstanleyLogo },
+  { name: "YouTube", logo: youtubeLogo },
+  { name: "Hyatt", logo: hyattLogo },
+  { name: "Rivian", logo: rivianLogo },
+  { name: "Lionsgate", logo: lionsgateLogo },
 ];
 
 const Index = () => {
@@ -69,14 +84,14 @@ const Index = () => {
             <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-cream/40 mb-10">
               Trusted by World-Class Brands
             </p>
-            <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
+            <div className="flex flex-wrap justify-center items-center gap-10 md:gap-14">
               {clients.map((client) => (
-                <span
-                  key={client}
-                  className="font-serif text-lg md:text-xl text-cream/30 tracking-wider"
-                >
-                  {client}
-                </span>
+                <img
+                  key={client.name}
+                  src={client.logo}
+                  alt={client.name}
+                  className="h-8 md:h-10 w-auto object-contain brightness-0 invert opacity-50 hover:opacity-80 transition-opacity"
+                />
               ))}
             </div>
           </div>
