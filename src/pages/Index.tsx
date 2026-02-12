@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 import heroImage from "@/assets/hero-magic-cinematic.jpg";
 import experienceImg from "@/assets/experience-closeup.jpg";
-import eventCardsImg from "@/assets/event-cards.jpg";
+import eventCardsImg from "@/assets/cards-spring-bw.jpg";
 import penthouseImg from "@/assets/event-penthouse-show.jpg";
 import cocktailImg from "@/assets/event-closeup-cocktail.jpg";
 
