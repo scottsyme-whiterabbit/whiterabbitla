@@ -23,6 +23,7 @@ import whowhatwearLogo from "@/assets/logos/whowhatwear.png";
 import sohohouseLogo from "@/assets/logos/sohohouse.png";
 import rideauLogo from "@/assets/logos/rideau.png";
 import lionsgateLogo from "@/assets/logos/lionsgate.png";
+import agtLogo from "@/assets/logos/agt.png";
 
 // display: 'invert' = white silhouette, 'natural' = show as-is
 const clients = [
@@ -38,6 +39,7 @@ const clients = [
   { name: "Hollywood Roosevelt", logo: hollywoodrooseveltLogo, display: 'natural' as const },
   { name: "Taittinger", logo: taittingerLogo, display: 'invert' as const },
   { name: "Lionsgate", logo: lionsgateLogo, display: 'invert' as const },
+  { name: "America's Got Talent", logo: agtLogo, display: 'invert' as const },
   { name: "Black Rabbit Rose", logo: blackrabbitroseLogo, display: 'invert' as const },
   { name: "FosterAll", logo: fosterallLogo, display: 'invert' as const },
   { name: "Who What Wear", logo: whowhatwearLogo, display: 'invert' as const },
