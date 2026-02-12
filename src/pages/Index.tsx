@@ -108,11 +108,12 @@ const Index = () => {
                 More Than Magic.<br />A Feeling.
               </h2>
                <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">
-                 A Scott Syme experience is built on one belief: every guest deserves to feel like the most 
-                 important person in the room. Expect mentalism, sleight of hand, and impossible coincidences 
-                 — all woven with humor, warmth, and moments that pull you in with every sense. The space 
-                 transforms, the atmosphere shifts, and for a brief window of time, the world feels a little 
-                 more alive.
+                 Imagine the hush of a five-star lobby, the thrill of turning left on a flight — that rare feeling 
+                 when every detail has been crafted just for you. Now bring that into a room full of your guests. 
+                 Scott Syme blends world-class sleight of hand, mentalism, and impossible coincidences with the 
+                 warmth of a master host — transforming any space into something cinematic, intimate, and utterly 
+                 alive. Curated lighting, a signature soundtrack, and moments so close you can feel them. This 
+                 isn't a magic show. It's a White Rabbit experience.
                </p>
               <Link
                 to="/experience"
