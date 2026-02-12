@@ -21,19 +21,19 @@ import lionsgateLogo from "@/assets/logos/lionsgate.png";
 import agtLogo from "@/assets/logos/agt.png";
 
 const clients = [
-  { name: "Netflix", logo: netflixLogo },
-  { name: "Disney", logo: disneyLogo },
-  { name: "Rolls Royce", logo: rollsroyceLogo },
-  { name: "Morgan Stanley", logo: morganstanleyLogo },
-  { name: "YouTube", logo: youtubeLogo },
-  { name: "Hyatt", logo: hyattLogo },
-  { name: "Rivian", logo: rivianLogo },
-  { name: "Paramount", logo: paramountLogo },
-  { name: "Olivia Rodrigo", logo: oliviarodrigoLogo },
-  { name: "Taittinger", logo: taittingerLogo },
-  { name: "Lionsgate", logo: lionsgateLogo },
-  { name: "Pistola", logo: pistolaLogo },
-];
+{ name: "Netflix", logo: netflixLogo },
+{ name: "Disney", logo: disneyLogo },
+{ name: "Rolls Royce", logo: rollsroyceLogo },
+{ name: "Morgan Stanley", logo: morganstanleyLogo },
+{ name: "YouTube", logo: youtubeLogo },
+{ name: "Hyatt", logo: hyattLogo },
+{ name: "Rivian", logo: rivianLogo },
+{ name: "Paramount", logo: paramountLogo },
+{ name: "Olivia Rodrigo", logo: oliviarodrigoLogo },
+{ name: "Taittinger", logo: taittingerLogo },
+{ name: "Lionsgate", logo: lionsgateLogo },
+{ name: "Pistola", logo: pistolaLogo }];
+
 
 const Index = () => {
   return (
@@ -50,20 +50,20 @@ const Index = () => {
             className="font-serif text-xl md:text-3xl text-cream/90 italic tracking-wide"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
-          >
-            Redefine the Perception of a Magic Experience
-          </motion.p>
+            transition={{ duration: 1, delay: 0.5 }}>
+            Experiences The Magic 
+
+That Make Your Guests Feel Truly Alive</motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1 }}
-            className="mt-12"
-          >
+            className="mt-12">
+
             <Link
               to="/contact"
-              className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-10 py-4 hover:bg-accent hover:text-accent-foreground transition-colors"
-            >
+              className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-10 py-4 hover:bg-accent hover:text-accent-foreground transition-colors">
+
               Book an Experience
             </Link>
           </motion.div>
@@ -72,8 +72,8 @@ const Index = () => {
         <motion.div
           className="absolute bottom-10 left-1/2 -translate-x-1/2 text-cream/50"
           animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
+          transition={{ duration: 2, repeat: Infinity }}>
+
           <ChevronDown size={32} />
         </motion.div>
       </section>
@@ -88,15 +88,15 @@ const Index = () => {
           </div>
           <div className="relative">
             <div className="flex animate-scroll-logos" style={{ width: 'max-content' }}>
-              {[...clients, ...clients, ...clients].map((client, i) => (
-                <div key={`${client.name}-${i}`} className="flex-shrink-0 flex items-center justify-center px-8 md:px-10" style={{ width: '180px', height: '60px' }}>
+              {[...clients, ...clients, ...clients].map((client, i) =>
+              <div key={`${client.name}-${i}`} className="flex-shrink-0 flex items-center justify-center px-8 md:px-10" style={{ width: '180px', height: '60px' }}>
                   <img
-                    src={client.logo}
-                    alt={client.name}
-                    className="max-h-full max-w-full w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity brightness-0 invert"
-                  />
+                  src={client.logo}
+                  alt={client.name}
+                  className="max-h-full max-w-full w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity brightness-0 invert" />
+
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </section>
@@ -118,8 +118,8 @@ const Index = () => {
               </p>
               <Link
                 to="/experience"
-                className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-primary text-primary px-8 py-3 hover:bg-primary hover:text-primary-foreground transition-colors"
-              >
+                className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-primary text-primary px-8 py-3 hover:bg-primary hover:text-primary-foreground transition-colors">
+
                 Explore
               </Link>
             </div>
@@ -130,8 +130,8 @@ const Index = () => {
               <img
                 src={experienceImg}
                 alt="Luxury close-up magic experience"
-                className="w-full h-full object-cover"
-              />
+                className="w-full h-full object-cover" />
+
             </div>
           </AnimatedSection>
         </div>
@@ -142,9 +142,9 @@ const Index = () => {
         <section className="bg-forest-dark py-24">
           <div className="max-w-3xl mx-auto px-6 text-center">
             <div className="flex justify-center gap-1 mb-8">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} size={20} className="fill-accent text-accent" />
-              ))}
+              {[...Array(5)].map((_, i) =>
+              <Star key={i} size={20} className="fill-accent text-accent" />
+              )}
             </div>
             <blockquote className="font-serif text-2xl md:text-3xl text-cream/90 italic leading-relaxed mb-8">
               "Scott's performance was the highlight of our entire event. Our guests are still talking about it 
@@ -169,15 +169,15 @@ const Index = () => {
             </p>
             <Link
               to="/contact"
-              className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors"
-            >
+              className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors">
+
               Book Now
             </Link>
           </div>
         </section>
       </AnimatedSection>
-    </main>
-  );
+    </main>);
+
 };
 
 export default Index;
