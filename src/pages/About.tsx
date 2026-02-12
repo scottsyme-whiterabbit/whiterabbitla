@@ -3,7 +3,7 @@ import scottPhoto from "@/assets/scott-syme-photo.jpg";
 import creditsPhoto from "@/assets/credits-photo.png";
 import scottPerformingImg from "@/assets/event-scott-performing.jpg";
 import guestReactionImg from "@/assets/event-guest-reaction.jpg";
-import silhouetteImg from "@/assets/event-silhouette.jpg";
+
 import parlorShowImg from "@/assets/event-parlor-show.jpg";
 import closeupCocktailImg from "@/assets/event-closeup-cocktail.jpg";
 import penthouseShowImg from "@/assets/event-penthouse-show.jpg";
