@@ -62,22 +62,22 @@ const About = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-4 gap-4">
           <AnimatedSection>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={scottCouchImg} alt="Scott Syme portrait on couch" className="w-full h-full object-cover" />
+              <img src={cardsMotionImg} alt="Cards in motion against curtain backdrop" className="w-full h-full object-cover scale-x-[-1]" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={cardsMotionImg} alt="Cards in motion against curtain backdrop" className="w-full h-full object-cover" />
+              <img src={scottCouchImg} alt="Scott Syme portrait on couch" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.2}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={cardsStackImg} alt="Card stack flourish with curtain backdrop" className="w-full h-full object-cover" />
+              <img src={cardsFanImg} alt="Close-up card fan sleight of hand" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.3}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={cardsFanImg} alt="Close-up card fan sleight of hand" className="w-full h-full object-cover" />
+              <img src={cardsStackImg} alt="Card stack flourish with curtain backdrop" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
         </div>
