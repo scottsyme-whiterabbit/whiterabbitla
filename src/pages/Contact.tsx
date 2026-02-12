@@ -6,9 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const Contact = () => {
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -19,17 +21,29 @@ const Contact = () => {
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Booking Inquiry — ${formData.eventType}`);
-    const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nEvent Type: ${formData.eventType}\nDate: ${formData.date}\nEvent Location: ${formData.location}\n\n${formData.message}`
-    );
-    window.location.href = `mailto:events@whiterabbitla.com?subject=${subject}&body=${body}`;
-    toast({
-      title: "Opening your email client",
-      description: "Your inquiry details have been prepared.",
-    });
+    setIsSubmitting(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("send-inquiry", {
+        body: formData,
+      });
+      if (error) throw error;
+      toast({
+        title: "Inquiry Sent!",
+        description: "We'll get back to you within 24 hours.",
+      });
+      setFormData({ name: "", email: "", phone: "", eventType: "", date: "", location: "", message: "" });
+    } catch (err) {
+      console.error("Send error:", err);
+      toast({
+        title: "Something went wrong",
+        description: "Please try again or email us directly at events@whiterabbitla.com",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -154,9 +168,10 @@ const Contact = () => {
               </div>
               <Button
                 type="submit"
+                disabled={isSubmitting}
                 className="font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-6 hover:bg-primary/90"
               >
-                Send Inquiry
+                {isSubmitting ? "Sending..." : "Send Inquiry"}
               </Button>
             </form>
           </AnimatedSection>
