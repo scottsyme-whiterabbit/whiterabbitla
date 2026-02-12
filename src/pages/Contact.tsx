@@ -45,7 +45,7 @@ const Contact = () => {
               Let's Create Magic
             </h1>
             <p className="font-sans text-base text-cream/70 max-w-xl mx-auto">
-              Tell us about your event and we'll craft the perfect experience.
+              Tell us about your event and Scott will craft the perfect White Rabbit experience.
             </p>
           </AnimatedSection>
         </div>
@@ -136,7 +136,7 @@ const Contact = () => {
               <div>
                 <h3 className="font-serif text-2xl text-foreground mb-4">Get in Touch</h3>
                 <p className="font-sans text-sm text-muted-foreground leading-relaxed">
-                  For booking inquiries or questions, reach out directly. We respond within 24 hours.
+                  For booking inquiries or questions, reach out to Scott directly. He responds within 24 hours.
                 </p>
               </div>
               <div className="space-y-4">

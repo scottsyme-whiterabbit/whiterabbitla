@@ -18,7 +18,7 @@ const services = [
   },
   {
     title: "Corporate Events",
-    description: "From Fortune 500 galas to product launches, White Rabbit brings sophistication and wonder to corporate gatherings that demand excellence.",
+    description: "From Fortune 500 galas to product launches, Scott Syme brings sophistication and wonder to corporate gatherings that demand excellence.",
     image: corporateImg,
   },
   {
@@ -40,8 +40,8 @@ const Experience = () => {
               Magic, Elevated
             </h1>
             <p className="font-sans text-base text-cream/70 max-w-2xl mx-auto leading-relaxed">
-              Every performance is meticulously crafted for your audience, your venue, and your vision. 
-              Immersive. Personalized. Sophisticated.
+              Every performance by magician Scott Syme is meticulously crafted for your audience, your venue, 
+              and your vision. Immersive. Personalized. Sophisticated.
             </p>
           </AnimatedSection>
         </div>

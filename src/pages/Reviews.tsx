@@ -64,8 +64,8 @@ const Reviews = () => {
             <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-cream mb-6">
               What They Say
             </h1>
-            <p className="font-sans text-base text-cream/70 max-w-xl mx-auto">
-              From Fortune 500 executives to intimate private gatherings — hear from those who've experienced the magic.
+             <p className="font-sans text-base text-cream/70 max-w-xl mx-auto">
+               From Fortune 500 executives to intimate private gatherings — hear from those who've experienced Scott Syme's magic.
             </p>
           </AnimatedSection>
         </div>
