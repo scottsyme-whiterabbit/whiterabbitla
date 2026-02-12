@@ -25,7 +25,7 @@ const About = () => {
       </section>
 
       {/* Bio */}
-      <section className="py-24 lg:py-32">
+      <section className="py-16 lg:py-20">
         <div className="max-w-3xl mx-auto px-6">
           <AnimatedSection>
             <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-8">
@@ -58,7 +58,7 @@ const About = () => {
       </section>
 
       {/* In Action */}
-      <section className="py-24">
+      <section className="py-12">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           <AnimatedSection>
             <div className="aspect-[3/4] overflow-hidden">
