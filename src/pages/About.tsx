@@ -73,12 +73,27 @@ const About = () => {
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={cardsDetailImg} alt="Card sleight of hand detail at White Rabbit show" className="w-full h-full object-cover" />
+              <img src={scottCouchImg} alt="Scott Syme portrait on couch" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.2}>
             <div className="aspect-[3/4] overflow-hidden">
               <img src={guestReactionImg} alt="Guest reacting to White Rabbit magic show" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.1}>
+            <div className="aspect-[3/4] overflow-hidden">
+              <img src={cardsMotionImg} alt="Cards in motion against curtain backdrop" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.2}>
+            <div className="aspect-[3/4] overflow-hidden">
+              <img src={cardsStackImg} alt="Card stack flourish with curtain backdrop" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.3}>
+            <div className="aspect-[3/4] overflow-hidden">
+              <img src={cardsFanImg} alt="Close-up card fan sleight of hand" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
