@@ -38,8 +38,8 @@ const Footer = () => {
             <a href="tel:+14243941850" className="flex items-center gap-2 text-sm hover:text-cream transition-colors">
               <Phone size={16} /> (424) 394-1850
             </a>
-            <a target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-cream transition-colors" href="https://www.instagram.com/scottsyme_/">@scottsyme_
-              <Instagram size={16} /> @whiterabbit_la
+            <a target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-cream transition-colors" href="https://www.instagram.com/scottsyme_/">_
+@<Instagram size={16} /> @whiterabbit_la
             </a>
           </div>
         </div>
