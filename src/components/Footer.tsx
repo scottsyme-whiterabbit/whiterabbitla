@@ -18,15 +18,15 @@ const Footer = () => {
           {/* Quick Links */}
           <div className="flex flex-col items-center gap-3">
             <h4 className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Navigate</h4>
-            {["Experience", "About", "Reviews", "Blog", "Contact"].map((link) => (
-              <Link
-                key={link}
-                to={`/${link.toLowerCase()}`}
-                className="font-sans text-sm tracking-wider hover:text-cream transition-colors"
-              >
+            {["Experience", "About", "Reviews", "Blog", "Contact"].map((link) =>
+            <Link
+              key={link}
+              to={`/${link.toLowerCase()}`}
+              className="font-sans text-sm tracking-wider hover:text-cream transition-colors">
+
                 {link}
               </Link>
-            ))}
+            )}
           </div>
 
           {/* Contact */}
@@ -38,7 +38,7 @@ const Footer = () => {
             <a href="tel:+14243941850" className="flex items-center gap-2 text-sm hover:text-cream transition-colors">
               <Phone size={16} /> (424) 394-1850
             </a>
-            <a href="https://instagram.com/whiterabbit_la" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-cream transition-colors">
+            <a target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-cream transition-colors" href="https://www.instagram.com/scottsyme_/">@scottsyme_
               <Instagram size={16} /> @whiterabbit_la
             </a>
           </div>
@@ -50,8 +50,8 @@ const Footer = () => {
           </p>
         </div>
       </div>
-    </footer>
-  );
+    </footer>);
+
 };
 
 export default Footer;
