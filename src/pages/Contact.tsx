@@ -23,7 +23,7 @@ const Contact = () => {
     const body = encodeURIComponent(
       `Name: ${formData.name}\nEmail: ${formData.email}\nEvent Type: ${formData.eventType}\nDate: ${formData.date}\n\n${formData.message}`
     );
-    window.location.href = `mailto:scott@whiterabbitla.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:scott.syme@whiterabbitla.com?subject=${subject}&body=${body}`;
     toast({
       title: "Opening your email client",
       description: "Your inquiry details have been prepared.",
@@ -140,8 +140,8 @@ const Contact = () => {
                 </p>
               </div>
               <div className="space-y-4">
-                <a href="mailto:scott@whiterabbitla.com" className="flex items-center gap-3 font-sans text-sm text-foreground hover:text-accent transition-colors">
-                  <Mail size={18} className="text-accent" /> scott@whiterabbitla.com
+                <a href="mailto:scott.syme@whiterabbitla.com" className="flex items-center gap-3 font-sans text-sm text-foreground hover:text-accent transition-colors">
+                  <Mail size={18} className="text-accent" /> scott.syme@whiterabbitla.com
                 </a>
                 <a href="tel:+14243941850" className="flex items-center gap-3 font-sans text-sm text-foreground hover:text-accent transition-colors">
                   <Phone size={18} className="text-accent" /> (424) 394-1850
