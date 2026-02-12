@@ -42,7 +42,7 @@ const Index = () => {
       {/* Hero */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroImage} alt="Luxury magic performance" className="w-full h-full object-cover" />
+          <img src={heroImage} alt="Scott Syme performing luxury close-up magic at a private event in Los Angeles" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-forest-dark/60" />
         </div>
 
@@ -131,7 +131,7 @@ const Index = () => {
             <div className="aspect-[4/5] overflow-hidden">
               <img
                 src={eventCardsImg}
-                alt="Scott Syme performing close-up card magic"
+                alt="Scott Syme performing close-up card magic at a luxury corporate event in Los Angeles"
                 className="w-full h-full object-cover" />
 
             </div>

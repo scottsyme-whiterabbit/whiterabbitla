@@ -54,7 +54,7 @@ const Experience = () => {
           <div className={`max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center ${index % 2 === 1 ? "lg:direction-rtl" : ""}`}>
             <AnimatedSection className={index % 2 === 1 ? "lg:order-2" : ""}>
               <div className="aspect-[4/3] overflow-hidden">
-                <img src={service.image} alt={service.title} className="w-full h-full object-cover" />
+                <img src={service.image} alt={`${service.title} — White Rabbit luxury magic entertainment Los Angeles`} className="w-full h-full object-cover" />
               </div>
             </AnimatedSection>
             <AnimatedSection delay={0.2} className={index % 2 === 1 ? "lg:order-1" : ""}>
