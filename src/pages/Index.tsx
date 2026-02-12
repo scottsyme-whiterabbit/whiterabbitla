@@ -23,21 +23,21 @@ import whowhatwearLogo from "@/assets/logos/whowhatwear.png";
 import sohohouseLogo from "@/assets/logos/sohohouse.png";
 
 const clients = [
-  { name: "Netflix", logo: netflixLogo },
-  { name: "Disney", logo: disneyLogo },
-  { name: "Rolls Royce", logo: rollsroyceLogo },
-  { name: "Morgan Stanley", logo: morganstanleyLogo },
-  { name: "YouTube", logo: youtubeLogo },
-  { name: "Hyatt", logo: hyattLogo },
-  { name: "Rivian", logo: rivianLogo },
-  { name: "Lionsgate", logo: lionsgateLogo },
-  { name: "Olivia Rodrigo", logo: oliviarodrigoLogo },
-  { name: "Hollywood Roosevelt", logo: hollywoodrooseveltLogo },
-  { name: "Taittinger", logo: taittingerLogo },
-  { name: "Black Rabbit Rose", logo: blackrabbitroseLogo },
-  { name: "FosterAll", logo: fosterallLogo },
-  { name: "Who What Wear", logo: whowhatwearLogo },
-  { name: "Soho House", logo: sohohouseLogo },
+  { name: "Netflix", logo: netflixLogo, whiteBg: false },
+  { name: "Disney", logo: disneyLogo, whiteBg: true },
+  { name: "Rolls Royce", logo: rollsroyceLogo, whiteBg: true },
+  { name: "Morgan Stanley", logo: morganstanleyLogo, whiteBg: false },
+  { name: "YouTube", logo: youtubeLogo, whiteBg: false },
+  { name: "Hyatt", logo: hyattLogo, whiteBg: true },
+  { name: "Rivian", logo: rivianLogo, whiteBg: false },
+  { name: "Lionsgate", logo: lionsgateLogo, whiteBg: false },
+  { name: "Olivia Rodrigo", logo: oliviarodrigoLogo, whiteBg: false },
+  { name: "Hollywood Roosevelt", logo: hollywoodrooseveltLogo, whiteBg: true },
+  { name: "Taittinger", logo: taittingerLogo, whiteBg: false },
+  { name: "Black Rabbit Rose", logo: blackrabbitroseLogo, whiteBg: false },
+  { name: "FosterAll", logo: fosterallLogo, whiteBg: false },
+  { name: "Who What Wear", logo: whowhatwearLogo, whiteBg: false },
+  { name: "Soho House", logo: sohohouseLogo, whiteBg: false },
 ];
 
 const Index = () => {
@@ -106,7 +106,7 @@ const Index = () => {
                   <img
                     src={client.logo}
                     alt={client.name}
-                    className="max-h-[40px] max-w-[130px] w-auto h-auto object-contain brightness-0 invert opacity-50 hover:opacity-80 transition-opacity"
+                    className={`max-h-[40px] max-w-[130px] w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity ${client.whiteBg ? 'rounded bg-white/10 p-1' : 'brightness-0 invert'}`}
                   />
                 </div>
               ))}
