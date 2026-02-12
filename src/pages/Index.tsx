@@ -111,11 +111,11 @@ That Make Your Guests Feel Truly Alive
               <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 leading-tight">
                 Magic That Transcends Entertainment
               </h2>
-              <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">
-                White Rabbit delivers bespoke magical experiences for the world's most discerning audiences. 
-                From intimate close-up performances to grand parlor shows, every moment is crafted 
-                to leave a lasting impression of wonder.
-              </p>
+               <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">
+                Magician Scott Syme delivers bespoke magical experiences through White Rabbit — crafted 
+                for the world's most discerning audiences. From intimate close-up performances to grand 
+                parlor shows, every moment is designed to leave a lasting impression of wonder.
+               </p>
               <Link
                 to="/experience"
                 className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-primary text-primary px-8 py-3 hover:bg-primary hover:text-primary-foreground transition-colors">
@@ -164,9 +164,9 @@ That Make Your Guests Feel Truly Alive
             <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">
               Create an Unforgettable Moment
             </h2>
-            <p className="font-sans text-base text-muted-foreground mb-10">
-              Elevate your next event with an experience your guests will never forget.
-            </p>
+             <p className="font-sans text-base text-muted-foreground mb-10">
+               Let Scott Syme elevate your next event with a White Rabbit experience your guests will never forget.
+             </p>
             <Link
               to="/contact"
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors">
