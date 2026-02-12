@@ -115,10 +115,10 @@ const Index = () => {
                 More Than Magic.<br />A Feeling.
               </h2>
                <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">
-                 Scott Syme blends sleight of hand, mentalism, impossible coincidences, and classics of magic with 
-                 humor, audience participation, and moments that engage all the senses. Every showcase is built around 
-                 genuine hospitality — guests don't just watch, they feel seen, taken care of, and truly alive. They 
-                 walk away with a story to tell and a memory that lingers long after the last card is turned.
+                 Scott Syme transforms any space into a first-class experience — cinematic lighting, curated 
+                 atmosphere, and world-class sleight of hand that makes every guest feel like the most important 
+                 person in the room. It's not just a performance; it's an environment of warmth, wonder, and 
+                 genuine hospitality that lingers long after the last card is turned.
                </p>
               <Link
                 to="/experience"
