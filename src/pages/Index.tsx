@@ -185,7 +185,7 @@ const Index = () => {
 
       {/* Final CTA */}
       <AnimatedSection>
-        <section className="py-24 lg:py-32 text-center">
+        <section className="py-12 lg:py-16 text-center">
           <div className="max-w-2xl mx-auto px-6">
             <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">
               Make Your Guests Feel Alive
