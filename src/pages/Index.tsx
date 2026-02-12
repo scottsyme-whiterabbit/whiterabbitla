@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ChevronDown, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
-import heroImage from "@/assets/hero-magic.jpg";
+import heroImage from "@/assets/hero-magic-cinematic.jpg";
 import experienceImg from "@/assets/experience-closeup.jpg";
 import eventCardsImg from "@/assets/event-cards.jpg";
 import penthouseImg from "@/assets/event-penthouse-show.jpg";
@@ -50,7 +50,7 @@ const Index = () => {
 
         <div className="relative z-10 text-center px-6 max-w-4xl flex flex-col items-center justify-end pb-16 h-full">
           <motion.p
-            className="text-xl text-cream/90 tracking-wide font-bold text-center font-serif md:text-4xl"
+            className="text-2xl text-cream/90 tracking-wide font-bold text-center font-serif md:text-5xl lg:text-6xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}>
