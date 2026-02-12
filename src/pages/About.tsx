@@ -11,9 +11,9 @@ const About = () => {
   return (
     <main className="pt-20">
       {/* Hero with Scott's photo */}
-      <section className="relative min-h-[70vh] flex items-end overflow-hidden">
+      <section className="relative min-h-[85vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">
-          <img src={scottPhoto} alt="Scott Syme, Los Angeles luxury magician and founder of White Rabbit" className="w-full h-full object-cover object-top" />
+          <img src={scottPhoto} alt="Scott Syme, Los Angeles luxury magician and founder of White Rabbit" className="w-full h-full object-cover object-[center_30%]" />
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark via-forest-dark/40 to-transparent" />
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-6 pb-16 w-full">
