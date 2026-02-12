@@ -1,12 +1,6 @@
 import AnimatedSection from "@/components/AnimatedSection";
 import scottPhoto from "@/assets/scott-syme-photo.jpg";
 import creditsPhoto from "@/assets/credits-photo.png";
-import scottPerformingImg from "@/assets/event-scott-performing.jpg";
-import guestReactionImg from "@/assets/event-guest-reaction.jpg";
-
-import parlorShowImg from "@/assets/event-parlor-show.jpg";
-import closeupCocktailImg from "@/assets/event-closeup-cocktail.jpg";
-import penthouseShowImg from "@/assets/event-penthouse-show.jpg";
 import scottCouchImg from "@/assets/scott-couch.jpg";
 import cardsMotionImg from "@/assets/cards-motion-curtain.jpg";
 import cardsStackImg from "@/assets/cards-stack-curtain.jpg";
@@ -65,20 +59,10 @@ const About = () => {
 
       {/* In Action */}
       <section className="py-12">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-4 gap-4">
           <AnimatedSection>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={scottPerformingImg} alt="Scott Syme performing close-up magic at a luxury private event" className="w-full h-full object-cover" />
-            </div>
-          </AnimatedSection>
-          <AnimatedSection delay={0.1}>
-            <div className="aspect-[3/4] overflow-hidden">
               <img src={scottCouchImg} alt="Scott Syme portrait on couch" className="w-full h-full object-cover" />
-            </div>
-          </AnimatedSection>
-          <AnimatedSection delay={0.2}>
-            <div className="aspect-[3/4] overflow-hidden">
-              <img src={guestReactionImg} alt="Guest reacting to White Rabbit magic show" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
@@ -94,21 +78,6 @@ const About = () => {
           <AnimatedSection delay={0.3}>
             <div className="aspect-[3/4] overflow-hidden">
               <img src={cardsFanImg} alt="Close-up card fan sleight of hand" className="w-full h-full object-cover" />
-            </div>
-          </AnimatedSection>
-          <AnimatedSection delay={0.1}>
-            <div className="aspect-[3/4] overflow-hidden">
-              <img src={parlorShowImg} alt="White Rabbit parlor show with emerald curtain backdrop" className="w-full h-full object-cover" />
-            </div>
-          </AnimatedSection>
-          <AnimatedSection delay={0.2}>
-            <div className="aspect-[3/4] overflow-hidden">
-              <img src={closeupCocktailImg} alt="Close-up magic at a cocktail event" className="w-full h-full object-cover" />
-            </div>
-          </AnimatedSection>
-          <AnimatedSection delay={0.3}>
-            <div className="aspect-[3/4] overflow-hidden">
-              <img src={penthouseShowImg} alt="Penthouse magic show performance" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
         </div>
