@@ -41,10 +41,21 @@ const About = () => {
                 elite craft and warm showmanship to every performance.
               </p>
               <p>
-                Think of the feeling of flying first class. There's no product you take home — it's the way 
-                you're treated. The warmth. The feeling of being seen and cared for. That's what Scott delivers, 
-                and it's why the world's most discerning clients — Netflix, Disney, Rolls Royce, Morgan Stanley, 
-                and countless private collectors and industry leaders — trust him with their most important events.
+                Scott's path to magic wasn't a straight line — and that's what makes him different. Before 
+                White Rabbit, he built a career in luxury real estate at Compass in Beverly Hills, where he 
+                learned to anticipate the needs of high-net-worth clients and deliver white-glove service. 
+                When he decided to pursue magic full-time, he took a job as a hotel valet — not out of 
+                necessity, but intention. He wanted to study hospitality from the ground up, learning what 
+                makes people feel genuinely welcomed and cared for. On his very first day after leaving 
+                that position to become a full-time magician, he was invited to perform at a billionaire's 
+                home — a moment that cemented what he already felt: he was exactly where he was meant to be.
+              </p>
+              <p>
+                That combination of business acumen, hospitality training, and world-class sleight of hand 
+                is why Fortune 500 companies, charitable organizations, and the most discerning private clients — 
+                Netflix, Disney, Rolls Royce, Morgan Stanley, and countless industry leaders — trust Scott 
+                with their most important events. When you hire White Rabbit, you're not just booking a 
+                magician. You're hiring someone who has dedicated his life to making people feel extraordinary.
               </p>
               <p>
                 For premium White Rabbit parlor shows, Scott transforms spaces with emerald curtain drapes, 
