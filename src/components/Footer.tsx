@@ -35,8 +35,8 @@ const Footer = () => {
             <a href="mailto:scott@whiterabbitla.com" className="flex items-center gap-2 text-sm hover:text-cream transition-colors">
               <Mail size={16} /> scott@whiterabbitla.com
             </a>
-            <a href="tel:+13109266834" className="flex items-center gap-2 text-sm hover:text-cream transition-colors">
-              <Phone size={16} /> (310) 926-6834
+            <a href="tel:+14243941850" className="flex items-center gap-2 text-sm hover:text-cream transition-colors">
+              <Phone size={16} /> (424) 394-1850
             </a>
             <a href="https://instagram.com/whiterabbit_la" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm hover:text-cream transition-colors">
               <Instagram size={16} /> @whiterabbit_la

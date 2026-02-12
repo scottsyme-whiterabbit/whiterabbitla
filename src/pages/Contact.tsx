@@ -143,8 +143,8 @@ const Contact = () => {
                 <a href="mailto:scott@whiterabbitla.com" className="flex items-center gap-3 font-sans text-sm text-foreground hover:text-accent transition-colors">
                   <Mail size={18} className="text-accent" /> scott@whiterabbitla.com
                 </a>
-                <a href="tel:+13109266834" className="flex items-center gap-3 font-sans text-sm text-foreground hover:text-accent transition-colors">
-                  <Phone size={18} className="text-accent" /> (310) 926-6834
+                <a href="tel:+14243941850" className="flex items-center gap-3 font-sans text-sm text-foreground hover:text-accent transition-colors">
+                  <Phone size={18} className="text-accent" /> (424) 394-1850
                 </a>
                 <a href="https://instagram.com/whiterabbit_la" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 font-sans text-sm text-foreground hover:text-accent transition-colors">
                   <Instagram size={18} className="text-accent" /> @whiterabbit_la
