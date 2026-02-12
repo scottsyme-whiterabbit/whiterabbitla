@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import wrLogo from "@/assets/wr-secondary-logo.png";
+import wrLogo from "@/assets/wr-symbol.png";
 
 const navLinks = [
   { to: "/experience", label: "Experience" },

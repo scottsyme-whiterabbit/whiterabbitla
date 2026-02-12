@@ -3,8 +3,8 @@ import { ChevronDown, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 import heroImage from "@/assets/hero-magic.jpg";
-import wrLogo from "@/assets/wr-primary-logo.png";
 import experienceImg from "@/assets/experience-closeup.jpg";
+
 
 import netflixLogo from "@/assets/logos/netflix.png";
 import disneyLogo from "@/assets/logos/disney.png";
@@ -29,8 +29,8 @@ const clients = [
   { name: "Disney", logo: disneyLogo, display: 'invert' as const },
   { name: "Rolls Royce", logo: rollsroyceLogo, display: 'invert' as const },
   { name: "Morgan Stanley", logo: morganstanleyLogo, display: 'invert' as const },
-  { name: "YouTube", logo: youtubeLogo, display: 'natural' as const },
-  { name: "Hyatt", logo: hyattLogo, display: 'whiteBg' as const },
+  { name: "YouTube", logo: youtubeLogo, display: 'invert' as const },
+  { name: "Hyatt", logo: hyattLogo, display: 'invert' as const },
   { name: "Rivian", logo: rivianLogo, display: 'invert' as const },
   { name: "Paramount", logo: paramountLogo, display: 'natural' as const },
   { name: "Olivia Rodrigo", logo: oliviarodrigoLogo, display: 'invert' as const },
@@ -54,14 +54,6 @@ const Index = () => {
         </div>
 
         <div className="relative z-10 text-center px-6 max-w-4xl">
-          <motion.img
-            src={wrLogo}
-            alt="White Rabbit"
-            className="h-24 md:h-32 mx-auto mb-8 brightness-0 invert"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2 }}
-          />
           <motion.p
             className="font-serif text-xl md:text-3xl text-cream/90 italic tracking-wide"
             initial={{ opacity: 0, y: 20 }}
@@ -109,7 +101,7 @@ const Index = () => {
                   <img
                     src={client.logo}
                     alt={client.name}
-                    className={`max-h-[40px] max-w-[130px] w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity ${client.display === 'whiteBg' ? 'rounded bg-white/10 p-1' : client.display === 'natural' ? 'rounded' : 'brightness-0 invert'}`}
+                    className={`max-h-[40px] max-w-[130px] w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity ${client.display === 'natural' ? 'rounded' : 'brightness-0 invert'}`}
                   />
                 </div>
               ))}
