@@ -25,9 +25,9 @@ import sohohouseLogo from "@/assets/logos/sohohouse.png";
 const clients = [
   { name: "Netflix", logo: netflixLogo, whiteBg: false },
   { name: "Disney", logo: disneyLogo, whiteBg: true },
-  { name: "Rolls Royce", logo: rollsroyceLogo, whiteBg: true },
+  { name: "Rolls Royce", logo: rollsroyceLogo, whiteBg: false },
   { name: "Morgan Stanley", logo: morganstanleyLogo, whiteBg: false },
-  { name: "YouTube", logo: youtubeLogo, whiteBg: false },
+  { name: "YouTube", logo: youtubeLogo, whiteBg: true },
   { name: "Hyatt", logo: hyattLogo, whiteBg: true },
   { name: "Rivian", logo: rivianLogo, whiteBg: false },
   { name: "Lionsgate", logo: lionsgateLogo, whiteBg: false },
