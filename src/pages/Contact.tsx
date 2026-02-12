@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Instagram, Mail, Phone } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
-import contactBg from "@/assets/contact-bg.jpg";
+import contactBg from "@/assets/event-silhouette.jpg";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";

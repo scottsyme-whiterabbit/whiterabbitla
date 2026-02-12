@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
-import closeupImg from "@/assets/event-closeup-reaction.jpg";
-import parlorImg from "@/assets/event-parlor-show.jpg";
-import corporateImg from "@/assets/event-scott-cards.jpg";
-import privateImg from "@/assets/event-crowd.jpg";
+import closeupImg from "@/assets/event-closeup-cocktail.jpg";
+import parlorImg from "@/assets/event-parlor-stage.jpg";
+import corporateImg from "@/assets/event-penthouse-show.jpg";
+import privateImg from "@/assets/event-group-photo.jpg";
+import cardsEmeraldImg from "@/assets/event-cards-emerald.jpg";
+import intimateImg from "@/assets/event-closeup-intimate.jpg";
 
 const services = [
   {
@@ -72,6 +74,27 @@ const Experience = () => {
           </div>
         </section>
       ))}
+
+      {/* Atmosphere Photo Strip */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+          <AnimatedSection>
+            <div className="aspect-[3/4] overflow-hidden">
+              <img src={cardsEmeraldImg} alt="Close-up of card sleight of hand with emerald green curtain backdrop at White Rabbit parlor show Los Angeles" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.15}>
+            <div className="aspect-[3/4] overflow-hidden">
+              <img src={intimateImg} alt="Guests captivated by intimate close-up magic performance at luxury Los Angeles event" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.3}>
+            <div className="aspect-[3/4] overflow-hidden">
+              <img src={parlorImg} alt="Scott Syme performing parlor magic show with emerald curtains and cinematic uplighting Los Angeles" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
 
       {/* CTA */}
       <AnimatedSection>
