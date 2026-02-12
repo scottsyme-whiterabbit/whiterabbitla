@@ -12,8 +12,10 @@ const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     eventType: "",
     date: "",
+    location: "",
     message: "",
   });
 
@@ -21,7 +23,7 @@ const Contact = () => {
     e.preventDefault();
     const subject = encodeURIComponent(`Booking Inquiry — ${formData.eventType}`);
     const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\nEvent Type: ${formData.eventType}\nDate: ${formData.date}\n\n${formData.message}`
+      `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nEvent Type: ${formData.eventType}\nDate: ${formData.date}\nEvent Location: ${formData.location}\n\n${formData.message}`
     );
     window.location.href = `mailto:scott.syme@whiterabbitla.com?subject=${subject}&body=${body}`;
     toast({
@@ -35,7 +37,7 @@ const Contact = () => {
       {/* Hero */}
       <section className="relative py-24 lg:py-32 overflow-hidden">
         <div className="absolute inset-0">
-          <img src={contactBg} alt="" className="w-full h-full object-cover" />
+          <img src={contactBg} alt="Book Scott Syme White Rabbit magician for luxury events in Los Angeles" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-forest-dark/80" />
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
@@ -88,6 +90,18 @@ const Contact = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 block">
+                    Phone Number
+                  </label>
+                  <Input
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    className="bg-background border-border"
+                    placeholder="(555) 123-4567"
+                  />
+                </div>
+                <div>
+                  <label className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 block">
                     Event Type
                   </label>
                   <Input
@@ -98,6 +112,8 @@ const Contact = () => {
                     placeholder="Corporate, Private, Wedding..."
                   />
                 </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 block">
                     Event Date
@@ -107,6 +123,17 @@ const Contact = () => {
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                     className="bg-background border-border"
+                  />
+                </div>
+                <div>
+                  <label className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 block">
+                    Event Location
+                  </label>
+                  <Input
+                    value={formData.location}
+                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                    className="bg-background border-border"
+                    placeholder="City, venue, or address"
                   />
                 </div>
               </div>

@@ -11,7 +11,7 @@ const About = () => {
       {/* Hero with Scott's photo */}
       <section className="relative min-h-[70vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">
-          <img src={scottPhoto} alt="Scott Syme, Magician" className="w-full h-full object-cover object-top" />
+          <img src={scottPhoto} alt="Scott Syme, Los Angeles luxury magician and founder of White Rabbit" className="w-full h-full object-cover object-top" />
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark via-forest-dark/40 to-transparent" />
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-6 pb-16 w-full">
@@ -34,7 +34,9 @@ const About = () => {
                 Based in Los Angeles, Scott Syme is the creative force behind White Rabbit — a luxury magic 
                 experience built on a simple belief: the best entertainment makes people feel truly alive. 
                 Not through tricks, but through an atmosphere of joy, genuine hospitality, and human connection 
-                that guests carry with them long after the night ends.
+                that guests carry with them long after the night ends. A proud member of the world-famous 
+                Magic Castle in Hollywood and the International Brotherhood of Magicians, Scott brings both 
+                elite craft and warm showmanship to every performance.
               </p>
               <p>
                 Think of the feeling of flying first class. There's no product you take home — it's the way 
@@ -58,12 +60,12 @@ const About = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 gap-6">
           <AnimatedSection>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={scottPerformingImg} alt="Scott Syme performing live" className="w-full h-full object-cover" />
+              <img src={scottPerformingImg} alt="Scott Syme performing close-up magic at a luxury private event in Los Angeles" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.2}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={guestReactionImg} alt="Guest reacting to magic" className="w-full h-full object-cover" />
+              <img src={guestReactionImg} alt="Guest reacting to White Rabbit magic show at a corporate event in Los Angeles" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
         </div>
@@ -91,7 +93,7 @@ const About = () => {
               Trusted by the Best
             </h2>
             <div className="overflow-hidden">
-              <img src={creditsPhoto} alt="White Rabbit client logos" className="w-full h-auto" />
+              <img src={creditsPhoto} alt="White Rabbit magician client logos including Netflix, Disney, Rolls Royce, Morgan Stanley, and more" className="w-full h-auto" />
             </div>
           </AnimatedSection>
         </div>
