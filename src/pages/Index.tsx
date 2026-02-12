@@ -40,7 +40,7 @@ const clients = [
   { name: "Black Rabbit Rose", logo: blackrabbitroseLogo },
   { name: "FosterAll", logo: fosterallLogo },
   { name: "Who What Wear", logo: whowhatwearLogo },
-  { name: "Soho House", logo: sohohouseLogo },
+  { name: "Soho House", logo: sohohouseLogo, invertLogo: true },
   { name: "Pistola", logo: pistolaLogo },
 ];
 
@@ -102,7 +102,7 @@ const Index = () => {
                   <img
                     src={client.logo}
                     alt={client.name}
-                    className="max-h-[50px] max-w-[150px] w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity brightness-0 invert"
+                    className={`max-h-[50px] max-w-[150px] w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity ${client.invertLogo ? 'invert' : 'brightness-0 invert'}`}
                   />
                 </div>
               ))}
