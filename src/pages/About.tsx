@@ -83,7 +83,7 @@ const About = () => {
         <section className="bg-forest-dark py-24">
           <div className="max-w-3xl mx-auto px-6 text-center">
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">The Mission</p>
-            <h2 className="font-serif text-3xl md:text-4xl text-cream italic leading-relaxed">
+            <h2 className="font-serif text-3xl md:text-4xl text-cream leading-relaxed">
               "To make people feel alive — creating an encounter with joy, wonder, 
               and hospitality that stays with them long after the last card is turned."
             </h2>
