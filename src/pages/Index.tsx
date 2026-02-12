@@ -47,13 +47,13 @@ const Index = () => {
 
         <div className="relative z-10 text-center px-6 max-w-4xl flex flex-col items-center justify-end pb-16 h-full">
           <motion.p
-            className="font-serif text-xl md:text-3xl text-cream/90 italic tracking-wide"
+            className="text-xl md:text-3xl text-cream/90 italic tracking-wide font-bold text-center font-serif"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}>
-            Experience Magic 
-
-That Make Your Guests Feel Truly Alive</motion.p>
+            Experience Magic 
+That Make Your Guests Feel Truly Alive
+          </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
