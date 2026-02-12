@@ -19,7 +19,8 @@ import taittingerLogo from "@/assets/logos/taittinger.png";
 import blackrabbitroseLogo from "@/assets/logos/blackrabbitrose.svg";
 import fosterallLogo from "@/assets/logos/fosterall.svg";
 import whowhatwearLogo from "@/assets/logos/whowhatwear.svg";
-import sohohouseLogo from "@/assets/logos/sohohouse.svg";
+import sohohouseLogo from "@/assets/logos/sohohouse.jpg";
+import pistolaLogo from "@/assets/logos/pistola-new.png";
 import lionsgateLogo from "@/assets/logos/lionsgate.png";
 import agtLogo from "@/assets/logos/agt.png";
 
@@ -40,6 +41,7 @@ const clients = [
   { name: "FosterAll", logo: fosterallLogo },
   { name: "Who What Wear", logo: whowhatwearLogo },
   { name: "Soho House", logo: sohohouseLogo },
+  { name: "Pistola", logo: pistolaLogo },
 ];
 
 const Index = () => {
@@ -52,7 +54,7 @@ const Index = () => {
           <div className="absolute inset-0 bg-forest-dark/60" />
         </div>
 
-        <div className="relative z-10 text-center px-6 max-w-4xl">
+        <div className="relative z-10 text-center px-6 max-w-4xl flex flex-col items-center justify-end pb-16 h-full">
           <motion.p
             className="font-serif text-xl md:text-3xl text-cream/90 italic tracking-wide"
             initial={{ opacity: 0, y: 20 }}
@@ -65,7 +67,7 @@ const Index = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1 }}
-            className="absolute bottom-12 left-1/2 -translate-x-1/2"
+            className="mt-12"
           >
             <Link
               to="/contact"
@@ -96,7 +98,7 @@ const Index = () => {
           <div className="relative">
             <div className="flex animate-scroll-logos" style={{ width: 'max-content' }}>
               {[...clients, ...clients, ...clients].map((client, i) => (
-                <div key={`${client.name}-${i}`} className="flex-shrink-0 mx-10 md:mx-14 flex items-center justify-center" style={{ width: '160px', height: '60px' }}>
+                <div key={`${client.name}-${i}`} className="flex-shrink-0 mx-6 md:mx-8 flex items-center justify-center" style={{ width: '160px', height: '60px' }}>
                   <img
                     src={client.logo}
                     alt={client.name}
