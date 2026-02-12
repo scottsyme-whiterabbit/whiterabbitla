@@ -3,11 +3,14 @@ import scottPhoto from "@/assets/scott-syme-photo.jpg";
 import creditsPhoto from "@/assets/credits-photo.png";
 import scottPerformingImg from "@/assets/event-scott-performing.jpg";
 import guestReactionImg from "@/assets/event-guest-reaction.jpg";
-import cardsDetailImg from "@/assets/event-cards-detail.jpg";
-import silhouetteImg from "@/assets/event-silhouette.jpg";
+
 import parlorShowImg from "@/assets/event-parlor-show.jpg";
 import closeupCocktailImg from "@/assets/event-closeup-cocktail.jpg";
 import penthouseShowImg from "@/assets/event-penthouse-show.jpg";
+import scottCouchImg from "@/assets/scott-couch.jpg";
+import cardsMotionImg from "@/assets/cards-motion-curtain.jpg";
+import cardsStackImg from "@/assets/cards-stack-curtain.jpg";
+import cardsFanImg from "@/assets/cards-fan-closeup.jpg";
 import { Link } from "react-router-dom";
 
 const About = () => {
@@ -70,12 +73,27 @@ const About = () => {
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={cardsDetailImg} alt="Card sleight of hand detail at White Rabbit show" className="w-full h-full object-cover" />
+              <img src={scottCouchImg} alt="Scott Syme portrait on couch" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.2}>
             <div className="aspect-[3/4] overflow-hidden">
               <img src={guestReactionImg} alt="Guest reacting to White Rabbit magic show" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.1}>
+            <div className="aspect-[3/4] overflow-hidden">
+              <img src={cardsMotionImg} alt="Cards in motion against curtain backdrop" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.2}>
+            <div className="aspect-[3/4] overflow-hidden">
+              <img src={cardsStackImg} alt="Card stack flourish with curtain backdrop" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.3}>
+            <div className="aspect-[3/4] overflow-hidden">
+              <img src={cardsFanImg} alt="Close-up card fan sleight of hand" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
