@@ -101,8 +101,8 @@ const About = () => {
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4 text-center">Notable Clients</p>
-            <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-12 text-center">
-              Trusted by the Best
+            <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-12 text-center">Trusted by the Best in Class
+
             </h2>
             <div className="overflow-hidden">
               <img src={creditsPhoto} alt="White Rabbit magician client logos including Netflix, Disney, Rolls Royce, Morgan Stanley, and more" className="w-full h-auto" />
@@ -118,15 +118,15 @@ const About = () => {
             <h2 className="font-serif text-4xl text-foreground mb-6">Let's Create Something Extraordinary</h2>
             <Link
               to="/contact"
-              className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors"
-            >
+              className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors">
+
               Get in Touch
             </Link>
           </div>
         </section>
       </AnimatedSection>
-    </main>
-  );
+    </main>);
+
 };
 
 export default About;
