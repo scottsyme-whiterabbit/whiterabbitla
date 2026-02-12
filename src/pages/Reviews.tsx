@@ -52,6 +52,30 @@ const reviews = [
     text: "I've seen a lot of magicians, but Scott is in a completely different league. His close-up work is flawless and his presence is magnetic. The best money I've ever spent on entertainment.",
     rating: 5,
   },
+  {
+    name: "Travis M.",
+    role: "Private Show Guest",
+    text: "I was blown away by a recent White Rabbit show and would recommend it to anyone — even if you're not necessarily into magic. The atmosphere, the hospitality, the performance — it all comes together into something truly special.",
+    rating: 5,
+  },
+  {
+    name: "Emily D.",
+    role: "Corporate Party",
+    text: "We booked Scott for our company party and it was a huge success. Every single guest was completely captivated. He has this incredible ability to make everyone feel like they're the most important person in the room.",
+    rating: 5,
+  },
+  {
+    name: "Sarah W.",
+    role: "Private Celebration",
+    text: "For top-notch entertainment, Scott is the one to call. The combination of his warm personality and jaw-dropping magic created an experience our guests are still raving about weeks later.",
+    rating: 5,
+  },
+  {
+    name: "Robert R.",
+    role: "Birthday Event",
+    text: "I found White Rabbit while searching for something unique for my wife's birthday. The show was fantastic — intimate, funny, and genuinely astonishing. It felt less like a performance and more like an unforgettable evening with friends.",
+    rating: 5,
+  },
 ];
 
 const Reviews = () => {
