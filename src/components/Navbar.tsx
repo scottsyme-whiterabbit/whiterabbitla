@@ -33,7 +33,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex-shrink-0">
-            <img src={wrLogo} alt="White Rabbit" className="h-12 w-auto brightness-0 invert" />
+            <img src={wrLogo} alt="White Rabbit" className="h-12 w-auto invert mix-blend-screen" />
           </Link>
 
           {/* Desktop nav */}
