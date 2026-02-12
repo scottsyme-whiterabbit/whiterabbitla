@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
+import heroDesertImg from "@/assets/experience-hero-desert.jpg";
 import closeupImg from "@/assets/event-closeup-cocktail.jpg";
 import parlorImg from "@/assets/event-parlor-stage.jpg";
 import corporateImg from "@/assets/event-penthouse-show.jpg";
@@ -34,8 +35,12 @@ const Experience = () => {
   return (
     <main className="pt-20">
       {/* Hero */}
-      <section className="bg-forest-dark py-24 lg:py-32">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+      <section className="relative min-h-[85vh] flex items-end overflow-hidden">
+        <div className="absolute inset-0">
+          <img src={heroDesertImg} alt="Scott Syme in the desert, White Rabbit luxury magician Los Angeles" className="w-full h-full object-cover object-center" style={{ filter: 'contrast(1.1) saturate(0.85) brightness(0.95) sepia(0.15)' }} />
+          <div className="absolute inset-0 bg-gradient-to-t from-forest-dark via-forest-dark/30 to-forest-dark/10" />
+        </div>
+        <div className="relative z-10 max-w-4xl mx-auto px-6 pb-16 w-full text-center">
           <AnimatedSection>
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">The White Rabbit Experience</p>
             <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-cream mb-6">
