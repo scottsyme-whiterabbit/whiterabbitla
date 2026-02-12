@@ -135,10 +135,11 @@ const Contact = () => {
                   </label>
                   <Input
                     required
-                    type="date"
+                    type="text"
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                     className="bg-background border-border"
+                    placeholder="MM/DD/YYYY or flexible"
                   />
                 </div>
                 <div>
