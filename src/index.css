@@ -135,7 +135,7 @@ html {
 }
 
 .animate-scroll-logos {
-  animation: scroll-logos 30s linear infinite;
+  animation: scroll-logos 18s linear infinite;
 }
 
 .animate-scroll-logos:hover {
