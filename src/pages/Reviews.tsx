@@ -128,7 +128,7 @@ const Reviews = () => {
 
       {/* CTA */}
       <AnimatedSection>
-        <section className="bg-forest-dark py-24 text-center">
+        <section className="bg-forest-dark pt-24 pb-12 text-center">
           <div className="max-w-2xl mx-auto px-6">
             <h2 className="font-serif text-4xl text-cream mb-6">Join the Experience</h2>
             <p className="font-sans text-base text-cream/70 mb-10">
