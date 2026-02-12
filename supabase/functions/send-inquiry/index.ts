@@ -53,7 +53,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         from: "White Rabbit <onboarding@resend.dev>",
-        to: ["events@whiterabbitla.com"],
+        to: ["scott.syme@whiterabbitla.com"],
         subject: `Booking Inquiry — ${eventType}`,
         html: emailHtml,
         reply_to: email,
