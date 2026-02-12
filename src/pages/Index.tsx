@@ -15,6 +15,12 @@ import hyattLogo from "@/assets/logos/hyatt.png";
 import rivianLogo from "@/assets/logos/rivian.png";
 import lionsgateLogo from "@/assets/logos/lionsgate.png";
 import oliviarodrigoLogo from "@/assets/logos/oliviarodrigo.png";
+import hollywoodrooseveltLogo from "@/assets/logos/hollywoodroosevelt.png";
+import taittingerLogo from "@/assets/logos/taittinger.png";
+import blackrabbitroseLogo from "@/assets/logos/blackrabbitrose.png";
+import fosterallLogo from "@/assets/logos/fosterall.png";
+import whowhatwearLogo from "@/assets/logos/whowhatwear.png";
+import sohohouseLogo from "@/assets/logos/sohohouse.png";
 
 const clients = [
   { name: "Netflix", logo: netflixLogo },
@@ -26,6 +32,12 @@ const clients = [
   { name: "Rivian", logo: rivianLogo },
   { name: "Lionsgate", logo: lionsgateLogo },
   { name: "Olivia Rodrigo", logo: oliviarodrigoLogo },
+  { name: "Hollywood Roosevelt", logo: hollywoodrooseveltLogo },
+  { name: "Taittinger", logo: taittingerLogo },
+  { name: "Black Rabbit Rose", logo: blackrabbitroseLogo },
+  { name: "FosterAll", logo: fosterallLogo },
+  { name: "Who What Wear", logo: whowhatwearLogo },
+  { name: "Soho House", logo: sohohouseLogo },
 ];
 
 const Index = () => {
@@ -79,21 +91,24 @@ const Index = () => {
         </motion.div>
       </section>
 
-      {/* Client Strip */}
+      {/* Client Logo Carousel */}
       <AnimatedSection>
-        <section className="bg-forest-dark py-16">
+        <section className="bg-forest-dark py-16 overflow-hidden">
           <div className="max-w-6xl mx-auto px-6">
             <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-cream/40 mb-10">
               Trusted by World-Class Brands
             </p>
-            <div className="flex flex-wrap justify-center items-center gap-10 md:gap-14">
-              {clients.map((client) => (
-                <img
-                  key={client.name}
-                  src={client.logo}
-                  alt={client.name}
-                  className="h-8 md:h-10 w-auto object-contain brightness-0 invert opacity-50 hover:opacity-80 transition-opacity"
-                />
+          </div>
+          <div className="relative">
+            <div className="flex animate-scroll-logos">
+              {[...clients, ...clients].map((client, i) => (
+                <div key={`${client.name}-${i}`} className="flex-shrink-0 mx-8 md:mx-10">
+                  <img
+                    src={client.logo}
+                    alt={client.name}
+                    className="h-8 md:h-10 w-auto object-contain brightness-0 invert opacity-50 hover:opacity-80 transition-opacity"
+                  />
+                </div>
               ))}
             </div>
           </div>
