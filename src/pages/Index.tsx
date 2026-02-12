@@ -150,7 +150,7 @@ const Index = () => {
               <Star key={i} size={20} className="fill-accent text-accent" />
               )}
             </div>
-            <blockquote className="font-serif text-2xl md:text-3xl text-cream/90 italic leading-relaxed mb-8">
+            <blockquote className="font-serif text-2xl md:text-3xl text-cream/90 leading-relaxed mb-8">
               "Our guests didn't just enjoy the show — they came alive. Months later, they still talk about 
               how Scott made them feel. That's not entertainment. That's something else entirely."
             </blockquote>

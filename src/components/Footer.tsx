@@ -10,7 +10,7 @@ const Footer = () => {
           {/* Logo & tagline */}
           <div className="flex flex-col items-center md:items-start gap-4">
             <img src={wrLogo} alt="White Rabbit Los Angeles" className="h-24 w-auto brightness-0 invert opacity-80" />
-            <p className="font-serif text-lg italic text-cream/60">
+            <p className="font-serif text-lg text-cream/60">
               Redefining the perception of magic.
             </p>
           </div>
