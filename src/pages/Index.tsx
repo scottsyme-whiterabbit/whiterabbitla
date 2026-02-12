@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 import heroImage from "@/assets/hero-magic.jpg";
 import experienceImg from "@/assets/experience-closeup.jpg";
+import eventCardsImg from "@/assets/event-cards.jpg";
 
 
 import netflixLogo from "@/assets/logos/netflix.png";
@@ -128,8 +129,8 @@ const Index = () => {
           <AnimatedSection delay={0.2}>
             <div className="aspect-[4/5] overflow-hidden">
               <img
-                src={experienceImg}
-                alt="Luxury close-up magic experience"
+                src={eventCardsImg}
+                alt="Scott Syme performing close-up card magic"
                 className="w-full h-full object-cover" />
 
             </div>

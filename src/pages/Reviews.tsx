@@ -1,6 +1,7 @@
 import { Star } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "react-router-dom";
+import audienceImg from "@/assets/event-audience.jpg";
 
 const reviews = [
   {
@@ -57,8 +58,12 @@ const Reviews = () => {
   return (
     <main className="pt-20">
       {/* Hero */}
-      <section className="bg-forest-dark py-24">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+      <section className="relative min-h-[50vh] flex items-end overflow-hidden">
+        <div className="absolute inset-0">
+          <img src={audienceImg} alt="Audience reacting to White Rabbit performance" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-forest-dark/70" />
+        </div>
+        <div className="relative z-10 max-w-4xl mx-auto px-6 text-center pb-16 pt-32">
           <AnimatedSection>
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">Testimonials</p>
             <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-cream mb-6">

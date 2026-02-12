@@ -1,6 +1,8 @@
 import AnimatedSection from "@/components/AnimatedSection";
 import scottPhoto from "@/assets/scott-syme-photo.jpg";
 import creditsPhoto from "@/assets/credits-photo.png";
+import scottPerformingImg from "@/assets/event-scott-performing.jpg";
+import guestReactionImg from "@/assets/event-guest-reaction.jpg";
 import { Link } from "react-router-dom";
 
 const About = () => {
@@ -44,6 +46,22 @@ const About = () => {
                 and the atmosphere. Scott doesn't just perform tricks; he crafts moments of genuine wonder that 
                 forge connections and leave lasting impressions.
               </p>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* In Action */}
+      <section className="py-24">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <AnimatedSection>
+            <div className="aspect-[3/4] overflow-hidden">
+              <img src={scottPerformingImg} alt="Scott Syme performing live" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.2}>
+            <div className="aspect-[3/4] overflow-hidden">
+              <img src={guestReactionImg} alt="Guest reacting to magic" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
         </div>
