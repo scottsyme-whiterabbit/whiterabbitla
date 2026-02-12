@@ -14,6 +14,7 @@ import youtubeLogo from "@/assets/logos/youtube.png";
 import hyattLogo from "@/assets/logos/hyatt.png";
 import rivianLogo from "@/assets/logos/rivian.png";
 import lionsgateLogo from "@/assets/logos/lionsgate.png";
+import oliviarodrigoLogo from "@/assets/logos/oliviarodrigo.png";
 
 const clients = [
   { name: "Netflix", logo: netflixLogo },
@@ -24,6 +25,7 @@ const clients = [
   { name: "Hyatt", logo: hyattLogo },
   { name: "Rivian", logo: rivianLogo },
   { name: "Lionsgate", logo: lionsgateLogo },
+  { name: "Olivia Rodrigo", logo: oliviarodrigoLogo },
 ];
 
 const Index = () => {
