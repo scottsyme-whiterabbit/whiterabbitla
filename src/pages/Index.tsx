@@ -15,17 +15,13 @@ import hyattLogo from "@/assets/logos/hyatt.png";
 import rivianLogo from "@/assets/logos/rivian.png";
 import paramountLogo from "@/assets/logos/paramount.png";
 import oliviarodrigoLogo from "@/assets/logos/oliviarodrigo.png";
-import hollywoodrooseveltLogo from "@/assets/logos/hollywoodroosevelt.png";
 import taittingerLogo from "@/assets/logos/taittinger.png";
 import blackrabbitroseLogo from "@/assets/logos/blackrabbitrose.svg";
 import fosterallLogo from "@/assets/logos/fosterall.svg";
 import whowhatwearLogo from "@/assets/logos/whowhatwear.svg";
 import sohohouseLogo from "@/assets/logos/sohohouse.svg";
-import rideauLogo from "@/assets/logos/rideau.png";
 import lionsgateLogo from "@/assets/logos/lionsgate.png";
 import agtLogo from "@/assets/logos/agt.png";
-import tixrLogo from "@/assets/logos/tixr.png";
-import pistolaLogo from "@/assets/logos/pistola.png";
 
 const clients = [
   { name: "Netflix", logo: netflixLogo },
@@ -37,7 +33,6 @@ const clients = [
   { name: "Rivian", logo: rivianLogo },
   { name: "Paramount", logo: paramountLogo },
   { name: "Olivia Rodrigo", logo: oliviarodrigoLogo },
-  { name: "Hollywood Roosevelt", logo: hollywoodrooseveltLogo },
   { name: "Taittinger", logo: taittingerLogo },
   { name: "Lionsgate", logo: lionsgateLogo },
   { name: "America's Got Talent", logo: agtLogo },
@@ -45,9 +40,6 @@ const clients = [
   { name: "FosterAll", logo: fosterallLogo },
   { name: "Who What Wear", logo: whowhatwearLogo },
   { name: "Soho House", logo: sohohouseLogo },
-  { name: "Rideau", logo: rideauLogo },
-  { name: "Tixr", logo: tixrLogo },
-  { name: "Pistola", logo: pistolaLogo },
 ];
 
 const Index = () => {
@@ -73,7 +65,7 @@ const Index = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1 }}
-            className="absolute bottom-24 left-1/2 -translate-x-1/2"
+            className="absolute bottom-12 left-1/2 -translate-x-1/2"
           >
             <Link
               to="/contact"
