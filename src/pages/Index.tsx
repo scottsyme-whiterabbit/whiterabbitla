@@ -154,9 +154,14 @@ const Index = () => {
               "Our guests didn't just enjoy the show — they came alive. Months later, they still talk about 
               how Scott made them feel. That's not entertainment. That's something else entirely."
             </blockquote>
-            <p className="font-sans text-sm tracking-[0.2em] uppercase text-cream/50">
+            <p className="font-sans text-sm tracking-[0.2em] uppercase text-cream/50 mb-8">
               — Morgan Stanley, Private Client Event
             </p>
+            <Link
+              to="/reviews"
+              className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-8 py-3 hover:bg-accent hover:text-accent-foreground transition-colors">
+              Read More Reviews
+            </Link>
           </div>
         </section>
       </AnimatedSection>
