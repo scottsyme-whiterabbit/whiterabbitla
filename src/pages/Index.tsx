@@ -24,27 +24,30 @@ import sohohouseLogo from "@/assets/logos/sohohouse.png";
 import rideauLogo from "@/assets/logos/rideau.png";
 import lionsgateLogo from "@/assets/logos/lionsgate.png";
 import agtLogo from "@/assets/logos/agt.png";
+import tixrLogo from "@/assets/logos/tixr.png";
+import pistolaLogo from "@/assets/logos/pistola.png";
 
-// display: 'invert' = white silhouette, 'natural' = show as-is
 const clients = [
-  { name: "Netflix", logo: netflixLogo, display: 'invert' as const },
-  { name: "Disney", logo: disneyLogo, display: 'invert' as const },
-  { name: "Rolls Royce", logo: rollsroyceLogo, display: 'invert' as const },
-  { name: "Morgan Stanley", logo: morganstanleyLogo, display: 'invert' as const },
-  { name: "YouTube", logo: youtubeLogo, display: 'invert' as const },
-  { name: "Hyatt", logo: hyattLogo, display: 'invert' as const },
-  { name: "Rivian", logo: rivianLogo, display: 'invert' as const },
-  { name: "Paramount", logo: paramountLogo, display: 'invert' as const },
-  { name: "Olivia Rodrigo", logo: oliviarodrigoLogo, display: 'invert' as const },
-  { name: "Hollywood Roosevelt", logo: hollywoodrooseveltLogo, display: 'natural' as const },
-  { name: "Taittinger", logo: taittingerLogo, display: 'invert' as const },
-  { name: "Lionsgate", logo: lionsgateLogo, display: 'invert' as const },
-  { name: "America's Got Talent", logo: agtLogo, display: 'invert' as const },
-  { name: "Black Rabbit Rose", logo: blackrabbitroseLogo, display: 'invert' as const },
-  { name: "FosterAll", logo: fosterallLogo, display: 'invert' as const },
-  { name: "Who What Wear", logo: whowhatwearLogo, display: 'invert' as const },
-  { name: "Soho House", logo: sohohouseLogo, display: 'invert' as const },
-  { name: "Rideau", logo: rideauLogo, display: 'invert' as const },
+  { name: "Netflix", logo: netflixLogo },
+  { name: "Disney", logo: disneyLogo },
+  { name: "Rolls Royce", logo: rollsroyceLogo },
+  { name: "Morgan Stanley", logo: morganstanleyLogo },
+  { name: "YouTube", logo: youtubeLogo },
+  { name: "Hyatt", logo: hyattLogo },
+  { name: "Rivian", logo: rivianLogo },
+  { name: "Paramount", logo: paramountLogo },
+  { name: "Olivia Rodrigo", logo: oliviarodrigoLogo },
+  { name: "Hollywood Roosevelt", logo: hollywoodrooseveltLogo },
+  { name: "Taittinger", logo: taittingerLogo },
+  { name: "Lionsgate", logo: lionsgateLogo },
+  { name: "America's Got Talent", logo: agtLogo },
+  { name: "Black Rabbit Rose", logo: blackrabbitroseLogo },
+  { name: "FosterAll", logo: fosterallLogo },
+  { name: "Who What Wear", logo: whowhatwearLogo },
+  { name: "Soho House", logo: sohohouseLogo },
+  { name: "Rideau", logo: rideauLogo },
+  { name: "Tixr", logo: tixrLogo },
+  { name: "Pistola", logo: pistolaLogo },
 ];
 
 const Index = () => {
@@ -101,11 +104,11 @@ const Index = () => {
           <div className="relative">
             <div className="flex animate-scroll-logos" style={{ width: 'max-content' }}>
               {[...clients, ...clients, ...clients].map((client, i) => (
-                <div key={`${client.name}-${i}`} className="flex-shrink-0 mx-8 md:mx-12 flex items-center justify-center" style={{ width: '140px', height: '50px' }}>
+                <div key={`${client.name}-${i}`} className="flex-shrink-0 mx-10 md:mx-14 flex items-center justify-center" style={{ width: '160px', height: '60px' }}>
                   <img
                     src={client.logo}
                     alt={client.name}
-                    className={`max-h-[40px] max-w-[130px] w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity ${client.display === 'natural' ? 'rounded' : 'brightness-0 invert'}`}
+                    className="max-h-[50px] max-w-[150px] w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity brightness-0 invert"
                   />
                 </div>
               ))}
