@@ -18,8 +18,7 @@ import oliviarodrigoLogo from "@/assets/logos/oliviarodrigo.png";
 import taittingerLogo from "@/assets/logos/taittinger.png";
 import blackrabbitroseLogo from "@/assets/logos/blackrabbitrose.svg";
 import fosterallLogo from "@/assets/logos/fosterall.svg";
-import whowhatwearLogo from "@/assets/logos/whowhatwear.svg";
-import sohohouseLogo from "@/assets/logos/sohohouse.jpg";
+import sohohouseLogo from "@/assets/logos/sohohouse.png";
 import pistolaLogo from "@/assets/logos/pistola-new.png";
 import lionsgateLogo from "@/assets/logos/lionsgate.png";
 import agtLogo from "@/assets/logos/agt.png";
@@ -39,8 +38,7 @@ const clients = [
   { name: "America's Got Talent", logo: agtLogo },
   { name: "Black Rabbit Rose", logo: blackrabbitroseLogo },
   { name: "FosterAll", logo: fosterallLogo },
-  { name: "Who What Wear", logo: whowhatwearLogo },
-  { name: "Soho House", logo: sohohouseLogo, invertLogo: true },
+  { name: "Soho House", logo: sohohouseLogo },
   { name: "Pistola", logo: pistolaLogo },
 ];
 
@@ -102,7 +100,7 @@ const Index = () => {
                   <img
                     src={client.logo}
                     alt={client.name}
-                    className={`max-h-[50px] max-w-[150px] w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity ${client.invertLogo ? 'invert' : 'brightness-0 invert'}`}
+                    className="max-h-[50px] max-w-[150px] w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity brightness-0 invert"
                   />
                 </div>
               ))}
