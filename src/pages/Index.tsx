@@ -13,7 +13,7 @@ import morganstanleyLogo from "@/assets/logos/morganstanley.png";
 import youtubeLogo from "@/assets/logos/youtube.png";
 import hyattLogo from "@/assets/logos/hyatt.png";
 import rivianLogo from "@/assets/logos/rivian.png";
-import lionsgateLogo from "@/assets/logos/lionsgate.png";
+import paramountLogo from "@/assets/logos/paramount.png";
 import oliviarodrigoLogo from "@/assets/logos/oliviarodrigo.png";
 import hollywoodrooseveltLogo from "@/assets/logos/hollywoodroosevelt.png";
 import taittingerLogo from "@/assets/logos/taittinger.png";
@@ -21,23 +21,26 @@ import blackrabbitroseLogo from "@/assets/logos/blackrabbitrose.png";
 import fosterallLogo from "@/assets/logos/fosterall.png";
 import whowhatwearLogo from "@/assets/logos/whowhatwear.png";
 import sohohouseLogo from "@/assets/logos/sohohouse.png";
+import rideauLogo from "@/assets/logos/rideau.png";
 
+// display: 'invert' = white silhouette, 'natural' = show as-is (green bg logos), 'whiteBg' = subtle bg container
 const clients = [
-  { name: "Netflix", logo: netflixLogo, whiteBg: false },
-  { name: "Disney", logo: disneyLogo, whiteBg: true },
-  { name: "Rolls Royce", logo: rollsroyceLogo, whiteBg: false },
-  { name: "Morgan Stanley", logo: morganstanleyLogo, whiteBg: false },
-  { name: "YouTube", logo: youtubeLogo, whiteBg: true },
-  { name: "Hyatt", logo: hyattLogo, whiteBg: true },
-  { name: "Rivian", logo: rivianLogo, whiteBg: false },
-  { name: "Lionsgate", logo: lionsgateLogo, whiteBg: false },
-  { name: "Olivia Rodrigo", logo: oliviarodrigoLogo, whiteBg: false },
-  { name: "Hollywood Roosevelt", logo: hollywoodrooseveltLogo, whiteBg: true },
-  { name: "Taittinger", logo: taittingerLogo, whiteBg: false },
-  { name: "Black Rabbit Rose", logo: blackrabbitroseLogo, whiteBg: false },
-  { name: "FosterAll", logo: fosterallLogo, whiteBg: false },
-  { name: "Who What Wear", logo: whowhatwearLogo, whiteBg: false },
-  { name: "Soho House", logo: sohohouseLogo, whiteBg: false },
+  { name: "Netflix", logo: netflixLogo, display: 'invert' as const },
+  { name: "Disney", logo: disneyLogo, display: 'invert' as const },
+  { name: "Rolls Royce", logo: rollsroyceLogo, display: 'natural' as const },
+  { name: "Morgan Stanley", logo: morganstanleyLogo, display: 'invert' as const },
+  { name: "YouTube", logo: youtubeLogo, display: 'natural' as const },
+  { name: "Hyatt", logo: hyattLogo, display: 'whiteBg' as const },
+  { name: "Rivian", logo: rivianLogo, display: 'invert' as const },
+  { name: "Paramount", logo: paramountLogo, display: 'natural' as const },
+  { name: "Olivia Rodrigo", logo: oliviarodrigoLogo, display: 'invert' as const },
+  { name: "Hollywood Roosevelt", logo: hollywoodrooseveltLogo, display: 'natural' as const },
+  { name: "Taittinger", logo: taittingerLogo, display: 'natural' as const },
+  { name: "Black Rabbit Rose", logo: blackrabbitroseLogo, display: 'invert' as const },
+  { name: "FosterAll", logo: fosterallLogo, display: 'invert' as const },
+  { name: "Who What Wear", logo: whowhatwearLogo, display: 'invert' as const },
+  { name: "Soho House", logo: sohohouseLogo, display: 'invert' as const },
+  { name: "Rideau", logo: rideauLogo, display: 'natural' as const },
 ];
 
 const Index = () => {
@@ -106,7 +109,7 @@ const Index = () => {
                   <img
                     src={client.logo}
                     alt={client.name}
-                    className={`max-h-[40px] max-w-[130px] w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity ${client.whiteBg ? 'rounded bg-white/10 p-1' : 'brightness-0 invert'}`}
+                    className={`max-h-[40px] max-w-[130px] w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity ${client.display === 'whiteBg' ? 'rounded bg-white/10 p-1' : client.display === 'natural' ? 'rounded' : 'brightness-0 invert'}`}
                   />
                 </div>
               ))}
