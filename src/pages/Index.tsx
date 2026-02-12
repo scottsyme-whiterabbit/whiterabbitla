@@ -94,11 +94,11 @@ const Index = () => {
           <div className="relative">
             <div className="flex animate-scroll-logos" style={{ width: 'max-content' }}>
               {[...clients, ...clients, ...clients].map((client, i) => (
-                <div key={`${client.name}-${i}`} className="flex-shrink-0 flex items-center justify-center h-[60px] px-8 md:px-10">
+                <div key={`${client.name}-${i}`} className="flex-shrink-0 flex items-center justify-center px-8 md:px-10" style={{ width: '180px', height: '60px' }}>
                   <img
                     src={client.logo}
                     alt={client.name}
-                    className="h-[40px] w-auto object-contain opacity-50 hover:opacity-80 transition-opacity brightness-0 invert"
+                    className="max-h-full max-w-full w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity brightness-0 invert"
                   />
                 </div>
               ))}
