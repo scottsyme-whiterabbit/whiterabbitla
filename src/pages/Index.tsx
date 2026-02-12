@@ -106,7 +106,7 @@ const Index = () => {
                   <img
                     src={client.logo}
                     alt={client.name}
-                    className="h-8 md:h-10 w-auto object-contain brightness-0 invert opacity-50 hover:opacity-80 transition-opacity"
+                    className="h-10 md:h-12 w-[120px] md:w-[150px] object-contain brightness-0 invert opacity-50 hover:opacity-80 transition-opacity"
                   />
                 </div>
               ))}
