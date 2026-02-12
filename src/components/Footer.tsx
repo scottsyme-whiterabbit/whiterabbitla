@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Instagram, Mail, Phone } from "lucide-react";
-import wrSymbol from "@/assets/wr-symbol.png";
+import wrLogo from "@/assets/wr-second-primary-logo.png";
 
 const Footer = () => {
   return (
@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
           {/* Logo & tagline */}
           <div className="flex flex-col items-center md:items-start gap-4">
-            <img src={wrSymbol} alt="White Rabbit" className="h-16 w-auto brightness-0 invert opacity-80" />
+            <img src={wrLogo} alt="White Rabbit Los Angeles" className="h-24 w-auto brightness-0 invert opacity-80" />
             <p className="font-serif text-lg italic text-cream/60">
               Redefining the perception of magic.
             </p>
