@@ -92,7 +92,7 @@ const About = () => {
       </AnimatedSection>
 
       {/* Credits */}
-      <section className="py-24">
+      <section className="py-12">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4 text-center">Notable Clients</p>
