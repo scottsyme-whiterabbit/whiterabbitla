@@ -47,6 +47,28 @@ const SeoLanding = () => {
 
   const heroImage = page.category === "Parlor Shows" ? parlorImg : experienceImg;
 
+  const localMarkets = [
+    "Los Angeles", "Beverly Hills", "Hollywood", "Santa Monica",
+    "Malibu", "West Hollywood", "Bel Air", "Pasadena", "Calabasas",
+  ];
+  const isTravelMarket = !localMarkets.includes(page.location);
+
+  const includedItems = isTravelMarket
+    ? [
+        "Pre-event consultation to tailor the performance to your audience and goals",
+        "World-class close-up magic, mentalism, and audience interaction",
+        "Professional appearance — Scott arrives in signature style, ready to elevate",
+        "Travel coordination handled seamlessly — Scott regularly performs in " + page.location,
+        "A follow-up to make sure your event exceeded expectations",
+      ]
+    : [
+        "Pre-event consultation to tailor the performance to your audience and goals",
+        "World-class close-up magic, mentalism, and audience interaction",
+        "Professional appearance — Scott arrives in signature style, ready to elevate",
+        "Full production support for private shows (lighting, sound, staging)",
+        "A follow-up to make sure your event exceeded expectations",
+      ];
+
   return (
     <main className="pt-20">
       {/* Hero */}
@@ -154,19 +176,18 @@ const SeoLanding = () => {
             <div className="mt-8 p-8 border border-border">
               <h3 className="font-serif text-2xl text-foreground mb-6">What's Included</h3>
               <ul className="space-y-4">
-                {[
-                  "Pre-event consultation to tailor the performance to your audience and goals",
-                  "World-class close-up magic, mentalism, and audience interaction",
-                  "Professional appearance — Scott arrives in signature style, ready to elevate",
-                  "Full production support for parlor shows (lighting, sound, staging)",
-                  "A follow-up to make sure your event exceeded expectations",
-                ].map((item, i) => (
+                {includedItems.map((item, i) => (
                   <li key={i} className="flex items-start gap-3">
                     <CheckCircle size={18} className="text-accent mt-0.5 shrink-0" />
                     <span className="font-sans text-sm text-muted-foreground">{item}</span>
                   </li>
                 ))}
               </ul>
+              {isTravelMarket && (
+                <p className="font-sans text-xs text-muted-foreground/70 mt-6 leading-relaxed italic">
+                  White Rabbit is based in Los Angeles and travels nationwide for select engagements. Close-up magic and mentalism travel beautifully — full theatrical staging (lighting rigs, curtains, sound) is available for events in the greater Los Angeles area. For {page.location} events, Scott works with your venue's existing setup to deliver the same world-class experience.
+                </p>
+              )}
             </div>
           </AnimatedSection>
         </div>
