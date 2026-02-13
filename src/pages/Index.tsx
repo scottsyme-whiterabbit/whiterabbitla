@@ -14,6 +14,7 @@ import cocktailImg from "@/assets/event-closeup-cocktail.jpg";
 import parlorShowImg from "@/assets/event-parlor-show.jpg";
 import scottCardsImg from "@/assets/event-scott-cards.jpg";
 import silhouetteImg from "@/assets/event-silhouette.jpg";
+import restaurantMagicImg from "@/assets/event-restaurant-magic.jpg";
 import cardsEmeraldImg from "@/assets/event-cards-emerald.jpg";
 import crowdImg from "@/assets/event-crowd.jpg";
 import intimateImg from "@/assets/event-closeup-intimate.jpg";
@@ -244,7 +245,7 @@ const Index = () => {
           </AnimatedSection>
           <AnimatedSection delay={0.25}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={silhouetteImg} alt="Dramatic silhouette of Scott Syme performing magic on stage" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={restaurantMagicImg} alt="Scott Syme performing close-up magic at a luxury restaurant event" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
         </div>
