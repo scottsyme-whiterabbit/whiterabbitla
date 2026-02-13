@@ -4,7 +4,7 @@ import wrLogo from "@/assets/wr-second-primary-logo.png";
 
 const Footer = () => {
   return (
-    <footer className="bg-forest-dark text-cream/80 py-16">
+    <footer aria-label="Site footer" className="bg-forest-dark text-cream/80 py-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
           {/* Logo & tagline */}
@@ -13,7 +13,7 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div className="flex flex-col items-center gap-3">
+          <nav aria-label="Footer navigation" className="flex flex-col items-center gap-3">
             <h4 className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Navigate</h4>
             {["Experience", "About", "Reviews", "Blog", "Contact"].map((link) =>
             <Link
@@ -24,7 +24,7 @@ const Footer = () => {
                 {link}
               </Link>
             )}
-          </div>
+          </nav>
 
           {/* Contact */}
           <div className="flex flex-col items-center md:items-end gap-4">

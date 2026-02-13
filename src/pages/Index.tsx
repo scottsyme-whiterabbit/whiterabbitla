@@ -57,7 +57,7 @@ const Index = () => {
   const { openQuiz } = useBookingQuiz();
 
   return (
-    <main>
+    <main id="main-content">
       {/* Hero */}
       <section className="relative h-screen flex flex-col overflow-hidden">
         {/* Mobile: text above image */}

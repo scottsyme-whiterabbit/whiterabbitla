@@ -80,7 +80,7 @@ const reviews = [
 
 const Reviews = () => {
   return (
-    <main className="pt-20">
+    <main id="main-content" className="pt-20">
       {/* Hero */}
       <section className="relative min-h-[50vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">
