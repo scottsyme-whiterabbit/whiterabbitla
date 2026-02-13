@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import usePageTracking from "@/hooks/usePageTracking";
+import LocalBusinessSchema from "@/components/LocalBusinessSchema";
 import Index from "./pages/Index";
 import Experience from "./pages/Experience";
 import About from "./pages/About";
@@ -22,6 +23,7 @@ const AppContent = () => {
   usePageTracking();
   return (
     <>
+      <LocalBusinessSchema />
       <ScrollToTop />
       <Navbar />
       <Routes>
