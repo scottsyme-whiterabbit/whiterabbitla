@@ -31,8 +31,8 @@ const Navbar = () => {
         : "bg-transparent"
     }`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="flex items-center justify-between h-20">
-          <Link to="/" className="flex-shrink-0">
+        <div className="flex items-center justify-center h-20">
+          <Link to="/" className="absolute left-6 lg:left-12 flex-shrink-0">
             <img src={wrLogo} alt="White Rabbit" className="h-12 w-auto invert mix-blend-screen" />
           </Link>
 
@@ -56,7 +56,7 @@ const Navbar = () => {
           {/* Mobile toggle */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-cream p-2"
+            className="absolute right-6 md:hidden text-cream p-2"
             aria-label="Toggle menu"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
