@@ -55,15 +55,39 @@ const Index = () => {
   return (
     <main>
       {/* Hero */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0">
-          <img src={heroImage} alt="Scott Syme performing luxury close-up magic at a private event in Los Angeles" className="w-full h-full object-cover object-[center_55%]" fetchPriority="high" decoding="async" />
-          <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/30 to-forest-dark/10" />
+      <section className="relative h-screen flex flex-col overflow-hidden">
+        {/* Mobile: text above image */}
+        <div className="md:hidden bg-forest-dark pt-24 pb-6 px-6 text-center flex flex-col items-center">
+          <motion.p
+            className="text-xl text-cream/90 tracking-wide font-bold font-serif"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.5 }}>
+            Experience Magic<br />
+            That Make Your Guests Feel Truly Alive
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 1 }}
+            className="mt-6">
+            <button
+              onClick={openQuiz}
+              className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-10 py-4 hover:bg-accent hover:text-accent-foreground transition-colors">
+              Book an Experience
+            </button>
+          </motion.div>
+        </div>
+        {/* Image fills remaining space on mobile, full screen on desktop */}
+        <div className="relative flex-1 md:absolute md:inset-0">
+          <img src={heroImage} alt="Scott Syme performing luxury close-up magic at a private event in Los Angeles" className="w-full h-full object-cover object-[center_40%] md:object-[center_55%]" fetchPriority="high" decoding="async" />
+          <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/30 to-forest-dark/10 hidden md:block" />
         </div>
 
-        <div className="relative z-10 text-center px-6 max-w-4xl flex flex-col items-center justify-end pb-6 h-full">
+        {/* Desktop: text overlaid */}
+        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto hidden md:flex flex-col items-center justify-end pb-6 h-full">
           <motion.p
-            className="text-xl text-cream/90 tracking-wide font-bold text-center font-serif md:text-4xl lg:text-5xl"
+            className="text-4xl lg:text-5xl text-cream/90 tracking-wide font-bold text-center font-serif"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}>
