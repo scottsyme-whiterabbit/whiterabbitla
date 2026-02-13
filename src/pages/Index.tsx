@@ -84,7 +84,7 @@ const Index = () => {
         </div>
         {/* Image fills remaining space on mobile, full screen on desktop */}
         <div className="relative flex-1 md:absolute md:inset-0">
-          <img src={heroImage} alt="Scott Syme performing luxury close-up magic at a private event in Los Angeles" className="w-full h-full object-cover object-[center_40%] md:object-[center_55%]" fetchPriority="high" decoding="async" />
+          <img src={heroImage} alt="Scott Syme, White Rabbit luxury magician tossing cards in a cinematic desert landscape – private event entertainment in Los Angeles" className="w-full h-full object-cover object-[center_40%] md:object-[center_55%]" fetchPriority="high" decoding="async" />
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/30 to-forest-dark/10 hidden md:block" />
         </div>
 
