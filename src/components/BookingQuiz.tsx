@@ -11,7 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 const EVENT_TYPES = [
   { id: "corporate", label: "Corporate Event", description: "Galas, product launches, conferences" },
   { id: "wedding", label: "Wedding", description: "Ceremonies, receptions, rehearsal dinners" },
-  { id: "private", label: "Private Party", description: "Birthdays, anniversaries, holidays" },
+  { id: "private", label: "Private Party", description: "Birthdays, bachelorettes, anniversaries, holidays" },
   { id: "parlor", label: "Parlor Show", description: "Intimate seated show experience" },
   { id: "other", label: "Something Else", description: "Let's talk about your vision" },
 ];
@@ -24,10 +24,10 @@ const GUEST_COUNTS = [
 ];
 
 const BUDGETS = [
-  { id: "exploring", label: "Just Exploring", description: "I want to learn more first" },
-  { id: "moderate", label: "$2,500 – $5,000", description: "Close-up magic & cocktail hours" },
-  { id: "premium", label: "$5,000 – $10,000", description: "Full parlor show experience" },
-  { id: "luxury", label: "$10,000+", description: "Premium multi-format experience" },
+  { id: "exploring", label: "Just Exploring", description: "I'm curious and want to learn more" },
+  { id: "intimate", label: "Intimate & Intentional", description: "A curated experience for a smaller gathering" },
+  { id: "elevated", label: "Elevated Experience", description: "Something memorable with real production value" },
+  { id: "showstopper", label: "Go All Out", description: "No limits — make it unforgettable" },
 ];
 
 type Step = "event" | "guests" | "date" | "budget" | "contact" | "recommendation";
