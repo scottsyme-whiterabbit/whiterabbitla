@@ -17,6 +17,7 @@ import Reviews from "./pages/Reviews";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
 import SeoLanding from "./pages/SeoLanding";
+import ServicePage from "./pages/ServicePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ const AppContent = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<SeoLanding />} />
+        <Route path="/services/:serviceSlug" element={<ServicePage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

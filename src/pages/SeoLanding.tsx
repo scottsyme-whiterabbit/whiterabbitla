@@ -3,6 +3,13 @@ import { useEffect } from "react";
 import { Star, CheckCircle } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getSeoPageBySlug } from "@/data/seoPages";
+import { useBookingQuiz } from "@/contexts/BookingQuizContext";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import experienceImg from "@/assets/experience-closeup.jpg";
 import parlorImg from "@/assets/event-parlor-show.jpg";
 
@@ -25,6 +32,7 @@ const trustLogos = [
 const SeoLanding = () => {
   const { slug } = useParams<{ slug: string }>();
   const page = slug ? getSeoPageBySlug(slug) : undefined;
+  const { openQuiz } = useBookingQuiz();
 
   useEffect(() => {
     if (page) {
@@ -39,6 +47,30 @@ const SeoLanding = () => {
         document.head.appendChild(meta);
       }
     }
+  }, [page]);
+
+  // Inject FAQ structured data (JSON-LD)
+  useEffect(() => {
+    if (!page?.faqs?.length) return;
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.id = "faq-schema";
+    script.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: page.faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer,
+        },
+      })),
+    });
+    // Remove previous FAQ schema if exists
+    document.getElementById("faq-schema")?.remove();
+    document.head.appendChild(script);
+    return () => { script.remove(); };
   }, [page]);
 
   if (!page) {
@@ -92,12 +124,12 @@ const SeoLanding = () => {
             <p className="font-sans text-lg text-cream/80 max-w-2xl mx-auto mb-10">
               {page.heroSubheadline}
             </p>
-            <Link
-              to="/contact"
+            <button
+              onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors"
             >
               Check Availability
-            </Link>
+            </button>
           </AnimatedSection>
         </div>
       </section>
@@ -140,7 +172,7 @@ const SeoLanding = () => {
         </div>
       </section>
 
-      {/* Mid-page CTA */}
+      {/* Mid-page CTA — Inline Quiz Trigger */}
       <AnimatedSection>
         <section className="bg-secondary/30 py-16">
           <div className="max-w-3xl mx-auto px-6 text-center">
@@ -150,12 +182,12 @@ const SeoLanding = () => {
             <p className="font-sans text-base text-muted-foreground mb-8 max-w-xl mx-auto">
               Dates fill quickly — especially during peak event season. Tell us about your event and we'll confirm availability within 24 hours.
             </p>
-            <Link
-              to="/contact"
+            <button
+              onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors"
             >
               Inquire Now — It's Free
-            </Link>
+            </button>
           </div>
         </section>
       </AnimatedSection>
@@ -193,6 +225,31 @@ const SeoLanding = () => {
         </div>
       </section>
 
+      {/* FAQ Section */}
+      {page.faqs.length > 0 && (
+        <section className="py-20 border-t border-border">
+          <div className="max-w-3xl mx-auto px-6">
+            <AnimatedSection>
+              <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-10">
+                Frequently Asked Questions
+              </h2>
+              <Accordion type="single" collapsible className="w-full">
+                {page.faqs.map((faq, i) => (
+                  <AccordionItem key={i} value={`faq-${i}`}>
+                    <AccordionTrigger className="font-sans text-sm md:text-base text-foreground text-left">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="font-sans text-sm text-muted-foreground leading-relaxed">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </AnimatedSection>
+          </div>
+        </section>
+      )}
+
       {/* Testimonial */}
       <AnimatedSection>
         <section className="bg-forest-dark py-20">
@@ -225,12 +282,12 @@ const SeoLanding = () => {
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-8">
               Most clients book 4–8 weeks in advance · No obligation to inquire
             </p>
-            <Link
-              to="/contact"
+            <button
+              onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors"
             >
               Book White Rabbit Now
-            </Link>
+            </button>
           </div>
         </section>
       </AnimatedSection>

@@ -8,6 +8,13 @@
   <url><loc>https://whiterabbitla.com/contact</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
   <url><loc>https://whiterabbitla.com/blog</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
 
+  <!-- Dedicated Service Pages -->
+  <url><loc>https://whiterabbitla.com/services/corporate-magician</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://whiterabbitla.com/services/wedding-magician</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://whiterabbitla.com/services/private-party-magician</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://whiterabbitla.com/services/close-up-magician</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://whiterabbitla.com/services/private-magic-show</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+
   <!-- SEO Landing Pages: Corporate Event Magician -->
   <url><loc>https://whiterabbitla.com/blog/los-angeles-corporate-event-magician</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://whiterabbitla.com/blog/beverly-hills-corporate-event-magician</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
