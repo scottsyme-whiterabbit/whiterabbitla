@@ -45,7 +45,7 @@ const Index = () => {
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img src={heroImage} alt="Scott Syme performing luxury close-up magic at a private event in Los Angeles" className="w-full h-full object-cover object-[center_55%]" />
-          <div className="absolute inset-0 bg-forest-dark/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/30 to-forest-dark/10" />
         </div>
 
         <div className="relative z-10 text-center px-6 max-w-4xl flex flex-col items-center justify-end pb-6 h-full">
