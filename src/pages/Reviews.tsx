@@ -1,7 +1,7 @@
 import { Star } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "react-router-dom";
-import audienceImg from "@/assets/audience-reaction-intimate.jpg";
+import audienceImg from "@/assets/event-audience.jpg";
 
 const reviews = [
 {
