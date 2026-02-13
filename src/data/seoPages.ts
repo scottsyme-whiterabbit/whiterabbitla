@@ -31,6 +31,90 @@ const locations = [
   "Calabasas",
 ] as const;
 
+// Curated luxury venue references per location for authentic local SEO
+const locationVenues: Record<string, { dining: string[]; hotels: string[]; culture: string[] }> = {
+  "Los Angeles": {
+    dining: ["Hillstone", "Bestia", "Catch LA"],
+    hotels: ["The West Hollywood EDITION", "Shutters on the Beach", "The Beverly Hilton"],
+    culture: ["The Getty Center", "Chateau Marmont", "LACMA"],
+  },
+  "Beverly Hills": {
+    dining: ["Spago", "Matsuhisa", "The Polo Lounge at The Beverly Hills Hotel"],
+    hotels: ["The Peninsula Beverly Hills", "Waldorf Astoria Beverly Hills", "Montage Beverly Hills"],
+    culture: ["Rodeo Drive", "Kith Beverly Hills", "The Maybourne"],
+  },
+  "Hollywood": {
+    dining: ["Musso & Frank Grill", "Mama Shelter", "Mother Wolf"],
+    hotels: ["The Hollywood Roosevelt", "1 Hotel West Hollywood", "Sunset Tower Hotel"],
+    culture: ["The Fonda Theatre", "Hollywood Bowl", "NeueHouse Hollywood"],
+  },
+  "Santa Monica": {
+    dining: ["Giorgio Baldi", "Elephante", "Hillstone Santa Monica"],
+    hotels: ["Shutters on the Beach", "Casa del Mar", "The Shore Hotel"],
+    culture: ["Santa Monica Proper", "Palisades Village", "Margo Leavin Gallery"],
+  },
+  "Malibu": {
+    dining: ["Nobu Malibu", "Soho House Malibu", "Taverna Tony"],
+    hotels: ["The Surfrider Malibu", "Calamigos Guest Ranch", "Malibu Beach Inn"],
+    culture: ["Malibu Country Mart", "The Getty Villa", "Point Dume"],
+  },
+  "West Hollywood": {
+    dining: ["Craig's", "Catch LA", "Cecconi's"],
+    hotels: ["The West Hollywood EDITION", "Sunset Tower Hotel", "Pendry West Hollywood"],
+    culture: ["Melrose Place", "The Sunset Strip", "Pacific Design Center"],
+  },
+  "Bel Air": {
+    dining: ["Wolfgang Puck at Hotel Bel-Air", "Bel-Air Bar & Grill", "Katsuya Brentwood"],
+    hotels: ["Hotel Bel-Air", "The Bel-Air Bay Club", "W Los Angeles"],
+    culture: ["The Getty Center", "Bel-Air Country Club", "Stone Canyon"],
+  },
+  "Pasadena": {
+    dining: ["The Raymond", "Café Beaujolais", "Union Restaurant"],
+    hotels: ["The Langham Huntington", "Hotel Constance", "Pasadena Hotel & Pool"],
+    culture: ["The Norton Simon Museum", "Old Town Pasadena", "The Gamble House"],
+  },
+  "Orange County": {
+    dining: ["Selanne Steak Tavern", "Marché Moderne", "The Beachcomber at Crystal Cove"],
+    hotels: ["Montage Laguna Beach", "The Resort at Pelican Hill", "Waldorf Astoria Monarch Beach"],
+    culture: ["Fashion Island", "South Coast Plaza", "Laguna Beach art galleries"],
+  },
+  "San Diego": {
+    dining: ["Juniper & Ivy", "Born & Raised", "Addison"],
+    hotels: ["The Lodge at Torrey Pines", "Hotel del Coronado", "Pendry San Diego"],
+    culture: ["The Gaslamp Quarter", "La Jolla Cove", "Balboa Park"],
+  },
+  "Las Vegas": {
+    dining: ["Carbone", "Catch Las Vegas", "Nobu at Caesars Palace"],
+    hotels: ["Bellagio", "The Wynn", "Encore at Wynn"],
+    culture: ["The ARIA Fine Art Collection", "The Venetian", "Resorts World"],
+  },
+  "Calabasas": {
+    dining: ["Sagebrush Cantina", "Toscanova", "The Six Chow House"],
+    hotels: ["The Anza", "Calabasas Inn", "Four Seasons Westlake Village"],
+    culture: ["The Commons at Calabasas", "Malibu Creek State Park", "King Gillette Ranch"],
+  },
+};
+
+function getVenueContext(location: string, serviceKey: string): string {
+  const venues = locationVenues[location];
+  if (!venues) return "";
+
+  switch (serviceKey) {
+    case "corporate-event-magician":
+      return `Whether it's a product launch at ${venues.culture[2]}, a client appreciation dinner at ${venues.dining[0]}, or a gala at ${venues.hotels[0]} — White Rabbit brings the same world-class presence to every room in ${location}.`;
+    case "private-party-magician":
+      return `From penthouse celebrations overlooking ${venues.culture[1]} to intimate dinner parties after an evening at ${venues.dining[1]}, ${location}'s finest hosts know: the entertainment is what separates a nice night from an unforgettable one.`;
+    case "wedding-magician":
+      return `${location}'s most sought-after wedding venues — from ${venues.hotels[1]} to ${venues.hotels[2]} — deserve entertainment that matches their elegance. White Rabbit is the cocktail hour experience that lives up to the setting.`;
+    case "close-up-magician":
+      return `Picture it: guests mingling in the lobby of ${venues.hotels[0]}, or gathered around the bar at ${venues.dining[2]} — and then something impossible happens in their hands. That's the White Rabbit effect, and it's why ${location}'s most discerning hosts keep coming back.`;
+    case "parlor-show":
+      return `Imagine transforming a private dining room at ${venues.dining[0]} or the event space at ${venues.hotels[0]} into an intimate theater. The Parlor Show brings a level of sophistication that feels right at home in ${location}'s most refined spaces.`;
+    default:
+      return "";
+  }
+}
+
 const serviceTypes = [
   {
     key: "corporate-event-magician",
@@ -171,6 +255,12 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
       midCta = "";
       intro = "";
       body = [];
+  }
+
+  // Inject local venue reference as the third body paragraph
+  const venueContext = getVenueContext(location, service.key);
+  if (venueContext) {
+    body.splice(2, 0, venueContext);
   }
 
   return {
