@@ -1,3 +1,8 @@
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
 export interface SeoPage {
   slug: string;
   title: string;
@@ -14,6 +19,7 @@ export interface SeoPage {
   ctaText: string;
   socialProof: string;
   socialProofAttribution: string;
+  faqs: FaqItem[];
 }
 
 const locations = [
@@ -230,6 +236,74 @@ const testimonials = [
   },
 ];
 
+function generateFaqs(location: string, serviceKey: string): FaqItem[] {
+  const shared: FaqItem[] = [
+    {
+      question: `How far in advance should I book a magician in ${location}?`,
+      answer: `We recommend booking 4–8 weeks in advance, especially during peak event season (October–December and April–June). Popular dates fill quickly. Contact us as soon as you have a date in mind and we'll confirm availability within 24 hours.`,
+    },
+    {
+      question: `What makes White Rabbit different from other magicians in ${location}?`,
+      answer: `White Rabbit delivers a luxury entertainment experience — not just tricks. Think curated atmosphere, world-class sleight of hand, and the kind of guest engagement that transforms events. We've performed for Netflix, Disney, Morgan Stanley, and Rolls Royce because we treat every event like a five-star experience.`,
+    },
+  ];
+
+  const serviceSpecific: Record<string, FaqItem[]> = {
+    "corporate-event-magician": [
+      {
+        question: "What type of corporate events is White Rabbit best suited for?",
+        answer: "Cocktail receptions, holiday parties, product launches, executive retreats, client appreciation events, trade shows, and galas. Scott's close-up magic is designed to break the ice and create genuine connections between guests — perfect for networking-heavy events.",
+      },
+      {
+        question: "Can the performance be customized with our company branding?",
+        answer: "Absolutely. Scott tailors every performance to your event's goals, audience, and tone. Whether it's incorporating your company's messaging into a reveal or matching the energy of your event theme, every detail is considered.",
+      },
+    ],
+    "private-party-magician": [
+      {
+        question: "What size private party is ideal for a magician?",
+        answer: "White Rabbit performs for intimate gatherings of 6 guests up to celebrations of 200+. For smaller groups, the magic becomes intensely personal. For larger parties, Scott moves through the room creating pockets of wonder everywhere he goes.",
+      },
+      {
+        question: "What occasions work best for hiring a private party magician?",
+        answer: "Milestone birthdays, anniversary dinners, engagement parties, holiday gatherings, housewarming celebrations, dinner parties, and bachelorette events. Any occasion where you want your guests talking about your party for years to come.",
+      },
+    ],
+    "wedding-magician": [
+      {
+        question: "When during the wedding does the magician perform?",
+        answer: "Cocktail hour is the most popular window — it's the perfect time to break the ice between guests from different parts of your life. Scott can also perform during the reception or as a pre-dinner show. We work with your timeline to find the ideal moment.",
+      },
+      {
+        question: "Is the magic appropriate for all ages at a wedding?",
+        answer: "Yes — every performance is elegant, sophisticated, and family-friendly. No cheesy props, no pulling rabbits from hats. Just beautiful, intimate moments of wonder that feel right at home at a black-tie celebration.",
+      },
+    ],
+    "close-up-magician": [
+      {
+        question: "What is close-up magic and how does it work at events?",
+        answer: "Close-up magic happens right in your guests' hands — cards, coins, borrowed objects. Scott moves through the room performing for small groups of 4–8 people at a time, creating intimate, jaw-dropping moments. It's interactive, personal, and the most powerful form of live entertainment.",
+      },
+      {
+        question: "How long does a close-up magic performance typically last?",
+        answer: "Most clients book 2–3 hours of roaming close-up magic for cocktail hours and receptions. Each small group gets about 8–10 minutes of dedicated performance. Custom timing is always available based on your event's needs.",
+      },
+    ],
+    "private-magic-show": [
+      {
+        question: "What is included in a Private Magic Show?",
+        answer: "A curated 45-minute theatrical performance featuring close-up magic, mentalism, and audience interaction. In the greater Los Angeles area, full production support is included — professional lighting, sound design, and staging to transform your space into an intimate theater.",
+      },
+      {
+        question: "How many guests can attend a Private Magic Show?",
+        answer: "The Private Magic Show is designed for groups of 20 to 120 guests. This range ensures every person feels connected to the performance — close enough to see every detail, intimate enough to feel like they're part of something special.",
+      },
+    ],
+  };
+
+  return [...(serviceSpecific[serviceKey] || []), ...shared];
+}
+
 function generatePage(location: string, service: typeof serviceTypes[number]): SeoPage {
   const slug = `${slugify(location)}-${service.key}`;
 
@@ -323,6 +397,8 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
     body.splice(2, 0, venueContext);
   }
 
+  const faqs = generateFaqs(location, service.key);
+
   return {
     slug,
     title: `${service.label} in ${location}`,
@@ -339,6 +415,7 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
     ctaText: `Book White Rabbit for Your ${location} Event`,
     socialProof: testimonial.quote,
     socialProofAttribution: testimonial.attribution,
+    faqs,
   };
 }
 
