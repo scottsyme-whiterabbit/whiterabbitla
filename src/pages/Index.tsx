@@ -13,6 +13,11 @@ import silhouetteImg from "@/assets/event-silhouette.jpg";
 import cardsEmeraldImg from "@/assets/event-cards-emerald.jpg";
 import crowdImg from "@/assets/event-crowd.jpg";
 import intimateImg from "@/assets/event-closeup-intimate.jpg";
+import cuMagicReactionImg from "@/assets/event-cu-magic-reaction.jpg";
+import cardsBlueImg from "@/assets/event-cards-blue.jpg";
+import crowdReactionImg from "@/assets/event-crowd-reaction.jpg";
+import groupFinaleImg from "@/assets/event-group-finale.jpg";
+import rubikShowImg from "@/assets/event-rubiks-show.jpg";
 
 
 import netflixLogo from "@/assets/logos/netflix.png";
@@ -172,42 +177,47 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-3 gap-4">
           <AnimatedSection>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={penthouseImg} alt="Scott Syme performing White Rabbit parlor magic show in a luxury Los Angeles penthouse" className="w-full h-full object-cover" />
+              <img src={cuMagicReactionImg} alt="Guest reacting with amazement to close-up card magic" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={cocktailImg} alt="Guests reacting to close-up magic at a luxury cocktail event" className="w-full h-full object-cover" />
+              <img src={penthouseImg} alt="Scott Syme performing parlor magic show in a luxury Los Angeles penthouse" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
+            <div className="aspect-[4/3] overflow-hidden">
+              <img src={cardsBlueImg} alt="Close-up sleight of hand with dramatic blue lighting" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.1}>
+            <div className="aspect-[4/3] overflow-hidden">
+              <img src={rubikShowImg} alt="Scott Syme performing with a Rubik's cube at a live show" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.15}>
+            <div className="aspect-[4/3] overflow-hidden">
+              <img src={crowdReactionImg} alt="Audience reacting with excitement during a parlor magic show" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.2}>
             <div className="aspect-[4/3] overflow-hidden">
               <img src={parlorShowImg} alt="Scott Syme parlor magic show with emerald curtains" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
-          <AnimatedSection delay={0.1}>
+          <AnimatedSection delay={0.15}>
             <div className="aspect-[4/3] overflow-hidden">
               <img src={scottCardsImg} alt="Scott Syme performing card magic at a private event" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
-          <AnimatedSection delay={0.15}>
+          <AnimatedSection delay={0.2}>
+            <div className="aspect-[4/3] overflow-hidden">
+              <img src={groupFinaleImg} alt="Group photo after a White Rabbit magic experience" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.25}>
             <div className="aspect-[4/3] overflow-hidden">
               <img src={silhouetteImg} alt="Dramatic silhouette of magician performing on stage" className="w-full h-full object-cover" />
-            </div>
-          </AnimatedSection>
-          <AnimatedSection delay={0.2}>
-            <div className="aspect-[4/3] overflow-hidden">
-              <img src={cardsEmeraldImg} alt="Close-up card sleight of hand with emerald backdrop" className="w-full h-full object-cover" />
-            </div>
-          </AnimatedSection>
-          <AnimatedSection delay={0.15}>
-            <div className="aspect-[4/3] overflow-hidden">
-              <img src={crowdImg} alt="Crowd enjoying a White Rabbit magic experience" className="w-full h-full object-cover" />
-            </div>
-          </AnimatedSection>
-          <AnimatedSection delay={0.2}>
-            <div className="aspect-[4/3] overflow-hidden">
-              <img src={intimateImg} alt="Intimate close-up magic performance" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
         </div>
