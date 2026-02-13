@@ -29,6 +29,16 @@ const locations = [
   "San Diego",
   "Las Vegas",
   "Calabasas",
+  "Miami",
+  "New York",
+  "Austin",
+  "Chicago",
+  "Dallas",
+  "San Francisco",
+  "Scottsdale",
+  "Nashville",
+  "Aspen",
+  "Houston",
 ] as const;
 
 // Curated luxury venue references per location for authentic local SEO
@@ -92,6 +102,56 @@ const locationVenues: Record<string, { dining: string[]; hotels: string[]; cultu
     dining: ["Sagebrush Cantina", "Toscanova", "The Six Chow House"],
     hotels: ["The Anza", "Calabasas Inn", "Four Seasons Westlake Village"],
     culture: ["The Commons at Calabasas", "Malibu Creek State Park", "King Gillette Ranch"],
+  },
+  "Miami": {
+    dining: ["Carbone Miami", "Major Food Group's ZZ's", "Papi Steak"],
+    hotels: ["Faena Hotel", "The Setai", "Four Seasons Surf Club"],
+    culture: ["Design District", "Wynwood Walls", "Pérez Art Museum"],
+  },
+  "New York": {
+    dining: ["Le Bernardin", "Eleven Madison Park", "Carbone"],
+    hotels: ["The Mark", "Aman New York", "The Carlyle"],
+    culture: ["The Met", "MoMA", "The Standard High Line"],
+  },
+  "Austin": {
+    dining: ["Uchi", "Emmer & Rye", "Lenoir"],
+    hotels: ["Hotel Saint Cecilia", "The Line Austin", "Commodore Perry Estate"],
+    culture: ["South Congress", "The Contemporary Austin", "Rainey Street"],
+  },
+  "Chicago": {
+    dining: ["Alinea", "Girl & The Goat", "RPM Italian"],
+    hotels: ["The Peninsula Chicago", "Soho House Chicago", "The Langham"],
+    culture: ["The Art Institute", "Millennium Park", "The Chicago Riverwalk"],
+  },
+  "Dallas": {
+    dining: ["Nobu Dallas", "Flora Street Café", "Town Hearth"],
+    hotels: ["The Joule", "The Ritz-Carlton Dallas", "Hotel Crescent Court"],
+    culture: ["The Dallas Arts District", "Highland Park Village", "The Nasher Sculpture Center"],
+  },
+  "San Francisco": {
+    dining: ["Quince", "Lazy Bear", "Cotogna"],
+    hotels: ["The St. Regis San Francisco", "Proper Hotel", "The Ritz-Carlton"],
+    culture: ["SFMOMA", "The Presidio", "Pacific Heights"],
+  },
+  "Scottsdale": {
+    dining: ["Steak 44", "Café Monarch", "Talavera at Four Seasons"],
+    hotels: ["The Phoenician", "Andaz Scottsdale", "Four Seasons Scottsdale"],
+    culture: ["Old Town Scottsdale", "Scottsdale Museum of Contemporary Art", "Camelback Mountain"],
+  },
+  "Nashville": {
+    dining: ["Catbird Seat", "The 404 Kitchen", "Husk Nashville"],
+    hotels: ["The Hermitage Hotel", "1 Hotel Nashville", "Noelle Nashville"],
+    culture: ["The Gulch", "12South", "The Frist Art Museum"],
+  },
+  "Aspen": {
+    dining: ["Matsuhisa Aspen", "Element 47", "Betula Aspen"],
+    hotels: ["The Little Nell", "The St. Regis Aspen", "Hotel Jerome"],
+    culture: ["Aspen Art Museum", "Wagner Park", "Aspen Mountain"],
+  },
+  "Houston": {
+    dining: ["March", "Underbelly Hospitality", "Le Jardinier"],
+    hotels: ["Hotel Granduca", "La Colombe d'Or", "The Post Oak Hotel"],
+    culture: ["The Museum District", "River Oaks", "The Menil Collection"],
   },
 };
 
