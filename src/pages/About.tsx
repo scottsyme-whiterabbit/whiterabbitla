@@ -58,7 +58,7 @@ const About = () => {
                 magician. You're hiring someone who has dedicated his life to making people feel extraordinary.
               </p>
               <p>
-                For premium White Rabbit parlor shows, Scott transforms spaces with emerald curtain drapes, 
+                For premium White Rabbit private magic shows, Scott transforms spaces with emerald curtain drapes, 
                 cinematic uplighting, and a curated soundtrack — creating an atmosphere that feels like stepping 
                 into an upscale hotel lobby. The show is bigger emotionally than it is physically. Guests don't 
                 just leave entertained; they leave feeling changed, carrying stories they'll tell for years.

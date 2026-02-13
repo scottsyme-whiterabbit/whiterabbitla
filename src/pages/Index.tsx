@@ -206,7 +206,7 @@ const Index = () => {
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={penthouseImg} alt="Scott Syme performing parlor magic show in a luxury Los Angeles penthouse" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={penthouseImg} alt="Scott Syme performing private magic show in a luxury Los Angeles penthouse" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
@@ -221,12 +221,12 @@ const Index = () => {
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={crowdReactionImg} alt="Audience reacting with excitement during a White Rabbit parlor magic show" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={crowdReactionImg} alt="Audience reacting with excitement during a White Rabbit private magic show" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.2}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={parlorShowImg} alt="Scott Syme parlor magic show with emerald curtains and uplighting" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={parlorShowImg} alt="Scott Syme private magic show with emerald curtains and uplighting" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.15}>

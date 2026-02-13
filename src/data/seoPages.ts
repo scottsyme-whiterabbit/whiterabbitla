@@ -168,8 +168,8 @@ function getVenueContext(location: string, serviceKey: string): string {
       return `${location}'s most sought-after wedding venues — from ${venues.hotels[1]} to ${venues.hotels[2]} — deserve entertainment that matches their elegance. White Rabbit is the cocktail hour experience that lives up to the setting.`;
     case "close-up-magician":
       return `Picture it: guests mingling in the lobby of ${venues.hotels[0]}, or gathered around the bar at ${venues.dining[2]} — and then something impossible happens in their hands. That's the White Rabbit effect, and it's why ${location}'s most discerning hosts keep coming back.`;
-    case "parlor-show":
-      return `Imagine transforming a private dining room at ${venues.dining[0]} or the event space at ${venues.hotels[0]} into an intimate theater. The Parlor Show brings a level of sophistication that feels right at home in ${location}'s most refined spaces.`;
+    case "private-magic-show":
+      return `Imagine transforming a private dining room at ${venues.dining[0]} or the event space at ${venues.hotels[0]} into an intimate theater. The Private Magic Show brings a level of sophistication that feels right at home in ${location}'s most refined spaces.`;
     default:
       return "";
   }
@@ -197,9 +197,9 @@ const serviceTypes = [
     category: "Close-Up Magic",
   },
   {
-    key: "parlor-show",
-    label: "Parlor Magic Show",
-    category: "Parlor Shows",
+    key: "private-magic-show",
+    label: "Private Magic Show",
+    category: "Private Magic Shows",
   },
 ] as const;
 
@@ -296,16 +296,16 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
       ];
       break;
 
-    case "parlor-show":
-      heroHeadline = `Parlor Magic Show in ${location}`;
+    case "private-magic-show":
+      heroHeadline = `Private Magic Show in ${location}`;
       heroSub = `A curated 45-minute theatrical experience your guests will be buzzing about for months.`;
-      midCta = `Book a Parlor Show in ${location}`;
-      intro = `Looking for a show-stopping performance for your ${location} event? The White Rabbit Parlor Show is a curated 45-minute theatrical experience — part magic show, part one-man theater, part collective hallucination. Designed for groups of 20 to 120, it transforms any space into an intimate venue where the impossible feels inevitable and every guest is part of the story.`;
+      midCta = `Book a Private Magic Show in ${location}`;
+      intro = `Looking for a show-stopping performance for your ${location} event? The White Rabbit Private Magic Show is a curated 45-minute theatrical experience — part magic show, part one-man theater, part collective hallucination. Designed for groups of 20 to 120, it transforms any space into an intimate venue where the impossible feels inevitable and every guest is part of the story.`;
       body = [
         `Imagine emerald curtains, warm lighting, and a curated soundtrack that pulls your guests into another world before the first trick even begins. Then Scott takes the stage — and for the next 45 minutes, reality gets beautifully unreliable. Cards defy physics. Minds are read with unsettling accuracy. Objects appear in places they have no business being. And the audience? They're not just watching. They're screaming, laughing, and grabbing each other's arms.`,
-        `The Parlor Show isn't background entertainment — it's the centerpiece of your evening. It's the thing your guests will text each other about the next morning. It's the reason they'll RSVP "yes" to your next event before you even send the invitation. That's the ROI of extraordinary entertainment.`,
+        `The Private Magic Show isn't background entertainment — it's the centerpiece of your evening. It's the thing your guests will text each other about the next morning. It's the reason they'll RSVP "yes" to your next event before you even send the invitation. That's the ROI of extraordinary entertainment.`,
         `White Rabbit provides full production support — professional lighting, sound design, and staging — turning your venue, living room, or corporate conference room into a world-class performance space. Every show is tailored to your audience, your space, and the feeling you want to create.`,
-        `Based in Los Angeles and available for events across ${location} and beyond. The Parlor Show is our most requested experience — book early to secure your preferred date.`,
+        `Based in Los Angeles and available for events across ${location} and beyond. The Private Magic Show is our most requested experience — book early to secure your preferred date.`,
       ];
       break;
 

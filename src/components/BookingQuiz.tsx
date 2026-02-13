@@ -12,7 +12,7 @@ const EVENT_TYPES = [
   { id: "corporate", label: "Corporate Event", description: "Galas, product launches, conferences" },
   { id: "wedding", label: "Wedding", description: "Ceremonies, receptions, rehearsal dinners" },
   { id: "private", label: "Private Party", description: "Birthdays, bachelorettes, anniversaries, holidays" },
-  { id: "parlor", label: "Parlor Show", description: "Intimate seated show experience" },
+  { id: "parlor", label: "Private Magic Show", description: "Intimate seated show experience" },
   { id: "other", label: "Something Else", description: "Let's talk about your vision" },
 ];
 
@@ -52,10 +52,10 @@ const getRecommendation = (data: QuizData) => {
 
   if (eventType === "parlor" || (guestCount === "intimate" && eventType !== "corporate")) {
     return {
-      title: "The White Rabbit Parlor Show",
+      title: "The White Rabbit Private Magic Show",
       description:
         "An intimate, seated show with emerald curtains, cinematic uplighting, and a curated soundtrack. Scott transforms your space into something unforgettable — blending card mastery, mentalism, and audience participation that engages all the senses.",
-      format: "Parlor Show",
+      format: "Private Magic Show",
     };
   }
 
