@@ -40,7 +40,7 @@ const Experience = () => {
       {/* Hero */}
       <section className="relative min-h-[85vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroDesertImg} alt="Scott Syme in the desert, White Rabbit luxury magician Los Angeles" className="w-full h-full object-cover" style={{ objectPosition: 'center 55%', filter: 'contrast(1.15) saturate(0.8) brightness(0.92) sepia(0.2)' }} />
+          <img src={heroDesertImg} alt="Scott Syme in the desert, White Rabbit luxury magician Los Angeles" className="w-full h-full object-cover" fetchPriority="high" decoding="async" style={{ objectPosition: 'center 55%', filter: 'contrast(1.15) saturate(0.8) brightness(0.92) sepia(0.2)' }} />
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark via-forest-dark/30 to-forest-dark/10" />
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-6 pb-16 w-full text-center">
@@ -64,7 +64,7 @@ const Experience = () => {
           <div className={`max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center ${index % 2 === 1 ? "lg:direction-rtl" : ""}`}>
             <AnimatedSection className={index % 2 === 1 ? "lg:order-2" : ""}>
               <div className="aspect-[4/3] overflow-hidden">
-                <img src={service.image} alt={`${service.title} — White Rabbit luxury magic entertainment Los Angeles`} className="w-full h-full object-cover" />
+                <img src={service.image} alt={`${service.title} — White Rabbit luxury magic entertainment Los Angeles`} loading="lazy" decoding="async" className="w-full h-full object-cover" />
               </div>
             </AnimatedSection>
             <AnimatedSection delay={0.2} className={index % 2 === 1 ? "lg:order-1" : ""}>
@@ -88,17 +88,17 @@ const Experience = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           <AnimatedSection>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={cardsEmeraldImg} alt="Close-up of card sleight of hand with emerald green curtain backdrop at White Rabbit parlor show Los Angeles" className="w-full h-full object-cover" />
+              <img src={cardsEmeraldImg} alt="Close-up of card sleight of hand with emerald green curtain backdrop at White Rabbit parlor show Los Angeles" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={intimateImg} alt="Guests captivated by intimate close-up magic performance at luxury Los Angeles event" className="w-full h-full object-cover" />
+              <img src={intimateImg} alt="Guests captivated by intimate close-up magic performance at luxury Los Angeles event" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.3}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={parlorImg} alt="Scott Syme performing parlor magic show with emerald curtains and cinematic uplighting Los Angeles" className="w-full h-full object-cover" />
+              <img src={parlorImg} alt="Scott Syme performing parlor magic show with emerald curtains and cinematic uplighting Los Angeles" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
         </div>

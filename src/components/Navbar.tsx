@@ -34,7 +34,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="flex items-center justify-center h-20">
           <Link to="/" className="absolute left-6 lg:left-12 flex-shrink-0">
-            <img src={wrLogo} alt="White Rabbit" className="h-12 w-auto invert mix-blend-screen" />
+            <img src={wrLogo} alt="White Rabbit Los Angeles — luxury magician" className="h-12 w-auto invert mix-blend-screen" fetchPriority="high" />
           </Link>
 
           {/* Desktop nav */}

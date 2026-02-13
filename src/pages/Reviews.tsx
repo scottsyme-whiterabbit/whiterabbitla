@@ -84,7 +84,7 @@ const Reviews = () => {
       {/* Hero */}
       <section className="relative min-h-[50vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">
-          <img src={audienceImg} alt="Audience reacting to Scott Syme White Rabbit magic show at a luxury event in Los Angeles" className="w-full h-full object-cover" />
+          <img src={audienceImg} alt="Audience reacting to Scott Syme White Rabbit magic show at a luxury event in Los Angeles" className="w-full h-full object-cover" fetchPriority="high" decoding="async" />
           <div className="absolute inset-0 bg-forest-dark/70" />
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center pb-16 pt-32">
