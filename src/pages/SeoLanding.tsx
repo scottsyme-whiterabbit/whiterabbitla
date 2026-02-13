@@ -1,10 +1,26 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import { useEffect } from "react";
-import { Star } from "lucide-react";
+import { Star, CheckCircle } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getSeoPageBySlug } from "@/data/seoPages";
 import experienceImg from "@/assets/experience-closeup.jpg";
 import parlorImg from "@/assets/event-parlor-show.jpg";
+
+import netflixLogo from "@/assets/logos/netflix.png";
+import disneyLogo from "@/assets/logos/disney.png";
+import rollsroyceLogo from "@/assets/logos/rollsroyce.png";
+import morganstanleyLogo from "@/assets/logos/morganstanley.png";
+import paramountLogo from "@/assets/logos/paramount.png";
+import rivianLogo from "@/assets/logos/rivian.png";
+
+const trustLogos = [
+  { name: "Netflix", logo: netflixLogo },
+  { name: "Disney", logo: disneyLogo },
+  { name: "Morgan Stanley", logo: morganstanleyLogo },
+  { name: "Rolls Royce", logo: rollsroyceLogo },
+  { name: "Paramount", logo: paramountLogo },
+  { name: "Rivian", logo: rivianLogo },
+];
 
 const SeoLanding = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -34,46 +50,125 @@ const SeoLanding = () => {
   return (
     <main className="pt-20">
       {/* Hero */}
-      <section className="relative py-32 lg:py-40 overflow-hidden">
+      <section className="relative py-28 lg:py-36 overflow-hidden">
         <div className="absolute inset-0">
           <img
             src={heroImage}
             alt={page.heroHeadline}
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-forest-dark/75" />
+          <div className="absolute inset-0 bg-forest-dark/80" />
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <AnimatedSection>
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">
-              {page.category}
+              {page.category} · {page.location}
             </p>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-cream mb-6 leading-tight">
               {page.heroHeadline}
             </h1>
-            <p className="font-sans text-lg text-cream/80 max-w-2xl mx-auto">
+            <p className="font-sans text-lg text-cream/80 max-w-2xl mx-auto mb-10">
               {page.heroSubheadline}
             </p>
+            <Link
+              to="/contact"
+              className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors"
+            >
+              Check Availability
+            </Link>
           </AnimatedSection>
         </div>
       </section>
 
-      {/* Intro */}
+      {/* Trust Bar */}
+      <section className="bg-forest-dark py-8 border-t border-cream/10">
+        <div className="max-w-4xl mx-auto px-6">
+          <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-cream/40 mb-6">
+            Trusted by World-Class Brands
+          </p>
+          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+            {trustLogos.map((client) => (
+              <img
+                key={client.name}
+                src={client.logo}
+                alt={client.name}
+                className="h-6 md:h-8 w-auto object-contain opacity-50 brightness-0 invert"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Intro + Body */}
       <section className="py-20 lg:py-28">
         <div className="max-w-3xl mx-auto px-6">
           <AnimatedSection>
-            <p className="font-sans text-lg text-muted-foreground leading-relaxed mb-12">
+            <p className="font-sans text-lg text-foreground leading-relaxed mb-10 font-medium">
               {page.introParagraph}
             </p>
           </AnimatedSection>
 
-          {page.bodyParagraphs.map((paragraph, i) => (
+          {page.bodyParagraphs.slice(0, 2).map((paragraph, i) => (
             <AnimatedSection key={i} delay={i * 0.1}>
               <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8">
                 {paragraph}
               </p>
             </AnimatedSection>
           ))}
+        </div>
+      </section>
+
+      {/* Mid-page CTA */}
+      <AnimatedSection>
+        <section className="bg-secondary/30 py-16">
+          <div className="max-w-3xl mx-auto px-6 text-center">
+            <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-4">
+              {page.midCtaText}
+            </h2>
+            <p className="font-sans text-base text-muted-foreground mb-8 max-w-xl mx-auto">
+              Dates fill quickly — especially during peak event season. Tell us about your event and we'll confirm availability within 24 hours.
+            </p>
+            <Link
+              to="/contact"
+              className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors"
+            >
+              Inquire Now — It's Free
+            </Link>
+          </div>
+        </section>
+      </AnimatedSection>
+
+      {/* Remaining body */}
+      <section className="py-20">
+        <div className="max-w-3xl mx-auto px-6">
+          {page.bodyParagraphs.slice(2).map((paragraph, i) => (
+            <AnimatedSection key={i} delay={i * 0.1}>
+              <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8">
+                {paragraph}
+              </p>
+            </AnimatedSection>
+          ))}
+
+          {/* What You Get */}
+          <AnimatedSection delay={0.2}>
+            <div className="mt-8 p-8 border border-border">
+              <h3 className="font-serif text-2xl text-foreground mb-6">What's Included</h3>
+              <ul className="space-y-4">
+                {[
+                  "Pre-event consultation to tailor the performance to your audience and goals",
+                  "World-class close-up magic, mentalism, and audience interaction",
+                  "Professional appearance — Scott arrives in signature style, ready to elevate",
+                  "Full production support for parlor shows (lighting, sound, staging)",
+                  "A follow-up to make sure your event exceeded expectations",
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <CheckCircle size={18} className="text-accent mt-0.5 shrink-0" />
+                    <span className="font-sans text-sm text-muted-foreground">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
@@ -87,32 +182,33 @@ const SeoLanding = () => {
               ))}
             </div>
             <blockquote className="font-serif text-2xl md:text-3xl text-cream/90 leading-relaxed mb-6">
-              "Scott didn't just entertain our guests — he made them feel like the most important people in the room. 
-              That's a rare gift, and it's exactly what we needed."
+              "{page.socialProof}"
             </blockquote>
             <p className="font-sans text-sm tracking-[0.2em] uppercase text-cream/50">
-              — Private Client, {page.location}
+              — {page.socialProofAttribution}
             </p>
           </div>
         </section>
       </AnimatedSection>
 
-      {/* CTA */}
+      {/* Final CTA */}
       <AnimatedSection>
         <section className="py-24 text-center">
           <div className="max-w-2xl mx-auto px-6">
-            <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">
-              {page.ctaText}
+            <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-4">
+              Make Your Next Event Unforgettable
             </h2>
-            <p className="font-sans text-base text-muted-foreground mb-10">
-              Every experience is tailored to your event, your guests, and your vision. 
-              Tell us about your occasion and we'll craft something extraordinary.
+            <p className="font-sans text-base text-muted-foreground mb-6">
+              Tell us about your {page.location} event — date, guest count, and vibe — and we'll craft a custom experience your guests will never forget.
+            </p>
+            <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-8">
+              Most clients book 4–8 weeks in advance · No obligation to inquire
             </p>
             <Link
               to="/contact"
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors"
             >
-              Inquire Now
+              Book White Rabbit Now
             </Link>
           </div>
         </section>
