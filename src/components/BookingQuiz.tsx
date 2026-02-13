@@ -30,11 +30,12 @@ const BUDGETS = [
   { id: "showstopper", label: "Go All Out", description: "No limits — make it unforgettable" },
 ];
 
-type Step = "event" | "guests" | "date" | "budget" | "contact" | "recommendation";
+type Step = "event" | "location" | "guests" | "date" | "budget" | "contact" | "recommendation";
 
 interface QuizData {
   eventType: string;
   eventLabel: string;
+  location: string;
   guestCount: string;
   guestLabel: string;
   date: string;
@@ -84,7 +85,7 @@ const getRecommendation = (data: QuizData) => {
   };
 };
 
-const STEPS: Step[] = ["event", "guests", "date", "budget", "contact", "recommendation"];
+const STEPS: Step[] = ["event", "location", "guests", "date", "budget", "contact", "recommendation"];
 
 const BookingQuiz = () => {
   const { isOpen, closeQuiz } = useBookingQuiz();
@@ -95,6 +96,7 @@ const BookingQuiz = () => {
   const [data, setData] = useState<QuizData>({
     eventType: "",
     eventLabel: "",
+    location: "",
     guestCount: "",
     guestLabel: "",
     date: "",
@@ -112,6 +114,7 @@ const BookingQuiz = () => {
   const canAdvance = () => {
     switch (step) {
       case "event": return !!data.eventType;
+      case "location": return !!data.location;
       case "guests": return !!data.guestCount;
       case "date": return !!data.date;
       case "budget": return !!data.budget;
@@ -141,7 +144,7 @@ const BookingQuiz = () => {
           phone: data.phone,
           eventType: `${data.eventLabel} (${rec.format})`,
           date: data.date,
-          location: "TBD — from quiz funnel",
+          location: data.location || "TBD",
           message: `Guest Count: ${data.guestLabel}\nBudget: ${data.budgetLabel}\nRecommended: ${rec.title}\n\n${data.message || "No additional message."}`,
         },
       });
@@ -163,7 +166,7 @@ const BookingQuiz = () => {
     setTimeout(() => {
       setStep("event");
       setSubmitted(false);
-      setData({ eventType: "", eventLabel: "", guestCount: "", guestLabel: "", date: "", budget: "", budgetLabel: "", name: "", email: "", phone: "", message: "" });
+      setData({ eventType: "", eventLabel: "", location: "", guestCount: "", guestLabel: "", date: "", budget: "", budgetLabel: "", name: "", email: "", phone: "", message: "" });
     }, 300);
   };
 
@@ -255,7 +258,7 @@ const BookingQuiz = () => {
                     </div>
                   ) : step === "event" ? (
                     <div>
-                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 1 of 5</p>
+                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 1 of 6</p>
                       <h3 className="font-serif text-2xl text-foreground mb-2">What's the Occasion?</h3>
                       <p className="font-sans text-sm text-muted-foreground mb-6">Select the type of event you're planning.</p>
                       <div className="space-y-3">
@@ -270,9 +273,21 @@ const BookingQuiz = () => {
                         ))}
                       </div>
                     </div>
+                  ) : step === "location" ? (
+                    <div>
+                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 2 of 6</p>
+                      <h3 className="font-serif text-2xl text-foreground mb-2">Where's the Event?</h3>
+                      <p className="font-sans text-sm text-muted-foreground mb-6">City or general area — helps us plan logistics.</p>
+                      <Input
+                        value={data.location}
+                        onChange={(e) => setData({ ...data, location: e.target.value })}
+                        placeholder="e.g. Los Angeles, Miami, New York..."
+                        className="bg-background border-border"
+                      />
+                    </div>
                   ) : step === "guests" ? (
                     <div>
-                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 2 of 5</p>
+                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 3 of 6</p>
                       <h3 className="font-serif text-2xl text-foreground mb-2">How Many Guests?</h3>
                       <p className="font-sans text-sm text-muted-foreground mb-6">This helps us recommend the right format.</p>
                       <div className="space-y-3">
@@ -289,7 +304,7 @@ const BookingQuiz = () => {
                     </div>
                   ) : step === "date" ? (
                     <div>
-                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 3 of 5</p>
+                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 4 of 6</p>
                       <h3 className="font-serif text-2xl text-foreground mb-2">When Is Your Event?</h3>
                       <p className="font-sans text-sm text-muted-foreground mb-6">An approximate date is fine — we can finalize later.</p>
                       <Input
@@ -301,7 +316,7 @@ const BookingQuiz = () => {
                     </div>
                   ) : step === "budget" ? (
                     <div>
-                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 4 of 5</p>
+                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 5 of 6</p>
                       <h3 className="font-serif text-2xl text-foreground mb-2">Investment Range</h3>
                       <p className="font-sans text-sm text-muted-foreground mb-6">This helps us tailor the experience to your vision.</p>
                       <div className="space-y-3">
@@ -318,7 +333,7 @@ const BookingQuiz = () => {
                     </div>
                   ) : step === "contact" ? (
                     <div>
-                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 5 of 5</p>
+                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 6 of 6</p>
                       <h3 className="font-serif text-2xl text-foreground mb-2">Almost There!</h3>
                       <p className="font-sans text-sm text-muted-foreground mb-6">How can Scott reach you?</p>
                       <div className="space-y-4">
@@ -384,6 +399,10 @@ const BookingQuiz = () => {
                               <div className="flex justify-between border-b border-border pb-2">
                                 <span>Event</span>
                                 <span className="text-foreground">{data.eventLabel}</span>
+                              </div>
+                              <div className="flex justify-between border-b border-border pb-2">
+                                <span>Location</span>
+                                <span className="text-foreground">{data.location}</span>
                               </div>
                               <div className="flex justify-between border-b border-border pb-2">
                                 <span>Guests</span>
