@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
+import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import heroDesertImg from "@/assets/experience-hero-desert.jpg";
 import closeupImg from "@/assets/event-closeup-cocktail.jpg";
 import parlorImg from "@/assets/event-parlor-stage.jpg";
@@ -32,6 +33,8 @@ const services = [
 ];
 
 const Experience = () => {
+  const { openQuiz } = useBookingQuiz();
+
   return (
     <main className="pt-20">
       {/* Hero */}
@@ -68,12 +71,12 @@ const Experience = () => {
               <div>
                 <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">{service.title}</h2>
                 <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8">{service.description}</p>
-                <Link
-                  to="/contact"
+                <button
+                  onClick={openQuiz}
                   className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-primary text-primary px-8 py-3 hover:bg-primary hover:text-primary-foreground transition-colors"
                 >
                   Inquire
-                </Link>
+                </button>
               </div>
             </AnimatedSection>
           </div>
@@ -109,12 +112,12 @@ const Experience = () => {
             <p className="font-sans text-base text-cream/70 mb-10">
               Let Scott transform your next event into an atmosphere of wonder, joy, and genuine connection.
             </p>
-            <Link
-              to="/contact"
+            <button
+              onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors"
             >
               Book Now
-            </Link>
+            </button>
           </div>
         </section>
       </AnimatedSection>

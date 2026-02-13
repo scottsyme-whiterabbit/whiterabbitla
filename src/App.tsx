@@ -8,6 +8,8 @@ import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import usePageTracking from "@/hooks/usePageTracking";
 import LocalBusinessSchema from "@/components/LocalBusinessSchema";
+import { BookingQuizProvider } from "@/contexts/BookingQuizContext";
+import BookingQuiz from "@/components/BookingQuiz";
 import Index from "./pages/Index";
 import Experience from "./pages/Experience";
 import About from "./pages/About";
@@ -26,6 +28,7 @@ const AppContent = () => {
       <LocalBusinessSchema />
       <ScrollToTop />
       <Navbar />
+      <BookingQuiz />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/experience" element={<Experience />} />
@@ -44,11 +47,13 @@ const AppContent = () => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <AppContent />
-      </BrowserRouter>
+      <BookingQuizProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AppContent />
+        </BrowserRouter>
+      </BookingQuizProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
