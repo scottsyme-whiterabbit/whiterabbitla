@@ -128,7 +128,7 @@ const Reviews = () => {
 
       {/* CTA */}
       <AnimatedSection>
-        <section className="bg-forest-dark pt-24 pb-12 text-center">
+        <section className="bg-forest-dark pt-24 pb-24 text-center mb-12">
           <div className="max-w-2xl mx-auto px-6">
             <h2 className="font-serif text-4xl text-cream mb-6">Let's Make Some Magic</h2>
             <p className="font-sans text-base text-cream/70 mb-10">
@@ -137,15 +137,11 @@ const Reviews = () => {
             <Link
               to="/contact"
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors">
-
               Book Now
             </Link>
           </div>
         </section>
       </AnimatedSection>
-
-      {/* White separator before footer */}
-      <div className="w-full h-px bg-cream/20" />
     </main>);
 
 };
