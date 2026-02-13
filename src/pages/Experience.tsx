@@ -16,7 +16,7 @@ const services = [
     image: closeupImg,
   },
   {
-    title: "Parlor Shows",
+    title: "Private Magic Shows",
     description: "The premium White Rabbit experience. Scott transforms your space with emerald curtain drapes, cinematic uplighting, and a curated soundtrack — turning any room into an atmosphere that feels like stepping into an upscale hotel lobby. The show blends classic magic, card mastery, mentalism, and stunning coincidences with humor and audience participation that engages all the senses. For 20–100 guests, the show is bigger emotionally than it is physically. Guests walk away feeling like they experienced something they've never felt before.",
     image: parlorImg,
   },
@@ -88,7 +88,7 @@ const Experience = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           <AnimatedSection>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={cardsEmeraldImg} alt="Close-up of card sleight of hand with emerald green curtain backdrop at White Rabbit parlor show Los Angeles" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={cardsEmeraldImg} alt="Close-up of card sleight of hand with emerald green curtain backdrop at White Rabbit private magic show Los Angeles" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
@@ -98,7 +98,7 @@ const Experience = () => {
           </AnimatedSection>
           <AnimatedSection delay={0.3}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={parlorImg} alt="Scott Syme performing parlor magic show with emerald curtains and cinematic uplighting Los Angeles" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={parlorImg} alt="Scott Syme performing private magic show with emerald curtains and cinematic uplighting Los Angeles" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
         </div>

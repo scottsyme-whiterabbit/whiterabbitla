@@ -37,7 +37,7 @@ const reviews = [
 {
   name: "Jennifer K.",
   role: "Charity Gala",
-  text: "Scott's parlor show had our 80 guests completely captivated for 45 minutes straight. The storytelling, the humor, the impossible moments — it was unforgettable.",
+  text: "Scott's private magic show had our 80 guests completely captivated for 45 minutes straight. The storytelling, the humor, the impossible moments — it was unforgettable.",
   rating: 5
 },
 {
