@@ -185,7 +185,7 @@ const SeoLanding = () => {
               </ul>
               {isTravelMarket && (
                 <p className="font-sans text-xs text-muted-foreground/70 mt-6 leading-relaxed italic">
-                  White Rabbit is based in Los Angeles and travels nationwide for select engagements. Close-up magic and mentalism travel beautifully — full theatrical staging (lighting rigs, curtains, sound) is available for events in the greater Los Angeles area. For {page.location} events, Scott works with your venue's existing setup to deliver the same world-class experience.
+                  White Rabbit is based in Los Angeles and travels nationwide for select engagements. Close-up magic, mentalism, and curated sound travel beautifully — full theatrical staging (lighting rigs, curtains) is available for events in the greater Los Angeles area. For {page.location} events, Scott works with your venue's existing setup to deliver the same world-class experience.
                 </p>
               )}
             </div>
