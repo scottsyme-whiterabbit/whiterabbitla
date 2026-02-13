@@ -33,7 +33,7 @@ const About = () => {
             </h2>
             <div className="space-y-6 font-sans text-base text-muted-foreground leading-relaxed">
               <p>
-                Based in Los Angeles, Scott Syme is the creative force behind White Rabbit — a luxury magic 
+                Based in Los Angeles, Scott Syme is the creative force behind White Rabbit, a luxury magic 
                 experience built on a simple belief: the best entertainment makes people feel truly alive. 
                 Not through tricks, but through an atmosphere of joy, genuine hospitality, and human connection 
                 that guests carry with them long after the night ends. A proud member of the world-famous 
@@ -41,25 +41,25 @@ const About = () => {
                 elite craft and warm showmanship to every performance.
               </p>
               <p>
-                Scott's path to magic wasn't a straight line — and that's what makes him different. Before 
+                Scott's path to magic wasn't a straight line, and that's what makes him different. Before 
                 White Rabbit, he built a career in luxury real estate at Compass in Beverly Hills, where he 
                 learned to anticipate the needs of high-net-worth clients and deliver white-glove service. 
-                When he decided to pursue magic full-time, he took a job as a hotel valet — not out of 
+                When he decided to pursue magic full-time, he took a job as a hotel valet. Not out of 
                 necessity, but intention. He wanted to study hospitality from the ground up, learning what 
                 makes people feel genuinely welcomed and cared for. On his very first day after leaving 
                 that position to become a full-time magician, he was invited to perform at a billionaire's 
-                home — a moment that cemented what he already felt: he was exactly where he was meant to be.
+                home. A moment that cemented what he already felt: he was exactly where he was meant to be.
               </p>
               <p>
                 That combination of business acumen, hospitality training, and world-class sleight of hand 
-                is why Fortune 500 companies, charitable organizations, and the most discerning private clients — 
-                Netflix, Disney, Rolls Royce, Morgan Stanley, and countless industry leaders — trust Scott 
+                is why Fortune 500 companies, charitable organizations, and the most discerning private clients 
+                (Netflix, Disney, Rolls Royce, Morgan Stanley, and countless industry leaders) trust Scott 
                 with their most important events. When you hire White Rabbit, you're not just booking a 
                 magician. You're hiring someone who has dedicated his life to making people feel extraordinary.
               </p>
               <p>
                 For premium White Rabbit private magic shows, Scott transforms spaces with emerald curtain drapes, 
-                cinematic uplighting, and a curated soundtrack — creating an atmosphere that feels like stepping 
+                cinematic uplighting, and a curated soundtrack, creating an atmosphere that feels like stepping 
                 into an upscale hotel lobby. The show is bigger emotionally than it is physically. Guests don't 
                 just leave entertained; they leave feeling changed, carrying stories they'll tell for years.
               </p>
@@ -99,7 +99,7 @@ const About = () => {
         <section className="bg-forest-dark py-24">
           <div className="max-w-3xl mx-auto px-6 text-center">
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">The Mission</p>
-            <h2 className="font-serif text-3xl md:text-4xl text-cream leading-relaxed">"To make people feel alive — creating an encounter with joy, wonder, and hospitality that stays with them long after the the evening is over"
+            <h2 className="font-serif text-3xl md:text-4xl text-cream leading-relaxed">"To make people feel alive. Creating an encounter with joy, wonder, and hospitality that stays with them long after the evening is over"
 
 
             </h2>

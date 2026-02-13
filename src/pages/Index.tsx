@@ -122,7 +122,7 @@ const Index = () => {
                 <div key={`${client.name}-${i}`} className="flex-shrink-0 flex items-center justify-center px-8 md:px-10" style={{ width: '180px', height: '60px' }}>
                   <img
                     src={client.logo}
-                    alt={`${client.name} logo — White Rabbit client`}
+                    alt={`${client.name} logo, White Rabbit client`}
                     loading="lazy"
                     decoding="async"
                     className="max-h-full max-w-full w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity brightness-0 invert" />
@@ -143,10 +143,10 @@ const Index = () => {
                 More Than Magic.<br />A Feeling.
               </h2>
               <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">
-                Imagine the hush of a five-star lobby, the thrill of turning left on a flight — that rare feeling 
+                Imagine the hush of a five-star lobby, the thrill of turning left on a flight. That rare feeling 
                 when every detail has been crafted just for you. Now bring that into a room full of your guests. 
                 Scott Syme blends world-class sleight of hand, mentalism, and impossible coincidences with the 
-                warmth of a master host — transforming any space into something cinematic, intimate, and utterly 
+                warmth of a master host, transforming any space into something cinematic, intimate, and utterly 
                 alive. Curated lighting, a signature soundtrack, and moments so close you can feel them. This 
                 isn't a magic show. It's a White Rabbit experience.
               </p>
@@ -181,11 +181,11 @@ const Index = () => {
               )}
             </div>
             <blockquote className="font-serif text-2xl md:text-3xl text-cream/90 leading-relaxed mb-8">
-              "Our guests didn't just enjoy the show — they came alive. Months later, they still talk about 
+              "Our guests didn't just enjoy the show. They came alive. Months later, they still talk about 
               how Scott made them feel. That's not entertainment. That's something else entirely."
             </blockquote>
             <p className="font-sans text-sm tracking-[0.2em] uppercase text-cream/50 mb-8">
-              — Morgan Stanley, Private Client Event
+              Morgan Stanley, Private Client Event
             </p>
             <Link
               to="/reviews"
@@ -255,7 +255,7 @@ const Index = () => {
               Make Your Guests Feel Alive
             </h2>
             <p className="font-sans text-base text-muted-foreground mb-10">
-              Scott Syme transforms any space into something extraordinary — an atmosphere of joy, wonder, and genuine 
+              Scott Syme transforms any space into something extraordinary. An atmosphere of joy, wonder, and genuine 
               hospitality that your guests will talk about for years to come.
             </p>
             <button
