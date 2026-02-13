@@ -51,7 +51,7 @@ const Contact = () => {
       {/* Hero */}
       <section className="relative py-24 lg:py-32 overflow-hidden">
         <div className="absolute inset-0">
-          <img src={contactBg} alt="Book Scott Syme White Rabbit magician for luxury events in Los Angeles" className="w-full h-full object-cover" />
+          <img src={contactBg} alt="Book Scott Syme White Rabbit magician for luxury events in Los Angeles" className="w-full h-full object-cover" fetchPriority="high" decoding="async" />
           <div className="absolute inset-0 bg-forest-dark/80" />
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">

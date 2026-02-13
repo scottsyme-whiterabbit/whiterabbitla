@@ -9,7 +9,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
           {/* Logo & tagline */}
           <div className="flex flex-col items-center md:items-start justify-center h-full">
-            <img src={wrLogo} alt="White Rabbit Los Angeles" className="h-24 w-auto brightness-0 invert opacity-80" />
+            <img src={wrLogo} alt="White Rabbit Los Angeles luxury magic entertainment logo" loading="lazy" decoding="async" className="h-24 w-auto brightness-0 invert opacity-80" />
           </div>
 
           {/* Quick Links */}

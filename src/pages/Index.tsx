@@ -57,7 +57,7 @@ const Index = () => {
       {/* Hero */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroImage} alt="Scott Syme performing luxury close-up magic at a private event in Los Angeles" className="w-full h-full object-cover object-[center_55%]" />
+          <img src={heroImage} alt="Scott Syme performing luxury close-up magic at a private event in Los Angeles" className="w-full h-full object-cover object-[center_55%]" fetchPriority="high" decoding="async" />
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/30 to-forest-dark/10" />
         </div>
 
@@ -98,7 +98,9 @@ const Index = () => {
                 <div key={`${client.name}-${i}`} className="flex-shrink-0 flex items-center justify-center px-8 md:px-10" style={{ width: '180px', height: '60px' }}>
                   <img
                     src={client.logo}
-                    alt={client.name}
+                    alt={`${client.name} logo — White Rabbit client`}
+                    loading="lazy"
+                    decoding="async"
                     className="max-h-full max-w-full w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity brightness-0 invert" />
                 </div>
               )}
@@ -137,6 +139,8 @@ const Index = () => {
               <img
                 src={eventCardsImg}
                 alt="Scott Syme performing close-up card magic at a luxury corporate event in Los Angeles"
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
@@ -173,47 +177,47 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-3 gap-4">
           <AnimatedSection>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={cuMagicReactionImg} alt="Guest reacting with amazement to close-up card magic" className="w-full h-full object-cover" />
+              <img src={cuMagicReactionImg} alt="Guest reacting with amazement to close-up card magic at White Rabbit event" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={penthouseImg} alt="Scott Syme performing parlor magic show in a luxury Los Angeles penthouse" className="w-full h-full object-cover" />
+              <img src={penthouseImg} alt="Scott Syme performing parlor magic show in a luxury Los Angeles penthouse" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={cardsBlueImg} alt="Close-up sleight of hand with dramatic blue lighting" className="w-full h-full object-cover" />
+              <img src={cardsBlueImg} alt="Close-up sleight of hand card magic with dramatic blue lighting" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={rubikShowImg} alt="Scott Syme performing with a Rubik's cube at a live show" className="w-full h-full object-cover" />
+              <img src={rubikShowImg} alt="Scott Syme performing Rubik's cube magic at a live White Rabbit show" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={crowdReactionImg} alt="Audience reacting with excitement during a parlor magic show" className="w-full h-full object-cover" />
+              <img src={crowdReactionImg} alt="Audience reacting with excitement during a White Rabbit parlor magic show" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.2}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={parlorShowImg} alt="Scott Syme parlor magic show with emerald curtains" className="w-full h-full object-cover" />
+              <img src={parlorShowImg} alt="Scott Syme parlor magic show with emerald curtains and uplighting" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={scottCardsImg} alt="Scott Syme performing card magic at a private event" className="w-full h-full object-cover" />
+              <img src={scottCardsImg} alt="Scott Syme performing card magic at a private luxury event" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.2}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={groupFinaleImg} alt="Group photo after a White Rabbit magic experience" className="w-full h-full object-cover" />
+              <img src={groupFinaleImg} alt="Group photo after a White Rabbit magic experience in Los Angeles" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.25}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={silhouetteImg} alt="Dramatic silhouette of magician performing on stage" className="w-full h-full object-cover" />
+              <img src={silhouetteImg} alt="Dramatic silhouette of Scott Syme performing magic on stage" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
         </div>
