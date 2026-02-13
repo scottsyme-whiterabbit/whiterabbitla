@@ -143,6 +143,9 @@ const Reviews = () => {
           </div>
         </section>
       </AnimatedSection>
+
+      {/* White separator before footer */}
+      <div className="w-full h-px bg-cream/20" />
     </main>);
 
 };
