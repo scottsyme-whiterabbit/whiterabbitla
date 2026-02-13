@@ -203,11 +203,14 @@ const BookingQuiz = () => {
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-forest-dark/90 backdrop-blur-md p-4"
-        >
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-forest-dark/90 backdrop-blur-md p-4"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Booking quiz"
+          >
           <motion.div
             initial={{ opacity: 0, y: 30, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -218,7 +221,8 @@ const BookingQuiz = () => {
             {/* Close */}
             <button
               onClick={handleClose}
-              className="absolute top-4 right-4 z-10 text-muted-foreground hover:text-foreground transition-colors"
+              className="absolute top-4 right-4 z-10 text-muted-foreground hover:text-foreground transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              aria-label="Close booking quiz"
             >
               <X size={20} />
             </button>
@@ -338,8 +342,9 @@ const BookingQuiz = () => {
                       <p className="font-sans text-sm text-muted-foreground mb-6">How can Scott reach you?</p>
                       <div className="space-y-4">
                         <div>
-                          <label className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 block">Name</label>
+                          <label htmlFor="quiz-name" className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 block">Name</label>
                           <Input
+                            id="quiz-name"
                             required
                             value={data.name}
                             onChange={(e) => setData({ ...data, name: e.target.value })}
@@ -348,8 +353,9 @@ const BookingQuiz = () => {
                           />
                         </div>
                         <div>
-                          <label className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 block">Email</label>
+                          <label htmlFor="quiz-email" className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 block">Email</label>
                           <Input
+                            id="quiz-email"
                             required
                             type="email"
                             value={data.email}
@@ -359,8 +365,9 @@ const BookingQuiz = () => {
                           />
                         </div>
                         <div>
-                          <label className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 block">Phone</label>
+                          <label htmlFor="quiz-phone" className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 block">Phone</label>
                           <Input
+                            id="quiz-phone"
                             required
                             type="tel"
                             value={data.phone}
@@ -370,10 +377,11 @@ const BookingQuiz = () => {
                           />
                         </div>
                         <div>
-                          <label className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 block">
+                          <label htmlFor="quiz-message" className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 block">
                             Anything else? <span className="normal-case tracking-normal text-muted-foreground/60">(optional)</span>
                           </label>
                           <Textarea
+                            id="quiz-message"
                             value={data.message}
                             onChange={(e) => setData({ ...data, message: e.target.value })}
                             className="bg-background border-border min-h-[80px]"

@@ -47,7 +47,7 @@ const Contact = () => {
   };
 
   return (
-    <main className="pt-20">
+    <main id="main-content" className="pt-20">
       {/* Hero */}
       <section className="relative py-24 lg:py-32 overflow-hidden">
         <div className="absolute inset-0">

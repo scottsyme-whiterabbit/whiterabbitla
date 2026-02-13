@@ -36,7 +36,7 @@ const Experience = () => {
   const { openQuiz } = useBookingQuiz();
 
   return (
-    <main className="pt-20">
+    <main id="main-content" className="pt-20">
       {/* Hero */}
       <section className="relative min-h-[85vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">

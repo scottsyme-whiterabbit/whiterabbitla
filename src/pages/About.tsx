@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 
 const About = () => {
   return (
-    <main className="pt-20">
+    <main id="main-content" className="pt-20">
       {/* Hero with Scott's photo */}
       <section className="relative min-h-[85vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">
