@@ -7,6 +7,12 @@ import experienceImg from "@/assets/experience-closeup.jpg";
 import eventCardsImg from "@/assets/cards-spring-bw.jpg";
 import penthouseImg from "@/assets/event-penthouse-show.jpg";
 import cocktailImg from "@/assets/event-closeup-cocktail.jpg";
+import parlorShowImg from "@/assets/event-parlor-show.jpg";
+import scottCardsImg from "@/assets/event-scott-cards.jpg";
+import silhouetteImg from "@/assets/event-silhouette.jpg";
+import cardsEmeraldImg from "@/assets/event-cards-emerald.jpg";
+import crowdImg from "@/assets/event-crowd.jpg";
+import intimateImg from "@/assets/event-closeup-intimate.jpg";
 
 
 import netflixLogo from "@/assets/logos/netflix.png";
@@ -161,17 +167,47 @@ const Index = () => {
         </section>
       </AnimatedSection>
 
-      {/* Photo Break */}
-      <section className="py-0">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Photo Gallery */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-3 gap-4">
           <AnimatedSection>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={penthouseImg} alt="Scott Syme performing White Rabbit parlor magic show in a luxury Los Angeles penthouse with panoramic city views" className="w-full h-full object-cover" />
+              <img src={penthouseImg} alt="Scott Syme performing White Rabbit parlor magic show in a luxury Los Angeles penthouse" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.1}>
+            <div className="aspect-[4/3] overflow-hidden">
+              <img src={cocktailImg} alt="Guests reacting to close-up magic at a luxury cocktail event" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.15}>
+            <div className="aspect-[4/3] overflow-hidden">
+              <img src={parlorShowImg} alt="Scott Syme parlor magic show with emerald curtains" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.1}>
+            <div className="aspect-[4/3] overflow-hidden">
+              <img src={scottCardsImg} alt="Scott Syme performing card magic at a private event" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.15}>
+            <div className="aspect-[4/3] overflow-hidden">
+              <img src={silhouetteImg} alt="Dramatic silhouette of magician performing on stage" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.2}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={cocktailImg} alt="Guests laughing and reacting to close-up magic by Scott Syme at a luxury cocktail event in Los Angeles" className="w-full h-full object-cover" />
+              <img src={cardsEmeraldImg} alt="Close-up card sleight of hand with emerald backdrop" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.15}>
+            <div className="aspect-[4/3] overflow-hidden">
+              <img src={crowdImg} alt="Crowd enjoying a White Rabbit magic experience" className="w-full h-full object-cover" />
+            </div>
+          </AnimatedSection>
+          <AnimatedSection delay={0.2}>
+            <div className="aspect-[4/3] overflow-hidden">
+              <img src={intimateImg} alt="Intimate close-up magic performance" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
         </div>
