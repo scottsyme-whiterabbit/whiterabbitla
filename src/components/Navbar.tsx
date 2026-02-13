@@ -3,13 +3,13 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import wrLogo from "@/assets/wr-symbol.png";
+import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 
 const navLinks = [
   { to: "/experience", label: "Experience" },
   { to: "/about", label: "About" },
   { to: "/reviews", label: "Reviews" },
   { to: "/blog", label: "Blog" },
-  { to: "/contact", label: "Book Now" },
 ];
 
 const Navbar = () => {
@@ -17,6 +17,7 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === "/";
+  const { openQuiz } = useBookingQuiz();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -42,15 +43,17 @@ const Navbar = () => {
               <Link
                 key={link.to}
                 to={link.to}
-                className={`font-sans text-sm tracking-[0.2em] uppercase transition-colors duration-300 ${
-                  link.to === "/contact"
-                    ? "bg-accent text-accent-foreground px-6 py-2 hover:bg-accent/80"
-                    : "text-cream/80 hover:text-cream"
-                }`}
+                className="font-sans text-sm tracking-[0.2em] uppercase transition-colors duration-300 text-cream/80 hover:text-cream"
               >
                 {link.label}
               </Link>
             ))}
+            <button
+              onClick={openQuiz}
+              className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-6 py-2 hover:bg-accent/80 transition-colors"
+            >
+              Book Now
+            </button>
           </div>
 
           {/* Mobile toggle */}
@@ -79,15 +82,17 @@ const Navbar = () => {
                   key={link.to}
                   to={link.to}
                   onClick={() => setIsOpen(false)}
-                  className={`font-sans text-sm tracking-[0.2em] uppercase transition-colors ${
-                    link.to === "/contact"
-                      ? "bg-accent text-accent-foreground px-6 py-3 text-center"
-                      : "text-cream/80 hover:text-cream"
-                  }`}
+                  className="font-sans text-sm tracking-[0.2em] uppercase transition-colors text-cream/80 hover:text-cream"
                 >
                   {link.label}
                 </Link>
               ))}
+              <button
+                onClick={() => { setIsOpen(false); openQuiz(); }}
+                className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-6 py-3 text-center"
+              >
+                Book Now
+              </button>
             </div>
           </motion.div>
         )}
