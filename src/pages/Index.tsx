@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
-import { ChevronDown, Star } from "lucide-react";
+import { ArrowRight, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
+
 import heroImage from "@/assets/hero-magic-cinematic.jpg";
 import experienceImg from "@/assets/experience-closeup.jpg";
+import scottDesertImg from "@/assets/scott-desert-sitting.jpg";
+import experienceHeroImg from "@/assets/experience-hero-desert.jpg";
 import eventCardsImg from "@/assets/cards-spring-bw.jpg";
 import penthouseImg from "@/assets/event-penthouse-show.jpg";
 import cocktailImg from "@/assets/event-closeup-cocktail.jpg";
@@ -244,6 +247,60 @@ const Index = () => {
               <img src={silhouetteImg} alt="Dramatic silhouette of Scott Syme performing magic on stage" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
+        </div>
+      </section>
+
+      {/* Discover More */}
+      <section className="py-24 lg:py-32">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <AnimatedSection>
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4 text-center">Discover More</p>
+            <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-16 text-center">Go Deeper</h2>
+          </AnimatedSection>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <AnimatedSection>
+              <Link to="/experience" className="group block relative aspect-[3/4] overflow-hidden">
+                <img src={experienceHeroImg} alt="The White Rabbit experience" loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-8">
+                  <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Experience</p>
+                  <h3 className="font-serif text-2xl text-cream mb-3">See What Awaits</h3>
+                  <p className="font-sans text-sm text-cream/60 mb-4">Close-up magic, parlor shows, and fully produced private events.</p>
+                  <span className="inline-flex items-center gap-2 font-sans text-sm tracking-[0.2em] uppercase text-cream/80 group-hover:text-accent transition-colors">
+                    Explore <ArrowRight size={14} />
+                  </span>
+                </div>
+              </Link>
+            </AnimatedSection>
+            <AnimatedSection delay={0.1}>
+              <Link to="/about" className="group block relative aspect-[3/4] overflow-hidden">
+                <img src={scottDesertImg} alt="Scott Syme, magician and founder of White Rabbit" loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-8">
+                  <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">About</p>
+                  <h3 className="font-serif text-2xl text-cream mb-3">Meet Scott Syme</h3>
+                  <p className="font-sans text-sm text-cream/60 mb-4">The story behind the magician who built a luxury experience from scratch.</p>
+                  <span className="inline-flex items-center gap-2 font-sans text-sm tracking-[0.2em] uppercase text-cream/80 group-hover:text-accent transition-colors">
+                    Read More <ArrowRight size={14} />
+                  </span>
+                </div>
+              </Link>
+            </AnimatedSection>
+            <AnimatedSection delay={0.2}>
+              <Link to="/blog" className="group block relative aspect-[3/4] overflow-hidden">
+                <img src={cocktailImg} alt="Luxury event entertainment and magic" loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-8">
+                  <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Blog</p>
+                  <h3 className="font-serif text-2xl text-cream mb-3">Planning Your Event</h3>
+                  <p className="font-sans text-sm text-cream/60 mb-4">Tips, guides, and inspiration for unforgettable private events.</p>
+                  <span className="inline-flex items-center gap-2 font-sans text-sm tracking-[0.2em] uppercase text-cream/80 group-hover:text-accent transition-colors">
+                    Browse <ArrowRight size={14} />
+                  </span>
+                </div>
+              </Link>
+            </AnimatedSection>
+          </div>
         </div>
       </section>
 
