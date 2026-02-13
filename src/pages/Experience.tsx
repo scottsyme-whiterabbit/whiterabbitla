@@ -103,7 +103,7 @@ const Experience = () => {
 
       {/* CTA */}
       <AnimatedSection>
-        <section className="bg-forest-dark py-24 text-center">
+        <section className="bg-forest-dark py-24 text-center mb-24">
           <div className="max-w-2xl mx-auto px-6">
             <h2 className="font-serif text-4xl md:text-5xl text-cream mb-6">Give Your Guests a Memory That Lasts</h2>
             <p className="font-sans text-base text-cream/70 mb-10">
