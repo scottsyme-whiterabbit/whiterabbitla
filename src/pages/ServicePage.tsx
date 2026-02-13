@@ -54,17 +54,17 @@ const servicePages: Record<string, ServiceData> = {
     metaTitle: "Corporate Event Magician | White Rabbit Magic Entertainment",
     metaDescription: "Hire a world-class corporate event magician for galas, product launches, and executive retreats. Trusted by Netflix, Disney & Morgan Stanley.",
     heroHeadline: "Corporate Event Magic",
-    heroSub: "The entertainment your guests will actually remember — and your competitors will wish they'd booked first.",
+    heroSub: "The entertainment your guests will actually remember, and your competitors will wish they'd booked first.",
     image: corporateImg,
-    intro: "White Rabbit delivers world-class close-up magic and mentalism for Fortune 500 galas, product launches, holiday parties, and executive retreats — the kind of entertainment that makes your event feel like a first-class experience.",
+    intro: "White Rabbit delivers world-class close-up magic and mentalism for Fortune 500 galas, product launches, holiday parties, and executive retreats. The kind of entertainment that makes your event feel like a first-class experience.",
     sections: [
       {
         heading: "Why Magic Works for Corporate Events",
-        body: "Here's the problem with most corporate entertainment: it's forgettable. A DJ nobody dances to. A comedian who doesn't read the room. Background noise. White Rabbit is the opposite — Scott Syme walks into your event and within minutes, your CEO is laughing, your clients are leaning in, and strangers are bonding over something they can't explain. That's not a party trick. That's a business advantage.",
+        body: "Here's the problem with most corporate entertainment: it's forgettable. A DJ nobody dances to. A comedian who doesn't read the room. Background noise. White Rabbit is the opposite. Scott Syme walks into your event and within minutes, your CEO is laughing, your clients are leaning in, and strangers are bonding over something they can't explain. That's not a party trick. That's a business advantage.",
       },
       {
         heading: "Cocktail Hour & Roaming Magic",
-        body: "Scott moves through your event performing intimate close-up magic for small groups — cards, mentalism, borrowed objects. Within seconds, people who've never met are gasping, laughing, and bonding over something extraordinary. It's the most effective icebreaker in the corporate entertainment world.",
+        body: "Scott moves through your event performing intimate close-up magic for small groups: cards, mentalism, borrowed objects. Within seconds, people who've never met are gasping, laughing, and bonding over something extraordinary. It's the most effective icebreaker in the corporate entertainment world.",
       },
       {
         heading: "Full Show Experiences",
@@ -80,9 +80,9 @@ const servicePages: Record<string, ServiceData> = {
     ],
     faqs: [
       { question: "What type of corporate events is White Rabbit best suited for?", answer: "Cocktail receptions, holiday parties, product launches, executive retreats, client appreciation events, trade shows, and galas. Scott's close-up magic is designed to break the ice and create genuine connections between guests." },
-      { question: "How long does a corporate performance last?", answer: "Roaming close-up magic is typically booked for 2–3 hours. The Private Magic Show is a curated 45-minute theatrical experience. Many clients book both for a full-evening White Rabbit experience." },
-      { question: "Can the performance be customized for our brand?", answer: "Absolutely. Every performance is tailored to your event's goals, audience, and tone — from incorporating brand messaging to matching the energy of your event theme." },
-      { question: "How far in advance should we book?", answer: "We recommend booking 4–8 weeks in advance, especially during peak event season. Contact us with your date and we'll confirm availability within 24 hours." },
+      { question: "How long does a corporate performance last?", answer: "Roaming close-up magic is typically booked for 2 to 3 hours. The Private Magic Show is a curated 45-minute theatrical experience. Many clients book both for a full-evening White Rabbit experience." },
+      { question: "Can the performance be customized for our brand?", answer: "Absolutely. Every performance is tailored to your event's goals, audience, and tone, from incorporating brand messaging to matching the energy of your event theme." },
+      { question: "How far in advance should we book?", answer: "We recommend booking 4 to 8 weeks in advance, especially during peak event season. Contact us with your date and we'll confirm availability within 24 hours." },
     ],
     testimonial: {
       quote: "I've never seen a room full of executives laugh that hard. Every single person came up to me afterward asking where I found him.",
@@ -95,21 +95,21 @@ const servicePages: Record<string, ServiceData> = {
     metaTitle: "Wedding Magician | Cocktail Hour Entertainment | White Rabbit",
     metaDescription: "Hire a wedding magician who transforms your cocktail hour into the highlight of the evening. Elegant, sophisticated, unforgettable. Check availability.",
     heroHeadline: "Wedding Magic",
-    heroSub: "The cocktail hour entertainment that makes your wedding unforgettable — for all the right reasons.",
+    heroSub: "The cocktail hour entertainment that makes your wedding unforgettable, for all the right reasons.",
     image: weddingImg,
     intro: "White Rabbit's cocktail hour magic is the secret weapon couples wish they'd known about sooner. While your guests mingle and the champagne flows, Scott creates moments of pure, joyful astonishment that turn strangers into friends before they even find their seats.",
     sections: [
       {
         heading: "Why Cocktail Hour Magic Works",
-        body: "Here's what nobody tells you about weddings: cocktail hour is make-or-break. It's the moment when your college friends meet your partner's family, when coworkers meet cousins. Close-up magic solves this instantly — within seconds, people who've never met are gasping, laughing, and bonding over something extraordinary.",
+        body: "Here's what nobody tells you about weddings: cocktail hour is make-or-break. It's the moment when your college friends meet your partner's family, when coworkers meet cousins. Close-up magic solves this instantly. Within seconds, people who've never met are gasping, laughing, and bonding over something extraordinary.",
       },
       {
         heading: "Elegant & Sophisticated",
-        body: "Every performance is perfectly calibrated for the tone of your celebration. No cheesy props. No interrupting toasts. No pulling rabbits out of hats. Just beautiful, intimate moments of wonder that feel right at home at a five-star venue — because that's where White Rabbit belongs.",
+        body: "Every performance is perfectly calibrated for the tone of your celebration. No cheesy props. No interrupting toasts. No pulling rabbits out of hats. Just beautiful, intimate moments of wonder that feel right at home at a five-star venue, because that's where White Rabbit belongs.",
       },
       {
         heading: "Tailored to Your Vision",
-        body: "Scott has performed at weddings across Southern California and beyond — from clifftop ceremonies to grand ballroom receptions. Each performance is tailored to your guest count, timeline, and vision. Cocktail hour roaming magic, a pre-dinner show, or both — whatever your celebration needs.",
+        body: "Scott has performed at weddings across Southern California and beyond. From clifftop ceremonies to grand ballroom receptions. Each performance is tailored to your guest count, timeline, and vision. Cocktail hour roaming magic, a pre-dinner show, or both: whatever your celebration needs.",
       },
     ],
     included: [
@@ -120,10 +120,10 @@ const servicePages: Record<string, ServiceData> = {
       "A follow-up to make sure your celebration exceeded expectations",
     ],
     faqs: [
-      { question: "When during the wedding does the magician perform?", answer: "Cocktail hour is the most popular window — it's the perfect time to break the ice between guests. Scott can also perform during the reception or as a pre-dinner show. We work with your timeline to find the ideal moment." },
-      { question: "Is the magic appropriate for all ages?", answer: "Yes — every performance is elegant, sophisticated, and family-friendly. Just beautiful, intimate moments of wonder that feel right at home at a black-tie celebration." },
+      { question: "When during the wedding does the magician perform?", answer: "Cocktail hour is the most popular window. It's the perfect time to break the ice between guests. Scott can also perform during the reception or as a pre-dinner show. We work with your timeline to find the ideal moment." },
+      { question: "Is the magic appropriate for all ages?", answer: "Yes. Every performance is elegant, sophisticated, and family-friendly. Just beautiful, intimate moments of wonder that feel right at home at a black-tie celebration." },
       { question: "How does booking work with our wedding planner?", answer: "Scott works directly with your planner or coordinator to ensure seamless integration. We handle timing, positioning, and flow so you don't have to think about it on your big day." },
-      { question: "How far in advance should we book?", answer: "Peak wedding season (May–October) books months in advance. We recommend reaching out as soon as you have your date to secure availability." },
+      { question: "How far in advance should we book?", answer: "Peak wedding season (May through October) books months in advance. We recommend reaching out as soon as you have your date to secure availability." },
     ],
     testimonial: {
       quote: "Hiring Scott was the single best decision we made for our wedding. Our guests are STILL talking about him six months later.",
@@ -136,17 +136,17 @@ const servicePages: Record<string, ServiceData> = {
     metaTitle: "Private Party Magician | Luxury Event Entertainment | White Rabbit",
     metaDescription: "Hire a private party magician for birthdays, anniversaries, and exclusive celebrations. White Rabbit transforms gatherings into unforgettable experiences.",
     heroHeadline: "Private Party Magic",
-    heroSub: "Give your guests a night they'll retell for years — not just another party they attended.",
+    heroSub: "Give your guests a night they'll retell for years, not just another party they attended.",
     image: privateImg,
-    intro: "The best parties aren't remembered for the venue or the menu — they're remembered for how they made people feel. White Rabbit transforms birthday celebrations, anniversary dinners, holiday gatherings, and house parties into evenings your guests will never stop talking about.",
+    intro: "The best parties aren't remembered for the venue or the menu. They're remembered for how they made people feel. White Rabbit transforms birthday celebrations, anniversary dinners, holiday gatherings, and house parties into evenings your guests will never stop talking about.",
     sections: [
       {
         heading: "The White Rabbit Effect",
-        body: "Picture this: your guests are gathered close, drinks in hand, when impossible things start happening inches from their fingertips. A card they merely thought of appears in a sealed envelope. A borrowed ring vanishes and reappears inside a locked box. The room erupts — not polite applause, but genuine, wide-eyed astonishment.",
+        body: "Picture this: your guests are gathered close, drinks in hand, when impossible things start happening inches from their fingertips. A card they merely thought of appears in a sealed envelope. A borrowed ring vanishes and reappears inside a locked box. The room erupts. Not polite applause, but genuine, wide-eyed astonishment.",
       },
       {
         heading: "More Than a Magician",
-        body: "Scott doesn't just perform tricks — he creates an atmosphere. The lighting shifts, a curated soundtrack sets the mood, and suddenly your living room feels like a private members' club. Every guest feels like the most important person in the room. That's the difference between hiring a magician and hiring White Rabbit.",
+        body: "Scott doesn't just perform tricks. He creates an atmosphere. The lighting shifts, a curated soundtrack sets the mood, and suddenly your living room feels like a private members' club. Every guest feels like the most important person in the room. That's the difference between hiring a magician and hiring White Rabbit.",
       },
       {
         heading: "Perfect for Every Occasion",
@@ -162,12 +162,12 @@ const servicePages: Record<string, ServiceData> = {
     ],
     faqs: [
       { question: "What size party works best?", answer: "White Rabbit performs for intimate gatherings of 6 guests up to celebrations of 200+. For smaller groups, the magic becomes intensely personal. For larger parties, Scott moves through the room creating pockets of wonder everywhere." },
-      { question: "What occasions work well with a magician?", answer: "Milestone birthdays, anniversary dinners, engagement parties, holiday gatherings, dinner parties, housewarming celebrations, and bachelorette events — any occasion where you want guests talking about your party for years." },
-      { question: "Can you perform at my home?", answer: "Absolutely. Many of our most memorable performances happen in private homes. Scott transforms any space — living rooms, backyards, dining rooms — into an intimate performance venue." },
-      { question: "How far in advance should I book?", answer: "We recommend booking 4–8 weeks in advance. Holiday season and summer weekends fill especially fast." },
+      { question: "What occasions work well with a magician?", answer: "Milestone birthdays, anniversary dinners, engagement parties, holiday gatherings, dinner parties, housewarming celebrations, and bachelorette events. Any occasion where you want guests talking about your party for years." },
+      { question: "Can you perform at my home?", answer: "Absolutely. Many of our most memorable performances happen in private homes. Scott transforms any space (living rooms, backyards, dining rooms) into an intimate performance venue." },
+      { question: "How far in advance should I book?", answer: "We recommend booking 4 to 8 weeks in advance. Holiday season and summer weekends fill especially fast." },
     ],
     testimonial: {
-      quote: "He read my mind. Actually read it. I still don't know how. My guests were screaming with joy — and these are people who don't scream.",
+      quote: "He read my mind. Actually read it. I still don't know how. My guests were screaming with joy, and these are people who don't scream.",
       attribution: "Private Event Host, Beverly Hills",
     },
   },
@@ -177,17 +177,17 @@ const servicePages: Record<string, ServiceData> = {
     metaTitle: "Close-Up Magician | Intimate Magic Entertainment | White Rabbit",
     metaDescription: "Hire a world-class close-up magician for your next event. Intimate, interactive magic that happens right in your guests' hands. Check availability.",
     heroHeadline: "Close-Up Magic",
-    heroSub: "Magic that happens right in your hands — intimate, impossible, and absolutely unforgettable.",
+    heroSub: "Magic that happens right in your hands. Intimate, impossible, and absolutely unforgettable.",
     image: closeupImg,
-    intro: "Close-up magic is the most powerful form of entertainment because it's personal — it happens right there in your hands, inches from your face. White Rabbit brings world-class sleight of hand directly to your guests, creating moments that feel like encountering real magic.",
+    intro: "Close-up magic is the most powerful form of entertainment because it's personal. It happens right there in your hands, inches from your face. White Rabbit brings world-class sleight of hand directly to your guests, creating moments that feel like encountering real magic.",
     sections: [
       {
         heading: "Why Close-Up Magic",
-        body: "There's a reason the world's most exclusive events feature close-up magic: it creates genuine human connection. When Scott approaches a group, within sixty seconds they're united — executives and interns, introverts and extroverts, all sharing the same moment of pure, unfiltered amazement.",
+        body: "There's a reason the world's most exclusive events feature close-up magic: it creates genuine human connection. When Scott approaches a group, within sixty seconds they're united. Executives and interns, introverts and extroverts, all sharing the same moment of pure, unfiltered amazement.",
       },
       {
         heading: "Interactive & Personal",
-        body: "Scott's close-up work blends card magic, mentalism, and psychological illusion into seamless, conversational performances. Guests don't just watch — they participate. They shuffle the deck, they choose the card, they hold the impossible object. Every person feels like the star of the show.",
+        body: "Scott's close-up work blends card magic, mentalism, and psychological illusion into seamless, conversational performances. Guests don't just watch. They participate. They shuffle the deck, they choose the card, they hold the impossible object. Every person feels like the star of the show.",
       },
       {
         heading: "Perfect for Any Setting",
@@ -202,13 +202,13 @@ const servicePages: Record<string, ServiceData> = {
       "Post-event follow-up",
     ],
     faqs: [
-      { question: "What is close-up magic?", answer: "Close-up magic happens right in your guests' hands — cards, coins, borrowed objects. Scott performs for small groups of 4–8 at a time, creating intimate, jaw-dropping moments. It's interactive, personal, and the most powerful form of live entertainment." },
+      { question: "What is close-up magic?", answer: "Close-up magic happens right in your guests' hands: cards, coins, borrowed objects. Scott performs for small groups of 4 to 8 at a time, creating intimate, jaw-dropping moments. It's interactive, personal, and the most powerful form of live entertainment." },
       { question: "How long does a close-up performance last?", answer: "Most clients book 2–3 hours of roaming close-up magic. Each small group gets about 8–10 minutes of dedicated performance. Custom timing is always available." },
       { question: "Does close-up magic work for large events?", answer: "Absolutely. Scott moves through events of any size, creating intimate moments within larger gatherings. For 150+ guests, we recommend pairing close-up magic with a Private Magic Show." },
-      { question: "What do I need to provide?", answer: "Nothing — Scott brings everything. All you need is your guests and a great event. No stage, no setup, no special requirements." },
+      { question: "What do I need to provide?", answer: "Nothing. Scott brings everything. All you need is your guests and a great event. No stage, no setup, no special requirements." },
     ],
     testimonial: {
-      quote: "Our guests didn't just enjoy the show — they came alive. Months later, they still talk about how Scott made them feel.",
+      quote: "Our guests didn't just enjoy the show. They came alive. Months later, they still talk about how Scott made them feel.",
       attribution: "Morgan Stanley, Private Client Event",
     },
   },
@@ -220,19 +220,19 @@ const servicePages: Record<string, ServiceData> = {
     heroHeadline: "The Private Magic Show",
     heroSub: "A curated 45-minute theatrical experience your guests will be buzzing about for months.",
     image: parlorImg,
-    intro: "The Private Magic Show is a curated 45-minute theatrical experience — part magic show, part one-man theater, part collective hallucination. Designed for groups of 20 to 120, it transforms any space into an intimate venue where the impossible feels inevitable.",
+    intro: "The Private Magic Show is a curated 45-minute theatrical experience: part magic show, part one-man theater, part collective hallucination. Designed for groups of 20 to 120, it transforms any space into an intimate venue where the impossible feels inevitable.",
     sections: [
       {
         heading: "The Experience",
-        body: "Imagine emerald curtains, warm lighting, and a curated soundtrack that pulls your guests into another world before the first trick even begins. Then Scott takes the stage — and for the next 45 minutes, reality gets beautifully unreliable. Cards defy physics. Minds are read. Objects appear in places they have no business being. And the audience? They're screaming, laughing, and grabbing each other's arms.",
+        body: "Imagine emerald curtains, warm lighting, and a curated soundtrack that pulls your guests into another world before the first trick even begins. Then Scott takes the stage, and for the next 45 minutes, reality gets beautifully unreliable. Cards defy physics. Minds are read. Objects appear in places they have no business being. And the audience? They're screaming, laughing, and grabbing each other's arms.",
       },
       {
         heading: "The Centerpiece of Your Evening",
-        body: "The Private Magic Show isn't background entertainment — it's the centerpiece of your evening. It's the thing your guests will text each other about the next morning. It's the reason they'll RSVP 'yes' to your next event before you even send the invitation.",
+        body: "The Private Magic Show isn't background entertainment. It's the centerpiece of your evening. It's the thing your guests will text each other about the next morning. It's the reason they'll RSVP 'yes' to your next event before you even send the invitation.",
       },
       {
         heading: "Full Production Support",
-        body: "White Rabbit provides full production support in the greater Los Angeles area — professional lighting, sound design, and staging — turning your venue, living room, or conference room into a world-class performance space. Every show is tailored to your audience, your space, and the feeling you want to create.",
+        body: "White Rabbit provides full production support in the greater Los Angeles area: professional lighting, sound design, and staging, turning your venue, living room, or conference room into a world-class performance space. Every show is tailored to your audience, your space, and the feeling you want to create.",
       },
     ],
     included: [
@@ -243,10 +243,10 @@ const servicePages: Record<string, ServiceData> = {
       "Post-event follow-up",
     ],
     faqs: [
-      { question: "How many guests can attend?", answer: "The Private Magic Show is designed for groups of 20 to 120 guests. This range ensures every person feels connected — close enough to see every detail, intimate enough to feel like they're part of something special." },
-      { question: "What space do you need?", answer: "We can transform almost any space — living rooms, event venues, conference rooms, restaurants. In the LA area, we bring full production (curtains, lighting, sound). For events elsewhere, Scott works with your venue's existing setup." },
-      { question: "Can the show be paired with close-up magic?", answer: "Yes — this is our most popular combination. Roaming close-up magic during cocktails, then the Private Magic Show as the evening's centerpiece. It's the complete White Rabbit experience." },
-      { question: "Is the show appropriate for all audiences?", answer: "Absolutely. The show is sophisticated, elegant, and universally engaging — perfect for corporate events, private celebrations, and mixed-age gatherings alike." },
+      { question: "How many guests can attend?", answer: "The Private Magic Show is designed for groups of 20 to 120 guests. This range ensures every person feels connected, close enough to see every detail, intimate enough to feel like they're part of something special." },
+      { question: "What space do you need?", answer: "We can transform almost any space: living rooms, event venues, conference rooms, restaurants. In the LA area, we bring full production (curtains, lighting, sound). For events elsewhere, Scott works with your venue's existing setup." },
+      { question: "Can the show be paired with close-up magic?", answer: "Yes, this is our most popular combination. Roaming close-up magic during cocktails, then the Private Magic Show as the evening's centerpiece. It's the complete White Rabbit experience." },
+      { question: "Is the show appropriate for all audiences?", answer: "Absolutely. The show is sophisticated, elegant, and universally engaging. Perfect for corporate events, private celebrations, and mixed-age gatherings alike." },
     ],
     testimonial: {
       quote: "We've hired entertainers before. Scott is in a completely different category. He turned our cocktail hour into the highlight of the entire evening.",
@@ -378,7 +378,7 @@ const ServicePage = () => {
               onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors"
             >
-              Inquire Now — It's Free
+              Inquire Now, It's Free
             </button>
           </div>
         </section>
@@ -439,7 +439,7 @@ const ServicePage = () => {
               "{page.testimonial.quote}"
             </blockquote>
             <p className="font-sans text-sm tracking-[0.2em] uppercase text-cream/50">
-              — {page.testimonial.attribution}
+              {page.testimonial.attribution}
             </p>
           </div>
         </section>

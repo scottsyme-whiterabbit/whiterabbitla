@@ -89,14 +89,14 @@ const SeoLanding = () => {
     ? [
         "Pre-event consultation to tailor the performance to your audience and goals",
         "World-class close-up magic, mentalism, and audience interaction",
-        "Professional appearance — Scott arrives in signature style, ready to elevate",
-        "Travel coordination handled seamlessly — Scott regularly performs in " + page.location,
+        "Professional appearance. Scott arrives in signature style, ready to elevate",
+        "Travel coordination handled seamlessly. Scott regularly performs in " + page.location,
         "A follow-up to make sure your event exceeded expectations",
       ]
     : [
         "Pre-event consultation to tailor the performance to your audience and goals",
         "World-class close-up magic, mentalism, and audience interaction",
-        "Professional appearance — Scott arrives in signature style, ready to elevate",
+        "Professional appearance. Scott arrives in signature style, ready to elevate",
         "Full production support for private shows (lighting, sound, staging)",
         "A follow-up to make sure your event exceeded expectations",
       ];
@@ -172,7 +172,7 @@ const SeoLanding = () => {
         </div>
       </section>
 
-      {/* Mid-page CTA — Inline Quiz Trigger */}
+      {/* Mid-page CTA */}
       <AnimatedSection>
         <section className="bg-secondary/30 py-16">
           <div className="max-w-3xl mx-auto px-6 text-center">
@@ -180,13 +180,13 @@ const SeoLanding = () => {
               {page.midCtaText}
             </h2>
             <p className="font-sans text-base text-muted-foreground mb-8 max-w-xl mx-auto">
-              Dates fill quickly — especially during peak event season. Tell us about your event and we'll confirm availability within 24 hours.
+              Dates fill quickly, especially during peak event season. Tell us about your event and we'll confirm availability within 24 hours.
             </p>
             <button
               onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors"
             >
-              Inquire Now — It's Free
+              Inquire Now, It's Free
             </button>
           </div>
         </section>
@@ -217,7 +217,7 @@ const SeoLanding = () => {
               </ul>
               {isTravelMarket && (
                 <p className="font-sans text-xs text-muted-foreground/70 mt-6 leading-relaxed italic">
-                  White Rabbit is based in Los Angeles and travels nationwide for select engagements. Close-up magic, mentalism, and curated sound travel beautifully — full theatrical staging (lighting rigs, curtains) is available for events in the greater Los Angeles area. For {page.location} events, Scott works with your venue's existing setup to deliver the same world-class experience.
+                  White Rabbit is based in Los Angeles and travels nationwide for select engagements. Close-up magic, mentalism, and curated sound travel beautifully. Full theatrical staging (lighting rigs, curtains) is available for events in the greater Los Angeles area. For {page.location} events, Scott works with your venue's existing setup to deliver the same world-class experience.
                 </p>
               )}
             </div>
@@ -263,7 +263,7 @@ const SeoLanding = () => {
               "{page.socialProof}"
             </blockquote>
             <p className="font-sans text-sm tracking-[0.2em] uppercase text-cream/50">
-              — {page.socialProofAttribution}
+              {page.socialProofAttribution}
             </p>
           </div>
         </section>
@@ -277,7 +277,7 @@ const SeoLanding = () => {
               Make Your Next Event Unforgettable
             </h2>
             <p className="font-sans text-base text-muted-foreground mb-6">
-              Tell us about your {page.location} event — date, guest count, and vibe — and we'll craft a custom experience your guests will never forget.
+              Tell us about your {page.location} event (date, guest count, and vibe) and we'll craft a custom experience your guests will never forget.
             </p>
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-8">
               Most clients book 4–8 weeks in advance · No obligation to inquire

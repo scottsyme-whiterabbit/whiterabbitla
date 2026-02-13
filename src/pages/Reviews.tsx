@@ -13,7 +13,7 @@ const reviews = [
 {
   name: "Sarah L.",
   role: "Private Birthday Party",
-  text: "We hired Scott for my husband's 50th birthday and he absolutely blew everyone away. The close-up magic was so intimate and personal — every guest felt like they had their own private show.",
+  text: "We hired Scott for my husband's 50th birthday and he absolutely blew everyone away. The close-up magic was so intimate and personal, every guest felt like they had their own private show.",
   rating: 5
 },
 {
@@ -25,7 +25,7 @@ const reviews = [
 {
   name: "Michael R.",
   role: "Wedding Reception",
-  text: "Hiring White Rabbit for our wedding cocktail hour was the best decision we made. Guests mingled and laughed together — Scott broke the ice in the most magical way possible.",
+  text: "Hiring White Rabbit for our wedding cocktail hour was the best decision we made. Guests mingled and laughed together. Scott broke the ice in the most magical way possible.",
   rating: 5
 },
 {
@@ -37,7 +37,7 @@ const reviews = [
 {
   name: "Jennifer K.",
   role: "Charity Gala",
-  text: "Scott's private magic show had our 80 guests completely captivated for 45 minutes straight. The storytelling, the humor, the impossible moments — it was unforgettable.",
+  text: "Scott's private magic show had our 80 guests completely captivated for 45 minutes straight. The storytelling, the humor, the impossible moments. It was unforgettable.",
   rating: 5
 },
 {
@@ -55,7 +55,7 @@ const reviews = [
 {
   name: "Travis M.",
   role: "Private Show Guest",
-  text: "I was blown away by a recent White Rabbit show and would recommend it to anyone — even if you're not necessarily into magic. The atmosphere, the hospitality, the performance — it all comes together into something truly special.",
+  text: "I was blown away by a recent White Rabbit show and would recommend it to anyone, even if you're not necessarily into magic. The atmosphere, the hospitality, the performance. It all comes together into something truly special.",
   rating: 5
 },
 {
@@ -73,7 +73,7 @@ const reviews = [
 {
   name: "Robert R.",
   role: "Birthday Event",
-  text: "I found White Rabbit while searching for something unique for my wife's birthday. The show was fantastic — intimate, funny, and genuinely astonishing. It felt less like a performance and more like an unforgettable evening with friends.",
+  text: "I found White Rabbit while searching for something unique for my wife's birthday. The show was fantastic. Intimate, funny, and genuinely astonishing. It felt less like a performance and more like an unforgettable evening with friends.",
   rating: 5
 }];
 

@@ -27,7 +27,7 @@ const BUDGETS = [
   { id: "exploring", label: "Just Exploring", description: "I'm curious and want to learn more" },
   { id: "intimate", label: "Intimate & Intentional", description: "A curated experience for a smaller gathering" },
   { id: "elevated", label: "Elevated Experience", description: "Something memorable with real production value" },
-  { id: "showstopper", label: "Go All Out", description: "No limits — make it unforgettable" },
+  { id: "showstopper", label: "Go All Out", description: "No limits. Make it unforgettable" },
 ];
 
 type Step = "event" | "location" | "guests" | "date" | "budget" | "contact" | "recommendation";
@@ -54,7 +54,7 @@ const getRecommendation = (data: QuizData) => {
     return {
       title: "The White Rabbit Private Magic Show",
       description:
-        "An intimate, seated show with emerald curtains, cinematic uplighting, and a curated soundtrack. Scott transforms your space into something unforgettable — blending card mastery, mentalism, and audience participation that engages all the senses.",
+        "An intimate, seated show with emerald curtains, cinematic uplighting, and a curated soundtrack. Scott transforms your space into something unforgettable, blending card mastery, mentalism, and audience participation that engages all the senses.",
       format: "Private Magic Show",
     };
   }
@@ -63,7 +63,7 @@ const getRecommendation = (data: QuizData) => {
     return {
       title: "Corporate & Grand Event Experience",
       description:
-        "Scott brings world-class sleight of hand and mentalism with the warmth of a master host. Perfect for cocktail hours and reception entertainment that makes every guest feel like the most important person in the room — then a show-stopping parlor performance.",
+        "Scott brings world-class sleight of hand and mentalism with the warmth of a master host. Perfect for cocktail hours and reception entertainment that makes every guest feel like the most important person in the room, followed by a show-stopping parlor performance.",
       format: "Corporate",
     };
   }
@@ -80,7 +80,7 @@ const getRecommendation = (data: QuizData) => {
   return {
     title: "Private Event Experience",
     description:
-      "Whether it's close-up magic weaving through your guests or a seated parlor show, Scott will craft an experience tailored to your event's energy, space, and guest count — making everyone feel truly alive.",
+      "Whether it's close-up magic weaving through your guests or a seated parlor show, Scott will craft an experience tailored to your event's energy, space, and guest count. Making everyone feel truly alive.",
     format: "Private",
   };
 };
@@ -277,7 +277,7 @@ const BookingQuiz = () => {
                     <div>
                       <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 2 of 6</p>
                       <h3 className="font-serif text-2xl text-foreground mb-2">Where's the Event?</h3>
-                      <p className="font-sans text-sm text-muted-foreground mb-6">City or general area — helps us plan logistics.</p>
+                      <p className="font-sans text-sm text-muted-foreground mb-6">City or general area. Helps us plan logistics.</p>
                       <Input
                         value={data.location}
                         onChange={(e) => setData({ ...data, location: e.target.value })}
@@ -306,7 +306,7 @@ const BookingQuiz = () => {
                     <div>
                       <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 4 of 6</p>
                       <h3 className="font-serif text-2xl text-foreground mb-2">When Is Your Event?</h3>
-                      <p className="font-sans text-sm text-muted-foreground mb-6">An approximate date is fine — we can finalize later.</p>
+                      <p className="font-sans text-sm text-muted-foreground mb-6">An approximate date is fine. We can finalize later.</p>
                       <Input
                         value={data.date}
                         onChange={(e) => setData({ ...data, date: e.target.value })}

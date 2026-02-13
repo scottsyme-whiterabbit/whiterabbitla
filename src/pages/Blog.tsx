@@ -24,7 +24,7 @@ const Blog = () => {
               Insights & Guides
             </h1>
             <p className="font-sans text-base text-cream/70 max-w-xl mx-auto">
-              Explore the world of luxury magic entertainment — from corporate galas to intimate private celebrations across Southern California and beyond.
+              Explore the world of luxury magic entertainment, from corporate galas to intimate private celebrations across Southern California and beyond.
             </p>
           </AnimatedSection>
         </div>
