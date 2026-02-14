@@ -10,6 +10,7 @@ import usePageTracking from "@/hooks/usePageTracking";
 import LocalBusinessSchema from "@/components/LocalBusinessSchema";
 import { BookingQuizProvider } from "@/contexts/BookingQuizContext";
 import BookingQuiz from "@/components/BookingQuiz";
+import CookieConsent from "@/components/CookieConsent";
 import Index from "./pages/Index";
 import Experience from "./pages/Experience";
 import About from "./pages/About";
@@ -42,6 +43,7 @@ const AppContent = () => {
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
+      <CookieConsent />
     </>
   );
 };
