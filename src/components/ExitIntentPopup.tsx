@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
-import { X } from "lucide-react";
-import { useBookingQuiz } from "@/contexts/BookingQuizContext";
+import { X, Sparkles, Check } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 const ExitIntentPopup = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const { openQuiz } = useBookingQuiz();
+  const [email, setEmail] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const location = useLocation();
 
   const handleMouseLeave = useCallback((e: MouseEvent) => {
@@ -17,12 +19,12 @@ const ExitIntentPopup = () => {
   }, []);
 
   useEffect(() => {
-    // Only trigger on blog/service pages
-    if (!location.pathname.startsWith("/blog/") && !location.pathname.startsWith("/services/")) return;
+    // Arm on all pages except contact (they're already converting)
+    if (location.pathname === "/contact") return;
 
     const timer = setTimeout(() => {
       document.addEventListener("mouseleave", handleMouseLeave);
-    }, 5000); // Wait 5s before arming
+    }, 8000);
 
     return () => {
       clearTimeout(timer);
@@ -35,9 +37,20 @@ const ExitIntentPopup = () => {
     sessionStorage.setItem("wr-exit-dismissed", "true");
   };
 
-  const handleBook = () => {
-    dismiss();
-    openQuiz();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim() || submitting) return;
+    setSubmitting(true);
+    try {
+      await supabase.from("lead_magnet_signups").insert({
+        email: email.trim(),
+        source_page: location.pathname,
+      });
+    } catch {
+      // Still show success — don't block the UX
+    }
+    setSubmitted(true);
+    setSubmitting(false);
   };
 
   if (!isVisible) return null;
@@ -45,7 +58,7 @@ const ExitIntentPopup = () => {
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={dismiss} />
-      <div className="relative bg-forest-dark border border-accent/30 max-w-md w-full p-10 text-center animate-in fade-in zoom-in-95 duration-300">
+      <div className="relative bg-forest-dark border border-accent/30 max-w-lg w-full p-10 text-center animate-in fade-in zoom-in-95 duration-300">
         <button
           onClick={dismiss}
           className="absolute top-4 right-4 text-cream/40 hover:text-cream transition-colors"
@@ -53,27 +66,71 @@ const ExitIntentPopup = () => {
         >
           <X size={20} />
         </button>
-        <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">
-          Before You Go
-        </p>
-        <h3 className="font-serif text-3xl text-cream mb-4">
-          Don't Miss Your Date
-        </h3>
-        <p className="font-sans text-sm text-cream/70 mb-8 leading-relaxed">
-          Peak season dates are filling fast. Check availability for your event now and we'll respond within 24 hours. No obligation.
-        </p>
-        <button
-          onClick={handleBook}
-          className="w-full font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-4 hover:bg-accent/80 transition-colors mb-4"
-        >
-          Check Availability
-        </button>
-        <button
-          onClick={dismiss}
-          className="font-sans text-xs text-cream/40 hover:text-cream/60 transition-colors"
-        >
-          No thanks, I'll come back later
-        </button>
+
+        {!submitted ? (
+          <>
+            <Sparkles className="mx-auto mb-4 text-accent" size={28} />
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3">
+              Free Guide
+            </p>
+            <h3 className="font-serif text-3xl text-cream mb-3">
+              The Host's Playbook
+            </h3>
+            <p className="font-serif text-base text-cream/50 italic mb-5">
+              7 Secrets to Choosing Entertainment That Makes Your Event Legendary
+            </p>
+            <div className="text-left space-y-2.5 mb-8 max-w-sm mx-auto">
+              {[
+                "The #1 mistake hosts make when booking entertainment",
+                "How to match the right performer to your event format",
+                "The cocktail hour trick that transforms guest energy",
+                "What luxury brands like Netflix and Morgan Stanley look for",
+                "Questions to ask any entertainer before signing a contract",
+              ].map((item) => (
+                <div key={item} className="flex items-start gap-3">
+                  <Check size={14} className="text-accent mt-1 flex-shrink-0" />
+                  <p className="font-sans text-sm text-cream/70">{item}</p>
+                </div>
+              ))}
+            </div>
+            <form onSubmit={handleSubmit} className="space-y-3">
+              <input
+                type="email"
+                placeholder="Your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full bg-cream/5 border border-cream/15 rounded px-4 py-3 font-sans text-sm text-cream placeholder:text-cream/30 focus:outline-none focus:border-accent"
+              />
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-3.5 hover:bg-accent/80 transition-colors disabled:opacity-50"
+              >
+                {submitting ? "Sending…" : "Send Me the Free Guide"}
+              </button>
+            </form>
+            <p className="font-sans text-xs text-cream/30 mt-4">
+              No spam. Just one beautifully useful guide.
+            </p>
+          </>
+        ) : (
+          <>
+            <Check className="mx-auto mb-4 text-accent" size={32} />
+            <h3 className="font-serif text-3xl text-cream mb-3">
+              Check Your Inbox
+            </h3>
+            <p className="font-sans text-sm text-cream/60 leading-relaxed mb-6">
+              Your copy of The Host's Playbook is on its way. In the meantime, feel free to explore what a White Rabbit experience looks like.
+            </p>
+            <button
+              onClick={dismiss}
+              className="font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-8 py-3 hover:bg-accent hover:text-accent-foreground transition-colors"
+            >
+              Continue Exploring
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
