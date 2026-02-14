@@ -58,7 +58,7 @@ const HostsPlaybook = () => {
   }, []);
 
   return (
-    <main className="pt-20">
+    <main id="main-content" className="pt-20">
       {/* Hero */}
       <section className="bg-forest-dark py-24">
         <div className="max-w-3xl mx-auto px-6 text-center">
@@ -76,7 +76,7 @@ const HostsPlaybook = () => {
         </div>
       </section>
 
-      {/* Intro */}
+      {/* Content */}
       <section className="py-20">
         <div className="max-w-3xl mx-auto px-6">
           <AnimatedSection>
@@ -84,69 +84,51 @@ const HostsPlaybook = () => {
               Whether you're planning a corporate gala, an intimate dinner party, or a milestone celebration, the entertainment you choose will define how your guests remember the night. This guide distills everything we've learned from hundreds of private events into seven actionable secrets.
             </p>
           </AnimatedSection>
-        </div>
-      </section>
 
-      {/* Sections */}
-      {sections.map((section, i) => (
-        <section key={section.number} className="py-8">
-          <div className="max-w-3xl mx-auto px-6">
-            <AnimatedSection>
-              <div className="flex items-baseline gap-3 mb-2">
-                <span className="font-sans text-xs tracking-[0.3em] text-accent/60">
-                  SECRET
-                </span>
-                <span className="font-serif text-3xl text-accent">{section.number}</span>
-              </div>
-              <h2 className="font-serif text-2xl md:text-3xl text-cream mb-4">
-                {section.title}
+          {sections.map((section, i) => (
+            <AnimatedSection key={section.number} delay={Math.min(i * 0.05, 0.2)}>
+              <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-4 mt-12">
+                Secret {section.number}: {section.title}
               </h2>
-              <div className="font-sans text-base text-muted-foreground leading-relaxed space-y-4">
-                {section.content.split('\n\n').map((paragraph, pi) => (
-                  <p key={pi}>
-                    {paragraph.split(/(\*\*.*?\*\*)/).map((part, j) => {
-                      if (part.startsWith("**") && part.endsWith("**")) {
-                        return (
-                          <strong key={j} className="text-cream/80 font-medium">
-                            {part.slice(2, -2)}
-                          </strong>
-                        );
-                      }
-                      return <span key={j}>{part}</span>;
-                    })}
-                  </p>
-                ))}
-              </div>
-            </AnimatedSection>
+              {section.content.split('\n\n').map((paragraph, pi) => (
+                <p key={pi} className="font-sans text-base text-muted-foreground leading-relaxed mb-8">
+                  {paragraph.split(/(\*\*.*?\*\*)/).map((part, j) => {
+                    if (part.startsWith("**") && part.endsWith("**")) {
+                      return (
+                        <strong key={j} className="text-foreground/80 font-medium">
+                          {part.slice(2, -2)}
+                        </strong>
+                      );
+                    }
+                    return <span key={j}>{part}</span>;
+                  })}
+                </p>
+              ))}
 
-            {/* Mid-article images */}
-            {i === 2 && (
-              <AnimatedSection className="mt-12">
+              {i === 2 && (
                 <img
                   src={eventParlorShow}
                   alt="Parlor magic show"
-                  className="w-full aspect-[16/9] object-cover"
+                  className="w-full aspect-[16/9] object-cover my-8"
                   loading="lazy"
                 />
-              </AnimatedSection>
-            )}
-            {i === 4 && (
-              <AnimatedSection className="mt-12">
+              )}
+              {i === 4 && (
                 <img
                   src={eventCloseupCocktail}
                   alt="Close-up magic during cocktail hour"
-                  className="w-full aspect-[16/9] object-cover"
+                  className="w-full aspect-[16/9] object-cover my-8"
                   loading="lazy"
                 />
-              </AnimatedSection>
-            )}
-          </div>
-        </section>
-      ))}
+              )}
+            </AnimatedSection>
+          ))}
+        </div>
+      </section>
 
       {/* CTA */}
       <AnimatedSection>
-        <section className="bg-forest-dark py-20 text-center">
+        <section className="bg-forest-dark py-16 text-center">
           <div className="max-w-2xl mx-auto px-6">
             <h2 className="font-serif text-3xl md:text-4xl text-cream mb-4">
               Ready to Elevate Your Next Event?
