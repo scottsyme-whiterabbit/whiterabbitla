@@ -9,6 +9,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { getSeoPagesByCategory } from "@/data/seoPages";
 
 import netflixLogo from "@/assets/logos/netflix.png";
 import disneyLogo from "@/assets/logos/disney.png";
@@ -444,6 +445,45 @@ const ServicePage = () => {
           </div>
         </section>
       </AnimatedSection>
+
+      {/* Related City Pages */}
+      <section className="py-16 border-t border-border">
+        <div className="max-w-3xl mx-auto px-6">
+          <AnimatedSection>
+            <h2 className="font-serif text-2xl text-foreground mb-6">Available Nationwide</h2>
+            <p className="font-sans text-sm text-muted-foreground mb-6">
+              White Rabbit performs across the country. Find {page.title.toLowerCase()} services near you:
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {getSeoPagesByCategory(
+                page.slug === "corporate-magician" ? "Corporate Events" :
+                page.slug === "wedding-magician" ? "Weddings" :
+                page.slug === "private-party-magician" ? "Private Events" :
+                page.slug === "close-up-magician" ? "Close-Up Magic" :
+                "Private Magic Shows"
+              )
+                .slice(0, 10)
+                .map((p) => (
+                  <Link
+                    key={p.slug}
+                    to={`/blog/${p.slug}`}
+                    className="font-sans text-xs tracking-[0.15em] uppercase px-3 py-1.5 border border-border text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
+                  >
+                    {p.location}
+                  </Link>
+                ))}
+            </div>
+            <div className="mt-6 flex flex-wrap gap-4">
+              <Link to="/experience" className="font-sans text-sm text-accent hover:text-accent/80 transition-colors underline underline-offset-4">
+                See all experiences →
+              </Link>
+              <Link to="/reviews" className="font-sans text-sm text-accent hover:text-accent/80 transition-colors underline underline-offset-4">
+                Read client reviews →
+              </Link>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
 
       {/* Final CTA */}
       <AnimatedSection>

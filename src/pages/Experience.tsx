@@ -12,21 +12,25 @@ import intimateImg from "@/assets/event-closeup-intimate.jpg";
 const services = [
   {
     title: "Close-Up Magic",
+    slug: "close-up-magician",
     description: "Intimate sleight of hand, mentalism, and impossible coincidences performed inches away. But it's the hospitality that sets it apart. Scott moves through your event like a world-class host, weaving humor, audience participation, and sensory moments into every interaction, making each guest feel like the most important person in the room. Perfect for cocktail hours, dinners, and VIP receptions.",
     image: closeupImg,
   },
   {
     title: "Private Magic Shows",
+    slug: "private-magic-show",
     description: "The premium White Rabbit experience. Scott transforms your space with emerald curtain drapes, cinematic uplighting, and a curated soundtrack, turning any room into an atmosphere that feels like stepping into an upscale hotel lobby. The show blends classic magic, card mastery, mentalism, and stunning coincidences with humor and audience participation that engages all the senses. For 20 to 100 guests, the show is bigger emotionally than it is physically. Guests walk away feeling like they experienced something they've never felt before.",
     image: parlorImg,
   },
   {
     title: "Corporate Events",
+    slug: "corporate-magician",
     description: "Fortune 500 galas, product launches, executive retreats. Scott brings sleight of hand, mentalism, and classics of magic together with warmth, humor, and genuine audience connection. Your team and clients don't just watch entertainment; they participate, they laugh, they feel taken care of and alive. That's why the world's top brands keep coming back.",
     image: corporateImg,
   },
   {
     title: "Weddings & Private Events",
+    slug: "wedding-magician",
     description: "Birthdays, weddings, holiday celebrations, and exclusive gatherings. Scott creates an atmosphere of joy through card magic, mind-reading, impossible coincidences, and playful audience participation, engaging all the senses and bringing people together. Guests leave with stories to tell their friends and a lasting impression that this was unlike anything they've experienced before.",
     image: privateImg,
   },
@@ -71,12 +75,20 @@ const Experience = () => {
               <div>
                 <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">{service.title}</h2>
                 <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8">{service.description}</p>
-                <button
-                  onClick={openQuiz}
-                  className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-primary text-primary px-8 py-3 hover:bg-primary hover:text-primary-foreground transition-colors"
-                >
-                  Inquire
-                </button>
+                <div className="flex flex-wrap gap-4">
+                  <button
+                    onClick={openQuiz}
+                    className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-primary text-primary px-8 py-3 hover:bg-primary hover:text-primary-foreground transition-colors"
+                  >
+                    Inquire
+                  </button>
+                  <Link
+                    to={`/services/${service.slug}`}
+                    className="inline-block font-sans text-sm tracking-[0.2em] uppercase text-muted-foreground hover:text-foreground px-8 py-3 transition-colors"
+                  >
+                    Learn More →
+                  </Link>
+                </div>
               </div>
             </AnimatedSection>
           </div>

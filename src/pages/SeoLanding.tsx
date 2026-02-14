@@ -2,7 +2,7 @@ import { useParams, Link, Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import { Star, CheckCircle } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
-import { getSeoPageBySlug } from "@/data/seoPages";
+import { getSeoPageBySlug, getSeoPagesByCategory, getSeoPagesByLocation } from "@/data/seoPages";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import {
   Accordion,
@@ -268,6 +268,62 @@ const SeoLanding = () => {
           </div>
         </section>
       </AnimatedSection>
+
+      {/* Related Links for Internal Linking */}
+      <section className="py-16 border-t border-border">
+        <div className="max-w-3xl mx-auto px-6">
+          <AnimatedSection>
+            <h2 className="font-serif text-2xl text-foreground mb-6">Explore More</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Link to dedicated service page */}
+              <div>
+                <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3">Deep Dive</p>
+                <Link
+                  to={`/services/${page.slug.replace(`${page.location.toLowerCase().replace(/\s+/g, "-")}-`, "")}`}
+                  className="font-sans text-sm text-foreground hover:text-accent transition-colors underline underline-offset-4"
+                >
+                  Learn more about our {page.serviceType} services →
+                </Link>
+              </div>
+              {/* Link to same service in other cities */}
+              <div>
+                <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3">Other Locations</p>
+                <div className="flex flex-wrap gap-2">
+                  {getSeoPagesByCategory(page.category)
+                    .filter((p) => p.location !== page.location)
+                    .slice(0, 5)
+                    .map((p) => (
+                      <Link
+                        key={p.slug}
+                        to={`/blog/${p.slug}`}
+                        className="font-sans text-xs tracking-[0.15em] uppercase px-3 py-1.5 border border-border text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
+                      >
+                        {p.location}
+                      </Link>
+                    ))}
+                </div>
+              </div>
+              {/* Link to other services in same city */}
+              <div className="md:col-span-2">
+                <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3">More in {page.location}</p>
+                <div className="flex flex-wrap gap-2">
+                  {getSeoPagesByLocation(page.location)
+                    .filter((p) => p.category !== page.category)
+                    .map((p) => (
+                      <Link
+                        key={p.slug}
+                        to={`/blog/${p.slug}`}
+                        className="font-sans text-xs tracking-[0.15em] uppercase px-3 py-1.5 border border-border text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
+                      >
+                        {p.serviceType}
+                      </Link>
+                    ))}
+                </div>
+              </div>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
 
       {/* Final CTA */}
       <AnimatedSection>
