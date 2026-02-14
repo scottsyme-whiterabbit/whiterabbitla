@@ -147,12 +147,13 @@ const Index = () => {
                 More Than Magic.<br />A Feeling.
               </h2>
               <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">
-                Imagine the hush of a five-star lobby, the thrill of turning left on a flight. That rare feeling 
-                when every detail has been crafted just for you. Now bring that into a room full of your guests. 
-                Scott Syme blends world-class sleight of hand, mentalism, and impossible coincidences with the 
-                warmth of a master host, transforming any space into something cinematic, intimate, and utterly 
-                alive. Curated lighting, a signature soundtrack, and moments so close you can feel them. This 
-                isn't a magic show. It's a White Rabbit experience.
+                Scott Syme is a world-class magician, mentalist, and the creative force behind White Rabbit. 
+                A member of the Magic Castle and consultant to performers on America's Got Talent and Disney Channel, 
+                Scott has spent years perfecting something most magicians never attempt: an experience that feels 
+                like stepping into a five-star lobby or turning left on a flight. He blends masterful sleight of hand, 
+                mentalism, and impossible coincidences with the warmth of a seasoned host, transforming any room into 
+                something cinematic, intimate, and utterly alive. Curated lighting, a signature soundtrack, and moments 
+                so close you can feel them. This isn't a magic show. It's a White Rabbit experience.
               </p>
               <Link
                 to="/experience"
