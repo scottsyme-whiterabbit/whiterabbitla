@@ -21,7 +21,6 @@ import paramountLogo from "@/assets/logos/paramount.png";
 import rivianLogo from "@/assets/logos/rivian.png";
 import agtLogo from "@/assets/logos/agt.png";
 import youtubeLogo from "@/assets/logos/youtube.png";
-import sohoLogo from "@/assets/logos/sohohouse.png";
 import hyattLogo from "@/assets/logos/hyatt.png";
 import lionsgateLogo from "@/assets/logos/lionsgate.png";
 
@@ -33,7 +32,6 @@ const trustLogos = [
   { name: "America's Got Talent", logo: agtLogo },
   { name: "Paramount", logo: paramountLogo },
   { name: "YouTube", logo: youtubeLogo },
-  { name: "Soho House", logo: sohoLogo },
   { name: "Rivian", logo: rivianLogo },
   { name: "Hyatt", logo: hyattLogo },
   { name: "Lionsgate", logo: lionsgateLogo },
