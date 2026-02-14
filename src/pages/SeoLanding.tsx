@@ -445,7 +445,7 @@ const SeoLanding = () => {
               </p>
             </div>
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-8">
-              Most clients book 4–8 weeks in advance · No obligation to inquire
+              Most clients book 2–4 weeks in advance · No obligation to inquire
             </p>
             <button
               onClick={openQuiz}
