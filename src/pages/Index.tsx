@@ -186,11 +186,11 @@ const Index = () => {
               )}
             </div>
             <blockquote className="font-serif text-2xl md:text-3xl text-cream/90 leading-relaxed mb-8">
-              "Our guests didn't just enjoy the show. They came alive. Months later, they still talk about 
-              how Scott made them feel. That's not entertainment. That's something else entirely."
+              "Scott performed at a 200-person event for us and the guests absolutely LOVED him and were 
+              amazed by his talents. I could not recommend him more! We can't wait to have him back."
             </blockquote>
             <p className="font-sans text-sm tracking-[0.2em] uppercase text-cream/50 mb-8">
-              Morgan Stanley, Private Client Event
+              Morgan Stanley, 200-Person Corporate Event
             </p>
             <Link
               to="/reviews"
