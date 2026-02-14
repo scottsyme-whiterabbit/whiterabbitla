@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { seoPages, seoCategories, seoLocations } from "@/data/seoPages";
+import { blogArticles } from "@/data/blogArticles";
 
 const Blog = () => {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -92,9 +93,37 @@ const Blog = () => {
         </div>
       </section>
 
+      {/* Editorial Articles */}
+      <section className="py-16 border-b border-border">
+        <div className="max-w-5xl mx-auto px-6">
+          <AnimatedSection>
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">Featured Articles</p>
+            <h2 className="font-serif text-3xl text-foreground mb-8">Insights on Luxury Entertainment</h2>
+          </AnimatedSection>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {blogArticles.map((article, i) => (
+              <AnimatedSection key={article.slug} delay={Math.min(i * 0.1, 0.3)}>
+                <Link to={`/blog/${article.slug}`} className="group block border border-border p-6 hover:border-accent/40 transition-colors h-full">
+                  <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3">
+                    {article.category} · {article.readTime}
+                  </p>
+                  <h3 className="font-serif text-xl text-foreground mb-3 group-hover:text-accent transition-colors">
+                    {article.title}
+                  </h3>
+                  <p className="font-sans text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                    {article.excerpt}
+                  </p>
+                </Link>
+              </AnimatedSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Pages Grid */}
       <section className="py-20">
         <div className="max-w-5xl mx-auto px-6">
+          <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">City Guides</p>
           <p className="font-sans text-sm text-muted-foreground mb-8">
             {filteredPages.length} {filteredPages.length === 1 ? "guide" : "guides"} found
           </p>
