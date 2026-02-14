@@ -58,120 +58,108 @@ const HostsPlaybook = () => {
   }, []);
 
   return (
-    <>
-
-      <main className="bg-background text-foreground">
-        {/* Hero */}
-        <section className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${eventAudience})` }}
-          />
-          <div className="absolute inset-0 bg-background/80" />
-          <div className="relative z-10 text-center px-6 max-w-3xl mx-auto py-32">
-            <AnimatedSection>
-              <p className="font-sans text-xs tracking-[0.35em] uppercase text-accent mb-6">
-                An Exclusive Guide from White Rabbit
-              </p>
-              <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-cream mb-6">
-                The Host's Playbook
-              </h1>
-              <p className="font-serif text-xl md:text-2xl text-cream/50 italic">
-                7 Secrets to Choosing Entertainment That Makes Your Event Legendary
-              </p>
-            </AnimatedSection>
-          </div>
-        </section>
-
-        {/* Intro */}
-        <section className="max-w-2xl mx-auto px-6 py-20">
+    <main className="pt-20">
+      {/* Hero */}
+      <section className="bg-forest-dark py-24">
+        <div className="max-w-3xl mx-auto px-6 text-center">
           <AnimatedSection>
-            <p className="font-serif text-lg text-cream/70 leading-relaxed">
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">
+              An Exclusive Guide · 12 min read
+            </p>
+            <h1 className="font-serif text-4xl md:text-5xl text-cream mb-6 leading-tight">
+              The Host's Playbook
+            </h1>
+            <p className="font-sans text-base text-cream/70 max-w-xl mx-auto">
+              7 Secrets to Choosing Entertainment That Makes Your Event Legendary
+            </p>
+          </AnimatedSection>
+        </div>
+      </section>
+
+      {/* Intro */}
+      <section className="py-20">
+        <div className="max-w-3xl mx-auto px-6">
+          <AnimatedSection>
+            <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8">
               Whether you're planning a corporate gala, an intimate dinner party, or a milestone celebration, the entertainment you choose will define how your guests remember the night. This guide distills everything we've learned from hundreds of private events into seven actionable secrets.
             </p>
           </AnimatedSection>
-        </section>
+        </div>
+      </section>
 
-        {/* Sections */}
-        {sections.map((section, i) => (
-          <section
-            key={section.number}
-            className={`py-16 ${i % 2 === 0 ? "bg-background" : "bg-forest-dark/30"}`}
-          >
-            <div className="max-w-2xl mx-auto px-6">
-              <AnimatedSection>
-                <div className="flex items-baseline gap-4 mb-6">
-                  <span className="font-sans text-xs tracking-[0.3em] text-accent/60">
-                    SECRET
-                  </span>
-                  <span className="font-serif text-4xl text-accent">{section.number}</span>
-                </div>
-                <h2 className="font-serif text-2xl md:text-3xl text-cream mb-8">
-                  {section.title}
-                </h2>
-                <div className="font-serif text-base text-cream/60 leading-relaxed whitespace-pre-line [&_strong]:text-cream/80 prose-strong:text-cream/80">
-                  {section.content.split(/(\*\*.*?\*\*)/).map((part, j) => {
-                    if (part.startsWith("**") && part.endsWith("**")) {
-                      return (
-                        <strong key={j} className="text-cream/80 font-medium">
-                          {part.slice(2, -2)}
-                        </strong>
-                      );
-                    }
-                    return <span key={j}>{part}</span>;
-                  })}
-                </div>
-              </AnimatedSection>
-
-              {/* Mid-article images */}
-              {i === 2 && (
-                <AnimatedSection className="mt-12">
-                  <img
-                    src={eventParlorShow}
-                    alt="Parlor magic show"
-                    className="w-full aspect-[16/9] object-cover"
-                    loading="lazy"
-                  />
-                </AnimatedSection>
-              )}
-              {i === 4 && (
-                <AnimatedSection className="mt-12">
-                  <img
-                    src={eventCloseupCocktail}
-                    alt="Close-up magic during cocktail hour"
-                    className="w-full aspect-[16/9] object-cover"
-                    loading="lazy"
-                  />
-                </AnimatedSection>
-              )}
-            </div>
-          </section>
-        ))}
-
-        {/* CTA */}
-        <section className="py-24 text-center px-6">
-          <AnimatedSection>
-            <div className="max-w-xl mx-auto">
-              <p className="font-sans text-xs tracking-[0.35em] uppercase text-accent mb-4">
-                Ready to Create Something Unforgettable?
-              </p>
-              <h2 className="font-serif text-3xl md:text-4xl text-cream mb-6">
-                Let's Plan Your Event
+      {/* Sections */}
+      {sections.map((section, i) => (
+        <section key={section.number} className="py-16">
+          <div className="max-w-3xl mx-auto px-6">
+            <AnimatedSection>
+              <div className="flex items-baseline gap-3 mb-2">
+                <span className="font-sans text-xs tracking-[0.3em] text-accent/60">
+                  SECRET
+                </span>
+                <span className="font-serif text-3xl text-accent">{section.number}</span>
+              </div>
+              <h2 className="font-serif text-2xl md:text-3xl text-cream mb-6">
+                {section.title}
               </h2>
-              <p className="font-serif text-base text-cream/50 mb-10 leading-relaxed">
-                Now that you know the secrets, let us help you put them into action. Every White Rabbit experience is tailored to your vision.
-              </p>
-              <button
-                onClick={openQuiz}
-                className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors"
-              >
-                Check Availability
-              </button>
-            </div>
-          </AnimatedSection>
+              <div className="font-sans text-base text-muted-foreground leading-relaxed whitespace-pre-line">
+                {section.content.split(/(\*\*.*?\*\*)/).map((part, j) => {
+                  if (part.startsWith("**") && part.endsWith("**")) {
+                    return (
+                      <strong key={j} className="text-cream/80 font-medium">
+                        {part.slice(2, -2)}
+                      </strong>
+                    );
+                  }
+                  return <span key={j}>{part}</span>;
+                })}
+              </div>
+            </AnimatedSection>
+
+            {/* Mid-article images */}
+            {i === 2 && (
+              <AnimatedSection className="mt-12">
+                <img
+                  src={eventParlorShow}
+                  alt="Parlor magic show"
+                  className="w-full aspect-[16/9] object-cover"
+                  loading="lazy"
+                />
+              </AnimatedSection>
+            )}
+            {i === 4 && (
+              <AnimatedSection className="mt-12">
+                <img
+                  src={eventCloseupCocktail}
+                  alt="Close-up magic during cocktail hour"
+                  className="w-full aspect-[16/9] object-cover"
+                  loading="lazy"
+                />
+              </AnimatedSection>
+            )}
+          </div>
         </section>
-      </main>
-    </>
+      ))}
+
+      {/* CTA */}
+      <AnimatedSection>
+        <section className="bg-forest-dark py-20 text-center">
+          <div className="max-w-2xl mx-auto px-6">
+            <h2 className="font-serif text-3xl md:text-4xl text-cream mb-4">
+              Ready to Elevate Your Next Event?
+            </h2>
+            <p className="font-sans text-sm text-cream/70 mb-8">
+              Now that you know the secrets, let us help you put them into action. Every White Rabbit experience is tailored to your vision.
+            </p>
+            <button
+              onClick={openQuiz}
+              className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors"
+            >
+              Check Availability
+            </button>
+          </div>
+        </section>
+      </AnimatedSection>
+    </main>
   );
 };
 

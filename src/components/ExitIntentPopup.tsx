@@ -20,7 +20,7 @@ const ExitIntentPopup = () => {
 
   useEffect(() => {
     // Arm on all pages except contact (they're already converting)
-    if (location.pathname === "/contact") return;
+    if (location.pathname === "/contact" || location.pathname === "/guide") return;
 
     const timer = setTimeout(() => {
       document.addEventListener("mouseleave", handleMouseLeave);
