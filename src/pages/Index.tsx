@@ -306,6 +306,28 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Discovery Quiz CTA */}
+      <AnimatedSection>
+        <section className="py-16 lg:py-20">
+          <div className="max-w-3xl mx-auto px-6 text-center">
+            <div className="border border-accent/20 rounded p-10 md:p-14 bg-forest-dark/30">
+              <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">Not Sure Yet?</p>
+              <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-4">
+                Wondering if magic is right for your event?
+              </h2>
+              <p className="font-sans text-base text-muted-foreground mb-8 max-w-lg mx-auto">
+                Take our 60-second quiz and we'll recommend the perfect experience for your guests — no commitment, just clarity.
+              </p>
+              <Link
+                to="/quiz"
+                className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-foreground px-10 py-4 hover:bg-accent hover:text-accent-foreground transition-colors">
+                Take the Quiz
+              </Link>
+            </div>
+          </div>
+        </section>
+      </AnimatedSection>
+
       {/* Final CTA */}
       <AnimatedSection>
         <section className="py-12 lg:py-16 text-center">

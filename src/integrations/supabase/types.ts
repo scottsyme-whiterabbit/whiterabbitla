@@ -14,7 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      discovery_quiz_leads: {
+        Row: {
+          biggest_concern: string | null
+          created_at: string
+          email: string | null
+          event_type: string | null
+          experience_priority: string | null
+          guest_count: string | null
+          id: string
+          name: string | null
+          quiz_answers: Json
+          recommendation: string
+        }
+        Insert: {
+          biggest_concern?: string | null
+          created_at?: string
+          email?: string | null
+          event_type?: string | null
+          experience_priority?: string | null
+          guest_count?: string | null
+          id?: string
+          name?: string | null
+          quiz_answers?: Json
+          recommendation: string
+        }
+        Update: {
+          biggest_concern?: string | null
+          created_at?: string
+          email?: string | null
+          event_type?: string | null
+          experience_priority?: string | null
+          guest_count?: string | null
+          id?: string
+          name?: string | null
+          quiz_answers?: Json
+          recommendation?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
