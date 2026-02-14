@@ -20,10 +20,15 @@ const Footer = () => {
               key={link}
               to={`/${link.toLowerCase()}`}
               className="font-sans text-sm tracking-wider hover:text-cream transition-colors">
-
                 {link}
               </Link>
             )}
+            <h4 className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2 mt-4">Services</h4>
+            <Link to="/services/corporate-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Corporate Events</Link>
+            <Link to="/services/wedding-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Weddings</Link>
+            <Link to="/services/private-party-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Private Parties</Link>
+            <Link to="/services/close-up-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Close-Up Magic</Link>
+            <Link to="/services/private-magic-show" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Private Magic Show</Link>
           </nav>
 
           {/* Contact */}
