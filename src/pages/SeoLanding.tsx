@@ -344,6 +344,18 @@ const SeoLanding = () => {
             >
               Book White Rabbit Now
             </button>
+            <p className="font-sans text-sm text-muted-foreground mt-8">
+              Follow Scott on Instagram{" "}
+              <a
+                href="https://www.instagram.com/scottsyme_/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent hover:text-accent/80 transition-colors underline underline-offset-4"
+              >
+                @scottsyme_
+              </a>
+              {" "}for behind-the-scenes magic and event highlights.
+            </p>
           </div>
         </section>
       </AnimatedSection>
