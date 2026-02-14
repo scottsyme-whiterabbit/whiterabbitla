@@ -107,6 +107,53 @@ const About = () => {
         </section>
       </AnimatedSection>
 
+      {/* What Scott Offers — links to Experience */}
+      <section className="py-20 lg:py-24">
+        <div className="max-w-4xl mx-auto px-6">
+          <AnimatedSection>
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4 text-center">What Scott Offers</p>
+            <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-12 text-center">
+              Experiences Tailored to Your Event
+            </h2>
+          </AnimatedSection>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[
+              { title: "Close-Up Magic", desc: "Intimate sleight of hand performed right in your guests' hands during cocktail hours and receptions.", link: "/services/close-up-magician" },
+              { title: "Private Magic Show", desc: "A curated 45-minute theatrical experience with cinematic lighting, sound, and audience interaction.", link: "/services/private-magic-show" },
+              { title: "Corporate Events", desc: "Sophisticated entertainment for galas, product launches, holiday parties, and executive retreats.", link: "/services/corporate-magician" },
+              { title: "Weddings", desc: "The cocktail hour experience that breaks the ice and gives your guests a story to tell forever.", link: "/services/wedding-magician" },
+            ].map((service, i) => (
+              <AnimatedSection key={service.title} delay={i * 0.1}>
+                <Link
+                  to={service.link}
+                  className="group block border border-border p-8 hover:border-accent/40 transition-colors h-full"
+                >
+                  <h3 className="font-serif text-xl text-foreground mb-3 group-hover:text-accent transition-colors">
+                    {service.title}
+                  </h3>
+                  <p className="font-sans text-sm text-muted-foreground leading-relaxed mb-4">
+                    {service.desc}
+                  </p>
+                  <span className="font-sans text-xs tracking-[0.2em] uppercase text-accent">
+                    Learn More →
+                  </span>
+                </Link>
+              </AnimatedSection>
+            ))}
+          </div>
+          <AnimatedSection delay={0.3}>
+            <div className="text-center mt-10">
+              <Link
+                to="/experience"
+                className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-primary text-primary px-8 py-3 hover:bg-primary hover:text-primary-foreground transition-colors"
+              >
+                View All Experiences
+              </Link>
+            </div>
+          </AnimatedSection>
+        </div>
+      </section>
+
       {/* Credits */}
       <section className="py-12">
         <div className="max-w-5xl mx-auto px-6">
