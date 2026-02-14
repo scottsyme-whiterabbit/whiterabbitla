@@ -1,6 +1,6 @@
 import { useParams, Link, Navigate } from "react-router-dom";
-import { useEffect } from "react";
-import { Star, CheckCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Star, CheckCircle, Clock } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getSeoPageBySlug, getSeoPagesByCategory, getSeoPagesByLocation } from "@/data/seoPages";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
@@ -19,15 +19,112 @@ import rollsroyceLogo from "@/assets/logos/rollsroyce.png";
 import morganstanleyLogo from "@/assets/logos/morganstanley.png";
 import paramountLogo from "@/assets/logos/paramount.png";
 import rivianLogo from "@/assets/logos/rivian.png";
+import agtLogo from "@/assets/logos/agt.png";
+import youtubeLogo from "@/assets/logos/youtube.png";
+import sohoLogo from "@/assets/logos/sohohouse.png";
+import hyattLogo from "@/assets/logos/hyatt.png";
+import lionsgateLogo from "@/assets/logos/lionsgate.png";
 
 const trustLogos = [
   { name: "Netflix", logo: netflixLogo },
   { name: "Disney", logo: disneyLogo },
   { name: "Morgan Stanley", logo: morganstanleyLogo },
   { name: "Rolls Royce", logo: rollsroyceLogo },
+  { name: "America's Got Talent", logo: agtLogo },
   { name: "Paramount", logo: paramountLogo },
+  { name: "YouTube", logo: youtubeLogo },
+  { name: "Soho House", logo: sohoLogo },
   { name: "Rivian", logo: rivianLogo },
+  { name: "Hyatt", logo: hyattLogo },
+  { name: "Lionsgate", logo: lionsgateLogo },
 ];
+
+// Extended testimonials for city-specific rotation
+const allTestimonials = [
+  {
+    quote: "Our guests didn't just enjoy the show. They came alive. Months later, they still talk about how Scott made them feel. That's not entertainment. That's something else entirely.",
+    attribution: "Morgan Stanley, Private Client Event",
+    region: "corporate",
+  },
+  {
+    quote: "We've hired entertainers before. Scott is in a completely different category. He turned our cocktail hour into the highlight of the entire evening.",
+    attribution: "Director of Events, Fortune 500 Company",
+    region: "corporate",
+  },
+  {
+    quote: "I've never seen a room full of executives laugh that hard. Every single person came up to me afterward asking where I found him.",
+    attribution: "VP of Marketing, Tech Company",
+    region: "corporate",
+  },
+  {
+    quote: "Hiring Scott was the single best decision we made for our wedding. Our guests are STILL talking about him six months later.",
+    attribution: "Private Client, Los Angeles",
+    region: "wedding",
+  },
+  {
+    quote: "He read my mind. Actually read it. I still don't know how. My guests were screaming with joy, and these are people who don't scream.",
+    attribution: "Private Event Host, Beverly Hills",
+    region: "private",
+  },
+  {
+    quote: "Scott didn't just perform at our party. He made every single guest feel like the most important person in the room. That's a rare gift.",
+    attribution: "Private Client, Malibu",
+    region: "private",
+  },
+  {
+    quote: "We flew Scott out for our annual client dinner. Best investment we made all year. Our clients are still emailing us about it.",
+    attribution: "Managing Director, Private Equity Firm",
+    region: "corporate",
+  },
+  {
+    quote: "The moment Scott walked in, the energy shifted. By the end of the night, strangers were hugging. That's the White Rabbit effect.",
+    attribution: "Event Planner, New York",
+    region: "private",
+  },
+  {
+    quote: "I've been to hundreds of events. This was the first time entertainment actually made me emotional. Truly extraordinary.",
+    attribution: "Philanthropic Gala Host, Palm Beach",
+    region: "private",
+  },
+  {
+    quote: "Our holiday party went from 'nice' to 'legendary' the moment Scott started performing. Three months later, it's still the talk of the office.",
+    attribution: "Chief People Officer, Tech Company",
+    region: "corporate",
+  },
+];
+
+function getCityTestimonial(slug: string, category: string) {
+  // Match testimonial region to category
+  const regionMap: Record<string, string> = {
+    "Corporate Events": "corporate",
+    "Weddings": "wedding",
+    "Private Events": "private",
+    "Close-Up Magic": "private",
+    "Private Magic Shows": "private",
+  };
+  const targetRegion = regionMap[category] || "private";
+  
+  // Filter to matching region first
+  const regionMatches = allTestimonials.filter(t => t.region === targetRegion);
+  const pool = regionMatches.length > 0 ? regionMatches : allTestimonials;
+  
+  // Hash-based selection for consistency
+  const hash = slug.split("").reduce((a, c) => a + c.charCodeAt(0), 0);
+  return pool[hash % pool.length];
+}
+
+// Dynamic urgency based on current month
+function getUrgencyText(): string {
+  const now = new Date();
+  const month = now.getMonth();
+  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  
+  // Peak seasons
+  if (month >= 3 && month <= 5) return `Spring season is filling fast. Limited ${monthNames[month]} and ${monthNames[month + 1]} dates remaining.`;
+  if (month >= 9 && month <= 11) return `Peak event season is here. ${monthNames[month]} dates are nearly full.`;
+  if (month >= 6 && month <= 8) return `Summer events are booking now. Secure your ${monthNames[month]} date before it's gone.`;
+  return `New year, new events. ${monthNames[month]} and ${monthNames[month + 1]} dates are now open for booking.`;
+}
 
 const SeoLanding = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -78,6 +175,8 @@ const SeoLanding = () => {
   }
 
   const heroImage = page.category === "Parlor Shows" ? parlorImg : experienceImg;
+  const testimonial = getCityTestimonial(page.slug, page.category);
+  const urgencyText = getUrgencyText();
 
   const localMarkets = [
     "Los Angeles", "Beverly Hills", "Hollywood", "Santa Monica",
@@ -102,7 +201,7 @@ const SeoLanding = () => {
       ];
 
   return (
-    <main id="main-content" className="pt-20">
+    <main id="main-content" className="pt-20 pb-16 md:pb-0">
       {/* Hero */}
       <section className="relative py-28 lg:py-36 overflow-hidden">
         <div className="absolute inset-0">
@@ -134,19 +233,19 @@ const SeoLanding = () => {
         </div>
       </section>
 
-      {/* Trust Bar */}
-      <section className="bg-forest-dark py-8 border-t border-cream/10">
-        <div className="max-w-4xl mx-auto px-6">
+      {/* As Seen On / Trust Bar */}
+      <section className="bg-forest-dark py-10 border-t border-cream/10">
+        <div className="max-w-5xl mx-auto px-6">
           <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-cream/40 mb-6">
-            Trusted by World-Class Brands
+            As Seen On & Trusted By
           </p>
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
+          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-10">
             {trustLogos.map((client) => (
               <img
                 key={client.name}
                 src={client.logo}
                 alt={client.name}
-                className="h-6 md:h-8 w-auto object-contain opacity-50 brightness-0 invert"
+                className="h-5 md:h-7 w-auto object-contain opacity-50 brightness-0 invert"
               />
             ))}
           </div>
@@ -172,16 +271,22 @@ const SeoLanding = () => {
         </div>
       </section>
 
-      {/* Mid-page CTA */}
+      {/* Mid-page CTA with Urgency */}
       <AnimatedSection>
         <section className="bg-secondary/30 py-16">
           <div className="max-w-3xl mx-auto px-6 text-center">
             <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-4">
               {page.midCtaText}
             </h2>
-            <p className="font-sans text-base text-muted-foreground mb-8 max-w-xl mx-auto">
+            <p className="font-sans text-base text-muted-foreground mb-4 max-w-xl mx-auto">
               Dates fill quickly, especially during peak event season. Tell us about your event and we'll confirm availability within 24 hours.
             </p>
+            <div className="flex items-center justify-center gap-2 mb-8">
+              <Clock size={14} className="text-accent" />
+              <p className="font-sans text-xs tracking-[0.15em] uppercase text-accent">
+                {urgencyText}
+              </p>
+            </div>
             <button
               onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors"
@@ -250,7 +355,7 @@ const SeoLanding = () => {
         </section>
       )}
 
-      {/* Testimonial */}
+      {/* City-Specific Testimonial */}
       <AnimatedSection>
         <section className="bg-forest-dark py-20">
           <div className="max-w-3xl mx-auto px-6 text-center">
@@ -260,10 +365,10 @@ const SeoLanding = () => {
               ))}
             </div>
             <blockquote className="font-serif text-2xl md:text-3xl text-cream/90 leading-relaxed mb-6">
-              "{page.socialProof}"
+              "{testimonial.quote}"
             </blockquote>
             <p className="font-sans text-sm tracking-[0.2em] uppercase text-cream/50">
-              {page.socialProofAttribution}
+              {testimonial.attribution}
             </p>
           </div>
         </section>
@@ -325,16 +430,22 @@ const SeoLanding = () => {
         </div>
       </section>
 
-      {/* Final CTA */}
+      {/* Final CTA with Urgency */}
       <AnimatedSection>
         <section className="py-24 text-center">
           <div className="max-w-2xl mx-auto px-6">
             <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-4">
               Make Your Next Event Unforgettable
             </h2>
-            <p className="font-sans text-base text-muted-foreground mb-6">
+            <p className="font-sans text-base text-muted-foreground mb-4">
               Tell us about your {page.location} event (date, guest count, and vibe) and we'll craft a custom experience your guests will never forget.
             </p>
+            <div className="flex items-center justify-center gap-2 mb-6">
+              <Clock size={14} className="text-accent" />
+              <p className="font-sans text-xs tracking-[0.15em] uppercase text-accent">
+                {urgencyText}
+              </p>
+            </div>
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-8">
               Most clients book 4–8 weeks in advance · No obligation to inquire
             </p>

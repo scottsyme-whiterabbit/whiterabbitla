@@ -11,15 +11,27 @@ import LocalBusinessSchema from "@/components/LocalBusinessSchema";
 import { BookingQuizProvider } from "@/contexts/BookingQuizContext";
 import BookingQuiz from "@/components/BookingQuiz";
 import CookieConsent from "@/components/CookieConsent";
+import ExitIntentPopup from "@/components/ExitIntentPopup";
+import StickyMobileCTA from "@/components/StickyMobileCTA";
 import Index from "./pages/Index";
 import Experience from "./pages/Experience";
 import About from "./pages/About";
 import Reviews from "./pages/Reviews";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
+import BlogArticle from "./pages/BlogArticle";
 import SeoLanding from "./pages/SeoLanding";
 import ServicePage from "./pages/ServicePage";
 import NotFound from "./pages/NotFound";
+import { getBlogArticleBySlug } from "./data/blogArticles";
+import { useParams } from "react-router-dom";
+
+const BlogArticleOrSeo = () => {
+  const { slug } = useParams<{ slug: string }>();
+  const article = slug ? getBlogArticleBySlug(slug) : undefined;
+  if (article) return <BlogArticle />;
+  return <SeoLanding />;
+};
 
 const queryClient = new QueryClient();
 
@@ -31,6 +43,8 @@ const AppContent = () => {
       <ScrollToTop />
       <Navbar />
       <BookingQuiz />
+      <ExitIntentPopup />
+      <StickyMobileCTA />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/experience" element={<Experience />} />
@@ -38,7 +52,7 @@ const AppContent = () => {
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/:slug" element={<SeoLanding />} />
+        <Route path="/blog/:slug" element={<BlogArticleOrSeo />} />
         <Route path="/services/:serviceSlug" element={<ServicePage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
