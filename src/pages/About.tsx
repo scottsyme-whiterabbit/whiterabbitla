@@ -54,8 +54,19 @@ const About = () => {
                 That combination of business acumen, hospitality training, and world-class sleight of hand 
                 is why Fortune 500 companies, charitable organizations, and the most discerning private clients 
                 (Netflix, Disney, Rolls Royce, Morgan Stanley, and countless industry leaders) trust Scott 
-                with their most important events. When you hire White Rabbit, you're not just booking a 
-                magician. You're hiring someone who has dedicated his life to making people feel extraordinary.
+                with their most important events. Beyond performing, Scott has consulted for major productions, 
+                teaching the cast of Disney Channel's Bizaardvark how to perform magic on screen alongside 
+                Olivia Rodrigo, consulting for America's Got Talent champion winner Dustin Tavella, and 
+                coaching comedian Adam Ray for a show at the legendary Comedy Store. When you hire White Rabbit, 
+                you're not just booking a magician. You're hiring someone who has dedicated his life to making 
+                people feel extraordinary.
+              </p>
+              <p>
+                In 2025, Scott created and hosted Magic Mondays at the Kookaburra Lounge in Hollywood, a 
+                weekly magic and comedy show produced by White Rabbit and the Kookaburra Lounge. The show 
+                featured some of the biggest names in magic, including Taylor Hughes, Kyle Marlett, Franco 
+                Pascali, and Blake Vogt, alongside comedians like Adam Ray, Tiffany Haddish, Craig Robinson, 
+                Dean Delray, and Katie Cazorla. Magic Mondays is returning in 2026 in Studio City.
               </p>
               <p>
                 For premium White Rabbit private magic shows, Scott transforms spaces with emerald curtain drapes, 
