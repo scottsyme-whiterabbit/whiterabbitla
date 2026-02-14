@@ -42,9 +42,14 @@ const ExitIntentPopup = () => {
     if (!email.trim() || submitting) return;
     setSubmitting(true);
     try {
+      // Save to database
       await supabase.from("lead_magnet_signups").insert({
         email: email.trim(),
         source_page: location.pathname,
+      });
+      // Send guide email + notify Scott
+      await supabase.functions.invoke("send-lead-magnet", {
+        body: { email: email.trim(), sourcePage: location.pathname },
       });
     } catch {
       // Still show success — don't block the UX

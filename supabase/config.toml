@@ -1,1 +1,4 @@
 project_id = "pgjyzayvkyrftcksvncj"
+
+[functions.send-lead-magnet]
+verify_jwt = false
