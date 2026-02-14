@@ -23,6 +23,7 @@ import BlogArticle from "./pages/BlogArticle";
 import SeoLanding from "./pages/SeoLanding";
 import ServicePage from "./pages/ServicePage";
 import NotFound from "./pages/NotFound";
+import DiscoveryQuiz from "./pages/DiscoveryQuiz";
 import { getBlogArticleBySlug } from "./data/blogArticles";
 import { useParams } from "react-router-dom";
 
@@ -54,6 +55,7 @@ const AppContent = () => {
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogArticleOrSeo />} />
         <Route path="/services/:serviceSlug" element={<ServicePage />} />
+        <Route path="/quiz" element={<DiscoveryQuiz />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
