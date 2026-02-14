@@ -42,7 +42,7 @@ serve(async (req) => {
         
         <!-- Header -->
         <tr><td style="padding:48px 40px 24px;text-align:center;">
-          <p style="font-family:sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#c8a0a0;margin:0 0 16px;">White Rabbit Magic</p>
+          <img src="https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-symbol.png" alt="White Rabbit" style="width:60px;height:auto;margin:0 auto 20px;" />
           <h1 style="font-family:Georgia,serif;font-size:32px;color:#f5f0e8;margin:0 0 8px;font-weight:normal;">The Host's Playbook</h1>
           <p style="font-family:Georgia,serif;font-size:16px;color:rgba(245,240,232,0.5);margin:0;font-style:italic;">7 Secrets to Choosing Entertainment That Makes Your Event Legendary</p>
         </td></tr>
@@ -80,7 +80,7 @@ serve(async (req) => {
         <tr><td style="padding:24px 40px 40px;text-align:center;">
           <hr style="border:none;border-top:1px solid rgba(200,160,160,0.15);margin:0 0 24px;" />
           <p style="font-family:sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,232,0.3);margin:0;">
-            White Rabbit Magic · Los Angeles
+            White Rabbit · Los Angeles
           </p>
         </td></tr>
 
