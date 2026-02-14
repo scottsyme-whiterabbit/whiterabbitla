@@ -7,8 +7,8 @@ import audienceImg from "@/assets/event-audience.jpg";
 const reviews = [
 {
   name: "Morgan Stanley",
-  role: "Private Client Event",
-  text: "Scott's performance was the highlight of our entire event. Our guests are still talking about it months later. Truly world-class entertainment.",
+  role: "200-Person Corporate Event",
+  text: "Scott performed at a 200-person event for us this week and the guests absolutely LOVED him and were amazed by his talents. I could not recommend him more! We can't wait to have him back.",
   rating: 5
 },
 {
