@@ -57,6 +57,18 @@ const locations = [
   "The Hamptons",
   "Greenwich",
   "Park City",
+  "Hillsborough",
+  "San Mateo",
+  "Burlingame",
+  "Atherton",
+  "Palo Alto",
+  "Woodside",
+  "Los Altos",
+  "Menlo Park",
+  "Saratoga",
+  "Los Gatos",
+  "Tiburon",
+  "Mill Valley",
 ] as const;
 
 // Curated luxury venue references per location for authentic local SEO
@@ -230,6 +242,66 @@ const locationVenues: Record<string, { dining: string[]; hotels: string[]; cultu
     dining: ["Handle", "Riverhorse on Main", "Firewood"],
     hotels: ["Montage Deer Valley", "The St. Regis Deer Valley", "Waldorf Astoria Park City"],
     culture: ["Main Street Park City", "Sundance Film Festival", "Deer Valley Resort"],
+  },
+  "Hillsborough": {
+    dining: ["Piacere", "Koi Palace", "Viognier at Draeger's"],
+    hotels: ["The Westin San Francisco Airport", "San Francisco Airport Marriott Waterfront", "Hotel Marques de Riscal"],
+    culture: ["Crystal Springs Golf Course", "Hillsborough Concours d'Elegance", "Sawyer Camp Trail"],
+  },
+  "San Mateo": {
+    dining: ["Viognier", "All Spice", "Chez Shea"],
+    hotels: ["San Mateo Marriott", "The Dylan Hotel", "Bay Landing Hotel"],
+    culture: ["CuriOdyssey", "San Mateo Central Park", "Hillsdale Shopping Center"],
+  },
+  "Burlingame": {
+    dining: ["Il Fornaio Burlingame", "Sapore Italiano", "Steelhead Brewing"],
+    hotels: ["Hyatt Regency SFO", "The Waterfront Hotel", "Embassy Suites SFO"],
+    culture: ["Burlingame Avenue", "Bayside Park", "Broadway Avenue"],
+  },
+  "Atherton": {
+    dining: ["Village Pub", "Madera at Rosewood", "Selby's"],
+    hotels: ["Rosewood Sand Hill", "Park James Hotel", "Four Seasons East Palo Alto"],
+    culture: ["Holbrook-Palmer Park", "Menlo Circus Club", "Allied Arts Guild"],
+  },
+  "Palo Alto": {
+    dining: ["Protégé", "Evvia Estiatorio", "Madera at Rosewood"],
+    hotels: ["Nobu Hotel Palo Alto", "Four Seasons Hotel Silicon Valley", "Rosewood Sand Hill"],
+    culture: ["Stanford University", "Palo Alto Art Center", "University Avenue"],
+  },
+  "Woodside": {
+    dining: ["The Village Pub", "Buck's of Woodside", "The Alpine Inn"],
+    hotels: ["Rosewood Sand Hill", "The Ritz-Carlton Half Moon Bay", "Costanoa"],
+    culture: ["Filoli Historic House", "Wunderlich County Park", "The Mountain Winery"],
+  },
+  "Los Altos": {
+    dining: ["Ambiance", "Chef Chu's", "Los Altos Grill"],
+    hotels: ["Residence Inn Los Altos", "Shashi Hotel Mountain View", "AC Hotel San Jose"],
+    culture: ["Los Altos History Museum", "Downtown Los Altos", "Rancho San Antonio"],
+  },
+  "Menlo Park": {
+    dining: ["Madera at Rosewood", "Café Borrone", "Camper"],
+    hotels: ["Rosewood Sand Hill", "Stanford Park Hotel", "Hotel Lucent"],
+    culture: ["Allied Arts Guild", "Burgess Park", "Santa Cruz Avenue"],
+  },
+  "Saratoga": {
+    dining: ["The Basin", "Plumed Horse", "La Fondue"],
+    hotels: ["The Toll House Hotel", "Hotel Valencia Santana Row", "The Fairmont San Jose"],
+    culture: ["The Mountain Winery", "Montalvo Arts Center", "Hakone Gardens"],
+  },
+  "Los Gatos": {
+    dining: ["Manresa", "Nick's on Main", "Forbes Mill Steakhouse"],
+    hotels: ["Hotel Los Gatos", "Toll House Hotel", "Nestldown"],
+    culture: ["Los Gatos Creek Trail", "Testarossa Winery", "Downtown Los Gatos"],
+  },
+  "Tiburon": {
+    dining: ["Sam's Anchor Café", "Servino Ristorante", "Luna Blu"],
+    hotels: ["The Lodge at Tiburon", "Waters Edge Hotel", "Casa Madrona"],
+    culture: ["Angel Island", "Tiburon Boardwalk", "Old St. Hilary's"],
+  },
+  "Mill Valley": {
+    dining: ["Buckeye Roadhouse", "Sol Food", "Molina"],
+    hotels: ["Mill Valley Inn", "Acqua Hotel", "Mountain Home Inn"],
+    culture: ["Mill Valley Lumber Yard", "Muir Woods", "Sweetwater Music Hall"],
   },
 };
 
