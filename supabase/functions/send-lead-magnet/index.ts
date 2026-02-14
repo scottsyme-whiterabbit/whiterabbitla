@@ -35,21 +35,21 @@ serve(async (req) => {
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background-color:#0a0a0a;font-family:Georgia,'Times New Roman',serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0a0a0a;padding:40px 20px;">
+<body style="margin:0;padding:0;background-color:#2D4A3E;font-family:Georgia,'Times New Roman',serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#2D4A3E;padding:40px 20px;">
     <tr><td align="center">
-      <table width="600" cellpadding="0" cellspacing="0" style="background-color:#111;border:1px solid rgba(200,170,110,0.2);">
+      <table width="600" cellpadding="0" cellspacing="0" style="background-color:#1e352c;border:1px solid rgba(200,160,160,0.2);">
         
         <!-- Header -->
         <tr><td style="padding:48px 40px 24px;text-align:center;">
-          <p style="font-family:sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#c8aa6e;margin:0 0 16px;">White Rabbit Magic</p>
+          <p style="font-family:sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#c8a0a0;margin:0 0 16px;">White Rabbit Magic</p>
           <h1 style="font-family:Georgia,serif;font-size:32px;color:#f5f0e8;margin:0 0 8px;font-weight:normal;">The Host's Playbook</h1>
           <p style="font-family:Georgia,serif;font-size:16px;color:rgba(245,240,232,0.5);margin:0;font-style:italic;">7 Secrets to Choosing Entertainment That Makes Your Event Legendary</p>
         </td></tr>
 
         <!-- Divider -->
         <tr><td style="padding:0 40px;">
-          <hr style="border:none;border-top:1px solid rgba(200,170,110,0.2);margin:0;" />
+          <hr style="border:none;border-top:1px solid rgba(200,160,160,0.2);margin:0;" />
         </td></tr>
 
         <!-- Body -->
@@ -65,7 +65,7 @@ serve(async (req) => {
           <table width="100%" cellpadding="0" cellspacing="0">
             <tr><td align="center">
               <a href="https://whiterabbitla.lovable.app/guide" 
-                 style="display:inline-block;font-family:sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;background-color:#c8aa6e;color:#0a0a0a;text-decoration:none;padding:16px 40px;">
+                 style="display:inline-block;font-family:sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;background-color:#c8a0a0;color:#1e352c;text-decoration:none;padding:16px 40px;">
                 Download Your Guide
               </a>
             </td></tr>
@@ -78,7 +78,7 @@ serve(async (req) => {
 
         <!-- Footer -->
         <tr><td style="padding:24px 40px 40px;text-align:center;">
-          <hr style="border:none;border-top:1px solid rgba(200,170,110,0.15);margin:0 0 24px;" />
+          <hr style="border:none;border-top:1px solid rgba(200,160,160,0.15);margin:0 0 24px;" />
           <p style="font-family:sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,232,0.3);margin:0;">
             White Rabbit Magic · Los Angeles
           </p>
