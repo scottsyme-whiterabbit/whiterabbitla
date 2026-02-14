@@ -45,6 +45,18 @@ const locations = [
   "Nashville",
   "Aspen",
   "Houston",
+  "Seattle",
+  "Denver",
+  "Atlanta",
+  "Boston",
+  "Washington DC",
+  "Philadelphia",
+  "Portland",
+  "Napa Valley",
+  "Palm Springs",
+  "The Hamptons",
+  "Greenwich",
+  "Park City",
 ] as const;
 
 // Curated luxury venue references per location for authentic local SEO
@@ -158,6 +170,66 @@ const locationVenues: Record<string, { dining: string[]; hotels: string[]; cultu
     dining: ["March", "Underbelly Hospitality", "Le Jardinier"],
     hotels: ["Hotel Granduca", "La Colombe d'Or", "The Post Oak Hotel"],
     culture: ["The Museum District", "River Oaks", "The Menil Collection"],
+  },
+  "Seattle": {
+    dining: ["Canlis", "The Walrus and the Carpenter", "Bateau"],
+    hotels: ["The Edgewater", "Hotel Sorrento", "Thompson Seattle"],
+    culture: ["Pike Place Market", "Chihuly Garden and Glass", "Capitol Hill"],
+  },
+  "Denver": {
+    dining: ["Frasca Food and Wine", "Beckon", "Guard and Grace"],
+    hotels: ["The Crawford Hotel", "Halcyon", "The Ramble Hotel"],
+    culture: ["Larimer Square", "Denver Art Museum", "RiNo Art District"],
+  },
+  "Atlanta": {
+    dining: ["Bacchanalia", "Lazy Betty", "Staplehouse"],
+    hotels: ["The St. Regis Atlanta", "Four Seasons Hotel Atlanta", "The Whitley"],
+    culture: ["Buckhead", "The High Museum of Art", "Ponce City Market"],
+  },
+  "Boston": {
+    dining: ["Menton", "O Ya", "No. 9 Park"],
+    hotels: ["The Newbury Boston", "XV Beacon", "Four Seasons One Dalton"],
+    culture: ["Beacon Hill", "The Isabella Stewart Gardner Museum", "Back Bay"],
+  },
+  "Washington DC": {
+    dining: ["The Inn at Little Washington", "Minibar by José Andrés", "Fiola"],
+    hotels: ["The Watergate Hotel", "Rosewood Washington DC", "The Hay-Adams"],
+    culture: ["Georgetown", "The Smithsonian", "The Kennedy Center"],
+  },
+  "Philadelphia": {
+    dining: ["Vetri Cucina", "Zahav", "Vernick Food & Drink"],
+    hotels: ["The Rittenhouse Hotel", "Four Seasons Philadelphia", "Hotel Palomar"],
+    culture: ["Rittenhouse Square", "The Philadelphia Museum of Art", "Old City"],
+  },
+  "Portland": {
+    dining: ["Canard", "Langbaan", "Castagna"],
+    hotels: ["Sentinel Hotel", "Hotel deLuxe", "The Woodlark"],
+    culture: ["The Pearl District", "Portland Art Museum", "Alberta Arts District"],
+  },
+  "Napa Valley": {
+    dining: ["The French Laundry", "Bottega", "Press"],
+    hotels: ["Meadowood Napa Valley", "Calistoga Ranch", "Carneros Resort"],
+    culture: ["Yountville", "The Hess Collection", "Napa Valley Wine Train"],
+  },
+  "Palm Springs": {
+    dining: ["Workshop Kitchen + Bar", "Spencer's Restaurant", "Miro's"],
+    hotels: ["The Parker Palm Springs", "L'Horizon Resort", "The Ritz-Carlton Rancho Mirage"],
+    culture: ["Palm Canyon Drive", "Palm Springs Art Museum", "Sunnylands"],
+  },
+  "The Hamptons": {
+    dining: ["Nick & Toni's", "Topping Rose House", "Almond"],
+    hotels: ["Topping Rose House", "The Baker House", "Gurney's Montauk"],
+    culture: ["Main Street Southampton", "Parrish Art Museum", "Montauk"],
+  },
+  "Greenwich": {
+    dining: ["L'Escale", "The Ginger Man", "Elm Street Oyster House"],
+    hotels: ["The Delamar", "J House Greenwich", "The Greenwich Hotel"],
+    culture: ["Greenwich Avenue", "Bruce Museum", "Belle Haven"],
+  },
+  "Park City": {
+    dining: ["Handle", "Riverhorse on Main", "Firewood"],
+    hotels: ["Montage Deer Valley", "The St. Regis Deer Valley", "Waldorf Astoria Park City"],
+    culture: ["Main Street Park City", "Sundance Film Festival", "Deer Valley Resort"],
   },
 };
 

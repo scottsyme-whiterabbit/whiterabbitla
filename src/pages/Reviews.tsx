@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Star } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "react-router-dom";
@@ -79,6 +80,39 @@ const reviews = [
 
 
 const Reviews = () => {
+  // Inject AggregateRating + individual Review schema for Google rich results
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.id = "reviews-schema";
+    script.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "@id": "https://whiterabbitla.com/#business",
+      name: "White Rabbit LA",
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: "5",
+        bestRating: "5",
+        ratingCount: String(reviews.length),
+        reviewCount: String(reviews.length),
+      },
+      review: reviews.map((r) => ({
+        "@type": "Review",
+        reviewRating: {
+          "@type": "Rating",
+          ratingValue: String(r.rating),
+          bestRating: "5",
+        },
+        author: { "@type": "Person", name: r.name },
+        reviewBody: r.text,
+      })),
+    });
+    document.getElementById("reviews-schema")?.remove();
+    document.head.appendChild(script);
+    return () => { script.remove(); };
+  }, []);
+
   return (
     <main id="main-content" className="pt-20">
       {/* Hero */}
