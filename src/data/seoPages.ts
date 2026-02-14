@@ -509,24 +509,24 @@ function slugify(text: string): string {
 
 const testimonials = [
   {
-    quote: "Our guests didn't just enjoy the show. They came alive. Months later, they still talk about how Scott made them feel. That's not entertainment. That's something else entirely.",
-    attribution: "Morgan Stanley, Private Client Event",
+    quote: "Scott performed at a 200-person event for us and the guests absolutely LOVED him and were amazed by his talents. I could not recommend him more! We can't wait to have him back.",
+    attribution: "Jamie I., Morgan Stanley Event",
   },
   {
-    quote: "We've hired entertainers before. Scott is in a completely different category. He turned our cocktail hour into the highlight of the entire evening.",
-    attribution: "Director of Events, Fortune 500 Company",
+    quote: "Scott put on an amazing show at our Holiday Party, all the guests loved him and were blown away! 2nd year in a row hiring him and he knocks it out of the park both times!",
+    attribution: "Taylor R., Corporate Holiday Party",
   },
   {
-    quote: "I've never seen a room full of executives laugh that hard. Every single person came up to me afterward asking where I found him.",
-    attribution: "VP of Marketing, Tech Company",
+    quote: "Saw him at a private event and absolutely crushed it!! Jaws were hitting the floor so hard the downstairs neighbors started wondering what was going down.",
+    attribution: "Mohammad R., Private Event Guest",
   },
   {
-    quote: "Hiring Scott was the single best decision we made for our wedding. Our guests are STILL talking about him six months later.",
-    attribution: "Private Client, Los Angeles",
+    quote: "Scott was so amazing. He elevated our party in ways I didn't expect, and he was everyone's favorite part. Absolutely worth it.",
+    attribution: "Zara M., Private Party Host",
   },
   {
-    quote: "He read my mind. Actually read it. I still don't know how. My guests were screaming with joy, and these are people who don't scream.",
-    attribution: "Private Event Host, Beverly Hills",
+    quote: "Scott takes a unique and personalized approach to his craft! I don't want to give anything away so all I can say is BOOK WHITE RABBIT! You won't regret it.",
+    attribution: "Kenneth R., Private Show Guest",
   },
 ];
 

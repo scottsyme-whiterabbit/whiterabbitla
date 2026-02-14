@@ -6,75 +6,111 @@ import audienceImg from "@/assets/event-audience.jpg";
 
 const reviews = [
 {
-  name: "Morgan Stanley",
-  role: "200-Person Corporate Event",
+  name: "Jamie I.",
+  role: "Morgan Stanley, 200-Person Corporate Event",
   text: "Scott performed at a 200-person event for us this week and the guests absolutely LOVED him and were amazed by his talents. I could not recommend him more! We can't wait to have him back.",
   rating: 5
 },
 {
-  name: "Sarah L.",
-  role: "Private Birthday Party",
-  text: "We hired Scott for my husband's 50th birthday and he absolutely blew everyone away. The close-up magic was so intimate and personal, every guest felt like they had their own private show.",
+  name: "Shaahin J.",
+  role: "35th Birthday Celebration",
+  text: "For my 35th birthday, I wanted to do something different. I had followed the White Rabbit show for a while and finally got to experience it. It exceeded every expectation.",
   rating: 5
 },
 {
-  name: "Netflix",
-  role: "Corporate Holiday Gala",
-  text: "Sophisticated, charming, and incredibly talented. Scott elevated our holiday event beyond what we imagined. Our team is still asking when he can come back.",
+  name: "Grace G.",
+  role: "Corporate Holiday Dinner",
+  text: "My company hosted a holiday dinner last Friday, and we had the pleasure of experiencing Scott's magic show. He is incredible and had the whole room captivated.",
   rating: 5
 },
 {
-  name: "Michael R.",
-  role: "Wedding Reception",
-  text: "Hiring White Rabbit for our wedding cocktail hour was the best decision we made. Guests mingled and laughed together. Scott broke the ice in the most magical way possible.",
+  name: "Mohammad R.",
+  role: "Private Event Guest",
+  text: "Saw him at a private event and absolutely crushed it!! Jaws were hitting the floor so hard the downstairs neighbors started wondering what was going down. I would recommend him!",
   rating: 5
 },
 {
-  name: "Rolls Royce",
-  role: "Product Launch",
-  text: "We needed something extraordinary for our launch event, and Scott delivered beyond expectations. His performance perfectly matched our brand's commitment to excellence.",
+  name: "Mostafa A.",
+  role: "Birthday Celebration",
+  text: "I had the absolute pleasure of having Scott perform at my birthday celebration, and he completely stole the show!",
   rating: 5
 },
 {
-  name: "Jennifer K.",
-  role: "Charity Gala",
-  text: "Scott's private magic show had our 80 guests completely captivated for 45 minutes straight. The storytelling, the humor, the impossible moments. It was unforgettable.",
+  name: "Zara M.",
+  role: "Private Party",
+  text: "Scott was so amazing. He elevated our party in ways I didn't expect, and he was everyone's favorite part. Absolutely worth it.",
   rating: 5
 },
 {
-  name: "Disney",
-  role: "Executive Dinner",
-  text: "In an industry built on creating magic, Scott managed to genuinely surprise and delight our team. That says everything.",
+  name: "Andres O.",
+  role: "Black Tie Event",
+  text: "We had Scott perform magic for a black tie event recently. Scott absolutely did an amazing job engaging with everyone.",
   rating: 5
 },
 {
-  name: "David P.",
-  role: "Private Dinner Party",
-  text: "I've seen a lot of magicians, but Scott is in a completely different league. His close-up work is flawless and his presence is magnetic. The best money I've ever spent on entertainment.",
+  name: "Taylor R.",
+  role: "Corporate Holiday Party",
+  text: "Scott put on an amazing show at our Holiday Christmas Party, all the guests loved him and were blown away from his tricks and magic! 2nd year in a row hiring him and he knocks it out of the park both times!",
   rating: 5
 },
 {
-  name: "Travis M.",
+  name: "Tim C.",
+  role: "Company Holiday Luncheon",
+  text: "Scott is an amazing magician. We had him showcase his skills at a company holiday luncheon. He is a true professional.",
+  rating: 5
+},
+{
+  name: "Jose F.",
+  role: "White Rabbit Show Guest",
+  text: "White Rabbit is an absolute gem! The atmosphere is magical, with an ambiance that instantly transports you.",
+  rating: 5
+},
+{
+  name: "Chris R.",
+  role: "Private Event",
+  text: "Scott is a great entertainer that does an excellent job customizing the performance to the specific space and event.",
+  rating: 5
+},
+{
+  name: "Kenneth R.",
   role: "Private Show Guest",
-  text: "I was blown away by a recent White Rabbit show and would recommend it to anyone, even if you're not necessarily into magic. The atmosphere, the hospitality, the performance. It all comes together into something truly special.",
+  text: "Scott takes a unique and personalized approach to his craft! I don't want to give anything away so all I can say is BOOK WHITE RABBIT! You won't regret it.",
   rating: 5
 },
 {
-  name: "Emily D.",
-  role: "Corporate Party",
-  text: "We booked Scott for our company party and it was a huge success. Every single guest was completely captivated. He has this incredible ability to make everyone feel like they're the most important person in the room.",
+  name: "Erik F.",
+  role: "Private Event Guest",
+  text: "Had an incredible experience at one of their events with some friends. Syme time is amazing and brings the whole crowd into his magical orbit. Highly recommend!",
   rating: 5
 },
 {
-  name: "Sarah W.",
-  role: "Private Celebration",
-  text: "For top-notch entertainment, Scott is the one to call. The combination of his warm personality and jaw-dropping magic created an experience our guests are still raving about weeks later.",
+  name: "Kyle L.",
+  role: "Private Event Host",
+  text: "One of the most entertaining magicians I have seen! Had the pleasure of hiring him for a private event and was amazing.",
   rating: 5
 },
 {
-  name: "Robert R.",
-  role: "Birthday Event",
-  text: "I found White Rabbit while searching for something unique for my wife's birthday. The show was fantastic. Intimate, funny, and genuinely astonishing. It felt less like a performance and more like an unforgettable evening with friends.",
+  name: "Will C.",
+  role: "Private Event",
+  text: "Excellent Experience! Don't even hesitate! Scott is amazing and our guests were very impressed. Thanks again!",
+  rating: 5
+},
+{
+  name: "Jennie",
+  role: "Private Show Guest",
+  text: "Scott is a tremendously talented magician whose sleight of hand mastery is unmatched. He has a funny and charming personality that makes every moment enjoyable.",
+  rating: 5
+},
+{
+  name: "Ana A.",
+  role: "Birthday Slumber Party",
+  text: "Amazing! Scott came over to make some magic during my birthday slumber party with my 6 best friends. We had the best time.",
+  rating: 5
+},
+{
+  name: "Heather C.",
+  role: "Show Attendee",
+  text: "Absolutely amazing show! Would highly recommend! Everyone was blown away by every trick!",
   rating: 5
 }];
 
