@@ -17,7 +17,7 @@ const HostsPlaybook = () => {
     {
       number: "02",
       title: "How to Match the Right Performer to Your Event Format",
-      content: `A 200-person corporate gala requires a completely different act than a 20-person dinner party. Here's the framework:\n\n• **Cocktail receptions (20–100 guests):** Close-up, roaming magic. The performer moves through the crowd, creating intimate moments in small groups.\n\n• **Seated dinners (10–50 guests):** Table-side performances between courses. Each table gets a private 5–8 minute show.\n\n• **Stage events (50–500+ guests):** A curated parlor show with a dedicated performance space, sound, and lighting.\n\nThe best entertainers adapt their act to your format — not the other way around.`,
+      content: `A 200-person corporate gala requires a completely different act than a 20-person dinner party. Here's the framework:\n\n**Cocktail receptions (20–100 guests)** work best with close-up, roaming magic. The performer moves through the crowd, creating intimate moments in small groups.\n\n**Seated dinners (10–50 guests)** call for table-side performances between courses. Each table gets a private 5–8 minute show.\n\n**Stage events (50–500+ guests)** shine with a curated parlor show featuring a dedicated performance space, sound, and lighting.\n\nThe best entertainers adapt their act to your format — not the other way around.`,
     },
     {
       number: "03",
@@ -27,7 +27,7 @@ const HostsPlaybook = () => {
     {
       number: "04",
       title: "What Luxury Brands Look for in an Entertainer",
-      content: `When companies like Netflix, Rolls-Royce, and Morgan Stanley hire entertainment, they're not just looking for tricks. They evaluate:\n\n• **Presentation:** Does the performer match the sophistication of the event?\n\n• **Adaptability:** Can they read the room and adjust in real-time?\n\n• **Discretion:** Are they professional enough for high-profile guests?\n\n• **Storytelling:** Does the act create a narrative, or is it just a series of tricks?\n\nThe difference between a good magician and a great one isn't the tricks — it's the experience they create around them.`,
+      content: `When companies like Netflix, Rolls-Royce, and Morgan Stanley hire entertainment, they're not just looking for tricks. They evaluate four key areas.\n\n**Presentation** — does the performer match the sophistication of the event? **Adaptability** — can they read the room and adjust in real-time? **Discretion** — are they professional enough for high-profile guests? **Storytelling** — does the act create a narrative, or is it just a series of tricks?\n\nThe difference between a good magician and a great one isn't the tricks — it's the experience they create around them.`,
     },
     {
       number: "05",
@@ -37,12 +37,12 @@ const HostsPlaybook = () => {
     {
       number: "06",
       title: "The Venue Checklist: Setting Up for Maximum Impact",
-      content: `Your venue affects the entertainment more than you think. Before booking, consider:\n\n• **Lighting:** Can it be dimmed for a parlor show? Is there enough light for close-up magic during cocktails?\n\n• **Sound:** For stage shows, is there a house system or do you need to provide one?\n\n• **Flow:** Where will guests naturally gather? Position the performer there.\n\n• **Timing:** Build the entertainment into the event timeline, not as an afterthought. The best results happen when the performer coordinates with your event planner or venue manager.`,
+      content: `Your venue affects the entertainment more than you think. Before booking, consider these essentials.\n\n**Lighting** — can it be dimmed for a parlor show? Is there enough light for close-up magic during cocktails? **Sound** — for stage shows, is there a house system or do you need to provide one? **Flow** — where will guests naturally gather? Position the performer there. **Timing** — build the entertainment into the event timeline, not as an afterthought. The best results happen when the performer coordinates with your event planner or venue manager.`,
     },
     {
       number: "07",
       title: "5 Questions to Ask Any Entertainer Before Signing a Contract",
-      content: `Before you commit, ask these five questions:\n\n1. **"Can you describe a similar event you've performed at?"** — Experience with your event type matters more than raw talent.\n\n2. **"How do you handle different audience sizes?"** — A great performer has different formats for different scales.\n\n3. **"What do you need from the venue?"** — Professionals know exactly what they need and keep it minimal.\n\n4. **"Can I see unedited video or reviews?"** — Polished reels are nice, but real reviews tell the truth.\n\n5. **"What's your cancellation policy?"** — Professionalism extends to the business side too.\n\nIf an entertainer can answer all five confidently, you're in good hands.`,
+      content: `Before you commit, ask these five questions.\n\n**"Can you describe a similar event you've performed at?"** Experience with your event type matters more than raw talent. **"How do you handle different audience sizes?"** A great performer has different formats for different scales. **"What do you need from the venue?"** Professionals know exactly what they need and keep it minimal. **"Can I see unedited video or reviews?"** Polished reels are nice, but real reviews tell the truth. **"What's your cancellation policy?"** Professionalism extends to the business side too.\n\nIf an entertainer can answer all five confidently, you're in good hands.`,
     },
   ];
 
