@@ -12,7 +12,7 @@ const HostsPlaybook = () => {
     {
       number: "01",
       title: "The #1 Mistake Hosts Make When Booking Entertainment",
-      content: `Most hosts wait until two weeks before their event to think about entertainment. By then, the best performers are booked and you're left choosing from whoever's available — not whoever's best.\n\nThe secret? Start your search 4–8 weeks out. This gives you time to vet performers, check references, and ensure the act is tailored to your specific event. The hosts who create legendary nights always plan entertainment as early as they plan the venue.`,
+      content: `Most hosts wait until two weeks before their event to think about entertainment. By then, the best performers are booked and you're left choosing from whoever's available — not whoever's best.\n\nThe secret? Start your search 2–4 weeks out. This gives you time to vet performers, check references, and ensure the act is tailored to your specific event. The hosts who create legendary nights always plan entertainment as early as they plan the venue.`,
     },
     {
       number: "02",
@@ -89,7 +89,7 @@ const HostsPlaybook = () => {
 
       {/* Sections */}
       {sections.map((section, i) => (
-        <section key={section.number} className="py-16">
+        <section key={section.number} className="py-8">
           <div className="max-w-3xl mx-auto px-6">
             <AnimatedSection>
               <div className="flex items-baseline gap-3 mb-2">
@@ -98,20 +98,24 @@ const HostsPlaybook = () => {
                 </span>
                 <span className="font-serif text-3xl text-accent">{section.number}</span>
               </div>
-              <h2 className="font-serif text-2xl md:text-3xl text-cream mb-6">
+              <h2 className="font-serif text-2xl md:text-3xl text-cream mb-4">
                 {section.title}
               </h2>
-              <div className="font-sans text-base text-muted-foreground leading-relaxed whitespace-pre-line">
-                {section.content.split(/(\*\*.*?\*\*)/).map((part, j) => {
-                  if (part.startsWith("**") && part.endsWith("**")) {
-                    return (
-                      <strong key={j} className="text-cream/80 font-medium">
-                        {part.slice(2, -2)}
-                      </strong>
-                    );
-                  }
-                  return <span key={j}>{part}</span>;
-                })}
+              <div className="font-sans text-base text-muted-foreground leading-relaxed space-y-4">
+                {section.content.split('\n\n').map((paragraph, pi) => (
+                  <p key={pi}>
+                    {paragraph.split(/(\*\*.*?\*\*)/).map((part, j) => {
+                      if (part.startsWith("**") && part.endsWith("**")) {
+                        return (
+                          <strong key={j} className="text-cream/80 font-medium">
+                            {part.slice(2, -2)}
+                          </strong>
+                        );
+                      }
+                      return <span key={j}>{part}</span>;
+                    })}
+                  </p>
+                ))}
               </div>
             </AnimatedSection>
 

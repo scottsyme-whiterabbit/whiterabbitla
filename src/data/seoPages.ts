@@ -534,7 +534,7 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
   const shared: FaqItem[] = [
     {
       question: `How far in advance should I book a magician in ${location}?`,
-      answer: `We recommend booking 4–8 weeks in advance, especially during peak event season (October–December and April–June). Popular dates fill quickly. Contact us as soon as you have a date in mind and we'll confirm availability within 24 hours.`,
+      answer: `We recommend booking 2–4 weeks in advance, especially during peak event season (October–December and April–June). Popular dates fill quickly. Contact us as soon as you have a date in mind and we'll confirm availability within 24 hours.`,
     },
     {
       question: `What makes White Rabbit different from other magicians in ${location}?`,
