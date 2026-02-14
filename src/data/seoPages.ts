@@ -69,6 +69,31 @@ const locations = [
   "Los Gatos",
   "Tiburon",
   "Mill Valley",
+  "Palm Beach",
+  "Naples",
+  "Montecito",
+  "Newport Beach",
+  "Coronado",
+  "Nantucket",
+  "Martha's Vineyard",
+  "Jupiter",
+  "Sarasota",
+  "Vail",
+  "Jackson Hole",
+  "Sun Valley",
+  "Lake Tahoe",
+  "Telluride",
+  "Coral Gables",
+  "Highland Park",
+  "River Oaks",
+  "Buckhead",
+  "Winnetka",
+  "Short Hills",
+  "Potomac",
+  "Paradise Valley",
+  "Sonoma",
+  "Carmel-by-the-Sea",
+  "Santa Barbara",
 ] as const;
 
 // Curated luxury venue references per location for authentic local SEO
@@ -302,6 +327,131 @@ const locationVenues: Record<string, { dining: string[]; hotels: string[]; cultu
     dining: ["Buckeye Roadhouse", "Sol Food", "Molina"],
     hotels: ["Mill Valley Inn", "Acqua Hotel", "Mountain Home Inn"],
     culture: ["Mill Valley Lumber Yard", "Muir Woods", "Sweetwater Music Hall"],
+  },
+  "Palm Beach": {
+    dining: ["Café Boulud", "Buccan", "Renato's"],
+    hotels: ["The Breakers", "Four Seasons Resort Palm Beach", "The Colony Hotel"],
+    culture: ["Worth Avenue", "The Norton Museum of Art", "Mar-a-Lago Club"],
+  },
+  "Naples": {
+    dining: ["The Bay House", "Barbatella", "USS Nemo"],
+    hotels: ["The Ritz-Carlton Naples", "Inn on Fifth", "LaPlaya Beach & Golf Resort"],
+    culture: ["Third Street South", "The Baker Museum", "Port Royal"],
+  },
+  "Montecito": {
+    dining: ["Lucky's Steakhouse", "Tre Lune", "Oliver's"],
+    hotels: ["Rosewood Miramar Beach", "San Ysidro Ranch", "Four Seasons Resort The Biltmore"],
+    culture: ["Coast Village Road", "Lotusland", "Butterfly Beach"],
+  },
+  "Newport Beach": {
+    dining: ["The Cannery", "Mastro's Ocean Club", "Fig & Olive"],
+    hotels: ["Balboa Bay Resort", "The Resort at Pelican Hill", "Lido House"],
+    culture: ["Balboa Island", "Fashion Island", "Crystal Cove State Park"],
+  },
+  "Coronado": {
+    dining: ["1500 Ocean", "Stake Chophouse", "Coronado Boathouse"],
+    hotels: ["Hotel del Coronado", "Loews Coronado Bay", "Glorietta Bay Inn"],
+    culture: ["Coronado Ferry Landing", "Orange Avenue", "Silver Strand"],
+  },
+  "Nantucket": {
+    dining: ["The Chanticleer", "Galley Beach", "Topper's at The Wauwinet"],
+    hotels: ["The Wauwinet", "White Elephant", "Greydon House"],
+    culture: ["Brant Point", "Nantucket Whaling Museum", "Cisco Brewers"],
+  },
+  "Martha's Vineyard": {
+    dining: ["Atria", "The Red Cat Kitchen", "Beach Road"],
+    hotels: ["Harbor View Hotel", "Winnetu Oceanside Resort", "Nobnocket Boutique Inn"],
+    culture: ["Edgartown", "Menemsha Harbor", "Aquinnah Cliffs"],
+  },
+  "Jupiter": {
+    dining: ["1000 North", "Guanabanas", "Cafe des Artistes"],
+    hotels: ["Jupiter Beach Resort", "PGA National Resort", "Wyndham Grand Jupiter"],
+    culture: ["Jupiter Inlet Lighthouse", "Blowing Rocks Preserve", "Jupiter Island"],
+  },
+  "Sarasota": {
+    dining: ["Jack Dusty", "Indigenous", "Bijou Café"],
+    hotels: ["The Ritz-Carlton Sarasota", "The Resort at Longboat Key Club", "Art Ovation Hotel"],
+    culture: ["St. Armands Circle", "The Ringling Museum", "Longboat Key"],
+  },
+  "Vail": {
+    dining: ["Sweet Basil", "Mountain Standard", "La Tour"],
+    hotels: ["The Sebastian", "Four Seasons Resort Vail", "The Arrabelle at Vail Square"],
+    culture: ["Vail Village", "Vail Mountain", "Gerald R. Ford Amphitheater"],
+  },
+  "Jackson Hole": {
+    dining: ["The Kitchen", "Snake River Grill", "Café Genevieve"],
+    hotels: ["Four Seasons Resort Jackson Hole", "Amangani", "Hotel Jackson"],
+    culture: ["Jackson Town Square", "National Museum of Wildlife Art", "Grand Teton National Park"],
+  },
+  "Sun Valley": {
+    dining: ["The Roundhouse", "Gretchen's", "Ketchum Grill"],
+    hotels: ["Sun Valley Lodge", "Limelight Hotel Ketchum", "Knob Hill Inn"],
+    culture: ["Ketchum", "Sun Valley Center for the Arts", "Bald Mountain"],
+  },
+  "Lake Tahoe": {
+    dining: ["Lone Eagle Grille", "Wolfdale's", "Soule Domain"],
+    hotels: ["The Ritz-Carlton Lake Tahoe", "Edgewood Tahoe", "Hyatt Regency Lake Tahoe"],
+    culture: ["Emerald Bay", "Heavenly Village", "Squaw Valley"],
+  },
+  "Telluride": {
+    dining: ["Allred's", "La Marmotte", "Chop House"],
+    hotels: ["Madeline Hotel & Residences", "The Hotel Telluride", "Lumière Hotel"],
+    culture: ["Telluride Film Festival", "Main Street Telluride", "Bear Creek Falls"],
+  },
+  "Coral Gables": {
+    dining: ["Christy's", "Ortanique", "Bulla Gastrobar"],
+    hotels: ["The Biltmore Hotel", "JW Marriott Miami Turnberry", "Hyatt Regency Coral Gables"],
+    culture: ["Miracle Mile", "Venetian Pool", "Fairchild Tropical Botanic Garden"],
+  },
+  "Highland Park": {
+    dining: ["Hillstone", "Al Biernat's", "Beverley's Bistro"],
+    hotels: ["The Adolphus", "Hotel Crescent Court", "The Joule"],
+    culture: ["Highland Park Village", "Turtle Creek", "Dallas Country Club"],
+  },
+  "River Oaks": {
+    dining: ["Le Jardinier", "March", "Steak 48"],
+    hotels: ["The Post Oak Hotel", "Hotel Granduca", "La Colombe d'Or"],
+    culture: ["River Oaks Country Club", "The Menil Collection", "River Oaks District"],
+  },
+  "Buckhead": {
+    dining: ["Bones", "Chops Lobster Bar", "Aria"],
+    hotels: ["The St. Regis Atlanta", "Waldorf Astoria Atlanta Buckhead", "The Whitley"],
+    culture: ["Buckhead Village District", "Atlanta History Center", "Chastain Park"],
+  },
+  "Winnetka": {
+    dining: ["Mino's", "Avli", "Prairie Grass Café"],
+    hotels: ["The Deer Path Inn", "Hotel Marques", "Renaissance North Shore"],
+    culture: ["Winnetka Community House", "North Shore Country Club", "Green Bay Trail"],
+  },
+  "Short Hills": {
+    dining: ["The Stirling Club", "Restaurant Serenade", "Terra"],
+    hotels: ["The Hilton Short Hills", "The Grand Summit Hotel", "Hotel Indigo"],
+    culture: ["The Mall at Short Hills", "Cora Hartshorn Arboretum", "Millburn Main Street"],
+  },
+  "Potomac": {
+    dining: ["Old Angler's Inn", "Founding Farmers", "Passionfish"],
+    hotels: ["Salamander Resort", "The Ritz-Carlton Tysons Corner", "The Inn at Perry Cabin"],
+    culture: ["Congressional Country Club", "Great Falls", "Potomac Village"],
+  },
+  "Paradise Valley": {
+    dining: ["Elements at Sanctuary", "LON's at The Hermosa", "Talavera"],
+    hotels: ["Sanctuary on Camelback Mountain", "The Hermosa Inn", "Mountain Shadows"],
+    culture: ["Camelback Mountain", "Paradise Valley Country Club", "Mummy Mountain"],
+  },
+  "Sonoma": {
+    dining: ["The Girl & The Fig", "Café La Haye", "El Dorado Kitchen"],
+    hotels: ["MacArthur Place", "Fairmont Sonoma Mission Inn", "The Lodge at Sonoma"],
+    culture: ["Sonoma Plaza", "Buena Vista Winery", "The Barracks"],
+  },
+  "Carmel-by-the-Sea": {
+    dining: ["Aubergine at L'Auberge Carmel", "Casanova", "La Bicyclette"],
+    hotels: ["L'Auberge Carmel", "The Lodge at Pebble Beach", "Bernardus Lodge & Spa"],
+    culture: ["Ocean Avenue", "Pebble Beach", "Point Lobos State Reserve"],
+  },
+  "Santa Barbara": {
+    dining: ["The Lark", "Bouchon", "Yoichi's"],
+    hotels: ["Belmond El Encanto", "The Ritz-Carlton Bacara", "Kimpton Canary Hotel"],
+    culture: ["State Street", "Santa Barbara Museum of Art", "Stearns Wharf"],
   },
 };
 
