@@ -39,19 +39,19 @@ import lionsgateLogo from "@/assets/logos/lionsgate.png";
 import agtLogo from "@/assets/logos/agt.png";
 
 const clients = [
-  { name: "Netflix", logo: netflixLogo },
-  { name: "Disney", logo: disneyLogo },
-  { name: "Rolls Royce", logo: rollsroyceLogo },
-  { name: "Morgan Stanley", logo: morganstanleyLogo },
-  { name: "YouTube", logo: youtubeLogo },
-  { name: "Hyatt", logo: hyattLogo },
-  { name: "Rivian", logo: rivianLogo },
-  { name: "Paramount", logo: paramountLogo },
-  { name: "Olivia Rodrigo", logo: oliviarodrigoLogo },
-  { name: "Taittinger", logo: taittingerLogo },
-  { name: "Lionsgate", logo: lionsgateLogo },
-  { name: "Pistola", logo: pistolaLogo },
-];
+{ name: "Netflix", logo: netflixLogo },
+{ name: "Disney", logo: disneyLogo },
+{ name: "Rolls Royce", logo: rollsroyceLogo },
+{ name: "Morgan Stanley", logo: morganstanleyLogo },
+{ name: "YouTube", logo: youtubeLogo },
+{ name: "Hyatt", logo: hyattLogo },
+{ name: "Rivian", logo: rivianLogo },
+{ name: "Paramount", logo: paramountLogo },
+{ name: "Olivia Rodrigo", logo: oliviarodrigoLogo },
+{ name: "Taittinger", logo: taittingerLogo },
+{ name: "Lionsgate", logo: lionsgateLogo },
+{ name: "Pistola", logo: pistolaLogo }];
+
 
 const Index = () => {
   const { openQuiz } = useBookingQuiz();
@@ -123,13 +123,13 @@ const Index = () => {
           <div className="relative">
             <div className="flex animate-scroll-logos" style={{ width: 'max-content' }}>
               {[...clients, ...clients, ...clients].map((client, i) =>
-                <div key={`${client.name}-${i}`} className="flex-shrink-0 flex items-center justify-center px-8 md:px-10" style={{ width: '180px', height: '60px' }}>
+              <div key={`${client.name}-${i}`} className="flex-shrink-0 flex items-center justify-center px-8 md:px-10" style={{ width: '180px', height: '60px' }}>
                   <img
-                    src={client.logo}
-                    alt={`${client.name} logo, White Rabbit client`}
-                    loading="lazy"
-                    decoding="async"
-                    className="max-h-full max-w-full w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity brightness-0 invert" />
+                  src={client.logo}
+                  alt={`${client.name} logo, White Rabbit client`}
+                  loading="lazy"
+                  decoding="async"
+                  className="max-h-full max-w-full w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity brightness-0 invert" />
                 </div>
               )}
             </div>
@@ -146,14 +146,14 @@ const Index = () => {
               <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 leading-tight">
                 More Than Magic.<br />A Feeling.
               </h2>
-              <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">
-                Scott Syme is a world-class magician, mentalist, and the creative force behind White Rabbit. 
-                A member of the Magic Castle and consultant to performers on America's Got Talent and Disney Channel, 
-                Scott has spent years perfecting something most magicians never attempt: an experience that feels 
-                like stepping into a five-star lobby or turning left on a flight. He blends masterful sleight of hand, 
-                mentalism, and impossible coincidences with the warmth of a seasoned host, transforming any room into 
-                something cinematic, intimate, and utterly alive. Curated lighting, a signature soundtrack, and moments 
-                so close you can feel them. This isn't a magic show. It's a White Rabbit experience.
+              <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">Scott Syme is a world-class magician and the creative force behind White Rabbit. A member of the Magic Castle and consultant to performers on America's Got Talent and Disney Channel, Scott has spent years perfecting something most magicians never attempt: an experience that feels like stepping into a five-star lobby or turning left on a flight. He blends masterful sleight of hand, mentalism, and impossible coincidences with the warmth of a seasoned host, transforming any room into something cinematic, intimate, and utterly alive. Curated lighting, a signature soundtrack, and moments so close you can feel them. This isn't a magic show. It's a White Rabbit experience.
+
+
+
+
+
+
+
               </p>
               <Link
                 to="/experience"
@@ -182,7 +182,7 @@ const Index = () => {
           <div className="max-w-3xl mx-auto px-6 text-center">
             <div className="flex justify-center gap-1 mb-8">
               {[...Array(5)].map((_, i) =>
-                <Star key={i} size={20} className="fill-accent text-accent" />
+              <Star key={i} size={20} className="fill-accent text-accent" />
               )}
             </div>
             <blockquote className="font-serif text-2xl md:text-3xl text-cream/90 leading-relaxed mb-8">
@@ -325,8 +325,8 @@ const Index = () => {
           </div>
         </section>
       </AnimatedSection>
-    </main>
-  );
+    </main>);
+
 };
 
 export default Index;
