@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Star } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "react-router-dom";
+import QuizCTA from "@/components/QuizCTA";
 import audienceImg from "@/assets/event-audience.jpg";
 
 const reviews = [
@@ -195,6 +196,9 @@ const Reviews = () => {
           </div>
         </div>
       </section>
+
+      {/* Quiz CTA */}
+      <QuizCTA />
 
       {/* CTA */}
       <AnimatedSection>

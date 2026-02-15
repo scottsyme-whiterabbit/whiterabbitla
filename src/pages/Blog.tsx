@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
+import QuizCTA from "@/components/QuizCTA";
 import { seoPages, seoCategories, seoLocations } from "@/data/seoPages";
 import { blogArticles } from "@/data/blogArticles";
 
@@ -155,6 +156,9 @@ const Blog = () => {
           </div>
         </div>
       </section>
+
+      {/* Quiz CTA */}
+      <QuizCTA />
 
       {/* CTA */}
       <AnimatedSection>

@@ -346,20 +346,11 @@ const DiscoveryQuiz = () => {
                   ))}
                 </div>
 
-                {/* Downloadable card */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1.8 }}
-                >
-                  <PersonaCard persona={personas[getPersona(answers as QuizAnswer)]} />
-                </motion.div>
-
                 {/* Divider + Recommendation */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 2 }}
+                  transition={{ delay: 1.8 }}
                   className="border-t border-cream/10 pt-8"
                 >
                   <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3 text-center">
@@ -402,6 +393,15 @@ const DiscoveryQuiz = () => {
                     ))}
                   </div>
                 </div>
+
+                {/* Downloadable persona card */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 2.2 }}
+                >
+                  <PersonaCard persona={personas[getPersona(answers as QuizAnswer)]} />
+                </motion.div>
 
                 {/* Lead capture */}
                 {!submitted ? (
