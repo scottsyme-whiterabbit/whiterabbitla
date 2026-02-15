@@ -2,10 +2,11 @@ import { useEffect } from "react";
 
 const LocalBusinessSchema = () => {
   useEffect(() => {
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.id = "local-business-schema";
-    script.textContent = JSON.stringify({
+    // Main LocalBusiness schema
+    const businessScript = document.createElement("script");
+    businessScript.type = "application/ld+json";
+    businessScript.id = "local-business-schema";
+    businessScript.textContent = JSON.stringify({
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
       "@id": "https://whiterabbitla.com/#business",
@@ -71,9 +72,8 @@ const LocalBusinessSchema = () => {
       ],
       founder: {
         "@type": "Person",
+        "@id": "https://whiterabbitla.com/#scott-syme",
         name: "Scott Syme",
-        jobTitle: "Magician & Mentalist",
-        url: "https://whiterabbitla.com/about",
       },
       makesOffer: [
         {
@@ -82,6 +82,7 @@ const LocalBusinessSchema = () => {
             "@type": "Service",
             name: "Corporate Event Magic",
             description: "Close-up magic and mentalism for corporate events, product launches, and galas.",
+            url: "https://whiterabbitla.com/services/corporate-magician",
           },
         },
         {
@@ -90,6 +91,7 @@ const LocalBusinessSchema = () => {
             "@type": "Service",
             name: "Private Party Magic",
             description: "Bespoke magic entertainment for private celebrations and dinner parties.",
+            url: "https://whiterabbitla.com/services/private-party-magician",
           },
         },
         {
@@ -98,6 +100,7 @@ const LocalBusinessSchema = () => {
             "@type": "Service",
             name: "Wedding Entertainment",
             description: "Cocktail hour magic for weddings across Los Angeles and beyond.",
+            url: "https://whiterabbitla.com/services/wedding-magician",
           },
         },
         {
@@ -106,6 +109,7 @@ const LocalBusinessSchema = () => {
             "@type": "Service",
             name: "Close-Up Magic",
             description: "Intimate sleight of hand and mentalism performed directly for guests.",
+            url: "https://whiterabbitla.com/services/close-up-magician",
           },
         },
         {
@@ -114,6 +118,7 @@ const LocalBusinessSchema = () => {
             "@type": "Service",
             name: "Parlor Magic Show",
             description: "A curated 45-minute theatrical magic experience for groups of 20-120.",
+            url: "https://whiterabbitla.com/services/private-magic-show",
           },
         },
       ],
@@ -126,14 +131,52 @@ const LocalBusinessSchema = () => {
       },
     });
 
-    // Remove existing if re-mounted
-    const existing = document.getElementById("local-business-schema");
-    if (existing) existing.remove();
+    // Person schema for Scott Syme (helps AI cite him as an authority)
+    const personScript = document.createElement("script");
+    personScript.type = "application/ld+json";
+    personScript.id = "person-schema";
+    personScript.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "@id": "https://whiterabbitla.com/#scott-syme",
+      name: "Scott Syme",
+      jobTitle: "Magician & Mentalist",
+      description: "Los Angeles based magician and mentalist specializing in close-up magic and parlor shows for luxury events. Member of the Magic Castle® in Hollywood. Featured on America's Got Talent.",
+      url: "https://whiterabbitla.com/about",
+      image: "https://whiterabbitla.com/og-image.jpg",
+      worksFor: {
+        "@type": "LocalBusiness",
+        "@id": "https://whiterabbitla.com/#business",
+        name: "White Rabbit LA",
+      },
+      knowsAbout: [
+        "Close-up magic",
+        "Mentalism",
+        "Sleight of hand",
+        "Corporate entertainment",
+        "Event entertainment",
+        "Parlor magic shows",
+      ],
+      sameAs: [
+        "https://www.instagram.com/scottsyme_/",
+      ],
+      memberOf: {
+        "@type": "Organization",
+        name: "The Academy of Magical Arts (Magic Castle®)",
+        url: "https://www.magiccastle.com",
+      },
+    });
 
-    document.head.appendChild(script);
+    // Remove existing if re-mounted
+    document.getElementById("local-business-schema")?.remove();
+    document.getElementById("person-schema")?.remove();
+
+    document.head.appendChild(businessScript);
+    document.head.appendChild(personScript);
 
     return () => {
-      script.remove();
+      businessScript.remove();
+      personScript.remove();
     };
   }, []);
 
