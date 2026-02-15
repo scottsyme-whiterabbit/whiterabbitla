@@ -22,35 +22,23 @@ serve(async (req) => {
     }
 
     const isStory = format === "story";
-    const aspectDesc = isStory ? "9:16 vertical story (1080x1920)" : "1:1 square post (1080x1080)";
+    const aspectDesc = isStory ? "9:16 vertical (1080x1920)" : "1:1 square (1080x1080)";
 
-    const STORAGE_BASE = "https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets";
-    const symbolUrl = `${STORAGE_BASE}/wr-symbol.png`;
-    const primaryLogoUrl = `${STORAGE_BASE}/wr-primary-logo.png`;
-
-    const prompt = `Create a luxurious, editorial-style Instagram ${isStory ? "story" : "post"} image for a high-end magic entertainment brand called "White Rabbit" by Scott Syme in Los Angeles.
+    const prompt = `Generate a luxurious, atmospheric background image for an Instagram ${isStory ? "story" : "post"}.
 
 The image should be ${aspectDesc} aspect ratio.
 
-Article title: "${title}"
-Article excerpt: "${excerpt}"
-Category: ${category}
+Theme context: "${category}" - "${excerpt}"
 
-I am providing you with two brand logos:
-1. The first image is the White Rabbit SYMBOL (a rabbit silhouette). Place this prominently on the image.
-2. The second image is the White Rabbit PRIMARY LOGO (wordmark with three stars above it). Place this at the top or bottom of the image as the brand identifier.
-
-CRITICAL: You MUST incorporate BOTH of the provided logo images exactly as they appear (do not redraw or approximate them). Place them cleanly on the design.
-
-Design requirements:
-- Deep forest green (#2D4A3E) and cream/ivory color palette with dusty rose (#c8a0a0) accents
-- TYPOGRAPHY IS CRITICAL: Use a refined, high-contrast didone serif font similar to "Ogg" by Sharp Type for all headline text. This means elegant thin-to-thick stroke contrast, classical proportions, upright (never italic), with a luxurious editorial magazine feel. For any smaller body text or labels, use a clean, light-weight sans-serif with wide letter-spacing. All text must be non-italicized.
-- The title text "${title}" should be prominently displayed on the image in this serif style
-- Include "whiterabbitla.com" subtly at the bottom in the sans-serif style with tracked uppercase letters
-- Sophisticated, moody, cinematic aesthetic (think luxury hotel lobby meets editorial magazine)
-- ${isStory ? "Vertical layout with text centered, generous spacing" : "Square layout, balanced composition"}
-- No clip art, no cartoonish elements, no cheesy magic imagery
-- Ultra high resolution, photographic quality background with text overlay`;
+Requirements:
+- This is ONLY a background image. Do NOT include any text, words, letters, logos, or watermarks whatsoever.
+- Deep forest green (#2D4A3E) tones blended with warm cream, gold, and dusty rose (#c8a0a0) accents
+- Moody, cinematic, editorial atmosphere (luxury hotel lobby, candlelit lounge, velvet textures)
+- Subtle visual motifs: playing cards, golden light, silk, dramatic shadows, bokeh
+- Abstract and ambient, leaving clear space for text overlay (especially center area)
+- Photographic quality, ultra high resolution
+- Rich depth with gradients and layered tones
+- NO text, NO words, NO letters, NO logos anywhere in the image`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -60,14 +48,7 @@ Design requirements:
       },
       body: JSON.stringify({
         model: "google/gemini-2.5-flash-image",
-        messages: [{
-          role: "user",
-          content: [
-            { type: "text", text: prompt },
-            { type: "image_url", image_url: { url: symbolUrl } },
-            { type: "image_url", image_url: { url: primaryLogoUrl } },
-          ],
-        }],
+        messages: [{ role: "user", content: prompt }],
         modalities: ["image", "text"],
       }),
     });
