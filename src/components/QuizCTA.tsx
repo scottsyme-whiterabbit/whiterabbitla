@@ -14,7 +14,7 @@ const QuizCTA = ({ title = "Discover Your Magic Guest Persona" }: QuizCTAProps) 
           <div className="flex justify-center mb-4">
             <Sparkles size={24} className="text-secondary" />
           </div>
-          <p className="font-sans text-xs tracking-[0.3em] uppercase text-secondary mb-4">60-Second Quiz</p>
+          <p className="font-sans text-xs tracking-[0.3em] uppercase text-secondary mb-4">30-Second Quiz</p>
           <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-4">
             {title}
           </h2>
