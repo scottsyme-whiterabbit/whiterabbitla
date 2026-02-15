@@ -201,6 +201,15 @@ const BlogArticle = () => {
           </Link>
         </div>
       </section>
+
+      {/* Copyright Notice */}
+      <section className="border-t border-border">
+        <div className="max-w-2xl mx-auto px-6 py-8">
+          <p className="font-sans text-[10px] text-muted-foreground/50 leading-relaxed text-center">
+            © {new Date().getFullYear()} White Rabbit Los Angeles. All rights reserved. No part of this publication may be reproduced, distributed, or transmitted in any form or by any means without the prior written permission of the publisher. All trademarks, service marks, and trade names referenced herein are the property of their respective owners.
+          </p>
+        </div>
+      </section>
     </main>
   );
 };
