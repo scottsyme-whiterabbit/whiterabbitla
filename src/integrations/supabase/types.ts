@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      contact_inquiries: {
+        Row: {
+          budget: string | null
+          client_type: string | null
+          created_at: string
+          date: string | null
+          email: string
+          event_type: string | null
+          guest_count: string | null
+          id: string
+          location: string | null
+          message: string | null
+          name: string
+          phone: string | null
+          recommendation: string | null
+          source: string
+        }
+        Insert: {
+          budget?: string | null
+          client_type?: string | null
+          created_at?: string
+          date?: string | null
+          email: string
+          event_type?: string | null
+          guest_count?: string | null
+          id?: string
+          location?: string | null
+          message?: string | null
+          name: string
+          phone?: string | null
+          recommendation?: string | null
+          source?: string
+        }
+        Update: {
+          budget?: string | null
+          client_type?: string | null
+          created_at?: string
+          date?: string | null
+          email?: string
+          event_type?: string | null
+          guest_count?: string | null
+          id?: string
+          location?: string | null
+          message?: string | null
+          name?: string
+          phone?: string | null
+          recommendation?: string | null
+          source?: string
+        }
+        Relationships: []
+      }
       discovery_quiz_leads: {
         Row: {
           biggest_concern: string | null
