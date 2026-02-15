@@ -1,4 +1,5 @@
 import AnimatedSection from "@/components/AnimatedSection";
+import QuizCTA from "@/components/QuizCTA";
 import scottPhoto from "@/assets/about-hero-desert.jpg";
 import creditsPhoto from "@/assets/credits-photo.png";
 import scottCouchImg from "@/assets/scott-couch.jpg";
@@ -179,6 +180,9 @@ const About = () => {
           </AnimatedSection>
         </div>
       </section>
+
+      {/* Quiz CTA */}
+      <QuizCTA />
 
       {/* CTA */}
       <AnimatedSection>

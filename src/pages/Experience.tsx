@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
+import QuizCTA from "@/components/QuizCTA";
 import heroDesertImg from "@/assets/experience-hero-desert.jpg";
 import closeupImg from "@/assets/event-closeup-cocktail.jpg";
 import parlorImg from "@/assets/event-parlor-stage.jpg";
@@ -115,6 +116,9 @@ const Experience = () => {
           </AnimatedSection>
         </div>
       </section>
+
+      {/* Quiz CTA */}
+      <QuizCTA />
 
       {/* CTA */}
       <AnimatedSection>
