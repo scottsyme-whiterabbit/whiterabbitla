@@ -25,6 +25,7 @@ import ServicePage from "./pages/ServicePage";
 import NotFound from "./pages/NotFound";
 import DiscoveryQuiz from "./pages/DiscoveryQuiz";
 import HostsPlaybook from "./pages/HostsPlaybook";
+import AdminNewsletter from "./pages/AdminNewsletter";
 import { getBlogArticleBySlug } from "./data/blogArticles";
 import { useParams } from "react-router-dom";
 
@@ -58,6 +59,7 @@ const AppContent = () => {
         <Route path="/services/:serviceSlug" element={<ServicePage />} />
         <Route path="/quiz" element={<DiscoveryQuiz />} />
         <Route path="/guide" element={<HostsPlaybook />} />
+        <Route path="/admin/newsletter" element={<AdminNewsletter />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
