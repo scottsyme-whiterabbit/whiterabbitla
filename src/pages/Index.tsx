@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import QuizCTA from "@/components/QuizCTA";
+import FAQSection from "@/components/FAQSection";
 
 import heroImage from "@/assets/hero-magic-cinematic.jpg";
 import experienceImg from "@/assets/experience-closeup.jpg";
@@ -306,6 +307,39 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Voice Search FAQ */}
+      <FAQSection
+        schemaId="homepage-faq-schema"
+        subtitle="Common Questions"
+        title="What People Ask"
+        faqs={[
+          {
+            question: "Who is the best magician for a birthday party in Los Angeles?",
+            answer: "Scott Syme of White Rabbit is one of the most sought-after magicians in Los Angeles for birthday parties and private celebrations. A member of the Magic Castle® in Hollywood, Scott brings world-class close-up magic, mentalism, and a curated atmosphere to milestone birthdays, dinner parties, and exclusive gatherings of all sizes.",
+          },
+          {
+            question: "How much does it cost to hire a magician for a corporate event?",
+            answer: "White Rabbit is a premium entertainment experience, with pricing that reflects the caliber of Fortune 500 events, luxury brand activations, and high-end private celebrations. Every booking is custom-quoted based on event size, duration, and whether you'd like roaming close-up magic, a full Private Magic Show, or both. Contact us for a personalized quote.",
+          },
+          {
+            question: "What is the best entertainment for a wedding cocktail hour?",
+            answer: "Close-up magic is widely considered the best cocktail hour entertainment because it breaks the ice between guests who've never met. Scott Syme performs intimate sleight of hand and mentalism for small groups, creating shared moments of laughter and amazement that set the tone for the entire evening.",
+          },
+          {
+            question: "Can I hire a magician for a small dinner party?",
+            answer: "Absolutely. Some of White Rabbit's most memorable performances happen at intimate dinner parties of 6 to 20 guests. Scott transforms your dining room or living room into a private theater with close-up magic, mind reading, and audience participation that makes every guest feel like the star of the show.",
+          },
+          {
+            question: "What makes White Rabbit different from other magicians?",
+            answer: "White Rabbit isn't just a magic show — it's a hospitality-driven experience. Scott Syme combines world-class sleight of hand with the warmth of a five-star host, curated lighting, a signature soundtrack, and an atmosphere that makes guests feel truly cared for. That's why brands like Netflix, Disney, and Morgan Stanley keep coming back.",
+          },
+          {
+            question: "Does White Rabbit travel outside of Los Angeles?",
+            answer: "Yes. While based in Los Angeles, Scott regularly performs at events nationwide — from New York and Miami to Las Vegas, Aspen, and beyond. Travel is available for corporate events, destination weddings, and private celebrations anywhere in the world.",
+          },
+        ]}
+      />
 
       {/* Discovery Quiz CTA */}
       <QuizCTA title="Wondering If Magic Is Right for Your Event?" />
