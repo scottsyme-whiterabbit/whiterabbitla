@@ -212,6 +212,7 @@ const DiscoveryQuiz = () => {
         guest_count: answers.guestCount || null,
         biggest_concern: answers.concern || null,
         experience_priority: answers.priority || null,
+        client_type: answers.clientType || null,
         recommendation: recommendation.title,
         quiz_answers: answers,
       });
@@ -316,7 +317,7 @@ const DiscoveryQuiz = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
-              {/* Persona Reveal */}
+              {/* Recommendation First */}
               <div className="text-center mb-8">
                 <motion.div
                   initial={{ scale: 0, rotate: -180 }}
@@ -331,7 +332,7 @@ const DiscoveryQuiz = () => {
                   transition={{ delay: 0.5 }}
                   className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3"
                 >
-                  Your Magic Guest Persona
+                  Our Recommendation for You
                 </motion.p>
                 <motion.h1
                   initial={{ opacity: 0, y: 20 }}
@@ -339,7 +340,7 @@ const DiscoveryQuiz = () => {
                   transition={{ delay: 0.7, duration: 0.5 }}
                   className="font-serif text-4xl md:text-5xl text-cream mb-3"
                 >
-                  {personas[getPersona(answers as QuizAnswer)].name}
+                  {recommendation.title}
                 </motion.h1>
                 <motion.p
                   initial={{ opacity: 0 }}
@@ -347,7 +348,7 @@ const DiscoveryQuiz = () => {
                   transition={{ delay: 1 }}
                   className="font-serif text-lg text-cream/60 italic mb-2"
                 >
-                  {personas[getPersona(answers as QuizAnswer)].tagline}
+                  {recommendation.subtitle}
                 </motion.p>
               </div>
 
@@ -357,50 +358,10 @@ const DiscoveryQuiz = () => {
                 transition={{ delay: 1.2, duration: 0.5 }}
                 className="space-y-8"
               >
-                {/* Persona description */}
+                {/* Recommendation description */}
                 <p className="font-sans text-base text-cream/80 leading-relaxed text-center">
-                  {personas[getPersona(answers as QuizAnswer)].description}
+                  {recommendation.description}
                 </p>
-
-                {/* Traits */}
-                <div className="flex justify-center gap-6 flex-wrap">
-                  {[
-                    personas[getPersona(answers as QuizAnswer)].trait1,
-                    personas[getPersona(answers as QuizAnswer)].trait2,
-                    personas[getPersona(answers as QuizAnswer)].trait3,
-                  ].map((trait, i) => (
-                    <motion.div
-                      key={trait}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 1.4 + i * 0.15 }}
-                      className="font-sans text-xs tracking-[0.15em] uppercase text-accent/70 border border-accent/20 px-4 py-2"
-                    >
-                      {trait}
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* Recommendation */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1.8 }}
-                  className="border-t border-cream/10 pt-8"
-                >
-                  <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3 text-center">
-                    Our Recommendation for You
-                  </p>
-                  <h2 className="font-serif text-3xl text-cream mb-2 text-center">
-                    {recommendation.title}
-                  </h2>
-                  <p className="font-serif text-base text-cream/60 italic mb-6 text-center">
-                    {recommendation.subtitle}
-                  </p>
-                  <p className="font-sans text-sm text-cream/80 leading-relaxed mb-6">
-                    {recommendation.description}
-                  </p>
-                </motion.div>
 
                 {/* Address their concern */}
                 {answers.concern && answers.concern !== "none" && (
