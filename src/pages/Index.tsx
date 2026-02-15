@@ -308,7 +308,7 @@ const Index = () => {
       </section>
 
       {/* Discovery Quiz CTA */}
-      <QuizCTA />
+      <QuizCTA title="Wondering If Magic Is Right for Your Event?" />
 
       {/* Final CTA */}
       <AnimatedSection>

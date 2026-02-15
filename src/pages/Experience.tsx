@@ -118,7 +118,7 @@ const Experience = () => {
       </section>
 
       {/* Quiz CTA */}
-      <QuizCTA />
+      <QuizCTA title="Not Sure Which Experience Fits Your Event?" />
 
       {/* CTA */}
       <AnimatedSection>
