@@ -158,7 +158,7 @@ const Blog = () => {
       </section>
 
       {/* Quiz CTA */}
-      <QuizCTA />
+      <QuizCTA title="Curious If Magic Is the Right Fit?" />
 
       {/* CTA */}
       <AnimatedSection>

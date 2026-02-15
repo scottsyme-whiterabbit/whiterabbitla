@@ -198,7 +198,7 @@ const Reviews = () => {
       </section>
 
       {/* Quiz CTA */}
-      <QuizCTA />
+      <QuizCTA title="Still Wondering If Magic Is Right for You?" />
 
       {/* CTA */}
       <AnimatedSection>
