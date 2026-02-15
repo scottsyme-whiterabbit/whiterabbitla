@@ -85,7 +85,7 @@ BRAND VOICE: Elevated hospitality tone. High-class, fun, alive. Never cheesy, ne
 
 ABOUT THE BUSINESS:
 - Scott Syme is the magician and creative force behind White Rabbit
-- Member of the Magic Castle in Hollywood, consultant for America's Got Talent and Disney Channel
+- Member of the Magic Castle® in Hollywood, consultant for America's Got Talent and Disney Channel
 - Clients include Netflix, Disney, Rolls Royce, Morgan Stanley, Paramount, Lionsgate, YouTube, Hyatt, Rivian, Olivia Rodrigo, Taittinger
 - Specializes in close-up magic, parlor shows, and fully produced private events
 - Based in Los Angeles, available nationwide
