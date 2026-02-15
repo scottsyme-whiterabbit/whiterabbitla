@@ -319,24 +319,24 @@ const Index = () => {
             answer: "Scott Syme of White Rabbit is one of the most sought-after magicians in Los Angeles for birthday parties and private celebrations. A member of the Magic Castle® in Hollywood, Scott brings world-class close-up magic, mentalism, and a curated atmosphere to milestone birthdays, dinner parties, and exclusive gatherings of all sizes.",
           },
           {
-            question: "How much does it cost to hire a magician for a corporate event?",
-            answer: "White Rabbit is a premium entertainment experience, with pricing that reflects the caliber of Fortune 500 events, luxury brand activations, and high-end private celebrations. Every booking is custom-quoted based on event size, duration, and whether you'd like roaming close-up magic, a full Private Magic Show, or both. Contact us for a personalized quote.",
-          },
-          {
             question: "What is the best entertainment for a wedding cocktail hour?",
             answer: "Close-up magic is widely considered the best cocktail hour entertainment because it breaks the ice between guests who've never met. Scott Syme performs intimate sleight of hand and mentalism for small groups, creating shared moments of laughter and amazement that set the tone for the entire evening.",
           },
           {
-            question: "Can I hire a magician for a small dinner party?",
-            answer: "Absolutely. Some of White Rabbit's most memorable performances happen at intimate dinner parties of 6 to 20 guests. Scott transforms your dining room or living room into a private theater with close-up magic, mind reading, and audience participation that makes every guest feel like the star of the show.",
+            question: "What type of magic is best for a corporate event?",
+            answer: "For corporate events, close-up roaming magic is the gold standard. Scott moves through cocktail hours, galas, and receptions performing sleight of hand and mentalism for small groups, turning strangers into collaborators within minutes. For events that call for a centerpiece moment, the Private Magic Show is a curated 45-minute theatrical experience designed for groups of 20 to 120.",
+          },
+          {
+            question: "How far in advance should I book a magician?",
+            answer: "We recommend reaching out 4 to 8 weeks before your event, though peak seasons like the holidays and summer weekends can fill months in advance. Contact us with your date and we'll confirm availability within 24 hours.",
           },
           {
             question: "What makes White Rabbit different from other magicians?",
-            answer: "White Rabbit isn't just a magic show — it's a hospitality-driven experience. Scott Syme combines world-class sleight of hand with the warmth of a five-star host, curated lighting, a signature soundtrack, and an atmosphere that makes guests feel truly cared for. That's why brands like Netflix, Disney, and Morgan Stanley keep coming back.",
+            answer: "White Rabbit is not just a magic show. It's a hospitality-driven experience. Scott Syme combines world-class sleight of hand with the warmth of a five-star host, curated lighting, a signature soundtrack, and an atmosphere that makes guests feel truly cared for. That's why brands like Netflix, Disney, and Morgan Stanley keep coming back.",
           },
           {
             question: "Does White Rabbit travel outside of Los Angeles?",
-            answer: "Yes. While based in Los Angeles, Scott regularly performs at events nationwide — from New York and Miami to Las Vegas, Aspen, and beyond. Travel is available for corporate events, destination weddings, and private celebrations anywhere in the world.",
+            answer: "Yes. While based in Los Angeles, Scott regularly performs at events nationwide, from New York and Miami to Las Vegas, Aspen, and beyond. Travel is available for corporate events, destination weddings, and private celebrations anywhere in the world.",
           },
         ]}
       />
