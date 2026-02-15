@@ -8,6 +8,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
+const CLIENT_TYPES = [
+  { id: "corporate", label: "Corporate / Brand", description: "Planning on behalf of a company or brand" },
+  { id: "event_planner", label: "Event Planner", description: "Professional planner booking for a client" },
+  { id: "wedding_planner", label: "Wedding Planner", description: "Coordinating a wedding celebration" },
+  { id: "individual", label: "Individual", description: "Planning my own private event" },
+];
+
 const EVENT_TYPES = [
   { id: "corporate", label: "Corporate Event", description: "Galas, product launches, conferences" },
   { id: "wedding", label: "Wedding", description: "Ceremonies, receptions, rehearsal dinners" },
@@ -30,9 +37,11 @@ const BUDGETS = [
   { id: "showstopper", label: "Go All Out", description: "No limits. Make it unforgettable" },
 ];
 
-type Step = "event" | "location" | "guests" | "date" | "budget" | "contact" | "recommendation";
+type Step = "clientType" | "event" | "location" | "guests" | "date" | "budget" | "contact" | "recommendation";
 
 interface QuizData {
+  clientType: string;
+  clientTypeLabel: string;
   eventType: string;
   eventLabel: string;
   location: string;
@@ -85,15 +94,17 @@ const getRecommendation = (data: QuizData) => {
   };
 };
 
-const STEPS: Step[] = ["event", "location", "guests", "date", "budget", "contact", "recommendation"];
+const STEPS: Step[] = ["clientType", "event", "location", "guests", "date", "budget", "contact", "recommendation"];
 
 const BookingQuiz = () => {
   const { isOpen, closeQuiz } = useBookingQuiz();
   const { toast } = useToast();
-  const [step, setStep] = useState<Step>("event");
+  const [step, setStep] = useState<Step>("clientType");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [data, setData] = useState<QuizData>({
+    clientType: "",
+    clientTypeLabel: "",
     eventType: "",
     eventLabel: "",
     location: "",
@@ -113,6 +124,7 @@ const BookingQuiz = () => {
 
   const canAdvance = () => {
     switch (step) {
+      case "clientType": return !!data.clientType;
       case "event": return !!data.eventType;
       case "location": return !!data.location;
       case "guests": return !!data.guestCount;
@@ -137,6 +149,23 @@ const BookingQuiz = () => {
     setIsSubmitting(true);
     const rec = getRecommendation(data);
     try {
+      // Save to database
+      await supabase.from("contact_inquiries").insert({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        event_type: data.eventLabel,
+        date: data.date,
+        location: data.location || "TBD",
+        guest_count: data.guestLabel,
+        budget: data.budgetLabel,
+        message: data.message || null,
+        client_type: data.clientType || null,
+        source: "booking_quiz",
+        recommendation: rec.title,
+      });
+
+      // Send email notification
       const { error } = await supabase.functions.invoke("send-inquiry", {
         body: {
           name: data.name,
@@ -145,7 +174,7 @@ const BookingQuiz = () => {
           eventType: `${data.eventLabel} (${rec.format})`,
           date: data.date,
           location: data.location || "TBD",
-          message: `Guest Count: ${data.guestLabel}\nBudget: ${data.budgetLabel}\nRecommended: ${rec.title}\n\n${data.message || "No additional message."}`,
+          message: `Client Type: ${data.clientTypeLabel}\nGuest Count: ${data.guestLabel}\nBudget: ${data.budgetLabel}\nRecommended: ${rec.title}\n\n${data.message || "No additional message."}`,
         },
       });
       if (error) throw error;
@@ -171,9 +200,9 @@ const BookingQuiz = () => {
   const handleClose = () => {
     closeQuiz();
     setTimeout(() => {
-      setStep("event");
+      setStep("clientType");
       setSubmitted(false);
-      setData({ eventType: "", eventLabel: "", location: "", guestCount: "", guestLabel: "", date: "", budget: "", budgetLabel: "", name: "", email: "", phone: "", message: "" });
+      setData({ clientType: "", clientTypeLabel: "", eventType: "", eventLabel: "", location: "", guestCount: "", guestLabel: "", date: "", budget: "", budgetLabel: "", name: "", email: "", phone: "", message: "" });
     }, 300);
   };
 
@@ -267,9 +296,26 @@ const BookingQuiz = () => {
                         Close
                       </Button>
                     </div>
+                  ) : step === "clientType" ? (
+                    <div>
+                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 1 of 7</p>
+                      <h3 className="font-serif text-2xl text-foreground mb-2">Which Best Describes You?</h3>
+                      <p className="font-sans text-sm text-muted-foreground mb-6">This helps us tailor the experience.</p>
+                      <div className="space-y-3">
+                        {CLIENT_TYPES.map((c) => (
+                          <OptionCard
+                            key={c.id}
+                            selected={data.clientType === c.id}
+                            label={c.label}
+                            description={c.description}
+                            onClick={() => setData({ ...data, clientType: c.id, clientTypeLabel: c.label })}
+                          />
+                        ))}
+                      </div>
+                    </div>
                   ) : step === "event" ? (
                     <div>
-                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 1 of 6</p>
+                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 2 of 7</p>
                       <h3 className="font-serif text-2xl text-foreground mb-2">What's the Occasion?</h3>
                       <p className="font-sans text-sm text-muted-foreground mb-6">Select the type of event you're planning.</p>
                       <div className="space-y-3">
@@ -286,7 +332,7 @@ const BookingQuiz = () => {
                     </div>
                   ) : step === "location" ? (
                     <div>
-                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 2 of 6</p>
+                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 3 of 7</p>
                       <h3 className="font-serif text-2xl text-foreground mb-2">Where's the Event?</h3>
                       <p className="font-sans text-sm text-muted-foreground mb-6">City or general area. Helps us plan logistics.</p>
                       <Input
@@ -298,7 +344,7 @@ const BookingQuiz = () => {
                     </div>
                   ) : step === "guests" ? (
                     <div>
-                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 3 of 6</p>
+                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 4 of 7</p>
                       <h3 className="font-serif text-2xl text-foreground mb-2">How Many Guests?</h3>
                       <p className="font-sans text-sm text-muted-foreground mb-6">This helps us recommend the right format.</p>
                       <div className="space-y-3">
@@ -315,7 +361,7 @@ const BookingQuiz = () => {
                     </div>
                   ) : step === "date" ? (
                     <div>
-                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 4 of 6</p>
+                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 5 of 7</p>
                       <h3 className="font-serif text-2xl text-foreground mb-2">When Is Your Event?</h3>
                       <p className="font-sans text-sm text-muted-foreground mb-6">An approximate date is fine. We can finalize later.</p>
                       <Input
@@ -327,7 +373,7 @@ const BookingQuiz = () => {
                     </div>
                   ) : step === "budget" ? (
                     <div>
-                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 5 of 6</p>
+                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 6 of 7</p>
                       <h3 className="font-serif text-2xl text-foreground mb-2">Investment Range</h3>
                       <p className="font-sans text-sm text-muted-foreground mb-6">This helps us tailor the experience to your vision.</p>
                       <div className="space-y-3">
@@ -344,7 +390,7 @@ const BookingQuiz = () => {
                     </div>
                   ) : step === "contact" ? (
                     <div>
-                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 6 of 6</p>
+                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Step 7 of 7</p>
                       <h3 className="font-serif text-2xl text-foreground mb-2">Almost There!</h3>
                       <p className="font-sans text-sm text-muted-foreground mb-6">How can Scott reach you?</p>
                       <div className="space-y-4">

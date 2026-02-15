@@ -19,13 +19,28 @@ const Contact = () => {
     date: "",
     location: "",
     message: "",
+    clientType: "",
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const { data, error } = await supabase.functions.invoke("send-inquiry", {
+      // Save to database
+      await supabase.from("contact_inquiries").insert({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        event_type: formData.eventType,
+        date: formData.date,
+        location: formData.location,
+        message: formData.message,
+        client_type: formData.clientType || null,
+        source: "contact_form",
+      });
+
+      // Send email
+      const { error } = await supabase.functions.invoke("send-inquiry", {
         body: formData,
       });
       if (error) throw error;
@@ -40,7 +55,7 @@ const Contact = () => {
         title: "Inquiry Sent!",
         description: "We'll get back to you within 24 hours.",
       });
-      setFormData({ name: "", email: "", phone: "", eventType: "", date: "", location: "", message: "" });
+      setFormData({ name: "", email: "", phone: "", eventType: "", date: "", location: "", message: "", clientType: "" });
     } catch (err) {
       console.error("Send error:", err);
       toast({
@@ -107,6 +122,23 @@ const Contact = () => {
                     placeholder="your@email.com"
                   />
                 </div>
+              </div>
+              <div>
+                <label className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 block">
+                  Which Best Describes You?
+                </label>
+                <select
+                  required
+                  value={formData.clientType}
+                  onChange={(e) => setFormData({ ...formData, clientType: e.target.value })}
+                  className="flex h-10 w-full rounded-md border border-border bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  <option value="">Select one...</option>
+                  <option value="corporate">Corporate / Brand</option>
+                  <option value="event_planner">Event Planner</option>
+                  <option value="wedding_planner">Wedding Planner</option>
+                  <option value="individual">Individual</option>
+                </select>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
