@@ -8,6 +8,7 @@ import PersonaCard, { personas, getPersona } from "@/components/PersonaCard";
 
 interface QuizAnswer {
   eventType: string;
+  clientType: string;
   vibe: string;
   concern: string;
   guestCount: string;
@@ -25,6 +26,18 @@ const questions = [
       { value: "private", label: "Private Party", desc: "Birthday, anniversary, holiday gathering" },
       { value: "fundraiser", label: "Fundraiser or Gala", desc: "Charity event, auction, benefit dinner" },
       { value: "unsure", label: "Not sure yet", desc: "Just exploring what's possible" },
+    ],
+  },
+  {
+    id: "clientType",
+    question: "Which best describes you?",
+    subtitle: "This helps us personalize your experience.",
+    options: [
+      { value: "corporate", label: "Business / Corporate", desc: "Company event, team outing, client entertainment" },
+      { value: "planner", label: "Event Planner / Coordinator", desc: "Planning on behalf of a client or organization" },
+      { value: "wedding_planner", label: "Wedding Planner / Bride & Groom", desc: "Planning a wedding or rehearsal event" },
+      { value: "individual", label: "Individual / Host", desc: "Hosting a personal celebration or gathering" },
+      { value: "other", label: "Other", desc: "Something else entirely" },
     ],
   },
   {

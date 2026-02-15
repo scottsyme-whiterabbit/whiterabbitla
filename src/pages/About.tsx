@@ -166,6 +166,9 @@ const About = () => {
         </div>
       </section>
 
+      {/* Quiz CTA - after services */}
+      <QuizCTA />
+
       {/* Credits */}
       <section className="py-12">
         <div className="max-w-5xl mx-auto px-6">
@@ -180,9 +183,6 @@ const About = () => {
           </AnimatedSection>
         </div>
       </section>
-
-      {/* Quiz CTA */}
-      <QuizCTA />
 
       {/* CTA */}
       <AnimatedSection>
