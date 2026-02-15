@@ -44,9 +44,9 @@ CRITICAL: You MUST incorporate BOTH of the provided logo images exactly as they 
 
 Design requirements:
 - Deep forest green (#2D4A3E) and cream/ivory color palette with dusty rose (#c8a0a0) accents
-- Elegant serif typography for the headline
-- The title text "${title}" should be prominently displayed on the image
-- Include "whiterabbitla.com" subtly at the bottom
+- TYPOGRAPHY IS CRITICAL: Use a refined, high-contrast didone serif font similar to "Ogg" by Sharp Type for all headline text. This means elegant thin-to-thick stroke contrast, classical proportions, upright (never italic), with a luxurious editorial magazine feel. For any smaller body text or labels, use a clean, light-weight sans-serif with wide letter-spacing. All text must be non-italicized.
+- The title text "${title}" should be prominently displayed on the image in this serif style
+- Include "whiterabbitla.com" subtly at the bottom in the sans-serif style with tracked uppercase letters
 - Sophisticated, moody, cinematic aesthetic (think luxury hotel lobby meets editorial magazine)
 - ${isStory ? "Vertical layout with text centered, generous spacing" : "Square layout, balanced composition"}
 - No clip art, no cartoonish elements, no cheesy magic imagery
