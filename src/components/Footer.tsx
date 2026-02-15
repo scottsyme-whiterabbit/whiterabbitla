@@ -50,7 +50,12 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-cream/10 text-center">
+        <div className="mt-12 pt-8 border-t border-cream/10 text-center space-y-3">
+          <div className="flex items-center justify-center gap-4">
+            <Link to="/privacy" className="font-sans text-[10px] tracking-wider text-cream/40 hover:text-cream/60 transition-colors">Privacy Policy</Link>
+            <span className="w-1 h-1 rounded-full bg-cream/20" />
+            <Link to="/terms" className="font-sans text-[10px] tracking-wider text-cream/40 hover:text-cream/60 transition-colors">Terms of Service</Link>
+          </div>
           <p className="font-sans text-xs tracking-wider text-cream/40">
             © {new Date().getFullYear()} White Rabbit Los Angeles. All rights reserved.
           </p>
