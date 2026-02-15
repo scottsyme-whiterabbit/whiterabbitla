@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Instagram, Mail, Phone } from "lucide-react";
+import { Instagram, Linkedin, Mail, Phone } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import contactBg from "@/assets/event-silhouette.jpg";
 import { Input } from "@/components/ui/input";
@@ -205,6 +205,9 @@ const Contact = () => {
                 </a>
                 <a href="https://www.instagram.com/whiterabbit_la/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 font-sans text-sm text-foreground hover:text-accent transition-colors">
                   <Instagram size={18} className="text-accent" /> @whiterabbit_la
+                </a>
+                <a href="https://www.linkedin.com/in/scottsymejr/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 font-sans text-sm text-foreground hover:text-accent transition-colors">
+                  <Linkedin size={18} className="text-accent" /> Scott Syme Jr.
                 </a>
               </div>
               <div className="pt-8 border-t border-border">
