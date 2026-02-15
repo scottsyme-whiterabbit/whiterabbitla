@@ -191,6 +191,7 @@ const DiscoveryQuiz = () => {
     if (!name.trim() || !email.trim()) return;
     setSubmitting(true);
     try {
+      // Save to quiz leads table
       await supabase.from("discovery_quiz_leads").insert({
         name: name.trim(),
         email: email.trim(),
@@ -201,6 +202,20 @@ const DiscoveryQuiz = () => {
         recommendation: recommendation.title,
         quiz_answers: answers,
       });
+
+      // Auto-enroll into drip sequence (fire and forget)
+      const personaKey = getPersona(answers as QuizAnswer);
+      const personaName = personas[personaKey]?.name || "";
+      supabase.functions.invoke("enroll-drip", {
+        body: {
+          name: name.trim(),
+          email: email.trim(),
+          source: "quiz",
+          persona: personaName,
+          recommendation: recommendation.title,
+        },
+      });
+
       setSubmitted(true);
     } catch {
       setSubmitted(true);
