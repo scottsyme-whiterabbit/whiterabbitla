@@ -39,23 +39,23 @@ const BlogArticle = () => {
   const pullQuoteSentence = pullQuoteSource.split(". ").slice(0, 2).join(". ") + ".";
   const showPullQuote = article.content.length > 4;
 
-  // Render paragraph with auto-bold for leading names/venues
+  // Check if text contains HTML markup
+  const hasHtml = (text: string) => /<[a-z][\s\S]*>/i.test(text);
+
+  // Render paragraph with drop cap for first, and HTML support
   const renderParagraph = (text: string, index: number) => {
     const isFirst = index === 0;
-
-    // Auto-detect bold lead-in: text before the first period if it looks like a name/venue (starts with capital, under 60 chars)
-    const firstPeriod = text.indexOf(". ");
-    const hasLeadIn =
-      !isFirst &&
-      firstPeriod > 0 &&
-      firstPeriod < 60 &&
-      /^[A-Z]/.test(text) &&
-      (article.category === "Magic Destinations" || text.match(/^[A-Z][a-zA-Z\s&'']+( at | is | has | brings | offers | remains | built )/));
+    const containsHtml = hasHtml(text);
 
     if (isFirst) {
       // Drop cap + lede styling
-      const firstChar = text.charAt(0);
-      const rest = text.slice(1);
+      // Strip any leading HTML tag to get the actual first character
+      const strippedText = text.replace(/^<[^>]+>/, "");
+      const firstChar = strippedText.charAt(0);
+      const restHtml = containsHtml
+        ? text.replace(new RegExp(`^(<[^>]+>)?${firstChar.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`), "$1")
+        : text.slice(1);
+
       return (
         <p className="font-sans text-lg md:text-xl text-foreground/90 leading-relaxed mb-8">
           <span
@@ -64,19 +64,21 @@ const BlogArticle = () => {
           >
             {firstChar}
           </span>
-          {rest}
+          {containsHtml ? (
+            <span dangerouslySetInnerHTML={{ __html: restHtml }} />
+          ) : (
+            restHtml
+          )}
         </p>
       );
     }
 
-    if (hasLeadIn) {
-      const lead = text.slice(0, firstPeriod);
-      const remaining = text.slice(firstPeriod);
+    if (containsHtml) {
       return (
-        <p className="font-sans text-base text-muted-foreground leading-[1.85] mb-7">
-          <strong className="text-foreground font-medium">{lead}</strong>
-          {remaining}
-        </p>
+        <p
+          className="font-sans text-base text-muted-foreground leading-[1.85] mb-7 [&_strong]:text-foreground [&_strong]:font-medium [&_a]:text-accent [&_a]:underline [&_a]:underline-offset-4 [&_a:hover]:text-accent/80 [&_a]:transition-colors"
+          dangerouslySetInnerHTML={{ __html: text }}
+        />
       );
     }
 
