@@ -24,7 +24,7 @@ const TermsOfService = () => {
           <AnimatedSection>
             <h2 className="font-serif text-2xl text-foreground mb-4">Acceptance of Terms</h2>
             <p className="font-sans text-sm text-muted-foreground leading-relaxed">
-              By accessing and using the White Rabbit Los Angeles website, you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our website.
+              By accessing and using the White Rabbit Entertainment Productions LLC ("White Rabbit," "White Rabbit Los Angeles," "we," "us," or "our") website, you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our website.
             </p>
           </AnimatedSection>
 

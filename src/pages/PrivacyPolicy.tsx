@@ -25,7 +25,7 @@ const PrivacyPolicy = () => {
           <AnimatedSection>
             <h2 className="font-serif text-2xl text-foreground mb-4">Information We Collect</h2>
             <p className="font-sans text-sm text-muted-foreground leading-relaxed mb-3">
-              When you interact with White Rabbit Los Angeles, we may collect information you voluntarily provide, including your name, email address, phone number, event details, and any other information submitted through our contact forms, booking quiz, or newsletter signup.
+              When you interact with White Rabbit Entertainment Productions LLC ("White Rabbit," "White Rabbit Los Angeles," "we," "us," or "our"), we may collect information you voluntarily provide, including your name, email address, phone number, event details, and any other information submitted through our contact forms, booking quiz, or newsletter signup.
             </p>
             <p className="font-sans text-sm text-muted-foreground leading-relaxed">
               We also automatically collect certain technical information when you visit our website, such as your IP address, browser type, device information, and browsing behavior through cookies and similar technologies.
