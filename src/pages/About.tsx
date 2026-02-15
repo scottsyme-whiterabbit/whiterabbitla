@@ -38,7 +38,7 @@ const About = () => {
                 experience built on a simple belief: the best entertainment makes people feel truly alive. 
                 Not through tricks, but through an atmosphere of joy, genuine hospitality, and human connection 
                 that guests carry with them long after the night ends. A proud member of the world-famous 
-                Magic Castle in Hollywood and the International Brotherhood of Magicians, Scott brings both 
+                Magic Castle® in Hollywood and the International Brotherhood of Magicians, Scott brings both 
                 elite craft and warm showmanship to every performance.
               </p>
               <p>
