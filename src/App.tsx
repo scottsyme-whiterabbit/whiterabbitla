@@ -26,6 +26,7 @@ import NotFound from "./pages/NotFound";
 import DiscoveryQuiz from "./pages/DiscoveryQuiz";
 import HostsPlaybook from "./pages/HostsPlaybook";
 import AdminNewsletter from "./pages/AdminNewsletter";
+import SocialGenerator from "./pages/SocialGenerator";
 import { getBlogArticleBySlug } from "./data/blogArticles";
 import { useParams } from "react-router-dom";
 
@@ -60,6 +61,7 @@ const AppContent = () => {
         <Route path="/quiz" element={<DiscoveryQuiz />} />
         <Route path="/guide" element={<HostsPlaybook />} />
         <Route path="/admin/newsletter" element={<AdminNewsletter />} />
+        <Route path="/admin/social" element={<SocialGenerator />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

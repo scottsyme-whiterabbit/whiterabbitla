@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.newsletter-admin]
 verify_jwt = false
+
+[functions.generate-social]
+verify_jwt = false
