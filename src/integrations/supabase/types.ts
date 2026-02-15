@@ -77,6 +77,123 @@ export type Database = {
         }
         Relationships: []
       }
+      newsletter_campaigns: {
+        Row: {
+          body_html: string
+          body_preview: string | null
+          campaign_type: string
+          created_at: string
+          drip_step: number | null
+          id: string
+          sent_count: number | null
+          status: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          body_html: string
+          body_preview?: string | null
+          campaign_type?: string
+          created_at?: string
+          drip_step?: number | null
+          id?: string
+          sent_count?: number | null
+          status?: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          body_html?: string
+          body_preview?: string | null
+          campaign_type?: string
+          created_at?: string
+          drip_step?: number | null
+          id?: string
+          sent_count?: number | null
+          status?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      newsletter_contacts: {
+        Row: {
+          created_at: string
+          drip_started_at: string | null
+          drip_step: number
+          email: string
+          id: string
+          last_emailed_at: string | null
+          name: string | null
+          source: string | null
+          subscribed: boolean
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          drip_started_at?: string | null
+          drip_step?: number
+          email: string
+          id?: string
+          last_emailed_at?: string | null
+          name?: string | null
+          source?: string | null
+          subscribed?: boolean
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          drip_started_at?: string | null
+          drip_step?: number
+          email?: string
+          id?: string
+          last_emailed_at?: string | null
+          name?: string | null
+          source?: string | null
+          subscribed?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      newsletter_send_log: {
+        Row: {
+          campaign_id: string
+          contact_id: string
+          id: string
+          sent_at: string
+          status: string
+        }
+        Insert: {
+          campaign_id: string
+          contact_id: string
+          id?: string
+          sent_at?: string
+          status?: string
+        }
+        Update: {
+          campaign_id?: string
+          contact_id?: string
+          id?: string
+          sent_at?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "newsletter_send_log_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "newsletter_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "newsletter_send_log_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "newsletter_contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
