@@ -65,7 +65,7 @@ const Footer = () => {
                 <Instagram size={20} className="text-cream/60 group-hover:text-accent transition-colors" />
                 <span className="font-sans text-sm tracking-wider text-cream/70 group-hover:text-cream transition-colors">@whiterabbit_la</span>
               </a>
-              <a href="https://www.linkedin.com/in/scottsyme/" target="_blank" rel="noopener noreferrer"
+              <a href="https://www.linkedin.com/in/scottsymejr/" target="_blank" rel="noopener noreferrer"
                 className="group flex items-center gap-2.5 px-5 py-3 border border-cream/20 rounded-full hover:border-accent/60 hover:bg-accent/5 transition-all duration-300">
                 <Linkedin size={20} className="text-cream/60 group-hover:text-accent transition-colors" />
                 <span className="font-sans text-sm tracking-wider text-cream/70 group-hover:text-cream transition-colors">Scott Syme</span>
