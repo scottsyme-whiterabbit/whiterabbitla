@@ -29,6 +29,13 @@ const Contact = () => {
         body: formData,
       });
       if (error) throw error;
+      // Meta Pixel: track contact form lead
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'Lead', {
+          content_name: 'Contact Form',
+          content_category: formData.eventType || 'General Inquiry',
+        });
+      }
       toast({
         title: "Inquiry Sent!",
         description: "We'll get back to you within 24 hours.",
