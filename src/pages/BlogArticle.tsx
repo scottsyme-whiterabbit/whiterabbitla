@@ -34,9 +34,13 @@ const BlogArticle = () => {
 
   // Pick a pull quote: use a sentence from the middle content that's impactful
   const midIndex = Math.floor(article.content.length / 2);
-  const pullQuoteSource = article.content[midIndex] || "";
-  // Extract first sentence as pull quote
-  const pullQuoteSentence = pullQuoteSource.split(". ").slice(0, 2).join(". ") + ".";
+  const pullQuoteSource = (article.content[midIndex] || "").replace(/<[^>]+>/g, "");
+  // Extract first two sentences as pull quote
+  const pullQuoteSentences = pullQuoteSource.split(". ").slice(0, 2).join(". ") + ".";
+  // If too long, cut at last full word before 200 chars
+  const pullQuoteSentence = pullQuoteSentences.length > 200
+    ? pullQuoteSentences.slice(0, 200).replace(/\s+\S*$/, "")
+    : pullQuoteSentences;
   const showPullQuote = article.content.length > 4;
 
   // Check if text contains HTML markup
@@ -135,9 +139,7 @@ const BlogArticle = () => {
                 <AnimatedSection key={`pullquote-${i}`}>
                   <blockquote className="border-l-2 border-accent pl-8 my-12 md:my-16">
                     <p className="font-serif text-2xl md:text-3xl text-foreground/80 leading-snug" style={{ fontStyle: "normal" }}>
-                      {pullQuoteSentence.length > 180
-                        ? pullQuoteSentence.slice(0, 180).trim() + "..."
-                        : pullQuoteSentence}
+                      {pullQuoteSentence}
                     </p>
                   </blockquote>
                 </AnimatedSection>
