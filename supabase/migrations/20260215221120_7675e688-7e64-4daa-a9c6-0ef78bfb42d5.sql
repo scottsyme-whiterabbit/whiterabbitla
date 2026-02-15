@@ -1,0 +1,1 @@
+ALTER TABLE public.discovery_quiz_leads ADD COLUMN client_type text;

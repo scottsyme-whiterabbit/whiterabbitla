@@ -17,6 +17,7 @@ export type Database = {
       discovery_quiz_leads: {
         Row: {
           biggest_concern: string | null
+          client_type: string | null
           created_at: string
           email: string | null
           event_type: string | null
@@ -29,6 +30,7 @@ export type Database = {
         }
         Insert: {
           biggest_concern?: string | null
+          client_type?: string | null
           created_at?: string
           email?: string | null
           event_type?: string | null
@@ -41,6 +43,7 @@ export type Database = {
         }
         Update: {
           biggest_concern?: string | null
+          client_type?: string | null
           created_at?: string
           email?: string | null
           event_type?: string | null
