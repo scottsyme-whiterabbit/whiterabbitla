@@ -4,15 +4,45 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import AnimatedSection from "@/components/AnimatedSection";
 
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
 type Format = "post" | "story";
 
 const SocialGenerator = () => {
+  const [password, setPassword] = useState("");
+  const [authenticated, setAuthenticated] = useState(false);
+  const [storedPassword, setStoredPassword] = useState("");
+
   const [selectedSlug, setSelectedSlug] = useState<string>("");
   const [generating, setGenerating] = useState<Format | null>(null);
   const [postImage, setPostImage] = useState<string | null>(null);
   const [storyImage, setStoryImage] = useState<string | null>(null);
 
   const selectedArticle = blogArticles.find((a) => a.slug === selectedSlug);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+        },
+        body: JSON.stringify({ action: "get_stats", adminPassword: password }),
+      });
+      if (res.ok) {
+        setStoredPassword(password);
+        setAuthenticated(true);
+        toast({ title: "Welcome back" });
+      } else {
+        toast({ title: "Invalid password", variant: "destructive" });
+      }
+    } catch {
+      toast({ title: "Connection failed", variant: "destructive" });
+    }
+  };
 
   const generate = async (format: Format) => {
     if (!selectedArticle) return;
@@ -51,6 +81,36 @@ const SocialGenerator = () => {
     a.download = filename;
     a.click();
   };
+
+  if (!authenticated) {
+    return (
+      <main id="main-content" className="pt-20 min-h-screen flex items-center justify-center">
+        <div className="max-w-sm w-full px-6">
+          <AnimatedSection>
+            <div className="text-center mb-8">
+              <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">Admin Access</p>
+              <h1 className="font-serif text-3xl text-foreground">Social Generator</h1>
+            </div>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter admin password"
+                className="w-full bg-background border border-border text-foreground font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent"
+              />
+              <button
+                type="submit"
+                className="w-full font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-3 hover:bg-accent/80 transition-colors"
+              >
+                Enter
+              </button>
+            </form>
+          </AnimatedSection>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main id="main-content" className="pt-20">
@@ -93,7 +153,6 @@ const SocialGenerator = () => {
 
           {selectedArticle && (
             <AnimatedSection>
-              {/* Preview Card */}
               <div className="border border-border p-6 mb-8">
                 <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">
                   {selectedArticle.category} · {selectedArticle.readTime}
@@ -104,7 +163,6 @@ const SocialGenerator = () => {
                 </p>
               </div>
 
-              {/* Generate Buttons */}
               <div className="flex flex-wrap gap-4 mb-12">
                 <button
                   onClick={() => generate("post")}
@@ -122,9 +180,7 @@ const SocialGenerator = () => {
                 </button>
               </div>
 
-              {/* Results */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Post Result */}
                 <div>
                   <p className="font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">
                     Square Post (1:1)
@@ -148,7 +204,6 @@ const SocialGenerator = () => {
                   )}
                 </div>
 
-                {/* Story Result */}
                 <div>
                   <p className="font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">
                     Story (9:16)
