@@ -216,6 +216,13 @@ const DiscoveryQuiz = () => {
         },
       });
 
+      // Meta Pixel: track discovery quiz completion
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'CompleteRegistration', {
+          content_name: 'Discovery Quiz',
+          content_category: recommendation.title,
+        });
+      }
       setSubmitted(true);
     } catch {
       setSubmitted(true);

@@ -149,6 +149,13 @@ const BookingQuiz = () => {
         },
       });
       if (error) throw error;
+      // Meta Pixel: track booking quiz lead
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'Lead', {
+          content_name: 'Booking Quiz',
+          content_category: data.eventLabel || 'Event Inquiry',
+        });
+      }
       setSubmitted(true);
     } catch {
       toast({
