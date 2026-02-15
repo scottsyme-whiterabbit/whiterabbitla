@@ -96,6 +96,9 @@ const Experience = () => {
         </section>
       ))}
 
+      {/* Quiz CTA - after services */}
+      <QuizCTA title="Not Sure Which Experience Fits Your Event?" />
+
       {/* Atmosphere Photo Strip */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -116,9 +119,6 @@ const Experience = () => {
           </AnimatedSection>
         </div>
       </section>
-
-      {/* Quiz CTA */}
-      <QuizCTA title="Not Sure Which Experience Fits Your Event?" />
 
       {/* CTA */}
       <AnimatedSection>
