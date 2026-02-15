@@ -68,7 +68,7 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}>
             Experience Magic<br />
-            That Make Your Guests Feel Truly Alive
+            That Makes Your Guests Feel Truly Alive
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -96,7 +96,7 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}>
             Experience Magic<br />
-            That Make Your Guests Feel Truly Alive
+            That Makes Your Guests Feel Truly Alive
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
