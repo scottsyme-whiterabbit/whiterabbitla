@@ -195,6 +195,23 @@ const Reviews = () => {
             )}
           </div>
 
+          {/* Leave a Review CTA */}
+          <div className="text-center mt-16 mb-4">
+            <p className="font-serif text-2xl text-foreground mb-3">Experienced the Magic?</p>
+            <p className="font-sans text-sm text-muted-foreground mb-6 max-w-md mx-auto">
+              Your words help others discover the wonder. We'd love to hear about your experience.
+            </p>
+            <a
+              href="https://g.page/r/whiterabbitla/review"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors"
+            >
+              <Star size={16} className="fill-current" />
+              Leave a Google Review
+            </a>
+          </div>
+
           {/* Testimonials Disclaimer */}
           <p className="font-sans text-[10px] text-muted-foreground/40 text-center mt-12 max-w-xl mx-auto leading-relaxed">
             Individual experiences may vary. Testimonials reflect the personal opinions of verified clients and do not constitute a guarantee of similar results. All reviews are authentic and unedited.
