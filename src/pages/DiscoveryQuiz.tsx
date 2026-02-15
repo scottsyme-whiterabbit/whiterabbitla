@@ -346,7 +346,7 @@ const DiscoveryQuiz = () => {
                   ))}
                 </div>
 
-                {/* Divider + Recommendation */}
+                {/* Recommendation */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -394,14 +394,33 @@ const DiscoveryQuiz = () => {
                   </div>
                 </div>
 
-                {/* Downloadable persona card */}
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 2.2 }}
-                >
+                {/* Urgency CTA */}
+                <div className="text-center border border-accent/30 rounded p-8 bg-accent/5">
+                  <p className="font-serif text-2xl text-cream mb-2">Ready to Book Your Experience?</p>
+                  <p className="font-sans text-sm text-cream/60 mb-6">
+                    Scott's calendar fills up quickly, especially during peak event season. Lock in your preferred date before it's taken.
+                  </p>
+                  <button
+                    onClick={openQuiz}
+                    className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors mb-3"
+                  >
+                    Book an Experience
+                  </button>
+                  <p className="font-sans text-xs text-cream/40 tracking-wide">
+                    Limited availability. No obligation to confirm until you're ready.
+                  </p>
+                </div>
+
+                {/* Persona reveal + card */}
+                <div className="border-t border-cream/10 pt-8">
+                  <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3 text-center">
+                    Your Magic Guest Persona
+                  </p>
+                  <p className="font-sans text-sm text-cream/60 text-center mb-6">
+                    Save and share your persona card with friends.
+                  </p>
                   <PersonaCard persona={personas[getPersona(answers as QuizAnswer)]} />
-                </motion.div>
+                </div>
 
                 {/* Lead capture */}
                 {!submitted ? (
@@ -410,7 +429,7 @@ const DiscoveryQuiz = () => {
                       Want us to follow up with details?
                     </p>
                     <p className="font-sans text-sm text-cream/50 mb-6">
-                      Drop your info and we'll send you a personalized overview — no pressure, no spam.
+                      Drop your info and we'll send you a personalized overview. No pressure, no spam.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-3 mb-4">
                       <input
@@ -445,17 +464,6 @@ const DiscoveryQuiz = () => {
                     </p>
                   </div>
                 )}
-
-                {/* CTA to book */}
-                <div className="text-center pt-4">
-                  <p className="font-sans text-sm text-cream/40 mb-4">Ready to go?</p>
-                  <button
-                    onClick={openQuiz}
-                    className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-10 py-4 hover:bg-accent hover:text-accent-foreground transition-colors"
-                  >
-                    Book an Experience
-                  </button>
-                </div>
               </motion.div>
             </motion.div>
           )}
