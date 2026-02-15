@@ -24,6 +24,10 @@ serve(async (req) => {
     const isStory = format === "story";
     const aspectDesc = isStory ? "9:16 vertical story (1080x1920)" : "1:1 square post (1080x1080)";
 
+    const STORAGE_BASE = "https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets";
+    const symbolUrl = `${STORAGE_BASE}/wr-symbol.png`;
+    const primaryLogoUrl = `${STORAGE_BASE}/wr-primary-logo.png`;
+
     const prompt = `Create a luxurious, editorial-style Instagram ${isStory ? "story" : "post"} image for a high-end magic entertainment brand called "White Rabbit" by Scott Syme in Los Angeles.
 
 The image should be ${aspectDesc} aspect ratio.
@@ -32,11 +36,16 @@ Article title: "${title}"
 Article excerpt: "${excerpt}"
 Category: ${category}
 
+I am providing you with two brand logos:
+1. The first image is the White Rabbit SYMBOL (a rabbit silhouette). Place this prominently on the image.
+2. The second image is the White Rabbit PRIMARY LOGO (wordmark with three stars above it). Place this at the top or bottom of the image as the brand identifier.
+
+CRITICAL: You MUST incorporate BOTH of the provided logo images exactly as they appear (do not redraw or approximate them). Place them cleanly on the design.
+
 Design requirements:
 - Deep forest green (#2D4A3E) and cream/ivory color palette with dusty rose (#c8a0a0) accents
 - Elegant serif typography for the headline
 - The title text "${title}" should be prominently displayed on the image
-- Include "WHITE RABBIT" brand name in small, elegant tracking at the top or bottom
 - Include "whiterabbitla.com" subtly at the bottom
 - Sophisticated, moody, cinematic aesthetic (think luxury hotel lobby meets editorial magazine)
 - ${isStory ? "Vertical layout with text centered, generous spacing" : "Square layout, balanced composition"}
@@ -51,7 +60,14 @@ Design requirements:
       },
       body: JSON.stringify({
         model: "google/gemini-2.5-flash-image",
-        messages: [{ role: "user", content: prompt }],
+        messages: [{
+          role: "user",
+          content: [
+            { type: "text", text: prompt },
+            { type: "image_url", image_url: { url: symbolUrl } },
+            { type: "image_url", image_url: { url: primaryLogoUrl } },
+          ],
+        }],
         modalities: ["image", "text"],
       }),
     });
