@@ -27,6 +27,8 @@ import DiscoveryQuiz from "./pages/DiscoveryQuiz";
 import HostsPlaybook from "./pages/HostsPlaybook";
 import AdminNewsletter from "./pages/AdminNewsletter";
 import SocialGenerator from "./pages/SocialGenerator";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsOfService from "./pages/TermsOfService";
 import { getBlogArticleBySlug } from "./data/blogArticles";
 import { useParams } from "react-router-dom";
 
@@ -62,6 +64,8 @@ const AppContent = () => {
         <Route path="/guide" element={<HostsPlaybook />} />
         <Route path="/admin/newsletter" element={<AdminNewsletter />} />
         <Route path="/admin/social" element={<SocialGenerator />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsOfService />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

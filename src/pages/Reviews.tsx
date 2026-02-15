@@ -194,6 +194,11 @@ const Reviews = () => {
               </AnimatedSection>
             )}
           </div>
+
+          {/* Testimonials Disclaimer */}
+          <p className="font-sans text-[10px] text-muted-foreground/40 text-center mt-12 max-w-xl mx-auto leading-relaxed">
+            Individual experiences may vary. Testimonials reflect the personal opinions of verified clients and do not constitute a guarantee of similar results. All reviews are authentic and unedited.
+          </p>
         </div>
       </section>
 
