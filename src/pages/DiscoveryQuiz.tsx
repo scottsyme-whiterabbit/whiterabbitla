@@ -411,16 +411,68 @@ const DiscoveryQuiz = () => {
                   </p>
                 </div>
 
-                {/* Persona reveal + card */}
-                <div className="border-t border-cream/10 pt-8">
-                  <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3 text-center">
+                {/* Persona reveal + card — Zoltar-style dramatic reveal */}
+                <motion.div
+                  className="border-t border-cream/10 pt-10 relative overflow-hidden"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 2.5, duration: 0.8 }}
+                >
+                  {/* Mystical glow backdrop */}
+                  <motion.div
+                    className="absolute inset-0 pointer-events-none"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: [0, 0.6, 0.3] }}
+                    transition={{ delay: 2.8, duration: 2, ease: "easeOut" }}
+                    style={{
+                      background: "radial-gradient(ellipse at center, hsl(var(--accent) / 0.12) 0%, transparent 70%)",
+                    }}
+                  />
+
+                  <motion.p
+                    className="font-sans text-[10px] tracking-[0.4em] uppercase text-cream/40 text-center mb-2"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 2.8, duration: 0.6 }}
+                  >
+                    The cards have spoken
+                  </motion.p>
+
+                  <motion.p
+                    className="font-sans text-xs tracking-[0.3em] uppercase text-accent text-center mb-1"
+                    initial={{ opacity: 0, letterSpacing: "0.6em" }}
+                    animate={{ opacity: 1, letterSpacing: "0.3em" }}
+                    transition={{ delay: 3.1, duration: 0.8, ease: "easeOut" }}
+                  >
                     Your Magic Guest Persona
-                  </p>
-                  <p className="font-sans text-sm text-cream/60 text-center mb-6">
+                  </motion.p>
+
+                  <motion.div
+                    className="flex justify-center my-4"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ delay: 3.4, duration: 0.6, ease: "easeOut" }}
+                  >
+                    <div className="w-16 h-px bg-accent/40" />
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.92, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ delay: 3.6, duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <PersonaCard persona={personas[getPersona(answers as QuizAnswer)]} />
+                  </motion.div>
+
+                  <motion.p
+                    className="font-sans text-sm text-cream/50 text-center mt-5"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 4.2, duration: 0.6 }}
+                  >
                     Save and share your persona card with friends.
-                  </p>
-                  <PersonaCard persona={personas[getPersona(answers as QuizAnswer)]} />
-                </div>
+                  </motion.p>
+                </motion.div>
 
                 {/* Lead capture */}
                 {!submitted ? (
