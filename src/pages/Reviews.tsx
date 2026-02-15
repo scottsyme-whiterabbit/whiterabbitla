@@ -202,7 +202,7 @@ const Reviews = () => {
               Your words help others discover the wonder. We'd love to hear about your experience.
             </p>
             <a
-              href="https://g.page/r/whiterabbitla/review"
+              href="https://g.page/r/CXLCQWnGrGWrEAE/review"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors"
