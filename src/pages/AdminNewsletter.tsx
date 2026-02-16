@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import { Upload, Send, FileText, Users, Mail, RefreshCw, Trash2, Eye } from "lucide-react";
+import PlannerDripTab from "@/components/PlannerDripTab";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -39,7 +40,7 @@ const AdminNewsletter = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [storedPassword, setStoredPassword] = useState("");
 
-  const [activeTab, setActiveTab] = useState<"dashboard" | "contacts" | "compose" | "campaigns">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "contacts" | "compose" | "campaigns" | "planner">("dashboard");
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [stats, setStats] = useState<Stats>({ subscribers: 0, campaigns: 0, emailsSent: 0 });
@@ -56,6 +57,7 @@ const AdminNewsletter = () => {
   const [sending, setSending] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
   const [editedCampaignId, setEditedCampaignId] = useState<string | null>(null);
+
 
   const callAdmin = useCallback(async (action: string, payload: Record<string, unknown> = {}) => {
     const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
@@ -298,7 +300,7 @@ const AdminNewsletter = () => {
 
         {/* Tabs */}
         <div className="flex gap-1 mb-8 border-b border-border">
-          {(["dashboard", "contacts", "compose", "campaigns"] as const).map(tab => (
+          {(["dashboard", "contacts", "compose", "campaigns", "planner"] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -567,6 +569,11 @@ const AdminNewsletter = () => {
               <p className="text-center text-muted-foreground py-8">No campaigns yet. Go to Compose to create one.</p>
             )}
           </div>
+        )}
+
+        {/* Planner Drip Campaign */}
+        {activeTab === "planner" && (
+          <PlannerDripTab storedPassword={storedPassword} />
         )}
       </div>
     </div>
