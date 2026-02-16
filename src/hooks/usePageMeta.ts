@@ -27,7 +27,10 @@ function setMetaTag(property: string, content: string, isProperty = true) {
 export function usePageMeta({ title, description, path, image, type = "website" }: PageMeta) {
   useEffect(() => {
     const url = path ? `${BASE_URL}${path}` : BASE_URL;
-    const ogImage = image || DEFAULT_IMAGE;
+    // Handle Vite-imported images (relative /assets/...) by making them absolute
+    const ogImage = image
+      ? image.startsWith("http") ? image : `${BASE_URL}${image}`
+      : DEFAULT_IMAGE;
 
     // Standard
     document.title = title;

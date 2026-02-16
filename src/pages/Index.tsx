@@ -63,6 +63,7 @@ const Index = () => {
     title: "White Rabbit LA | Luxury Magic Entertainment — Los Angeles",
     description: "Bespoke magical experiences for Fortune 500 events, private celebrations, and luxury gatherings across Los Angeles and beyond. Magician Scott Syme.",
     path: "/",
+    image: heroImage,
   });
 
   return (

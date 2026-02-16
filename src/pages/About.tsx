@@ -14,6 +14,7 @@ const About = () => {
     title: "About Scott Syme | White Rabbit Magic — Los Angeles Magician",
     description: "Meet Scott Syme, the magician behind White Rabbit. A Magic Castle® member and former America's Got Talent consultant who has performed for Netflix, Disney, and Morgan Stanley.",
     path: "/about",
+    image: scottPhoto,
   });
   return (
     <main id="main-content" className="pt-20">

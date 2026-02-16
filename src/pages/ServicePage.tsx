@@ -266,6 +266,7 @@ const ServicePage = () => {
     title: page?.metaTitle || "White Rabbit LA",
     description: page?.metaDescription || "",
     path: serviceSlug ? `/services/${serviceSlug}` : "/experience",
+    image: page?.image,
   });
 
   // FAQ JSON-LD
