@@ -9,6 +9,8 @@ import corporateImg from "@/assets/event-penthouse-show.jpg";
 import privateImg from "@/assets/event-group-photo.jpg";
 import cardsEmeraldImg from "@/assets/event-cards-emerald.jpg";
 import intimateImg from "@/assets/event-closeup-intimate.jpg";
+import mentalistImg from "@/assets/event-mentalism-closeup.jpg";
+import guestLaughImg from "@/assets/event-guest-laughing.jpg";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 
@@ -17,7 +19,7 @@ const services = [
     title: "Close-Up Magic",
     slug: "close-up-magician",
     description: "Intimate sleight of hand, mentalism, and impossible coincidences performed inches away. But it's the hospitality that sets it apart. Scott moves through your event like a world-class host, weaving humor, audience participation, and sensory moments into every interaction, making each guest feel like the most important person in the room. Perfect for cocktail hours, dinners, and VIP receptions.",
-    image: closeupImg,
+    image: guestLaughImg,
   },
   {
     title: "Private Magic Shows",
@@ -119,7 +121,7 @@ const Experience = () => {
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={intimateImg} alt="Guests captivated by intimate close-up magic performance at luxury Los Angeles event" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={mentalistImg} alt="Scott Syme performing mentalism close-up for guest at private event" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.3}>
