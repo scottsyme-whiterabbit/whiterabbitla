@@ -33,7 +33,8 @@ const BlogArticle = () => {
     image: article ? (categoryImages[article.category] || experienceImg) : undefined,
   });
 
-  useArticleSchema(article || { title: "", metaDescription: "", slug: "", publishDate: "", category: "", content: [] });
+  const articleImage = article ? (categoryImages[article.category] || experienceImg) : undefined;
+  useArticleSchema(article ? { ...article, image: articleImage } : { title: "", metaDescription: "", slug: "", publishDate: "", category: "", content: [], image: undefined });
 
   if (!article) return null;
 
