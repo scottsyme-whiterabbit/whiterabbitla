@@ -9,8 +9,8 @@ const DRIP_LABELS = [
   { step: 0, subject: "The entertainment gap", day: 0 },
   { step: 1, subject: "Cocktail hour secret", day: 3 },
   { step: 2, subject: "Surprise your clients", day: 7 },
-  { step: 3, subject: "Not kids' magic", day: 14 },
-  { step: 4, subject: "Add to your list?", day: 21 },
+  { step: 3, subject: "Not your kids' magician", day: 14 },
+  { step: 4, subject: "Add to your vendor list?", day: 21 },
 ];
 
 interface PlannerDripTabProps {
@@ -66,7 +66,8 @@ const PlannerDripTab = ({ storedPassword }: PlannerDripTabProps) => {
     const cols = header.split(",").map(h => h.trim());
     const emailIdx = cols.findIndex(h => h.includes("email"));
     const nameIdx = cols.findIndex(h => h.includes("name") && !h.includes("company"));
-    const companyIdx = cols.findIndex(h => h.includes("company"));
+    const companyIdx = cols.findIndex(h => h.includes("company") || h.includes("business"));
+    const cityIdx = cols.findIndex(h => h.includes("city") || h.includes("location"));
 
     if (emailIdx === -1) {
       toast.error("CSV must have an 'email' column");
@@ -79,6 +80,7 @@ const PlannerDripTab = ({ storedPassword }: PlannerDripTabProps) => {
         email: c[emailIdx],
         name: nameIdx >= 0 ? c[nameIdx] : undefined,
         company: companyIdx >= 0 ? c[companyIdx] : undefined,
+        city: cityIdx >= 0 ? c[cityIdx] : undefined,
       };
     }).filter(c => c.email?.includes("@"));
 
@@ -104,7 +106,7 @@ const PlannerDripTab = ({ storedPassword }: PlannerDripTabProps) => {
     const lines = csvInput.split("\n").filter(l => l.trim());
     const contacts = lines.map(line => {
       const parts = line.split(",").map(p => p.trim());
-      return { email: parts[0], name: parts[1] || undefined, company: parts[2] || undefined };
+      return { email: parts[0], name: parts[1] || undefined, company: parts[2] || undefined, city: parts[3] || undefined };
     }).filter(c => c.email?.includes("@"));
 
     if (!contacts.length) {
@@ -245,17 +247,17 @@ const PlannerDripTab = ({ storedPassword }: PlannerDripTabProps) => {
             Upload CSV
             <input type="file" accept=".csv" onChange={handleCSVUpload} className="hidden" />
           </label>
-          <p className="text-xs text-muted-foreground self-center">CSV with email, name, company columns</p>
+          <p className="text-xs text-muted-foreground self-center">CSV with email, name, company, city columns</p>
         </div>
 
         <div className="mb-4">
           <label className="font-sans text-xs tracking-wider uppercase text-muted-foreground mb-2 block">
-            Or paste manually (email, name, company per line)
+            Or paste manually (email, name, company, city per line)
           </label>
           <textarea
             value={csvInput}
             onChange={e => setCsvInput(e.target.value)}
-            placeholder={"sarah@stellarevents.com, Sarah Chen, Stellar Events\njohn@luxwed.com, John Park, Lux Weddings"}
+            placeholder={"sarah@stellarevents.com, Sarah Chen, Stellar Events, Los Angeles\njohn@luxwed.com, John Park, Lux Weddings, San Diego"}
             rows={4}
             className="w-full bg-forest-dark/50 border border-border text-foreground px-4 py-3 font-sans text-sm focus:outline-none focus:border-accent resize-none font-mono"
           />

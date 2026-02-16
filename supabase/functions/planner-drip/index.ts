@@ -17,7 +17,7 @@ const DRIP_SCHEDULE = [0, 3, 7, 14, 21]; // Day 0, 3, 7, 14, 21
 interface EmailTemplate {
   subject: string;
   preheader: string;
-  body: (name: string, company: string) => string;
+  body: (name: string, company: string, city: string) => string;
 }
 
 function wrapEmail(preheader: string, innerHtml: string, email: string): string {
@@ -96,62 +96,62 @@ const TEMPLATES: EmailTemplate[] = [
   // Email 1: Day 0 — The Gap Hook
   {
     subject: "The entertainment gap",
-    preheader: "Your clients want events that last.",
-    body: (name, company) => {
-      const companyLine = company ? ` your recent ${company} event` : " your work";
+    preheader: "Every planner hits this wall.",
+    body: (name, _company, city) => {
+      const cityLine = city ? ` in ${city}` : "";
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
-<p style="margin:0 0 18px;">Been admiring${companyLine}. Killer vibe.</p>
-<p style="margin:0 0 18px;">Event planners are up against guests tuning out mid-cocktail hour. We've seen top planners close the gap with modern magic that turns "nice event" into "unforgettable."</p>
+<p style="margin:0 0 18px;">Planning events${cityLine}? Every event pro I talk to hits the same wall: cocktail hour energy drops, guests drift to their phones, and the night loses momentum before dinner even starts.</p>
+<p style="margin:0 0 18px;">We've helped teams at Soho House and Rolls-Royce close that gap with modern close-up magic that keeps guests locked in.</p>
 <p style="margin:0 0 18px;">${shareLink("entertainment-gap-planners-dont-know.html", "See why it works →")}</p>
-<p style="margin:0 0 18px;">Open to how it fits yours?</p>
+<p style="margin:0 0 18px;">Open to seeing how it fits yours?</p>
 ${signoff(true)}
-${ps("Not kids' birthday stuff. Sophisticated sleight for adults.")}
+${ps("Not kids' birthday stuff. Sophisticated sleight of hand for adults.")}
 </td></tr>`;
     },
   },
   // Email 2: Day 3 — Cocktail Hour Value
   {
     subject: "Cocktail hour secret",
-    preheader: "Turn mingling into magic.",
-    body: (name, _company) => {
+    preheader: "Turn mingling into the highlight.",
+    body: (name, _company, _city) => {
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">${name},</p>
-<p style="margin:0 0 18px;">Cocktail hours are make-or-break for your events.</p>
-<p style="margin:0 0 18px;">Planners battle dead air: guests scrolling phones instead of connecting. We've watched it flip for clients like Morgan Stanley. 200 guests hooked, raving for weeks.</p>
+<p style="margin:0 0 18px;">Cocktail hours are make-or-break.</p>
+<p style="margin:0 0 18px;">Dead air, awkward mingling, guests checking the time. I've watched it flip for clients like Morgan Stanley. 200 guests, nobody left early, raving about it for weeks.</p>
 <p style="margin:0 0 18px;">${shareLink("why-cocktail-hour-entertainment-matters.html", "Quick read on why it matters →")}</p>
 <p style="margin:0 0 18px;">Worth exploring for your next one?</p>
 ${signoff()}
-${ps("Close-up magic that feels like a private show.")}
+${ps("Close-up magic that feels like a private show, not a stage act.")}
 </td></tr>`;
     },
   },
   // Email 3: Day 7 — The Surprise Factor
   {
     subject: "Surprise your clients",
-    preheader: "Entertainment they didn't know they craved.",
-    body: (name, _company) => {
+    preheader: "Entertainment they didn't know they wanted.",
+    body: (name, _company, _city) => {
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
-<p style="margin:0 0 18px;">Your clients hire you for the wow.</p>
-<p style="margin:0 0 18px;">But most events blend in, until you add the unexpected. Planners we've partnered with use this to get "best vendor ever" texts.</p>
+<p style="margin:0 0 18px;">Your clients hire you for the wow. But most events blend together until you add the thing nobody expected.</p>
+<p style="margin:0 0 18px;">Event pros we've partnered with at places like the Hollywood Roosevelt and Paramount use this to get "best vendor ever" texts the next morning.</p>
 <p style="margin:0 0 18px;">${shareLink("surprise-clients-entertainment-they-didnt-know-they-wanted.html", "See the surprise in action →")}</p>
 <p style="margin:0 0 18px;">Open to a peek at how?</p>
 ${signoff(true)}
-${ps("Parlor shows or roaming magic. Your call.")}
+${ps("Parlor shows or roaming magic. Scales to your event.")}
 </td></tr>`;
     },
   },
   // Email 4: Day 14 — Modern Magic Proof
   {
-    subject: "Not kids' magic",
-    preheader: "Adult events, elevated.",
-    body: (name, _company) => {
+    subject: "Not your kids' magician",
+    preheader: "Luxury events deserve better.",
+    body: (name, _company, _city) => {
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">${name},</p>
 <p style="margin:0 0 18px;">Quick one for event pros:</p>
-<p style="margin:0 0 18px;">Clients want luxury, not clowns and rabbits. We've helped planners level up with close-up mentalism that feels cinematic.</p>
-<p style="margin:0 0 18px;">${shareLink("not-kids-birthday-party-modern-magic.html", "Check the difference →")}</p>
+<p style="margin:0 0 18px;">Your clients want luxury, not rabbits from hats. We've helped planners level up with close-up mentalism that feels cinematic. Netflix, Disney, and Rivian have all booked it.</p>
+<p style="margin:0 0 18px;">${shareLink("not-kids-birthday-party-modern-magic.html", "See the difference →")}</p>
 <p style="margin:0 0 18px;">Thoughts on trying it?</p>
 ${signoff()}
 ${ps("Member of the Magic Castle. Disney + AGT vetted.")}
@@ -160,17 +160,17 @@ ${ps("Member of the Magic Castle. Disney + AGT vetted.")}
   },
   // Email 5: Day 21 — Vendor List Closer
   {
-    subject: "Add to your list?",
+    subject: "Add to your vendor list?",
     preheader: "One vendor that changes everything.",
-    body: (name, _company) => {
+    body: (name, _company, _city) => {
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
-<p style="margin:0 0 18px;">Event planners are stacking their vendor lists with game-changers. Why? To deliver the magic clients remember.</p>
-<p style="margin:0 0 18px;">Top ones added this, and got repeat business.</p>
+<p style="margin:0 0 18px;">Event pros are stacking their vendor lists with game-changers. The ones who added this got repeat business and referrals they didn't ask for.</p>
+<p style="margin:0 0 18px;">Taittinger, Hyatt, Lionsgate. Different events, same result.</p>
 <p style="margin:0 0 18px;">${shareLink("why-event-planners-adding-magician-vendor-list.html", "See why →")}</p>
-<p style="margin:0 0 18px;">Open to chatting fits?</p>
+<p style="margin:0 0 18px;">Open to chatting about fit?</p>
 ${signoff(true)}
-${ps(`30-sec quiz for your event's magic match: <a href="${APP_URL}/quiz" style="color:#c8a0a0; text-decoration:none;">whiterabbitla.com</a>`)}
+${ps(`30-sec quiz for your event's magic match: <a href="${APP_URL}/quiz" style="color:#c8a0a0; text-decoration:none;">whiterabbitla.com/quiz</a>`)}
 </td></tr>`;
     },
   },
@@ -231,6 +231,7 @@ serve(async (req) => {
                 drip_started_at: new Date().toISOString(),
                 company: c.company || null,
                 name: c.name || undefined,
+                city: c.city || null,
               })
               .eq("id", existing.id);
             enrolled++;
@@ -242,6 +243,7 @@ serve(async (req) => {
             email,
             name: c.name || null,
             company: c.company || null,
+            city: c.city || null,
             source: "planner-drip",
             subscribed: true,
             drip_step: 0,
@@ -303,8 +305,9 @@ serve(async (req) => {
         const template = TEMPLATES[step];
         const firstName = contact.name?.split(" ")[0] || "there";
         const company = contact.company || "";
+        const city = contact.city || "";
 
-        const bodyInner = template.body(firstName, company);
+        const bodyInner = template.body(firstName, company, city);
         const html = wrapEmail(template.preheader, bodyInner, contact.email);
 
         try {
@@ -364,7 +367,7 @@ serve(async (req) => {
       }
 
       const template = TEMPLATES[stepNum];
-      const innerHtml = template.body("Sarah", "Stellar Events");
+      const innerHtml = template.body("Sarah", "Stellar Events", "Los Angeles");
       const html = wrapEmail(template.preheader, innerHtml, "preview@example.com");
 
       return new Response(JSON.stringify({

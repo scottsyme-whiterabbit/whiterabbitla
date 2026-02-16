@@ -172,6 +172,7 @@ export type Database = {
       }
       newsletter_contacts: {
         Row: {
+          city: string | null
           company: string | null
           created_at: string
           drip_campaign: string
@@ -186,6 +187,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          city?: string | null
           company?: string | null
           created_at?: string
           drip_campaign?: string
@@ -200,6 +202,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          city?: string | null
           company?: string | null
           created_at?: string
           drip_campaign?: string
