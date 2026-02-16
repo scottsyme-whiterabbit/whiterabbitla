@@ -170,6 +170,38 @@ export type Database = {
         }
         Relationships: []
       }
+      newsletter_clicks: {
+        Row: {
+          clicked_at: string
+          contact_id: string
+          drip_step: number
+          id: string
+          link_slug: string
+        }
+        Insert: {
+          clicked_at?: string
+          contact_id: string
+          drip_step: number
+          id?: string
+          link_slug: string
+        }
+        Update: {
+          clicked_at?: string
+          contact_id?: string
+          drip_step?: number
+          id?: string
+          link_slug?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "newsletter_clicks_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "newsletter_contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       newsletter_contacts: {
         Row: {
           city: string | null
@@ -179,9 +211,11 @@ export type Database = {
           drip_started_at: string | null
           drip_step: number
           email: string
+          engagement_status: string
           id: string
           last_emailed_at: string | null
           name: string | null
+          reply_detected: boolean
           source: string | null
           subscribed: boolean
           updated_at: string
@@ -194,9 +228,11 @@ export type Database = {
           drip_started_at?: string | null
           drip_step?: number
           email: string
+          engagement_status?: string
           id?: string
           last_emailed_at?: string | null
           name?: string | null
+          reply_detected?: boolean
           source?: string | null
           subscribed?: boolean
           updated_at?: string
@@ -209,9 +245,11 @@ export type Database = {
           drip_started_at?: string | null
           drip_step?: number
           email?: string
+          engagement_status?: string
           id?: string
           last_emailed_at?: string | null
           name?: string | null
+          reply_detected?: boolean
           source?: string | null
           subscribed?: boolean
           updated_at?: string

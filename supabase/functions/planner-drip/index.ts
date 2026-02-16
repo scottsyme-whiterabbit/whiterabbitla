@@ -10,14 +10,17 @@ const corsHeaders = {
 const LOGO_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-symbol.png";
 const SITE_URL = "https://whiterabbitla.com";
 const APP_URL = "https://whiterabbitla.lovable.app";
+const TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-click";
 
 // Day offsets for each drip step
 const DRIP_SCHEDULE = [0, 3, 7, 14, 21]; // Day 0, 3, 7, 14, 21
+const WARM_SCHEDULE = [0, 3, 7]; // Day 0, 3, 7 after entering warm
+const BREAKUP_DAY = 28; // Day 28 from original start for non-clickers
 
 interface EmailTemplate {
   subject: string;
   preheader: string;
-  body: (name: string, company: string, city: string) => string;
+  body: (name: string, company: string, city: string, contactId?: string, step?: number) => string;
 }
 
 function wrapEmail(preheader: string, innerHtml: string, email: string): string {
@@ -88,22 +91,36 @@ function ps(text: string): string {
   return `<p style="margin:20px 0 0; font-family:Georgia,serif; font-size:13px; font-style:italic; line-height:1.7; color:rgba(245,240,232,0.5);">P.S. ${text}</p>`;
 }
 
+// Tracked link: wraps a URL through the click tracker with contact ID and step
+function trackedLink(url: string, text: string, contactId: string, step: number): string {
+  const trackingUrl = `${TRACK_URL}?cid=${contactId}&step=${step}&r=${encodeURIComponent(url)}`;
+  return `<a href="${trackingUrl}" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);" target="_blank">${text}</a>`;
+}
+
+// Plain link (for previews/tests where no contact ID exists)
 function shareLink(slug: string, text: string): string {
   return `<a href="${SITE_URL}/share/${slug}" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);" target="_blank">${text}</a>`;
 }
+
+// ═══════════════════════════════════════════════
+// PLANNER DRIP TEMPLATES (5 emails)
+// ═══════════════════════════════════════════════
 
 const TEMPLATES: EmailTemplate[] = [
   // Email 1: Day 0 — The Gap Hook
   {
     subject: "The entertainment gap",
     preheader: "Every planner hits this wall.",
-    body: (name, _company, city) => {
+    body: (name, _company, city, contactId, step) => {
       const cityLine = city ? ` in ${city}` : "";
+      const link = contactId
+        ? trackedLink(`${SITE_URL}/share/entertainment-gap-planners-dont-know.html`, "See why it works →", contactId, step ?? 0)
+        : shareLink("entertainment-gap-planners-dont-know.html", "See why it works →");
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
 <p style="margin:0 0 18px;">Planning events${cityLine}? Every event pro I talk to hits the same wall: cocktail hour energy drops, guests drift to their phones, and the night loses momentum before dinner even starts.</p>
 <p style="margin:0 0 18px;">We've helped teams at Soho House and Rolls-Royce close that gap. Sometimes it's roaming close-up magic during cocktails. Other times it's a full private show after dinner that nobody saw coming. Either way, guests stay locked in all night.</p>
-<p style="margin:0 0 18px;">${shareLink("entertainment-gap-planners-dont-know.html", "See why it works →")}</p>
+<p style="margin:0 0 18px;">${link}</p>
 <p style="margin:0 0 18px;">Open to seeing how it fits yours?</p>
 ${signoff(true)}
 ${ps("Not kids' birthday stuff. Sophisticated sleight of hand, mentalism, and private shows for adults.")}
@@ -114,13 +131,16 @@ ${ps("Not kids' birthday stuff. Sophisticated sleight of hand, mentalism, and pr
   {
     subject: "Cocktail hour secret",
     preheader: "Turn mingling into the highlight.",
-    body: (name, _company, _city) => {
+    body: (name, _company, _city, contactId, step) => {
+      const link = contactId
+        ? trackedLink(`${SITE_URL}/share/why-cocktail-hour-entertainment-matters.html`, "Quick read on why it matters →", contactId, step ?? 1)
+        : shareLink("why-cocktail-hour-entertainment-matters.html", "Quick read on why it matters →");
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">${name},</p>
 <p style="margin:0 0 18px;">Cocktail hours are make-or-break.</p>
 <p style="margin:0 0 18px;">Dead air, awkward mingling, guests checking the time. I've watched it flip for clients like Morgan Stanley. 200 guests, nobody left early, raving about it for weeks.</p>
 <p style="margin:0 0 18px;">For smaller gatherings, we also do intimate private shows: emerald curtains, cinematic lighting, a curated 45-minute performance that turns any room into an experience. Perfect as the main event or a post-dinner surprise.</p>
-<p style="margin:0 0 18px;">${shareLink("why-cocktail-hour-entertainment-matters.html", "Quick read on why it matters →")}</p>
+<p style="margin:0 0 18px;">${link}</p>
 <p style="margin:0 0 18px;">Worth exploring for your next one?</p>
 ${signoff()}
 ${ps("Close-up magic, parlor shows, or both. We tailor it to your event.")}
@@ -131,12 +151,15 @@ ${ps("Close-up magic, parlor shows, or both. We tailor it to your event.")}
   {
     subject: "Surprise your clients",
     preheader: "Entertainment they didn't know they wanted.",
-    body: (name, _company, _city) => {
+    body: (name, _company, _city, contactId, step) => {
+      const link = contactId
+        ? trackedLink(`${SITE_URL}/share/surprise-clients-entertainment-they-didnt-know-they-wanted.html`, "See the surprise in action →", contactId, step ?? 2)
+        : shareLink("surprise-clients-entertainment-they-didnt-know-they-wanted.html", "See the surprise in action →");
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
 <p style="margin:0 0 18px;">Your clients hire you for the wow. But most events blend together until you add the thing nobody expected.</p>
 <p style="margin:0 0 18px;">Event pros we've partnered with at places like the Hollywood Roosevelt and Paramount use this to get "best vendor ever" texts the next morning. Sometimes it's roaming magic during cocktails. Sometimes it's a full private magic show as the main event. The format flexes to whatever makes the night unforgettable.</p>
-<p style="margin:0 0 18px;">${shareLink("surprise-clients-entertainment-they-didnt-know-they-wanted.html", "See the surprise in action →")}</p>
+<p style="margin:0 0 18px;">${link}</p>
 <p style="margin:0 0 18px;">Open to a peek at how?</p>
 ${signoff(true)}
 ${ps("From 20-person dinners to 300-person galas. Scales to your event.")}
@@ -147,12 +170,15 @@ ${ps("From 20-person dinners to 300-person galas. Scales to your event.")}
   {
     subject: "Not your kids' magician",
     preheader: "Luxury events deserve better.",
-    body: (name, _company, _city) => {
+    body: (name, _company, _city, contactId, step) => {
+      const link = contactId
+        ? trackedLink(`${SITE_URL}/share/not-kids-birthday-party-modern-magic.html`, "See the difference →", contactId, step ?? 3)
+        : shareLink("not-kids-birthday-party-modern-magic.html", "See the difference →");
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">${name},</p>
 <p style="margin:0 0 18px;">Quick one for event pros:</p>
 <p style="margin:0 0 18px;">Your clients want luxury, not rabbits from hats. We bring close-up mentalism that feels cinematic and private shows that transform any room into something extraordinary. Custom lighting, emerald curtains, a curated soundtrack. Netflix, Disney, and Rivian have all booked it.</p>
-<p style="margin:0 0 18px;">${shareLink("not-kids-birthday-party-modern-magic.html", "See the difference →")}</p>
+<p style="margin:0 0 18px;">${link}</p>
 <p style="margin:0 0 18px;">Thoughts on trying it?</p>
 ${signoff()}
 ${ps("Member of the Magic Castle. Disney + AGT vetted. Close-up, parlor, and corporate shows.")}
@@ -163,12 +189,15 @@ ${ps("Member of the Magic Castle. Disney + AGT vetted. Close-up, parlor, and cor
   {
     subject: "Add to your vendor list?",
     preheader: "One vendor, three formats.",
-    body: (name, _company, _city) => {
+    body: (name, _company, _city, contactId, step) => {
+      const link = contactId
+        ? trackedLink(`${SITE_URL}/share/why-event-planners-adding-magician-vendor-list.html`, "See why →", contactId, step ?? 4)
+        : shareLink("why-event-planners-adding-magician-vendor-list.html", "See why →");
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
 <p style="margin:0 0 18px;">Event pros are stacking their vendor lists with game-changers. The ones who added this got repeat business and referrals they didn't ask for.</p>
 <p style="margin:0 0 18px;">Taittinger, Hyatt, Lionsgate. Cocktail receptions, corporate galas, private dinners. One vendor that covers close-up magic, full private shows, and everything in between.</p>
-<p style="margin:0 0 18px;">${shareLink("why-event-planners-adding-magician-vendor-list.html", "See why →")}</p>
+<p style="margin:0 0 18px;">${link}</p>
 <p style="margin:0 0 18px;">Open to chatting about fit?</p>
 ${signoff(true)}
 ${ps(`30-sec quiz to find your event's perfect format: <a href="${APP_URL}/quiz" style="color:#c8a0a0; text-decoration:none;">whiterabbitla.com/quiz</a>`)}
@@ -177,13 +206,85 @@ ${ps(`30-sec quiz to find your event's perfect format: <a href="${APP_URL}/quiz"
   },
 ];
 
+// ═══════════════════════════════════════════════
+// WARM LEAD TEMPLATES (3 emails for clickers)
+// ═══════════════════════════════════════════════
+
+const WARM_TEMPLATES: EmailTemplate[] = [
+  // Warm 1: Day 0 — Acknowledge interest
+  {
+    subject: "Quick thought for your next event",
+    preheader: "Since you were curious...",
+    body: (name, _company, _city) => {
+      return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
+<p style="margin:0 0 18px;">Hey ${name},</p>
+<p style="margin:0 0 18px;">I noticed you checked out some of our work. Figured I'd reach out directly.</p>
+<p style="margin:0 0 18px;">Most planners I work with start with a quick 10-minute call to talk through the event, the vibe, and which format would land best. No pitch, just a conversation about what would actually make your event unforgettable.</p>
+<p style="margin:0 0 18px;">Want to find 10 minutes this week?</p>
+<p style="margin:0 0 18px;"><a href="mailto:events@whiterabbitla.com?subject=Let's%20chat%20about%20an%20event" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">Just reply to this email</a> or call me at (424) 394-1850.</p>
+${signoff(true)}
+</td></tr>`;
+    },
+  },
+  // Warm 2: Day 3 — Social proof reinforcement
+  {
+    subject: "What Soho House said",
+    preheader: "Real feedback from real events.",
+    body: (name, _company, _city) => {
+      return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
+<p style="margin:0 0 18px;">${name},</p>
+<p style="margin:0 0 18px;">Quick share: after our last show at Soho House, the events team told us it was the highest-rated entertainment they'd ever booked. Guests literally wouldn't leave the room.</p>
+<p style="margin:0 0 18px;">That's the thing about what we do. It's not background entertainment. It's the thing people talk about at brunch the next day.</p>
+<p style="margin:0 0 18px;">Would love to show you what that looks like for your events. Even a quick call helps me understand what you're working with.</p>
+${signoff()}
+${ps("No commitment. Just a conversation.")}
+</td></tr>`;
+    },
+  },
+  // Warm 3: Day 7 — Direct CTA
+  {
+    subject: "Before I move on",
+    preheader: "Last note from me.",
+    body: (name, _company, _city) => {
+      return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
+<p style="margin:0 0 18px;">Hey ${name},</p>
+<p style="margin:0 0 18px;">I know inboxes get crowded, so I'll keep this short.</p>
+<p style="margin:0 0 18px;">If you've got an event coming up where you want guests to feel genuinely alive and taken care of, I'd love to chat. 10 minutes, no pressure.</p>
+<p style="margin:0 0 18px;">If the timing isn't right, no worries at all. You know where to find me when it is.</p>
+<p style="margin:0 0 18px;"><a href="mailto:events@whiterabbitla.com?subject=Let's%20chat%20about%20an%20event" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">Reply here</a> · <a href="tel:+14243941850" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">(424) 394-1850</a> · <a href="${APP_URL}/quiz" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">Take the quiz</a></p>
+${signoff(true)}
+</td></tr>`;
+    },
+  },
+];
+
+// ═══════════════════════════════════════════════
+// BREAKUP EMAIL (for non-clickers after Day 28)
+// ═══════════════════════════════════════════════
+
+const BREAKUP_TEMPLATE: EmailTemplate = {
+  subject: "Closing the loop",
+  preheader: "Last one from me.",
+  body: (name, _company, _city) => {
+    return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
+<p style="margin:0 0 18px;">Hey ${name},</p>
+<p style="margin:0 0 18px;">I've sent a few notes and I get it. Timing matters more than anything in this business.</p>
+<p style="margin:0 0 18px;">I'll stop filling your inbox. But if you ever have an event where you want to blow your clients away with something they've never experienced before, I'm a phone call away.</p>
+<p style="margin:0 0 18px;"><a href="mailto:events@whiterabbitla.com" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">events@whiterabbitla.com</a> · <a href="tel:+14243941850" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">(424) 394-1850</a></p>
+<p style="margin:0 0 18px;">Wishing you incredible events ahead.</p>
+${signoff(true)}
+</td></tr>`;
+  },
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { action, adminPassword, contacts: newContacts, step: requestedStep } = await req.json();
+    const reqBody = await req.json();
+    const { action, adminPassword, contacts: newContacts, step: requestedStep, testEmail } = reqBody;
 
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
     const ADMIN_PASSWORD = Deno.env.get("ADMIN_PASSWORD");
@@ -214,7 +315,6 @@ serve(async (req) => {
         if (!c.email) continue;
         const email = c.email.toLowerCase().trim();
 
-        // Check if already exists
         const { data: existing } = await supabase
           .from("newsletter_contacts")
           .select("id, drip_campaign")
@@ -222,7 +322,6 @@ serve(async (req) => {
           .maybeSingle();
 
         if (existing) {
-          // Update to planner campaign if they're on welcome
           if (existing.drip_campaign !== "planner") {
             await supabase
               .from("newsletter_contacts")
@@ -233,6 +332,7 @@ serve(async (req) => {
                 company: c.company || null,
                 name: c.name || undefined,
                 city: c.city || null,
+                engagement_status: "new",
               })
               .eq("id", existing.id);
             enrolled++;
@@ -250,6 +350,7 @@ serve(async (req) => {
             drip_step: 0,
             drip_campaign: "planner",
             drip_started_at: new Date().toISOString(),
+            engagement_status: "new",
           });
           enrolled++;
         }
@@ -268,86 +369,157 @@ serve(async (req) => {
         });
       }
 
-      // Get all planner drip contacts who haven't completed the sequence
-      const { data: contacts, error: contactsErr } = await supabase
+      const now = new Date();
+      let sent = 0;
+      const errors: string[] = [];
+
+      // ── Process PLANNER drip contacts ──
+      const { data: plannerContacts } = await supabase
         .from("newsletter_contacts")
         .select("*")
         .eq("drip_campaign", "planner")
         .eq("subscribed", true)
         .lt("drip_step", 5);
 
-      if (contactsErr) {
-        console.error("Query error:", contactsErr);
-        return new Response(JSON.stringify({ error: "Database error" }), {
-          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
+      if (plannerContacts?.length) {
+        for (const contact of plannerContacts) {
+          const step = contact.drip_step;
+          if (step >= 5) continue;
 
-      if (!contacts?.length) {
-        return new Response(JSON.stringify({ processed: 0, message: "No contacts due" }), {
-          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
+          const startedAt = new Date(contact.drip_started_at);
+          const daysSinceStart = (now.getTime() - startedAt.getTime()) / (1000 * 60 * 60 * 24);
+          if (daysSinceStart < DRIP_SCHEDULE[step]) continue;
 
-      const now = new Date();
-      let sent = 0;
-      const errors: string[] = [];
+          const template = TEMPLATES[step];
+          const firstName = contact.name?.split(" ")[0] || "there";
+          const bodyInner = template.body(firstName, contact.company || "", contact.city || "", contact.id, step);
+          const html = wrapEmail(template.preheader, bodyInner, contact.email);
 
-      for (const contact of contacts) {
-        const step = contact.drip_step; // 0-4 = next email to send (1-5)
-        if (step >= 5) continue;
-
-        const startedAt = new Date(contact.drip_started_at);
-        const daysSinceStart = (now.getTime() - startedAt.getTime()) / (1000 * 60 * 60 * 24);
-
-        // Check if it's time for this step
-        if (daysSinceStart < DRIP_SCHEDULE[step]) continue;
-
-        const template = TEMPLATES[step];
-        const firstName = contact.name?.split(" ")[0] || "there";
-        const company = contact.company || "";
-        const city = contact.city || "";
-
-        const bodyInner = template.body(firstName, company, city);
-        const html = wrapEmail(template.preheader, bodyInner, contact.email);
-
-        try {
-          const res = await fetch("https://api.resend.com/emails", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${RESEND_API_KEY}`,
-            },
-            body: JSON.stringify({
-              from: "Scott Syme | White Rabbit LA <scott.syme@whiterabbitla.com>",
-              to: [contact.email],
-              subject: template.subject,
-              html,
-            }),
-          });
-
-          if (res.ok) {
-            sent++;
-            await supabase
-              .from("newsletter_contacts")
-              .update({
-                drip_step: step + 1,
-                last_emailed_at: now.toISOString(),
-              })
-              .eq("id", contact.id);
-          } else {
-            const errData = await res.json();
-            errors.push(`${contact.email}: ${JSON.stringify(errData)}`);
+          try {
+            const res = await fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
+              body: JSON.stringify({
+                from: "Scott Syme | White Rabbit LA <scott.syme@whiterabbitla.com>",
+                to: [contact.email],
+                subject: template.subject,
+                html,
+              }),
+            });
+            if (res.ok) {
+              sent++;
+              await supabase.from("newsletter_contacts").update({ drip_step: step + 1, last_emailed_at: now.toISOString() }).eq("id", contact.id);
+            } else {
+              const errData = await res.json();
+              errors.push(`${contact.email}: ${JSON.stringify(errData)}`);
+            }
+          } catch (e) {
+            errors.push(`${contact.email}: ${e instanceof Error ? e.message : "Send error"}`);
           }
-        } catch (e) {
-          errors.push(`${contact.email}: ${e instanceof Error ? e.message : "Send error"}`);
+          await new Promise(r => setTimeout(r, 200));
         }
-
-        // Rate limit: small delay between sends
-        await new Promise(r => setTimeout(r, 200));
       }
 
-      return new Response(JSON.stringify({ processed: contacts.length, sent, errors: errors.length ? errors : undefined }), {
+      // ── Branch completed planner contacts ──
+      // Contacts at step 5 (finished planner drip): check engagement
+      const { data: completedContacts } = await supabase
+        .from("newsletter_contacts")
+        .select("*")
+        .eq("drip_campaign", "planner")
+        .eq("subscribed", true)
+        .eq("drip_step", 5);
+
+      if (completedContacts?.length) {
+        for (const contact of completedContacts) {
+          if (contact.engagement_status === "warm" || contact.engagement_status === "hot") {
+            // Move to warm-lead campaign
+            await supabase.from("newsletter_contacts").update({
+              drip_campaign: "planner-warm",
+              drip_step: 0,
+              drip_started_at: now.toISOString(),
+            }).eq("id", contact.id);
+          } else {
+            // Non-clicker: check if it's time for breakup email
+            const startedAt = new Date(contact.drip_started_at);
+            const daysSinceStart = (now.getTime() - startedAt.getTime()) / (1000 * 60 * 60 * 24);
+            if (daysSinceStart >= BREAKUP_DAY) {
+              const firstName = contact.name?.split(" ")[0] || "there";
+              const bodyInner = BREAKUP_TEMPLATE.body(firstName, contact.company || "", contact.city || "");
+              const html = wrapEmail(BREAKUP_TEMPLATE.preheader, bodyInner, contact.email);
+              try {
+                const res = await fetch("https://api.resend.com/emails", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
+                  body: JSON.stringify({
+                    from: "Scott Syme | White Rabbit LA <scott.syme@whiterabbitla.com>",
+                    to: [contact.email],
+                    subject: BREAKUP_TEMPLATE.subject,
+                    html,
+                  }),
+                });
+                if (res.ok) {
+                  sent++;
+                  await supabase.from("newsletter_contacts").update({
+                    drip_campaign: "planner-done",
+                    drip_step: 6,
+                    last_emailed_at: now.toISOString(),
+                    engagement_status: "cold",
+                  }).eq("id", contact.id);
+                }
+              } catch (_e) { /* skip */ }
+            }
+          }
+        }
+      }
+
+      // ── Process WARM LEAD campaign ──
+      const { data: warmContacts } = await supabase
+        .from("newsletter_contacts")
+        .select("*")
+        .eq("drip_campaign", "planner-warm")
+        .eq("subscribed", true)
+        .lt("drip_step", 3);
+
+      if (warmContacts?.length) {
+        for (const contact of warmContacts) {
+          const step = contact.drip_step;
+          if (step >= 3) continue;
+
+          const startedAt = new Date(contact.drip_started_at);
+          const daysSinceStart = (now.getTime() - startedAt.getTime()) / (1000 * 60 * 60 * 24);
+          if (daysSinceStart < WARM_SCHEDULE[step]) continue;
+
+          const template = WARM_TEMPLATES[step];
+          const firstName = contact.name?.split(" ")[0] || "there";
+          const bodyInner = template.body(firstName, contact.company || "", contact.city || "");
+          const html = wrapEmail(template.preheader, bodyInner, contact.email);
+
+          try {
+            const res = await fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
+              body: JSON.stringify({
+                from: "Scott Syme | White Rabbit LA <scott.syme@whiterabbitla.com>",
+                to: [contact.email],
+                subject: template.subject,
+                html,
+              }),
+            });
+            if (res.ok) {
+              sent++;
+              const newStep = step + 1;
+              await supabase.from("newsletter_contacts").update({
+                drip_step: newStep,
+                last_emailed_at: now.toISOString(),
+                ...(newStep >= 3 ? { drip_campaign: "planner-done" } : {}),
+              }).eq("id", contact.id);
+            }
+          } catch (_e) { /* skip */ }
+          await new Promise(r => setTimeout(r, 200));
+        }
+      }
+
+      return new Response(JSON.stringify({ processed: (plannerContacts?.length || 0) + (warmContacts?.length || 0) + (completedContacts?.length || 0), sent, errors: errors.length ? errors : undefined }), {
         status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -359,29 +531,36 @@ serve(async (req) => {
           status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const stepNum = requestedStep ?? 0;
 
-      if (stepNum < 0 || stepNum >= TEMPLATES.length) {
-        return new Response(JSON.stringify({ error: "Invalid step (0-4)" }), {
-          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+      const stepNum = requestedStep ?? 0;
+      const campaign = reqBody.campaign || "planner";
+
+      if (campaign === "planner-warm") {
+        if (stepNum < 0 || stepNum >= WARM_TEMPLATES.length) {
+          return new Response(JSON.stringify({ error: "Invalid step (0-2)" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        }
+        const template = WARM_TEMPLATES[stepNum];
+        const innerHtml = template.body("Sarah", "Stellar Events", "Los Angeles");
+        const html = wrapEmail(template.preheader, innerHtml, "preview@example.com");
+        return new Response(JSON.stringify({ subject: template.subject, preheader: template.preheader, body_html: html, day: WARM_SCHEDULE[stepNum], campaign: "planner-warm" }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
 
+      if (campaign === "breakup") {
+        const innerHtml = BREAKUP_TEMPLATE.body("Sarah", "Stellar Events", "Los Angeles");
+        const html = wrapEmail(BREAKUP_TEMPLATE.preheader, innerHtml, "preview@example.com");
+        return new Response(JSON.stringify({ subject: BREAKUP_TEMPLATE.subject, preheader: BREAKUP_TEMPLATE.preheader, body_html: html, day: BREAKUP_DAY, campaign: "breakup" }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+
+      if (stepNum < 0 || stepNum >= TEMPLATES.length) {
+        return new Response(JSON.stringify({ error: "Invalid step (0-4)" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
       const template = TEMPLATES[stepNum];
       const innerHtml = template.body("Sarah", "Stellar Events", "Los Angeles");
       const html = wrapEmail(template.preheader, innerHtml, "preview@example.com");
-
-      return new Response(JSON.stringify({
-        subject: template.subject,
-        preheader: template.preheader,
-        body_html: html,
-        day: DRIP_SCHEDULE[stepNum],
-      }), {
-        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return new Response(JSON.stringify({ subject: template.subject, preheader: template.preheader, body_html: html, day: DRIP_SCHEDULE[stepNum] }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // ── Action: stats ── Get planner drip stats
+    // ── Action: stats ── Get planner drip stats (enhanced)
     if (action === "stats") {
       if (adminPassword !== ADMIN_PASSWORD) {
         return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -391,20 +570,41 @@ serve(async (req) => {
 
       const { data: contacts } = await supabase
         .from("newsletter_contacts")
-        .select("drip_step, subscribed")
-        .eq("drip_campaign", "planner");
+        .select("drip_step, subscribed, drip_campaign, engagement_status, reply_detected")
+        .in("drip_campaign", ["planner", "planner-warm", "planner-done"]);
 
       const total = contacts?.length || 0;
       const active = contacts?.filter(c => c.subscribed).length || 0;
-      const completed = contacts?.filter(c => c.drip_step >= 5).length || 0;
+      const plannerActive = contacts?.filter(c => c.drip_campaign === "planner" && c.subscribed).length || 0;
+      const warmActive = contacts?.filter(c => c.drip_campaign === "planner-warm" && c.subscribed).length || 0;
+      const completed = contacts?.filter(c => c.drip_campaign === "planner-done").length || 0;
+      const warm = contacts?.filter(c => c.engagement_status === "warm" || c.engagement_status === "hot").length || 0;
+      const hot = contacts?.filter(c => c.engagement_status === "hot" || c.reply_detected).length || 0;
+      const cold = contacts?.filter(c => c.engagement_status === "cold").length || 0;
+
       const stepCounts = [0, 0, 0, 0, 0];
       contacts?.forEach(c => {
-        if (c.drip_step >= 0 && c.drip_step < 5 && c.subscribed) {
+        if (c.drip_campaign === "planner" && c.drip_step >= 0 && c.drip_step < 5 && c.subscribed) {
           stepCounts[c.drip_step]++;
         }
       });
 
-      return new Response(JSON.stringify({ total, active, completed, stepCounts }), {
+      // Click stats
+      const { count: totalClicks } = await supabase
+        .from("newsletter_clicks")
+        .select("*", { count: "exact", head: true });
+
+      const { data: uniqueClickers } = await supabase
+        .from("newsletter_clicks")
+        .select("contact_id");
+      const uniqueClickerCount = new Set(uniqueClickers?.map(c => c.contact_id)).size;
+
+      return new Response(JSON.stringify({
+        total, active, completed, stepCounts,
+        plannerActive, warmActive,
+        engagement: { warm, hot, cold },
+        clicks: { total: totalClicks || 0, uniqueContacts: uniqueClickerCount },
+      }), {
         status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -422,37 +622,46 @@ serve(async (req) => {
         });
       }
 
-      const { testEmail, step: testStep } = await req.json().catch(() => ({}));
-      const stepNum = testStep ?? requestedStep ?? 0;
+      const stepNum = requestedStep ?? 0;
       const toEmail = testEmail || "scott.syme@whiterabbitla.com";
+      const campaign = reqBody.campaign || "planner";
 
-      if (stepNum < 0 || stepNum >= TEMPLATES.length) {
-        return new Response(JSON.stringify({ error: "Invalid step (0-4)" }), {
-          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+      let template: EmailTemplate;
+      let subjectPrefix = "[TEST] ";
+
+      if (campaign === "planner-warm") {
+        if (stepNum < 0 || stepNum >= WARM_TEMPLATES.length) {
+          return new Response(JSON.stringify({ error: "Invalid step (0-2)" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        }
+        template = WARM_TEMPLATES[stepNum];
+        subjectPrefix = "[TEST WARM] ";
+      } else if (campaign === "breakup") {
+        template = BREAKUP_TEMPLATE;
+        subjectPrefix = "[TEST BREAKUP] ";
+      } else {
+        if (stepNum < 0 || stepNum >= TEMPLATES.length) {
+          return new Response(JSON.stringify({ error: "Invalid step (0-4)" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        }
+        template = TEMPLATES[stepNum];
       }
 
-      const template = TEMPLATES[stepNum];
       const innerHtml = template.body("Sarah", "Stellar Events", "Los Angeles");
       const html = wrapEmail(template.preheader, innerHtml, toEmail);
 
       const res = await fetch("https://api.resend.com/emails", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${RESEND_API_KEY}`,
-        },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
         body: JSON.stringify({
           from: "Scott Syme | White Rabbit LA <scott.syme@whiterabbitla.com>",
           to: [toEmail],
-          subject: `[TEST] ${template.subject}`,
+          subject: `${subjectPrefix}${template.subject}`,
           html,
         }),
       });
 
       if (res.ok) {
         const data = await res.json();
-        return new Response(JSON.stringify({ success: true, emailId: data.id, sentTo: toEmail, step: stepNum }), {
+        return new Response(JSON.stringify({ success: true, emailId: data.id, sentTo: toEmail, step: stepNum, campaign }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       } else {
