@@ -1,28 +1,20 @@
 import { useParams, Link } from "react-router-dom";
-import { useEffect } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getBlogArticleBySlug } from "@/data/blogArticles";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const BlogArticle = () => {
   const { slug } = useParams<{ slug: string }>();
   const article = slug ? getBlogArticleBySlug(slug) : undefined;
   const { openQuiz } = useBookingQuiz();
 
-  useEffect(() => {
-    if (article) {
-      document.title = article.metaTitle;
-      const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) {
-        metaDesc.setAttribute("content", article.metaDescription);
-      } else {
-        const meta = document.createElement("meta");
-        meta.name = "description";
-        meta.content = article.metaDescription;
-        document.head.appendChild(meta);
-      }
-    }
-  }, [article]);
+  usePageMeta({
+    title: article?.metaTitle || "White Rabbit LA | Blog",
+    description: article?.metaDescription || "",
+    path: slug ? `/blog/${slug}` : "/blog",
+    type: "article",
+  });
 
   if (!article) return null;
 

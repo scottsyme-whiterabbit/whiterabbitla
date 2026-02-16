@@ -4,8 +4,14 @@ import AnimatedSection from "@/components/AnimatedSection";
 import QuizCTA from "@/components/QuizCTA";
 import { seoPages, seoCategories, seoLocations } from "@/data/seoPages";
 import { blogArticles } from "@/data/blogArticles";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const Blog = () => {
+  usePageMeta({
+    title: "Insights & Guides | White Rabbit Magic — Los Angeles",
+    description: "Explore guides on luxury magic entertainment, from corporate galas to intimate private celebrations across Southern California and beyond.",
+    path: "/blog",
+  });
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [activeLocation, setActiveLocation] = useState<string | null>(null);
 

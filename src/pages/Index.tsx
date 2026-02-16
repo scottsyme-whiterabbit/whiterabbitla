@@ -5,6 +5,7 @@ import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import QuizCTA from "@/components/QuizCTA";
 import FAQSection from "@/components/FAQSection";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 import heroImage from "@/assets/hero-magic-cinematic.jpg";
 import experienceImg from "@/assets/experience-closeup.jpg";
@@ -57,6 +58,12 @@ const clients = [
 
 const Index = () => {
   const { openQuiz } = useBookingQuiz();
+
+  usePageMeta({
+    title: "White Rabbit LA | Luxury Magic Entertainment — Los Angeles",
+    description: "Bespoke magical experiences for Fortune 500 events, private celebrations, and luxury gatherings across Los Angeles and beyond. Magician Scott Syme.",
+    path: "/",
+  });
 
   return (
     <main id="main-content">
