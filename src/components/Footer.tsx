@@ -13,23 +13,27 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <nav aria-label="Footer navigation" className="flex flex-col items-center gap-3">
-            <h4 className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Navigate</h4>
-            {["Experience", "About", "Reviews", "Blog", "Contact"].map((link) =>
-            <Link
-              key={link}
-              to={`/${link.toLowerCase()}`}
-              className="font-sans text-sm tracking-wider hover:text-cream transition-colors">
-                {link}
-              </Link>
-            )}
-            <h4 className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2 mt-4">Services</h4>
-            <Link to="/services/corporate-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Corporate Events</Link>
-            <Link to="/services/wedding-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Weddings</Link>
-            <Link to="/services/private-party-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Private Parties</Link>
-            <Link to="/services/close-up-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Close-Up Magic</Link>
-            <Link to="/services/private-magic-show" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Private Magic Show</Link>
-            <Link to="/quiz" className="font-sans text-sm tracking-wider text-accent hover:text-cream transition-colors mt-3">Not sure? Take our quiz →</Link>
+          <nav aria-label="Footer navigation" className="grid grid-cols-2 gap-x-8 gap-y-3 text-center md:text-left">
+            <div className="flex flex-col items-center md:items-start gap-3">
+              <h4 className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Navigate</h4>
+              {["Experience", "About", "Reviews", "Blog", "Contact"].map((link) =>
+                <Link
+                  key={link}
+                  to={`/${link.toLowerCase()}`}
+                  className="font-sans text-sm tracking-wider hover:text-cream transition-colors">
+                  {link}
+                </Link>
+              )}
+            </div>
+            <div className="flex flex-col items-center md:items-start gap-3">
+              <h4 className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Services</h4>
+              <Link to="/services/corporate-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Corporate Events</Link>
+              <Link to="/services/wedding-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Weddings</Link>
+              <Link to="/services/private-party-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Private Parties</Link>
+              <Link to="/services/close-up-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Close-Up Magic</Link>
+              <Link to="/services/private-magic-show" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Private Magic Show</Link>
+              <Link to="/quiz" className="font-sans text-sm tracking-wider text-accent hover:text-cream transition-colors mt-3">Not sure? Take our quiz →</Link>
+            </div>
           </nav>
 
           {/* Contact */}
