@@ -26,3 +26,12 @@ verify_jwt = false
 
 [functions.planner-drip]
 verify_jwt = false
+
+[functions.track-click]
+verify_jwt = false
+
+[functions.email-webhook]
+verify_jwt = false
+
+[functions.enroll-drip]
+verify_jwt = false
