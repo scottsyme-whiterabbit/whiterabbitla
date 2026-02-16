@@ -1,6 +1,7 @@
 import { useParams, Navigate, Link } from "react-router-dom";
 import { useEffect } from "react";
 import { Star, CheckCircle } from "lucide-react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import {
@@ -261,20 +262,11 @@ const ServicePage = () => {
   const { openQuiz } = useBookingQuiz();
   const page = serviceSlug ? servicePages[serviceSlug] : undefined;
 
-  useEffect(() => {
-    if (page) {
-      document.title = page.metaTitle;
-      const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) {
-        metaDesc.setAttribute("content", page.metaDescription);
-      } else {
-        const meta = document.createElement("meta");
-        meta.name = "description";
-        meta.content = page.metaDescription;
-        document.head.appendChild(meta);
-      }
-    }
-  }, [page]);
+  usePageMeta({
+    title: page?.metaTitle || "White Rabbit LA",
+    description: page?.metaDescription || "",
+    path: serviceSlug ? `/services/${serviceSlug}` : "/experience",
+  });
 
   // FAQ JSON-LD
   useEffect(() => {

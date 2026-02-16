@@ -8,8 +8,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const Contact = () => {
+  usePageMeta({
+    title: "Contact & Booking | White Rabbit Magic — Los Angeles",
+    description: "Book Scott Syme for your next corporate event, wedding, or private celebration. Check availability and get a personalized quote within 24 hours.",
+    path: "/contact",
+  });
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({

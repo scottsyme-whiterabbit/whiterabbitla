@@ -4,6 +4,7 @@ import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "react-router-dom";
 import QuizCTA from "@/components/QuizCTA";
 import audienceImg from "@/assets/event-audience.jpg";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const reviews = [
 {
@@ -117,6 +118,12 @@ const reviews = [
 
 
 const Reviews = () => {
+  usePageMeta({
+    title: "Client Reviews | White Rabbit Magic — 5-Star Rated Los Angeles Magician",
+    description: "Read 50+ five-star reviews from corporate planners, brides, and private event hosts. See why White Rabbit is LA's most trusted luxury magic entertainment.",
+    path: "/reviews",
+  });
+
   // Inject AggregateRating + individual Review schema for Google rich results
   useEffect(() => {
     const script = document.createElement("script");

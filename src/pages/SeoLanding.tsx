@@ -1,5 +1,6 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { Star, CheckCircle, Clock } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getSeoPageBySlug, getSeoPagesByCategory, getSeoPagesByLocation } from "@/data/seoPages";
@@ -129,20 +130,11 @@ const SeoLanding = () => {
   const page = slug ? getSeoPageBySlug(slug) : undefined;
   const { openQuiz } = useBookingQuiz();
 
-  useEffect(() => {
-    if (page) {
-      document.title = page.metaTitle;
-      const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) {
-        metaDesc.setAttribute("content", page.metaDescription);
-      } else {
-        const meta = document.createElement("meta");
-        meta.name = "description";
-        meta.content = page.metaDescription;
-        document.head.appendChild(meta);
-      }
-    }
-  }, [page]);
+  usePageMeta({
+    title: page?.metaTitle || "White Rabbit LA",
+    description: page?.metaDescription || "",
+    path: slug ? `/blog/${slug}` : "/blog",
+  });
 
   // Inject FAQ structured data (JSON-LD)
   useEffect(() => {
