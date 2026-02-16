@@ -8,6 +8,7 @@ import cardsStackImg from "@/assets/cards-stack-curtain.jpg";
 import cardsFanImg from "@/assets/cards-fan-closeup.jpg";
 import { Link } from "react-router-dom";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 
 const About = () => {
   usePageMeta({
@@ -16,6 +17,7 @@ const About = () => {
     path: "/about",
     image: scottPhoto,
   });
+  useWebPageSchema({ name: "About Scott Syme", description: "Meet Scott Syme, the magician behind White Rabbit. A Magic Castle® member who has performed for Netflix, Disney, and Morgan Stanley.", path: "/about", type: "ProfilePage" });
   return (
     <main id="main-content" className="pt-20">
       {/* Hero with Scott's photo */}

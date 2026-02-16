@@ -2,6 +2,7 @@ import { useParams, Navigate, Link } from "react-router-dom";
 import { useEffect } from "react";
 import { Star, CheckCircle } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { useServiceSchema } from "@/hooks/useSchemaOrg";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import {
@@ -268,6 +269,8 @@ const ServicePage = () => {
     path: serviceSlug ? `/services/${serviceSlug}` : "/experience",
     image: page?.image,
   });
+
+  useServiceSchema(page ? { title: page.title, metaDescription: page.metaDescription, slug: page.slug, intro: page.intro } : { title: "", metaDescription: "", slug: "", intro: "" });
 
   // FAQ JSON-LD
   useEffect(() => {

@@ -3,6 +3,7 @@ import AnimatedSection from "@/components/AnimatedSection";
 import { getBlogArticleBySlug } from "@/data/blogArticles";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { useArticleSchema } from "@/hooks/useSchemaOrg";
 import ShareButton from "@/components/ShareButton";
 
 import closeupImg from "@/assets/event-closeup-cocktail.jpg";
@@ -31,6 +32,8 @@ const BlogArticle = () => {
     type: "article",
     image: article ? (categoryImages[article.category] || experienceImg) : undefined,
   });
+
+  useArticleSchema(article || { title: "", metaDescription: "", slug: "", publishDate: "", category: "", content: [] });
 
   if (!article) return null;
 

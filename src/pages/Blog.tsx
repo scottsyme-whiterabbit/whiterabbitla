@@ -5,6 +5,7 @@ import QuizCTA from "@/components/QuizCTA";
 import { seoPages, seoCategories, seoLocations } from "@/data/seoPages";
 import { blogArticles } from "@/data/blogArticles";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 
 const Blog = () => {
   usePageMeta({
@@ -12,6 +13,7 @@ const Blog = () => {
     description: "Explore guides on luxury magic entertainment, from corporate galas to intimate private celebrations across Southern California and beyond.",
     path: "/blog",
   });
+  useWebPageSchema({ name: "Insights & Guides", description: "Explore guides on luxury magic entertainment, from corporate galas to intimate private celebrations.", path: "/blog", type: "CollectionPage" });
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [activeLocation, setActiveLocation] = useState<string | null>(null);
 
