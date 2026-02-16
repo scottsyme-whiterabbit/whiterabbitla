@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Instagram, Linkedin, Mail, Phone } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
+import QuizCTA from "@/components/QuizCTA";
 import contactBg from "@/assets/event-silhouette.jpg";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -251,6 +252,9 @@ const Contact = () => {
           </AnimatedSection>
         </div>
       </section>
+
+      {/* Quiz CTA */}
+      <QuizCTA />
     </main>
   );
 };
