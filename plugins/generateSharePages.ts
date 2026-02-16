@@ -7,13 +7,7 @@ import fs from "fs";
 
 const BASE_URL = "https://whiterabbitla.com";
 
-const OG_IMAGES: Record<string, string> = {
-  "Magic Destinations": `${BASE_URL}/og/magic-destinations.jpg`,
-  "For Planners": `${BASE_URL}/og/corporate.jpg`,
-  "Private Events": `${BASE_URL}/og/private.jpg`,
-  "Corporate Events": `${BASE_URL}/og/corporate.jpg`,
-  "Behind the Craft": `${BASE_URL}/og/behind-the-craft.jpg`,
-};
+const BLOG_OG = `${BASE_URL}/og/blog-default.png`;
 const DEFAULT_OG = `${BASE_URL}/og-image.jpg`;
 
 interface SharePage {
@@ -94,7 +88,7 @@ export function generateSharePages(): Plugin {
           title: titles[i] || slugs[i],
           description: descs[i] || "",
           path: `/blog/${slugs[i]}`,
-          image: OG_IMAGES[cats[i]] || DEFAULT_OG,
+          image: BLOG_OG,
         });
       }
 
