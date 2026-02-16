@@ -186,19 +186,42 @@ HTML styling:
           last_emailed_at: new Date().toISOString(),
         })
         .eq("id", contact.id);
-
-      return new Response(JSON.stringify({ success: true, enrolled: true, emailSent: true }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
     } else {
       const errData = await sendRes.json();
       console.error("Resend error:", errData);
-      return new Response(JSON.stringify({ success: true, enrolled: true, emailSent: false }), {
-        status: 200,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
     }
+
+    // Send notification email to Scott for every new quiz lead
+    const notifyHtml = `
+      <h2>New Discovery Quiz Lead</h2>
+      <table style="border-collapse:collapse;width:100%;max-width:600px;">
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Name</td><td style="padding:8px;border-bottom:1px solid #eee;">${name || "Not provided"}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Email</td><td style="padding:8px;border-bottom:1px solid #eee;">${email}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Source</td><td style="padding:8px;border-bottom:1px solid #eee;">${source || "quiz"}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Persona</td><td style="padding:8px;border-bottom:1px solid #eee;">${persona || "N/A"}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Recommendation</td><td style="padding:8px;border-bottom:1px solid #eee;">${recommendation || "N/A"}</td></tr>
+      </table>
+    `;
+
+    await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+      },
+      body: JSON.stringify({
+        from: "White Rabbit <onboarding@resend.dev>",
+        to: ["scott.syme@whiterabbitla.com"],
+        subject: `Discovery Quiz Lead: ${name || email}`,
+        html: notifyHtml,
+        reply_to: email,
+      }),
+    });
+
+    return new Response(JSON.stringify({ success: true, enrolled: true, emailSent: sendRes.ok }), {
+      status: 200,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
   } catch (error) {
     console.error("enroll-drip error:", error);
     return new Response(
