@@ -409,6 +409,60 @@ serve(async (req) => {
       });
     }
 
+    // ── Action: test-send ── Send a single test email
+    if (action === "test-send") {
+      if (adminPassword !== ADMIN_PASSWORD) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (!RESEND_API_KEY) {
+        return new Response(JSON.stringify({ error: "Email service not configured" }), {
+          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const { testEmail, step: testStep } = await req.json().catch(() => ({}));
+      const stepNum = testStep ?? requestedStep ?? 0;
+      const toEmail = testEmail || "scott.syme@whiterabbitla.com";
+
+      if (stepNum < 0 || stepNum >= TEMPLATES.length) {
+        return new Response(JSON.stringify({ error: "Invalid step (0-4)" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const template = TEMPLATES[stepNum];
+      const innerHtml = template.body("Sarah", "Stellar Events", "Los Angeles");
+      const html = wrapEmail(template.preheader, innerHtml, toEmail);
+
+      const res = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${RESEND_API_KEY}`,
+        },
+        body: JSON.stringify({
+          from: "Scott Syme | White Rabbit LA <scott.syme@whiterabbitla.com>",
+          to: [toEmail],
+          subject: `[TEST] ${template.subject}`,
+          html,
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        return new Response(JSON.stringify({ success: true, emailId: data.id, sentTo: toEmail, step: stepNum }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      } else {
+        const errData = await res.json();
+        return new Response(JSON.stringify({ error: "Send failed", details: errData }), {
+          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
     return new Response(JSON.stringify({ error: "Unknown action" }), {
       status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
