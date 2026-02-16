@@ -170,7 +170,7 @@ HTML styling:
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "White Rabbit <onboarding@resend.dev>",
+        from: "White Rabbit <scott.syme@whiterabbitla.com>",
         to: [email.toLowerCase().trim()],
         subject: draft.subject,
         html,
@@ -210,7 +210,7 @@ HTML styling:
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "White Rabbit <onboarding@resend.dev>",
+        from: "White Rabbit <scott.syme@whiterabbitla.com>",
         to: ["scott.syme@whiterabbitla.com"],
         subject: `Discovery Quiz Lead: ${name || email}`,
         html: notifyHtml,
