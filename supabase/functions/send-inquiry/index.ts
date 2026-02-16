@@ -129,7 +129,7 @@ serve(async (req) => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "White Rabbit <onboarding@resend.dev>",
+        from: "White Rabbit <scott.syme@whiterabbitla.com>",
         to: ["scott.syme@whiterabbitla.com"],
         subject: `Booking Inquiry — ${eventType}`,
         html: emailHtml,
@@ -155,7 +155,7 @@ serve(async (req) => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "White Rabbit <onboarding@resend.dev>",
+        from: "White Rabbit <scott.syme@whiterabbitla.com>",
         to: [email],
         subject: "We received your inquiry, " + firstName,
         html: confirmationHtml,
