@@ -102,11 +102,11 @@ const TEMPLATES: EmailTemplate[] = [
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
 <p style="margin:0 0 18px;">Planning events${cityLine}? Every event pro I talk to hits the same wall: cocktail hour energy drops, guests drift to their phones, and the night loses momentum before dinner even starts.</p>
-<p style="margin:0 0 18px;">We've helped teams at Soho House and Rolls-Royce close that gap with modern close-up magic that keeps guests locked in.</p>
+<p style="margin:0 0 18px;">We've helped teams at Soho House and Rolls-Royce close that gap. Sometimes it's roaming close-up magic during cocktails. Other times it's a full private show after dinner that nobody saw coming. Either way, guests stay locked in all night.</p>
 <p style="margin:0 0 18px;">${shareLink("entertainment-gap-planners-dont-know.html", "See why it works →")}</p>
 <p style="margin:0 0 18px;">Open to seeing how it fits yours?</p>
 ${signoff(true)}
-${ps("Not kids' birthday stuff. Sophisticated sleight of hand for adults.")}
+${ps("Not kids' birthday stuff. Sophisticated sleight of hand, mentalism, and private shows for adults.")}
 </td></tr>`;
     },
   },
@@ -119,10 +119,11 @@ ${ps("Not kids' birthday stuff. Sophisticated sleight of hand for adults.")}
 <p style="margin:0 0 18px;">${name},</p>
 <p style="margin:0 0 18px;">Cocktail hours are make-or-break.</p>
 <p style="margin:0 0 18px;">Dead air, awkward mingling, guests checking the time. I've watched it flip for clients like Morgan Stanley. 200 guests, nobody left early, raving about it for weeks.</p>
+<p style="margin:0 0 18px;">For smaller gatherings, we also do intimate private shows: emerald curtains, cinematic lighting, a curated 45-minute performance that turns any room into an experience. Perfect as the main event or a post-dinner surprise.</p>
 <p style="margin:0 0 18px;">${shareLink("why-cocktail-hour-entertainment-matters.html", "Quick read on why it matters →")}</p>
 <p style="margin:0 0 18px;">Worth exploring for your next one?</p>
 ${signoff()}
-${ps("Close-up magic that feels like a private show, not a stage act.")}
+${ps("Close-up magic, parlor shows, or both. We tailor it to your event.")}
 </td></tr>`;
     },
   },
@@ -134,11 +135,11 @@ ${ps("Close-up magic that feels like a private show, not a stage act.")}
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
 <p style="margin:0 0 18px;">Your clients hire you for the wow. But most events blend together until you add the thing nobody expected.</p>
-<p style="margin:0 0 18px;">Event pros we've partnered with at places like the Hollywood Roosevelt and Paramount use this to get "best vendor ever" texts the next morning.</p>
+<p style="margin:0 0 18px;">Event pros we've partnered with at places like the Hollywood Roosevelt and Paramount use this to get "best vendor ever" texts the next morning. Sometimes it's roaming magic during cocktails. Sometimes it's a full private magic show as the main event. The format flexes to whatever makes the night unforgettable.</p>
 <p style="margin:0 0 18px;">${shareLink("surprise-clients-entertainment-they-didnt-know-they-wanted.html", "See the surprise in action →")}</p>
 <p style="margin:0 0 18px;">Open to a peek at how?</p>
 ${signoff(true)}
-${ps("Parlor shows or roaming magic. Scales to your event.")}
+${ps("From 20-person dinners to 300-person galas. Scales to your event.")}
 </td></tr>`;
     },
   },
@@ -150,27 +151,27 @@ ${ps("Parlor shows or roaming magic. Scales to your event.")}
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">${name},</p>
 <p style="margin:0 0 18px;">Quick one for event pros:</p>
-<p style="margin:0 0 18px;">Your clients want luxury, not rabbits from hats. We've helped planners level up with close-up mentalism that feels cinematic. Netflix, Disney, and Rivian have all booked it.</p>
+<p style="margin:0 0 18px;">Your clients want luxury, not rabbits from hats. We bring close-up mentalism that feels cinematic and private shows that transform any room into something extraordinary. Custom lighting, emerald curtains, a curated soundtrack. Netflix, Disney, and Rivian have all booked it.</p>
 <p style="margin:0 0 18px;">${shareLink("not-kids-birthday-party-modern-magic.html", "See the difference →")}</p>
 <p style="margin:0 0 18px;">Thoughts on trying it?</p>
 ${signoff()}
-${ps("Member of the Magic Castle. Disney + AGT vetted.")}
+${ps("Member of the Magic Castle. Disney + AGT vetted. Close-up, parlor, and corporate shows.")}
 </td></tr>`;
     },
   },
   // Email 5: Day 21 — Vendor List Closer
   {
     subject: "Add to your vendor list?",
-    preheader: "One vendor that changes everything.",
+    preheader: "One vendor, three formats.",
     body: (name, _company, _city) => {
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
 <p style="margin:0 0 18px;">Event pros are stacking their vendor lists with game-changers. The ones who added this got repeat business and referrals they didn't ask for.</p>
-<p style="margin:0 0 18px;">Taittinger, Hyatt, Lionsgate. Different events, same result.</p>
+<p style="margin:0 0 18px;">Taittinger, Hyatt, Lionsgate. Cocktail receptions, corporate galas, private dinners. One vendor that covers close-up magic, full private shows, and everything in between.</p>
 <p style="margin:0 0 18px;">${shareLink("why-event-planners-adding-magician-vendor-list.html", "See why →")}</p>
 <p style="margin:0 0 18px;">Open to chatting about fit?</p>
 ${signoff(true)}
-${ps(`30-sec quiz for your event's magic match: <a href="${APP_URL}/quiz" style="color:#c8a0a0; text-decoration:none;">whiterabbitla.com/quiz</a>`)}
+${ps(`30-sec quiz to find your event's perfect format: <a href="${APP_URL}/quiz" style="color:#c8a0a0; text-decoration:none;">whiterabbitla.com/quiz</a>`)}
 </td></tr>`;
     },
   },
