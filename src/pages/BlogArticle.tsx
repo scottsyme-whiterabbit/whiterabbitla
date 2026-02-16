@@ -33,8 +33,16 @@ const BlogArticle = () => {
     image: article ? (categoryImages[article.category] || experienceImg) : undefined,
   });
 
-  const articleImage = article ? (categoryImages[article.category] || experienceImg) : undefined;
-  useArticleSchema(article ? { ...article, image: articleImage } : { title: "", metaDescription: "", slug: "", publishDate: "", category: "", content: [], image: undefined });
+  const BASE_URL = "https://whiterabbitla.com";
+  const schemaCategoryImages: Record<string, string> = {
+    "For Planners": `${BASE_URL}/og/corporate.jpg`,
+    "Magic Destinations": `${BASE_URL}/og/magic-destinations.jpg`,
+    "Private Events": `${BASE_URL}/og/private.jpg`,
+    "Corporate Events": `${BASE_URL}/og/corporate.jpg`,
+    "Behind the Craft": `${BASE_URL}/og/behind-the-craft.jpg`,
+  };
+  const schemaImage = article ? (schemaCategoryImages[article.category] || `${BASE_URL}/og/experience.jpg`) : undefined;
+  useArticleSchema(article ? { ...article, image: schemaImage } : { title: "", metaDescription: "", slug: "", publishDate: "", category: "", content: [], image: undefined });
 
   if (!article) return null;
 
