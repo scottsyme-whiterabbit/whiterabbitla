@@ -14,3 +14,6 @@ verify_jwt = false
 
 [functions.generate-social]
 verify_jwt = false
+
+[functions.send-inquiry]
+verify_jwt = false
