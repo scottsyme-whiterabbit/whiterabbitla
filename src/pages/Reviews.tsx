@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import QuizCTA from "@/components/QuizCTA";
 import audienceImg from "@/assets/event-audience.jpg";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { useBreadcrumbSchema } from "@/hooks/useSchemaOrg";
 
 const reviews = [
 {
@@ -124,6 +125,7 @@ const Reviews = () => {
     path: "/reviews",
     image: audienceImg,
   });
+  useBreadcrumbSchema([{ name: "Home", path: "/" }, { name: "Reviews", path: "/reviews" }]);
 
   // Inject AggregateRating + individual Review schema for Google rich results
   useEffect(() => {
