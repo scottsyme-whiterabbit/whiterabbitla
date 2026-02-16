@@ -2,23 +2,23 @@ import { useState } from "react";
 import { Share2, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const BASE_URL = "https://whiterabbitla.com";
 
 interface ShareButtonProps {
-  title: string;
-  description: string;
-  path: string;
-  ogImage?: string;
+  /** The slug used to find the static share page in /share/{slug}.html */
+  shareSlug: string;
 }
 
-// Map of OG images available at stable public URLs
+// Map of OG images available at stable public URLs (exported for other components)
 const OG_IMAGES: Record<string, string> = {
   "Magic Destinations": `${BASE_URL}/og/magic-destinations.jpg`,
   "For Planners": `${BASE_URL}/og/corporate.jpg`,
   "Private Events": `${BASE_URL}/og/private.jpg`,
   "Corporate Events": `${BASE_URL}/og/corporate.jpg`,
   "Behind the Craft": `${BASE_URL}/og/behind-the-craft.jpg`,
+  "Event Planning": `${BASE_URL}/og/corporate.jpg`,
+  "Corporate": `${BASE_URL}/og/corporate.jpg`,
+  "Weddings": `${BASE_URL}/og/private.jpg`,
   about: `${BASE_URL}/og/about.jpg`,
   experience: `${BASE_URL}/og/experience.jpg`,
   contact: `${BASE_URL}/og/contact.jpg`,
@@ -31,20 +31,17 @@ export function getOgImage(category?: string): string {
   return OG_IMAGES.default;
 }
 
-export default function ShareButton({ title, description, path, ogImage }: ShareButtonProps) {
+export default function ShareButton({ shareSlug }: ShareButtonProps) {
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
 
   const handleCopy = async () => {
-    const targetUrl = `${BASE_URL}${path}`;
-    const image = ogImage || OG_IMAGES.default;
-
-    const shareUrl = `${SUPABASE_URL}/functions/v1/og-share?url=${encodeURIComponent(targetUrl)}&t=${encodeURIComponent(title)}&d=${encodeURIComponent(description)}&i=${encodeURIComponent(image)}`;
+    const shareUrl = `${BASE_URL}/share/${shareSlug}.html`;
 
     try {
       await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
-      toast({ title: "Link copied", description: "Share it via text — the preview will show the correct title and photo." });
+      toast({ title: "Link copied", description: "Paste it in a text — the preview will show the correct title and photo." });
       setTimeout(() => setCopied(false), 2000);
     } catch {
       toast({ title: "Couldn't copy", description: "Please try again.", variant: "destructive" });
