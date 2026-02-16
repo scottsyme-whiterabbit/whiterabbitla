@@ -3,6 +3,7 @@ import AnimatedSection from "@/components/AnimatedSection";
 import { getBlogArticleBySlug } from "@/data/blogArticles";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import ShareButton, { getOgImage } from "@/components/ShareButton";
 
 import closeupImg from "@/assets/event-closeup-cocktail.jpg";
 import parlorImg from "@/assets/event-parlor-show.jpg";
@@ -118,6 +119,14 @@ const BlogArticle = () => {
               <span>{publishDate}</span>
               <span className="w-1 h-1 rounded-full bg-cream/30" />
               <span>{article.readTime}</span>
+            </div>
+            <div className="mt-6">
+              <ShareButton
+                title={article.metaTitle}
+                description={article.metaDescription}
+                path={`/blog/${slug}`}
+                ogImage={getOgImage(article.category)}
+              />
             </div>
           </AnimatedSection>
         </div>
