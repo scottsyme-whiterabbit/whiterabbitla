@@ -4,6 +4,20 @@ import { getBlogArticleBySlug } from "@/data/blogArticles";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
+import closeupImg from "@/assets/event-closeup-cocktail.jpg";
+import parlorImg from "@/assets/event-parlor-show.jpg";
+import corporateImg from "@/assets/event-penthouse-show.jpg";
+import scottCardsImg from "@/assets/event-scott-cards.jpg";
+import experienceImg from "@/assets/experience-closeup.jpg";
+
+const categoryImages: Record<string, string> = {
+  "For Planners": corporateImg,
+  "Magic Destinations": parlorImg,
+  "Private Events": closeupImg,
+  "Corporate Events": corporateImg,
+  "Behind the Craft": scottCardsImg,
+};
+
 const BlogArticle = () => {
   const { slug } = useParams<{ slug: string }>();
   const article = slug ? getBlogArticleBySlug(slug) : undefined;
@@ -14,6 +28,7 @@ const BlogArticle = () => {
     description: article?.metaDescription || "",
     path: slug ? `/blog/${slug}` : "/blog",
     type: "article",
+    image: article ? (categoryImages[article.category] || experienceImg) : undefined,
   });
 
   if (!article) return null;

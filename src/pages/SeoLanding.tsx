@@ -134,6 +134,7 @@ const SeoLanding = () => {
     title: page?.metaTitle || "White Rabbit LA",
     description: page?.metaDescription || "",
     path: slug ? `/blog/${slug}` : "/blog",
+    image: experienceImg,
   });
 
   // Inject FAQ structured data (JSON-LD)

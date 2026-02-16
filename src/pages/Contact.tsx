@@ -15,6 +15,7 @@ const Contact = () => {
     title: "Contact & Booking | White Rabbit Magic — Los Angeles",
     description: "Book Scott Syme for your next corporate event, wedding, or private celebration. Check availability and get a personalized quote within 24 hours.",
     path: "/contact",
+    image: contactBg,
   });
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
