@@ -17,3 +17,6 @@ verify_jwt = false
 
 [functions.send-inquiry]
 verify_jwt = false
+
+[functions.og-share]
+verify_jwt = false
