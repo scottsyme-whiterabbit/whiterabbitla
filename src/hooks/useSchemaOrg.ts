@@ -49,6 +49,7 @@ export function useArticleSchema(article: {
   publishDate: string;
   category: string;
   content: string[];
+  image?: string;
 }) {
   const wordCount = article.content.join(" ").split(/\s+/).length;
 
@@ -65,7 +66,7 @@ export function useArticleSchema(article: {
         "@type": "WebPage",
         "@id": `${BASE_URL}/blog/${article.slug}`,
       },
-      image: `${BASE_URL}/og/blog-default.png`,
+      image: article.image || `${BASE_URL}/og/blog-default.png`,
       url: `${BASE_URL}/blog/${article.slug}`,
       articleSection: article.category,
       wordCount,
