@@ -62,6 +62,17 @@ serve(async (req) => {
         });
       }
 
+      case "get_contacts_full": {
+        const { data, error } = await supabase
+          .from("newsletter_contacts")
+          .select("id, email, name, company, city, source, subscribed, drip_campaign, drip_step, engagement_status, reply_detected, last_emailed_at, created_at")
+          .order("created_at", { ascending: false });
+        if (error) throw error;
+        return new Response(JSON.stringify({ contacts: data }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       case "get_contacts": {
         const { data, error } = await supabase
           .from("newsletter_contacts")
