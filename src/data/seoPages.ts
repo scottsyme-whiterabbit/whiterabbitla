@@ -482,8 +482,10 @@ function getVenueContext(location: string, serviceKey: string): string {
       return `Picture your closest friends and family gathered at ${venues.dining[0]} or the private dining room at ${venues.hotels[2]}, the night before the big day. White Rabbit makes that intimate evening as magical as the wedding itself.`;
     case "halloween-party-magician":
       return `From haunted soirées at ${venues.hotels[0]} to costumed gatherings at ${venues.dining[2]}, White Rabbit adds a layer of genuine mystery and dark wonder to ${location}'s most atmospheric Halloween celebrations.`;
-    case "christmas-party-magician":
+     case "christmas-party-magician":
       return `Whether it's the company holiday party at ${venues.hotels[1]} or a New Year's Eve celebration at ${venues.dining[0]}, White Rabbit brings the kind of magic that makes the season truly feel special in ${location}.`;
+    case "premiere-red-carpet-magician":
+      return `From after-parties at ${venues.hotels[0]} to screening receptions at ${venues.culture[2]}, White Rabbit brings the kind of entertainment that gives industry veterans in ${location} something they haven't experienced in years: genuine surprise.`;
     default:
       return "";
   }
@@ -549,6 +551,11 @@ const serviceTypes = [
     key: "christmas-party-magician",
     label: "Christmas Party Magician",
     category: "Christmas & NYE",
+  },
+  {
+    key: "premiere-red-carpet-magician",
+    label: "Premiere & Red Carpet Magician",
+    category: "Premieres & Production",
   },
 ] as const;
 
@@ -710,6 +717,16 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
       {
         question: "What size Christmas party works best for a magician?",
         answer: "From intimate office gatherings of 20 to grand company celebrations of 500+, White Rabbit scales to fit. For larger events, Scott provides roaming close-up magic during cocktails. For more intimate groups, a seated parlor show can serve as the evening's centerpiece.",
+      },
+    ],
+    "premiere-red-carpet-magician": [
+      {
+        question: "What kind of Hollywood events does White Rabbit perform at?",
+        answer: "Premiere after-parties, wrap parties, screening receptions, studio events, award show celebrations, brand activations, and VIP lounges. Any industry event where you want guests talking about the experience instead of checking their phones.",
+      },
+      {
+        question: "Can Scott perform in VIP areas and green rooms?",
+        answer: "Absolutely. Close-up magic is designed for exactly these environments: intimate spaces, small groups, no stage or setup required. Scott moves through VIP sections, green rooms, and cocktail areas creating personal moments of astonishment for talent, executives, and guests alike.",
       },
     ],
   };
@@ -887,6 +904,19 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
       ];
       break;
 
+    case "premiere-red-carpet-magician":
+      heroHeadline = `Premiere & Red Carpet Entertainment in ${location}`;
+      heroSub = `The after-party entertainment that gives Hollywood's most jaded guests something they've never seen before.`;
+      midCta = `Book Entertainment for Your ${location} Premiere or Studio Event`;
+      intro = `Looking for entertainment for a premiere after-party, wrap party, or studio event in ${location}? Hollywood events need entertainment that matches the creative caliber of the work. White Rabbit delivers world-class close-up magic and mentalism that transforms industry events from predictable to unforgettable. Trusted by Netflix, Paramount, Lionsgate, and Disney.`;
+      body = [
+        `Every premiere after-party in ${location} follows the same playbook: open bar, DJ, step-and-repeat. Your guests have been to this party a hundred times. Close-up magic breaks the formula. Scott Syme moves through the VIP section, the green room, the cocktail area, creating moments of genuine astonishment that give directors, producers, and talent something they rarely experience at their own celebrations: surprise.`,
+        `Scott is a member of the world-famous Magic Castle® in Hollywood and has performed for Netflix, Paramount, Lionsgate, and Disney. He understands the industry room. He knows that the EP doesn't want to be put on the spot, that the agent is there to network, and that the crew is ready to have the time of their lives. He reads each group and meets them exactly where they are.`,
+        `Perfect for premiere after-parties, wrap parties, screening receptions, award show celebrations, studio holiday events, brand activations, and VIP lounges. No stage, no sound system, no setup time. Just a world-class entertainer who arrives and transforms the energy of the room.`,
+        `Available for industry events across ${location}. Premiere and awards season dates (September through March) book quickly. Inquire now to secure your date.`,
+      ];
+      break;
+
     default:
       heroHeadline = "";
       heroSub = "";
@@ -923,8 +953,15 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
   };
 }
 
+const premiereLocations = new Set([
+  "Los Angeles", "Beverly Hills", "Hollywood", "Santa Monica", "Malibu",
+  "West Hollywood", "Bel Air", "Pasadena", "Calabasas",
+]);
+
 export const seoPages: SeoPage[] = locations.flatMap((location) =>
-  serviceTypes.map((service) => generatePage(location, service))
+  serviceTypes
+    .filter((service) => service.key !== "premiere-red-carpet-magician" || premiereLocations.has(location))
+    .map((service) => generatePage(location, service))
 );
 
 export function getSeoPageBySlug(slug: string): SeoPage | undefined {
