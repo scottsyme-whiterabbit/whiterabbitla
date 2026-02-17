@@ -55,6 +55,15 @@ body { margin: 0; padding: 0; width: 100% !important; background-color: #2D4A3E;
 
 ${innerHtml}
 
+<!-- Book a Call CTA -->
+<tr><td style="padding: 0 40px 20px; text-align:center;" class="padding-mobile">
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
+<tr><td style="border:1px solid #c8a0a0; border-radius:2px;">
+<a href="https://calendar.app.google/58WjggPt3RFAcJjq8" target="_blank" style="display:inline-block; padding:14px 36px; font-family:Georgia,serif; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:#c8a0a0; text-decoration:none; font-weight:bold;">Book a Call</a>
+</td></tr>
+</table>
+</td></tr>
+
 <!-- Footer -->
 <tr><td style="padding: 0 40px;" class="padding-mobile">
 <hr style="border:none; border-top:1px solid rgba(200,160,160,0.15); margin:0 0 24px;" />
