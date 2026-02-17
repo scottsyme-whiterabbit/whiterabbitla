@@ -588,6 +588,7 @@ serve(async (req) => {
 
       const total = contacts?.length || 0;
       const active = contacts?.filter(c => c.subscribed).length || 0;
+      const unsubscribed = contacts?.filter(c => !c.subscribed).length || 0;
       const plannerActive = contacts?.filter(c => c.drip_campaign === "planner" && c.subscribed).length || 0;
       const warmActive = contacts?.filter(c => c.drip_campaign === "planner-warm" && c.subscribed).length || 0;
       const completed = contacts?.filter(c => c.drip_campaign === "planner-done").length || 0;
@@ -612,11 +613,17 @@ serve(async (req) => {
         .select("contact_id");
       const uniqueClickerCount = new Set(uniqueClickers?.map(c => c.contact_id)).size;
 
+      // Send log stats (for calculating rates)
+      const { count: totalSent } = await supabase
+        .from("newsletter_send_log")
+        .select("*", { count: "exact", head: true });
+
       return new Response(JSON.stringify({
-        total, active, completed, stepCounts,
+        total, active, unsubscribed, completed, stepCounts,
         plannerActive, warmActive,
         engagement: { warm, hot, cold },
         clicks: { total: totalClicks || 0, uniqueContacts: uniqueClickerCount },
+        totalSent: totalSent || 0,
       }), {
         status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
