@@ -103,13 +103,13 @@ const cityData: { city: string; region: string; photo: string; tagline: string }
 
   // Northeast
   { city: "New York", region: "Northeast", photo: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=600&h=400&fit=crop", tagline: "Manhattan penthouses and Hamptons estates" }, // NYC Central Park skyline
-  { city: "The Hamptons", region: "Northeast", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=400&fit=crop", tagline: "East End summer celebrations and benefit galas" }, // Hamptons beach dunes
+  { city: "The Hamptons", region: "Northeast", photo: "/areas/the-hamptons.jpg", tagline: "East End summer celebrations and benefit galas" },
   { city: "Greenwich", region: "Northeast", photo: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop", tagline: "Gold Coast estate entertainment" }, // Grand estate
-  { city: "Boston", region: "Northeast", photo: "https://images.unsplash.com/photo-1572120360610-d971b9d7767c?w=600&h=400&fit=crop", tagline: "Back Bay galas and Cambridge celebrations" }, // Boston Beacon Hill brownstones
+  { city: "Boston", region: "Northeast", photo: "/areas/boston.jpg", tagline: "Back Bay galas and Cambridge celebrations" },
   { city: "Washington DC", region: "Northeast", photo: "https://images.unsplash.com/photo-1501466044931-62695aada8e9?w=600&h=400&fit=crop", tagline: "Embassy dinners and Georgetown receptions" }, // DC monuments/Capitol
   { city: "Philadelphia", region: "Northeast", photo: "https://images.unsplash.com/photo-1569761316261-9a8696fa2ca3?w=600&h=400&fit=crop", tagline: "Main Line estates and Center City galas" }, // Philly skyline
   { city: "Short Hills", region: "Northeast", photo: "https://images.unsplash.com/photo-1605146769289-440113cc3d00?w=600&h=400&fit=crop", tagline: "New Jersey's luxury enclave celebrations" }, // Luxury suburban estate
-  { city: "Potomac", region: "Northeast", photo: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop", tagline: "DC-area estate events and charity galas" }, // Luxury estate
+  { city: "Potomac", region: "Northeast", photo: "/areas/potomac.jpg", tagline: "DC-area estate events and charity galas" },
 
   // Midwest
   { city: "Chicago", region: "Midwest", photo: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=600&h=400&fit=crop", tagline: "Gold Coast penthouses and Lake Shore galas" }, // Chicago skyline
