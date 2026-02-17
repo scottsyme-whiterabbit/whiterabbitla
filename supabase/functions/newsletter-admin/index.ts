@@ -34,11 +34,20 @@ serve(async (req) => {
             status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }
-        // Upsert to handle duplicates
+        // Deduplicate within the batch (keep first occurrence)
+        const seen = new Set<string>();
+        const unique = contacts.filter((c: { email: string }) => {
+          const email = c.email.toLowerCase().trim();
+          if (seen.has(email)) return false;
+          seen.add(email);
+          return true;
+        });
+
+        // Upsert deduplicated contacts
         const { data, error } = await supabase
           .from("newsletter_contacts")
           .upsert(
-            contacts.map((c: { email: string; name?: string; source?: string }) => ({
+            unique.map((c: { email: string; name?: string; source?: string }) => ({
               email: c.email.toLowerCase().trim(),
               name: c.name?.trim() || null,
               source: c.source || "csv",
@@ -48,7 +57,7 @@ serve(async (req) => {
           .select();
 
         if (error) throw error;
-        return new Response(JSON.stringify({ imported: data?.length || 0 }), {
+        return new Response(JSON.stringify({ imported: data?.length || 0, duplicatesSkipped: contacts.length - unique.length }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
