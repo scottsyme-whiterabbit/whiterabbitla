@@ -486,6 +486,8 @@ function getVenueContext(location: string, serviceKey: string): string {
       return `Whether it's the company holiday party at ${venues.hotels[1]} or a New Year's Eve celebration at ${venues.dining[0]}, White Rabbit brings the kind of magic that makes the season truly feel special in ${location}.`;
     case "premiere-red-carpet-magician":
       return `From after-parties at ${venues.hotels[0]} to screening receptions at ${venues.culture[2]}, White Rabbit brings the kind of entertainment that gives industry veterans in ${location} something they haven't experienced in years: genuine surprise.`;
+    case "dmc-entertainment":
+      return `Whether it's an incentive trip welcome reception at ${venues.hotels[0]}, a VIP dinner at ${venues.dining[0]}, or a group activity at ${venues.culture[1]}, White Rabbit seamlessly integrates into the curated ${location} itineraries that destination management companies build for their top-tier clients.`;
     default:
       return "";
   }
@@ -556,6 +558,11 @@ const serviceTypes = [
     key: "premiere-red-carpet-magician",
     label: "Premiere & Red Carpet Magician",
     category: "Premieres & Production",
+  },
+  {
+    key: "dmc-entertainment",
+    label: "DMC Entertainment & Magician",
+    category: "DMC & Incentive Travel",
   },
 ] as const;
 
@@ -727,6 +734,16 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
       {
         question: "Can Scott perform in VIP areas and green rooms?",
         answer: "Absolutely. Close-up magic is designed for exactly these environments: intimate spaces, small groups, no stage or setup required. Scott moves through VIP sections, green rooms, and cocktail areas creating personal moments of astonishment for talent, executives, and guests alike.",
+      },
+    ],
+    "dmc-entertainment": [
+      {
+        question: "How does White Rabbit work with DMCs and destination management companies?",
+        answer: "White Rabbit integrates seamlessly into the curated itineraries DMCs build for incentive trips, corporate retreats, and VIP group experiences. Scott arrives ready to perform with zero setup, fitting into welcome receptions, dinner programs, team-building sessions, and post-excursion gatherings. Many DMCs add White Rabbit as a signature local entertainment option for their Los Angeles and nationwide programs.",
+      },
+      {
+        question: "What types of incentive trip events work best for a magician?",
+        answer: "Welcome receptions, farewell dinners, awards galas, VIP breakout sessions, and exclusive group activities. Close-up magic is especially effective during networking moments where attendees from different offices or regions are meeting for the first time. It breaks the ice instantly and creates shared memories that reinforce the trip's purpose.",
       },
     ],
   };
@@ -915,6 +932,19 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
         `Scott is a member of the world-famous Magic Castle® in Hollywood and has performed for Netflix, Paramount, Lionsgate, and Disney. He understands the industry room. He knows that the EP doesn't want to be put on the spot, that the agent is there to network, and that the crew is ready to have the time of their lives. He reads each group and meets them exactly where they are.`,
         `Perfect for premiere after-parties, wrap parties, screening receptions, award show celebrations, studio holiday events, brand activations, and VIP lounges. No stage, no sound system, no setup time. Just a world-class entertainer who arrives and transforms the energy of the room.`,
         `Available for industry events across ${location}. Premiere and awards season dates (September through March) book quickly. Inquire now to secure your date.`,
+      ];
+      break;
+
+    case "dmc-entertainment":
+      heroHeadline = `DMC Entertainment & Magician in ${location}`;
+      heroSub = `The local entertainment your incentive trip attendees will remember long after they check out.`;
+      midCta = `Add White Rabbit to Your ${location} Program`;
+      intro = `Building a ${location} itinerary for an incentive trip, corporate retreat, or VIP group experience? White Rabbit gives destination management companies a premium, turnkey entertainment option that elevates welcome receptions, farewell dinners, and group activities. No stage, no setup, no risk. Just world-class close-up magic and mentalism that creates genuine connection between attendees from the moment they arrive.`;
+      body = [
+        `DMCs know the challenge: every incentive trip needs a "wow" moment that justifies the investment. The excursion is great. The restaurant is great. But what makes attendees say "that was the best company trip I've ever been on"? It's the unexpected. It's walking into a welcome reception in ${location} and having a performer approach your group with something that stops the room. Within minutes, VPs from different offices who've never met are laughing together, bonded over something they can't explain.`,
+        `Scott Syme is a member of the world-famous Magic Castle® in Hollywood and has performed for Netflix, Disney, Morgan Stanley, Rolls Royce, and the kind of private clientele that demands flawless execution. His close-up magic and mentalism require zero infrastructure: no stage, no sound system, no power. He integrates into any venue, any format, any timeline. For DMCs, that means one less vendor to coordinate and one more reason attendees will rave about the program.`,
+        `The most effective format for incentive trips is a two-touch approach. First, roaming close-up magic during the welcome cocktail reception, breaking the ice across teams and regions. Then, a curated Private Magic Show as a surprise entertainment element during the farewell dinner. The first touch warms the room. The second closes the trip with a standing ovation. Together, they create the kind of program that gets DMCs rebookings and referrals.`,
+        `White Rabbit is based in Los Angeles and travels nationwide. Close-up magic, mentalism, and professional sound equipment travel anywhere. Full theatrical staging (lighting and curtains) is available for greater Los Angeles events. Inquire about availability for your upcoming ${location} programs.`,
       ];
       break;
 

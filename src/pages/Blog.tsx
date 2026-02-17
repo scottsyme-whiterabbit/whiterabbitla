@@ -111,7 +111,7 @@ const Blog = () => {
             <h2 className="font-serif text-3xl text-foreground mb-6">Insights on Luxury Entertainment</h2>
           </AnimatedSection>
           <div className="flex flex-wrap gap-2 mb-8">
-            {[null, "For Planners", "For Production Companies", "Luxury Nightlife", "Event Planning", "Corporate", "Private Events", "Weddings", "Magic Destinations"].map((cat) => {
+            {[null, "For Planners", "For DMCs", "For Production Companies", "Luxury Nightlife", "Event Planning", "Corporate", "Private Events", "Weddings", "Magic Destinations"].map((cat) => {
               const hasArticles = cat === null || blogArticles.some(a => a.category === cat);
               if (!hasArticles) return null;
               return (
