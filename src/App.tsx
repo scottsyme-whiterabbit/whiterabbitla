@@ -32,6 +32,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ReviewGate from "./pages/ReviewGate";
 import TermsOfService from "./pages/TermsOfService";
 import PitchDeck from "./pages/PitchDeck";
+import Refer from "./pages/Refer";
 import { getBlogArticleBySlug } from "./data/blogArticles";
 import { useParams } from "react-router-dom";
 
@@ -72,6 +73,7 @@ const AppContent = () => {
         <Route path="/terms" element={<TermsOfService />} />
         <Route path="/deck" element={<PitchDeck />} />
         <Route path="/review" element={<ReviewGate />} />
+        <Route path="/refer" element={<Refer />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
