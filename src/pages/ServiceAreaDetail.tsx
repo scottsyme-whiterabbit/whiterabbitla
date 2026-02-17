@@ -5,6 +5,7 @@ import { getAreaBySlug } from "@/data/serviceAreas";
 import { seoPages } from "@/data/seoPages";
 import { blogArticles } from "@/data/blogArticles";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 
 const ServiceAreaDetail = () => {
   const { citySlug } = useParams<{ citySlug: string }>();
@@ -18,6 +19,15 @@ const ServiceAreaDetail = () => {
       ? `Hire a world-class magician for luxury events in ${area.city}. Close-up magic, parlor shows, and bespoke entertainment by White Rabbit.`
       : "",
     path: `/areas/${citySlug}`,
+  });
+
+  useWebPageSchema({
+    name: area ? `Magician in ${area.city}` : "Service Area",
+    description: area
+      ? `Hire a world-class magician for luxury events in ${area.city}. Close-up magic, parlor shows, and bespoke entertainment.`
+      : "",
+    path: `/areas/${citySlug}`,
+    type: "WebPage",
   });
 
   if (!area) return <Navigate to="/areas" replace />;
@@ -42,7 +52,7 @@ const ServiceAreaDetail = () => {
       <section className="relative h-[50vh] min-h-[400px]">
         <img
           src={area.photo.replace("w=600&h=400", "w=1600&h=900")}
-          alt={`${area.city} luxury events`}
+          alt={`${area.city}, ${area.region} — luxury event entertainment destination`}
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
