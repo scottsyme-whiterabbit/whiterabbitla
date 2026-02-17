@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Search, Filter, Users, Flame, ThermometerSun, Snowflake, UserX } from "lucide-react";
+import { Search, Filter, Users, Flame, ThermometerSun, Snowflake, UserX, ChevronDown, ChevronUp, MousePointerClick } from "lucide-react";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -18,6 +18,13 @@ interface Contact {
   reply_detected: boolean;
   last_emailed_at: string | null;
   created_at: string;
+}
+
+interface ClickEvent {
+  id: string;
+  link_slug: string;
+  drip_step: number;
+  clicked_at: string;
 }
 
 type FilterStatus = "all" | "hot" | "warm" | "new" | "cold" | "unsubscribed";
@@ -40,6 +47,9 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<FilterStatus>(initialFilter || "all");
   const [loading, setLoading] = useState(false);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [clicksCache, setClicksCache] = useState<Record<string, ClickEvent[]>>({});
+  const [loadingClicks, setLoadingClicks] = useState<string | null>(null);
 
   const loadContacts = useCallback(async () => {
     setLoading(true);
@@ -70,15 +80,43 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
     if (initialFilter) setFilter(initialFilter);
   }, [initialFilter]);
 
+  const toggleExpand = async (contactId: string) => {
+    if (expandedId === contactId) {
+      setExpandedId(null);
+      return;
+    }
+    setExpandedId(contactId);
+
+    if (clicksCache[contactId]) return;
+
+    setLoadingClicks(contactId);
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+        },
+        body: JSON.stringify({ action: "get_contact_clicks", adminPassword: storedPassword, contactId }),
+      });
+      if (!res.ok) throw new Error("Failed to load clicks");
+      const data = await res.json();
+      setClicksCache(prev => ({ ...prev, [contactId]: data.clicks || [] }));
+    } catch (e) {
+      console.error("Failed to load clicks:", e);
+      setClicksCache(prev => ({ ...prev, [contactId]: [] }));
+    } finally {
+      setLoadingClicks(null);
+    }
+  };
+
   const filtered = contacts.filter(c => {
-    // Filter by status
     if (filter === "unsubscribed" && c.subscribed) return false;
     if (filter === "hot" && (c.engagement_status !== "hot" || !c.subscribed)) return false;
     if (filter === "warm" && (c.engagement_status !== "warm" || !c.subscribed)) return false;
     if (filter === "new" && (c.engagement_status !== "new" || !c.subscribed)) return false;
     if (filter === "cold" && (c.engagement_status !== "cold" || !c.subscribed)) return false;
 
-    // Search
     if (search.trim()) {
       const q = search.toLowerCase();
       return (
@@ -149,6 +187,7 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border">
+              <th className="w-8 p-3"></th>
               <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Email</th>
               <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Name</th>
               <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Company</th>
@@ -163,29 +202,73 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
             {filtered.map(c => {
               const statusKey = !c.subscribed ? "unsubscribed" : c.engagement_status;
               const config = STATUS_CONFIG[statusKey] || STATUS_CONFIG["new"];
+              const isExpanded = expandedId === c.id;
+              const clicks = clicksCache[c.id];
+              const isLoadingThis = loadingClicks === c.id;
+
               return (
-                <tr key={c.id} className="border-b border-border/50 hover:bg-accent/5 transition-colors">
-                  <td className="p-3 text-foreground font-mono text-xs">{c.email}</td>
-                  <td className="p-3 text-muted-foreground">{c.name || "—"}</td>
-                  <td className="p-3 text-muted-foreground">{c.company || "—"}</td>
-                  <td className="p-3 text-muted-foreground">{c.city || "—"}</td>
-                  <td className="p-3">
-                    <span className={`text-xs px-2 py-1 inline-flex items-center gap-1 ${config.colorClass}`}>
-                      {c.reply_detected && "💬 "}
-                      {config.label}
-                    </span>
-                  </td>
-                  <td className="p-3 text-muted-foreground text-xs">{c.drip_campaign}</td>
-                  <td className="p-3 text-muted-foreground text-xs">{c.drip_step}/5</td>
-                  <td className="p-3 text-muted-foreground text-xs">
-                    {c.last_emailed_at ? new Date(c.last_emailed_at).toLocaleDateString() : "Never"}
-                  </td>
-                </tr>
+                <>
+                  <tr
+                    key={c.id}
+                    onClick={() => toggleExpand(c.id)}
+                    className="border-b border-border/50 hover:bg-accent/5 transition-colors cursor-pointer"
+                  >
+                    <td className="p-3 text-muted-foreground">
+                      {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                    </td>
+                    <td className="p-3 text-foreground font-mono text-xs">{c.email}</td>
+                    <td className="p-3 text-muted-foreground">{c.name || "—"}</td>
+                    <td className="p-3 text-muted-foreground">{c.company || "—"}</td>
+                    <td className="p-3 text-muted-foreground">{c.city || "—"}</td>
+                    <td className="p-3">
+                      <span className={`text-xs px-2 py-1 inline-flex items-center gap-1 ${config.colorClass}`}>
+                        {c.reply_detected && "💬 "}
+                        {config.label}
+                      </span>
+                    </td>
+                    <td className="p-3 text-muted-foreground text-xs">{c.drip_campaign}</td>
+                    <td className="p-3 text-muted-foreground text-xs">{c.drip_step}/5</td>
+                    <td className="p-3 text-muted-foreground text-xs">
+                      {c.last_emailed_at ? new Date(c.last_emailed_at).toLocaleDateString() : "Never"}
+                    </td>
+                  </tr>
+                  {isExpanded && (
+                    <tr key={`${c.id}-clicks`} className="border-b border-border/50">
+                      <td colSpan={9} className="p-0">
+                        <div className="bg-accent/5 px-6 py-4">
+                          <div className="flex items-center gap-2 mb-3">
+                            <MousePointerClick size={14} className="text-accent" />
+                            <span className="font-sans text-xs tracking-[0.15em] uppercase text-accent">Click Activity</span>
+                          </div>
+                          {isLoadingThis ? (
+                            <p className="text-xs text-muted-foreground">Loading clicks...</p>
+                          ) : clicks && clicks.length > 0 ? (
+                            <div className="space-y-2">
+                              {clicks.map(click => (
+                                <div key={click.id} className="flex items-center gap-4 text-xs">
+                                  <span className="text-muted-foreground w-32">
+                                    {new Date(click.clicked_at).toLocaleDateString()} {new Date(click.clicked_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                                  </span>
+                                  <span className="text-foreground/70 bg-border/30 px-2 py-0.5">
+                                    Email #{click.drip_step}
+                                  </span>
+                                  <span className="text-foreground font-mono">{click.link_slug}</span>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-xs text-muted-foreground">No clicks recorded yet.</p>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </>
               );
             })}
             {!filtered.length && (
               <tr>
-                <td colSpan={8} className="p-8 text-center text-muted-foreground">
+                <td colSpan={9} className="p-8 text-center text-muted-foreground">
                   {search ? "No contacts match your search." : "No contacts found."}
                 </td>
               </tr>
