@@ -652,7 +652,7 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
     "golf-tournament-magician": [
       {
         question: "When does the magician perform at a golf tournament?",
-        answer: "The sweet spot is the post-round reception — that awkward window between the last putt and the awards dinner when players are milling around. Scott fills that gap with roaming close-up magic that keeps energy high and conversations flowing. He can also perform during the awards dinner or at the 19th hole.",
+        answer: "There are three key windows. First, on the course itself: Scott can station at a signature hole and perform close-up magic for groups waiting at the tee, turning a five-minute backup into the most talked-about hole of the day. Second, during the post-round reception as golfers come off the course. Third, as MC and host during dinner and awards. One performer covers the entire day.",
       },
       {
         question: "Is the magic appropriate for a golf crowd?",
@@ -820,6 +820,7 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
       intro = `Planning a golf tournament in ${location} and wondering what happens after the last putt drops? That awkward window between the round and the awards dinner is where most events lose momentum. White Rabbit fills it with world-class close-up magic and hosting that keeps your players engaged, entertained, and talking about your event long after the trophies are handed out.`;
       body = [
         `Here's the truth about golf tournaments: the golf is great, but the post-round experience is where loyalty is built. Your players remember the 19th hole more than the 18th. Scott Syme transforms that dead zone into the highlight of the day with roaming close-up magic during cocktails, mentalism that reads the room, and the kind of energy that turns strangers into friends.`,
+        `But the entertainment can start on the course itself. One of the most effective formats is stationing a magician at a signature hole where groups inevitably back up. Instead of standing around for five minutes waiting for the group ahead to clear, your players get a close-up magic performance right at the tee box. It turns dead time into the most talked-about moment of the round, and players arrive at the 19th hole already buzzing about the entertainment.`,
         `Scott is a proud member of the world-famous Magic Castle® in Hollywood, and his style is perfectly calibrated for the country club environment. Sophisticated, conversational, whiskey-in-hand entertainment that feels like it belongs at a private club. No stage required. No cheesy props. Just a master craftsman moving through the room creating impossible moments that spark genuine connection.`,
         `Beyond the magic, Scott also serves as a professional MC and host, managing the flow from cocktail hour through dinner, awards, and auction. It's a hybrid offering that eliminates the need for a separate emcee while keeping energy high and pacing tight.`,
         `Available for charity tournaments, corporate golf outings, member-guest events, and private club celebrations across ${location}. Limited dates during peak golf season (April–October). Inquire now.`,
