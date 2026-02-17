@@ -65,7 +65,7 @@ const PlannerDripTab = ({ storedPassword }: PlannerDripTabProps) => {
     const header = lines[0].toLowerCase();
     const cols = header.split(",").map(h => h.trim());
     const emailIdx = cols.findIndex(h => h.includes("email"));
-    const nameIdx = cols.findIndex(h => h.includes("name") && !h.includes("company"));
+    const nameIdx = cols.findIndex(h => (h.includes("first") && h.includes("name")) || (h === "name") || (h.includes("name") && !h.includes("company") && !h.includes("last")));
     const companyIdx = cols.findIndex(h => h.includes("company") || h.includes("business"));
     const cityIdx = cols.findIndex(h => h.includes("city") || h.includes("location"));
 
