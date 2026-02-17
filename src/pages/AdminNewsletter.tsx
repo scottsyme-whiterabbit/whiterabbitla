@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import { Upload, Send, FileText, Users, Mail, RefreshCw, Trash2, Eye } from "lucide-react";
 import PlannerDripTab from "@/components/PlannerDripTab";
+import ContactsListTab from "@/components/ContactsListTab";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -342,49 +343,7 @@ const AdminNewsletter = () => {
 
         {/* Contacts */}
         {activeTab === "contacts" && (
-          <div>
-            <div className="flex items-center gap-4 mb-6">
-              <label className="inline-flex items-center gap-2 cursor-pointer bg-accent text-accent-foreground px-5 py-2 font-sans text-sm tracking-[0.2em] uppercase hover:bg-accent/80 transition-colors">
-                <Upload size={16} />
-                Import CSV
-                <input type="file" accept=".csv" onChange={handleCSVUpload} className="hidden" />
-              </label>
-              <p className="text-sm text-muted-foreground">{contacts.length} contacts total</p>
-            </div>
-            <div className="border border-border overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-border">
-                    <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Email</th>
-                    <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Name</th>
-                    <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Source</th>
-                    <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Status</th>
-                    <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Last Emailed</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {contacts.map(c => (
-                    <tr key={c.id} className="border-b border-border/50">
-                      <td className="p-3 text-foreground">{c.email}</td>
-                      <td className="p-3 text-muted-foreground">{c.name || "—"}</td>
-                      <td className="p-3 text-muted-foreground">{c.source}</td>
-                      <td className="p-3">
-                        <span className={`text-xs px-2 py-1 ${c.subscribed ? "bg-green-900/30 text-green-400" : "bg-red-900/30 text-red-400"}`}>
-                          {c.subscribed ? "Active" : "Unsubscribed"}
-                        </span>
-                      </td>
-                      <td className="p-3 text-muted-foreground text-xs">
-                        {c.last_emailed_at ? new Date(c.last_emailed_at).toLocaleDateString() : "Never"}
-                      </td>
-                    </tr>
-                  ))}
-                  {!contacts.length && (
-                    <tr><td colSpan={5} className="p-8 text-center text-muted-foreground">No contacts yet. Upload a CSV to get started.</td></tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <ContactsListTab storedPassword={storedPassword} />
         )}
 
         {/* Compose */}
