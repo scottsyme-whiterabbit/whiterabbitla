@@ -101,6 +101,13 @@ function getCityTestimonial(slug: string, category: string) {
     "Private Events": "private",
     "Close-Up Magic": "private",
     "Private Magic Shows": "private",
+    "Golf Tournaments": "corporate",
+    "Charity Galas": "corporate",
+    "Holiday Parties": "corporate",
+    "Trade Shows": "corporate",
+    "Rehearsal Dinners": "wedding",
+    "Halloween Events": "private",
+    "Christmas & NYE": "corporate",
   };
   const targetRegion = regionMap[category] || "private";
   
