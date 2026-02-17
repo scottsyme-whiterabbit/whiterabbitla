@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { Search, Filter, Users, Flame, ThermometerSun, Snowflake, UserX, ChevronDown, ChevronUp, MousePointerClick } from "lucide-react";
+import { Search, Users, Flame, ThermometerSun, Snowflake, UserX, ChevronDown, ChevronUp, MousePointerClick, Eye } from "lucide-react";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -27,6 +27,13 @@ interface ClickEvent {
   clicked_at: string;
 }
 
+interface OpenEvent {
+  id: string;
+  drip_step: number;
+  opened_at: string;
+  user_agent: string | null;
+}
+
 type FilterStatus = "all" | "hot" | "warm" | "new" | "cold" | "unsubscribed";
 
 interface ContactsListTabProps {
@@ -49,7 +56,9 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
   const [loading, setLoading] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [clicksCache, setClicksCache] = useState<Record<string, ClickEvent[]>>({});
-  const [loadingClicks, setLoadingClicks] = useState<string | null>(null);
+  const [opensCache, setOpensCache] = useState<Record<string, OpenEvent[]>>({});
+  const [loadingActivity, setLoadingActivity] = useState<string | null>(null);
+  const [activityTab, setActivityTab] = useState<"opens" | "clicks">("opens");
 
   const loadContacts = useCallback(async () => {
     setLoading(true);
@@ -87,9 +96,9 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
     }
     setExpandedId(contactId);
 
-    if (clicksCache[contactId]) return;
+    if (clicksCache[contactId] && opensCache[contactId]) return;
 
-    setLoadingClicks(contactId);
+    setLoadingActivity(contactId);
     try {
       const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
         method: "POST",
@@ -99,14 +108,16 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
         },
         body: JSON.stringify({ action: "get_contact_clicks", adminPassword: storedPassword, contactId }),
       });
-      if (!res.ok) throw new Error("Failed to load clicks");
+      if (!res.ok) throw new Error("Failed to load activity");
       const data = await res.json();
       setClicksCache(prev => ({ ...prev, [contactId]: data.clicks || [] }));
+      setOpensCache(prev => ({ ...prev, [contactId]: data.opens || [] }));
     } catch (e) {
-      console.error("Failed to load clicks:", e);
+      console.error("Failed to load activity:", e);
       setClicksCache(prev => ({ ...prev, [contactId]: [] }));
+      setOpensCache(prev => ({ ...prev, [contactId]: [] }));
     } finally {
-      setLoadingClicks(null);
+      setLoadingActivity(null);
     }
   };
 
@@ -136,6 +147,17 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
     new: contacts.filter(c => c.engagement_status === "new" && c.subscribed).length,
     cold: contacts.filter(c => c.engagement_status === "cold" && c.subscribed).length,
     unsubscribed: contacts.filter(c => !c.subscribed).length,
+  };
+
+  // Dedupe opens by drip_step (show unique opens only)
+  const getUniqueOpens = (opens: OpenEvent[]) => {
+    const seen = new Set<string>();
+    return opens.filter(o => {
+      const key = `${o.drip_step}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
   };
 
   return (
@@ -204,7 +226,8 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
               const config = STATUS_CONFIG[statusKey] || STATUS_CONFIG["new"];
               const isExpanded = expandedId === c.id;
               const clicks = clicksCache[c.id];
-              const isLoadingThis = loadingClicks === c.id;
+              const opens = opensCache[c.id];
+              const isLoadingThis = loadingActivity === c.id;
 
               return (
                 <>
@@ -233,31 +256,68 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
                     </td>
                   </tr>
                   {isExpanded && (
-                    <tr key={`${c.id}-clicks`} className="border-b border-border/50">
+                    <tr key={`${c.id}-activity`} className="border-b border-border/50">
                       <td colSpan={9} className="p-0">
                         <div className="bg-accent/5 px-6 py-4">
-                          <div className="flex items-center gap-2 mb-3">
-                            <MousePointerClick size={14} className="text-accent" />
-                            <span className="font-sans text-xs tracking-[0.15em] uppercase text-accent">Click Activity</span>
+                          {/* Activity tabs */}
+                          <div className="flex gap-4 mb-3">
+                            <button
+                              onClick={(e) => { e.stopPropagation(); setActivityTab("opens"); }}
+                              className={`flex items-center gap-1.5 font-sans text-xs tracking-[0.15em] uppercase transition-colors ${
+                                activityTab === "opens" ? "text-accent" : "text-muted-foreground hover:text-foreground"
+                              }`}
+                            >
+                              <Eye size={14} />
+                              Opens {opens ? `(${getUniqueOpens(opens).length})` : ""}
+                            </button>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); setActivityTab("clicks"); }}
+                              className={`flex items-center gap-1.5 font-sans text-xs tracking-[0.15em] uppercase transition-colors ${
+                                activityTab === "clicks" ? "text-accent" : "text-muted-foreground hover:text-foreground"
+                              }`}
+                            >
+                              <MousePointerClick size={14} />
+                              Clicks {clicks ? `(${clicks.length})` : ""}
+                            </button>
                           </div>
+
                           {isLoadingThis ? (
-                            <p className="text-xs text-muted-foreground">Loading clicks...</p>
-                          ) : clicks && clicks.length > 0 ? (
-                            <div className="space-y-2">
-                              {clicks.map(click => (
-                                <div key={click.id} className="flex items-center gap-4 text-xs">
-                                  <span className="text-muted-foreground w-32">
-                                    {new Date(click.clicked_at).toLocaleDateString()} {new Date(click.clicked_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                                  </span>
-                                  <span className="text-foreground/70 bg-border/30 px-2 py-0.5">
-                                    Email #{click.drip_step}
-                                  </span>
-                                  <span className="text-foreground font-mono">{click.link_slug}</span>
-                                </div>
-                              ))}
-                            </div>
+                            <p className="text-xs text-muted-foreground">Loading activity...</p>
+                          ) : activityTab === "opens" ? (
+                            opens && getUniqueOpens(opens).length > 0 ? (
+                              <div className="space-y-2">
+                                {getUniqueOpens(opens).map(open => (
+                                  <div key={open.id} className="flex items-center gap-4 text-xs">
+                                    <span className="text-muted-foreground w-32">
+                                      {new Date(open.opened_at).toLocaleDateString()} {new Date(open.opened_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                                    </span>
+                                    <span className="text-foreground/70 bg-border/30 px-2 py-0.5">
+                                      Email #{open.drip_step}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-xs text-muted-foreground">No opens recorded yet.</p>
+                            )
                           ) : (
-                            <p className="text-xs text-muted-foreground">No clicks recorded yet.</p>
+                            clicks && clicks.length > 0 ? (
+                              <div className="space-y-2">
+                                {clicks.map(click => (
+                                  <div key={click.id} className="flex items-center gap-4 text-xs">
+                                    <span className="text-muted-foreground w-32">
+                                      {new Date(click.clicked_at).toLocaleDateString()} {new Date(click.clicked_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                                    </span>
+                                    <span className="text-foreground/70 bg-border/30 px-2 py-0.5">
+                                      Email #{click.drip_step}
+                                    </span>
+                                    <span className="text-foreground font-mono">{click.link_slug}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <p className="text-xs text-muted-foreground">No clicks recorded yet.</p>
+                            )
                           )}
                         </div>
                       </td>

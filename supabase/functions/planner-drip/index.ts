@@ -11,6 +11,7 @@ const LOGO_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/pub
 const SITE_URL = "https://whiterabbitla.com";
 const APP_URL = "https://whiterabbitla.lovable.app";
 const TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-click";
+const OPEN_TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-open";
 
 // Day offsets for each drip step
 const DRIP_SCHEDULE = [0, 3, 7, 14, 21]; // Day 0, 3, 7, 14, 21
@@ -23,7 +24,8 @@ interface EmailTemplate {
   body: (name: string, company: string, city: string, contactId?: string, step?: number) => string;
 }
 
-function wrapEmail(preheader: string, innerHtml: string, email: string): string {
+function wrapEmail(preheader: string, innerHtml: string, email: string, contactId?: string, step?: number): string {
+  const openPixel = contactId ? `<img src="${OPEN_TRACK_URL}?cid=${contactId}&step=${step ?? 0}" width="1" height="1" style="display:block;width:1px;height:1px;border:0;" alt="" />` : "";
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -75,6 +77,7 @@ White Rabbit · Los Angeles<br/>
 </table>
 </td></tr></table>
 </center>
+${openPixel}
 </body></html>`.replace(/\{\{EMAIL\}\}/g, email);
 }
 
@@ -422,7 +425,7 @@ serve(async (req) => {
           const template = TEMPLATES[step];
           const firstName = contact.name?.split(" ")[0] || "there";
           const bodyInner = template.body(firstName, contact.company || "", contact.city || "", contact.id, step);
-          const html = wrapEmail(template.preheader, bodyInner, contact.email);
+          const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, step);
 
           try {
             const res = await fetch("https://api.resend.com/emails", {
@@ -474,7 +477,7 @@ serve(async (req) => {
             if (daysSinceStart >= BREAKUP_DAY) {
               const firstName = contact.name?.split(" ")[0] || "there";
               const bodyInner = BREAKUP_TEMPLATE.body(firstName, contact.company || "", contact.city || "");
-              const html = wrapEmail(BREAKUP_TEMPLATE.preheader, bodyInner, contact.email);
+              const html = wrapEmail(BREAKUP_TEMPLATE.preheader, bodyInner, contact.email, contact.id, 5);
               try {
                 const res = await fetch("https://api.resend.com/emails", {
                   method: "POST",
@@ -522,7 +525,7 @@ serve(async (req) => {
           const template = WARM_TEMPLATES[step];
           const firstName = contact.name?.split(" ")[0] || "there";
           const bodyInner = template.body(firstName, contact.company || "", contact.city || "");
-          const html = wrapEmail(template.preheader, bodyInner, contact.email);
+          const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, step);
 
           try {
             const res = await fetch("https://api.resend.com/emails", {
