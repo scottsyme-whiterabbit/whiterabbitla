@@ -83,7 +83,8 @@ function signoff(full: boolean = false): string {
     return `<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
 Scott Syme<br/>
 <span style="font-size:13px; color:rgba(245,240,232,0.5);">White Rabbit · Los Angeles</span><br/>
-<span style="font-size:12px; color:rgba(245,240,232,0.35);">(424) 394-1850 · events@whiterabbitla.com</span>
+<span style="font-size:12px; color:rgba(245,240,232,0.35);">(424) 394-1850 · scott.syme@whiterabbitla.com</span><br/>
+<span style="font-size:12px;"><a href="https://whiterabbitla.com" style="color:rgba(245,240,232,0.35); text-decoration:none;">whiterabbitla.com</a></span>
 </p>`;
   }
   return `<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">Scott</p>`;
