@@ -61,7 +61,7 @@ const testimonials = [
 const experiences = [
   {
     title: "Close-Up Magic",
-    desc: "Intimate sleight of hand during cocktail hours & receptions. Perfect for 20–200+ guests.",
+    desc: "Intimate interactive magic during cocktail hours & receptions. Perfect for 20–200+ guests.",
     image: closeupImg,
   },
   {

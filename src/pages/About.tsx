@@ -66,7 +66,7 @@ const About = () => {
                 home. A moment that cemented what he already felt: he was exactly where he was meant to be.
               </p>
               <p>
-                That combination of business acumen, hospitality training, and world-class sleight of hand 
+                That combination of business acumen, hospitality training, and world-class showmanship 
                 is why Fortune 500 companies, charitable organizations, and the most discerning private clients 
                 (Netflix, Disney, Rolls Royce, Morgan Stanley, and countless industry leaders) trust Scott 
                 with their most important events. Beyond performing, Scott has consulted for major productions, 

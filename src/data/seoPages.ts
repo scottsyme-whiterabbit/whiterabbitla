@@ -601,7 +601,7 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
     },
     {
       question: `What makes White Rabbit different from other magicians in ${location}?`,
-      answer: `White Rabbit delivers a luxury entertainment experience, not just tricks. Scott is a member of the world-famous Magic Castle® in Hollywood, the most prestigious private club for magicians on earth. Combined with world-class sleight of hand and the kind of guest engagement that transforms events, it's why Netflix, Disney, Morgan Stanley, and Rolls Royce trust White Rabbit with their most important moments.`,
+      answer: `White Rabbit delivers a luxury entertainment experience, not just tricks. Scott is a member of the world-famous Magic Castle® in Hollywood, the most prestigious private club for magicians on earth. Combined with world-class mentalism, interactive magic, and the kind of guest engagement that transforms events, it's why Netflix, Disney, Morgan Stanley, and Rolls Royce trust White Rabbit with their most important moments.`,
     },
   ];
 
@@ -709,7 +709,7 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
     "halloween-party-magician": [
       {
         question: "What kind of magic works for a Halloween event?",
-        answer: "Scott leans into the mysterious and uncanny — mentalism, mind reading, and eerie coincidences that feel genuinely supernatural. It's sophisticated dark wonder, not jump scares. Think séance energy meets world-class sleight of hand. Perfect for adult Halloween parties where atmosphere matters.",
+        answer: "Scott leans into the mysterious and uncanny: mentalism, mind reading, and eerie coincidences that feel genuinely supernatural. It's sophisticated dark wonder, not jump scares. Think séance energy meets world-class psychological magic. Perfect for adult Halloween parties where atmosphere matters.",
       },
       {
         question: "Does Scott dress in costume for Halloween events?",
@@ -808,10 +808,10 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
       heroHeadline = `Close-Up Magician in ${location}`;
       heroSub = `Magic that happens right in your hands. Intimate, impossible, and absolutely unforgettable.`;
       midCta = `Hire a Close-Up Magician in ${location}`;
-      intro = `Looking for a close-up magician in ${location}? Close-up magic is the most powerful form of entertainment because it's personal. It happens right there in your hands, inches from your face, and no amount of replaying will reveal the secret. White Rabbit brings world-class sleight of hand directly to your guests, creating moments that feel like encountering real magic.`;
+      intro = `Looking for a close-up magician in ${location}? Close-up magic is the most powerful form of entertainment because it's personal. It happens right there in your hands, inches from your face, and no amount of replaying will reveal the secret. White Rabbit brings world-class interactive magic directly to your guests, creating moments that feel like encountering real magic.`;
       body = [
         `There's a reason the world's most exclusive events feature close-up magic: it creates genuine human connection. When Scott Syme approaches a group, within sixty seconds they're united. Executives and interns, introverts and extroverts, all sharing the same moment of pure, unfiltered amazement. No other entertainment does this.`,
-        `A proud member of the world-famous Magic Castle® in Hollywood, Scott's close-up work blends card magic, mentalism, and psychological illusion into seamless, conversational performances. Guests don't just watch. They participate. They shuffle the deck, they choose the card, they hold the impossible object. It's interactive in a way that makes every person feel like the star of the show.`,
+        `A proud member of the world-famous Magic Castle® in Hollywood, Scott's close-up work blends mentalism, psychological illusion, and interactive magic into seamless, conversational performances. Guests don't just watch. They participate. They make impossible choices, they hold objects that vanish and reappear, they experience moments that defy explanation. It's interactive in a way that makes every person feel like the star of the show.`,
         `Perfect for cocktail hours, dinner parties, VIP lounges, restaurant activations, hotel lobbies, brand activations, trade shows, and any ${location} event where you want guests mingling, laughing, and completely present in the moment.`,
         `Available for events of any size across ${location}. Most clients book 2 to 4 hours of roaming close-up magic, though custom packages are available. Inquire now. The calendar fills fast, especially during event season.`,
       ];
@@ -903,7 +903,7 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
       intro = `Hosting a Halloween party in ${location}? Skip the generic costume party and give your guests an evening of genuine mystery. White Rabbit leans into the uncanny — mentalism, mind reading, and eerie coincidences that feel genuinely supernatural. On the one night of the year when everyone wants to believe in magic, Scott Syme delivers the real thing.`;
       body = [
         `Halloween parties are everywhere. But a Halloween experience? That's rare. White Rabbit transforms your gathering into something atmospheric and unforgettable. Picture this: dim lighting, a curated soundtrack, and a magician who seems to know things he shouldn't. Cards appear in impossible places. Thoughts are read with unsettling accuracy. A borrowed object vanishes and reappears somewhere that makes no sense — unless, of course, something genuinely strange is happening.`,
-        `Scott is a member of the world-famous Magic Castle® in Hollywood, and his mentalism and psychological illusion work takes on a different dimension during Halloween. The same routines that amaze at corporate events become genuinely eerie when performed by candlelight on October 31st. It's sophisticated dark wonder, not jump scares. Think séance energy meets world-class sleight of hand.`,
+        `Scott is a member of the world-famous Magic Castle® in Hollywood, and his mentalism and psychological illusion work takes on a different dimension during Halloween. The same routines that amaze at corporate events become genuinely eerie when performed by candlelight on October 31st. It's sophisticated dark wonder, not jump scares. Think séance energy meets world-class psychological magic.`,
         `Perfect for adult Halloween parties, haunted dinners, costume galas, and spooky cocktail events. Scott's style naturally carries a dark elegance that fits the season without resorting to gimmicks. The atmosphere is built into the performance.`,
         `October dates fill quickly — Halloween weekend especially. Book early to bring the uncanny to your ${location} Halloween celebration.`,
       ];
