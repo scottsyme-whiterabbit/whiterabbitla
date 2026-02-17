@@ -160,7 +160,7 @@ const Index = () => {
               <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 leading-tight">
                 More Than Magic.<br />A Feeling.
               </h2>
-              <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">Scott Syme is a world-class magician and the creative force behind White Rabbit. A member of the Magic Castle® and consultant to performers on America's Got Talent and Disney Channel, Scott has spent years perfecting something most magicians never attempt: an experience that feels like stepping into a five-star lobby or turning left on a flight. He blends masterful sleight of hand, mentalism, and impossible coincidences with the warmth of a seasoned host, transforming any room into something cinematic, intimate, and utterly alive. Curated lighting, a signature soundtrack, and moments so close you can feel them. This isn't a magic show. It's a White Rabbit experience.
+              <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">Scott Syme is a world-class magician and the creative force behind White Rabbit. A member of the Magic Castle® and consultant to performers on America's Got Talent and Disney Channel, Scott has spent years perfecting something most magicians never attempt: an experience that feels like stepping into a five-star lobby or turning left on a flight. He blends masterful mentalism, interactive magic, and impossible coincidences with the warmth of a seasoned host, transforming any room into something cinematic, intimate, and utterly alive. Curated lighting, a signature soundtrack, and moments so close you can feel them. This isn't a magic show. It's a White Rabbit experience.
 
 
 
@@ -233,7 +233,7 @@ const Index = () => {
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={cardsBlueImg} alt="Close-up sleight of hand card magic with dramatic blue lighting" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={cardsBlueImg} alt="Close-up interactive magic with dramatic blue lighting" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
@@ -335,11 +335,11 @@ const Index = () => {
           },
           {
             question: "What is the best entertainment for a wedding cocktail hour?",
-            answer: "Close-up magic is widely considered the best cocktail hour entertainment because it breaks the ice between guests who've never met. Scott Syme performs intimate sleight of hand and mentalism for small groups, creating shared moments of laughter and amazement that set the tone for the entire evening.",
+            answer: "Close-up magic is widely considered the best cocktail hour entertainment because it breaks the ice between guests who've never met. Scott Syme performs intimate mentalism and interactive magic for small groups, creating shared moments of laughter and amazement that set the tone for the entire evening.",
           },
           {
             question: "What type of magic is best for a corporate event?",
-            answer: "For corporate events, close-up roaming magic is the gold standard. Scott moves through cocktail hours, galas, and receptions performing sleight of hand and mentalism for small groups, turning strangers into collaborators within minutes. For events that call for a centerpiece moment, the Private Magic Show is a curated 45-minute theatrical experience designed for groups of 20 to 120.",
+            answer: "For corporate events, close-up roaming magic is the gold standard. Scott moves through cocktail hours, galas, and receptions performing mentalism and interactive magic for small groups, turning strangers into collaborators within minutes. For events that call for a centerpiece moment, the Private Magic Show is a curated 45-minute theatrical experience designed for groups of 20 to 120.",
           },
           {
             question: "How far in advance should I book a magician?",
@@ -347,7 +347,7 @@ const Index = () => {
           },
           {
             question: "What makes White Rabbit different from other magicians?",
-            answer: "White Rabbit is not just a magic show. It's a hospitality-driven experience. Scott Syme combines world-class sleight of hand with the warmth of a five-star host, curated lighting, a signature soundtrack, and an atmosphere that makes guests feel truly cared for. That's why brands like Netflix, Disney, and Morgan Stanley keep coming back.",
+            answer: "White Rabbit is not just a magic show. It's a hospitality-driven experience. Scott Syme combines world-class mentalism and interactive magic with the warmth of a five-star host, curated lighting, a signature soundtrack, and an atmosphere that makes guests feel truly cared for. That's why brands like Netflix, Disney, and Morgan Stanley keep coming back.",
           },
           {
             question: "Does White Rabbit travel outside of Los Angeles?",

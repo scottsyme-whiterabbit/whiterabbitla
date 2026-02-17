@@ -182,7 +182,7 @@ const servicePages: Record<string, ServiceData> = {
     heroHeadline: "Close-Up Magic",
     heroSub: "Magic that happens right in your hands. Intimate, impossible, and absolutely unforgettable.",
     image: closeupImg,
-    intro: "Close-up magic is the most powerful form of entertainment because it's personal. It happens right there in your hands, inches from your face. White Rabbit brings world-class sleight of hand directly to your guests, creating moments that feel like encountering real magic.",
+    intro: "Close-up magic is the most powerful form of entertainment because it's personal. It happens right there in your hands, inches from your face. White Rabbit brings world-class interactive magic directly to your guests, creating moments that feel like encountering real magic.",
     sections: [
       {
         heading: "Why Close-Up Magic",
@@ -190,7 +190,7 @@ const servicePages: Record<string, ServiceData> = {
       },
       {
         heading: "Interactive & Personal",
-        body: "Scott's close-up work blends card magic, mentalism, and psychological illusion into seamless, conversational performances. Guests don't just watch. They participate. They shuffle the deck, they choose the card, they hold the impossible object. Every person feels like the star of the show.",
+        body: "Scott's close-up work blends mentalism, psychological illusion, and interactive magic into seamless, conversational performances. Guests don't just watch. They participate. They make impossible choices, they hold objects that vanish and reappear, they experience moments that defy explanation. Every person feels like the star of the show.",
       },
       {
         heading: "Perfect for Any Setting",
@@ -199,7 +199,7 @@ const servicePages: Record<string, ServiceData> = {
     ],
     included: [
       "Pre-event consultation to understand your audience and goals",
-      "World-class sleight of hand, card magic, and mentalism",
+      "World-class mentalism, interactive magic, and impossible moments",
       "Seamless roaming performance through your event",
       "Professional appearance in signature style",
       "Post-event follow-up",

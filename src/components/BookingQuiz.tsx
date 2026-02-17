@@ -72,7 +72,7 @@ const getRecommendation = (data: QuizData) => {
     return {
       title: "Corporate & Grand Event Experience",
       description:
-        "Scott brings world-class sleight of hand and mentalism with the warmth of a master host. Perfect for cocktail hours and reception entertainment that makes every guest feel like the most important person in the room, followed by a show-stopping parlor performance.",
+        "Scott brings world-class mentalism and interactive magic with the warmth of a master host. Perfect for cocktail hours and reception entertainment that makes every guest feel like the most important person in the room, followed by a show-stopping parlor performance.",
       format: "Corporate",
     };
   }

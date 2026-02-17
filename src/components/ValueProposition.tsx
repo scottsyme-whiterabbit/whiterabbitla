@@ -10,7 +10,7 @@ const painPoints = [
 ];
 
 const included = [
-  "World-class sleight of hand, mentalism, and impossible coincidences",
+  "World-class mentalism, interactive magic, and impossible coincidences",
   "A warm, magnetic host who makes every guest feel like the most important person in the room",
   "Curated atmosphere: signature soundtrack, cinematic lighting, emerald curtain drapes",
   "Pre-event consultation to tailor the experience to your guests and venue",

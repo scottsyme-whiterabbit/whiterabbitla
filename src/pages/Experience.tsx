@@ -20,7 +20,7 @@ const services = [
   {
     title: "Close-Up Magic",
     slug: "close-up-magician",
-    description: "Intimate sleight of hand, mentalism, and impossible coincidences performed inches away. But it's the hospitality that sets it apart. Scott moves through your event like a world-class host, weaving humor, audience participation, and sensory moments into every interaction, making each guest feel like the most important person in the room. Perfect for cocktail hours, dinners, and VIP receptions.",
+    description: "Intimate mentalism, interactive magic, and impossible coincidences performed inches away. But it's the hospitality that sets it apart. Scott moves through your event like a world-class host, weaving humor, audience participation, and sensory moments into every interaction, making each guest feel like the most important person in the room. Perfect for cocktail hours, dinners, and VIP receptions.",
     image: guestLaughImg,
   },
   {
@@ -32,7 +32,7 @@ const services = [
   {
     title: "Corporate Events",
     slug: "corporate-magician",
-    description: "Fortune 500 galas, product launches, executive retreats. Scott brings sleight of hand, mentalism, and classics of magic together with warmth, humor, and genuine audience connection. Your team and clients don't just watch entertainment; they participate, they laugh, they feel taken care of and alive. That's why the world's top brands keep coming back.",
+    description: "Fortune 500 galas, product launches, executive retreats. Scott brings mentalism, interactive magic, and classics of magic together with warmth, humor, and genuine audience connection. Your team and clients don't just watch entertainment; they participate, they laugh, they feel taken care of and alive. That's why the world's top brands keep coming back.",
     image: corporateImg,
   },
   {
@@ -124,7 +124,7 @@ const Experience = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           <AnimatedSection>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={cardsEmeraldImg} alt="Close-up of card sleight of hand with emerald green curtain backdrop at White Rabbit private magic show Los Angeles" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={cardsEmeraldImg} alt="Close-up magic with emerald green curtain backdrop at White Rabbit private magic show Los Angeles" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
