@@ -10,7 +10,7 @@ const QuizNudge = () => (
           <Sparkles size={16} className="text-secondary shrink-0" />
           <p className="font-sans text-sm text-muted-foreground truncate">
             <span className="hidden sm:inline">Not sure what fits your event? </span>
-            <span className="text-foreground font-medium">Take the 30-second quiz</span>
+            <span className="text-foreground font-medium">Take the 35-second quiz</span>
           </p>
         </div>
         <Link
