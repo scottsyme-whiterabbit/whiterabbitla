@@ -98,7 +98,7 @@ const cityData: { city: string; region: string; photo: string; tagline: string }
   { city: "Jupiter", region: "Southeast", photo: "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&h=400&fit=crop", tagline: "Exclusive Florida coastal celebrations" }, // Beach and ocean
   { city: "Sarasota", region: "Southeast", photo: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop", tagline: "Ringling-era elegance and barrier island events" }, // White sand beach
   { city: "Buckhead", region: "Southeast", photo: "/areas/buckhead.jpg", tagline: "Atlanta's most prestigious neighborhood events" },
-  { city: "Nantucket", region: "Northeast", photo: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=600&h=400&fit=crop", tagline: "Island getaway celebrations" }, // Nantucket shingle cottage
+  { city: "Nantucket", region: "Northeast", photo: "/areas/nantucket.jpg", tagline: "Island getaway celebrations" },
   { city: "Martha's Vineyard", region: "Northeast", photo: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&h=400&fit=crop", tagline: "Coastal New England estate parties" }, // New England meadow coast
 
   // Northeast
