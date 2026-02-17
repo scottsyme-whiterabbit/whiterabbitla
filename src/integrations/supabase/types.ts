@@ -300,6 +300,7 @@ export type Database = {
       }
       newsletter_send_log: {
         Row: {
+          ab_variant: string | null
           campaign_id: string
           contact_id: string
           id: string
@@ -307,6 +308,7 @@ export type Database = {
           status: string
         }
         Insert: {
+          ab_variant?: string | null
           campaign_id: string
           contact_id: string
           id?: string
@@ -314,6 +316,7 @@ export type Database = {
           status?: string
         }
         Update: {
+          ab_variant?: string | null
           campaign_id?: string
           contact_id?: string
           id?: string
