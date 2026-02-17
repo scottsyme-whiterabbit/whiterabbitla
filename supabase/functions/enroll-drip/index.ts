@@ -113,7 +113,7 @@ HTML styling:
 - Accent color: #c8a0a0
 - Logo at top: <img src="https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-symbol.png" alt="White Rabbit" style="width:50px;height:auto;margin:0 auto 24px;display:block;" />
 - Soft CTA linking to https://whiterabbitla.lovable.app/experience (not a hard sell button, just a text link)
-- Footer: "White Rabbit · Los Angeles" in small text, with "Unsubscribe" linking to {{UNSUBSCRIBE_LINK}}
+- Footer: "White Rabbit · Los Angeles" with physical address "7393 W. Manchester Ave #209, Los Angeles, CA 90045" in small text, with "Unsubscribe" linking to {{UNSUBSCRIBE_LINK}}
 - Keep it 3-4 short paragraphs. Warm, not long.
 - Current date context: ${currentMonth} ${currentYear}`;
 
