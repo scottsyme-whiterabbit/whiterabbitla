@@ -38,3 +38,6 @@ verify_jwt = false
 
 [functions.enroll-drip]
 verify_jwt = false
+
+[functions.send-thank-you]
+verify_jwt = false

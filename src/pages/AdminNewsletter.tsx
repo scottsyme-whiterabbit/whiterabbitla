@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
-import { Upload, Send, FileText, Users, Mail, RefreshCw, Trash2, Eye } from "lucide-react";
+import { Upload, Send, FileText, Users, Mail, RefreshCw, Trash2, Eye, Heart } from "lucide-react";
 import PlannerDripTab from "@/components/PlannerDripTab";
 import ContactsListTab from "@/components/ContactsListTab";
 
@@ -41,7 +41,12 @@ const AdminNewsletter = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [storedPassword, setStoredPassword] = useState("");
 
-  const [activeTab, setActiveTab] = useState<"dashboard" | "contacts" | "compose" | "campaigns" | "planner">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "contacts" | "compose" | "campaigns" | "planner" | "thankyou">("dashboard");
+  const [tyClientName, setTyClientName] = useState("");
+  const [tyClientEmail, setTyClientEmail] = useState("");
+  const [tyEventType, setTyEventType] = useState("");
+  const [tySending, setTySending] = useState(false);
+  const [tySent, setTySent] = useState(false);
   const [contactsFilter, setContactsFilter] = useState<string>("all");
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
@@ -302,7 +307,7 @@ const AdminNewsletter = () => {
 
         {/* Tabs */}
         <div className="flex gap-1 mb-8 border-b border-border">
-          {(["dashboard", "contacts", "compose", "campaigns", "planner"] as const).map(tab => (
+          {(["dashboard", "contacts", "compose", "campaigns", "planner", "thankyou"] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -534,6 +539,112 @@ const AdminNewsletter = () => {
         {/* Planner Drip Campaign */}
         {activeTab === "planner" && (
           <PlannerDripTab storedPassword={storedPassword} onNavigateToContacts={(filter) => { setContactsFilter(filter); setActiveTab("contacts"); }} />
+        )}
+
+        {/* Thank You Email */}
+        {activeTab === "thankyou" && (
+          <div className="max-w-xl">
+            <h2 className="font-serif text-2xl text-foreground mb-2">Post-Show Thank You</h2>
+            <p className="font-sans text-sm text-muted-foreground mb-8">
+              Send a branded thank-you email to a client after their event. Includes a link to leave a review.
+            </p>
+
+            {tySent ? (
+              <div className="border border-accent/30 p-8 text-center">
+                <Heart size={24} className="text-accent mx-auto mb-4" />
+                <p className="font-serif text-xl text-foreground mb-2">Email Sent!</p>
+                <p className="font-sans text-sm text-muted-foreground mb-6">
+                  Thank-you email delivered to {tyClientEmail}.
+                </p>
+                <button
+                  onClick={() => { setTySent(false); setTyClientName(""); setTyClientEmail(""); setTyEventType(""); }}
+                  className="font-sans text-sm tracking-[0.2em] uppercase text-accent hover:text-foreground transition-colors"
+                >
+                  Send Another
+                </button>
+              </div>
+            ) : (
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  if (!tyClientName || !tyClientEmail) {
+                    toast.error("Name and email required");
+                    return;
+                  }
+                  setTySending(true);
+                  try {
+                    const res = await fetch(`${SUPABASE_URL}/functions/v1/send-thank-you`, {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${SUPABASE_KEY}`,
+                      },
+                      body: JSON.stringify({
+                        clientName: tyClientName,
+                        clientEmail: tyClientEmail,
+                        eventType: tyEventType || undefined,
+                        adminPassword: storedPassword,
+                      }),
+                    });
+                    const data = await res.json();
+                    if (res.ok) {
+                      setTySent(true);
+                      toast.success("Thank-you email sent!");
+                    } else {
+                      throw new Error(data.error || "Send failed");
+                    }
+                  } catch (err) {
+                    toast.error(err instanceof Error ? err.message : "Failed to send");
+                  } finally {
+                    setTySending(false);
+                  }
+                }}
+                className="space-y-4"
+              >
+                <div>
+                  <label className="font-sans text-xs tracking-wider uppercase text-muted-foreground mb-1 block">Client Name *</label>
+                  <input
+                    value={tyClientName}
+                    onChange={e => setTyClientName(e.target.value)}
+                    placeholder="e.g., Jamie Irving"
+                    maxLength={100}
+                    required
+                    className="w-full bg-transparent border border-border text-foreground px-4 py-3 font-sans text-sm focus:outline-none focus:border-accent"
+                  />
+                </div>
+                <div>
+                  <label className="font-sans text-xs tracking-wider uppercase text-muted-foreground mb-1 block">Client Email *</label>
+                  <input
+                    value={tyClientEmail}
+                    onChange={e => setTyClientEmail(e.target.value)}
+                    type="email"
+                    placeholder="client@company.com"
+                    maxLength={255}
+                    required
+                    className="w-full bg-transparent border border-border text-foreground px-4 py-3 font-sans text-sm focus:outline-none focus:border-accent"
+                  />
+                </div>
+                <div>
+                  <label className="font-sans text-xs tracking-wider uppercase text-muted-foreground mb-1 block">Event Name / Type (optional)</label>
+                  <input
+                    value={tyEventType}
+                    onChange={e => setTyEventType(e.target.value)}
+                    placeholder="e.g., your holiday gala, the Morgan Stanley dinner"
+                    maxLength={200}
+                    className="w-full bg-transparent border border-border text-foreground px-4 py-3 font-sans text-sm focus:outline-none focus:border-accent"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={tySending}
+                  className="w-full bg-accent text-accent-foreground py-3 font-sans text-sm tracking-[0.2em] uppercase hover:bg-accent/80 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                >
+                  <Send size={14} />
+                  {tySending ? "Sending..." : "Send Thank You Email"}
+                </button>
+              </form>
+            )}
+          </div>
         )}
       </div>
     </div>
