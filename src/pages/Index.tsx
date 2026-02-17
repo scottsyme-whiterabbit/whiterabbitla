@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import QuizCTA from "@/components/QuizCTA";
+import QuizNudge from "@/components/QuizNudge";
 import FAQSection from "@/components/FAQSection";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
@@ -121,6 +122,9 @@ const Index = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Quiz Nudge — above the fold */}
+      <QuizNudge />
 
       {/* Client Logo Carousel */}
       <AnimatedSection>

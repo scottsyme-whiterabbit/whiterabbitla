@@ -1,5 +1,6 @@
 import AnimatedSection from "@/components/AnimatedSection";
 import QuizCTA from "@/components/QuizCTA";
+import QuizNudge from "@/components/QuizNudge";
 import scottPhoto from "@/assets/about-hero-desert.jpg";
 import creditsPhoto from "@/assets/credits-photo.png";
 import scottCouchImg from "@/assets/scott-couch.jpg";
@@ -34,6 +35,9 @@ const About = () => {
           </AnimatedSection>
         </div>
       </section>
+
+      {/* Quiz Nudge — above the fold */}
+      <QuizNudge />
 
       {/* Bio */}
       <section className="py-16 lg:py-20">

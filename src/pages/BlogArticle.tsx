@@ -5,6 +5,7 @@ import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useArticleSchema } from "@/hooks/useSchemaOrg";
 import ShareButton from "@/components/ShareButton";
+import QuizNudge from "@/components/QuizNudge";
 
 import closeupImg from "@/assets/event-closeup-cocktail.jpg";
 import parlorImg from "@/assets/event-parlor-show.jpg";
@@ -139,6 +140,9 @@ const BlogArticle = () => {
           </AnimatedSection>
         </div>
       </section>
+
+      {/* Quiz Nudge — above the fold */}
+      <QuizNudge />
 
       {/* Lede / Excerpt */}
       <section className="border-b border-border">
