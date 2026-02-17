@@ -399,7 +399,6 @@ serve(async (req) => {
         });
       }
 
-      const DAILY_SEND_LIMIT = 90; // Resend free tier = 100/day, keep 10 buffer for transactional
       const now = new Date();
       let sent = 0;
       const errors: string[] = [];
@@ -414,7 +413,7 @@ serve(async (req) => {
 
       if (plannerContacts?.length) {
         for (const contact of plannerContacts) {
-          if (sent >= DAILY_SEND_LIMIT) break;
+          
           const step = contact.drip_step;
           if (step >= 5) continue;
 
@@ -514,7 +513,7 @@ serve(async (req) => {
 
       if (warmContacts?.length) {
         for (const contact of warmContacts) {
-          if (sent >= DAILY_SEND_LIMIT) break;
+          
           const step = contact.drip_step;
           if (step >= 3) continue;
 
