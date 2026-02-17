@@ -147,6 +147,24 @@ serve(async (req) => {
         });
       }
 
+      case "get_contact_clicks": {
+        const { contactId } = payload;
+        if (!contactId) {
+          return new Response(JSON.stringify({ error: "contactId required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const { data: clicks, error: clicksErr } = await supabase
+          .from("newsletter_clicks")
+          .select("id, link_slug, drip_step, clicked_at")
+          .eq("contact_id", contactId)
+          .order("clicked_at", { ascending: false });
+        if (clicksErr) throw clicksErr;
+        return new Response(JSON.stringify({ clicks: clicks || [] }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       case "get_stats": {
         const { count: contactCount } = await supabase
           .from("newsletter_contacts")
