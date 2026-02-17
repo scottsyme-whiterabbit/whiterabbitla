@@ -14,6 +14,7 @@ const Blog = () => {
     path: "/blog",
   });
   useWebPageSchema({ name: "Insights & Guides", description: "Explore guides on luxury magic entertainment, from corporate galas to intimate private celebrations.", path: "/blog", type: "CollectionPage" });
+  const [activeArticleCategory, setActiveArticleCategory] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [activeLocation, setActiveLocation] = useState<string | null>(null);
 
@@ -107,10 +108,31 @@ const Blog = () => {
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">Featured Articles</p>
-            <h2 className="font-serif text-3xl text-foreground mb-8">Insights on Luxury Entertainment</h2>
+            <h2 className="font-serif text-3xl text-foreground mb-6">Insights on Luxury Entertainment</h2>
           </AnimatedSection>
+          <div className="flex flex-wrap gap-2 mb-8">
+            {[null, "For Planners", "For Production Companies", "Event Planning", "Corporate", "Private Events", "Weddings", "Magic Destinations"].map((cat) => {
+              const hasArticles = cat === null || blogArticles.some(a => a.category === cat);
+              if (!hasArticles) return null;
+              return (
+                <button
+                  key={cat || "all"}
+                  onClick={() => setActiveArticleCategory(cat)}
+                  className={`font-sans text-xs tracking-[0.15em] uppercase px-4 py-2 border transition-colors ${
+                    activeArticleCategory === cat
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "border-border text-muted-foreground hover:text-foreground hover:border-foreground"
+                  }`}
+                >
+                  {cat || "All"}
+                </button>
+              );
+            })}
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {blogArticles.map((article, i) => (
+            {blogArticles
+              .filter(a => !activeArticleCategory || a.category === activeArticleCategory)
+              .map((article, i) => (
               <AnimatedSection key={article.slug} delay={Math.min(i * 0.1, 0.3)}>
                 <Link to={`/blog/${article.slug}`} className="group block border border-border p-6 hover:border-accent/40 transition-colors h-full">
                   <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3">
