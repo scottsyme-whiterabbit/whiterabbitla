@@ -309,11 +309,20 @@ serve(async (req) => {
         });
       }
 
+      // Deduplicate within the batch
+      const seen = new Set<string>();
+      const dedupedContacts = newContacts.filter((c: { email?: string }) => {
+        if (!c.email) return false;
+        const email = c.email.toLowerCase().trim();
+        if (seen.has(email)) return false;
+        seen.add(email);
+        return true;
+      });
+
       let enrolled = 0;
       let skipped = 0;
 
-      for (const c of newContacts) {
-        if (!c.email) continue;
+      for (const c of dedupedContacts) {
         const email = c.email.toLowerCase().trim();
 
         const { data: existing } = await supabase
