@@ -712,6 +712,57 @@ serve(async (req) => {
       }
     }
 
+    // ── Action: get_contacts ── List planner contacts with engagement info
+    if (action === "get_contacts") {
+      if (adminPassword !== ADMIN_PASSWORD) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const { data: contacts } = await supabase
+        .from("newsletter_contacts")
+        .select("id, email, name, company, city, drip_step, drip_campaign, engagement_status, subscribed, reply_detected, last_emailed_at, created_at")
+        .in("drip_campaign", ["planner", "planner-warm", "planner-done"])
+        .order("created_at", { ascending: false });
+
+      return new Response(JSON.stringify({ contacts: contacts || [] }), {
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // ── Action: get_contact_activity ── Get clicks & opens for a specific contact
+    if (action === "get_contact_activity") {
+      if (adminPassword !== ADMIN_PASSWORD) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const contactId = reqBody.contactId;
+      if (!contactId) {
+        return new Response(JSON.stringify({ error: "contactId required" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const { data: clicks } = await supabase
+        .from("newsletter_clicks")
+        .select("id, link_slug, drip_step, clicked_at")
+        .eq("contact_id", contactId)
+        .order("clicked_at", { ascending: false });
+
+      const { data: opens } = await supabase
+        .from("newsletter_opens")
+        .select("id, drip_step, opened_at")
+        .eq("contact_id", contactId)
+        .order("opened_at", { ascending: false });
+
+      return new Response(JSON.stringify({ clicks: clicks || [], opens: opens || [] }), {
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     return new Response(JSON.stringify({ error: "Unknown action" }), {
       status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
-import { Target, Upload, Eye, Send, RefreshCw, Users, Mail, UserX, Flame, ThermometerSun, MousePointerClick } from "lucide-react";
+import { Target, Upload, Eye, Send, RefreshCw, Users, Mail, UserX, Flame, ThermometerSun, MousePointerClick, ChevronDown, ChevronRight, ExternalLink, EyeIcon } from "lucide-react";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -12,6 +12,34 @@ const DRIP_LABELS = [
   { step: 3, subject: "Not your kids' magician", day: 14 },
   { step: 4, subject: "Add to your vendor list?", day: 21 },
 ];
+
+interface PlannerContact {
+  id: string;
+  email: string;
+  name: string | null;
+  company: string | null;
+  city: string | null;
+  drip_step: number;
+  drip_campaign: string;
+  engagement_status: string;
+  subscribed: boolean;
+  reply_detected: boolean;
+  last_emailed_at: string | null;
+  created_at: string;
+}
+
+interface ClickRecord {
+  id: string;
+  link_slug: string;
+  drip_step: number;
+  clicked_at: string;
+}
+
+interface OpenRecord {
+  id: string;
+  drip_step: number;
+  opened_at: string;
+}
 
 interface PlannerDripTabProps {
   storedPassword: string;
@@ -28,6 +56,12 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
   const [previewHtml, setPreviewHtml] = useState("");
   const [loading, setLoading] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const [contacts, setContacts] = useState<PlannerContact[]>([]);
+  const [showContacts, setShowContacts] = useState(false);
+  const [expandedContact, setExpandedContact] = useState<string | null>(null);
+  const [activityCache, setActivityCache] = useState<Record<string, { clicks: ClickRecord[]; opens: OpenRecord[] }>>({});
+  const [activityLoading, setActivityLoading] = useState<string | null>(null);
+  const [contactFilter, setContactFilter] = useState<string>("all");
 
   const callPlanner = useCallback(async (action: string, payload: Record<string, unknown> = {}) => {
     const res = await fetch(`${SUPABASE_URL}/functions/v1/planner-drip`, {
@@ -54,10 +88,63 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
     }
   }, [callPlanner]);
 
+  const loadContacts = useCallback(async () => {
+    try {
+      const data = await callPlanner("get_contacts");
+      setContacts(data.contacts || []);
+    } catch (e) {
+      console.error("Failed to load planner contacts:", e);
+    }
+  }, [callPlanner]);
+
   useEffect(() => {
     loadStats();
   }, [loadStats]);
 
+  const handleToggleContacts = async () => {
+    if (!showContacts && contacts.length === 0) {
+      await loadContacts();
+    }
+    setShowContacts(!showContacts);
+  };
+
+  const handleExpandContact = async (contactId: string) => {
+    if (expandedContact === contactId) {
+      setExpandedContact(null);
+      return;
+    }
+    setExpandedContact(contactId);
+    if (!activityCache[contactId]) {
+      setActivityLoading(contactId);
+      try {
+        const data = await callPlanner("get_contact_activity", { contactId });
+        setActivityCache(prev => ({ ...prev, [contactId]: { clicks: data.clicks || [], opens: data.opens || [] } }));
+      } catch (e) {
+        console.error("Failed to load activity:", e);
+      } finally {
+        setActivityLoading(null);
+      }
+    }
+  };
+
+  const filteredContacts = contacts.filter(c => {
+    if (contactFilter === "all") return true;
+    if (contactFilter === "warm") return c.engagement_status === "warm";
+    if (contactFilter === "hot") return c.engagement_status === "hot" || c.reply_detected;
+    if (contactFilter === "unsubscribed") return !c.subscribed;
+    if (contactFilter === "active") return c.subscribed;
+    return true;
+  });
+
+  const engagementBadge = (c: PlannerContact) => {
+    if (c.reply_detected) return <span className="px-2 py-0.5 text-[10px] tracking-wider uppercase bg-red-500/20 text-red-300 rounded">Replied</span>;
+    if (c.engagement_status === "hot") return <span className="px-2 py-0.5 text-[10px] tracking-wider uppercase bg-red-500/20 text-red-300 rounded">Hot</span>;
+    if (c.engagement_status === "warm") return <span className="px-2 py-0.5 text-[10px] tracking-wider uppercase bg-orange-500/20 text-orange-300 rounded">Warm</span>;
+    if (!c.subscribed) return <span className="px-2 py-0.5 text-[10px] tracking-wider uppercase bg-muted text-muted-foreground rounded">Unsub</span>;
+    return null;
+  };
+
+  // ... keep existing code (handleCSVUpload, handleManualEnroll, handlePreview, handleProcessNow)
   const handleCSVUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -106,19 +193,19 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
 
   const handleManualEnroll = async () => {
     const lines = csvInput.split("\n").filter(l => l.trim());
-    const contacts = lines.map(line => {
+    const contactsList = lines.map(line => {
       const parts = line.split(",").map(p => p.trim());
       return { email: parts[0], name: parts[1] || undefined, company: parts[2] || undefined, city: parts[3] || undefined };
     }).filter(c => c.email?.includes("@"));
 
-    if (!contacts.length) {
+    if (!contactsList.length) {
       toast.error("Enter at least one valid email");
       return;
     }
 
     setLoading(true);
     try {
-      const res = await callPlanner("enroll", { contacts });
+      const res = await callPlanner("enroll", { contacts: contactsList });
       toast.success(`Enrolled ${res.enrolled} planners`);
       setCsvInput("");
       loadStats();
@@ -278,6 +365,137 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
           </div>
         </div>
       )}
+
+      {/* Contacts List */}
+      <div className="border border-border">
+        <button
+          onClick={handleToggleContacts}
+          className="w-full p-4 flex items-center justify-between hover:bg-accent/5 transition-colors"
+        >
+          <h3 className="font-sans text-sm tracking-[0.2em] uppercase text-muted-foreground flex items-center gap-2">
+            <Users size={16} />
+            Planner Contacts
+            {contacts.length > 0 && <span className="text-accent">({contacts.length})</span>}
+          </h3>
+          {showContacts ? <ChevronDown size={16} className="text-muted-foreground" /> : <ChevronRight size={16} className="text-muted-foreground" />}
+        </button>
+
+        {showContacts && (
+          <div>
+            {/* Filter bar */}
+            <div className="px-4 pb-3 flex gap-2 flex-wrap">
+              {["all", "active", "warm", "hot", "unsubscribed"].map(f => (
+                <button
+                  key={f}
+                  onClick={() => setContactFilter(f)}
+                  className={`px-3 py-1 text-xs tracking-wider uppercase transition-colors ${contactFilter === f ? "bg-accent text-accent-foreground" : "border border-border text-muted-foreground hover:text-foreground"}`}
+                >
+                  {f}
+                </button>
+              ))}
+            </div>
+
+            {/* Contacts table */}
+            <div className="max-h-[500px] overflow-y-auto">
+              <table className="w-full text-sm">
+                <thead className="sticky top-0 bg-background border-b border-border">
+                  <tr>
+                    <th className="text-left px-4 py-2 font-sans text-xs tracking-wider uppercase text-muted-foreground"></th>
+                    <th className="text-left px-4 py-2 font-sans text-xs tracking-wider uppercase text-muted-foreground">Name</th>
+                    <th className="text-left px-4 py-2 font-sans text-xs tracking-wider uppercase text-muted-foreground hidden md:table-cell">Company</th>
+                    <th className="text-left px-4 py-2 font-sans text-xs tracking-wider uppercase text-muted-foreground hidden md:table-cell">City</th>
+                    <th className="text-left px-4 py-2 font-sans text-xs tracking-wider uppercase text-muted-foreground">Step</th>
+                    <th className="text-left px-4 py-2 font-sans text-xs tracking-wider uppercase text-muted-foreground">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredContacts.map(c => (
+                    <>
+                      <tr
+                        key={c.id}
+                        onClick={() => handleExpandContact(c.id)}
+                        className="border-b border-border/50 hover:bg-accent/5 cursor-pointer transition-colors"
+                      >
+                        <td className="px-4 py-2.5">
+                          {expandedContact === c.id ? <ChevronDown size={14} className="text-muted-foreground" /> : <ChevronRight size={14} className="text-muted-foreground" />}
+                        </td>
+                        <td className="px-4 py-2.5">
+                          <p className="text-foreground">{c.name || "—"}</p>
+                          <p className="text-xs text-muted-foreground">{c.email}</p>
+                        </td>
+                        <td className="px-4 py-2.5 text-muted-foreground hidden md:table-cell">{c.company || "—"}</td>
+                        <td className="px-4 py-2.5 text-muted-foreground hidden md:table-cell">{c.city || "—"}</td>
+                        <td className="px-4 py-2.5 text-muted-foreground">
+                          {c.drip_campaign === "planner-done" ? "Done" : `${c.drip_step + 1}/5`}
+                        </td>
+                        <td className="px-4 py-2.5">{engagementBadge(c)}</td>
+                      </tr>
+                      {expandedContact === c.id && (
+                        <tr key={`${c.id}-detail`}>
+                          <td colSpan={6} className="px-8 py-4 bg-accent/5">
+                            {activityLoading === c.id ? (
+                              <p className="text-xs text-muted-foreground animate-pulse">Loading activity...</p>
+                            ) : activityCache[c.id] ? (
+                              <div className="grid md:grid-cols-2 gap-6">
+                                {/* Clicks */}
+                                <div>
+                                  <h4 className="font-sans text-xs tracking-wider uppercase text-muted-foreground mb-2 flex items-center gap-1">
+                                    <MousePointerClick size={12} /> Link Clicks ({activityCache[c.id].clicks.length})
+                                  </h4>
+                                  {activityCache[c.id].clicks.length === 0 ? (
+                                    <p className="text-xs text-muted-foreground italic">No clicks yet</p>
+                                  ) : (
+                                    <div className="space-y-1.5">
+                                      {activityCache[c.id].clicks.map(click => (
+                                        <div key={click.id} className="flex items-start gap-2 text-xs">
+                                          <ExternalLink size={10} className="text-accent mt-0.5 shrink-0" />
+                                          <div>
+                                            <p className="text-foreground">{click.link_slug}</p>
+                                            <p className="text-muted-foreground">
+                                              Email {click.drip_step + 1} · {new Date(click.clicked_at).toLocaleDateString()} {new Date(click.clicked_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                                            </p>
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+                                {/* Opens */}
+                                <div>
+                                  <h4 className="font-sans text-xs tracking-wider uppercase text-muted-foreground mb-2 flex items-center gap-1">
+                                    <EyeIcon size={12} /> Opens ({activityCache[c.id].opens.length})
+                                  </h4>
+                                  {activityCache[c.id].opens.length === 0 ? (
+                                    <p className="text-xs text-muted-foreground italic">No opens tracked yet</p>
+                                  ) : (
+                                    <div className="space-y-1.5">
+                                      {activityCache[c.id].opens.map(open => (
+                                        <div key={open.id} className="flex items-start gap-2 text-xs">
+                                          <EyeIcon size={10} className="text-accent mt-0.5 shrink-0" />
+                                          <p className="text-muted-foreground">
+                                            Email {open.drip_step + 1} · {new Date(open.opened_at).toLocaleDateString()} {new Date(open.opened_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                                          </p>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            ) : null}
+                          </td>
+                        </tr>
+                      )}
+                    </>
+                  ))}
+                </tbody>
+              </table>
+              {filteredContacts.length === 0 && (
+                <p className="text-center text-xs text-muted-foreground py-8">No contacts match this filter</p>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Enroll Planners */}
       <div className="border border-border p-6">
