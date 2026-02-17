@@ -190,7 +190,7 @@ const servicePages: Record<string, ServiceData> = {
       },
       {
         heading: "Interactive & Personal",
-        body: "Scott's close-up work blends mentalism, psychological illusion, and interactive magic into seamless, conversational performances. Guests don't just watch. They participate. They make impossible choices, they hold objects that vanish and reappear, they experience moments that defy explanation. Every person feels like the star of the show.",
+        body: "Scott's close-up work blends interactive magic, mentalism, and mind reading into seamless, conversational performances. Guests don't just watch. They participate. They make impossible choices, they hold objects that vanish and reappear, they experience moments that defy explanation. Every person feels like the star of the show.",
       },
       {
         heading: "Perfect for Any Setting",
