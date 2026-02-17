@@ -16,25 +16,25 @@ const CLIENT_TYPES = [
 ];
 
 const EVENT_TYPES = [
-  { id: "corporate", label: "Corporate Event", description: "Galas, product launches, conferences" },
+  { id: "corporate", label: "Corporate Event", description: "Galas, product launches, golf tournaments, conferences" },
   { id: "wedding", label: "Wedding", description: "Ceremonies, receptions, rehearsal dinners" },
-  { id: "private", label: "Private Party", description: "Birthdays, bachelorettes, anniversaries, holidays" },
-  { id: "parlor", label: "Private Magic Show", description: "Intimate seated show experience" },
-  { id: "other", label: "Something Else", description: "Let's talk about your vision" },
+  { id: "private", label: "Private Party", description: "Birthdays, red carpet events, anniversaries, holidays" },
+  { id: "parlor", label: "Private Magic Show", description: "Intimate seated show for your home or venue" },
+  { id: "other", label: "Something Else", description: "Award ceremonies, charity galas, brand activations" },
 ];
 
 const GUEST_COUNTS = [
-  { id: "intimate", label: "Under 30", description: "Intimate gathering" },
-  { id: "medium", label: "30–75", description: "Medium-sized event" },
-  { id: "large", label: "75–150", description: "Large event" },
-  { id: "xlarge", label: "150+", description: "Grand affair" },
+  { id: "intimate", label: "Under 30", description: "Intimate dinner or VIP reception" },
+  { id: "medium", label: "30–75", description: "Private party or cocktail hour" },
+  { id: "large", label: "75–150", description: "Corporate event or gala" },
+  { id: "xlarge", label: "150+", description: "Grand affair, tournament, or festival" },
 ];
 
 const BUDGETS = [
-  { id: "exploring", label: "Just Exploring", description: "I'm curious and want to learn more" },
-  { id: "intimate", label: "Intimate & Intentional", description: "A curated experience for a smaller gathering" },
-  { id: "elevated", label: "Elevated Experience", description: "Something memorable with real production value" },
-  { id: "showstopper", label: "Go All Out", description: "No limits. Make it unforgettable" },
+  { id: "exploring", label: "Just Exploring", description: "Curious about what's possible for my event" },
+  { id: "intimate", label: "Intimate & Intentional", description: "Close-up magic for a dinner or cocktail hour" },
+  { id: "elevated", label: "Elevated Experience", description: "Full production with lighting, sound, and staging" },
+  { id: "showstopper", label: "Go All Out", description: "The complete White Rabbit transformation" },
 ];
 
 type Step = "clientType" | "event" | "location" | "guests" | "date" | "budget" | "contact" | "recommendation";
