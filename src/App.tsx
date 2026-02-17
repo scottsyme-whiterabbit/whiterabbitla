@@ -31,6 +31,7 @@ import SocialGenerator from "./pages/SocialGenerator";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import ReviewGate from "./pages/ReviewGate";
 import TermsOfService from "./pages/TermsOfService";
+import PitchDeck from "./pages/PitchDeck";
 import { getBlogArticleBySlug } from "./data/blogArticles";
 import { useParams } from "react-router-dom";
 
@@ -69,6 +70,7 @@ const AppContent = () => {
         <Route path="/admin/social" element={<SocialGenerator />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfService />} />
+        <Route path="/deck" element={<PitchDeck />} />
         <Route path="/review" element={<ReviewGate />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
