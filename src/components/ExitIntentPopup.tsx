@@ -1,14 +1,16 @@
 import { useState, useEffect, useCallback } from "react";
-import { X, Sparkles, Check } from "lucide-react";
+import { X, Sparkles, Check, CalendarCheck } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import { supabase } from "@/integrations/supabase/client";
 
 const ExitIntentPopup = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [mode, setMode] = useState<"choice" | "guide" | "success">("choice");
   const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const location = useLocation();
+  const { openQuiz } = useBookingQuiz();
 
   const handleMouseLeave = useCallback((e: MouseEvent) => {
     if (e.clientY <= 0) {
@@ -19,8 +21,7 @@ const ExitIntentPopup = () => {
   }, []);
 
   useEffect(() => {
-    // Arm on all pages except contact (they're already converting)
-    if (location.pathname === "/contact" || location.pathname === "/guide") return;
+    if (location.pathname === "/contact" || location.pathname === "/guide" || location.pathname === "/quiz") return;
 
     const timer = setTimeout(() => {
       document.addEventListener("mouseleave", handleMouseLeave);
@@ -37,24 +38,31 @@ const ExitIntentPopup = () => {
     sessionStorage.setItem("wr-exit-dismissed", "true");
   };
 
+  const handleCheckAvailability = () => {
+    dismiss();
+    openQuiz();
+  };
+
+  const handleGetGuide = () => {
+    setMode("guide");
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim() || submitting) return;
     setSubmitting(true);
     try {
-      // Save to database
       await supabase.from("lead_magnet_signups").insert({
         email: email.trim(),
         source_page: location.pathname,
       });
-      // Send guide email + notify Scott
       await supabase.functions.invoke("send-lead-magnet", {
         body: { email: email.trim(), sourcePage: location.pathname },
       });
     } catch {
-      // Still show success — don't block the UX
+      // Still show success
     }
-    setSubmitted(true);
+    setMode("success");
     setSubmitting(false);
   };
 
@@ -72,7 +80,43 @@ const ExitIntentPopup = () => {
           <X size={20} />
         </button>
 
-        {!submitted ? (
+        {mode === "choice" && (
+          <>
+            <Sparkles className="mx-auto mb-4 text-accent" size={28} />
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3">
+              Before You Go
+            </p>
+            <h3 className="font-serif text-3xl text-cream mb-3">
+              Don't Leave Without This
+            </h3>
+            <p className="font-sans text-sm text-cream/60 leading-relaxed mb-8 max-w-sm mx-auto">
+              Whether you're ready to book or still exploring, we've got you covered.
+            </p>
+
+            {/* Primary CTA: Check Availability */}
+            <button
+              onClick={handleCheckAvailability}
+              className="w-full flex items-center justify-center gap-2.5 font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-4 hover:bg-accent/80 transition-colors mb-4"
+            >
+              <CalendarCheck size={16} strokeWidth={1.5} />
+              Check Availability
+            </button>
+
+            {/* Secondary CTA: Free Guide */}
+            <button
+              onClick={handleGetGuide}
+              className="w-full font-sans text-sm tracking-[0.2em] uppercase border border-accent/40 text-cream px-8 py-4 hover:bg-accent/10 hover:border-accent transition-colors mb-6"
+            >
+              Get the Free Host's Playbook
+            </button>
+
+            <p className="font-sans text-xs text-cream/30">
+              Join 200+ hosts who've elevated their events with White Rabbit.
+            </p>
+          </>
+        )}
+
+        {mode === "guide" && (
           <>
             <Sparkles className="mx-auto mb-4 text-accent" size={28} />
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3">
@@ -119,18 +163,26 @@ const ExitIntentPopup = () => {
               No spam. Just one beautifully useful guide.
             </p>
           </>
-        ) : (
+        )}
+
+        {mode === "success" && (
           <>
             <Check className="mx-auto mb-4 text-accent" size={32} />
             <h3 className="font-serif text-3xl text-cream mb-3">
               Check Your Inbox
             </h3>
             <p className="font-sans text-sm text-cream/60 leading-relaxed mb-6">
-              Your copy of The Host's Playbook is on its way. In the meantime, feel free to explore what a White Rabbit experience looks like.
+              Your copy of The Host's Playbook is on its way. In the meantime, want to see if your date is available?
             </p>
             <button
+              onClick={handleCheckAvailability}
+              className="w-full font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-3.5 hover:bg-accent/80 transition-colors mb-3"
+            >
+              Check Availability
+            </button>
+            <button
               onClick={dismiss}
-              className="font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-8 py-3 hover:bg-accent hover:text-accent-foreground transition-colors"
+              className="font-sans text-sm tracking-[0.2em] uppercase text-cream/40 hover:text-cream transition-colors"
             >
               Continue Exploring
             </button>
