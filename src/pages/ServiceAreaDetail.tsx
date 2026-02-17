@@ -1,5 +1,6 @@
 import { useParams, Link, Navigate } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
+import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import QuizCTA from "@/components/QuizCTA";
 import { getAreaBySlug } from "@/data/serviceAreas";
 import { seoPages } from "@/data/seoPages";
@@ -10,6 +11,7 @@ import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 const ServiceAreaDetail = () => {
   const { citySlug } = useParams<{ citySlug: string }>();
   const area = citySlug ? getAreaBySlug(citySlug) : undefined;
+  const { openQuiz } = useBookingQuiz();
 
   usePageMeta({
     title: area
@@ -76,13 +78,27 @@ const ServiceAreaDetail = () => {
         </div>
       </section>
 
-      {/* Intro */}
+      {/* Intro + Book Now CTA */}
       <section className="py-16">
         <div className="max-w-3xl mx-auto px-6">
           <AnimatedSection>
-            <p className="font-sans text-base text-muted-foreground leading-relaxed">
+            <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8">
               White Rabbit brings world-class close-up magic, mentalism, and parlor shows to {area.city}'s most prestigious venues and private residences. Whether you're planning a corporate gala, intimate dinner party, or milestone celebration, Scott Syme delivers an unforgettable experience tailored to your event.
             </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <button
+                onClick={openQuiz}
+                className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors"
+              >
+                Book Now
+              </button>
+              <Link
+                to="/contact"
+                className="font-sans text-sm tracking-[0.2em] uppercase border border-border text-foreground px-10 py-4 hover:border-accent/40 transition-colors text-center"
+              >
+                Inquire
+              </Link>
+            </div>
           </AnimatedSection>
         </div>
       </section>
