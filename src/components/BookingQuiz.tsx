@@ -33,8 +33,8 @@ const GUEST_COUNTS = [
 const BUDGETS = [
   { id: "exploring", label: "Just Exploring", description: "Curious about what's possible for my event" },
   { id: "intimate", label: "Intimate & Intentional", description: "Close-up magic for a dinner or cocktail hour" },
-  { id: "elevated", label: "Elevated Experience", description: "Full production with lighting, sound, and staging" },
-  { id: "showstopper", label: "Go All Out", description: "The complete White Rabbit transformation" },
+  { id: "elevated", label: "Elevated Experience", description: "A curated show that transforms the room" },
+  { id: "showstopper", label: "Go All Out", description: "The full White Rabbit experience, no limits" },
 ];
 
 type Step = "clientType" | "event" | "location" | "guests" | "date" | "budget" | "contact" | "recommendation";
