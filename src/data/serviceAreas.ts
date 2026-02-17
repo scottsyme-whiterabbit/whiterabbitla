@@ -28,13 +28,13 @@ export const serviceAreaRegions = [
 const cityData: { city: string; region: string; photo: string; tagline: string }[] = [
   // Southern California — all verified Unsplash IDs
   { city: "Los Angeles", region: "Southern California", photo: "https://images.unsplash.com/photo-1534190760961-74e8c1c5c3da?w=600&h=400&fit=crop", tagline: "Home base — from Hollywood premieres to Bel Air estates" }, // LA skyline palm trees sunset
-  { city: "Beverly Hills", region: "Southern California", photo: "https://images.unsplash.com/photo-1616680214084-22670571f872?w=600&h=400&fit=crop", tagline: "Rodeo Drive galas and private estate soirées" }, // Rodeo Drive street
+  { city: "Beverly Hills", region: "Southern California", photo: "/areas/beverly-hills.jpg", tagline: "Rodeo Drive galas and private estate soirées" },
   { city: "Hollywood", region: "Southern California", photo: "https://images.unsplash.com/photo-1506184106046-1e6e90c0222d?w=600&h=400&fit=crop", tagline: "Studio events, wrap parties and red carpet nights" }, // Hollywood Sign on hillside
   { city: "Santa Monica", region: "Southern California", photo: "https://images.unsplash.com/photo-1514321648849-f4e1d5da98dc?w=600&h=400&fit=crop", tagline: "Oceanfront receptions and beachside celebrations" }, // Santa Monica Pier ferris wheel
   { city: "Malibu", region: "Southern California", photo: "https://images.unsplash.com/photo-1608651491346-203b49350557?w=600&h=400&fit=crop", tagline: "Cliffside mansions and PCH-view events" }, // Malibu ocean cliff view
   { city: "West Hollywood", region: "Southern California", photo: "https://images.unsplash.com/photo-1580655653885-65763b2597d0?w=600&h=400&fit=crop", tagline: "Sunset Strip venues and members-only clubs" }, // LA nightlife palms
   { city: "Bel Air", region: "Southern California", photo: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&h=400&fit=crop", tagline: "Ultra-private estate entertainment" }, // Luxury modern estate pool
-  { city: "Pasadena", region: "Southern California", photo: "https://images.unsplash.com/photo-1597430203689-39bff04a9512?w=600&h=400&fit=crop", tagline: "Historic venues and garden celebrations" }, // Pasadena City Hall
+  { city: "Pasadena", region: "Southern California", photo: "/areas/pasadena.jpg", tagline: "Historic venues and garden celebrations" },
   { city: "Calabasas", region: "Southern California", photo: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&h=400&fit=crop", tagline: "Celebrity neighborhoods and gated community events" }, // Luxury home exterior
   { city: "Orange County", region: "Southern California", photo: "https://images.unsplash.com/photo-1598584223013-2cc01d1a5280?w=600&h=400&fit=crop", tagline: "Newport Coast galas and Laguna Beach gatherings" }, // Beach coastline people
   { city: "San Diego", region: "Southern California", photo: "https://images.unsplash.com/photo-1583195426307-cbbe1d867a32?w=600&h=400&fit=crop", tagline: "Waterfront conventions and La Jolla retreats" }, // San Diego city skyline
@@ -48,8 +48,8 @@ const cityData: { city: string; region: string; photo: string; tagline: string }
   { city: "San Francisco", region: "Northern California", photo: "https://images.unsplash.com/photo-1521464302861-ce943915d1c3?w=600&h=400&fit=crop", tagline: "Tech galas and Pacific Heights soirées" }, // Golden Gate Bridge
   { city: "Napa Valley", region: "Northern California", photo: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=600&h=400&fit=crop", tagline: "Vineyard dinners and winery estate events" }, // Wine glasses/vineyard
   { city: "Hillsborough", region: "Northern California", photo: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&h=400&fit=crop", tagline: "Peninsula estate entertainment" }, // Grand estate interior
-  { city: "San Mateo", region: "Northern California", photo: "https://images.unsplash.com/photo-1617952986600-802c5c6b3df1?w=600&h=400&fit=crop", tagline: "Silicon Valley corporate celebrations" }, // San Mateo Bay Area
-  { city: "Burlingame", region: "Northern California", photo: "https://images.unsplash.com/photo-1573790387438-4da905039392?w=600&h=400&fit=crop", tagline: "Bayside corporate events" }, // Burlingame Avenue downtown
+  { city: "San Mateo", region: "Northern California", photo: "/areas/san-mateo.jpg", tagline: "Silicon Valley corporate celebrations" },
+  { city: "Burlingame", region: "Northern California", photo: "/areas/burlingame.jpg", tagline: "Bayside corporate events" },
   { city: "Atherton", region: "Northern California", photo: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&h=400&fit=crop", tagline: "America's most exclusive zip code celebrations" }, // Luxury gated estate
   { city: "Palo Alto", region: "Northern California", photo: "https://images.unsplash.com/photo-1564981797816-1043664bf78d?w=600&h=400&fit=crop", tagline: "Venture capital dinners and tech founder parties" }, // Stanford/campus
   { city: "Woodside", region: "Northern California", photo: "https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?w=600&h=400&fit=crop", tagline: "Redwood estate gatherings" }, // Tall redwood trees
@@ -60,17 +60,17 @@ const cityData: { city: string; region: string; photo: string; tagline: string }
   { city: "Tiburon", region: "Northern California", photo: "https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=600&h=400&fit=crop", tagline: "Waterfront Marin County affairs" }, // Coastal waterfront
   { city: "Mill Valley", region: "Northern California", photo: "https://images.unsplash.com/photo-1502630859934-b3b41d18206c?w=600&h=400&fit=crop", tagline: "Redwood-shaded private events" }, // Muir Woods redwoods
   { city: "Sonoma", region: "Northern California", photo: "https://images.unsplash.com/photo-1506377247377-2a5b3b417ebb?w=600&h=400&fit=crop", tagline: "Wine country retreats and harvest dinners" }, // Wine grapes/vineyard
-  { city: "Carmel-by-the-Sea", region: "Northern California", photo: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&h=400&fit=crop", tagline: "Coastal luxury weddings and intimate gatherings" }, // Rocky coastline
+  { city: "Carmel-by-the-Sea", region: "Northern California", photo: "/areas/carmel-by-the-sea.jpg", tagline: "Coastal luxury weddings and intimate gatherings" },
 
   // West Coast
-  { city: "Seattle", region: "West Coast", photo: "https://images.unsplash.com/photo-1502175353174-a7a70e73b4c3?w=600&h=400&fit=crop", tagline: "Pacific Northwest corporate galas" }, // Space Needle skyline
-  { city: "Portland", region: "West Coast", photo: "https://images.unsplash.com/photo-1555699875-5773b14726e2?w=600&h=400&fit=crop", tagline: "Creative industry celebrations" }, // Portland cityscape
+  { city: "Seattle", region: "West Coast", photo: "/areas/seattle.jpg", tagline: "Pacific Northwest corporate galas" },
+  { city: "Portland", region: "West Coast", photo: "/areas/portland.jpg", tagline: "Creative industry celebrations" },
 
   // Mountain & Resort
   { city: "Las Vegas", region: "Mountain & Resort", photo: "https://images.unsplash.com/photo-1605833556294-ea5c7a74f57d?w=600&h=400&fit=crop", tagline: "Casino nights, conventions and VIP suites" }, // Vegas Strip lights
   { city: "Aspen", region: "Mountain & Resort", photo: "https://images.unsplash.com/photo-1578241561880-0a1d5db3cb8a?w=600&h=400&fit=crop", tagline: "Ski lodge celebrations and mountain retreats" }, // Aspen Maroon Bells
   { city: "Vail", region: "Mountain & Resort", photo: "https://images.unsplash.com/photo-1551524559-8af4e6624178?w=600&h=400&fit=crop", tagline: "Alpine luxury and aprés-ski entertainment" }, // Vail ski village
-  { city: "Park City", region: "Mountain & Resort", photo: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600&h=400&fit=crop", tagline: "Sundance season parties and mountain estates" }, // Mountain resort
+  { city: "Park City", region: "Mountain & Resort", photo: "/areas/park-city.jpg", tagline: "Sundance season parties and mountain estates" },
   { city: "Jackson Hole", region: "Mountain & Resort", photo: "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=600&h=400&fit=crop", tagline: "Grand Teton backdrop private events" }, // Deer/mountain nature
   { city: "Sun Valley", region: "Mountain & Resort", photo: "https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?w=600&h=400&fit=crop", tagline: "Idaho's billionaire playground celebrations" }, // Mountain valley
   { city: "Lake Tahoe", region: "Mountain & Resort", photo: "https://images.unsplash.com/photo-1542202229-7d93c33f5d07?w=600&h=400&fit=crop", tagline: "Lakeside lodges and mountain-view galas" }, // Lake Tahoe blue water
@@ -78,14 +78,14 @@ const cityData: { city: string; region: string; photo: string; tagline: string }
   { city: "Denver", region: "Mountain & Resort", photo: "https://images.unsplash.com/photo-1546156929-a4c0ac411f47?w=600&h=400&fit=crop", tagline: "Mile-high corporate events and galas" }, // Denver skyline mountains
 
   // Southwest
-  { city: "Scottsdale", region: "Southwest", photo: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&h=400&fit=crop", tagline: "Desert resort incentive trips and golf outings" }, // Arizona desert saguaro
+  { city: "Scottsdale", region: "Southwest", photo: "/areas/scottsdale.jpg", tagline: "Desert resort incentive trips and golf outings" },
   { city: "Paradise Valley", region: "Southwest", photo: "https://images.unsplash.com/photo-1547234935-80c7145ec969?w=600&h=400&fit=crop", tagline: "Arizona's most exclusive enclave" }, // Desert/Camelback Mountain
   { city: "Austin", region: "Southwest", photo: "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=600&h=400&fit=crop", tagline: "SXSW parties and tech industry celebrations" }, // Austin Congress Ave bridge
 
   // Texas
   { city: "Dallas", region: "Texas", photo: "https://images.unsplash.com/photo-1545194445-dddb8f4487c6?w=600&h=400&fit=crop", tagline: "Highland Park galas and corporate affairs" }, // Dallas skyline
   { city: "Houston", region: "Texas", photo: "https://images.unsplash.com/photo-1530089711124-9ca31fb9e863?w=600&h=400&fit=crop", tagline: "River Oaks estate parties and energy sector events" }, // Houston skyline
-  { city: "Highland Park", region: "Texas", photo: "https://images.unsplash.com/photo-1582407947092-60a6ef5ee906?w=600&h=400&fit=crop", tagline: "Dallas's premier neighborhood celebrations" }, // Highland Park mansion
+  { city: "Highland Park", region: "Texas", photo: "/areas/highland-park.jpg", tagline: "Dallas's premier neighborhood celebrations" },
   { city: "River Oaks", region: "Texas", photo: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&h=400&fit=crop", tagline: "Houston's luxury district events" }, // Grand estate exterior
 
   // Southeast
