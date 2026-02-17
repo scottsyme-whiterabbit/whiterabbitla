@@ -3,6 +3,7 @@ import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import QuizCTA from "@/components/QuizCTA";
 import QuizNudge from "@/components/QuizNudge";
+import ValueProposition from "@/components/ValueProposition";
 import heroDesertImg from "@/assets/experience-hero-desert.jpg";
 import closeupImg from "@/assets/event-closeup-cocktail.jpg";
 import parlorImg from "@/assets/event-parlor-stage.jpg";
@@ -111,6 +112,9 @@ const Experience = () => {
           </div>
         </section>
       ))}
+
+      {/* Value Proposition — Hormozi-style offer */}
+      <ValueProposition />
 
       {/* Quiz CTA - after services */}
       <QuizCTA title="Not Sure Which Experience Fits Your Event?" />
