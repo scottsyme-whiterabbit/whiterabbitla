@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -166,6 +167,33 @@ serve(async (req) => {
     if (!confirmRes.ok) {
       const confirmErr = await confirmRes.json();
       console.error("Confirmation email error:", confirmErr);
+    }
+
+    // Auto-convert: if this email is in the drip campaign, mark as converted and stop drip
+    try {
+      const supabase = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      );
+      const contactEmail = email.toLowerCase().trim();
+      const { data: dripContact } = await supabase
+        .from("newsletter_contacts")
+        .select("id, drip_campaign")
+        .eq("email", contactEmail)
+        .maybeSingle();
+
+      if (dripContact && dripContact.drip_campaign?.startsWith("planner")) {
+        await supabase
+          .from("newsletter_contacts")
+          .update({
+            drip_campaign: "planner-converted",
+            engagement_status: "hot",
+          })
+          .eq("id", dripContact.id);
+        console.log(`Auto-converted drip contact: ${contactEmail}`);
+      }
+    } catch (convErr) {
+      console.error("Auto-convert check failed (non-blocking):", convErr);
     }
 
     return new Response(
