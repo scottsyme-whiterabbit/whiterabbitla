@@ -7,8 +7,9 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-// Resend webhook handler for reply detection
-// Set up in Resend dashboard: Webhooks → Add endpoint → select "email.replied" event
+// Resend webhook handler for email event tracking
+// Set up in Resend dashboard: Webhooks → Add endpoint
+// Select events: email.bounced, email.complained, email.delivered, email.opened, email.clicked
 // URL: https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/email-webhook
 
 serve(async (req) => {
@@ -27,12 +28,54 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Handle reply events
-    if (eventType === "email.replied" || eventType === "email.complained") {
+    // Handle complaint (spam) events — auto-unsubscribe
+    if (eventType === "email.complained") {
       const recipientEmail = body.data?.to?.[0] || body.data?.email;
-
       if (recipientEmail) {
-        // Find the contact and mark as hot lead
+        await supabase
+          .from("newsletter_contacts")
+          .update({ subscribed: false, engagement_status: "unsubscribed" })
+          .eq("email", recipientEmail.toLowerCase());
+        console.log(`Contact ${recipientEmail} unsubscribed (spam complaint)`);
+      }
+    }
+
+    // Handle bounce events — auto-unsubscribe
+    if (eventType === "email.bounced" || eventType === "email.delivery_delayed") {
+      const recipientEmail = body.data?.to?.[0] || body.data?.email;
+      if (recipientEmail) {
+        await supabase
+          .from("newsletter_contacts")
+          .update({ subscribed: false })
+          .eq("email", recipientEmail.toLowerCase());
+        console.log(`Contact ${recipientEmail} unsubscribed (${eventType})`);
+      }
+    }
+
+    // Handle opened events — bump engagement
+    if (eventType === "email.opened") {
+      const recipientEmail = body.data?.to?.[0] || body.data?.email;
+      if (recipientEmail) {
+        const { data: contact } = await supabase
+          .from("newsletter_contacts")
+          .select("id, engagement_status")
+          .eq("email", recipientEmail.toLowerCase())
+          .maybeSingle();
+
+        if (contact && contact.engagement_status === "new") {
+          await supabase
+            .from("newsletter_contacts")
+            .update({ engagement_status: "warm" })
+            .eq("id", contact.id);
+          console.log(`Contact ${recipientEmail} upgraded to warm (opened)`);
+        }
+      }
+    }
+
+    // Handle click events — mark as hot lead + notify
+    if (eventType === "email.clicked") {
+      const recipientEmail = body.data?.to?.[0] || body.data?.email;
+      if (recipientEmail) {
         const { data: contact } = await supabase
           .from("newsletter_contacts")
           .select("id, engagement_status")
@@ -42,15 +85,11 @@ serve(async (req) => {
         if (contact) {
           await supabase
             .from("newsletter_contacts")
-            .update({
-              reply_detected: true,
-              engagement_status: "hot",
-            })
+            .update({ engagement_status: "hot" })
             .eq("id", contact.id);
+          console.log(`Contact ${recipientEmail} marked as hot (clicked)`);
 
-          console.log(`Contact ${recipientEmail} marked as hot lead (reply detected)`);
-
-          // Send notification to Scott
+          // Notify Scott about hot lead
           const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
           if (RESEND_API_KEY) {
             await fetch("https://api.resend.com/emails", {
@@ -62,27 +101,15 @@ serve(async (req) => {
               body: JSON.stringify({
                 from: "White Rabbit System <scott.syme@whiterabbitla.com>",
                 to: ["scott.syme@whiterabbitla.com"],
-                subject: `🔥 Hot Lead: ${recipientEmail} replied!`,
-                html: `<p>A planner drip contact has replied to one of your emails.</p>
+                subject: `🔥 Hot Lead: ${recipientEmail} clicked a link!`,
+                html: `<p>A drip contact clicked a link in your email.</p>
 <p><strong>Email:</strong> ${recipientEmail}</p>
-<p><strong>Event:</strong> ${eventType}</p>
-<p>Check your inbox and follow up personally!</p>`,
+<p><strong>Link:</strong> ${body.data?.click?.link || "unknown"}</p>
+<p>Follow up while they're engaged!</p>`,
               }),
             });
           }
         }
-      }
-    }
-
-    // Handle bounce/unsubscribe events
-    if (eventType === "email.bounced" || eventType === "email.delivery_delayed") {
-      const recipientEmail = body.data?.to?.[0] || body.data?.email;
-      if (recipientEmail) {
-        await supabase
-          .from("newsletter_contacts")
-          .update({ subscribed: false })
-          .eq("email", recipientEmail.toLowerCase());
-        console.log(`Contact ${recipientEmail} unsubscribed (${eventType})`);
       }
     }
 
