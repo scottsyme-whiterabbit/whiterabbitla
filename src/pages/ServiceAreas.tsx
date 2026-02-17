@@ -64,7 +64,7 @@ const ServiceAreas = () => {
                     >
                       <img
                         src={area.photo}
-                        alt={`${area.city} luxury events`}
+                        alt={`${area.city}, ${area.region} — magician for luxury events`}
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         loading="lazy"
                       />
