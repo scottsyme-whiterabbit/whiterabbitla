@@ -62,7 +62,7 @@ The HTML should use this styling:
 - Accent/CTA color: #c8a0a0
 - Include the logo: <img src="https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-symbol.png" alt="White Rabbit" style="width:60px;height:auto;margin:0 auto 20px;" />
 - CTA button linking to https://whiterabbitla.lovable.app/contact
-- Footer: "White Rabbit · Los Angeles" with unsubscribe placeholder: {{UNSUBSCRIBE_LINK}}
+- Footer: "White Rabbit · Los Angeles" with physical address "7393 W. Manchester Ave #209, Los Angeles, CA 90045" and unsubscribe placeholder: {{UNSUBSCRIBE_LINK}}
 - Keep it concise: 3-4 short paragraphs max
 - Current month/year for seasonal context: ${currentMonth} ${currentYear}`;
 

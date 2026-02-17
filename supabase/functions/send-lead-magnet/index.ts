@@ -80,7 +80,8 @@ serve(async (req) => {
         <tr><td style="padding:24px 40px 40px;text-align:center;">
           <hr style="border:none;border-top:1px solid rgba(200,160,160,0.15);margin:0 0 24px;" />
           <p style="font-family:sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(245,240,232,0.3);margin:0;">
-            White Rabbit · Los Angeles
+            White Rabbit · Los Angeles<br/>
+            7393 W. Manchester Ave #209, Los Angeles, CA 90045
           </p>
         </td></tr>
 

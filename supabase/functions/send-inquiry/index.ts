@@ -111,7 +111,8 @@ serve(async (req) => {
         <!-- Footer -->
         <tr><td style="padding:40px 40px 32px;text-align:center;">
           <p style="margin:0;font-family:Georgia,serif;font-size:11px;color:rgba(245,240,232,0.3);letter-spacing:0.1em;">
-            White Rabbit Magic · Los Angeles, CA
+            White Rabbit Magic · Los Angeles, CA<br/>
+            7393 W. Manchester Ave #209, Los Angeles, CA 90045
           </p>
         </td></tr>
 
