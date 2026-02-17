@@ -42,6 +42,7 @@ const AdminNewsletter = () => {
   const [storedPassword, setStoredPassword] = useState("");
 
   const [activeTab, setActiveTab] = useState<"dashboard" | "contacts" | "compose" | "campaigns" | "planner">("dashboard");
+  const [contactsFilter, setContactsFilter] = useState<string>("all");
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [stats, setStats] = useState<Stats>({ subscribers: 0, campaigns: 0, emailsSent: 0 });
@@ -343,7 +344,7 @@ const AdminNewsletter = () => {
 
         {/* Contacts */}
         {activeTab === "contacts" && (
-          <ContactsListTab storedPassword={storedPassword} />
+          <ContactsListTab storedPassword={storedPassword} initialFilter={contactsFilter as any} />
         )}
 
         {/* Compose */}
@@ -532,7 +533,7 @@ const AdminNewsletter = () => {
 
         {/* Planner Drip Campaign */}
         {activeTab === "planner" && (
-          <PlannerDripTab storedPassword={storedPassword} />
+          <PlannerDripTab storedPassword={storedPassword} onNavigateToContacts={(filter) => { setContactsFilter(filter); setActiveTab("contacts"); }} />
         )}
       </div>
     </div>
