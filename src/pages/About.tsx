@@ -129,6 +129,33 @@ const About = () => {
         </section>
       </AnimatedSection>
 
+      {/* Overheard — Celebrity Reactions */}
+      <section className="py-16 lg:py-20">
+        <div className="max-w-4xl mx-auto px-6">
+          <AnimatedSection>
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-10 text-center">Overheard</p>
+          </AnimatedSection>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            {[
+              { quote: "That was well worth it.", name: "Don Cheadle", title: "Actor" },
+              { quote: "You're going straight to hell.", name: "Richard Jefferson", title: "NBA Champion" },
+              { quote: "Love it.", name: "Dolph Lundgren", title: "Actor" },
+              { quote: "That is some crazy bullshit.", name: "Peter Farrelly", title: "Director" },
+            ].map((item, i) => (
+              <AnimatedSection key={item.name} delay={i * 0.1}>
+                <div className="text-center">
+                  <p className="font-serif text-lg md:text-xl text-foreground leading-snug mb-3">
+                    "{item.quote}"
+                  </p>
+                  <p className="font-sans text-xs font-semibold tracking-[0.15em] uppercase text-foreground/80">{item.name}</p>
+                  <p className="font-sans text-[11px] tracking-wider uppercase text-muted-foreground">{item.title}</p>
+                </div>
+              </AnimatedSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* What Scott Offers — links to Experience */}
       <section className="py-20 lg:py-24">
         <div className="max-w-4xl mx-auto px-6">
