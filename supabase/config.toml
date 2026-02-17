@@ -33,5 +33,8 @@ verify_jwt = false
 [functions.email-webhook]
 verify_jwt = false
 
+[functions.track-open]
+verify_jwt = false
+
 [functions.enroll-drip]
 verify_jwt = false

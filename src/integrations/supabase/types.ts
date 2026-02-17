@@ -256,6 +256,48 @@ export type Database = {
         }
         Relationships: []
       }
+      newsletter_opens: {
+        Row: {
+          campaign_id: string | null
+          contact_id: string
+          drip_step: number
+          id: string
+          opened_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          campaign_id?: string | null
+          contact_id: string
+          drip_step?: number
+          id?: string
+          opened_at?: string
+          user_agent?: string | null
+        }
+        Update: {
+          campaign_id?: string | null
+          contact_id?: string
+          drip_step?: number
+          id?: string
+          opened_at?: string
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "newsletter_opens_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "newsletter_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "newsletter_opens_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "newsletter_contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       newsletter_send_log: {
         Row: {
           campaign_id: string

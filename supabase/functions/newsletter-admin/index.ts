@@ -160,7 +160,15 @@ serve(async (req) => {
           .eq("contact_id", contactId)
           .order("clicked_at", { ascending: false });
         if (clicksErr) throw clicksErr;
-        return new Response(JSON.stringify({ clicks: clicks || [] }), {
+
+        const { data: opens, error: opensErr } = await supabase
+          .from("newsletter_opens")
+          .select("id, drip_step, opened_at, user_agent")
+          .eq("contact_id", contactId)
+          .order("opened_at", { ascending: false });
+        if (opensErr) throw opensErr;
+
+        return new Response(JSON.stringify({ clicks: clicks || [], opens: opens || [] }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
