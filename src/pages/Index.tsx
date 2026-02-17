@@ -123,9 +123,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Quiz Nudge — above the fold */}
-      <QuizNudge />
-
       {/* Client Logo Carousel */}
       <AnimatedSection>
         <section className="bg-forest-dark py-16 overflow-hidden">
@@ -150,6 +147,9 @@ const Index = () => {
           </div>
         </section>
       </AnimatedSection>
+
+      {/* Quiz Nudge — after social proof */}
+      <QuizNudge />
 
       {/* The Experience Teaser */}
       <section className="py-24 lg:py-32">
