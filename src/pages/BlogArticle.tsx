@@ -18,6 +18,7 @@ const categoryImages: Record<string, string> = {
   "Private Events": closeupImg,
   "Corporate Events": corporateImg,
   "Behind the Craft": scottCardsImg,
+  "Luxury Nightlife": closeupImg,
 };
 
 const BlogArticle = () => {
