@@ -73,7 +73,7 @@ const cityData: { city: string; region: string; photo: string; tagline: string }
   { city: "Park City", region: "Mountain & Resort", photo: "/areas/park-city.jpg", tagline: "Sundance season parties and mountain estates" },
   { city: "Jackson Hole", region: "Mountain & Resort", photo: "https://images.unsplash.com/photo-1472396961693-142e6e269027?w=600&h=400&fit=crop", tagline: "Grand Teton backdrop private events" }, // Deer/mountain nature
   { city: "Sun Valley", region: "Mountain & Resort", photo: "https://images.unsplash.com/photo-1483921020237-2ff51e8e4b22?w=600&h=400&fit=crop", tagline: "Idaho's billionaire playground celebrations" }, // Mountain valley
-  { city: "Lake Tahoe", region: "Mountain & Resort", photo: "https://images.unsplash.com/photo-1542202229-7d93c33f5d07?w=600&h=400&fit=crop", tagline: "Lakeside lodges and mountain-view galas" }, // Lake Tahoe blue water
+  { city: "Lake Tahoe", region: "Mountain & Resort", photo: "/areas/lake-tahoe.jpg", tagline: "Lakeside lodges and mountain-view galas" },
   { city: "Telluride", region: "Mountain & Resort", photo: "https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=600&h=400&fit=crop", tagline: "Remote luxury in the Colorado Rockies" }, // Dramatic mountain peaks
   { city: "Denver", region: "Mountain & Resort", photo: "https://images.unsplash.com/photo-1546156929-a4c0ac411f47?w=600&h=400&fit=crop", tagline: "Mile-high corporate events and galas" }, // Denver skyline mountains
 
@@ -89,16 +89,16 @@ const cityData: { city: string; region: string; photo: string; tagline: string }
   { city: "River Oaks", region: "Texas", photo: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&h=400&fit=crop", tagline: "Houston's luxury district events" }, // Grand estate exterior
 
   // Southeast
-  { city: "Miami", region: "Southeast", photo: "https://images.unsplash.com/photo-1533106418989-88406c7cc8ca?w=600&h=400&fit=crop", tagline: "South Beach parties and Brickell penthouse events" }, // Miami Beach
-  { city: "Nashville", region: "Southeast", photo: "https://images.unsplash.com/photo-1587162146766-e06b1189b907?w=600&h=400&fit=crop", tagline: "Music Row celebrations and bourbon bar receptions" }, // Nashville Broadway neon
+  { city: "Miami", region: "Southeast", photo: "/areas/miami.jpg", tagline: "South Beach parties and Brickell penthouse events" },
+  { city: "Nashville", region: "Southeast", photo: "/areas/nashville.jpg", tagline: "Music Row celebrations and bourbon bar receptions" },
   { city: "Atlanta", region: "Southeast", photo: "https://images.unsplash.com/photo-1575917649705-5b59aaa12e6b?w=600&h=400&fit=crop", tagline: "Buckhead galas and Midtown corporate events" }, // Atlanta skyline
   { city: "Palm Beach", region: "Southeast", photo: "https://images.unsplash.com/photo-1590523741831-ab7e8b8f9c7f?w=600&h=400&fit=crop", tagline: "The Breakers and Worth Avenue private affairs" }, // Palm-lined tropical
   { city: "Naples", region: "Southeast", photo: "https://images.unsplash.com/photo-1568495248636-6432b97bd949?w=600&h=400&fit=crop", tagline: "Gulf Coast luxury community celebrations" }, // Naples FL pier sunset
   { city: "Coral Gables", region: "Southeast", photo: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&h=400&fit=crop", tagline: "Biltmore elegance and coral rock estates" }, // Biltmore-style hotel
   { city: "Jupiter", region: "Southeast", photo: "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&h=400&fit=crop", tagline: "Exclusive Florida coastal celebrations" }, // Beach and ocean
   { city: "Sarasota", region: "Southeast", photo: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop", tagline: "Ringling-era elegance and barrier island events" }, // White sand beach
-  { city: "Buckhead", region: "Southeast", photo: "https://images.unsplash.com/photo-1575917649705-5b59aaa12e6b?w=600&h=400&fit=crop", tagline: "Atlanta's most prestigious neighborhood events" }, // Atlanta skyline
-  { city: "Nantucket", region: "Northeast", photo: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=600&h=400&fit=crop", tagline: "Island getaway celebrations" }, // Nantucket shingle cottage
+  { city: "Buckhead", region: "Southeast", photo: "/areas/buckhead.jpg", tagline: "Atlanta's most prestigious neighborhood events" },
+  { city: "Nantucket", region: "Northeast", photo: "/areas/nantucket.jpg", tagline: "Island getaway celebrations" },
   { city: "Martha's Vineyard", region: "Northeast", photo: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&h=400&fit=crop", tagline: "Coastal New England estate parties" }, // New England meadow coast
 
   // Northeast
