@@ -340,6 +340,51 @@ export type Database = {
           },
         ]
       }
+      referrals: {
+        Row: {
+          created_at: string
+          id: string
+          notes: string | null
+          referred_email: string | null
+          referred_event_details: string | null
+          referred_name: string
+          referrer_company: string | null
+          referrer_email: string
+          referrer_name: string
+          reward_redeemed: boolean
+          status: string
+          verified_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          referred_email?: string | null
+          referred_event_details?: string | null
+          referred_name: string
+          referrer_company?: string | null
+          referrer_email: string
+          referrer_name: string
+          reward_redeemed?: boolean
+          status?: string
+          verified_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notes?: string | null
+          referred_email?: string | null
+          referred_event_details?: string | null
+          referred_name?: string
+          referrer_company?: string | null
+          referrer_email?: string
+          referrer_name?: string
+          reward_redeemed?: boolean
+          status?: string
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
