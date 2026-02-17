@@ -63,7 +63,7 @@ const getRecommendation = (data: QuizData) => {
     return {
       title: "The White Rabbit Private Magic Show",
       description:
-        "An intimate, seated show with emerald curtains, cinematic uplighting, and a curated soundtrack. Scott transforms your space into something unforgettable, blending card mastery, mentalism, and audience participation that engages all the senses.",
+        "An intimate, seated show where Scott transforms your space into something unforgettable, blending interactive magic, mentalism, and audience participation that engages all the senses.",
       format: "Private Magic Show",
     };
   }
