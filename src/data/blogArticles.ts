@@ -445,6 +445,24 @@ export const blogArticles: BlogArticle[] = [
       "Whether you're hosting a corporate casino night for 300 or an intimate poker evening for 20, the principle is the same: your guests came expecting a theme. Give them an experience. A world-class magician turns the illusion of a casino night into something genuinely impossible to forget.",
     ],
   },
+  {
+    slug: "why-dmcs-adding-magician-incentive-trips",
+    title: "Why DMCs Are Adding a Magician to Their Incentive Trip Playbook",
+    metaTitle: "Why DMCs Are Booking Magicians for Incentive Trips | White Rabbit",
+    metaDescription: "Destination management companies are discovering that a professional magician is the missing piece of their incentive trip programs. Here's why it works.",
+    category: "For DMCs",
+    publishDate: "2026-02-17",
+    readTime: "5 min read",
+    excerpt: "The best DMCs don't just plan itineraries. They create experiences attendees talk about for years. A world-class magician is becoming the secret weapon that separates good trips from legendary ones.",
+    content: [
+      "If you run a destination management company, you already know the formula: stunning venue, curated excursion, great restaurant, branded gift bag. It works. But if you're honest with yourself, it also works for every other DMC pitching the same client. The itinerary is tight. The logistics are flawless. And yet, when attendees get home, they struggle to remember what made this trip different from the last three. That's the gap a magician fills.",
+      "Professional close-up magic is the most efficient wow-factor a DMC can add to a program. It requires zero infrastructure. No stage, no sound system, no load-in window, no power drop. A world-class performer arrives at your welcome reception, moves through the room for two hours, and by the time the last drink is poured, your attendees are bonded in a way that no team-building exercise has ever achieved. Strangers from different offices, different cities, different countries are laughing together, grabbing each other and saying 'you have to see this.'",
+      "Scott Syme, the magician behind <a href='/' target='_blank' rel='noopener noreferrer'>White Rabbit</a>, is a member of the world-famous <a href='https://www.magiccastle.com' target='_blank' rel='noopener noreferrer'>Magic Castle®</a> in Hollywood and has performed for Netflix, Disney, Morgan Stanley, Rolls Royce, and hundreds of private events where the standard is nothing less than extraordinary. His close-up magic and mentalism are specifically designed for the kind of high-caliber, high-expectation environments that DMCs operate in. No cheesy props. No audience embarrassment. Just elegant, impossible moments that happen right in your attendees' hands.",
+      "The smartest DMCs are using a two-touch format. First, roaming close-up magic during the welcome reception on night one, breaking the ice across teams and setting the tone for the entire trip. Then, a curated 45-minute Private Magic Show as the surprise entertainment anchor during the farewell dinner. The first touch warms the room. The second closes the trip with a standing ovation. Together, they give the program a narrative arc that attendees remember long after they've forgotten the restaurant name.",
+      "For DMCs, the business case is straightforward. Magic is a differentiator that competitors aren't offering yet. It's a line item that requires minimal coordination on your end. It generates the kind of attendee feedback that makes clients renew contracts. And unlike a cooking class or vineyard tour, it works in any city, any venue, any season. Whether your program is in Los Angeles, Scottsdale, Miami, or Aspen, the experience translates.",
+      "The planners who book White Rabbit for one trip don't stop at one. They add it to their standard program toolkit because the ROI is undeniable: happier attendees, stronger testimonials, and clients who stop shopping around for other DMCs. If you're building programs for Fortune 500 companies, incentive houses, or high-net-worth groups, this is the entertainment upgrade your itineraries have been missing.",
+    ],
+  },
 ];
 
 export function getBlogArticleBySlug(slug: string): BlogArticle | undefined {

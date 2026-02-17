@@ -28,6 +28,7 @@ const serviceKeys = [
   "close-up-magician", "private-magic-show", "golf-tournament-magician",
   "charity-gala-magician", "holiday-party-magician", "trade-show-magician",
   "rehearsal-dinner-magician", "halloween-party-magician", "christmas-party-magician",
+  "dmc-entertainment",
 ];
 
 const editorialArticles = [
@@ -49,6 +50,7 @@ const editorialArticles = [
   "magic-monday-studio-city",
   "golf-tournament-entertainment-ideas",
   "why-your-event-needs-mc-not-just-entertainment",
+  "why-dmcs-adding-magician-incentive-trips",
 ];
 
 function slugify(text: string): string {
