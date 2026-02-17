@@ -360,18 +360,24 @@ const Index = () => {
       <AnimatedSection>
         <section className="py-12 lg:py-16 text-center">
           <div className="max-w-2xl mx-auto px-6">
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">Your Guests Deserve This</p>
             <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">
-              Make Your Guests Feel Alive
+              Don't Leave the Best Part of Your Event to Chance
             </h2>
+            <p className="font-sans text-base text-muted-foreground mb-4">
+              The venue is booked. The caterer is confirmed. The playlist is set.
+              But what happens when your guests are standing in a circle, drink in hand, waiting for something to happen?
+            </p>
             <p className="font-sans text-base text-muted-foreground mb-10">
-              Scott Syme transforms any space into something extraordinary. An atmosphere of joy, wonder, and genuine 
-              hospitality that your guests will talk about for years to come.
+              Scott fills that moment with joy, laughter, and genuine connection. No awkward silences. No forgettable entertainment.
+              Just an atmosphere your guests will be talking about long after the night is over.
             </p>
             <button
               onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors">
-              Book Now
+              Check Availability
             </button>
+            <p className="font-sans text-xs text-muted-foreground/60 mt-4">Limited dates each month. No associates. Just Scott.</p>
           </div>
         </section>
       </AnimatedSection>

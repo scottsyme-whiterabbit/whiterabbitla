@@ -443,7 +443,7 @@ const BookingQuiz = () => {
                         </div>
                       </div>
                     </div>
-                  ) : step === "recommendation" ? (
+                    ) : step === "recommendation" ? (
                     <div>
                       {(() => {
                         const rec = getRecommendation(data);
@@ -456,7 +456,27 @@ const BookingQuiz = () => {
                             <div className="p-5 bg-accent/5 border border-accent/20 mb-6">
                               <p className="font-sans text-sm text-muted-foreground leading-relaxed">{rec.description}</p>
                             </div>
-                            <div className="space-y-2 text-sm font-sans text-muted-foreground mb-6">
+
+                            {/* Value Stack */}
+                            <div className="mb-6">
+                              <p className="font-sans text-xs tracking-[0.2em] uppercase text-accent/70 mb-3">What's Included</p>
+                              <div className="space-y-2">
+                                {[
+                                  "World-class magic tailored to your event",
+                                  "Pre-event consultation and planning",
+                                  "Seamless coordination with your venue and team",
+                                  "A host who makes every guest feel alive",
+                                  "An experience they'll talk about for years",
+                                ].map((item, i) => (
+                                  <div key={i} className="flex items-center gap-2">
+                                    <Check size={14} className="text-accent flex-shrink-0" />
+                                    <p className="font-sans text-xs text-foreground">{item}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div className="space-y-2 text-sm font-sans text-muted-foreground mb-4">
                               <div className="flex justify-between border-b border-border pb-2">
                                 <span>Event</span>
                                 <span className="text-foreground">{data.eventLabel}</span>
@@ -478,6 +498,10 @@ const BookingQuiz = () => {
                                 <span className="text-foreground">{data.budgetLabel}</span>
                               </div>
                             </div>
+
+                            <p className="font-sans text-[11px] text-muted-foreground/50 text-center">
+                              Limited dates available. Scott personally performs at every event.
+                            </p>
                           </>
                         );
                       })()}
