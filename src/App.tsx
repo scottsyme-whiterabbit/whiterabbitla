@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -74,6 +74,7 @@ const AppContent = () => {
         <Route path="/deck" element={<PitchDeck />} />
         <Route path="/review" element={<ReviewGate />} />
         <Route path="/refer" element={<Refer />} />
+        <Route path="/event-magician" element={<Navigate to="/" replace />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
