@@ -15,9 +15,10 @@ const DRIP_LABELS = [
 
 interface PlannerDripTabProps {
   storedPassword: string;
+  onNavigateToContacts?: (filter: string) => void;
 }
 
-const PlannerDripTab = ({ storedPassword }: PlannerDripTabProps) => {
+const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTabProps) => {
   const [stats, setStats] = useState<{ total: number; active: number; completed: number; unsubscribed: number; stepCounts: number[]; engagement: { warm: number; hot: number; cold: number }; clicks: { total: number; uniqueContacts: number }; totalSent: number }>({
     total: 0, active: 0, completed: 0, unsubscribed: 0, stepCounts: [0, 0, 0, 0, 0],
     engagement: { warm: 0, hot: 0, cold: 0 }, clicks: { total: 0, uniqueContacts: 0 }, totalSent: 0,
@@ -177,13 +178,13 @@ const PlannerDripTab = ({ storedPassword }: PlannerDripTabProps) => {
           </div>
           <p className="font-serif text-3xl text-foreground">{stats.completed}</p>
         </div>
-        <div className="border border-border p-5">
+        <button onClick={() => onNavigateToContacts?.("unsubscribed")} className="border border-border p-5 text-left hover:border-accent/50 transition-colors cursor-pointer">
           <div className="flex items-center gap-2 mb-1">
             <UserX size={16} className="text-red-400" />
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Unsubscribed</p>
           </div>
           <p className="font-serif text-3xl text-foreground">{stats.unsubscribed}</p>
-        </div>
+        </button>
         <div className="border border-border p-5">
           <button
             onClick={handleProcessNow}
@@ -200,20 +201,20 @@ const PlannerDripTab = ({ storedPassword }: PlannerDripTabProps) => {
 
       {/* Stats Row 2 — Engagement */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="border border-border p-5">
+        <button onClick={() => onNavigateToContacts?.("hot")} className="border border-border p-5 text-left hover:border-accent/50 transition-colors cursor-pointer">
           <div className="flex items-center gap-2 mb-1">
             <Flame size={16} className="text-red-400" />
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Hot Leads</p>
           </div>
           <p className="font-serif text-3xl text-foreground">{stats.engagement.hot}</p>
-        </div>
-        <div className="border border-border p-5">
+        </button>
+        <button onClick={() => onNavigateToContacts?.("warm")} className="border border-border p-5 text-left hover:border-accent/50 transition-colors cursor-pointer">
           <div className="flex items-center gap-2 mb-1">
             <ThermometerSun size={16} className="text-orange-400" />
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Warm Leads</p>
           </div>
           <p className="font-serif text-3xl text-foreground">{stats.engagement.warm}</p>
-        </div>
+        </button>
         <div className="border border-border p-5">
           <div className="flex items-center gap-2 mb-1">
             <MousePointerClick size={16} className="text-accent" />

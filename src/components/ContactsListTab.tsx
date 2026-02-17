@@ -24,6 +24,7 @@ type FilterStatus = "all" | "hot" | "warm" | "new" | "cold" | "unsubscribed";
 
 interface ContactsListTabProps {
   storedPassword: string;
+  initialFilter?: FilterStatus;
 }
 
 const STATUS_CONFIG: Record<string, { label: string; icon: typeof Flame; colorClass: string }> = {
@@ -34,10 +35,10 @@ const STATUS_CONFIG: Record<string, { label: string; icon: typeof Flame; colorCl
   unsubscribed: { label: "Unsub", icon: UserX, colorClass: "bg-red-900/20 text-red-500" },
 };
 
-const ContactsListTab = ({ storedPassword }: ContactsListTabProps) => {
+const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps) => {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState<FilterStatus>("all");
+  const [filter, setFilter] = useState<FilterStatus>(initialFilter || "all");
   const [loading, setLoading] = useState(false);
 
   const loadContacts = useCallback(async () => {
@@ -64,6 +65,10 @@ const ContactsListTab = ({ storedPassword }: ContactsListTabProps) => {
   useEffect(() => {
     loadContacts();
   }, [loadContacts]);
+
+  useEffect(() => {
+    if (initialFilter) setFilter(initialFilter);
+  }, [initialFilter]);
 
   const filtered = contacts.filter(c => {
     // Filter by status
