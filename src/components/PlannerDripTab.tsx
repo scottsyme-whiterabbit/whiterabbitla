@@ -6,11 +6,11 @@ const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 const DRIP_LABELS = [
-  { step: 0, subject: "The entertainment gap", day: 0 },
-  { step: 1, subject: "Cocktail hour secret", day: 3 },
-  { step: 2, subject: "Surprise your clients", day: 7 },
-  { step: 3, subject: "Not your kids' magician", day: 14 },
-  { step: 4, subject: "Add to your vendor list?", day: 21 },
+  { step: 0, subjectA: "The entertainment gap", subjectB: "What your cocktail hour is missing", day: 0 },
+  { step: 1, subjectA: "Cocktail hour secret", subjectB: "Why 200 guests didn't leave early", day: 3 },
+  { step: 2, subjectA: "Surprise your clients", subjectB: "The thing nobody expected", day: 7 },
+  { step: 3, subjectA: "Not your kids' magician", subjectB: "What Netflix and Disney booked", day: 14 },
+  { step: 4, subjectA: "Add to your vendor list?", subjectB: "One vendor, three formats", day: 21 },
 ];
 
 interface PlannerContact {
@@ -47,9 +47,9 @@ interface PlannerDripTabProps {
 }
 
 const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTabProps) => {
-  const [stats, setStats] = useState<{ total: number; active: number; completed: number; unsubscribed: number; stepCounts: number[]; engagement: { warm: number; hot: number; cold: number }; clicks: { total: number; uniqueContacts: number }; totalSent: number }>({
+  const [stats, setStats] = useState<{ total: number; active: number; completed: number; unsubscribed: number; stepCounts: number[]; engagement: { warm: number; hot: number; cold: number }; clicks: { total: number; uniqueContacts: number }; totalSent: number; abResults?: Record<string, { sentA: number; sentB: number; openedA: number; openedB: number }> }>({
     total: 0, active: 0, completed: 0, unsubscribed: 0, stepCounts: [0, 0, 0, 0, 0],
-    engagement: { warm: 0, hot: 0, cold: 0 }, clicks: { total: 0, uniqueContacts: 0 }, totalSent: 0,
+    engagement: { warm: 0, hot: 0, cold: 0 }, clicks: { total: 0, uniqueContacts: 0 }, totalSent: 0, abResults: {},
   });
   const [csvInput, setCsvInput] = useState("");
   const [previewStep, setPreviewStep] = useState(0);
@@ -335,21 +335,82 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
               className={`border p-3 text-left transition-colors hover:border-accent ${previewStep === i && previewHtml ? "border-accent" : "border-border"}`}
             >
               <p className="font-sans text-xs text-muted-foreground mb-1">Day {d.day}</p>
-              <p className="font-sans text-sm text-foreground leading-tight">{d.subject}</p>
+              <p className="font-sans text-sm text-foreground leading-tight">{d.subjectA}</p>
+              <p className="font-sans text-[10px] text-muted-foreground/60 leading-tight mt-0.5">B: {d.subjectB}</p>
               <p className="font-sans text-xs text-accent mt-2">{stats.stepCounts[i]} waiting</p>
             </button>
           ))}
         </div>
       </div>
 
-      {/* Email Preview */}
+      {/* A/B Test Results */}
+      {stats.abResults && Object.keys(stats.abResults).length > 0 && (
+        <div>
+          <h3 className="font-sans text-sm tracking-[0.2em] uppercase text-muted-foreground mb-4 flex items-center gap-2">
+            <EyeIcon size={16} />
+            A/B Subject Line Results
+          </h3>
+          <div className="border border-border overflow-hidden">
+            <table className="w-full text-sm">
+              <thead className="bg-card border-b border-border">
+                <tr>
+                  <th className="text-left px-4 py-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Step</th>
+                  <th className="text-left px-4 py-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Variant A</th>
+                  <th className="text-center px-4 py-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Open %</th>
+                  <th className="text-left px-4 py-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Variant B</th>
+                  <th className="text-center px-4 py-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Open %</th>
+                  <th className="text-center px-4 py-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Winner</th>
+                </tr>
+              </thead>
+              <tbody>
+                {DRIP_LABELS.map((d) => {
+                  const key = `planner-step-${d.step}`;
+                  const ab = stats.abResults?.[key];
+                  if (!ab || (ab.sentA === 0 && ab.sentB === 0)) return null;
+                  const rateA = ab.sentA > 0 ? Math.round((ab.openedA / ab.sentA) * 100) : 0;
+                  const rateB = ab.sentB > 0 ? Math.round((ab.openedB / ab.sentB) * 100) : 0;
+                  const winner = ab.sentA >= 3 && ab.sentB >= 3
+                    ? rateA > rateB ? "A" : rateB > rateA ? "B" : "Tie"
+                    : "—";
+                  return (
+                    <tr key={key} className="border-b border-border/50">
+                      <td className="px-4 py-3 font-sans text-xs text-muted-foreground">Day {d.day}</td>
+                      <td className="px-4 py-3">
+                        <p className="font-sans text-sm text-foreground">{d.subjectA}</p>
+                        <p className="font-sans text-[10px] text-muted-foreground">{ab.sentA} sent · {ab.openedA} opened</p>
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <span className={`font-sans text-sm font-semibold ${winner === "A" ? "text-accent" : "text-foreground"}`}>{rateA}%</span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <p className="font-sans text-sm text-foreground">{d.subjectB}</p>
+                        <p className="font-sans text-[10px] text-muted-foreground">{ab.sentB} sent · {ab.openedB} opened</p>
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <span className={`font-sans text-sm font-semibold ${winner === "B" ? "text-accent" : "text-foreground"}`}>{rateB}%</span>
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <span className={`font-sans text-xs tracking-wider uppercase font-semibold ${winner === "A" || winner === "B" ? "text-accent" : "text-muted-foreground"}`}>
+                          {winner}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <p className="px-4 py-2 font-sans text-[10px] text-muted-foreground/50">Winner declared after 3+ sends per variant. Each contact is randomly assigned A or B.</p>
+          </div>
+        </div>
+      )}
+
       {previewHtml && (
         <div className="border border-border">
           <div className="p-4 border-b border-border flex items-center justify-between">
             <div>
               <h3 className="font-sans text-sm text-foreground">
                 <Eye size={14} className="inline mr-2" />
-                Preview: Email {previewStep + 1} — "{DRIP_LABELS[previewStep].subject}"
+                Preview: Email {previewStep + 1} — "{DRIP_LABELS[previewStep].subjectA}"
               </h3>
               <p className="text-xs text-muted-foreground mt-1">Day {DRIP_LABELS[previewStep].day} · Sample: Sarah from Stellar Events</p>
             </div>

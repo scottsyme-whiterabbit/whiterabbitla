@@ -19,9 +19,18 @@ const WARM_SCHEDULE = [0, 3, 7]; // Day 0, 3, 7 after entering warm
 const BREAKUP_DAY = 28; // Day 28 from original start for non-clickers
 
 interface EmailTemplate {
-  subject: string;
+  subjectA: string;
+  subjectB: string;
   preheader: string;
   body: (name: string, company: string, city: string, contactId?: string, step?: number) => string;
+}
+
+function pickVariant(): "A" | "B" {
+  return Math.random() < 0.5 ? "A" : "B";
+}
+
+function getSubject(template: EmailTemplate, variant: "A" | "B"): string {
+  return variant === "A" ? template.subjectA : template.subjectB;
 }
 
 function wrapEmail(preheader: string, innerHtml: string, email: string, contactId?: string, step?: number): string {
@@ -121,7 +130,8 @@ function shareLink(slug: string, text: string): string {
 const TEMPLATES: EmailTemplate[] = [
   // Email 1: Day 0 — The Gap Hook
   {
-    subject: "The entertainment gap",
+    subjectA: "The entertainment gap",
+    subjectB: "What your cocktail hour is missing",
     preheader: "Every planner hits this wall.",
     body: (name, _company, city, contactId, step) => {
       const cityLine = city ? ` in ${city}` : "";
@@ -142,7 +152,8 @@ ${ps("Not kids' birthday stuff. Sophisticated sleight of hand, mentalism, and pr
   },
   // Email 2: Day 3 — Cocktail Hour Value
   {
-    subject: "Cocktail hour secret",
+    subjectA: "Cocktail hour secret",
+    subjectB: "Why 200 guests didn't leave early",
     preheader: "Turn mingling into the highlight.",
     body: (name, _company, _city, contactId, step) => {
       const link = contactId
@@ -163,7 +174,8 @@ ${ps("Close-up magic, parlor shows, or both. We tailor it to your event.")}
   },
   // Email 3: Day 7 — The Surprise Factor
   {
-    subject: "Surprise your clients",
+    subjectA: "Surprise your clients",
+    subjectB: "The thing nobody expected",
     preheader: "Entertainment they didn't know they wanted.",
     body: (name, _company, _city, contactId, step) => {
       const link = contactId
@@ -183,7 +195,8 @@ ${ps(`Need to share this with your team? Here's our lookbook: <a href="${SITE_UR
   },
   // Email 4: Day 14 — Modern Magic Proof
   {
-    subject: "Not your kids' magician",
+    subjectA: "Not your kids' magician",
+    subjectB: "What Netflix and Disney booked",
     preheader: "Luxury events deserve better.",
     body: (name, _company, _city, contactId, step) => {
       const link = contactId
@@ -204,7 +217,8 @@ ${ps("Member of the Magic Castle. Disney + AGT vetted. Close-up, parlor, and cor
   },
   // Email 5: Day 21 — Vendor List Closer
   {
-    subject: "Add to your vendor list?",
+    subjectA: "Add to your vendor list?",
+    subjectB: "One vendor, three formats",
     preheader: "One vendor, three formats.",
     body: (name, _company, _city, contactId, step) => {
       const link = contactId
@@ -231,7 +245,8 @@ ${ps(`Share our lookbook with your team: <a href="${SITE_URL}/deck" style="color
 const WARM_TEMPLATES: EmailTemplate[] = [
   // Warm 1: Day 0 — Acknowledge interest
   {
-    subject: "Quick thought for your next event",
+    subjectA: "Quick thought for your next event",
+    subjectB: "Noticed you were curious",
     preheader: "Since you were curious...",
     body: (name, _company, _city) => {
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
@@ -247,7 +262,8 @@ ${signoff(true)}
   },
   // Warm 2: Day 3 — Social proof reinforcement
   {
-    subject: "What Soho House said",
+    subjectA: "What Soho House said",
+    subjectB: "Their highest-rated entertainment ever",
     preheader: "Real feedback from real events.",
     body: (name, _company, _city) => {
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
@@ -263,7 +279,8 @@ ${ps(`No commitment. Just a conversation. Or share our lookbook with your client
   },
   // Warm 3: Day 7 — Direct CTA
   {
-    subject: "Before I move on",
+    subjectA: "Before I move on",
+    subjectB: "Last note from me",
     preheader: "Last note from me.",
     body: (name, _company, _city) => {
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
@@ -284,7 +301,8 @@ ${signoff(true)}
 // ═══════════════════════════════════════════════
 
 const BREAKUP_TEMPLATE: EmailTemplate = {
-  subject: "Closing the loop",
+  subjectA: "Closing the loop",
+  subjectB: "Timing is everything",
   preheader: "Last one from me.",
   body: (name, _company, _city) => {
     return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
@@ -423,6 +441,8 @@ serve(async (req) => {
           if (daysSinceStart < DRIP_SCHEDULE[step]) continue;
 
           const template = TEMPLATES[step];
+          const variant = pickVariant();
+          const subject = getSubject(template, variant);
           const firstName = contact.name?.split(" ")[0] || "there";
           const bodyInner = template.body(firstName, contact.company || "", contact.city || "", contact.id, step);
           const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, step);
@@ -434,13 +454,19 @@ serve(async (req) => {
               body: JSON.stringify({
                 from: "Scott Syme | White Rabbit LA <scott.syme@whiterabbitla.com>",
                 to: [contact.email],
-                subject: template.subject,
+                subject,
                 html,
               }),
             });
             if (res.ok) {
               sent++;
               await supabase.from("newsletter_contacts").update({ drip_step: step + 1, last_emailed_at: now.toISOString() }).eq("id", contact.id);
+              // Log send with A/B variant
+              await supabase.from("newsletter_send_log").insert({
+                campaign_id: `planner-step-${step}`,
+                contact_id: contact.id,
+                ab_variant: variant,
+              });
             } else {
               const errData = await res.json();
               errors.push(`${contact.email}: ${JSON.stringify(errData)}`);
@@ -476,6 +502,8 @@ serve(async (req) => {
             const daysSinceStart = (now.getTime() - startedAt.getTime()) / (1000 * 60 * 60 * 24);
             if (daysSinceStart >= BREAKUP_DAY) {
               const firstName = contact.name?.split(" ")[0] || "there";
+              const breakupVariant = pickVariant();
+              const breakupSubject = getSubject(BREAKUP_TEMPLATE, breakupVariant);
               const bodyInner = BREAKUP_TEMPLATE.body(firstName, contact.company || "", contact.city || "");
               const html = wrapEmail(BREAKUP_TEMPLATE.preheader, bodyInner, contact.email, contact.id, 5);
               try {
@@ -485,7 +513,7 @@ serve(async (req) => {
                   body: JSON.stringify({
                     from: "Scott Syme | White Rabbit LA <scott.syme@whiterabbitla.com>",
                     to: [contact.email],
-                    subject: BREAKUP_TEMPLATE.subject,
+                    subject: breakupSubject,
                     html,
                   }),
                 });
@@ -523,6 +551,8 @@ serve(async (req) => {
           if (daysSinceStart < WARM_SCHEDULE[step]) continue;
 
           const template = WARM_TEMPLATES[step];
+          const warmVariant = pickVariant();
+          const warmSubject = getSubject(template, warmVariant);
           const firstName = contact.name?.split(" ")[0] || "there";
           const bodyInner = template.body(firstName, contact.company || "", contact.city || "");
           const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, step);
@@ -534,7 +564,7 @@ serve(async (req) => {
               body: JSON.stringify({
                 from: "Scott Syme | White Rabbit LA <scott.syme@whiterabbitla.com>",
                 to: [contact.email],
-                subject: template.subject,
+                subject: warmSubject,
                 html,
               }),
             });
@@ -546,6 +576,12 @@ serve(async (req) => {
                 last_emailed_at: now.toISOString(),
                 ...(newStep >= 3 ? { drip_campaign: "planner-done" } : {}),
               }).eq("id", contact.id);
+              // Log send with A/B variant
+              await supabase.from("newsletter_send_log").insert({
+                campaign_id: `warm-step-${step}`,
+                contact_id: contact.id,
+                ab_variant: warmVariant,
+              });
             }
           } catch (_e) { /* skip */ }
           await new Promise(r => setTimeout(r, 200));
@@ -575,13 +611,13 @@ serve(async (req) => {
         const template = WARM_TEMPLATES[stepNum];
         const innerHtml = template.body("Sarah", "Stellar Events", "Los Angeles");
         const html = wrapEmail(template.preheader, innerHtml, "preview@example.com");
-        return new Response(JSON.stringify({ subject: template.subject, preheader: template.preheader, body_html: html, day: WARM_SCHEDULE[stepNum], campaign: "planner-warm" }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        return new Response(JSON.stringify({ subjectA: template.subjectA, subjectB: template.subjectB, preheader: template.preheader, body_html: html, day: WARM_SCHEDULE[stepNum], campaign: "planner-warm" }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
 
       if (campaign === "breakup") {
         const innerHtml = BREAKUP_TEMPLATE.body("Sarah", "Stellar Events", "Los Angeles");
         const html = wrapEmail(BREAKUP_TEMPLATE.preheader, innerHtml, "preview@example.com");
-        return new Response(JSON.stringify({ subject: BREAKUP_TEMPLATE.subject, preheader: BREAKUP_TEMPLATE.preheader, body_html: html, day: BREAKUP_DAY, campaign: "breakup" }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        return new Response(JSON.stringify({ subjectA: BREAKUP_TEMPLATE.subjectA, subjectB: BREAKUP_TEMPLATE.subjectB, preheader: BREAKUP_TEMPLATE.preheader, body_html: html, day: BREAKUP_DAY, campaign: "breakup" }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
 
       if (stepNum < 0 || stepNum >= TEMPLATES.length) {
@@ -590,7 +626,7 @@ serve(async (req) => {
       const template = TEMPLATES[stepNum];
       const innerHtml = template.body("Sarah", "Stellar Events", "Los Angeles");
       const html = wrapEmail(template.preheader, innerHtml, "preview@example.com");
-      return new Response(JSON.stringify({ subject: template.subject, preheader: template.preheader, body_html: html, day: DRIP_SCHEDULE[stepNum] }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify({ subjectA: template.subjectA, subjectB: template.subjectB, preheader: template.preheader, body_html: html, day: DRIP_SCHEDULE[stepNum] }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
     // ── Action: stats ── Get planner drip stats (enhanced)
@@ -638,12 +674,43 @@ serve(async (req) => {
         .from("newsletter_send_log")
         .select("*", { count: "exact", head: true });
 
+      // A/B test stats: get sends with variant, join with opens
+      const { data: sendLogs } = await supabase
+        .from("newsletter_send_log")
+        .select("campaign_id, contact_id, ab_variant")
+        .not("ab_variant", "is", null);
+
+      const { data: openLogs } = await supabase
+        .from("newsletter_opens")
+        .select("contact_id, drip_step");
+
+      // Build A/B results per step
+      const openSet = new Set(openLogs?.map(o => `${o.contact_id}-${o.drip_step}`) || []);
+      const abResults: Record<string, { sentA: number; sentB: number; openedA: number; openedB: number }> = {};
+
+      for (const log of (sendLogs || [])) {
+        const key = log.campaign_id; // e.g. "planner-step-0"
+        if (!abResults[key]) abResults[key] = { sentA: 0, sentB: 0, openedA: 0, openedB: 0 };
+        // Extract step number from campaign_id
+        const stepMatch = key.match(/step-(\d+)/);
+        const stepNum = stepMatch ? parseInt(stepMatch[1]) : -1;
+        const opened = openSet.has(`${log.contact_id}-${stepNum}`);
+        if (log.ab_variant === "A") {
+          abResults[key].sentA++;
+          if (opened) abResults[key].openedA++;
+        } else {
+          abResults[key].sentB++;
+          if (opened) abResults[key].openedB++;
+        }
+      }
+
       return new Response(JSON.stringify({
         total, active, unsubscribed, completed, stepCounts,
         plannerActive, warmActive,
         engagement: { warm, hot, cold },
         clicks: { total: totalClicks || 0, uniqueContacts: uniqueClickerCount },
         totalSent: totalSent || 0,
+        abResults,
       }), {
         status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -685,6 +752,7 @@ serve(async (req) => {
         template = TEMPLATES[stepNum];
       }
 
+      const testVariant = (reqBody.variant === "B" ? "B" : "A") as "A" | "B";
       const innerHtml = template.body("Sarah", "Stellar Events", "Los Angeles");
       const html = wrapEmail(template.preheader, innerHtml, toEmail);
 
@@ -694,7 +762,7 @@ serve(async (req) => {
         body: JSON.stringify({
           from: "Scott Syme | White Rabbit LA <scott.syme@whiterabbitla.com>",
           to: [toEmail],
-          subject: `${subjectPrefix}${template.subject}`,
+          subject: `${subjectPrefix}${getSubject(template, testVariant)}`,
           html,
         }),
       });
