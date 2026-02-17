@@ -55,15 +55,6 @@ body { margin: 0; padding: 0; width: 100% !important; background-color: #2D4A3E;
 
 ${innerHtml}
 
-<!-- Book a Call CTA -->
-<tr><td style="padding: 0 40px 20px; text-align:center;" class="padding-mobile">
-<table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
-<tr><td style="border:1px solid #c8a0a0; border-radius:2px;">
-<a href="https://calendar.app.google/58WjggPt3RFAcJjq8" target="_blank" style="display:inline-block; padding:14px 36px; font-family:Georgia,serif; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:#c8a0a0; text-decoration:none; font-weight:bold;">Book a Call</a>
-</td></tr>
-</table>
-</td></tr>
-
 <!-- Footer -->
 <tr><td style="padding: 0 40px;" class="padding-mobile">
 <hr style="border:none; border-top:1px solid rgba(200,160,160,0.15); margin:0 0 24px;" />
@@ -102,6 +93,12 @@ function ps(text: string): string {
   return `<p style="margin:20px 0 0; font-family:Georgia,serif; font-size:13px; font-style:italic; line-height:1.7; color:rgba(245,240,232,0.5);">P.S. ${text}</p>`;
 }
 
+function bookCallCTA(): string {
+  return `<p style="margin:18px 0 0; text-align:center;">
+<a href="https://calendar.app.google/58WjggPt3RFAcJjq8" target="_blank" style="display:inline-block; padding:12px 32px; font-family:Georgia,serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#c8a0a0; text-decoration:none; font-weight:bold; border:1px solid #c8a0a0; border-radius:2px;">Book a Call</a>
+</p>`;
+}
+
 // Tracked link: wraps a URL through the click tracker with contact ID and step
 function trackedLink(url: string, text: string, contactId: string, step: number): string {
   const trackingUrl = `${TRACK_URL}?cid=${contactId}&step=${step}&r=${encodeURIComponent(url)}`;
@@ -132,7 +129,8 @@ const TEMPLATES: EmailTemplate[] = [
 <p style="margin:0 0 18px;">Planning events${cityLine}? Every event pro I talk to hits the same wall: cocktail hour energy drops, guests drift to their phones, and the night loses momentum before dinner even starts.</p>
 <p style="margin:0 0 18px;">We've helped teams at Soho House and Rolls-Royce close that gap. Sometimes it's roaming close-up magic during cocktails. Other times it's a full private show after dinner that nobody saw coming. Either way, guests stay locked in all night.</p>
 <p style="margin:0 0 18px;">${link}</p>
-<p style="margin:0 0 18px;">Open to seeing how it fits yours?</p>
+${bookCallCTA()}
+<p style="margin:18px 0 18px;">Open to seeing how it fits yours?</p>
 ${signoff(true)}
 ${ps("Not kids' birthday stuff. Sophisticated sleight of hand, mentalism, and private shows for adults.")}
 </td></tr>`;
@@ -152,8 +150,9 @@ ${ps("Not kids' birthday stuff. Sophisticated sleight of hand, mentalism, and pr
 <p style="margin:0 0 18px;">Dead air, awkward mingling, guests checking the time. I've watched it flip for clients like Morgan Stanley. 200 guests, nobody left early, raving about it for weeks.</p>
 <p style="margin:0 0 18px;">For smaller gatherings, we also do intimate private shows: emerald curtains, cinematic lighting, a curated 45-minute performance that turns any room into an experience. Perfect as the main event or a post-dinner surprise.</p>
 <p style="margin:0 0 18px;">${link}</p>
-<p style="margin:0 0 18px;">Worth exploring for your next one?</p>
-${signoff()}
+${bookCallCTA()}
+<p style="margin:18px 0 18px;">Worth exploring for your next one?</p>
+${signoff(true)}
 ${ps("Close-up magic, parlor shows, or both. We tailor it to your event.")}
 </td></tr>`;
     },
@@ -171,7 +170,8 @@ ${ps("Close-up magic, parlor shows, or both. We tailor it to your event.")}
 <p style="margin:0 0 18px;">Your clients hire you for the wow. But most events blend together until you add the thing nobody expected.</p>
 <p style="margin:0 0 18px;">Event pros we've partnered with at places like the Hollywood Roosevelt and Paramount use this to get "best vendor ever" texts the next morning. Sometimes it's roaming magic during cocktails. Sometimes it's a full private magic show as the main event. The format flexes to whatever makes the night unforgettable.</p>
 <p style="margin:0 0 18px;">${link}</p>
-<p style="margin:0 0 18px;">Open to a peek at how?</p>
+${bookCallCTA()}
+<p style="margin:18px 0 18px;">Open to a peek at how?</p>
 ${signoff(true)}
 ${ps("From 20-person dinners to 300-person galas. Scales to your event.")}
 </td></tr>`;
@@ -190,8 +190,9 @@ ${ps("From 20-person dinners to 300-person galas. Scales to your event.")}
 <p style="margin:0 0 18px;">Quick one for event pros:</p>
 <p style="margin:0 0 18px;">Your clients want luxury, not rabbits from hats. We bring close-up mentalism that feels cinematic and private shows that transform any room into something extraordinary. Custom lighting, emerald curtains, a curated soundtrack. Netflix, Disney, and Rivian have all booked it.</p>
 <p style="margin:0 0 18px;">${link}</p>
-<p style="margin:0 0 18px;">Thoughts on trying it?</p>
-${signoff()}
+${bookCallCTA()}
+<p style="margin:18px 0 18px;">Thoughts on trying it?</p>
+${signoff(true)}
 ${ps("Member of the Magic Castle. Disney + AGT vetted. Close-up, parlor, and corporate shows.")}
 </td></tr>`;
     },
@@ -209,7 +210,8 @@ ${ps("Member of the Magic Castle. Disney + AGT vetted. Close-up, parlor, and cor
 <p style="margin:0 0 18px;">Event pros are stacking their vendor lists with game-changers. The ones who added this got repeat business and referrals they didn't ask for.</p>
 <p style="margin:0 0 18px;">Taittinger, Hyatt, Lionsgate. Cocktail receptions, corporate galas, private dinners. One vendor that covers close-up magic, full private shows, and everything in between.</p>
 <p style="margin:0 0 18px;">${link}</p>
-<p style="margin:0 0 18px;">Open to chatting about fit?</p>
+${bookCallCTA()}
+<p style="margin:18px 0 18px;">Open to chatting about fit?</p>
 ${signoff(true)}
 ${ps(`30-sec quiz to find your event's perfect format: <a href="${APP_URL}/quiz" style="color:#c8a0a0; text-decoration:none;">whiterabbitla.com/quiz</a>`)}
 </td></tr>`;
@@ -233,6 +235,7 @@ const WARM_TEMPLATES: EmailTemplate[] = [
 <p style="margin:0 0 18px;">Most planners I work with start with a quick 10-minute call to talk through the event, the vibe, and which format would land best. No pitch, just a conversation about what would actually make your event unforgettable.</p>
 <p style="margin:0 0 18px;">Want to find 10 minutes this week?</p>
 <p style="margin:0 0 18px;"><a href="mailto:events@whiterabbitla.com?subject=Let's%20chat%20about%20an%20event" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">Just reply to this email</a> or call me at (424) 394-1850.</p>
+${bookCallCTA()}
 ${signoff(true)}
 </td></tr>`;
     },
@@ -247,7 +250,8 @@ ${signoff(true)}
 <p style="margin:0 0 18px;">Quick share: after our last show at Soho House, the events team told us it was the highest-rated entertainment they'd ever booked. Guests literally wouldn't leave the room.</p>
 <p style="margin:0 0 18px;">That's the thing about what we do. It's not background entertainment. It's the thing people talk about at brunch the next day.</p>
 <p style="margin:0 0 18px;">Would love to show you what that looks like for your events. Even a quick call helps me understand what you're working with.</p>
-${signoff()}
+${bookCallCTA()}
+${signoff(true)}
 ${ps("No commitment. Just a conversation.")}
 </td></tr>`;
     },
@@ -263,6 +267,7 @@ ${ps("No commitment. Just a conversation.")}
 <p style="margin:0 0 18px;">If you've got an event coming up where you want guests to feel genuinely alive and taken care of, I'd love to chat. 10 minutes, no pressure.</p>
 <p style="margin:0 0 18px;">If the timing isn't right, no worries at all. You know where to find me when it is.</p>
 <p style="margin:0 0 18px;"><a href="mailto:events@whiterabbitla.com?subject=Let's%20chat%20about%20an%20event" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">Reply here</a> · <a href="tel:+14243941850" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">(424) 394-1850</a> · <a href="${APP_URL}/quiz" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">Take the quiz</a></p>
+${bookCallCTA()}
 ${signoff(true)}
 </td></tr>`;
     },
@@ -282,7 +287,8 @@ const BREAKUP_TEMPLATE: EmailTemplate = {
 <p style="margin:0 0 18px;">I've sent a few notes and I get it. Timing matters more than anything in this business.</p>
 <p style="margin:0 0 18px;">I'll stop filling your inbox. But if you ever have an event where you want to blow your clients away with something they've never experienced before, I'm a phone call away.</p>
 <p style="margin:0 0 18px;"><a href="mailto:events@whiterabbitla.com" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">events@whiterabbitla.com</a> · <a href="tel:+14243941850" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">(424) 394-1850</a></p>
-<p style="margin:0 0 18px;">Wishing you incredible events ahead.</p>
+${bookCallCTA()}
+<p style="margin:18px 0 18px;">Wishing you incredible events ahead.</p>
 ${signoff(true)}
 </td></tr>`;
   },
