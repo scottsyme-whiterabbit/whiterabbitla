@@ -470,6 +470,20 @@ function getVenueContext(location: string, serviceKey: string): string {
       return `Picture it: guests mingling in the lobby of ${venues.hotels[0]}, or gathered around the bar at ${venues.dining[2]}, and then something impossible happens in their hands. That's the White Rabbit effect, and it's why ${location}'s most discerning hosts keep coming back.`;
     case "private-magic-show":
       return `Imagine transforming a private dining room at ${venues.dining[0]} or the event space at ${venues.hotels[0]} into an intimate theater. The Private Magic Show brings a level of sophistication that feels right at home in ${location}'s most refined spaces.`;
+    case "golf-tournament-magician":
+      return `Whether it's the post-round reception at ${venues.culture[2]} or the awards dinner at ${venues.hotels[0]}, White Rabbit fills the gap between the last putt and the first toast with something your players will actually remember.`;
+    case "charity-gala-magician":
+      return `From black-tie fundraisers at ${venues.hotels[1]} to intimate donor dinners at ${venues.dining[0]}, White Rabbit creates the kind of moments that loosen wallets and warm hearts across ${location}'s most prestigious philanthropic events.`;
+    case "holiday-party-magician":
+      return `Whether your team is celebrating at ${venues.hotels[0]} or hosting an intimate gathering at ${venues.dining[1]}, White Rabbit transforms your ${location} holiday party from "nice" to "legendary."`;
+    case "trade-show-magician":
+      return `On a crowded expo floor near ${venues.culture[2]}, your booth needs a competitive edge. White Rabbit draws crowds, holds attention, and turns foot traffic into qualified leads at ${location}'s biggest trade shows and brand activations.`;
+    case "rehearsal-dinner-magician":
+      return `Picture your closest friends and family gathered at ${venues.dining[0]} or the private dining room at ${venues.hotels[2]}, the night before the big day. White Rabbit makes that intimate evening as magical as the wedding itself.`;
+    case "halloween-party-magician":
+      return `From haunted soirées at ${venues.hotels[0]} to costumed gatherings at ${venues.dining[2]}, White Rabbit adds a layer of genuine mystery and dark wonder to ${location}'s most atmospheric Halloween celebrations.`;
+    case "christmas-party-magician":
+      return `Whether it's the company holiday party at ${venues.hotels[1]} or a New Year's Eve celebration at ${venues.dining[0]}, White Rabbit brings the kind of magic that makes the season truly feel special in ${location}.`;
     default:
       return "";
   }
@@ -500,6 +514,41 @@ const serviceTypes = [
     key: "private-magic-show",
     label: "Private Magic Show",
     category: "Private Magic Shows",
+  },
+  {
+    key: "golf-tournament-magician",
+    label: "Golf Tournament Magician",
+    category: "Golf Tournaments",
+  },
+  {
+    key: "charity-gala-magician",
+    label: "Charity Gala Magician",
+    category: "Charity Galas",
+  },
+  {
+    key: "holiday-party-magician",
+    label: "Holiday Party Magician",
+    category: "Holiday Parties",
+  },
+  {
+    key: "trade-show-magician",
+    label: "Trade Show Magician",
+    category: "Trade Shows",
+  },
+  {
+    key: "rehearsal-dinner-magician",
+    label: "Rehearsal Dinner Magician",
+    category: "Rehearsal Dinners",
+  },
+  {
+    key: "halloween-party-magician",
+    label: "Halloween Party Magician",
+    category: "Halloween Events",
+  },
+  {
+    key: "christmas-party-magician",
+    label: "Christmas Party Magician",
+    category: "Christmas & NYE",
   },
 ] as const;
 
@@ -593,6 +642,76 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
         answer: "The Private Magic Show is designed for groups of 20 to 120 guests. This range ensures every person feels connected to the performance, close enough to see every detail, intimate enough to feel like they're part of something special.",
       },
     ],
+    "golf-tournament-magician": [
+      {
+        question: "When does the magician perform at a golf tournament?",
+        answer: "The sweet spot is the post-round reception — that awkward window between the last putt and the awards dinner when players are milling around. Scott fills that gap with roaming close-up magic that keeps energy high and conversations flowing. He can also perform during the awards dinner or at the 19th hole.",
+      },
+      {
+        question: "Is the magic appropriate for a golf crowd?",
+        answer: "Absolutely. Scott's style is sophisticated, conversational, and perfectly calibrated for the country club environment. Think whiskey-in-hand, blazer-on entertainment — not kids' birthday party tricks. It's the kind of experience that feels right at home at a private club.",
+      },
+    ],
+    "charity-gala-magician": [
+      {
+        question: "How does a magician enhance a charity gala or fundraiser?",
+        answer: "Magic creates an atmosphere of generosity and delight. When guests are amazed and emotionally engaged, they give more freely. Scott's roaming close-up magic during cocktail hour warms the room before the ask, and a parlor show before the paddle raise can electrify the energy in the room.",
+      },
+      {
+        question: "Can the performance tie into our fundraising mission?",
+        answer: "Yes. Scott tailors every performance to your organization's tone and goals. Whether it's weaving your mission into a mentalism reveal or creating a 'wow moment' that transitions into the live auction, the magic serves your event's purpose, not the other way around.",
+      },
+    ],
+    "holiday-party-magician": [
+      {
+        question: "How far in advance should we book for a holiday party?",
+        answer: "Holiday season (October through January) is by far the busiest time. We recommend booking at least 6–8 weeks in advance for December dates. Many companies rebook the following year's holiday party the week after the current one. Early planning is essential.",
+      },
+      {
+        question: "What makes a holiday party magician different from a regular DJ or band?",
+        answer: "A DJ provides background music. A magician creates moments. Scott moves through the room creating personal, interactive experiences for every guest — the kind of entertainment people actually talk about the next day at the office. It's the difference between a party and an event.",
+      },
+    ],
+    "trade-show-magician": [
+      {
+        question: "How does a magician help at a trade show or brand activation?",
+        answer: "A skilled trade show magician draws crowds to your booth, holds their attention, and weaves your product messaging into the performance. Scott can incorporate your brand story, product demos, or key talking points into the magic, turning passive attendees into engaged prospects.",
+      },
+      {
+        question: "Can the magic incorporate our product or brand messaging?",
+        answer: "Absolutely. Scott specializes in custom routines that organically feature your product, logo, or key message. The magic becomes a vehicle for your brand story — memorable, shareable, and far more effective than a standard booth demo.",
+      },
+    ],
+    "rehearsal-dinner-magician": [
+      {
+        question: "Is magic appropriate for a rehearsal dinner?",
+        answer: "It's perfect. Rehearsal dinners are intimate, emotional, and full of people meeting for the first time. Close-up magic breaks the ice instantly, giving both families something to bond over before the big day. It sets the tone for the entire wedding weekend.",
+      },
+      {
+        question: "How long does the performance last at a rehearsal dinner?",
+        answer: "Most couples book 1–2 hours of roaming magic during cocktails and dinner. Scott moves table to table, creating personal moments for each group. It's subtle, elegant, and never interrupts the flow of the evening.",
+      },
+    ],
+    "halloween-party-magician": [
+      {
+        question: "What kind of magic works for a Halloween event?",
+        answer: "Scott leans into the mysterious and uncanny — mentalism, mind reading, and eerie coincidences that feel genuinely supernatural. It's sophisticated dark wonder, not jump scares. Think séance energy meets world-class sleight of hand. Perfect for adult Halloween parties where atmosphere matters.",
+      },
+      {
+        question: "Does Scott dress in costume for Halloween events?",
+        answer: "Scott's signature style already carries a dark, mysterious elegance that fits Halloween naturally. He can lean further into the theme with styling that matches your event's aesthetic, but the real magic is in the performance itself — the kind of 'how did he know that' moments that feel especially eerie on Halloween.",
+      },
+    ],
+    "christmas-party-magician": [
+      {
+        question: "Is White Rabbit available for New Year's Eve events too?",
+        answer: "Yes. Scott performs at both Christmas parties and New Year's Eve celebrations. NYE events are particularly popular — magic at midnight creates an unforgettable transition into the new year. Book early, as December 31 fills first.",
+      },
+      {
+        question: "What size Christmas party works best for a magician?",
+        answer: "From intimate office gatherings of 20 to grand company celebrations of 500+, White Rabbit scales to fit. For larger events, Scott provides roaming close-up magic during cocktails. For more intimate groups, a seated parlor show can serve as the evening's centerpiece.",
+      },
+    ],
   };
 
   return [...(serviceSpecific[serviceKey] || []), ...shared];
@@ -674,6 +793,97 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
         `The Private Magic Show isn't background entertainment. It's the centerpiece of your evening. It's the thing your guests will text each other about the next morning. It's the reason they'll RSVP "yes" to your next event before you even send the invitation. That's the ROI of extraordinary entertainment.`,
         `White Rabbit provides full production support: professional lighting, sound design, and staging, turning your venue, living room, or corporate conference room into a world-class performance space. Every show is tailored to your audience, your space, and the feeling you want to create.`,
         `Based in Los Angeles and available for events across ${location} and beyond. The Private Magic Show is our most requested experience. Book early to secure your preferred date.`,
+      ];
+      break;
+
+    case "golf-tournament-magician":
+      heroHeadline = `Golf Tournament Magician in ${location}`;
+      heroSub = `Fill the post-round dead zone with something your players will actually remember.`;
+      midCta = `Book Entertainment for Your ${location} Golf Event`;
+      intro = `Planning a golf tournament in ${location} and wondering what happens after the last putt drops? That awkward window between the round and the awards dinner is where most events lose momentum. White Rabbit fills it with world-class close-up magic and hosting that keeps your players engaged, entertained, and talking about your event long after the trophies are handed out.`;
+      body = [
+        `Here's the truth about golf tournaments: the golf is great, but the post-round experience is where loyalty is built. Your players remember the 19th hole more than the 18th. Scott Syme transforms that dead zone into the highlight of the day with roaming close-up magic during cocktails, mentalism that reads the room, and the kind of energy that turns strangers into friends.`,
+        `Scott is a proud member of the world-famous Magic Castle® in Hollywood, and his style is perfectly calibrated for the country club environment. Sophisticated, conversational, whiskey-in-hand entertainment that feels like it belongs at a private club. No stage required. No cheesy props. Just a master craftsman moving through the room creating impossible moments that spark genuine connection.`,
+        `Beyond the magic, Scott also serves as a professional MC and host, managing the flow from cocktail hour through dinner, awards, and auction. It's a hybrid offering that eliminates the need for a separate emcee while keeping energy high and pacing tight.`,
+        `Available for charity tournaments, corporate golf outings, member-guest events, and private club celebrations across ${location}. Limited dates during peak golf season (April–October). Inquire now.`,
+      ];
+      break;
+
+    case "charity-gala-magician":
+      heroHeadline = `Magician for Charity Galas in ${location}`;
+      heroSub = `The entertainment that warms the room before the ask — and keeps wallets open all night.`;
+      midCta = `Book Entertainment for Your ${location} Gala`;
+      intro = `Planning a fundraiser or charity gala in ${location}? The entertainment you choose sets the emotional temperature of the entire evening. White Rabbit delivers world-class close-up magic and mentalism that creates an atmosphere of generosity, delight, and genuine human connection — exactly the energy you need before the paddle goes up.`;
+      body = [
+        `The best galas don't just raise money. They create an emotional experience that makes donors feel proud, connected, and eager to give. That's where White Rabbit comes in. During cocktail hour, Scott moves through the room performing intimate close-up magic for small groups. By the time guests sit down for dinner, the energy in the room is electric. Strangers have bonded. The mood is generous. The ask lands differently when people feel that good.`,
+        `Scott is a member of the world-famous Magic Castle® in Hollywood and has performed for Netflix, Disney, Morgan Stanley, and Rolls Royce. His presence at your gala signals to donors that this is a world-class event, the kind of evening where extraordinary things happen, including extraordinary generosity.`,
+        `Scott can also perform a pre-auction parlor show that electrifies the room right before the live auction, creating a surge of energy that translates directly to higher bids. Every element of the performance is tailored to serve your fundraising goals.`,
+        `Available for nonprofit galas, charity auctions, philanthropic dinners, and fundraising events across ${location}. Dates during gala season (September–December) fill early. Reach out now.`,
+      ];
+      break;
+
+    case "holiday-party-magician":
+      heroHeadline = `Holiday Party Magician in ${location}`;
+      heroSub = `Turn your holiday party from "nice" to the event everyone talks about until next December.`;
+      midCta = `Book Your ${location} Holiday Party Entertainment`;
+      intro = `Looking for holiday party entertainment in ${location} that your team will actually remember? Forget the generic DJ. Forget the awkward karaoke. White Rabbit delivers the kind of sophisticated, interactive entertainment that makes your holiday party the highlight of the year, and the reason people RSVP to next year's before you even send the invite.`;
+      body = [
+        `Holiday parties have a problem: everyone's been to a hundred of them, and they all blur together. The same playlist. The same small talk. The same "that was nice" on the way home. White Rabbit fixes that. Scott Syme moves through the room performing close-up magic that turns coworkers into friends, breaks down departmental silos, and gives everyone a shared experience they'll be retelling at the coffee machine for months.`,
+        `A member of the world-famous Magic Castle® in Hollywood, Scott's style is elegant, warm, and perfectly suited for the holiday atmosphere. Whether it's an intimate team dinner of 15 or a company-wide celebration of 500, the magic scales beautifully. And the best part? No setup, no teardown, no sound check. Just a world-class entertainer who arrives ready to make your party unforgettable.`,
+        `Don't underestimate the ROI of a great holiday party. Employee retention, team morale, client relationships — they all improve when people associate your company with extraordinary experiences. That's what White Rabbit delivers.`,
+        `Holiday season (October through January) is our busiest period. December dates fill months in advance. Many clients rebook the following year immediately after their event. Plan early to secure your preferred date in ${location}.`,
+      ];
+      break;
+
+    case "trade-show-magician":
+      heroHeadline = `Trade Show Magician in ${location}`;
+      heroSub = `Stop blending in. Start drawing crowds. Turn booth traffic into qualified leads.`;
+      midCta = `Book a Trade Show Magician in ${location}`;
+      intro = `Exhibiting at a trade show in ${location} and tired of watching attendees walk past your booth? White Rabbit is the competitive edge that stops people in their tracks. Scott Syme blends world-class close-up magic with your brand messaging to draw crowds, hold attention, and turn passive foot traffic into engaged, qualified prospects.`;
+      body = [
+        `Trade shows are brutal. You've spent thousands on the booth, the travel, the team — and most attendees walk right past without a second glance. A trade show magician changes the equation entirely. Scott draws a crowd within minutes, holds their attention with jaw-dropping close-up magic, and weaves your product story or key messaging into the performance so naturally that attendees don't even realize they're being marketed to. They just know they can't look away.`,
+        `Scott is a member of the world-famous Magic Castle® in Hollywood, and his trade show work is specifically designed for the expo floor environment. Quick-hit routines that hook passersby, custom reveals that feature your product, and a magnetic presence that makes your booth the one everyone's talking about at the after-party.`,
+        `The math is simple: more booth traffic = more leads = more ROI. Clients report 3-5x the foot traffic at their booth when White Rabbit is performing. But it's not just quantity — the quality of engagement is on a completely different level when people are amazed and emotionally connected to your brand experience.`,
+        `Available for trade shows, conferences, brand activations, product launches, and experiential marketing events across ${location}. Book early for major industry events. Custom messaging integration is included.`,
+      ];
+      break;
+
+    case "rehearsal-dinner-magician":
+      heroHeadline = `Rehearsal Dinner Magician in ${location}`;
+      heroSub = `The night before the big day deserves its own magic.`;
+      midCta = `Book Entertainment for Your ${location} Rehearsal Dinner`;
+      intro = `Planning a rehearsal dinner in ${location}? The rehearsal dinner is where the wedding weekend truly begins — and it's often the most intimate, emotional gathering of the entire celebration. White Rabbit transforms that evening into something unforgettable with close-up magic that brings both families together before they even reach the altar.`;
+      body = [
+        `Here's what makes a rehearsal dinner uniquely special: it's the first time both families are in the same room, together, with no ceremony to attend and no schedule to follow. It's relaxed, emotional, and full of first introductions. Close-up magic is the perfect icebreaker. Within minutes of Scott arriving, your aunt is bonding with their grandmother over a card trick, and the best man is buying drinks for the maid of honor after a mind-reading routine that left them both speechless.`,
+        `Scott is a proud member of the world-famous Magic Castle® in Hollywood, and his style is warm, intimate, and perfectly suited for the rehearsal dinner atmosphere. He moves table to table, creating personal moments for each group — never interrupting toasts, never pulling focus from the couple. Just elegant, conversational magic that makes the evening feel special.`,
+        `The rehearsal dinner sets the tone for the entire wedding weekend. When guests arrive at the ceremony the next day, they're already connected, already energized, already talking about the incredible evening they shared. That's the White Rabbit effect.`,
+        `Available for rehearsal dinners, welcome parties, and wedding weekend events across ${location}. Wedding season dates (May–October) book quickly. Couples who book the rehearsal dinner often add White Rabbit to the wedding reception too. Inquire now.`,
+      ];
+      break;
+
+    case "halloween-party-magician":
+      heroHeadline = `Halloween Party Magician in ${location}`;
+      heroSub = `Dark wonder, genuine mystery, and the kind of magic that feels real on the night when anything seems possible.`;
+      midCta = `Book Halloween Entertainment in ${location}`;
+      intro = `Hosting a Halloween party in ${location}? Skip the generic costume party and give your guests an evening of genuine mystery. White Rabbit leans into the uncanny — mentalism, mind reading, and eerie coincidences that feel genuinely supernatural. On the one night of the year when everyone wants to believe in magic, Scott Syme delivers the real thing.`;
+      body = [
+        `Halloween parties are everywhere. But a Halloween experience? That's rare. White Rabbit transforms your gathering into something atmospheric and unforgettable. Picture this: dim lighting, a curated soundtrack, and a magician who seems to know things he shouldn't. Cards appear in impossible places. Thoughts are read with unsettling accuracy. A borrowed object vanishes and reappears somewhere that makes no sense — unless, of course, something genuinely strange is happening.`,
+        `Scott is a member of the world-famous Magic Castle® in Hollywood, and his mentalism and psychological illusion work takes on a different dimension during Halloween. The same routines that amaze at corporate events become genuinely eerie when performed by candlelight on October 31st. It's sophisticated dark wonder, not jump scares. Think séance energy meets world-class sleight of hand.`,
+        `Perfect for adult Halloween parties, haunted dinners, costume galas, and spooky cocktail events. Scott's style naturally carries a dark elegance that fits the season without resorting to gimmicks. The atmosphere is built into the performance.`,
+        `October dates fill quickly — Halloween weekend especially. Book early to bring the uncanny to your ${location} Halloween celebration.`,
+      ];
+      break;
+
+    case "christmas-party-magician":
+      heroHeadline = `Christmas & New Year's Eve Magician in ${location}`;
+      heroSub = `Make the holidays truly magical — the kind of celebration your guests will toast to for years.`;
+      midCta = `Book Holiday Season Entertainment in ${location}`;
+      intro = `Looking for a magician for your Christmas party or New Year's Eve celebration in ${location}? The holiday season deserves entertainment that matches the magic of the moment. White Rabbit delivers warm, sophisticated close-up magic and mentalism that brings people together during the most wonderful — and most socially complicated — time of the year.`;
+      body = [
+        `Christmas parties and New Year's Eve events share a common challenge: high expectations. People want the evening to feel special, festive, and genuinely memorable. A good playlist isn't enough. White Rabbit delivers the "wow" factor that elevates your celebration from pleasant to legendary. Scott moves through the room performing intimate close-up magic that gives every guest their own personal moment of wonder.`,
+        `A member of the world-famous Magic Castle® in Hollywood, Scott's style is warm, celebratory, and perfectly suited for the holiday atmosphere. Whether it's a seated dinner where he visits each table or a cocktail party where he floats between groups, the magic creates the kind of shared joy that defines the holidays at their best.`,
+        `For New Year's Eve, Scott can build toward a midnight crescendo — a grand finale of mentalism and magic that makes the countdown feel like the culmination of something extraordinary. It's the difference between watching the ball drop on a screen and being part of something you'll remember forever.`,
+        `December is our busiest month. Christmas party dates book 2–3 months in advance. New Year's Eve is a single-night event that fills first. If you're planning a holiday celebration in ${location}, reach out now to secure your date.`,
       ];
       break;
 
