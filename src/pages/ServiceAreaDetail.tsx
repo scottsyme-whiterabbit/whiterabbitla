@@ -2,6 +2,7 @@ import { useParams, Link, Navigate } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import QuizCTA from "@/components/QuizCTA";
+import QuizNudge from "@/components/QuizNudge";
 import { getAreaBySlug } from "@/data/serviceAreas";
 import { seoPages } from "@/data/seoPages";
 import { blogArticles } from "@/data/blogArticles";
@@ -77,6 +78,9 @@ const ServiceAreaDetail = () => {
           </div>
         </div>
       </section>
+
+      {/* Quiz Nudge — above the fold */}
+      <QuizNudge />
 
       {/* Intro + Book Now CTA */}
       <section className="py-16">
