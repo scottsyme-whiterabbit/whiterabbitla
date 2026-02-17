@@ -177,7 +177,7 @@ ${ps("Close-up magic, parlor shows, or both. We tailor it to your event.")}
 ${bookCallCTA()}
 <p style="margin:18px 0 18px;">Open to a peek at how?</p>
 ${signoff(true)}
-${ps("From 20-person dinners to 300-person galas. Scales to your event.")}
+${ps(`Need to share this with your team? Here's our lookbook: <a href="${SITE_URL}/deck" style="color:#c8a0a0; text-decoration:none;">whiterabbitla.com/deck</a>`)}
 </td></tr>`;
     },
   },
@@ -194,6 +194,7 @@ ${ps("From 20-person dinners to 300-person galas. Scales to your event.")}
 <p style="margin:0 0 18px;">Quick one for event pros:</p>
 <p style="margin:0 0 18px;">Your clients want luxury, not rabbits from hats. We bring close-up mentalism that feels cinematic and private shows that transform any room into something extraordinary. Custom lighting, emerald curtains, a curated soundtrack. Netflix, Disney, and Rivian have all booked it.</p>
 <p style="margin:0 0 18px;">${link}</p>
+<p style="margin:0 0 18px;">Want to share this with a client or colleague? <a href="${SITE_URL}/deck" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">Here's our lookbook</a> — one link, everything they need to see.</p>
 ${bookCallCTA()}
 <p style="margin:18px 0 18px;">Thoughts on trying it?</p>
 ${signoff(true)}
@@ -217,7 +218,7 @@ ${ps("Member of the Magic Castle. Disney + AGT vetted. Close-up, parlor, and cor
 ${bookCallCTA()}
 <p style="margin:18px 0 18px;">Open to chatting about fit?</p>
 ${signoff(true)}
-${ps(`30-sec quiz to find your event's perfect format: <a href="${APP_URL}/quiz" style="color:#c8a0a0; text-decoration:none;">whiterabbitla.com/quiz</a>`)}
+${ps(`Share our lookbook with your team: <a href="${SITE_URL}/deck" style="color:#c8a0a0; text-decoration:none;">whiterabbitla.com/deck</a> · Or find your format: <a href="${APP_URL}/quiz" style="color:#c8a0a0; text-decoration:none;">whiterabbitla.com/quiz</a>`)}
 </td></tr>`;
     },
   },
@@ -256,7 +257,7 @@ ${signoff(true)}
 <p style="margin:0 0 18px;">Would love to show you what that looks like for your events. Even a quick call helps me understand what you're working with.</p>
 ${bookCallCTA()}
 ${signoff(true)}
-${ps("No commitment. Just a conversation.")}
+${ps(`No commitment. Just a conversation. Or share our lookbook with your client: <a href="${SITE_URL}/deck" style="color:#c8a0a0; text-decoration:none;">whiterabbitla.com/deck</a>`)}
 </td></tr>`;
     },
   },
