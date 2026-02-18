@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import { Upload, Send, FileText, Users, Mail, RefreshCw, Trash2, Eye, Heart, Download } from "lucide-react";
 import PlannerDripTab from "@/components/PlannerDripTab";
+import ResidentDripTab from "@/components/ResidentDripTab";
 import ContactsListTab from "@/components/ContactsListTab";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -41,7 +42,7 @@ const AdminNewsletter = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [storedPassword, setStoredPassword] = useState("");
 
-  const [activeTab, setActiveTab] = useState<"dashboard" | "contacts" | "compose" | "campaigns" | "planner" | "thankyou">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "contacts" | "compose" | "campaigns" | "planner" | "apartment" | "thankyou">("dashboard");
   const [tyClientName, setTyClientName] = useState("");
   const [tyClientEmail, setTyClientEmail] = useState("");
   const [tyEventType, setTyEventType] = useState("");
@@ -451,7 +452,7 @@ const AdminNewsletter = () => {
 
         {/* Tabs */}
         <div className="flex gap-1 mb-8 border-b border-border">
-          {(["dashboard", "contacts", "compose", "campaigns", "planner", "thankyou"] as const).map(tab => (
+          {(["dashboard", "contacts", "compose", "campaigns", "planner", "apartment", "thankyou"] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -710,6 +711,10 @@ const AdminNewsletter = () => {
           <PlannerDripTab storedPassword={storedPassword} onNavigateToContacts={(filter) => { setContactsFilter(filter); setActiveTab("contacts"); }} />
         )}
 
+        {/* Apartment / Resident Drip Campaign */}
+        {activeTab === "apartment" && (
+          <ResidentDripTab storedPassword={storedPassword} onNavigateToContacts={(filter) => { setContactsFilter(filter); setActiveTab("contacts"); }} />
+        )}
         {/* Thank You Email */}
         {activeTab === "thankyou" && (
           <div className="max-w-xl">

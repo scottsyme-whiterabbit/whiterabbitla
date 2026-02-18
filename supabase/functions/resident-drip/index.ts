@@ -917,10 +917,65 @@ serve(async (req) => {
         }
       });
 
+      // Get contact IDs for this campaign
+      const contactIds = (contacts || []).map((c: any) => c.id).filter(Boolean);
+
+      // Opens stats
+      let opensTotal = 0, opensUnique = 0, opensPerStep = [0, 0, 0, 0, 0];
+      if (contactIds.length) {
+        // We need full contact list with IDs
+        const { data: fullContacts } = await supabase
+          .from("newsletter_contacts")
+          .select("id")
+          .in("drip_campaign", ["resident", "resident-done", "resident-pulse"]);
+        const ids = (fullContacts || []).map((c: any) => c.id);
+        
+        if (ids.length) {
+          const { data: opens } = await supabase
+            .from("newsletter_opens")
+            .select("contact_id, drip_step")
+            .in("contact_id", ids);
+          opensTotal = opens?.length || 0;
+          opensUnique = new Set(opens?.map((o: any) => o.contact_id)).size;
+          opens?.forEach((o: any) => {
+            if (o.drip_step >= 0 && o.drip_step < 5) opensPerStep[o.drip_step]++;
+          });
+        }
+      }
+
+      // Clicks stats
+      let clicksTotal = 0, clicksUnique = 0;
+      if (contactIds.length) {
+        const { data: fullContacts } = await supabase
+          .from("newsletter_contacts")
+          .select("id")
+          .in("drip_campaign", ["resident", "resident-done", "resident-pulse"]);
+        const ids = (fullContacts || []).map((c: any) => c.id);
+        if (ids.length) {
+          const { data: clicks } = await supabase
+            .from("newsletter_clicks")
+            .select("contact_id")
+            .in("contact_id", ids);
+          clicksTotal = clicks?.length || 0;
+          clicksUnique = new Set(clicks?.map((c: any) => c.contact_id)).size;
+        }
+      }
+
+      // Total emails sent
+      const { count: totalSent } = await supabase
+        .from("newsletter_send_log")
+        .select("*", { count: "exact", head: true })
+        .like("campaign_id", "resident%");
+
+      const openRate = (totalSent && totalSent > 0) ? Math.round((opensUnique / totalSent) * 100) : 0;
+
       return new Response(JSON.stringify({
         total, active, unsubscribed, completed, stepCounts,
         residentActive, pulseActive,
-        engagement: { warm, hot },
+        engagement: { warm, hot, cold: total - warm - hot },
+        opens: { total: opensTotal, uniqueContacts: opensUnique, rate: openRate, perStep: opensPerStep },
+        clicks: { total: clicksTotal, uniqueContacts: clicksUnique },
+        totalSent: totalSent || 0,
       }), {
         status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -993,6 +1048,34 @@ serve(async (req) => {
           status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
+    }
+
+    // ── Action: get_contact_activity ── Get clicks/opens for a contact
+    if (action === "get_contact_activity") {
+      if (adminPassword !== ADMIN_PASSWORD) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      const contactId = reqBody.contactId;
+      if (!contactId) {
+        return new Response(JSON.stringify({ error: "contactId required" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      const { data: clicks } = await supabase
+        .from("newsletter_clicks")
+        .select("id, link_slug, drip_step, clicked_at")
+        .eq("contact_id", contactId)
+        .order("clicked_at", { ascending: false });
+      const { data: opens } = await supabase
+        .from("newsletter_opens")
+        .select("id, drip_step, opened_at")
+        .eq("contact_id", contactId)
+        .order("opened_at", { ascending: false });
+      return new Response(JSON.stringify({ clicks: clicks || [], opens: opens || [] }), {
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     // ── Action: get_contacts ── List resident contacts
