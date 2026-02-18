@@ -43,7 +43,7 @@ ABOUT THE BUSINESS:
 - Known for transforming any room into something cinematic and intimate through curated lighting, signature soundtrack, and world-class hospitality
 - Based in Los Angeles, available nationwide
 
-CONTACT: events@whiterabbitla.com | 424 394 1850 | whiterabbitla.lovable.app
+CONTACT: events@whiterabbitla.com | 424 394 1850 | whiterabbitla.com
 
 ${dripContext}
 
@@ -61,7 +61,7 @@ The HTML should use this styling:
 - Text color: rgba(245,240,232,0.8)
 - Accent/CTA color: #c8a0a0
 - Include the logo: <img src="https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-symbol.png" alt="White Rabbit" style="width:60px;height:auto;margin:0 auto 20px;" />
-- CTA button linking to https://whiterabbitla.lovable.app/contact
+- CTA button linking to https://whiterabbitla.com/contact
 - Footer: "White Rabbit · Los Angeles" with physical address "7393 W. Manchester Ave #209, Los Angeles, CA 90045" and unsubscribe placeholder: {{UNSUBSCRIBE_LINK}}
 - Keep it concise: 3-4 short paragraphs max
 - Current month/year for seasonal context: ${currentMonth} ${currentYear}`;
