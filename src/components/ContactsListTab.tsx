@@ -39,6 +39,7 @@ interface OpenEvent {
 }
 
 type FilterStatus = "all" | "hot" | "warm" | "new" | "cold" | "unsubscribed" | "opened";
+type CampaignFilter = "all" | "planner" | "resident";
 
 interface ContactsListTabProps {
   storedPassword: string;
@@ -54,10 +55,64 @@ const STATUS_CONFIG: Record<string, { label: string; icon: typeof Flame; colorCl
   opened: { label: "Opened", icon: Eye, colorClass: "bg-emerald-900/30 text-emerald-400" },
 };
 
+const TOTAL_STEPS = 5;
+
+const DripTimeline = ({ currentStep, campaign, opens, clicks }: {
+  currentStep: number;
+  campaign: string;
+  opens?: OpenEvent[];
+  clicks?: ClickEvent[];
+}) => {
+  const openedSteps = new Set(opens?.map(o => o.drip_step) || []);
+  const clickedSteps = new Set(clicks?.map(c => c.drip_step) || []);
+
+  return (
+    <div className="flex items-center gap-1" title={`${campaign} · Step ${currentStep}/${TOTAL_STEPS}`}>
+      {Array.from({ length: TOTAL_STEPS }, (_, i) => {
+        const step = i + 1;
+        const isSent = step <= currentStep;
+        const isOpened = openedSteps.has(step);
+        const isClicked = clickedSteps.has(step);
+
+        let dotClass = "w-5 h-5 rounded-full border flex items-center justify-center text-[9px] font-sans font-bold transition-all ";
+        if (isClicked) {
+          dotClass += "bg-accent border-accent text-accent-foreground";
+        } else if (isOpened) {
+          dotClass += "bg-accent/30 border-accent text-accent";
+        } else if (isSent) {
+          dotClass += "bg-muted border-border text-muted-foreground";
+        } else {
+          dotClass += "border-border/40 text-border/40";
+        }
+
+        return (
+          <div key={step} className="flex items-center">
+            <div className={dotClass} title={
+              isClicked ? `Step ${step}: Clicked` :
+              isOpened ? `Step ${step}: Opened` :
+              isSent ? `Step ${step}: Sent` :
+              `Step ${step}: Pending`
+            }>
+              {step}
+            </div>
+            {step < TOTAL_STEPS && (
+              <div className={`w-2 h-px ${isSent ? "bg-muted-foreground/30" : "bg-border/20"}`} />
+            )}
+          </div>
+        );
+      })}
+      <span className="ml-1.5 text-[10px] text-muted-foreground uppercase tracking-wider">
+        {campaign === "planner" ? "P" : "A"}
+      </span>
+    </div>
+  );
+};
 const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps) => {
+
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<FilterStatus>(initialFilter || "all");
+  const [campaignFilter, setCampaignFilter] = useState<CampaignFilter>("all");
   const [loading, setLoading] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [clicksCache, setClicksCache] = useState<Record<string, ClickEvent[]>>({});
@@ -163,6 +218,10 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
   };
 
   const filtered = contacts.filter(c => {
+    // Campaign filter
+    if (campaignFilter === "planner" && c.drip_campaign !== "planner") return false;
+    if (campaignFilter === "resident" && c.drip_campaign !== "resident") return false;
+
     if (filter === "unsubscribed" && c.subscribed) return false;
     if (filter === "hot" && (c.engagement_status !== "hot" || !c.subscribed)) return false;
     if (filter === "warm" && (c.engagement_status !== "warm" || !c.subscribed)) return false;
@@ -206,7 +265,24 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
   return (
     <>
     <div className="space-y-6">
-      {/* Filter Pills */}
+      {/* Campaign Filter */}
+      <div className="flex gap-2 mb-4">
+        {(["all", "planner", "resident"] as CampaignFilter[]).map(cf => (
+          <button
+            key={cf}
+            onClick={() => setCampaignFilter(cf)}
+            className={`px-4 py-2 border font-sans text-xs tracking-[0.15em] uppercase transition-colors ${
+              campaignFilter === cf
+                ? "border-accent text-accent bg-accent/10"
+                : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/30"
+            }`}
+          >
+            {cf === "all" ? "All Campaigns" : cf === "planner" ? "Planner" : "Apartment"}
+          </button>
+        ))}
+      </div>
+
+      {/* Status Filter Pills */}
       <div className="flex flex-wrap gap-2">
         {(["all", "hot", "warm", "new", "cold", "unsubscribed", "opened"] as FilterStatus[]).map(status => {
           const config = STATUS_CONFIG[status];
@@ -257,10 +333,8 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
               <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Email</th>
               <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Name</th>
               <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Company</th>
-              <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">City</th>
               <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Status</th>
-              <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Campaign</th>
-              <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Step</th>
+              <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground min-w-[180px]">Drip Progress</th>
               <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Last Emailed</th>
               <th className="w-10 p-3"></th>
             </tr>
@@ -287,15 +361,20 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
                     <td className="p-3 text-foreground font-mono text-xs">{c.email}</td>
                     <td className="p-3 text-muted-foreground">{c.name || "—"}</td>
                     <td className="p-3 text-muted-foreground">{c.company || "—"}</td>
-                    <td className="p-3 text-muted-foreground">{c.city || "—"}</td>
                     <td className="p-3">
                       <span className={`text-xs px-2 py-1 inline-flex items-center gap-1 ${config.colorClass}`}>
                         {c.reply_detected && "💬 "}
                         {config.label}
                       </span>
                     </td>
-                    <td className="p-3 text-muted-foreground text-xs">{c.drip_campaign}</td>
-                    <td className="p-3 text-muted-foreground text-xs">{c.drip_step}/5</td>
+                    <td className="p-3">
+                      <DripTimeline
+                        currentStep={c.drip_step}
+                        campaign={c.drip_campaign}
+                        opens={opensCache[c.id]}
+                        clicks={clicksCache[c.id]}
+                      />
+                    </td>
                     <td className="p-3 text-muted-foreground text-xs">
                       {c.last_emailed_at ? new Date(c.last_emailed_at).toLocaleDateString() : "Never"}
                     </td>
@@ -311,7 +390,7 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
                   </tr>
                   {isExpanded && (
                     <tr key={`${c.id}-activity`} className="border-b border-border/50">
-                      <td colSpan={10} className="p-0">
+                      <td colSpan={8} className="p-0">
                         <div className="bg-accent/5 px-6 py-4">
                           {/* Activity tabs */}
                           <div className="flex gap-4 mb-3">
@@ -382,7 +461,7 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
             })}
             {!filtered.length && (
               <tr>
-                <td colSpan={10} className="p-8 text-center text-muted-foreground">
+                <td colSpan={8} className="p-8 text-center text-muted-foreground">
                   {search ? "No contacts match your search." : "No contacts found."}
                 </td>
               </tr>
