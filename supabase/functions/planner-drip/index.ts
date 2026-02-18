@@ -61,7 +61,7 @@ body { margin: 0; padding: 0; width: 100% !important; background-color: #335747;
 
 <!-- Logo -->
 <tr><td style="padding: 40px 40px 24px; text-align:center;" class="padding-mobile">
-<img src="${LOGO_URL}" alt="White Rabbit" width="50" style="width:50px; height:auto; display:block; margin:0 auto;" />
+<img src="${LOGO_URL}" alt="White Rabbit" width="90" style="width:90px; height:auto; display:block; margin:0 auto;" />
 </td></tr>
 
 ${innerHtml}
