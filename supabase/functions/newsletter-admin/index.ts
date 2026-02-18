@@ -205,21 +205,39 @@ serve(async (req) => {
       }
 
       case "get_stats": {
-        const { count: contactCount } = await supabase
+        const { data: contactData } = await supabase
           .from("newsletter_contacts")
-          .select("*", { count: "exact", head: true })
-          .eq("subscribed", true);
+          .select("drip_campaign, subscribed, engagement_status");
+
         const { count: campaignCount } = await supabase
           .from("newsletter_campaigns")
           .select("*", { count: "exact", head: true });
-        const { count: sentCount } = await supabase
+
+        const { data: sendData } = await supabase
           .from("newsletter_send_log")
-          .select("*", { count: "exact", head: true });
+          .select("campaign_id");
+
+        const contacts = contactData || [];
+        const sends = sendData || [];
+
+        const buildCampaignStats = (prefix: string) => {
+          const cc = contacts.filter((c: { drip_campaign: string }) => c.drip_campaign.startsWith(prefix));
+          const active = cc.filter((c: { subscribed: boolean }) => c.subscribed);
+          return {
+            subscribers: active.length,
+            unsubscribed: cc.filter((c: { subscribed: boolean }) => !c.subscribed).length,
+            emailsSent: sends.filter((s: { campaign_id: string }) => s.campaign_id.startsWith(prefix)).length,
+            hot: active.filter((c: { engagement_status: string }) => c.engagement_status === "hot").length,
+            warm: active.filter((c: { engagement_status: string }) => c.engagement_status === "warm").length,
+          };
+        };
 
         return new Response(JSON.stringify({
-          subscribers: contactCount || 0,
+          subscribers: contacts.filter((c: { subscribed: boolean }) => c.subscribed).length,
           campaigns: campaignCount || 0,
-          emailsSent: sentCount || 0,
+          emailsSent: sends.length,
+          planner: buildCampaignStats("planner"),
+          resident: buildCampaignStats("resident"),
         }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
