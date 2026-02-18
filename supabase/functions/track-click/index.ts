@@ -34,12 +34,48 @@ serve(async (req) => {
         link_slug: linkSlug,
       });
 
-      // Update engagement status to "warm" if currently "new"
-      await supabase
-        .from("newsletter_contacts")
-        .update({ engagement_status: "warm" })
-        .eq("id", contactId)
-        .eq("engagement_status", "new");
+      // Count total clicks for this contact
+      const { count: clickCount } = await supabase
+        .from("newsletter_clicks")
+        .select("*", { count: "exact", head: true })
+        .eq("contact_id", contactId);
+
+      const totalClicks = clickCount || 1;
+
+      if (totalClicks >= 3) {
+        // 3+ clicks: mark as Hot and transition to warm nurture sequence
+        const { data: contact } = await supabase
+          .from("newsletter_contacts")
+          .select("drip_campaign, engagement_status")
+          .eq("id", contactId)
+          .single();
+
+        if (contact && contact.drip_campaign === "planner") {
+          // Move to warm nurture sequence
+          await supabase
+            .from("newsletter_contacts")
+            .update({
+              engagement_status: "hot",
+              drip_campaign: "planner-warm",
+              drip_step: 0,
+              drip_started_at: new Date().toISOString(),
+            })
+            .eq("id", contactId);
+        } else if (contact && contact.engagement_status !== "hot") {
+          // Already in warm or other campaign, just mark hot
+          await supabase
+            .from("newsletter_contacts")
+            .update({ engagement_status: "hot" })
+            .eq("id", contactId);
+        }
+      } else if (totalClicks >= 1) {
+        // 1-2 clicks: mark as warm, keep drip running
+        await supabase
+          .from("newsletter_contacts")
+          .update({ engagement_status: "warm" })
+          .eq("id", contactId)
+          .in("engagement_status", ["new"]);
+      }
     }
 
     // Redirect to the actual destination

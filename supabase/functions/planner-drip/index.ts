@@ -494,12 +494,17 @@ serve(async (req) => {
 
       if (completedContacts?.length) {
         for (const contact of completedContacts) {
-          if (contact.engagement_status === "warm" || contact.engagement_status === "hot") {
-            // Move to warm-lead campaign
+          if (contact.engagement_status === "warm") {
+            // Warm but didn't hit 3+ clicks during drip — move to warm nurture anyway
             await supabase.from("newsletter_contacts").update({
               drip_campaign: "planner-warm",
               drip_step: 0,
               drip_started_at: now.toISOString(),
+            }).eq("id", contact.id);
+          } else if (contact.engagement_status === "hot") {
+            // Already hot (3+ clicks triggered mid-drip) — mark done
+            await supabase.from("newsletter_contacts").update({
+              drip_campaign: "planner-done",
             }).eq("id", contact.id);
           } else {
             // Non-clicker: check if it's time for breakup email
