@@ -70,15 +70,21 @@ const Index = () => {
   return (
     <main id="main-content">
       {/* Hero */}
-      <section className="relative h-screen flex flex-col overflow-hidden">
-        {/* Mobile: text above image */}
-        <div className="md:hidden bg-forest-dark pt-24 pb-6 px-6 text-center flex flex-col items-center">
+      <section className="relative h-screen overflow-hidden">
+        {/* Image – full screen on all devices */}
+        <div className="absolute inset-0">
+          <img src={heroImage} alt="Scott Syme, White Rabbit luxury magician tossing cards in a cinematic desert landscape – private event entertainment in Los Angeles" className="w-full h-full object-cover object-[center_40%] md:object-[center_55%]" fetchPriority="high" decoding="async" />
+          <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/30 to-forest-dark/10 hidden md:block" />
+        </div>
+
+        {/* Mobile: text overlaid at top of photo */}
+        <div className="md:hidden absolute inset-0 z-10 flex flex-col items-center pt-24 px-6 text-center">
           <motion.p
-            className="text-xl text-cream/90 tracking-wide font-bold font-serif"
+            className="text-xl text-cream/90 tracking-wide font-bold font-serif drop-shadow-lg"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}>
-            Experience Magic<br className="mb-2" />
+            Experience Magic<br />
             <span className="block mt-2">That Makes You Feel Truly Alive</span>
           </motion.p>
           <motion.div
@@ -92,11 +98,6 @@ const Index = () => {
               Book an Experience
             </button>
           </motion.div>
-        </div>
-        {/* Image fills remaining space on mobile, full screen on desktop */}
-        <div className="relative flex-1 md:absolute md:inset-0">
-          <img src={heroImage} alt="Scott Syme, White Rabbit luxury magician tossing cards in a cinematic desert landscape – private event entertainment in Los Angeles" className="w-full h-full object-cover object-[center_40%] md:object-[center_55%]" fetchPriority="high" decoding="async" />
-          <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/30 to-forest-dark/10 hidden md:block" />
         </div>
 
         {/* Desktop: text overlaid */}
