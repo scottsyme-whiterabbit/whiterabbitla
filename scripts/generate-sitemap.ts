@@ -28,7 +28,7 @@ const serviceKeys = [
   "close-up-magician", "private-magic-show", "golf-tournament-magician",
   "charity-gala-magician", "holiday-party-magician", "trade-show-magician",
   "rehearsal-dinner-magician", "halloween-party-magician", "christmas-party-magician",
-  "dmc-entertainment", "resident-event-magician",
+  "premiere-red-carpet-magician", "dmc-entertainment", "resident-event-magician",
 ];
 
 const editorialArticles = [
@@ -57,6 +57,25 @@ const editorialArticles = [
   "resident-event-ideas-that-actually-get-rsvps",
 ];
 
+// Service area city slugs for /areas/:city pages
+const serviceAreaCities = [
+  "los-angeles", "beverly-hills", "hollywood", "santa-monica", "malibu",
+  "west-hollywood", "calabasas", "pasadena", "orange-county", "san-diego",
+  "palm-springs", "montecito", "newport-beach", "coronado", "santa-barbara",
+  "san-francisco", "palo-alto", "atherton", "hillsborough", "san-mateo",
+  "burlingame", "woodside", "los-altos", "menlo-park", "saratoga",
+  "los-gatos", "tiburon", "mill-valley", "napa-valley", "sonoma",
+  "carmel-by-the-sea", "seattle", "portland",
+  "aspen", "vail", "park-city", "jackson-hole", "sun-valley",
+  "lake-tahoe", "telluride", "scottsdale", "paradise-valley",
+  "dallas", "highland-park", "houston", "river-oaks", "austin",
+  "atlanta", "buckhead", "miami", "coral-gables", "palm-beach",
+  "naples", "jupiter", "sarasota", "nashville",
+  "new-york", "the-hamptons", "greenwich", "nantucket", "marthas-vineyard",
+  "short-hills", "boston", "washington-dc", "potomac", "philadelphia",
+  "chicago", "winnetka", "denver", "las-vegas",
+];
+
 function slugify(text: string): string {
   return text.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
 }
@@ -75,6 +94,9 @@ const lines: string[] = [
   url("/reviews", "monthly", "0.8"),
   url("/contact", "monthly", "0.9"),
   url("/blog", "weekly", "0.8"),
+  url("/areas", "monthly", "0.7"),
+  url("/quiz", "monthly", "0.7"),
+  url("/deck", "monthly", "0.6"),
   "",
   '  <!-- Dedicated Service Pages -->',
   url("/services/corporate-magician", "monthly", "0.9"),
@@ -83,8 +105,15 @@ const lines: string[] = [
   url("/services/close-up-magician", "monthly", "0.9"),
   url("/services/private-magic-show", "monthly", "0.9"),
   "",
-  '  <!-- SEO Landing Pages -->',
+  '  <!-- Service Area Pages -->',
 ];
+
+for (const city of serviceAreaCities) {
+  lines.push(url(`/areas/${city}`, "monthly", "0.6"));
+}
+
+lines.push("");
+lines.push('  <!-- SEO Landing Pages -->');
 
 for (const loc of locations) {
   for (const key of serviceKeys) {
@@ -101,4 +130,6 @@ for (const slug of editorialArticles) {
 lines.push("</urlset>");
 
 writeFileSync("public/sitemap.xml", lines.join("\n"));
-console.log(`Sitemap generated with ${lines.length} lines`);
+const seoCount = locations.length * serviceKeys.length;
+const totalUrls = 9 + 5 + serviceAreaCities.length + seoCount + editorialArticles.length;
+console.log(`Sitemap generated: ${totalUrls} URLs (${seoCount} SEO + ${editorialArticles.length} editorial + ${serviceAreaCities.length} area pages + 14 core/service)`);
