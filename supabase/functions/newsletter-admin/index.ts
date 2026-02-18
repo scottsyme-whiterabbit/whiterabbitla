@@ -173,6 +173,17 @@ serve(async (req) => {
         });
       }
 
+      case "get_opened_contact_ids": {
+        const { data: opens, error: opensErr } = await supabase
+          .from("newsletter_opens")
+          .select("contact_id");
+        if (opensErr) throw opensErr;
+        const uniqueIds = [...new Set((opens || []).map((o: { contact_id: string }) => o.contact_id))];
+        return new Response(JSON.stringify({ contactIds: uniqueIds }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       case "get_stats": {
         const { count: contactCount } = await supabase
           .from("newsletter_contacts")

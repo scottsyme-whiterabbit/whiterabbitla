@@ -34,7 +34,7 @@ interface OpenEvent {
   user_agent: string | null;
 }
 
-type FilterStatus = "all" | "hot" | "warm" | "new" | "cold" | "unsubscribed";
+type FilterStatus = "all" | "hot" | "warm" | "new" | "cold" | "unsubscribed" | "opened";
 
 interface ContactsListTabProps {
   storedPassword: string;
@@ -47,6 +47,7 @@ const STATUS_CONFIG: Record<string, { label: string; icon: typeof Flame; colorCl
   new: { label: "New", icon: Users, colorClass: "bg-blue-900/30 text-blue-400" },
   cold: { label: "Cold", icon: Snowflake, colorClass: "bg-slate-700/30 text-slate-400" },
   unsubscribed: { label: "Unsub", icon: UserX, colorClass: "bg-red-900/20 text-red-500" },
+  opened: { label: "Opened", icon: Eye, colorClass: "bg-emerald-900/30 text-emerald-400" },
 };
 
 const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps) => {
@@ -59,6 +60,7 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
   const [opensCache, setOpensCache] = useState<Record<string, OpenEvent[]>>({});
   const [loadingActivity, setLoadingActivity] = useState<string | null>(null);
   const [activityTab, setActivityTab] = useState<"opens" | "clicks">("opens");
+  const [openedContactIds, setOpenedContactIds] = useState<Set<string>>(new Set());
 
   const loadContacts = useCallback(async () => {
     setLoading(true);
@@ -81,9 +83,23 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
     }
   }, [storedPassword]);
 
+  const loadOpenedIds = useCallback(async () => {
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${SUPABASE_KEY}` },
+        body: JSON.stringify({ action: "get_opened_contact_ids", adminPassword: storedPassword }),
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      setOpenedContactIds(new Set(data.contactIds || []));
+    } catch (_e) { /* skip */ }
+  }, [storedPassword]);
+
   useEffect(() => {
     loadContacts();
-  }, [loadContacts]);
+    loadOpenedIds();
+  }, [loadContacts, loadOpenedIds]);
 
   useEffect(() => {
     if (initialFilter) setFilter(initialFilter);
@@ -127,6 +143,7 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
     if (filter === "warm" && (c.engagement_status !== "warm" || !c.subscribed)) return false;
     if (filter === "new" && (c.engagement_status !== "new" || !c.subscribed)) return false;
     if (filter === "cold" && (c.engagement_status !== "cold" || !c.subscribed)) return false;
+    if (filter === "opened" && !openedContactIds.has(c.id)) return false;
 
     if (search.trim()) {
       const q = search.toLowerCase();
@@ -147,6 +164,7 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
     new: contacts.filter(c => c.engagement_status === "new" && c.subscribed).length,
     cold: contacts.filter(c => c.engagement_status === "cold" && c.subscribed).length,
     unsubscribed: contacts.filter(c => !c.subscribed).length,
+    opened: contacts.filter(c => openedContactIds.has(c.id)).length,
   };
 
   // Dedupe opens by drip_step (show unique opens only)
@@ -164,7 +182,7 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
     <div className="space-y-6">
       {/* Filter Pills */}
       <div className="flex flex-wrap gap-2">
-        {(["all", "hot", "warm", "new", "cold", "unsubscribed"] as FilterStatus[]).map(status => {
+        {(["all", "hot", "warm", "new", "cold", "unsubscribed", "opened"] as FilterStatus[]).map(status => {
           const config = STATUS_CONFIG[status];
           const Icon = config?.icon || Users;
           const isActive = filter === status;

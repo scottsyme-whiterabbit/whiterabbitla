@@ -323,22 +323,22 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
           </div>
           <p className="font-serif text-3xl text-foreground">{stats.engagement.warm}</p>
         </button>
-        <div className="border border-border p-5">
+        <button onClick={() => onNavigateToContacts?.("opened")} className="border border-border p-5 text-left hover:border-accent/50 transition-colors cursor-pointer">
           <div className="flex items-center gap-2 mb-1">
             <Eye size={16} className="text-accent" />
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Opens</p>
           </div>
           <p className="font-serif text-3xl text-foreground">{stats.opens.total}</p>
           <p className="font-sans text-xs text-muted-foreground mt-1">{stats.opens.uniqueContacts} unique</p>
-        </div>
-        <div className="border border-border p-5">
+        </button>
+        <button onClick={() => onNavigateToContacts?.("opened")} className="border border-border p-5 text-left hover:border-accent/50 transition-colors cursor-pointer">
           <div className="flex items-center gap-2 mb-1">
             <EyeIcon size={16} className="text-accent" />
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Open Rate</p>
           </div>
           <p className="font-serif text-3xl text-foreground">{stats.opens.rate}%</p>
           <p className="font-sans text-xs text-muted-foreground mt-1">{stats.opens.uniqueContacts}/{stats.totalSent} sent</p>
-        </div>
+        </button>
         <div className="border border-border p-5">
           <div className="flex items-center gap-2 mb-1">
             <MousePointerClick size={16} className="text-accent" />
