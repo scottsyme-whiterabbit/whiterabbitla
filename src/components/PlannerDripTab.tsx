@@ -21,11 +21,11 @@ const WARM_LABELS = [
 
 const PULSE_LABELS = [
   { step: 0, subjectA: "3 entertainment trends planners are booking this spring", subjectB: "Spring events are changing", date: "Mar 1", pillar: "Event Intel" },
-  { step: 1, subjectA: "What 150 guests at a Rolls-Royce launch experienced", subjectB: "Nobody wanted to leave", date: "Mar 15", pillar: "Behind the Curtain" },
+  { step: 1, subjectA: "What 30 guests at a Rolls-Royce unveiling experienced", subjectB: "Nobody wanted to leave", date: "Mar 15", pillar: "Behind the Curtain" },
   { step: 2, subjectA: "Cocktail hours are getting a serious upgrade", subjectB: "The cocktail hour problem, solved", date: "Apr 1", pillar: "Event Intel" },
   { step: 3, subjectA: "A private dinner show for 30", subjectB: "The after-dinner surprise that changed the night", date: "Apr 15", pillar: "Behind the Curtain" },
   { step: 4, subjectA: "Summer gala season starts now", subjectB: "What top planners are booking for summer", date: "May 1", pillar: "Event Intel" },
-  { step: 5, subjectA: "Entertainment at a Rivian leadership retreat", subjectB: "When the CEO won't stop talking about it", date: "May 15", pillar: "Behind the Curtain" },
+  { step: 5, subjectA: "Magic under the stars at a Rivian retreat", subjectB: "The highlight of the retreat", date: "May 15", pillar: "Behind the Curtain" },
   { step: 6, subjectA: "Steal this idea: wedding entertainment beyond the DJ", subjectB: "The wedding vendor nobody expected", date: "Jun 1", pillar: "Steal This Idea" },
   { step: 7, subjectA: "What happened at a Taittinger champagne dinner", subjectB: "Champagne, cards, and 40 guests", date: "Jun 15", pillar: "Behind the Curtain" },
   { step: 8, subjectA: "Smart planners are booking Q4 now", subjectB: "Holiday party season fills up fast", date: "Jul 1", pillar: "Event Intel" },
