@@ -468,7 +468,10 @@ const AdminNewsletter = () => {
         {activeTab === "dashboard" && (
           <div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="border border-border p-6">
+              <div
+                className="border border-border p-6 cursor-pointer hover:border-accent/50 transition-colors"
+                onClick={() => { setContactsFilter("all"); setActiveTab("contacts"); }}
+              >
                 <div className="flex items-center gap-3 mb-2">
                   <Users size={20} className="text-accent" />
                   <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Subscribers</p>
