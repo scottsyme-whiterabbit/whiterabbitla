@@ -69,9 +69,9 @@ const Experience = () => {
               An Encounter with Joy
             </h1>
             <p className="font-sans text-base text-cream/70 max-w-2xl mx-auto leading-relaxed">
-              Wonder, hospitality, and moments that stay with your guests long after the evening is over. 
-              White Rabbit creates an atmosphere so alive, so intimate, 
-              that every person in the room feels like the most important one there.
+              A White Rabbit experience is more than magic. It's an atmosphere of warmth, wonder, and world-class hospitality. 
+              Scott Syme transforms your space into something extraordinary, where every guest feels seen, cared for, and truly alive. 
+              They leave with more than amazement. They leave feeling changed.
             </p>
           </AnimatedSection>
         </div>
@@ -144,9 +144,9 @@ const Experience = () => {
       <AnimatedSection>
         <section className="bg-forest-dark py-16 text-center mb-24">
           <div className="max-w-2xl mx-auto px-6">
-            <h2 className="font-serif text-4xl md:text-5xl text-cream mb-6">Be the Host Everyone Remembers</h2>
+            <h2 className="font-serif text-4xl md:text-5xl text-cream mb-6">Give Your Guests a Memory That Lasts</h2>
             <p className="font-sans text-base text-cream/70 mb-10">
-              Your guests deserve an experience that makes them feel truly alive. Let's create it together.
+              Let Scott transform your next event into an atmosphere of wonder, joy, and genuine connection.
             </p>
             <button
               onClick={openQuiz}
