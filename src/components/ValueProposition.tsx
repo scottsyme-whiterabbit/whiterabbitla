@@ -1,4 +1,4 @@
-import { Check, CalendarClock } from "lucide-react";
+import { Check, CalendarClock, Sparkles } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 
@@ -15,7 +15,20 @@ const included = [
   "A curated atmosphere that transforms any space into something unforgettable",
   "Pre-event consultation to tailor the experience to your guests and venue",
   "Seamless coordination with your planner, venue, and production team",
+  "Professional presence from arrival to departure, no riders, no production crews",
   "A lasting impression your guests will talk about for years",
+];
+
+const dreamOutcomes = [
+  { label: "Your guests", outcome: "leave saying it was the best event they've ever attended" },
+  { label: "Your clients", outcome: "associate your brand with something extraordinary" },
+  { label: "Your evening", outcome: "flows effortlessly from cocktails to standing ovation" },
+];
+
+const comparisons = [
+  { item: "Live band or DJ", cost: "$5,000–$15,000+", note: "Background noise most guests tune out" },
+  { item: "Celebrity appearance", cost: "$25,000–$100,000+", note: "A photo op, not an experience" },
+  { item: "Photo booth rental", cost: "$1,500–$3,000", note: "Fun for five minutes, forgotten by morning" },
 ];
 
 const ValueProposition = () => {
@@ -49,6 +62,25 @@ const ValueProposition = () => {
           </div>
         </AnimatedSection>
 
+        {/* Dream Outcome */}
+        <AnimatedSection delay={0.12}>
+          <div className="text-center mb-10">
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">The Dream Outcome</p>
+            <h3 className="font-serif text-3xl md:text-4xl text-foreground mb-8">
+              Imagine This Instead
+            </h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+            {dreamOutcomes.map((item, i) => (
+              <div key={i} className="text-center p-6 border border-accent/15 bg-accent/5">
+                <Sparkles size={18} className="text-accent mx-auto mb-3" />
+                <p className="font-sans text-xs tracking-[0.2em] uppercase text-accent mb-2">{item.label}</p>
+                <p className="font-serif text-lg text-foreground leading-snug">{item.outcome}</p>
+              </div>
+            ))}
+          </div>
+        </AnimatedSection>
+
         {/* The Solution */}
         <AnimatedSection delay={0.15}>
           <div className="text-center mb-10">
@@ -64,10 +96,14 @@ const ValueProposition = () => {
           </div>
         </AnimatedSection>
 
-        {/* What's Included */}
+        {/* Grand Slam Value Stack */}
         <AnimatedSection delay={0.2}>
-          <div className="border border-accent/20 bg-accent/5 p-8 md:p-10 mb-16">
-            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-6 text-center">What Every Client Receives</p>
+          <div className="border border-accent/20 bg-accent/5 p-8 md:p-10 mb-10">
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2 text-center">The Grand Slam Offer</p>
+            <h4 className="font-serif text-2xl md:text-3xl text-foreground mb-2 text-center">Everything You Get</h4>
+            <p className="font-sans text-sm text-muted-foreground text-center mb-8 max-w-lg mx-auto">
+              One phone call. One line item on your vendor list. An experience your guests will never forget.
+            </p>
             <div className="space-y-4">
               {included.map((item, i) => (
                 <div key={i} className="flex gap-3 items-start">
@@ -76,6 +112,25 @@ const ValueProposition = () => {
                 </div>
               ))}
             </div>
+          </div>
+        </AnimatedSection>
+
+        {/* Anchor Pricing Comparison */}
+        <AnimatedSection delay={0.22}>
+          <div className="mb-16">
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-6 text-center">How It Compares</p>
+            <div className="space-y-3">
+              {comparisons.map((comp, i) => (
+                <div key={i} className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4 p-4 border border-border/30 bg-background/30">
+                  <span className="font-sans text-sm text-foreground font-medium sm:w-48 flex-shrink-0">{comp.item}</span>
+                  <span className="font-sans text-xs tracking-wider uppercase text-muted-foreground sm:w-40 flex-shrink-0">{comp.cost}</span>
+                  <span className="font-sans text-sm text-muted-foreground/70 italic">{comp.note}</span>
+                </div>
+              ))}
+            </div>
+            <p className="font-sans text-sm text-accent text-center mt-6 italic">
+              A White Rabbit experience delivers more impact than all three combined.
+            </p>
           </div>
         </AnimatedSection>
 

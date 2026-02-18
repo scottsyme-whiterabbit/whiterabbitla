@@ -84,8 +84,8 @@ const Index = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}>
-            Experience Magic<br />
-            <span className="block mt-2">That Makes You Feel Truly Alive</span>
+            Be the Host<br />
+            <span className="block mt-2">They Never Stop Talking About</span>
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -107,8 +107,8 @@ const Index = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}>
-            Experience Magic<br />
-            <span className="block mt-3">That Makes You Feel Truly Alive</span>
+            Be the Host<br />
+            <span className="block mt-3">They Never Stop Talking About</span>
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -158,10 +158,10 @@ const Index = () => {
           <AnimatedSection>
             <div>
               <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">The Experience</p>
-              <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 leading-tight">
-                More Than Magic.<br />A Feeling.
-              </h2>
-              <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">Scott Syme is a world-class magician and the creative force behind White Rabbit. A member of the Magic Castle® and consultant to performers on America's Got Talent and Disney Channel, Scott has spent years perfecting something most magicians never attempt: an experience that feels like stepping into a five-star lobby or turning left on a flight. He blends interactive magic, mentalism, and impossible coincidences with the warmth of a seasoned host, transforming any room into something cinematic, intimate, and utterly alive. Curated lighting, a signature soundtrack, and moments so close you can feel them. This isn't a magic show. It's a White Rabbit experience.
+               <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 leading-tight">
+                 The Event They<br />Never Forget.
+               </h2>
+               <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">Scott Syme is a world-class magician and the creative force behind White Rabbit. A member of the Magic Castle® and consultant to performers on America's Got Talent and Disney Channel, Scott has spent years perfecting something most entertainers never attempt: making the host look like a genius. He blends interactive magic, mentalism, and impossible coincidences with the warmth of a seasoned host, transforming any room into something cinematic, intimate, and utterly alive. Your guests don't just watch. They participate, they laugh, they feel taken care of. And three months later, they're still telling the story.
 
 
 
