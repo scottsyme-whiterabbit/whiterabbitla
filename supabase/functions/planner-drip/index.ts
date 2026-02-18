@@ -7,7 +7,7 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const LOGO_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-symbol.png";
+const LOGO_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-symbol-outline.png";
 const SITE_URL = "https://whiterabbitla.com";
 const APP_URL = "https://whiterabbitla.com";
 const TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-click";
@@ -45,19 +45,19 @@ function wrapEmail(preheader: string, innerHtml: string, email: string, contactI
 body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
 table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
 img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
-body { margin: 0; padding: 0; width: 100% !important; background-color: #2D4A3E; }
+body { margin: 0; padding: 0; width: 100% !important; background-color: #335747; }
 @media screen and (max-width: 600px) {
   .email-container { width: 100% !important; }
   .padding-mobile { padding-left: 20px !important; padding-right: 20px !important; }
 }
 </style>
 </head>
-<body style="margin:0; padding:0; background-color:#2D4A3E;">
-<div style="display:none; max-height:0; overflow:hidden; font-size:1px; line-height:1px; color:#2D4A3E;">${preheader}</div>
-<center style="width:100%; background-color:#2D4A3E;">
-<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color:#2D4A3E;">
+<body style="margin:0; padding:0; background-color:#335747;">
+<div style="display:none; max-height:0; overflow:hidden; font-size:1px; line-height:1px; color:#335747;">${preheader}</div>
+<center style="width:100%; background-color:#335747;">
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color:#335747;">
 <tr><td style="padding: 30px 0;">
-<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="560" align="center" class="email-container" style="max-width:560px; margin:auto; background-color:#1e352c; border-radius:4px;">
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="560" align="center" class="email-container" style="max-width:560px; margin:auto; background-color:#223D34; border-radius:4px;">
 
 <!-- Logo -->
 <tr><td style="padding: 40px 40px 24px; text-align:center;" class="padding-mobile">
@@ -68,13 +68,13 @@ ${innerHtml}
 
 <!-- Footer -->
 <tr><td style="padding: 0 40px;" class="padding-mobile">
-<hr style="border:none; border-top:1px solid rgba(200,160,160,0.15); margin:0 0 24px;" />
+<hr style="border:none; border-top:1px solid rgba(201,163,168,0.15); margin:0 0 24px;" />
 </td></tr>
 <tr><td style="padding: 0 40px 12px; text-align:center;" class="padding-mobile">
 <p style="margin:0; font-family:Georgia,serif; font-size:12px; color:rgba(245,240,232,0.4);">
 White Rabbit · Los Angeles<br/>
 7393 W. Manchester Ave #209, Los Angeles, CA 90045<br/>
-<a href="mailto:events@whiterabbitla.com" style="color:#c8a0a0; text-decoration:none;">events@whiterabbitla.com</a> · <a href="tel:+14243941850" style="color:rgba(245,240,232,0.4); text-decoration:none;">(424) 394-1850</a>
+<a href="mailto:events@whiterabbitla.com" style="color:#C9A3A8; text-decoration:none;">events@whiterabbitla.com</a> · <a href="tel:+14243941850" style="color:rgba(248,245,240,0.4); text-decoration:none;">(424) 394-1850</a>
 </p>
 </td></tr>
 <tr><td style="padding: 0 40px 32px; text-align:center;" class="padding-mobile">
@@ -108,19 +108,19 @@ function ps(text: string): string {
 
 function bookCallCTA(): string {
   return `<p style="margin:18px 0 0; text-align:center;">
-<a href="https://calendar.app.google/58WjggPt3RFAcJjq8" target="_blank" style="display:inline-block; padding:12px 32px; font-family:Georgia,serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#c8a0a0; text-decoration:none; font-weight:bold; border:1px solid #c8a0a0; border-radius:2px;">Book a Call</a>
+<a href="https://calendar.app.google/58WjggPt3RFAcJjq8" target="_blank" style="display:inline-block; padding:12px 32px; font-family:Georgia,serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#C9A3A8; text-decoration:none; font-weight:bold; border:1px solid #C9A3A8; border-radius:2px;">Book a Call</a>
 </p>`;
 }
 
 // Tracked link: wraps a URL through the click tracker with contact ID and step
 function trackedLink(url: string, text: string, contactId: string, step: number): string {
   const trackingUrl = `${TRACK_URL}?cid=${contactId}&step=${step}&r=${encodeURIComponent(url)}`;
-  return `<a href="${trackingUrl}" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);" target="_blank">${text}</a>`;
+  return `<a href="${trackingUrl}" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);" target="_blank">${text}</a>`;
 }
 
 // Plain link (for previews/tests where no contact ID exists)
 function shareLink(slug: string, text: string): string {
-  return `<a href="${SITE_URL}/share/${slug}" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);" target="_blank">${text}</a>`;
+  return `<a href="${SITE_URL}/share/${slug}" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);" target="_blank">${text}</a>`;
 }
 
 // ═══════════════════════════════════════════════
@@ -189,7 +189,7 @@ ${ps("Close-up magic, parlor shows, or both. We tailor it to your event.")}
 ${bookCallCTA()}
 <p style="margin:18px 0 18px;">Open to a peek at how?</p>
 ${signoff(true)}
-${ps(`Need to share this with your team? Here's our lookbook: <a href="${SITE_URL}/deck" style="color:#c8a0a0; text-decoration:none;">whiterabbitla.com/deck</a>`)}
+${ps(`Need to share this with your team? Here's our lookbook: <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-decoration:none;">whiterabbitla.com/deck</a>`)}
 </td></tr>`;
     },
   },
@@ -207,7 +207,7 @@ ${ps(`Need to share this with your team? Here's our lookbook: <a href="${SITE_UR
 <p style="margin:0 0 18px;">Quick one for event pros:</p>
 <p style="margin:0 0 18px;">Your clients want luxury, not rabbits from hats. We bring close-up mentalism that feels cinematic and private shows that transform any room into something extraordinary. Custom lighting, emerald curtains, a curated soundtrack. Netflix, Disney, and Rivian have all booked it.</p>
 <p style="margin:0 0 18px;">${link}</p>
-<p style="margin:0 0 18px;">Want to share this with a client or colleague? <a href="${SITE_URL}/deck" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">Here's our lookbook</a> — one link, everything they need to see.</p>
+<p style="margin:0 0 18px;">Want to share this with a client or colleague? <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">Here's our lookbook</a> — one link, everything they need to see.</p>
 ${bookCallCTA()}
 <p style="margin:18px 0 18px;">Thoughts on trying it?</p>
 ${signoff(true)}
@@ -232,7 +232,7 @@ ${ps("Member of the Magic Castle. Disney + AGT vetted. Close-up, parlor, and cor
 ${bookCallCTA()}
 <p style="margin:18px 0 18px;">Open to chatting about fit?</p>
 ${signoff(true)}
-${ps(`Share our lookbook with your team: <a href="${SITE_URL}/deck" style="color:#c8a0a0; text-decoration:none;">whiterabbitla.com/deck</a> · Or find your format: <a href="${APP_URL}/quiz" style="color:#c8a0a0; text-decoration:none;">whiterabbitla.com/quiz</a>`)}
+${ps(`Share our lookbook with your team: <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-decoration:none;">whiterabbitla.com/deck</a> · Or find your format: <a href="${APP_URL}/quiz" style="color:#C9A3A8; text-decoration:none;">whiterabbitla.com/quiz</a>`)}
 </td></tr>`;
     },
   },
@@ -254,7 +254,7 @@ const WARM_TEMPLATES: EmailTemplate[] = [
 <p style="margin:0 0 18px;">I noticed you checked out some of our work. Figured I'd reach out directly.</p>
 <p style="margin:0 0 18px;">Most planners I work with start with a quick 10-minute call to talk through the event, the vibe, and which format would land best. No pitch, just a conversation about what would actually make your event unforgettable.</p>
 <p style="margin:0 0 18px;">Want to find 10 minutes this week?</p>
-<p style="margin:0 0 18px;"><a href="mailto:events@whiterabbitla.com?subject=Let's%20chat%20about%20an%20event" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">Just reply to this email</a> or call me at (424) 394-1850.</p>
+<p style="margin:0 0 18px;"><a href="mailto:events@whiterabbitla.com?subject=Let's%20chat%20about%20an%20event" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">Just reply to this email</a> or call me at (424) 394-1850.</p>
 ${bookCallCTA()}
 ${signoff(true)}
 </td></tr>`;
@@ -273,7 +273,7 @@ ${signoff(true)}
 <p style="margin:0 0 18px;">Would love to show you what that looks like for your events. Even a quick call helps me understand what you're working with.</p>
 ${bookCallCTA()}
 ${signoff(true)}
-${ps(`No commitment. Just a conversation. Or share our lookbook with your client: <a href="${SITE_URL}/deck" style="color:#c8a0a0; text-decoration:none;">whiterabbitla.com/deck</a>`)}
+${ps(`No commitment. Just a conversation. Or share our lookbook with your client: <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-decoration:none;">whiterabbitla.com/deck</a>`)}
 </td></tr>`;
     },
   },
@@ -288,7 +288,7 @@ ${ps(`No commitment. Just a conversation. Or share our lookbook with your client
 <p style="margin:0 0 18px;">I know inboxes get crowded, so I'll keep this short.</p>
 <p style="margin:0 0 18px;">If you've got an event coming up where you want guests to feel genuinely alive and taken care of, I'd love to chat. 10 minutes, no pressure.</p>
 <p style="margin:0 0 18px;">If the timing isn't right, no worries at all. You know where to find me when it is.</p>
-<p style="margin:0 0 18px;"><a href="mailto:events@whiterabbitla.com?subject=Let's%20chat%20about%20an%20event" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">Reply here</a> · <a href="tel:+14243941850" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">(424) 394-1850</a> · <a href="${APP_URL}/quiz" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">Take the quiz</a></p>
+<p style="margin:0 0 18px;"><a href="mailto:events@whiterabbitla.com?subject=Let's%20chat%20about%20an%20event" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">Reply here</a> · <a href="tel:+14243941850" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">(424) 394-1850</a> · <a href="${APP_URL}/quiz" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">Take the quiz</a></p>
 ${bookCallCTA()}
 ${signoff(true)}
 </td></tr>`;
@@ -309,7 +309,7 @@ const BREAKUP_TEMPLATE: EmailTemplate = {
 <p style="margin:0 0 18px;">Hey ${name},</p>
 <p style="margin:0 0 18px;">I've sent a few notes and I get it. Timing matters more than anything in this business.</p>
 <p style="margin:0 0 18px;">I'll stop filling your inbox. But if you ever have an event where you want to blow your clients away with something they've never experienced before, I'm a phone call away.</p>
-<p style="margin:0 0 18px;"><a href="mailto:events@whiterabbitla.com" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">events@whiterabbitla.com</a> · <a href="tel:+14243941850" style="color:#c8a0a0; text-decoration:none; border-bottom:1px solid rgba(200,160,160,0.3);">(424) 394-1850</a></p>
+<p style="margin:0 0 18px;"><a href="mailto:events@whiterabbitla.com" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">events@whiterabbitla.com</a> · <a href="tel:+14243941850" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">(424) 394-1850</a></p>
 ${bookCallCTA()}
 <p style="margin:18px 0 18px;">Wishing you incredible events ahead.</p>
 ${signoff(true)}
