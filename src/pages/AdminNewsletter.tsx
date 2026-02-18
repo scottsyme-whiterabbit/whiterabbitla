@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
-import { Upload, Send, FileText, Users, Mail, RefreshCw, Trash2, Eye, Heart } from "lucide-react";
+import { Upload, Send, FileText, Users, Mail, RefreshCw, Trash2, Eye, Heart, Download } from "lucide-react";
 import PlannerDripTab from "@/components/PlannerDripTab";
 import ContactsListTab from "@/components/ContactsListTab";
 
@@ -235,6 +235,82 @@ const AdminNewsletter = () => {
     e.target.value = "";
   };
 
+  // Process CSV and download updated version with [Apartment Name] Team names
+  const handleProcessAndDownloadCSV = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const text = await file.text();
+    const normalized = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+    
+    // Reassemble lines that are inside quoted fields
+    const rawLines: string[] = [];
+    let buffer = "";
+    let quoteCount = 0;
+    for (const line of normalized.split("\n")) {
+      buffer += (buffer ? "\n" : "") + line;
+      quoteCount += (line.match(/"/g) || []).length;
+      if (quoteCount % 2 === 0) {
+        rawLines.push(buffer);
+        buffer = "";
+        quoteCount = 0;
+      }
+    }
+    if (buffer) rawLines.push(buffer);
+
+    const lines = rawLines.filter(l => l.trim());
+    if (!lines.length) { toast.error("Empty CSV"); return; }
+
+    const headerCols = parseCSVRow(lines[0]).map(h => h.toLowerCase().replace(/^\ufeff/, ""));
+    const emailIdx = headerCols.findIndex(h => h.includes("email"));
+    const apartmentIdx = headerCols.findIndex(h => h.includes("apartment name") || h === "building name");
+    const firstNameIdx = headerCols.findIndex(h => h.includes("first name"));
+
+    if (emailIdx === -1 || apartmentIdx === -1 || firstNameIdx === -1) {
+      toast.error("CSV must have 'Email', 'Apartment Name', and 'First Name' columns");
+      e.target.value = "";
+      return;
+    }
+
+    let updatedCount = 0;
+    const outputLines = [lines[0]]; // keep header as-is
+
+    for (let i = 1; i < lines.length; i++) {
+      const cols = parseCSVRow(lines[i]);
+      const email = cols[emailIdx]?.replace(/^"|"$/g, "").trim();
+      const apartmentName = cols[apartmentIdx]?.replace(/^"|"$/g, "").trim();
+
+      if (email && email.includes("@") && apartmentName) {
+        cols[firstNameIdx] = `${apartmentName} Team`;
+        updatedCount++;
+      }
+
+      // Rebuild line with proper CSV quoting
+      const rebuiltLine = cols.map(c => {
+        const val = c || "";
+        if (val.includes(",") || val.includes('"') || val.includes("\n")) {
+          return `"${val.replace(/"/g, '""')}"`;
+        }
+        return val;
+      }).join(",");
+      outputLines.push(rebuiltLine);
+    }
+
+    // Trigger download
+    const blob = new Blob([outputLines.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = file.name.replace(/\.csv$/i, "-UPDATED.csv");
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    toast.success(`Updated ${updatedCount} contact names to [Apartment Name] Team`);
+    e.target.value = "";
+  };
+
   const handleDraft = async () => {
     setDrafting(true);
     try {
@@ -390,27 +466,49 @@ const AdminNewsletter = () => {
 
         {/* Dashboard */}
         {activeTab === "dashboard" && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="border border-border p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <Users size={20} className="text-accent" />
-                <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Subscribers</p>
+          <div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="border border-border p-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <Users size={20} className="text-accent" />
+                  <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Subscribers</p>
+                </div>
+                <p className="font-serif text-4xl text-foreground">{stats.subscribers}</p>
               </div>
-              <p className="font-serif text-4xl text-foreground">{stats.subscribers}</p>
+              <div className="border border-border p-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <FileText size={20} className="text-accent" />
+                  <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Campaigns</p>
+                </div>
+                <p className="font-serif text-4xl text-foreground">{stats.campaigns}</p>
+              </div>
+              <div className="border border-border p-6">
+                <div className="flex items-center gap-3 mb-2">
+                  <Mail size={20} className="text-accent" />
+                  <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Emails Sent</p>
+                </div>
+                <p className="font-serif text-4xl text-foreground">{stats.emailsSent}</p>
+              </div>
             </div>
-            <div className="border border-border p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <FileText size={20} className="text-accent" />
-                <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Campaigns</p>
+
+            {/* CSV Tools */}
+            <div className="mt-8 border border-border p-6">
+              <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-4">CSV Tools</h3>
+              <div className="flex flex-wrap gap-4">
+                <label className="cursor-pointer bg-accent text-accent-foreground px-5 py-2.5 font-sans text-sm tracking-[0.15em] uppercase hover:bg-accent/80 transition-colors flex items-center gap-2">
+                  <Upload size={14} />
+                  Import to Database
+                  <input type="file" accept=".csv" className="hidden" onChange={handleCSVUpload} />
+                </label>
+                <label className="cursor-pointer border border-border text-foreground px-5 py-2.5 font-sans text-sm tracking-[0.15em] uppercase hover:border-accent hover:text-accent transition-colors flex items-center gap-2">
+                  <Download size={14} />
+                  Process & Download CSV
+                  <input type="file" accept=".csv" className="hidden" onChange={handleProcessAndDownloadCSV} />
+                </label>
               </div>
-              <p className="font-serif text-4xl text-foreground">{stats.campaigns}</p>
-            </div>
-            <div className="border border-border p-6">
-              <div className="flex items-center gap-3 mb-2">
-                <Mail size={20} className="text-accent" />
-                <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Emails Sent</p>
-              </div>
-              <p className="font-serif text-4xl text-foreground">{stats.emailsSent}</p>
+              <p className="font-sans text-xs text-muted-foreground mt-3">
+                "Process & Download" transforms names to [Apartment Name] Team and downloads the updated file without importing.
+              </p>
             </div>
           </div>
         )}
