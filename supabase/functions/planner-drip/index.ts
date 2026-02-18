@@ -317,6 +317,198 @@ ${signoff(true)}
   },
 };
 
+// ═══════════════════════════════════════════════
+// PLANNER PULSE — Twice-monthly newsletter
+// Sent on the 1st and 15th of each month
+// ═══════════════════════════════════════════════
+
+// Target send dates for each issue
+const PULSE_DATES = [
+  "2026-03-01", "2026-03-15", "2026-04-01", "2026-04-15", "2026-05-01",
+  "2026-05-15", "2026-06-01", "2026-06-15", "2026-07-01", "2026-07-15",
+];
+
+const PULSE_TEMPLATES: EmailTemplate[] = [
+  // Issue 1 — Mar 1 — Event Intel: Spring booking trends
+  {
+    subjectA: "3 entertainment trends planners are booking this spring",
+    subjectB: "Spring events are changing",
+    preheader: "What's landing at high-end events right now.",
+    body: (name, _company, _city) => {
+      return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
+<p style="margin:0 0 18px;">Hey ${name},</p>
+<p style="margin:0 0 18px;">Spring is when the best events get booked. Here's what I'm seeing from planners right now:</p>
+<p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">1. Interactive over passive.</strong> Guests want to be part of the experience, not just watch. Roaming close-up magic during cocktails outperforms any stage act for mingling events.</p>
+<p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">2. The "second act" surprise.</strong> More planners are adding a post-dinner private show — 30 to 45 minutes that nobody saw coming. It's becoming the moment guests talk about for months.</p>
+<p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">3. Entertainment as branding.</strong> Corporate clients are using personalized magic — custom reveals tied to product launches, company milestones, or key messages woven into the performance.</p>
+<p style="margin:0 0 18px;">Happy to share how any of these could work for your upcoming events.</p>
+${bookCallCTA()}
+${signoff(true)}
+</td></tr>`;
+    },
+  },
+  // Issue 2 — Mar 15 — Behind the Curtain: Rolls-Royce launch
+  {
+    subjectA: "What 150 guests at a Rolls-Royce launch experienced",
+    subjectB: "Nobody wanted to leave",
+    preheader: "Behind the scenes of a recent event.",
+    body: (name, _company, _city) => {
+      return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
+<p style="margin:0 0 18px;">Hey ${name},</p>
+<p style="margin:0 0 18px;">Quick story from a recent event:</p>
+<p style="margin:0 0 18px;">Rolls-Royce hosted a private unveiling for 150 guests. The brief was simple: keep people engaged during cocktails so they're energized for the reveal. No stage. No microphone. Just intimate, one-on-one moments that made each guest feel like the VIP.</p>
+<p style="margin:0 0 18px;">By the time the car was unveiled, the room was electric. The event director told us guests were still talking about the magic at the after-party — not the car.</p>
+<p style="margin:0 0 18px;">That's the thing. Great entertainment doesn't compete with your event. It amplifies it.</p>
+<p style="margin:0 0 18px;">If you've got something this spring where the energy needs to be dialed in from minute one, I'd love to chat.</p>
+${bookCallCTA()}
+${signoff(true)}
+</td></tr>`;
+    },
+  },
+  // Issue 3 — Apr 1 — Event Intel: Cocktail hour reinvention
+  {
+    subjectA: "Cocktail hours are getting a serious upgrade",
+    subjectB: "The cocktail hour problem, solved",
+    preheader: "Stop losing guests to their phones.",
+    body: (name, _company, _city) => {
+      return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
+<p style="margin:0 0 18px;">${name},</p>
+<p style="margin:0 0 18px;">I talk to planners every week and the same problem keeps coming up: cocktail hour falls flat. Guests cluster into familiar groups, energy dips, phones come out.</p>
+<p style="margin:0 0 18px;">The fix isn't louder music or more passed apps. It's giving people a reason to lean in.</p>
+<p style="margin:0 0 18px;">Roaming close-up magic does something no other format can: it creates natural conversation between strangers. One impossibility, and suddenly the couple from table 4 is laughing with the CEO's wife. That chemistry carries through the rest of the night.</p>
+<p style="margin:0 0 18px;">The best part for you? It requires zero setup, no AV, no stage, no coordination. We just show up and make rooms come alive.</p>
+<p style="margin:0 0 18px;">Worth exploring for your next cocktail reception?</p>
+${bookCallCTA()}
+${signoff(true)}
+</td></tr>`;
+    },
+  },
+  // Issue 4 — Apr 15 — Behind the Curtain: Private dinner show
+  {
+    subjectA: "A private dinner show for 30",
+    subjectB: "The after-dinner surprise that changed the night",
+    preheader: "When intimate means unforgettable.",
+    body: (name, _company, _city) => {
+      return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
+<p style="margin:0 0 18px;">Hey ${name},</p>
+<p style="margin:0 0 18px;">Last month we did something special: a private parlor show for 30 guests after a sit-down dinner at a home in Bel Air.</p>
+<p style="margin:0 0 18px;">The host wanted something that felt exclusive — not a performance, but an experience. We set up emerald curtains, warm lighting, and a curated 45-minute show in their living room. No stage. Guests were three feet away.</p>
+<p style="margin:0 0 18px;">At the end, one guest turned to the host and said: "This is the best party I've ever been to." The host forwarded that text to us the next morning.</p>
+<p style="margin:0 0 18px;">Private parlor shows work beautifully for intimate dinners, milestone celebrations, and client appreciation events. If you've got something like that on your calendar, I'd love to show you what's possible.</p>
+${bookCallCTA()}
+${signoff(true)}
+</td></tr>`;
+    },
+  },
+  // Issue 5 — May 1 — Event Intel: Summer gala planning
+  {
+    subjectA: "Summer gala season starts now",
+    subjectB: "What top planners are booking for summer",
+    preheader: "The best summer events get booked in spring.",
+    body: (name, _company, _city) => {
+      return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
+<p style="margin:0 0 18px;">Hey ${name},</p>
+<p style="margin:0 0 18px;">May means summer events are being locked in right now. If you're planning galas, fundraisers, or client appreciation events for June through August, here's what's working:</p>
+<p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">Outdoor cocktail + indoor show.</strong> Start with roaming magic during an outdoor cocktail hour, then move guests inside for a curated 45-minute private show. The transition creates natural energy and keeps the evening building.</p>
+<p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">The "un-gala" gala.</strong> More hosts are ditching traditional formats. Instead of a keynote nobody remembers, they're adding experiences that guests can't stop talking about. Magic replaces the speaker slot, and engagement goes through the roof.</p>
+<p style="margin:0 0 18px;">Summer dates fill fast. If you're even considering adding entertainment to an upcoming event, now's the time to lock it in.</p>
+${bookCallCTA()}
+${signoff(true)}
+</td></tr>`;
+    },
+  },
+  // Issue 6 — May 15 — Behind the Curtain: Rivian retreat
+  {
+    subjectA: "Entertainment at a Rivian leadership retreat",
+    subjectB: "When the CEO won't stop talking about it",
+    preheader: "Corporate events don't have to be boring.",
+    body: (name, _company, _city) => {
+      return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
+<p style="margin:0 0 18px;">Hey ${name},</p>
+<p style="margin:0 0 18px;">Corporate retreats usually follow the same formula: team building, strategy sessions, group dinner, everyone checks out by 9pm.</p>
+<p style="margin:0 0 18px;">When Rivian booked us for their leadership retreat, they wanted something different for the evening event. No keynote. No trivia. Just an experience that felt surprising and elevated.</p>
+<p style="margin:0 0 18px;">We performed close-up magic during cocktails, then transitioned into a 40-minute private show. The CEO later told the event organizer it was the highlight of the entire retreat — and they'd already spent six figures on the programming.</p>
+<p style="margin:0 0 18px;">If you're planning a corporate retreat or leadership event this summer, this is the kind of addition that gets you remembered. Not just by the attendees — by the person who signs off on next year's budget.</p>
+${bookCallCTA()}
+${signoff(true)}
+</td></tr>`;
+    },
+  },
+  // Issue 7 — Jun 1 — Steal This Idea: Wedding entertainment
+  {
+    subjectA: "Steal this idea: wedding entertainment beyond the DJ",
+    subjectB: "The wedding vendor nobody expected",
+    preheader: "An idea your couples will love.",
+    body: (name, _company, _city) => {
+      return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
+<p style="margin:0 0 18px;">Hey ${name},</p>
+<p style="margin:0 0 18px;">Here's an idea you can pitch to your next couple:</p>
+<p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">Cocktail hour magic.</strong> That 60-90 minute gap between ceremony and reception? Instead of leaving guests to fend for themselves with a cheese board, add roaming close-up magic. It breaks the ice between families meeting for the first time, keeps energy high, and gives guests something to buzz about before dinner even starts.</p>
+<p style="margin:0 0 18px;">One wedding planner told me: "It's the one vendor every single guest comments on. Not the flowers. Not the cake. The magician."</p>
+<p style="margin:0 0 18px;">It's also one of the easiest additions to your lineup — no setup, no AV, no coordination with other vendors. We just show up and make the cocktail hour unforgettable.</p>
+<p style="margin:0 0 18px;">Wedding season is here. If you've got couples still building their vendor lineup, this is worth a conversation.</p>
+${bookCallCTA()}
+${signoff(true)}
+</td></tr>`;
+    },
+  },
+  // Issue 8 — Jun 15 — Behind the Curtain: Taittinger dinner
+  {
+    subjectA: "What happened at a Taittinger champagne dinner",
+    subjectB: "Champagne, cards, and 40 guests",
+    preheader: "Luxury meets wonder.",
+    body: (name, _company, _city) => {
+      return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
+<p style="margin:0 0 18px;">Hey ${name},</p>
+<p style="margin:0 0 18px;">Taittinger hosted an intimate champagne dinner for 40 guests. The brief: elevate the evening without overshadowing the brand. Subtle, sophisticated, unforgettable.</p>
+<p style="margin:0 0 18px;">We performed close-up magic tableside between courses. Each interaction was 3-4 minutes — just long enough to create a genuine moment of wonder, then move on before it felt like a show.</p>
+<p style="margin:0 0 18px;">The brand manager told us afterward: "You matched the energy of the room perfectly. It felt like you were part of the evening, not performing at it."</p>
+<p style="margin:0 0 18px;">That's the goal every time. Not to be the entertainment — to be the reason the evening felt different.</p>
+<p style="margin:0 0 18px;">If you've got a luxury dinner or brand event where the details matter, I'd love to talk about what that looks like.</p>
+${bookCallCTA()}
+${signoff(true)}
+</td></tr>`;
+    },
+  },
+  // Issue 9 — Jul 1 — Event Intel: Q4 pre-planning
+  {
+    subjectA: "Smart planners are booking Q4 now",
+    subjectB: "Holiday party season fills up fast",
+    preheader: "The best holiday events are planned in summer.",
+    body: (name, _company, _city) => {
+      return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
+<p style="margin:0 0 18px;">Hey ${name},</p>
+<p style="margin:0 0 18px;">I know it's July, but the planners who lock in entertainment now are the ones whose holiday events actually stand out. Every year, I'm fully booked by mid-October.</p>
+<p style="margin:0 0 18px;">Here's what I'm seeing for Q4 2026:</p>
+<p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">Corporate holiday parties</strong> are getting more experiential. Roaming magic + a private show after dinner is becoming the go-to format for companies that want their team event to actually feel special.</p>
+<p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">Client appreciation dinners</strong> are replacing generic gifts with memorable experiences. One night of magic creates more goodwill than a holiday basket.</p>
+<p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">New Year's Eve events</strong> book earliest. If you've got NYE on your calendar, now's the time.</p>
+<p style="margin:0 0 18px;">Want to get ahead? Lock in a date now and we'll figure out the format later.</p>
+${bookCallCTA()}
+${signoff(true)}
+</td></tr>`;
+    },
+  },
+  // Issue 10 — Jul 15 — Behind the Curtain: Hyatt ballroom
+  {
+    subjectA: "200 guests in a Hyatt ballroom",
+    subjectB: "The event highlight nobody planned for",
+    preheader: "When the entertainment becomes the story.",
+    body: (name, _company, _city) => {
+      return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
+<p style="margin:0 0 18px;">Hey ${name},</p>
+<p style="margin:0 0 18px;">A Hyatt property reached out last fall for their annual gala. 200 guests, black tie, high expectations. They'd done live music for years and wanted something fresh.</p>
+<p style="margin:0 0 18px;">We did two sets: roaming magic during cocktails (45 minutes), then a private parlor show in a breakout room after dinner (40 minutes). Guests could choose to attend or stay at the main event — nearly everyone chose the show.</p>
+<p style="margin:0 0 18px;">The event manager said they received more positive feedback about that single evening than any event in the previous three years. They rebooked for this year before the night was over.</p>
+<p style="margin:0 0 18px;">That's the power of adding something nobody saw coming. If you've got a large-format event on your calendar for fall or winter, let's talk about what the right format looks like.</p>
+${bookCallCTA()}
+${signoff(true)}
+${ps(`Save our lookbook for your files: <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-decoration:none;">whiterabbitla.com/deck</a>`)}
+</td></tr>`;
+    },
+  },
+];
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -594,7 +786,7 @@ serve(async (req) => {
               await supabase.from("newsletter_contacts").update({
                 drip_step: newStep,
                 last_emailed_at: now.toISOString(),
-                ...(newStep >= 3 ? { drip_campaign: "planner-done" } : {}),
+                ...(newStep >= 3 ? { drip_campaign: "planner-pulse", drip_step: 0, drip_started_at: now.toISOString() } : {}),
               }).eq("id", contact.id);
               // Log send with A/B variant
               await supabase.from("newsletter_send_log").insert({
@@ -605,6 +797,85 @@ serve(async (req) => {
             }
           } catch (_e) { /* skip */ }
           await new Promise(r => setTimeout(r, 200));
+        }
+      }
+
+      // ── Process PULSE contacts ── Send on 1st and 15th of month
+      const day = now.getDate();
+      const isPulseDay = (day === 1 || day === 15);
+
+      if (isPulseDay) {
+        const todayStr = now.toISOString().split("T")[0];
+        const pulseIndex = PULSE_DATES.indexOf(todayStr);
+
+        if (pulseIndex >= 0) {
+          const { data: pulseContacts } = await supabase
+            .from("newsletter_contacts")
+            .select("*")
+            .eq("drip_campaign", "planner-pulse")
+            .eq("subscribed", true)
+            .lte("drip_step", pulseIndex);
+
+          if (pulseContacts?.length) {
+            for (const contact of pulseContacts) {
+              if (contact.drip_step > pulseIndex) continue;
+
+              const template = PULSE_TEMPLATES[pulseIndex];
+              const pulseVariant = pickVariant();
+              const pulseSubject = getSubject(template, pulseVariant);
+              const firstName = contact.name?.split(" ")[0] || "there";
+              const bodyInner = template.body(firstName, contact.company || "", contact.city || "");
+              const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, 100 + pulseIndex);
+
+              try {
+                const res = await fetch("https://api.resend.com/emails", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
+                  body: JSON.stringify({
+                    from: "Scott Syme | White Rabbit LA <scott.syme@whiterabbitla.com>",
+                    to: [contact.email],
+                    reply_to: "events@whiterabbitla.com",
+                    subject: pulseSubject,
+                    html,
+                    headers: {
+                      "List-Unsubscribe": `<${SITE_URL}/unsubscribe?email=${encodeURIComponent(contact.email)}>, <mailto:events@whiterabbitla.com?subject=Unsubscribe>`,
+                      "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+                    },
+                  }),
+                });
+                if (res.ok) {
+                  sent++;
+                  await supabase.from("newsletter_contacts").update({
+                    drip_step: pulseIndex + 1,
+                    last_emailed_at: now.toISOString(),
+                  }).eq("id", contact.id);
+                  await supabase.from("newsletter_send_log").insert({
+                    campaign_id: `pulse-${pulseIndex}`,
+                    contact_id: contact.id,
+                    ab_variant: pulseVariant,
+                  });
+                }
+              } catch (_e) { /* skip */ }
+              await new Promise(r => setTimeout(r, 200));
+            }
+          }
+        }
+      }
+
+      // ── Move planner-done contacts into pulse ──
+      const { data: doneContacts } = await supabase
+        .from("newsletter_contacts")
+        .select("id")
+        .eq("drip_campaign", "planner-done")
+        .eq("subscribed", true);
+
+      if (doneContacts?.length) {
+        for (const contact of doneContacts) {
+          await supabase.from("newsletter_contacts").update({
+            drip_campaign: "planner-pulse",
+            drip_step: 0,
+            drip_started_at: now.toISOString(),
+          }).eq("id", contact.id);
         }
       }
 
@@ -634,6 +905,16 @@ serve(async (req) => {
         return new Response(JSON.stringify({ subjectA: template.subjectA, subjectB: template.subjectB, preheader: template.preheader, body_html: html, day: WARM_SCHEDULE[stepNum], campaign: "planner-warm" }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
 
+      if (campaign === "planner-pulse") {
+        if (stepNum < 0 || stepNum >= PULSE_TEMPLATES.length) {
+          return new Response(JSON.stringify({ error: `Invalid step (0-${PULSE_TEMPLATES.length - 1})` }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        }
+        const template = PULSE_TEMPLATES[stepNum];
+        const innerHtml = template.body("Sarah", "Stellar Events", "Los Angeles");
+        const html = wrapEmail(template.preheader, innerHtml, "preview@example.com");
+        return new Response(JSON.stringify({ subjectA: template.subjectA, subjectB: template.subjectB, preheader: template.preheader, body_html: html, date: PULSE_DATES[stepNum], campaign: "planner-pulse" }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+
       if (campaign === "breakup") {
         const innerHtml = BREAKUP_TEMPLATE.body("Sarah", "Stellar Events", "Los Angeles");
         const html = wrapEmail(BREAKUP_TEMPLATE.preheader, innerHtml, "preview@example.com");
@@ -660,7 +941,7 @@ serve(async (req) => {
       const { data: contacts } = await supabase
         .from("newsletter_contacts")
         .select("drip_step, subscribed, drip_campaign, engagement_status, reply_detected")
-        .in("drip_campaign", ["planner", "planner-warm", "planner-done"]);
+        .in("drip_campaign", ["planner", "planner-warm", "planner-done", "planner-pulse"]);
 
       const total = contacts?.length || 0;
       const active = contacts?.filter(c => c.subscribed).length || 0;
@@ -671,6 +952,7 @@ serve(async (req) => {
       const warm = contacts?.filter(c => c.engagement_status === "warm" || c.engagement_status === "hot").length || 0;
       const hot = contacts?.filter(c => c.engagement_status === "hot" || c.reply_detected).length || 0;
       const cold = contacts?.filter(c => c.engagement_status === "cold").length || 0;
+      const pulseActive = contacts?.filter(c => c.drip_campaign === "planner-pulse" && c.subscribed).length || 0;
 
       const stepCounts = [0, 0, 0, 0, 0];
       contacts?.forEach(c => {
@@ -742,7 +1024,7 @@ serve(async (req) => {
 
       return new Response(JSON.stringify({
         total, active, unsubscribed, completed, stepCounts,
-        plannerActive, warmActive,
+        plannerActive, warmActive, pulseActive,
         engagement: { warm, hot, cold },
         clicks: { total: totalClicks || 0, uniqueContacts: uniqueClickerCount },
         opens: { total: totalOpens, uniqueContacts: uniqueOpenerCount, rate: openRate, perStep: stepOpens },
@@ -779,6 +1061,12 @@ serve(async (req) => {
         }
         template = WARM_TEMPLATES[stepNum];
         subjectPrefix = "[TEST WARM] ";
+      } else if (campaign === "planner-pulse") {
+        if (stepNum < 0 || stepNum >= PULSE_TEMPLATES.length) {
+          return new Response(JSON.stringify({ error: `Invalid step (0-${PULSE_TEMPLATES.length - 1})` }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        }
+        template = PULSE_TEMPLATES[stepNum];
+        subjectPrefix = "[TEST PULSE] ";
       } else if (campaign === "breakup") {
         template = BREAKUP_TEMPLATE;
         subjectPrefix = "[TEST BREAKUP] ";
@@ -833,7 +1121,7 @@ serve(async (req) => {
       const { data: contacts } = await supabase
         .from("newsletter_contacts")
         .select("id, email, name, company, city, drip_step, drip_campaign, engagement_status, subscribed, reply_detected, last_emailed_at, created_at")
-        .in("drip_campaign", ["planner", "planner-warm", "planner-done"])
+        .in("drip_campaign", ["planner", "planner-warm", "planner-done", "planner-pulse"])
         .order("created_at", { ascending: false });
 
       return new Response(JSON.stringify({ contacts: contacts || [] }), {
