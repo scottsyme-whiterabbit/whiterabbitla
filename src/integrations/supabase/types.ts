@@ -325,13 +325,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "newsletter_send_log_campaign_id_fkey"
-            columns: ["campaign_id"]
-            isOneToOne: false
-            referencedRelation: "newsletter_campaigns"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "newsletter_send_log_contact_id_fkey"
             columns: ["contact_id"]
             isOneToOne: false
