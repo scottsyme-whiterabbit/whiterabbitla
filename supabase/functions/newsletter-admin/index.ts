@@ -137,6 +137,24 @@ serve(async (req) => {
         }
       }
 
+      case "delete_contact": {
+        const { contactId } = payload;
+        if (!contactId) {
+          return new Response(JSON.stringify({ error: "contactId required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        // Delete related records first, then the contact
+        await supabase.from("newsletter_clicks").delete().eq("contact_id", contactId);
+        await supabase.from("newsletter_opens").delete().eq("contact_id", contactId);
+        await supabase.from("newsletter_send_log").delete().eq("contact_id", contactId);
+        const { error: delErr } = await supabase.from("newsletter_contacts").delete().eq("id", contactId);
+        if (delErr) throw delErr;
+        return new Response(JSON.stringify({ success: true }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       case "delete_campaign": {
         const { campaignId } = payload;
         const { error } = await supabase

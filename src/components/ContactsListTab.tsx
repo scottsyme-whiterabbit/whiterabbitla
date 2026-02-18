@@ -1,5 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
-import { Search, Users, Flame, ThermometerSun, Snowflake, UserX, ChevronDown, ChevronUp, MousePointerClick, Eye } from "lucide-react";
+import { Search, Users, Flame, ThermometerSun, Snowflake, UserX, ChevronDown, ChevronUp, MousePointerClick, Eye, Trash2 } from "lucide-react";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -61,6 +65,8 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
   const [loadingActivity, setLoadingActivity] = useState<string | null>(null);
   const [activityTab, setActivityTab] = useState<"opens" | "clicks">("opens");
   const [openedContactIds, setOpenedContactIds] = useState<Set<string>>(new Set());
+  const [deleteTarget, setDeleteTarget] = useState<Contact | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const loadContacts = useCallback(async () => {
     setLoading(true);
@@ -137,6 +143,25 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
     }
   };
 
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${SUPABASE_KEY}` },
+        body: JSON.stringify({ action: "delete_contact", adminPassword: storedPassword, contactId: deleteTarget.id }),
+      });
+      if (!res.ok) throw new Error("Delete failed");
+      setContacts(prev => prev.filter(c => c.id !== deleteTarget.id));
+      setDeleteTarget(null);
+    } catch (e) {
+      console.error("Failed to delete contact:", e);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   const filtered = contacts.filter(c => {
     if (filter === "unsubscribed" && c.subscribed) return false;
     if (filter === "hot" && (c.engagement_status !== "hot" || !c.subscribed)) return false;
@@ -179,6 +204,7 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
   };
 
   return (
+    <>
     <div className="space-y-6">
       {/* Filter Pills */}
       <div className="flex flex-wrap gap-2">
@@ -236,6 +262,7 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
               <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Campaign</th>
               <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Step</th>
               <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Last Emailed</th>
+              <th className="w-10 p-3"></th>
             </tr>
           </thead>
           <tbody>
@@ -272,10 +299,19 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
                     <td className="p-3 text-muted-foreground text-xs">
                       {c.last_emailed_at ? new Date(c.last_emailed_at).toLocaleDateString() : "Never"}
                     </td>
+                    <td className="p-3">
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setDeleteTarget(c); }}
+                        className="text-muted-foreground hover:text-red-400 transition-colors"
+                        title="Delete contact"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </td>
                   </tr>
                   {isExpanded && (
                     <tr key={`${c.id}-activity`} className="border-b border-border/50">
-                      <td colSpan={9} className="p-0">
+                      <td colSpan={10} className="p-0">
                         <div className="bg-accent/5 px-6 py-4">
                           {/* Activity tabs */}
                           <div className="flex gap-4 mb-3">
@@ -346,7 +382,7 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
             })}
             {!filtered.length && (
               <tr>
-                <td colSpan={9} className="p-8 text-center text-muted-foreground">
+                <td colSpan={10} className="p-8 text-center text-muted-foreground">
                   {search ? "No contacts match your search." : "No contacts found."}
                 </td>
               </tr>
@@ -355,6 +391,29 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
         </table>
       </div>
     </div>
+
+    {/* Delete Confirmation */}
+    <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
+      <AlertDialogContent className="bg-background border-border">
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete Contact</AlertDialogTitle>
+          <AlertDialogDescription>
+            Permanently delete <strong>{deleteTarget?.email}</strong>? This removes all their activity data (opens, clicks, send history) and cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel className="border-border">Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={handleDelete}
+            disabled={deleting}
+            className="bg-red-600 hover:bg-red-700 text-white"
+          >
+            {deleting ? "Deleting..." : "Delete"}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+    </>
   );
 };
 
