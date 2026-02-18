@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
-import { Upload, Send, FileText, Users, Mail, RefreshCw, Trash2, Eye, Heart, Download } from "lucide-react";
+import { Upload, Send, FileText, Flame, ThermometerSun, RefreshCw, Trash2, Eye, Heart, Download } from "lucide-react";
 import PlannerDripTab from "@/components/PlannerDripTab";
 import ResidentDripTab from "@/components/ResidentDripTab";
 import ContactsListTab from "@/components/ContactsListTab";
@@ -31,10 +31,20 @@ interface Campaign {
   created_at: string;
 }
 
+interface CampaignStats {
+  subscribers: number;
+  unsubscribed: number;
+  emailsSent: number;
+  hot: number;
+  warm: number;
+}
+
 interface Stats {
   subscribers: number;
   campaigns: number;
   emailsSent: number;
+  planner?: CampaignStats;
+  resident?: CampaignStats;
 }
 
 const AdminNewsletter = () => {
@@ -467,36 +477,90 @@ const AdminNewsletter = () => {
 
         {/* Dashboard */}
         {activeTab === "dashboard" && (
-          <div>
+          <div className="space-y-8">
+            {/* Audience Overview - Side by Side */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Planner Audience */}
+              <div className="border border-border p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-accent">Planners</h3>
+                  <button
+                    onClick={() => { setContactsFilter("all"); setActiveTab("contacts"); }}
+                    className="font-sans text-[10px] tracking-wider uppercase text-muted-foreground hover:text-accent transition-colors"
+                  >
+                    View All →
+                  </button>
+                </div>
+                <p className="font-serif text-4xl text-foreground mb-4">{stats.planner?.subscribers ?? 0}</p>
+                <div className="grid grid-cols-3 gap-3 text-xs font-sans">
+                  <div className="bg-accent/5 px-3 py-2">
+                    <span className="text-muted-foreground block">Emails Sent</span>
+                    <span className="text-foreground font-medium">{stats.planner?.emailsSent ?? 0}</span>
+                  </div>
+                  <div className="bg-accent/5 px-3 py-2">
+                    <span className="flex items-center gap-1 text-muted-foreground"><Flame size={10} className="text-destructive" /> Hot</span>
+                    <span className="text-foreground font-medium">{stats.planner?.hot ?? 0}</span>
+                  </div>
+                  <div className="bg-accent/5 px-3 py-2">
+                    <span className="flex items-center gap-1 text-muted-foreground"><ThermometerSun size={10} className="text-orange-400" /> Warm</span>
+                    <span className="text-foreground font-medium">{stats.planner?.warm ?? 0}</span>
+                  </div>
+                </div>
+                {(stats.planner?.unsubscribed ?? 0) > 0 && (
+                  <p className="text-[10px] text-muted-foreground mt-2">{stats.planner?.unsubscribed} unsubscribed</p>
+                )}
+              </div>
+
+              {/* Apartment Audience */}
+              <div className="border border-border p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-accent">Apartments</h3>
+                  <button
+                    onClick={() => { setContactsFilter("all"); setActiveTab("contacts"); }}
+                    className="font-sans text-[10px] tracking-wider uppercase text-muted-foreground hover:text-accent transition-colors"
+                  >
+                    View All →
+                  </button>
+                </div>
+                <p className="font-serif text-4xl text-foreground mb-4">{stats.resident?.subscribers ?? 0}</p>
+                <div className="grid grid-cols-3 gap-3 text-xs font-sans">
+                  <div className="bg-accent/5 px-3 py-2">
+                    <span className="text-muted-foreground block">Emails Sent</span>
+                    <span className="text-foreground font-medium">{stats.resident?.emailsSent ?? 0}</span>
+                  </div>
+                  <div className="bg-accent/5 px-3 py-2">
+                    <span className="flex items-center gap-1 text-muted-foreground"><Flame size={10} className="text-destructive" /> Hot</span>
+                    <span className="text-foreground font-medium">{stats.resident?.hot ?? 0}</span>
+                  </div>
+                  <div className="bg-accent/5 px-3 py-2">
+                    <span className="flex items-center gap-1 text-muted-foreground"><ThermometerSun size={10} className="text-orange-400" /> Warm</span>
+                    <span className="text-foreground font-medium">{stats.resident?.warm ?? 0}</span>
+                  </div>
+                </div>
+                {(stats.resident?.unsubscribed ?? 0) > 0 && (
+                  <p className="text-[10px] text-muted-foreground mt-2">{stats.resident?.unsubscribed} unsubscribed</p>
+                )}
+              </div>
+            </div>
+
+            {/* Combined totals row */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div
-                className="border border-border p-6 cursor-pointer hover:border-accent/50 transition-colors"
-                onClick={() => { setContactsFilter("all"); setActiveTab("contacts"); }}
-              >
-                <div className="flex items-center gap-3 mb-2">
-                  <Users size={20} className="text-accent" />
-                  <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Subscribers</p>
-                </div>
-                <p className="font-serif text-4xl text-foreground">{stats.subscribers}</p>
+              <div className="border border-border/50 p-4">
+                <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground mb-1">Total Active</p>
+                <p className="font-serif text-2xl text-foreground">{stats.subscribers}</p>
               </div>
-              <div className="border border-border p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <FileText size={20} className="text-accent" />
-                  <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Campaigns</p>
-                </div>
-                <p className="font-serif text-4xl text-foreground">{stats.campaigns}</p>
+              <div className="border border-border/50 p-4">
+                <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground mb-1">Campaigns</p>
+                <p className="font-serif text-2xl text-foreground">{stats.campaigns}</p>
               </div>
-              <div className="border border-border p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <Mail size={20} className="text-accent" />
-                  <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Emails Sent</p>
-                </div>
-                <p className="font-serif text-4xl text-foreground">{stats.emailsSent}</p>
+              <div className="border border-border/50 p-4">
+                <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground mb-1">Total Emails Sent</p>
+                <p className="font-serif text-2xl text-foreground">{stats.emailsSent}</p>
               </div>
             </div>
 
             {/* CSV Tools */}
-            <div className="mt-8 border border-border p-6">
+            <div className="border border-border p-6">
               <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-4">CSV Tools</h3>
               <div className="flex flex-wrap gap-4">
                 <label className="cursor-pointer bg-accent text-accent-foreground px-5 py-2.5 font-sans text-sm tracking-[0.15em] uppercase hover:bg-accent/80 transition-colors flex items-center gap-2">
