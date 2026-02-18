@@ -332,7 +332,7 @@ const PULSE_TEMPLATES: EmailTemplate[] = [
   // Issue 1 — Mar 1 — Event Intel: Spring booking trends
   {
     subjectA: "3 entertainment trends planners are booking this spring",
-    subjectB: "Spring events are changing",
+    subjectB: "The problem with spring events (and the fix)",
     preheader: "What's landing at high-end events right now.",
     body: (name, _company, _city, contactId, step) => {
       const trendLink = contactId
@@ -340,12 +340,13 @@ const PULSE_TEMPLATES: EmailTemplate[] = [
         : `<a href="${SITE_URL}/blog/corporate-entertainment-trends-2026" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">Read more on 2026 trends →</a>`;
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
-<p style="margin:0 0 18px;">Spring is when the best events get booked. Here's what I'm seeing from planners right now:</p>
-<p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">1. Interactive over passive.</strong> Guests want to be part of the experience, not just watch. Roaming close-up magic during cocktails outperforms any stage act for mingling events.</p>
-<p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">2. The "second act" surprise.</strong> More planners are adding a post-dinner private show — 30 to 45 minutes that nobody saw coming. It's becoming the moment guests talk about for months.</p>
-<p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">3. Entertainment as branding.</strong> Corporate clients are using personalized magic — custom reveals tied to product launches, company milestones, or key messages woven into the performance.</p>
+<p style="margin:0 0 18px;">I just wrapped a corporate gala in Scottsdale and a private dinner in Greenwich back to back, and the feedback confirmed something I keep hearing from planners across the country: guests are tired of passive entertainment.</p>
+<p style="margin:0 0 18px;">Here are three shifts I'm seeing this spring:</p>
+<p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">1. Interactive over passive.</strong> Guests want to be part of the experience, not watch from a distance. Roaming close-up magic during cocktails solves the "everyone's on their phone" problem better than any DJ or background band.</p>
+<p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">2. The "second act" surprise.</strong> More planners are adding a post-dinner private show that nobody saw coming. It gives the evening a climax that guests talk about for months.</p>
+<p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">3. Entertainment as branding.</strong> Corporate clients are weaving custom reveals into magic, tying product launches and company milestones into the performance itself.</p>
 <p style="margin:0 0 18px;">${trendLink}</p>
-<p style="margin:0 0 18px;">Happy to share how any of these could work for your upcoming events.</p>
+<p style="margin:0 0 18px;">If any of these sound like problems you're solving for an upcoming event, I'd love to show you how we handle them. We travel nationwide and bring everything we need.</p>
 ${bookCallCTA()}
 ${signoff(true)}
 ${ps(`Not sure which format fits your event? <a href="${APP_URL}/quiz" style="color:#C9A3A8; text-decoration:none;">Take the 35-second quiz</a> · <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-decoration:none;">View our lookbook</a>`)}
@@ -354,21 +355,21 @@ ${ps(`Not sure which format fits your event? <a href="${APP_URL}/quiz" style="co
   },
   // Issue 2 — Mar 15 — Behind the Curtain: Rolls-Royce private unveiling
   {
-    subjectA: "What 30 guests at a Rolls-Royce unveiling experienced",
-    subjectB: "Nobody wanted to leave",
-    preheader: "Behind the scenes of a recent event.",
+    subjectA: "How we solved the 'dead air' problem at a Rolls-Royce unveiling",
+    subjectB: "30 VIP guests, zero dead time",
+    preheader: "The gap between arrival and reveal is where events stall.",
     body: (name, _company, _city, contactId, step) => {
       const articleLink = contactId
         ? trackedLink(`${SITE_URL}/blog/surprise-clients-entertainment-they-didnt-know-they-wanted`, "How surprise entertainment changes an event →", contactId, step ?? 101)
         : `<a href="${SITE_URL}/blog/surprise-clients-entertainment-they-didnt-know-they-wanted" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">How surprise entertainment changes an event →</a>`;
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
-<p style="margin:0 0 18px;">Quick story from a recent event:</p>
-<p style="margin:0 0 18px;">Rolls-Royce hosted a private unveiling for about 30 guests. These were VIP clients who had just finished a special test drive experience, and the brief was simple: keep the energy high during the cocktail hour before the big reveal.</p>
-<p style="margin:0 0 18px;">No stage. No microphone. Just intimate, one-on-one close-up magic that made each guest feel like the only person in the room. By the time the car was unveiled, the room was electric.</p>
-<p style="margin:0 0 18px;">But here's my favorite part: one of the guests was so taken by the experience that she booked me on the spot for her company's employee appreciation event. That's what happens when entertainment feels personal rather than performative.</p>
+<p style="margin:0 0 18px;">Every planner knows the problem: you've got VIP guests arriving, cocktails are flowing, but there's a window before the main event where energy can flatline. Conversations stall. Phones come out.</p>
+<p style="margin:0 0 18px;">Rolls-Royce had exactly this challenge. About 30 VIP clients had just finished a special test drive experience, and there was a cocktail hour before the big vehicle unveiling. The brief: keep the energy high so the room is electric when the car drops.</p>
+<p style="margin:0 0 18px;">We filled that window with intimate, one-on-one close-up magic. No stage. No microphone. Just moments that made each guest feel like the only person in the room. By the time the reveal happened, the energy was already through the roof.</p>
+<p style="margin:0 0 18px;">Here's the part I love: one guest was so taken by the experience that she booked me on the spot for her company's employee appreciation event. That's what happens when entertainment feels personal rather than performative.</p>
 <p style="margin:0 0 18px;">${articleLink}</p>
-<p style="margin:0 0 18px;">If you've got something this spring where the energy needs to be dialed in from minute one, I'd love to chat.</p>
+<p style="margin:0 0 18px;">If you've got an event where there's a gap that needs filling, whether it's a product launch, a corporate reception, or a client dinner, that's exactly the problem we solve. We bring everything we need and travel anywhere in the country.</p>
 ${bookCallCTA()}
 ${signoff(true)}
 ${ps(`Share our lookbook with your client: <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-decoration:none;">whiterabbitla.com/deck</a>`)}
@@ -386,12 +387,12 @@ ${ps(`Share our lookbook with your client: <a href="${SITE_URL}/deck" style="col
         : `<a href="${SITE_URL}/blog/why-cocktail-hour-entertainment-matters" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">Why cocktail hour entertainment matters →</a>`;
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">${name},</p>
-<p style="margin:0 0 18px;">I talk to planners every week and the same problem keeps coming up: cocktail hour falls flat. Guests cluster into familiar groups, energy dips, phones come out.</p>
+<p style="margin:0 0 18px;">Whether I'm performing at a gala in Chicago, a reception in Miami, or a corporate dinner in Napa, the same problem keeps coming up: cocktail hour falls flat. Guests cluster into familiar groups, energy dips, phones come out.</p>
 <p style="margin:0 0 18px;">The fix isn't louder music or more passed apps. It's giving people a reason to lean in.</p>
 <p style="margin:0 0 18px;">Roaming close-up magic does something no other format can: it creates natural conversation between strangers. One impossibility, and suddenly the couple from table 4 is laughing with the CEO's wife. That chemistry carries through the rest of the night.</p>
-<p style="margin:0 0 18px;">The best part for you? It requires zero setup, no AV, no stage, no coordination. We just show up and make rooms come alive.</p>
+<p style="margin:0 0 18px;">The best part for you? It requires zero setup, no AV, no stage, no coordination with other vendors. We show up and make rooms come alive, wherever the event is.</p>
 <p style="margin:0 0 18px;">${articleLink}</p>
-<p style="margin:0 0 18px;">Worth exploring for your next cocktail reception?</p>
+<p style="margin:0 0 18px;">If cocktail hour energy is something you've been trying to solve, let's talk. It's one of the easiest wins you can add to your lineup.</p>
 ${bookCallCTA()}
 ${signoff(true)}
 ${ps(`Find your perfect format: <a href="${APP_URL}/quiz" style="color:#C9A3A8; text-decoration:none;">Take the quiz</a> · <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-decoration:none;">View our lookbook</a>`)}
@@ -400,8 +401,8 @@ ${ps(`Find your perfect format: <a href="${APP_URL}/quiz" style="color:#C9A3A8; 
   },
   // Issue 4 — Apr 15 — Behind the Curtain: Private dinner show
   {
-    subjectA: "A private dinner show for 30",
-    subjectB: "The after-dinner surprise that changed the night",
+    subjectA: "How a Bel Air dinner party turned into the 'best party ever'",
+    subjectB: "The after-dinner problem most hosts don't solve",
     preheader: "When intimate means unforgettable.",
     body: (name, _company, _city, contactId, step) => {
       const articleLink = contactId
@@ -409,11 +410,11 @@ ${ps(`Find your perfect format: <a href="${APP_URL}/quiz" style="color:#C9A3A8; 
         : `<a href="${SITE_URL}/blog/planning-private-party-los-angeles" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">Guide to private party entertainment →</a>`;
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
-<p style="margin:0 0 18px;">Last month we did something special: a private parlor show for 30 guests after a sit-down dinner at a home in Bel Air.</p>
-<p style="margin:0 0 18px;">The host wanted something that felt exclusive. We set up emerald curtains, warm lighting, and a curated 45-minute show in their living room. No stage. Guests were three feet away.</p>
+<p style="margin:0 0 18px;">Here's a problem that comes up a lot with intimate events: after dinner wraps, the night loses momentum. Guests start checking the time. The host can feel it.</p>
+<p style="margin:0 0 18px;">Last month we solved this at a private dinner for 30 in Bel Air. The host wanted something that felt exclusive, so we set up emerald curtains, warm lighting, and a curated 45-minute parlor show in their living room. No stage. Guests were three feet away.</p>
 <p style="margin:0 0 18px;">At the end, one guest turned to the host and said: "This is the best party I've ever been to." The host forwarded that text to us the next morning.</p>
 <p style="margin:0 0 18px;">${articleLink}</p>
-<p style="margin:0 0 18px;">Private parlor shows work beautifully for intimate dinners, milestone celebrations, and client appreciation events. If you've got something like that on your calendar, I'd love to show you what's possible.</p>
+<p style="margin:0 0 18px;">Private parlor shows work beautifully for intimate dinners, milestone celebrations, and client appreciation events, anywhere in the country. If you've got something like that on your calendar, I'd love to show you what's possible.</p>
 ${bookCallCTA()}
 ${signoff(true)}
 ${ps(`Save our lookbook for your files: <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-decoration:none;">whiterabbitla.com/deck</a>`)}
@@ -422,8 +423,8 @@ ${ps(`Save our lookbook for your files: <a href="${SITE_URL}/deck" style="color:
   },
   // Issue 5 — May 1 — Event Intel: Summer gala planning
   {
-    subjectA: "Summer gala season starts now",
-    subjectB: "What top planners are booking for summer",
+    subjectA: "The summer event problem nobody talks about",
+    subjectB: "What top planners are booking for summer (and why)",
     preheader: "The best summer events get booked in spring.",
     body: (name, _company, _city, contactId, step) => {
       const articleLink = contactId
@@ -431,11 +432,12 @@ ${ps(`Save our lookbook for your files: <a href="${SITE_URL}/deck" style="color:
         : `<a href="${SITE_URL}/blog/how-to-choose-entertainment-for-luxury-event" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">How to choose entertainment for a luxury event →</a>`;
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
-<p style="margin:0 0 18px;">May means summer events are being locked in right now. If you're planning galas, fundraisers, or client appreciation events for June through August, here's what's working:</p>
+<p style="margin:0 0 18px;">May means summer events are being locked in. Whether you're producing a fundraiser in Dallas, a retreat in Park City, or a company party in Boston, here's the problem I keep solving:</p>
+<p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">The "same-as-last-year" trap.</strong> Guests remember when an event felt exactly like the one before. The planners who stand out are the ones who add one unexpected element that nobody saw coming.</p>
 <p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">Outdoor cocktail + indoor show.</strong> Start with roaming magic during an outdoor cocktail hour, then move guests inside for a curated 45-minute private show. The transition creates natural energy and keeps the evening building.</p>
 <p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">The "un-gala" gala.</strong> More hosts are ditching traditional formats. Instead of a keynote nobody remembers, they're adding experiences that guests can't stop talking about.</p>
 <p style="margin:0 0 18px;">${articleLink}</p>
-<p style="margin:0 0 18px;">Summer dates fill fast. If you're even considering adding entertainment to an upcoming event, now's the time to lock it in.</p>
+<p style="margin:0 0 18px;">Summer dates fill fast, especially for destination events. If you're even considering adding entertainment, now's the time to lock it in. We travel nationwide and handle all logistics.</p>
 ${bookCallCTA()}
 ${signoff(true)}
 ${ps(`Not sure which format fits? <a href="${APP_URL}/quiz" style="color:#C9A3A8; text-decoration:none;">Take the 35-second quiz</a> · <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-decoration:none;">View our lookbook</a>`)}
@@ -444,8 +446,8 @@ ${ps(`Not sure which format fits? <a href="${APP_URL}/quiz" style="color:#C9A3A8
   },
   // Issue 6 — May 15 — Behind the Curtain: Rivian retreat in Joshua Tree
   {
-    subjectA: "Magic under the stars at a Rivian retreat",
-    subjectB: "The highlight of the retreat",
+    subjectA: "How we solved the 'everyone's scattered' problem at a Rivian retreat",
+    subjectB: "The highlight of a Joshua Tree retreat",
     preheader: "An outdoor cocktail hour nobody wanted to end.",
     body: (name, _company, _city, contactId, step) => {
       const articleLink = contactId
@@ -453,12 +455,12 @@ ${ps(`Not sure which format fits? <a href="${APP_URL}/quiz" style="color:#C9A3A8
         : `<a href="${SITE_URL}/blog/entertainment-gap-planners-dont-know" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">The entertainment gap most planners miss →</a>`;
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
-<p style="margin:0 0 18px;">One of my favorite events last year was a Rivian retreat in Joshua Tree for their referral partners.</p>
-<p style="margin:0 0 18px;">The setting was incredible: an outdoor cocktail hour under the desert sky with live music, a bonfire, and Alpha Gatos. My job was to roam through the crowd during cocktails, creating intimate moments of close-up magic between small groups.</p>
-<p style="margin:0 0 18px;">The team leader of events for Rivian pulled me aside afterward and told me the magic was the highlight of the entire retreat. When you're competing with a Joshua Tree sunset, a bonfire, and live music for that title, it means something.</p>
-<p style="margin:0 0 18px;">That's what close-up magic does at its best. It doesn't need a stage or a spotlight. It just needs people, and the right moment.</p>
+<p style="margin:0 0 18px;">Corporate retreats have a specific challenge: you've got people who may not know each other well, an outdoor setting with lots of space, and a cocktail hour where guests can easily drift apart. If you're not intentional about it, the energy never comes together.</p>
+<p style="margin:0 0 18px;">Rivian flew me out to Joshua Tree for a retreat with their referral partners. The scene: an outdoor cocktail hour under the desert sky with live music, a bonfire, and affogatos. Beautiful, but spread out.</p>
+<p style="margin:0 0 18px;">My job was to roam through the crowd during cocktails, creating intimate moments of close-up magic between small groups. It gave people a shared experience, a reason to cluster together, something to talk about besides work.</p>
+<p style="margin:0 0 18px;">The team leader of events for Rivian told me afterward that the magic was the highlight of the entire retreat. When you're competing with a Joshua Tree sunset and a bonfire for that title, it means something.</p>
 <p style="margin:0 0 18px;">${articleLink}</p>
-<p style="margin:0 0 18px;">If you're planning a corporate retreat or offsite this summer, I'd love to talk about how we could make an evening like that happen.</p>
+<p style="margin:0 0 18px;">If you're planning a corporate retreat, offsite, or incentive trip this summer, I'd love to talk about how we solve the "scattered energy" problem. We travel anywhere in the country for the right event.</p>
 ${bookCallCTA()}
 ${signoff(true)}
 ${ps(`Share our lookbook with your team: <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-decoration:none;">whiterabbitla.com/deck</a>`)}
@@ -467,8 +469,8 @@ ${ps(`Share our lookbook with your team: <a href="${SITE_URL}/deck" style="color
   },
   // Issue 7 — Jun 1 — Steal This Idea: Wedding entertainment
   {
-    subjectA: "Steal this idea: wedding entertainment beyond the DJ",
-    subjectB: "The wedding vendor nobody expected",
+    subjectA: "The wedding vendor gap your couples don't know they have",
+    subjectB: "The easiest vendor add your couples will love",
     preheader: "An idea your couples will love.",
     body: (name, _company, _city, contactId, step) => {
       const articleLink = contactId
@@ -476,12 +478,12 @@ ${ps(`Share our lookbook with your team: <a href="${SITE_URL}/deck" style="color
         : `<a href="${SITE_URL}/blog/wedding-entertainment-beyond-the-dj" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">Wedding entertainment ideas that wow →</a>`;
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
-<p style="margin:0 0 18px;">Here's an idea you can pitch to your next couple:</p>
-<p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">Cocktail hour magic.</strong> That 60-90 minute gap between ceremony and reception? Instead of leaving guests to fend for themselves with a cheese board, add roaming close-up magic. It breaks the ice between families meeting for the first time, keeps energy high, and gives guests something to buzz about before dinner even starts.</p>
-<p style="margin:0 0 18px;">One wedding planner told me: "It's the one vendor every single guest comments on. Not the flowers. Not the cake. The magician."</p>
-<p style="margin:0 0 18px;">It's also one of the easiest additions to your lineup. No setup, no AV, no coordination with other vendors.</p>
+<p style="margin:0 0 18px;">Here's a problem every wedding planner knows: that 60-90 minute gap between ceremony and reception. Guests cluster into familiar groups. The couple is off doing photos. Energy flatlines.</p>
+<p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">The fix:</strong> Roaming close-up magic during cocktail hour. It breaks the ice between families meeting for the first time, keeps energy high, and gives guests something to buzz about before dinner even starts.</p>
+<p style="margin:0 0 18px;">One wedding planner told me: "It's the one vendor every single guest comments on. Not the flowers. Not the cake. The magician." I've performed at weddings from Napa to Nashville to the Hamptons, and the feedback is always the same.</p>
+<p style="margin:0 0 18px;">It's also one of the easiest additions to your vendor lineup. No setup, no AV, no coordination needed. We just show up and make the room come alive.</p>
 <p style="margin:0 0 18px;">${articleLink}</p>
-<p style="margin:0 0 18px;">Wedding season is here. If you've got couples still building their vendor lineup, this is worth a conversation.</p>
+<p style="margin:0 0 18px;">Wedding season is here. If you've got couples still building their vendor lineup, this is worth a conversation. We travel to destination weddings nationwide.</p>
 ${bookCallCTA()}
 ${signoff(true)}
 ${ps(`Find the right format: <a href="${APP_URL}/quiz" style="color:#C9A3A8; text-decoration:none;">Take the quiz</a> · <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-decoration:none;">View our lookbook</a>`)}
@@ -490,8 +492,8 @@ ${ps(`Find the right format: <a href="${APP_URL}/quiz" style="color:#C9A3A8; tex
   },
   // Issue 8 — Jun 15 — Behind the Curtain: Taittinger dinner
   {
-    subjectA: "What happened at a Taittinger champagne dinner",
-    subjectB: "Champagne, cards, and 40 guests",
+    subjectA: "The fine line between too much and just right",
+    subjectB: "How Taittinger solved their luxury dinner problem",
     preheader: "Luxury meets wonder.",
     body: (name, _company, _city, contactId, step) => {
       const articleLink = contactId
@@ -499,12 +501,12 @@ ${ps(`Find the right format: <a href="${APP_URL}/quiz" style="color:#C9A3A8; tex
         : `<a href="${SITE_URL}/blog/how-to-vet-magician-high-end-event" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">How to vet a magician for high-end events →</a>`;
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
-<p style="margin:0 0 18px;">Taittinger hosted an intimate champagne dinner for 40 guests. The brief: elevate the evening without overshadowing the brand. Subtle, sophisticated, unforgettable.</p>
-<p style="margin:0 0 18px;">We performed close-up magic tableside between courses. Each interaction was 3-4 minutes — just long enough to create a genuine moment of wonder, then move on before it felt like a show.</p>
+<p style="margin:0 0 18px;">Here's a problem that comes up with luxury brand events: you want entertainment that elevates the evening, but you can't risk anything that feels cheesy, disruptive, or off-brand. The line between memorable and embarrassing is razor thin.</p>
+<p style="margin:0 0 18px;">Taittinger faced this exact challenge at an intimate champagne dinner for 40 guests. The brief: elevate without overshadowing the brand. Subtle, sophisticated, unforgettable.</p>
+<p style="margin:0 0 18px;">We performed close-up magic tableside between courses. Each interaction was 3-4 minutes, just long enough to create a genuine moment of wonder, then move on before it felt like a show.</p>
 <p style="margin:0 0 18px;">The brand manager told us afterward: "You matched the energy of the room perfectly. It felt like you were part of the evening, not performing at it."</p>
-<p style="margin:0 0 18px;">That's the goal every time. Not to be the entertainment — to be the reason the evening felt different.</p>
 <p style="margin:0 0 18px;">${articleLink}</p>
-<p style="margin:0 0 18px;">If you've got a luxury dinner or brand event where the details matter, I'd love to talk about what that looks like.</p>
+<p style="margin:0 0 18px;">If you've got a luxury dinner, brand activation, or client event where tone matters as much as content, that's exactly the problem we solve. Based in Los Angeles, available anywhere in the country.</p>
 ${bookCallCTA()}
 ${signoff(true)}
 ${ps(`Save our lookbook: <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-decoration:none;">whiterabbitla.com/deck</a>`)}
@@ -513,7 +515,7 @@ ${ps(`Save our lookbook: <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-d
   },
   // Issue 9 — Jul 1 — Event Intel: Q4 pre-planning
   {
-    subjectA: "Smart planners are booking Q4 now",
+    subjectA: "The Q4 booking problem starts now",
     subjectB: "Holiday party season fills up fast",
     preheader: "The best holiday events are planned in summer.",
     body: (name, _company, _city, contactId, step) => {
@@ -522,13 +524,13 @@ ${ps(`Save our lookbook: <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-d
         : `<a href="${SITE_URL}/blog/why-event-planners-adding-magician-vendor-list" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">Why planners are adding magic to their vendor list →</a>`;
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
-<p style="margin:0 0 18px;">I know it's July, but the planners who lock in entertainment now are the ones whose holiday events actually stand out. Every year, I'm fully booked by mid-October.</p>
-<p style="margin:0 0 18px;">Here's what I'm seeing for Q4 2026:</p>
+<p style="margin:0 0 18px;">I know it's July, but here's the problem: by mid-October, my calendar for Q4 is full. Every year, planners reach out in November and I'm already booked, whether it's a holiday party in Chicago, a year-end gala in New York, or an appreciation dinner in Scottsdale.</p>
+<p style="margin:0 0 18px;">Here's what's landing for Q4 2026:</p>
 <p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">Corporate holiday parties</strong> are getting more experiential. Roaming magic + a private show after dinner is becoming the go-to format for companies that want their team event to actually feel special.</p>
 <p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">Client appreciation dinners</strong> are replacing generic gifts with memorable experiences. One night of magic creates more goodwill than a holiday basket.</p>
 <p style="margin:0 0 18px;"><strong style="color:#F5F0E8;">New Year's Eve events</strong> book earliest. If you've got NYE on your calendar, now's the time.</p>
 <p style="margin:0 0 18px;">${articleLink}</p>
-<p style="margin:0 0 18px;">Want to get ahead? Lock in a date now and we'll figure out the format later.</p>
+<p style="margin:0 0 18px;">The fix is simple: lock in a date now and we'll figure out the format later. We travel nationwide, so location is never an issue.</p>
 ${bookCallCTA()}
 ${signoff(true)}
 ${ps(`Find your format: <a href="${APP_URL}/quiz" style="color:#C9A3A8; text-decoration:none;">Take the quiz</a> · <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-decoration:none;">View our lookbook</a>`)}
@@ -537,7 +539,7 @@ ${ps(`Find your format: <a href="${APP_URL}/quiz" style="color:#C9A3A8; text-dec
   },
   // Issue 10 — Jul 15 — Behind the Curtain: Hyatt ballroom
   {
-    subjectA: "200 guests in a Hyatt ballroom",
+    subjectA: "How a Hyatt property solved their 'same event, every year' problem",
     subjectB: "The event highlight nobody planned for",
     preheader: "When the entertainment becomes the story.",
     body: (name, _company, _city, contactId, step) => {
@@ -546,11 +548,12 @@ ${ps(`Find your format: <a href="${APP_URL}/quiz" style="color:#C9A3A8; text-dec
         : `<a href="${SITE_URL}/blog/not-kids-birthday-party-modern-magic" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">What modern magic actually looks like →</a>`;
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
-<p style="margin:0 0 18px;">A Hyatt property reached out last fall for their annual gala. 200 guests, black tie, high expectations. They'd done live music for years and wanted something fresh.</p>
-<p style="margin:0 0 18px;">We did two sets: roaming magic during cocktails (45 minutes), then a private parlor show in a breakout room after dinner (40 minutes). Guests could choose to attend or stay at the main event — nearly everyone chose the show.</p>
+<p style="margin:0 0 18px;">Here's a problem that comes up every year for venue and hotel event teams: the annual gala feels stale. Same format, same band, same feedback. "It was nice." Nobody's raving about it.</p>
+<p style="margin:0 0 18px;">A Hyatt property reached out with exactly this challenge. 200 guests, black tie, high expectations. They'd done live music for years and needed something that would actually generate buzz.</p>
+<p style="margin:0 0 18px;">We did two sets: roaming magic during cocktails (45 minutes), then a private parlor show in a breakout room after dinner (40 minutes). Guests could choose to attend or stay at the main event. Nearly everyone chose the show.</p>
 <p style="margin:0 0 18px;">The event manager said they received more positive feedback about that single evening than any event in the previous three years. They rebooked for this year before the night was over.</p>
 <p style="margin:0 0 18px;">${articleLink}</p>
-<p style="margin:0 0 18px;">That's the power of adding something nobody saw coming. If you've got a large-format event on your calendar for fall or winter, let's talk about what the right format looks like.</p>
+<p style="margin:0 0 18px;">If you've got a large-format event on your calendar for fall or winter that needs to feel different from last year, that's the problem we solve. We perform at events across the country, from hotel ballrooms to private estates.</p>
 ${bookCallCTA()}
 ${signoff(true)}
 ${ps(`Save our lookbook for your files: <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-decoration:none;">whiterabbitla.com/deck</a>`)}
