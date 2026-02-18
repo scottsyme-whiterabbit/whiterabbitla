@@ -81,7 +81,7 @@ serve(async (req) => {
           // Personalize the email
           let html = campaign.body_html
             .replace(/\{\{NAME\}\}/g, contact.name || "there")
-            .replace(/\{\{UNSUBSCRIBE_LINK\}\}/g, `https://whiterabbitla.lovable.app/unsubscribe?email=${encodeURIComponent(contact.email)}`);
+            .replace(/\{\{UNSUBSCRIBE_LINK\}\}/g, `https://whiterabbitla.com/unsubscribe?email=${encodeURIComponent(contact.email)}`);
 
           // Inject open tracking pixel
           const openPixel = `<img src="https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-open?cid=${contact.id}&step=0&cam=${campaignId}" width="1" height="1" style="display:block;width:1px;height:1px;border:0;" alt="" />`;

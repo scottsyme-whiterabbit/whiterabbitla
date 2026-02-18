@@ -64,7 +64,7 @@ serve(async (req) => {
           <!-- CTA Button -->
           <table width="100%" cellpadding="0" cellspacing="0">
             <tr><td align="center">
-              <a href="https://whiterabbitla.lovable.app/guide" 
+              <a href="https://whiterabbitla.com/guide" 
                  style="display:inline-block;font-family:sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;background-color:#c8a0a0;color:#1e352c;text-decoration:none;padding:16px 40px;">
                 Download Your Guide
               </a>

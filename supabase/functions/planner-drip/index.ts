@@ -9,7 +9,7 @@ const corsHeaders = {
 
 const LOGO_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-symbol.png";
 const SITE_URL = "https://whiterabbitla.com";
-const APP_URL = "https://whiterabbitla.lovable.app";
+const APP_URL = "https://whiterabbitla.com";
 const TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-click";
 const OPEN_TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-open";
 

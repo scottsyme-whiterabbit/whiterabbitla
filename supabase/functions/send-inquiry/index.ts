@@ -87,7 +87,7 @@ serve(async (req) => {
             In the meantime, feel free to explore what a White Rabbit experience looks like:
           </p>
           <p style="margin:0 0 20px;text-align:center;">
-            <a href="https://whiterabbitla.lovable.app/experience" style="font-family:Georgia,serif;font-size:14px;letter-spacing:0.15em;text-transform:uppercase;color:#c8a0a0;text-decoration:none;border-bottom:1px solid rgba(200,160,160,0.3);padding-bottom:2px;">
+            <a href="https://whiterabbitla.com/experience" style="font-family:Georgia,serif;font-size:14px;letter-spacing:0.15em;text-transform:uppercase;color:#c8a0a0;text-decoration:none;border-bottom:1px solid rgba(200,160,160,0.3);padding-bottom:2px;">
               Explore the Experience
             </a>
           </p>
