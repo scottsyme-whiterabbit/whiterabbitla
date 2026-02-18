@@ -224,8 +224,8 @@ const ContactsListTab = ({ storedPassword, initialFilter, initialCampaign }: Con
 
   const filtered = contacts.filter(c => {
     // Campaign filter
-    if (campaignFilter === "planner" && c.drip_campaign !== "planner") return false;
-    if (campaignFilter === "resident" && c.drip_campaign !== "resident") return false;
+    if (campaignFilter === "planner" && !c.drip_campaign.startsWith("planner")) return false;
+    if (campaignFilter === "resident" && !c.drip_campaign.startsWith("resident")) return false;
 
     if (filter === "unsubscribed" && c.subscribed) return false;
     if (filter === "hot" && (c.engagement_status !== "hot" || !c.subscribed)) return false;
