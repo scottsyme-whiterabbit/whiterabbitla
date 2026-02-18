@@ -47,9 +47,11 @@ serve(async (req) => {
         const { data, error } = await supabase
           .from("newsletter_contacts")
           .upsert(
-            unique.map((c: { email: string; name?: string; source?: string }) => ({
+            unique.map((c: { email: string; name?: string; company?: string; city?: string; source?: string }) => ({
               email: c.email.toLowerCase().trim(),
               name: c.name?.trim() || null,
+              company: c.company?.trim() || null,
+              city: c.city?.trim() || null,
               source: c.source || "csv",
             })),
             { onConflict: "email" }

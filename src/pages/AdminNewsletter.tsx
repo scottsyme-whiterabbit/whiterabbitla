@@ -128,29 +128,97 @@ const AdminNewsletter = () => {
     }
   };
 
+  // Smart CSV parser that handles quoted fields with commas/newlines
+  const parseCSVRow = (row: string): string[] => {
+    const cols: string[] = [];
+    let current = "";
+    let inQuotes = false;
+    for (let i = 0; i < row.length; i++) {
+      const ch = row[i];
+      if (ch === '"') {
+        inQuotes = !inQuotes;
+      } else if (ch === "," && !inQuotes) {
+        cols.push(current.trim());
+        current = "";
+      } else {
+        current += ch;
+      }
+    }
+    cols.push(current.trim());
+    return cols;
+  };
+
   const handleCSVUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     const text = await file.text();
-    const lines = text.split("\n").filter(l => l.trim());
-    const header = lines[0].toLowerCase();
-    const emailIdx = header.split(",").findIndex(h => h.trim().includes("email"));
-    const nameIdx = header.split(",").findIndex(h => h.trim().includes("name"));
+    // Normalize line endings and handle quoted multi-line fields
+    const normalized = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+    
+    // Reassemble lines that are inside quoted fields
+    const rawLines: string[] = [];
+    let buffer = "";
+    let quoteCount = 0;
+    for (const line of normalized.split("\n")) {
+      buffer += (buffer ? "\n" : "") + line;
+      quoteCount += (line.match(/"/g) || []).length;
+      if (quoteCount % 2 === 0) {
+        rawLines.push(buffer);
+        buffer = "";
+        quoteCount = 0;
+      }
+    }
+    if (buffer) rawLines.push(buffer);
+
+    const lines = rawLines.filter(l => l.trim());
+    if (!lines.length) { toast.error("Empty CSV"); return; }
+
+    const headerCols = parseCSVRow(lines[0]).map(h => h.toLowerCase().replace(/^\ufeff/, ""));
+    
+    // Detect column indices for multiple CSV formats
+    const emailIdx = headerCols.findIndex(h => h.includes("email"));
+    const apartmentIdx = headerCols.findIndex(h => h.includes("apartment name") || h === "building name");
+    const firstNameIdx = headerCols.findIndex(h => h.includes("first name"));
+    const companyIdx = headerCols.findIndex(h => h.includes("company") || h.includes("apartment name") || h === "building name");
+    const cityIdx = headerCols.findIndex(h => h === "city");
+    const nameIdx = headerCols.findIndex(h => h.includes("name") && !h.includes("first") && !h.includes("last") && !h.includes("apartment") && !h.includes("building"));
 
     if (emailIdx === -1) {
-      toast.error("CSV must have an 'email' column");
+      toast.error("CSV must have an 'email' or 'EMAIL CONTACT' column");
       return;
     }
 
+    const isApartmentCSV = apartmentIdx >= 0;
+
     const parsed = lines.slice(1).map(line => {
-      const cols = line.split(",").map(c => c.trim().replace(/^"|"$/g, ""));
+      const cols = parseCSVRow(line);
+      const email = cols[emailIdx]?.replace(/^"|"$/g, "").trim();
+      if (!email || !email.includes("@")) return null;
+
+      let contactName: string | undefined;
+      const apartmentName = isApartmentCSV ? cols[apartmentIdx]?.replace(/^"|"$/g, "").trim() : undefined;
+
+      if (isApartmentCSV && apartmentName) {
+        // Auto-transform: set name to "[Apartment Name] Team"
+        contactName = `${apartmentName} Team`;
+      } else if (firstNameIdx >= 0) {
+        contactName = cols[firstNameIdx]?.replace(/^"|"$/g, "").trim() || undefined;
+      } else if (nameIdx >= 0) {
+        contactName = cols[nameIdx]?.replace(/^"|"$/g, "").trim() || undefined;
+      }
+
+      const company = isApartmentCSV && apartmentName ? apartmentName : (companyIdx >= 0 ? cols[companyIdx]?.replace(/^"|"$/g, "").trim() || undefined : undefined);
+      const city = cityIdx >= 0 ? cols[cityIdx]?.replace(/^"|"$/g, "").replace(/,$/g, "").trim() || undefined : undefined;
+
       return {
-        email: cols[emailIdx],
-        name: nameIdx >= 0 ? cols[nameIdx] : undefined,
+        email: email.toLowerCase(),
+        name: contactName,
+        company,
+        city,
         source: "csv",
       };
-    }).filter(c => c.email && c.email.includes("@"));
+    }).filter(Boolean);
 
     if (!parsed.length) {
       toast.error("No valid emails found in CSV");
@@ -159,7 +227,7 @@ const AdminNewsletter = () => {
 
     try {
       const res = await callAdmin("import_contacts", { contacts: parsed });
-      toast.success(`Imported ${res.imported} contacts`);
+      toast.success(`Imported ${res.imported} contacts${isApartmentCSV ? " (names set to [Apartment] Team)" : ""}`);
       loadData();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Import failed");
