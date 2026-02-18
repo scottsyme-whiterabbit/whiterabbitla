@@ -60,7 +60,7 @@ serve(async (req) => {
         
         <!-- Logo -->
         <tr><td style="padding:40px 40px 0;text-align:center;">
-          <img src="https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-symbol-outline.png" alt="White Rabbit" width="50" style="width:50px;height:auto;display:block;margin:0 auto;" />
+          <img src="https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-email-logo.png" alt="White Rabbit" width="50" style="width:50px;height:auto;display:block;margin:0 auto;" />
         </td></tr>
 
         <!-- Headline -->
