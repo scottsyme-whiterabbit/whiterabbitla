@@ -100,8 +100,13 @@ serve(async (req) => {
       body: JSON.stringify({
         from: "White Rabbit <scott.syme@whiterabbitla.com>",
         to: [email],
+        reply_to: "events@whiterabbitla.com",
         subject: "Your Host's Playbook Is Ready ✨",
         html: leadEmailHtml,
+        text: `Thank you for downloading The Host's Playbook.\n\nYou now have access to the exact framework that clients like Morgan Stanley, Netflix, and Rolls-Royce use when planning unforgettable events.\n\nDownload your guide: https://whiterabbitla.com/guide\n\nWhen you're ready to create something unforgettable, we'd love to hear from you.\n\nWhite Rabbit · Los Angeles\n7393 W. Manchester Ave #209, Los Angeles, CA 90045`,
+        headers: {
+          "List-Unsubscribe": "<mailto:events@whiterabbitla.com?subject=Unsubscribe>",
+        },
       }),
     });
 
