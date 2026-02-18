@@ -59,6 +59,7 @@ const AdminNewsletter = () => {
   const [tySending, setTySending] = useState(false);
   const [tySent, setTySent] = useState(false);
   const [contactsFilter, setContactsFilter] = useState<string>("all");
+  const [contactsCampaign, setContactsCampaign] = useState<string>("all");
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [stats, setStats] = useState<Stats>({ subscribers: 0, campaigns: 0, emailsSent: 0 });
@@ -485,26 +486,38 @@ const AdminNewsletter = () => {
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-accent">Planners</h3>
                   <button
-                    onClick={() => { setContactsFilter("all"); setActiveTab("contacts"); }}
+                    onClick={() => { setContactsFilter("all"); setContactsCampaign("planner"); setActiveTab("contacts"); }}
                     className="font-sans text-[10px] tracking-wider uppercase text-muted-foreground hover:text-accent transition-colors"
                   >
                     View All →
                   </button>
                 </div>
-                <p className="font-serif text-4xl text-foreground mb-4">{stats.planner?.subscribers ?? 0}</p>
+                <button
+                  onClick={() => { setContactsFilter("all"); setContactsCampaign("planner"); setActiveTab("contacts"); }}
+                  className="text-left w-full mb-4 group"
+                >
+                  <p className="font-serif text-4xl text-foreground group-hover:text-accent transition-colors">{stats.planner?.subscribers ?? 0}</p>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">active subscribers</p>
+                </button>
                 <div className="grid grid-cols-3 gap-3 text-xs font-sans">
                   <div className="bg-accent/5 px-3 py-2">
                     <span className="text-muted-foreground block">Emails Sent</span>
                     <span className="text-foreground font-medium">{stats.planner?.emailsSent ?? 0}</span>
                   </div>
-                  <div className="bg-accent/5 px-3 py-2">
+                  <button
+                    onClick={() => { setContactsFilter("hot"); setContactsCampaign("planner"); setActiveTab("contacts"); }}
+                    className="bg-accent/5 px-3 py-2 text-left hover:bg-accent/10 transition-colors"
+                  >
                     <span className="flex items-center gap-1 text-muted-foreground"><Flame size={10} className="text-destructive" /> Hot</span>
                     <span className="text-foreground font-medium">{stats.planner?.hot ?? 0}</span>
-                  </div>
-                  <div className="bg-accent/5 px-3 py-2">
+                  </button>
+                  <button
+                    onClick={() => { setContactsFilter("warm"); setContactsCampaign("planner"); setActiveTab("contacts"); }}
+                    className="bg-accent/5 px-3 py-2 text-left hover:bg-accent/10 transition-colors"
+                  >
                     <span className="flex items-center gap-1 text-muted-foreground"><ThermometerSun size={10} className="text-orange-400" /> Warm</span>
                     <span className="text-foreground font-medium">{stats.planner?.warm ?? 0}</span>
-                  </div>
+                  </button>
                 </div>
                 {(stats.planner?.unsubscribed ?? 0) > 0 && (
                   <p className="text-[10px] text-muted-foreground mt-2">{stats.planner?.unsubscribed} unsubscribed</p>
@@ -516,26 +529,38 @@ const AdminNewsletter = () => {
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-accent">Apartments</h3>
                   <button
-                    onClick={() => { setContactsFilter("all"); setActiveTab("contacts"); }}
+                    onClick={() => { setContactsFilter("all"); setContactsCampaign("resident"); setActiveTab("contacts"); }}
                     className="font-sans text-[10px] tracking-wider uppercase text-muted-foreground hover:text-accent transition-colors"
                   >
                     View All →
                   </button>
                 </div>
-                <p className="font-serif text-4xl text-foreground mb-4">{stats.resident?.subscribers ?? 0}</p>
+                <button
+                  onClick={() => { setContactsFilter("all"); setContactsCampaign("resident"); setActiveTab("contacts"); }}
+                  className="text-left w-full mb-4 group"
+                >
+                  <p className="font-serif text-4xl text-foreground group-hover:text-accent transition-colors">{stats.resident?.subscribers ?? 0}</p>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">active subscribers</p>
+                </button>
                 <div className="grid grid-cols-3 gap-3 text-xs font-sans">
                   <div className="bg-accent/5 px-3 py-2">
                     <span className="text-muted-foreground block">Emails Sent</span>
                     <span className="text-foreground font-medium">{stats.resident?.emailsSent ?? 0}</span>
                   </div>
-                  <div className="bg-accent/5 px-3 py-2">
+                  <button
+                    onClick={() => { setContactsFilter("hot"); setContactsCampaign("resident"); setActiveTab("contacts"); }}
+                    className="bg-accent/5 px-3 py-2 text-left hover:bg-accent/10 transition-colors"
+                  >
                     <span className="flex items-center gap-1 text-muted-foreground"><Flame size={10} className="text-destructive" /> Hot</span>
                     <span className="text-foreground font-medium">{stats.resident?.hot ?? 0}</span>
-                  </div>
-                  <div className="bg-accent/5 px-3 py-2">
+                  </button>
+                  <button
+                    onClick={() => { setContactsFilter("warm"); setContactsCampaign("resident"); setActiveTab("contacts"); }}
+                    className="bg-accent/5 px-3 py-2 text-left hover:bg-accent/10 transition-colors"
+                  >
                     <span className="flex items-center gap-1 text-muted-foreground"><ThermometerSun size={10} className="text-orange-400" /> Warm</span>
                     <span className="text-foreground font-medium">{stats.resident?.warm ?? 0}</span>
-                  </div>
+                  </button>
                 </div>
                 {(stats.resident?.unsubscribed ?? 0) > 0 && (
                   <p className="text-[10px] text-muted-foreground mt-2">{stats.resident?.unsubscribed} unsubscribed</p>
@@ -583,7 +608,7 @@ const AdminNewsletter = () => {
 
         {/* Contacts */}
         {activeTab === "contacts" && (
-          <ContactsListTab storedPassword={storedPassword} initialFilter={contactsFilter as any} />
+          <ContactsListTab storedPassword={storedPassword} initialFilter={contactsFilter as any} initialCampaign={contactsCampaign as any} />
         )}
 
         {/* Compose */}

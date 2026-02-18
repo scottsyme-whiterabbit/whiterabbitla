@@ -44,6 +44,7 @@ type CampaignFilter = "all" | "planner" | "resident";
 interface ContactsListTabProps {
   storedPassword: string;
   initialFilter?: FilterStatus;
+  initialCampaign?: CampaignFilter;
 }
 
 const STATUS_CONFIG: Record<string, { label: string; icon: typeof Flame; colorClass: string }> = {
@@ -107,12 +108,12 @@ const DripTimeline = ({ currentStep, campaign, opens, clicks }: {
     </div>
   );
 };
-const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps) => {
+const ContactsListTab = ({ storedPassword, initialFilter, initialCampaign }: ContactsListTabProps) => {
 
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<FilterStatus>(initialFilter || "all");
-  const [campaignFilter, setCampaignFilter] = useState<CampaignFilter>("all");
+  const [campaignFilter, setCampaignFilter] = useState<CampaignFilter>(initialCampaign || "all");
   const [loading, setLoading] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [clicksCache, setClicksCache] = useState<Record<string, ClickEvent[]>>({});
@@ -165,6 +166,10 @@ const ContactsListTab = ({ storedPassword, initialFilter }: ContactsListTabProps
   useEffect(() => {
     if (initialFilter) setFilter(initialFilter);
   }, [initialFilter]);
+
+  useEffect(() => {
+    if (initialCampaign) setCampaignFilter(initialCampaign);
+  }, [initialCampaign]);
 
   const toggleExpand = async (contactId: string) => {
     if (expandedId === contactId) {
