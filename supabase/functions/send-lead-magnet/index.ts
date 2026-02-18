@@ -42,7 +42,7 @@ serve(async (req) => {
         
         <!-- Header -->
         <tr><td style="padding:48px 40px 24px;text-align:center;">
-          <img src="https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-email-logo.png" alt="White Rabbit" style="width:60px;height:auto;margin:0 auto 20px;" />
+          <img src="https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-email-logo.png" alt="White Rabbit" style="width:90px;height:auto;margin:0 auto 20px;" />
           <h1 style="font-family:Georgia,serif;font-size:32px;color:#F8F5F0;margin:0 0 8px;font-weight:normal;">The Host's Playbook</h1>
           <p style="font-family:Georgia,serif;font-size:16px;color:rgba(245,240,232,0.5);margin:0;font-style:italic;">7 Secrets to Choosing Entertainment That Makes Your Event Legendary</p>
         </td></tr>
