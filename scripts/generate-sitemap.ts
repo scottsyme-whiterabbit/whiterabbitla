@@ -28,7 +28,7 @@ const serviceKeys = [
   "close-up-magician", "private-magic-show", "golf-tournament-magician",
   "charity-gala-magician", "holiday-party-magician", "trade-show-magician",
   "rehearsal-dinner-magician", "halloween-party-magician", "christmas-party-magician",
-  "dmc-entertainment",
+  "dmc-entertainment", "resident-event-magician",
 ];
 
 const editorialArticles = [
@@ -51,6 +51,10 @@ const editorialArticles = [
   "golf-tournament-entertainment-ideas",
   "why-your-event-needs-mc-not-just-entertainment",
   "why-dmcs-adding-magician-incentive-trips",
+  "why-resident-events-need-more-than-wine-and-cheese",
+  "easiest-vendor-decision-property-manager",
+  "how-one-magic-show-changed-resident-engagement",
+  "resident-event-ideas-that-actually-get-rsvps",
 ];
 
 function slugify(text: string): string {
