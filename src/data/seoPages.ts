@@ -488,6 +488,8 @@ function getVenueContext(location: string, serviceKey: string): string {
       return `From after-parties at ${venues.hotels[0]} to screening receptions at ${venues.culture[2]}, White Rabbit brings the kind of entertainment that gives industry veterans in ${location} something they haven't experienced in years: genuine surprise.`;
     case "dmc-entertainment":
       return `Whether it's an incentive trip welcome reception at ${venues.hotels[0]}, a VIP dinner at ${venues.dining[0]}, or a group activity at ${venues.culture[1]}, White Rabbit seamlessly integrates into the curated ${location} itineraries that destination management companies build for their top-tier clients.`;
+    case "resident-event-magician":
+      return `From luxury apartment communities near ${venues.culture[1]} to high-rise buildings overlooking ${venues.culture[0]}, White Rabbit transforms standard resident socials in ${location} into the kind of events that drive attendance, build community, and make residents proud of where they live.`;
     default:
       return "";
   }
@@ -563,6 +565,11 @@ const serviceTypes = [
     key: "dmc-entertainment",
     label: "DMC Entertainment & Magician",
     category: "DMC & Incentive Travel",
+  },
+  {
+    key: "resident-event-magician",
+    label: "Resident Event Magician",
+    category: "Resident Events",
   },
 ] as const;
 
@@ -744,6 +751,16 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
       {
         question: "What types of incentive trip events work best for a magician?",
         answer: "Welcome receptions, farewell dinners, awards galas, VIP breakout sessions, and exclusive group activities. Close-up magic is especially effective during networking moments where attendees from different offices or regions are meeting for the first time. It breaks the ice instantly and creates shared memories that reinforce the trip's purpose.",
+      },
+    ],
+    "resident-event-magician": [
+      {
+        question: "What kind of resident events work best for a magician?",
+        answer: "Quarterly socials, holiday parties, move-in welcome events, pool parties, rooftop cocktail nights, and resident appreciation evenings. The format works beautifully for any gathering where you want residents to interact, engage, and actually enjoy themselves. The magic gives people a reason to show up and a reason to stay.",
+      },
+      {
+        question: "Is this appropriate for an apartment community?",
+        answer: "Absolutely. Scott's style is sophisticated, conversational, and designed for adult audiences. This is not a children's entertainer. It's world-class close-up magic and mentalism that creates genuine connection between neighbors. Think cocktail party energy, not birthday party energy. NetVendor approved and fully insured for hassle-free booking.",
       },
     ],
   };
@@ -945,6 +962,19 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
         `Scott Syme is a member of the world-famous Magic Castle® in Hollywood and has performed for Netflix, Disney, Morgan Stanley, Rolls Royce, and the kind of private clientele that demands flawless execution. His close-up magic and mentalism require zero infrastructure: no stage, no sound system, no power. He integrates into any venue, any format, any timeline. For DMCs, that means one less vendor to coordinate and one more reason attendees will rave about the program.`,
         `The most effective format for incentive trips is a two-touch approach. First, roaming close-up magic during the welcome cocktail reception, breaking the ice across teams and regions. Then, a curated Private Magic Show as a surprise entertainment element during the farewell dinner. The first touch warms the room. The second closes the trip with a standing ovation. Together, they create the kind of program that gets DMCs rebookings and referrals.`,
         `White Rabbit is based in Los Angeles and travels nationwide. Close-up magic, mentalism, and professional sound equipment travel anywhere. Full theatrical staging (lighting and curtains) is available for greater Los Angeles events. Inquire about availability for your upcoming ${location} programs.`,
+      ];
+      break;
+
+    case "resident-event-magician":
+      heroHeadline = `Resident Event Magician in ${location}`;
+      heroSub = `The entertainment upgrade that turns standard resident socials into the events your community talks about for months.`;
+      midCta = `Book Resident Event Entertainment in ${location}`;
+      intro = `Looking for entertainment for your ${location} apartment community's resident events? White Rabbit delivers world-class magic shows and close-up entertainment that transforms standard socials into the highest-attended, most talked-about events your building has ever hosted. NetVendor approved, fully insured, and turnkey. One vendor, zero headaches.`;
+      body = [
+        `Here's the reality of resident events: your residents have seen the same wine-and-cheese format at every building they've ever lived in. Attendance is low because nothing on the flyer is worth getting off the couch for. A professional magic show changes that equation instantly. When your residents see "Private Magic Show" on the invite, they show up. And when they experience it, they tell their neighbors who missed it. That's how you build real community.`,
+        `Scott Syme is a member of the world-famous Magic Castle® in Hollywood, a NetVendor approved vendor, and fully insured. He has performed for Netflix, Disney, Morgan Stanley, Rolls Royce, and hundreds of private events. His style is sophisticated, conversational, and designed for adult audiences. No balloon animals. No cheesy props. Just elegant, interactive magic and mentalism that makes your residents feel like they're attending a private show at an exclusive members' club.`,
+        `The format is simple and flexible. For Southern California properties, Scott brings a full turnkey production: emerald curtains, professional lighting, a curated soundtrack, and a 45-minute theatrical show that transforms your clubhouse, rooftop, or common area into a private theater. For properties nationwide, he brings world-class close-up magic, mentalism, and professional sound that works in any space. Either way, setup takes 30 minutes, your team doesn't lift a finger, and the experience is unforgettable.`,
+        `Properties that book White Rabbit see immediate results: record attendance, overwhelmingly positive resident feedback, and rebookings before the curtains come down. In a market where retention and resident satisfaction are everything, entertainment that actually builds community isn't a line item. It's a competitive advantage. Available across ${location}. Inquire now.`,
       ];
       break;
 

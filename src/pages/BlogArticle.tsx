@@ -20,6 +20,7 @@ const categoryImages: Record<string, string> = {
   "Corporate Events": corporateImg,
   "Behind the Craft": scottCardsImg,
   "Luxury Nightlife": closeupImg,
+  "Resident Events": corporateImg,
 };
 
 const BlogArticle = () => {
@@ -42,6 +43,7 @@ const BlogArticle = () => {
     "Private Events": `${BASE_URL}/og/private.jpg`,
     "Corporate Events": `${BASE_URL}/og/corporate.jpg`,
     "Behind the Craft": `${BASE_URL}/og/behind-the-craft.jpg`,
+    "Resident Events": `${BASE_URL}/og/corporate.jpg`,
   };
   const schemaImage = article ? (schemaCategoryImages[article.category] || `${BASE_URL}/og/experience.jpg`) : undefined;
   useArticleSchema(article ? { ...article, image: schemaImage } : { title: "", metaDescription: "", slug: "", publishDate: "", category: "", content: [], image: undefined });
