@@ -262,13 +262,13 @@ ${signoff(true)}
   },
   // Warm 2: Day 3 — Social proof reinforcement
   {
-    subjectA: "What Soho House said",
-    subjectB: "Their highest-rated entertainment ever",
-    preheader: "Real feedback from real events.",
+    subjectA: "What happened at Morgan Stanley",
+    subjectB: "200 guests, nobody left early",
+    preheader: "Real feedback from a real event.",
     body: (name, _company, _city) => {
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">${name},</p>
-<p style="margin:0 0 18px;">Quick share: after our last show at Soho House, the events team told us it was the highest-rated entertainment they'd ever booked. Guests literally wouldn't leave the room.</p>
+<p style="margin:0 0 18px;">Quick share: we performed for over 200 guests at a Morgan Stanley event. Nobody left early. The host told us it was the highlight of the entire evening.</p>
 <p style="margin:0 0 18px;">That's the thing about what we do. It's not background entertainment. It's the thing people talk about at brunch the next day.</p>
 <p style="margin:0 0 18px;">Would love to show you what that looks like for your events. Even a quick call helps me understand what you're working with.</p>
 ${bookCallCTA()}

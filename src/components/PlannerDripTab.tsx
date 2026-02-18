@@ -15,7 +15,7 @@ const DRIP_LABELS = [
 
 const WARM_LABELS = [
   { step: 0, subjectA: "Quick thought for your next event", subjectB: "Noticed you were curious", day: 0 },
-  { step: 1, subjectA: "What Soho House said", subjectB: "Their highest-rated entertainment ever", day: 3 },
+  { step: 1, subjectA: "What happened at Morgan Stanley", subjectB: "200 guests, nobody left early", day: 3 },
   { step: 2, subjectA: "Before I move on", subjectB: "Last note from me", day: 7 },
 ];
 
