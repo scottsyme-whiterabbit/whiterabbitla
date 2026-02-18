@@ -40,6 +40,18 @@ serve(async (req) => {
       }
     }
 
+    // Handle manual unsubscribe from the website
+    if (eventType === "unsubscribe_manual") {
+      const recipientEmail = body.data?.email_address;
+      if (recipientEmail) {
+        await supabase
+          .from("newsletter_contacts")
+          .update({ subscribed: false })
+          .eq("email", recipientEmail.toLowerCase().trim());
+        console.log(`Contact ${recipientEmail} manually unsubscribed`);
+      }
+    }
+
     // Handle bounce events — auto-unsubscribe
     if (eventType === "email.bounced" || eventType === "email.delivery_delayed") {
       const recipientEmail = body.data?.to?.[0] || body.data?.email;

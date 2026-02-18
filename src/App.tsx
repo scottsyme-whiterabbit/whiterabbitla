@@ -33,6 +33,7 @@ import ReviewGate from "./pages/ReviewGate";
 import TermsOfService from "./pages/TermsOfService";
 import PitchDeck from "./pages/PitchDeck";
 import Refer from "./pages/Refer";
+import Unsubscribe from "./pages/Unsubscribe";
 import ServiceAreas from "./pages/ServiceAreas";
 import ServiceAreaDetail from "./pages/ServiceAreaDetail";
 import { getBlogArticleBySlug } from "./data/blogArticles";
@@ -78,6 +79,7 @@ const AppContent = () => {
         <Route path="/refer" element={<Refer />} />
         <Route path="/areas" element={<ServiceAreas />} />
         <Route path="/areas/:citySlug" element={<ServiceAreaDetail />} />
+        <Route path="/unsubscribe" element={<Unsubscribe />} />
         <Route path="/event-magician" element={<Navigate to="/" replace />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
