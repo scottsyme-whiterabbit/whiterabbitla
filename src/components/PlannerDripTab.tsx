@@ -47,9 +47,9 @@ interface PlannerDripTabProps {
 }
 
 const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTabProps) => {
-  const [stats, setStats] = useState<{ total: number; active: number; completed: number; unsubscribed: number; stepCounts: number[]; engagement: { warm: number; hot: number; cold: number }; clicks: { total: number; uniqueContacts: number }; totalSent: number; abResults?: Record<string, { sentA: number; sentB: number; openedA: number; openedB: number }> }>({
+  const [stats, setStats] = useState<{ total: number; active: number; completed: number; unsubscribed: number; stepCounts: number[]; engagement: { warm: number; hot: number; cold: number }; clicks: { total: number; uniqueContacts: number }; opens: { total: number; uniqueContacts: number; rate: number; perStep: number[] }; totalSent: number; abResults?: Record<string, { sentA: number; sentB: number; openedA: number; openedB: number }> }>({
     total: 0, active: 0, completed: 0, unsubscribed: 0, stepCounts: [0, 0, 0, 0, 0],
-    engagement: { warm: 0, hot: 0, cold: 0 }, clicks: { total: 0, uniqueContacts: 0 }, totalSent: 0, abResults: {},
+    engagement: { warm: 0, hot: 0, cold: 0 }, clicks: { total: 0, uniqueContacts: 0 }, opens: { total: 0, uniqueContacts: 0, rate: 0, perStep: [0, 0, 0, 0, 0] }, totalSent: 0, abResults: {},
   });
   const [csvInput, setCsvInput] = useState("");
   const [previewStep, setPreviewStep] = useState(0);
@@ -287,7 +287,7 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
       </div>
 
       {/* Stats Row 2 — Engagement */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
         <button onClick={() => onNavigateToContacts?.("hot")} className="border border-border p-5 text-left hover:border-accent/50 transition-colors cursor-pointer">
           <div className="flex items-center gap-2 mb-1">
             <Flame size={16} className="text-red-400" />
@@ -302,6 +302,22 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
           </div>
           <p className="font-serif text-3xl text-foreground">{stats.engagement.warm}</p>
         </button>
+        <div className="border border-border p-5">
+          <div className="flex items-center gap-2 mb-1">
+            <Eye size={16} className="text-accent" />
+            <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Opens</p>
+          </div>
+          <p className="font-serif text-3xl text-foreground">{stats.opens.total}</p>
+          <p className="font-sans text-xs text-muted-foreground mt-1">{stats.opens.uniqueContacts} unique</p>
+        </div>
+        <div className="border border-border p-5">
+          <div className="flex items-center gap-2 mb-1">
+            <EyeIcon size={16} className="text-accent" />
+            <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Open Rate</p>
+          </div>
+          <p className="font-serif text-3xl text-foreground">{stats.opens.rate}%</p>
+          <p className="font-sans text-xs text-muted-foreground mt-1">{stats.opens.uniqueContacts}/{stats.totalSent} sent</p>
+        </div>
         <div className="border border-border p-5">
           <div className="flex items-center gap-2 mb-1">
             <MousePointerClick size={16} className="text-accent" />
@@ -338,6 +354,9 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
               <p className="font-sans text-sm text-foreground leading-tight">{d.subjectA}</p>
               <p className="font-sans text-[10px] text-muted-foreground/60 leading-tight mt-0.5">B: {d.subjectB}</p>
               <p className="font-sans text-xs text-accent mt-2">{stats.stepCounts[i]} waiting</p>
+              <p className="font-sans text-[10px] text-muted-foreground mt-0.5">
+                <Eye size={10} className="inline mr-1" />{stats.opens.perStep[i]} opened
+              </p>
             </button>
           ))}
         </div>

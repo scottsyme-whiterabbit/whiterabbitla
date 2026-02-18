@@ -689,24 +689,40 @@ serve(async (req) => {
         .from("newsletter_send_log")
         .select("*", { count: "exact", head: true });
 
-      // A/B test stats: get sends with variant, join with opens
+      // Open stats
+      const { data: openLogs } = await supabase
+        .from("newsletter_opens")
+        .select("contact_id, drip_step");
+
+      const totalOpens = openLogs?.length || 0;
+      const uniqueOpenerCount = new Set(openLogs?.map(o => o.contact_id)).size;
+      const openRate = (totalSent && totalSent > 0) ? Math.round((uniqueOpenerCount / totalSent) * 100) : 0;
+
+      // Per-step open counts (unique contacts per step)
+      const stepOpens = [0, 0, 0, 0, 0];
+      const stepOpenSeen: Set<string>[] = [new Set(), new Set(), new Set(), new Set(), new Set()];
+      openLogs?.forEach(o => {
+        if (o.drip_step >= 0 && o.drip_step < 5) {
+          if (!stepOpenSeen[o.drip_step].has(o.contact_id)) {
+            stepOpenSeen[o.drip_step].add(o.contact_id);
+            stepOpens[o.drip_step]++;
+          }
+        }
+      });
+
+      // A/B test stats: get sends with variant
       const { data: sendLogs } = await supabase
         .from("newsletter_send_log")
         .select("campaign_id, contact_id, ab_variant")
         .not("ab_variant", "is", null);
-
-      const { data: openLogs } = await supabase
-        .from("newsletter_opens")
-        .select("contact_id, drip_step");
 
       // Build A/B results per step
       const openSet = new Set(openLogs?.map(o => `${o.contact_id}-${o.drip_step}`) || []);
       const abResults: Record<string, { sentA: number; sentB: number; openedA: number; openedB: number }> = {};
 
       for (const log of (sendLogs || [])) {
-        const key = log.campaign_id; // e.g. "planner-step-0"
+        const key = log.campaign_id;
         if (!abResults[key]) abResults[key] = { sentA: 0, sentB: 0, openedA: 0, openedB: 0 };
-        // Extract step number from campaign_id
         const stepMatch = key.match(/step-(\d+)/);
         const stepNum = stepMatch ? parseInt(stepMatch[1]) : -1;
         const opened = openSet.has(`${log.contact_id}-${stepNum}`);
@@ -724,6 +740,7 @@ serve(async (req) => {
         plannerActive, warmActive,
         engagement: { warm, hot, cold },
         clicks: { total: totalClicks || 0, uniqueContacts: uniqueClickerCount },
+        opens: { total: totalOpens, uniqueContacts: uniqueOpenerCount, rate: openRate, perStep: stepOpens },
         totalSent: totalSent || 0,
         abResults,
       }), {
