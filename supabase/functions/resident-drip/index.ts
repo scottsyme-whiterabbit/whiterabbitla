@@ -141,7 +141,7 @@ const TEMPLATES: EmailTemplate[] = [
 ${bookCallCTA()}
 <p style="margin:18px 0 18px;">Open to seeing how this fits your next event?</p>
 ${signoff(true)}
-${ps(`NetVendor approved. Fully insured. Turnkey setup. ${deckLink}`)}
+${ps(`NetVendor approved. Fully insured. Turnkey setup. Magic Castle® member. ${deckLink}`)}
 </td></tr>`;
     },
   },
@@ -293,7 +293,7 @@ ${ps(`View our lookbook: <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-d
 <p style="margin:0 0 18px;">If you've got a welcome event coming up, this is the easiest way to make it unforgettable.</p>
 ${bookCallCTA()}
 ${signoff(true)}
-${ps("NetVendor approved. Fully insured. 30-minute setup. Your team does nothing.")}
+${ps("NetVendor approved. Fully insured. Magic Castle® member. 30-minute setup. Your team does nothing.")}
 </td></tr>`;
     },
   },
@@ -381,7 +381,7 @@ ${ps(`View our lookbook: <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-d
 <p style="margin:0 0 18px;">If you want your events to work double duty as marketing, let's talk.</p>
 ${bookCallCTA()}
 ${signoff(true)}
-${ps("NetVendor approved. Fully insured. Trusted by Fortune 500 companies.")}
+${ps("NetVendor approved. Fully insured. Magic Castle® member. Trusted by Fortune 500 companies.")}
 </td></tr>`;
     },
   },
@@ -425,7 +425,7 @@ ${ps(`See what we do: <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-deco
 <p style="margin:0 0 18px;">If you've got an event coming up, I'll handle the entertainment and help with the promotion. Easy.</p>
 ${bookCallCTA()}
 ${signoff(true)}
-${ps("One vendor. Entertainment + event poster. Zero coordination headaches.")}
+${ps("One vendor. Entertainment + event poster. Magic Castle® member. Zero coordination headaches.")}
 </td></tr>`;
     },
   },
@@ -496,7 +496,7 @@ ${ps(`NetVendor approved. Fully insured. <a href="${SITE_URL}/deck" style="color
 <p style="margin:0 0 18px;">If you're looking for an entertainment partner that scales across your portfolio, let's talk.</p>
 ${bookCallCTA()}
 ${signoff(true)}
-${ps("Available throughout Southern California with full production. Nationwide with close-up magic and sound.")}
+${ps("Magic Castle® member. Available throughout Southern California with full production. Nationwide with close-up magic and sound.")}
 </td></tr>`;
     },
   },
@@ -871,13 +871,13 @@ serve(async (req) => {
           return new Response(JSON.stringify({ error: `Invalid step (0-${PULSE_TEMPLATES.length - 1})` }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
         }
         const template = PULSE_TEMPLATES[stepNum];
-        const innerHtml = template.body("Jordan", "Greystar Luxury Living", "Los Angeles");
+        const innerHtml = template.body("Jordan", "The Residences", "Los Angeles");
         const html = wrapEmail(template.preheader, innerHtml, "preview@example.com");
         return new Response(JSON.stringify({ subjectA: template.subjectA, subjectB: template.subjectB, preheader: template.preheader, body_html: html, date: PULSE_DATES[stepNum], campaign: "resident-pulse" }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
 
       if (campaign === "breakup") {
-        const innerHtml = BREAKUP_TEMPLATE.body("Jordan", "Greystar Luxury Living", "Los Angeles");
+        const innerHtml = BREAKUP_TEMPLATE.body("Jordan", "The Residences", "Los Angeles");
         const html = wrapEmail(BREAKUP_TEMPLATE.preheader, innerHtml, "preview@example.com");
         return new Response(JSON.stringify({ subjectA: BREAKUP_TEMPLATE.subjectA, subjectB: BREAKUP_TEMPLATE.subjectB, preheader: BREAKUP_TEMPLATE.preheader, body_html: html, day: 28, campaign: "breakup" }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
@@ -886,7 +886,7 @@ serve(async (req) => {
         return new Response(JSON.stringify({ error: "Invalid step (0-4)" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
       const template = TEMPLATES[stepNum];
-      const innerHtml = template.body("Jordan", "Greystar Luxury Living", "Los Angeles");
+      const innerHtml = template.body("Jordan", "The Residences", "Los Angeles");
       const html = wrapEmail(template.preheader, innerHtml, "preview@example.com");
       return new Response(JSON.stringify({ subjectA: template.subjectA, subjectB: template.subjectB, preheader: template.preheader, body_html: html, day: DRIP_SCHEDULE[stepNum] }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
@@ -1021,7 +1021,7 @@ serve(async (req) => {
       }
 
       const testVariant = (reqBody.variant === "B" ? "B" : "A") as "A" | "B";
-      const innerHtml = template.body("Jordan", "Greystar Luxury Living", "Los Angeles");
+      const innerHtml = template.body("Jordan", "The Residences", "Los Angeles");
       const html = wrapEmail(template.preheader, innerHtml, toEmail);
 
       const res = await fetch("https://api.resend.com/emails", {
