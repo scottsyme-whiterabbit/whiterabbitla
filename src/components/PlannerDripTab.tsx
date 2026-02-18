@@ -29,7 +29,7 @@ const PULSE_LABELS = [
   { step: 6, subjectA: "The wedding vendor gap your couples don't know they have", subjectB: "The easiest vendor add your couples will love", date: "Jun 1", pillar: "Steal This Idea" },
   { step: 7, subjectA: "The fine line between too much and just right", subjectB: "How Taittinger solved their luxury dinner problem", date: "Jun 15", pillar: "Behind the Curtain" },
   { step: 8, subjectA: "The Q4 booking problem starts now", subjectB: "Holiday party season fills up fast", date: "Jul 1", pillar: "Event Intel" },
-  { step: 9, subjectA: "How a Hyatt property solved their 'same event, every year' problem", subjectB: "The event highlight nobody planned for", date: "Jul 15", pillar: "Behind the Curtain" },
+  { step: 9, subjectA: "How a charity gala raised more money than the year before", subjectB: "The gala moment that changed everything", date: "Jul 15", pillar: "Behind the Curtain" },
 ];
 
 interface PlannerContact {

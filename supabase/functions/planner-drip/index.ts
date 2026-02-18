@@ -227,7 +227,7 @@ ${ps("Member of the Magic Castle. Disney + AGT vetted. Close-up, parlor, and cor
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
 <p style="margin:0 0 18px;">Event pros are stacking their vendor lists with game-changers. The ones who added this got repeat business and referrals they didn't ask for.</p>
-<p style="margin:0 0 18px;">Taittinger, Hyatt, Lionsgate. Cocktail receptions, corporate galas, private dinners. One vendor that covers close-up magic, full private shows, and everything in between.</p>
+<p style="margin:0 0 18px;">Taittinger, FosterAll, Lionsgate. Cocktail receptions, charity galas, private dinners. One vendor that covers close-up magic, full private shows, and even live auctioneering and MC hosting.</p>
 <p style="margin:0 0 18px;">${link}</p>
 ${bookCallCTA()}
 <p style="margin:18px 0 18px;">Open to chatting about fit?</p>
@@ -537,26 +537,26 @@ ${ps(`Find your format: <a href="${APP_URL}/quiz" style="color:#C9A3A8; text-dec
 </td></tr>`;
     },
   },
-  // Issue 10 — Jul 15 — Behind the Curtain: Hyatt ballroom
+  // Issue 10 — Jul 15 — Behind the Curtain: FosterAll charity gala
   {
-    subjectA: "How a Hyatt property solved their 'same event, every year' problem",
-    subjectB: "The event highlight nobody planned for",
-    preheader: "When the entertainment becomes the story.",
+    subjectA: "How a charity gala raised more money than the year before",
+    subjectB: "The gala moment that changed everything",
+    preheader: "When entertainment becomes a fundraising tool.",
     body: (name, _company, _city, contactId, step) => {
       const articleLink = contactId
-        ? trackedLink(`${SITE_URL}/blog/not-kids-birthday-party-modern-magic`, "What modern magic actually looks like →", contactId, step ?? 109)
-        : `<a href="${SITE_URL}/blog/not-kids-birthday-party-modern-magic" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">What modern magic actually looks like →</a>`;
+        ? trackedLink(`${SITE_URL}/blog/why-your-event-needs-mc-not-just-entertainment`, "Why your event needs an MC, not just entertainment →", contactId, step ?? 109)
+        : `<a href="${SITE_URL}/blog/why-your-event-needs-mc-not-just-entertainment" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">Why your event needs an MC, not just entertainment →</a>`;
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
-<p style="margin:0 0 18px;">Here's a problem that comes up every year for venue and hotel event teams: the annual gala feels stale. Same format, same band, same feedback. "It was nice." Nobody's raving about it.</p>
-<p style="margin:0 0 18px;">A Hyatt property reached out with exactly this challenge. 200 guests, black tie, high expectations. They'd done live music for years and needed something that would actually generate buzz.</p>
-<p style="margin:0 0 18px;">We did two sets: roaming magic during cocktails (45 minutes), then a private parlor show in a breakout room after dinner (40 minutes). Guests could choose to attend or stay at the main event. Nearly everyone chose the show.</p>
-<p style="margin:0 0 18px;">The event manager said they received more positive feedback about that single evening than any event in the previous three years. They rebooked for this year before the night was over.</p>
+<p style="margin:0 0 18px;">Here's a problem I see with charity galas every year: the silent auction gets foot traffic, but the live auction loses momentum. Energy drops, paddles stay down, and the fundraising total falls short of the goal.</p>
+<p style="margin:0 0 18px;">FosterAll brought me in for their annual gala at the Jonathan Club — one of the most prestigious private clubs in the country. The ask wasn't just "do some magic." They needed someone who could carry the room.</p>
+<p style="margin:0 0 18px;">During the silent auction, I performed close-up magic tableside — keeping guests engaged, energized, and in the room longer. Then I stepped into the role of auctioneer and MC for the main gala. The result? They raised more money than the previous year. And they've already invited me back.</p>
+<p style="margin:0 0 18px;">That's the difference between hiring entertainment and hiring someone who can shape the energy of an entire evening.</p>
 <p style="margin:0 0 18px;">${articleLink}</p>
-<p style="margin:0 0 18px;">If you've got a large-format event on your calendar for fall or winter that needs to feel different from last year, that's the problem we solve. We perform at events across the country, from hotel ballrooms to private estates.</p>
+<p style="margin:0 0 18px;">If you're planning a fundraiser, gala, or benefit — whether it's in New York, Scottsdale, Chicago, or anywhere in between — this is the kind of impact we bring. We travel nationwide.</p>
 ${bookCallCTA()}
 ${signoff(true)}
-${ps(`Save our lookbook for your files: <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-decoration:none;">whiterabbitla.com/deck</a>`)}
+${ps(`Find your format: <a href="${APP_URL}/quiz" style="color:#C9A3A8; text-decoration:none;">Take the quiz</a> · <a href="${SITE_URL}/deck" style="color:#C9A3A8; text-decoration:none;">View our lookbook</a>`)}
 </td></tr>`;
     },
   },
