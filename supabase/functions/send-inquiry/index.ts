@@ -53,26 +53,26 @@ serve(async (req) => {
 <!DOCTYPE html>
 <html lang="en">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"></head>
-<body style="margin:0;padding:0;background-color:#2D4A3E;font-family:Georgia,'Times New Roman',serif;">
-  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color:#2D4A3E;">
+<body style="margin:0;padding:0;background-color:#335747;font-family:Georgia,'Times New Roman',serif;">
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color:#335747;">
     <tr><td style="padding:40px 20px;">
-      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="560" style="max-width:560px;margin:0 auto;background-color:#1e352c;border-radius:8px;overflow:hidden;">
+      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="560" style="max-width:560px;margin:0 auto;background-color:#223D34;border-radius:8px;overflow:hidden;">
         
         <!-- Logo -->
         <tr><td style="padding:40px 40px 0;text-align:center;">
-          <img src="https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-symbol.png" alt="White Rabbit" width="50" style="width:50px;height:auto;display:block;margin:0 auto;" />
+          <img src="https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-symbol-outline.png" alt="White Rabbit" width="50" style="width:50px;height:auto;display:block;margin:0 auto;" />
         </td></tr>
 
         <!-- Headline -->
         <tr><td style="padding:32px 40px 0;text-align:center;">
-          <h1 style="margin:0;font-family:Georgia,serif;font-size:28px;font-weight:normal;color:#F5F0E8;letter-spacing:0.02em;line-height:1.3;">
+          <h1 style="margin:0;font-family:Georgia,serif;font-size:28px;font-weight:normal;color:#F8F5F0;letter-spacing:0.02em;line-height:1.3;">
             We Received Your Inquiry
           </h1>
         </td></tr>
 
         <!-- Divider -->
         <tr><td style="padding:24px 40px 0;text-align:center;">
-          <div style="width:40px;height:1px;background-color:#c8a0a0;margin:0 auto;"></div>
+          <div style="width:40px;height:1px;background-color:#C9A3A8;margin:0 auto;"></div>
         </td></tr>
 
         <!-- Body -->
@@ -87,7 +87,7 @@ serve(async (req) => {
             In the meantime, feel free to explore what a White Rabbit experience looks like:
           </p>
           <p style="margin:0 0 20px;text-align:center;">
-            <a href="https://whiterabbitla.com/experience" style="font-family:Georgia,serif;font-size:14px;letter-spacing:0.15em;text-transform:uppercase;color:#c8a0a0;text-decoration:none;border-bottom:1px solid rgba(200,160,160,0.3);padding-bottom:2px;">
+            <a href="https://whiterabbitla.com/experience" style="font-family:Georgia,serif;font-size:14px;letter-spacing:0.15em;text-transform:uppercase;color:#C9A3A8;text-decoration:none;border-bottom:1px solid rgba(201,163,168,0.3);padding-bottom:2px;">
               Explore the Experience
             </a>
           </p>
@@ -101,7 +101,7 @@ serve(async (req) => {
           <p style="margin:0;font-family:Georgia,serif;font-size:15px;color:rgba(245,240,232,0.6);font-style:italic;">
             Warmly,
           </p>
-          <p style="margin:4px 0 0;font-family:Georgia,serif;font-size:16px;color:#F5F0E8;">
+          <p style="margin:4px 0 0;font-family:Georgia,serif;font-size:16px;color:#F8F5F0;">
             Scott Syme
           </p>
           <p style="margin:2px 0 0;font-family:Georgia,serif;font-size:13px;color:rgba(245,240,232,0.4);letter-spacing:0.1em;text-transform:uppercase;">
