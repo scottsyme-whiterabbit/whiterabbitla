@@ -66,12 +66,11 @@ const Experience = () => {
           <AnimatedSection>
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">The White Rabbit Experience</p>
             <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-cream mb-6">
-              Your Event. Their Favorite Memory.
+              An Encounter with Joy
             </h1>
             <p className="font-sans text-base text-cream/70 max-w-2xl mx-auto leading-relaxed">
-              Three months from now, your guests will still be talking about what happened at your event. 
-              Not the venue, not the menu. The moment everything shifted. 
-              That's what a White Rabbit experience creates: an atmosphere so alive, so intimate, 
+              Wonder, hospitality, and moments that stay with your guests long after the evening is over. 
+              White Rabbit creates an atmosphere so alive, so intimate, 
               that every person in the room feels like the most important one there.
             </p>
           </AnimatedSection>
