@@ -79,7 +79,7 @@ White Rabbit · Los Angeles<br/>
 </td></tr>
 <tr><td style="padding: 0 40px 32px; text-align:center;" class="padding-mobile">
 <p style="margin:0; font-family:Georgia,serif; font-size:11px; color:rgba(245,240,232,0.25);">
-<a href="${APP_URL}/unsubscribe?email=${encodeURIComponent("{{EMAIL}}")}" style="color:rgba(245,240,232,0.3); text-decoration:underline;">Unsubscribe</a>
+<a href="${SITE_URL}/unsubscribe?email=${encodeURIComponent("{{EMAIL}}")}" style="color:rgba(245,240,232,0.3); text-decoration:underline;">Unsubscribe</a>
 </p>
 </td></tr>
 
