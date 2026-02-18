@@ -13,6 +13,12 @@ const DRIP_LABELS = [
   { step: 4, subjectA: "Add to your vendor list?", subjectB: "One vendor, three formats", day: 21 },
 ];
 
+const WARM_LABELS = [
+  { step: 0, subjectA: "Quick thought for your next event", subjectB: "Noticed you were curious", day: 0 },
+  { step: 1, subjectA: "What Soho House said", subjectB: "Their highest-rated entertainment ever", day: 3 },
+  { step: 2, subjectA: "Before I move on", subjectB: "Last note from me", day: 7 },
+];
+
 interface PlannerContact {
   id: string;
   email: string;
@@ -54,6 +60,7 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
   const [csvInput, setCsvInput] = useState("");
   const [previewStep, setPreviewStep] = useState(0);
   const [previewHtml, setPreviewHtml] = useState("");
+  const [previewCampaign, setPreviewCampaign] = useState<string>("planner");
   const [loading, setLoading] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [contacts, setContacts] = useState<PlannerContact[]>([]);
@@ -216,10 +223,11 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
     }
   };
 
-  const handlePreview = async (step: number) => {
+  const handlePreview = async (step: number, campaign: string = "planner") => {
     setPreviewStep(step);
+    setPreviewCampaign(campaign);
     try {
-      const res = await callPlanner("preview", { step });
+      const res = await callPlanner("preview", { step, campaign });
       setPreviewHtml(res.body_html);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Preview failed");
@@ -362,7 +370,28 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
         </div>
       </div>
 
-      {/* A/B Test Results */}
+      {/* Warm Nurture Sequence */}
+      <div>
+        <h3 className="font-sans text-sm tracking-[0.2em] uppercase text-muted-foreground mb-4 flex items-center gap-2">
+          <ThermometerSun size={16} className="text-orange-400" />
+          Warm Nurture Sequence
+          <span className="text-xs text-muted-foreground/50 normal-case tracking-normal">(3+ clicks triggers this)</span>
+        </h3>
+        <div className="grid grid-cols-3 gap-2">
+          {WARM_LABELS.map((d, i) => (
+            <button
+              key={`warm-${i}`}
+              onClick={() => handlePreview(i, "planner-warm")}
+              className={`border p-3 text-left transition-colors hover:border-accent ${previewCampaign === "planner-warm" && previewStep === i && previewHtml ? "border-accent" : "border-border"}`}
+            >
+              <p className="font-sans text-xs text-orange-400/70 mb-1">Day {d.day}</p>
+              <p className="font-sans text-sm text-foreground leading-tight">{d.subjectA}</p>
+              <p className="font-sans text-[10px] text-muted-foreground/60 leading-tight mt-0.5">B: {d.subjectB}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {stats.abResults && Object.keys(stats.abResults).length > 0 && (
         <div>
           <h3 className="font-sans text-sm tracking-[0.2em] uppercase text-muted-foreground mb-4 flex items-center gap-2">
@@ -429,9 +458,17 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
             <div>
               <h3 className="font-sans text-sm text-foreground">
                 <Eye size={14} className="inline mr-2" />
-                Preview: Email {previewStep + 1} — "{DRIP_LABELS[previewStep].subjectA}"
+                {previewCampaign === "planner-warm"
+                  ? `Preview: Nurture ${previewStep + 1} — "${WARM_LABELS[previewStep]?.subjectA}"`
+                  : `Preview: Email ${previewStep + 1} — "${DRIP_LABELS[previewStep]?.subjectA}"`
+                }
               </h3>
-              <p className="text-xs text-muted-foreground mt-1">Day {DRIP_LABELS[previewStep].day} · Sample: Sarah from Stellar Events</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {previewCampaign === "planner-warm"
+                  ? `Day ${WARM_LABELS[previewStep]?.day} · Warm Nurture Sequence · Sample: Sarah from Stellar Events`
+                  : `Day ${DRIP_LABELS[previewStep]?.day} · Sample: Sarah from Stellar Events`
+                }
+              </p>
             </div>
             <button onClick={() => setPreviewHtml("")} className="text-muted-foreground hover:text-foreground text-xs uppercase tracking-wider">Close</button>
           </div>
