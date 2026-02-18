@@ -454,8 +454,13 @@ serve(async (req) => {
               body: JSON.stringify({
                 from: "Scott Syme | White Rabbit LA <scott.syme@whiterabbitla.com>",
                 to: [contact.email],
+                reply_to: "events@whiterabbitla.com",
                 subject,
                 html,
+                headers: {
+                  "List-Unsubscribe": `<${SITE_URL}/unsubscribe?email=${encodeURIComponent(contact.email)}>, <mailto:events@whiterabbitla.com?subject=Unsubscribe>`,
+                  "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+                },
               }),
             });
             if (res.ok) {
@@ -513,8 +518,13 @@ serve(async (req) => {
                   body: JSON.stringify({
                     from: "Scott Syme | White Rabbit LA <scott.syme@whiterabbitla.com>",
                     to: [contact.email],
+                    reply_to: "events@whiterabbitla.com",
                     subject: breakupSubject,
                     html,
+                    headers: {
+                      "List-Unsubscribe": `<${SITE_URL}/unsubscribe?email=${encodeURIComponent(contact.email)}>, <mailto:events@whiterabbitla.com?subject=Unsubscribe>`,
+                      "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+                    },
                   }),
                 });
                 if (res.ok) {
@@ -564,8 +574,13 @@ serve(async (req) => {
               body: JSON.stringify({
                 from: "Scott Syme | White Rabbit LA <scott.syme@whiterabbitla.com>",
                 to: [contact.email],
+                reply_to: "events@whiterabbitla.com",
                 subject: warmSubject,
                 html,
+                headers: {
+                  "List-Unsubscribe": `<${SITE_URL}/unsubscribe?email=${encodeURIComponent(contact.email)}>, <mailto:events@whiterabbitla.com?subject=Unsubscribe>`,
+                  "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+                },
               }),
             });
             if (res.ok) {
@@ -762,8 +777,13 @@ serve(async (req) => {
         body: JSON.stringify({
           from: "Scott Syme | White Rabbit LA <scott.syme@whiterabbitla.com>",
           to: [toEmail],
+          reply_to: "events@whiterabbitla.com",
           subject: `${subjectPrefix}${getSubject(template, testVariant)}`,
           html,
+          headers: {
+            "List-Unsubscribe": `<${SITE_URL}/unsubscribe?email=${encodeURIComponent(toEmail)}>, <mailto:events@whiterabbitla.com?subject=Unsubscribe>`,
+            "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+          },
         }),
       });
 

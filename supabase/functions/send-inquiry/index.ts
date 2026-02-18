@@ -159,8 +159,13 @@ serve(async (req) => {
       body: JSON.stringify({
         from: "White Rabbit <scott.syme@whiterabbitla.com>",
         to: [email],
+        reply_to: "events@whiterabbitla.com",
         subject: "We received your inquiry, " + firstName,
         html: confirmationHtml,
+        text: `${firstName}, thank you for reaching out.\n\nYour inquiry has been received, and Scott is reviewing the details now. You can expect a personal response within 2 to 5 hours.\n\nIn the meantime, explore what a White Rabbit experience looks like: https://whiterabbitla.com/experience\n\nWe look forward to creating something extraordinary together.\n\nWarmly,\nScott Syme\nWhite Rabbit · Los Angeles`,
+        headers: {
+          "List-Unsubscribe": "<mailto:events@whiterabbitla.com?subject=Unsubscribe>",
+        },
       }),
     });
 

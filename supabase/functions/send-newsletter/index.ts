@@ -100,8 +100,14 @@ serve(async (req) => {
             body: JSON.stringify({
               from: "White Rabbit <scott.syme@whiterabbitla.com>",
               to: [contact.email],
+              reply_to: "events@whiterabbitla.com",
               subject: campaign.subject,
               html,
+              text: `${campaign.subject}\n\nView this email in your browser. If you'd like to unsubscribe, visit: https://whiterabbitla.com/unsubscribe?email=${encodeURIComponent(contact.email)}\n\nWhite Rabbit · Los Angeles\n7393 W. Manchester Ave #209, Los Angeles, CA 90045`,
+              headers: {
+                "List-Unsubscribe": `<https://whiterabbitla.com/unsubscribe?email=${encodeURIComponent(contact.email)}>, <mailto:events@whiterabbitla.com?subject=Unsubscribe>`,
+                "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+              },
             }),
           });
 
