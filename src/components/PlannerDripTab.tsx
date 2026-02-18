@@ -19,6 +19,19 @@ const WARM_LABELS = [
   { step: 2, subjectA: "Before I move on", subjectB: "Last note from me", day: 7 },
 ];
 
+const PULSE_LABELS = [
+  { step: 0, subjectA: "3 entertainment trends planners are booking this spring", subjectB: "Spring events are changing", date: "Mar 1", pillar: "Event Intel" },
+  { step: 1, subjectA: "What 150 guests at a Rolls-Royce launch experienced", subjectB: "Nobody wanted to leave", date: "Mar 15", pillar: "Behind the Curtain" },
+  { step: 2, subjectA: "Cocktail hours are getting a serious upgrade", subjectB: "The cocktail hour problem, solved", date: "Apr 1", pillar: "Event Intel" },
+  { step: 3, subjectA: "A private dinner show for 30", subjectB: "The after-dinner surprise that changed the night", date: "Apr 15", pillar: "Behind the Curtain" },
+  { step: 4, subjectA: "Summer gala season starts now", subjectB: "What top planners are booking for summer", date: "May 1", pillar: "Event Intel" },
+  { step: 5, subjectA: "Entertainment at a Rivian leadership retreat", subjectB: "When the CEO won't stop talking about it", date: "May 15", pillar: "Behind the Curtain" },
+  { step: 6, subjectA: "Steal this idea: wedding entertainment beyond the DJ", subjectB: "The wedding vendor nobody expected", date: "Jun 1", pillar: "Steal This Idea" },
+  { step: 7, subjectA: "What happened at a Taittinger champagne dinner", subjectB: "Champagne, cards, and 40 guests", date: "Jun 15", pillar: "Behind the Curtain" },
+  { step: 8, subjectA: "Smart planners are booking Q4 now", subjectB: "Holiday party season fills up fast", date: "Jul 1", pillar: "Event Intel" },
+  { step: 9, subjectA: "200 guests in a Hyatt ballroom", subjectB: "The event highlight nobody planned for", date: "Jul 15", pillar: "Behind the Curtain" },
+];
+
 interface PlannerContact {
   id: string;
   email: string;
@@ -392,6 +405,30 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
         </div>
       </div>
 
+      {/* Planner Pulse — Twice-Monthly Newsletter */}
+      <div>
+        <h3 className="font-sans text-sm tracking-[0.2em] uppercase text-muted-foreground mb-4 flex items-center gap-2">
+          <Mail size={16} className="text-accent" />
+          Planner Pulse — Twice Monthly
+          <span className="text-xs text-muted-foreground/50 normal-case tracking-normal">(after drip/nurture completes · {(stats as any).pulseActive || 0} active)</span>
+        </h3>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+          {PULSE_LABELS.map((d, i) => (
+            <button
+              key={`pulse-${i}`}
+              onClick={() => handlePreview(i, "planner-pulse")}
+              className={`border p-3 text-left transition-colors hover:border-accent ${previewCampaign === "planner-pulse" && previewStep === i && previewHtml ? "border-accent" : "border-border"}`}
+            >
+              <p className="font-sans text-[10px] text-accent/70 mb-1">{d.date}</p>
+              <p className="font-sans text-[10px] tracking-wider uppercase text-muted-foreground/50 mb-1">{d.pillar}</p>
+              <p className="font-sans text-xs text-foreground leading-tight">{d.subjectA}</p>
+              <p className="font-sans text-[10px] text-muted-foreground/60 leading-tight mt-0.5">B: {d.subjectB}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+
+
       {stats.abResults && Object.keys(stats.abResults).length > 0 && (
         <div>
           <h3 className="font-sans text-sm tracking-[0.2em] uppercase text-muted-foreground mb-4 flex items-center gap-2">
@@ -458,13 +495,17 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
             <div>
               <h3 className="font-sans text-sm text-foreground">
                 <Eye size={14} className="inline mr-2" />
-                {previewCampaign === "planner-warm"
+                {previewCampaign === "planner-pulse"
+                  ? `Preview: Pulse ${previewStep + 1} — "${PULSE_LABELS[previewStep]?.subjectA}"`
+                  : previewCampaign === "planner-warm"
                   ? `Preview: Nurture ${previewStep + 1} — "${WARM_LABELS[previewStep]?.subjectA}"`
                   : `Preview: Email ${previewStep + 1} — "${DRIP_LABELS[previewStep]?.subjectA}"`
                 }
               </h3>
               <p className="text-xs text-muted-foreground mt-1">
-                {previewCampaign === "planner-warm"
+                {previewCampaign === "planner-pulse"
+                  ? `${PULSE_LABELS[previewStep]?.date} · ${PULSE_LABELS[previewStep]?.pillar} · Sample: Sarah from Stellar Events`
+                  : previewCampaign === "planner-warm"
                   ? `Day ${WARM_LABELS[previewStep]?.day} · Warm Nurture Sequence · Sample: Sarah from Stellar Events`
                   : `Day ${DRIP_LABELS[previewStep]?.day} · Sample: Sarah from Stellar Events`
                 }
