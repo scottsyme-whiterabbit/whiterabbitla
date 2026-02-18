@@ -121,7 +121,7 @@ function trackedLink(url: string, text: string, contactId: string, step: number)
 const TEMPLATES: EmailTemplate[] = [
   // Email 1: Day 0 — The Resident Event Problem
   {
-    subjectA: "Your resident events deserve better",
+    subjectA: "How's attendance at your resident events?",
     subjectB: "The attendance problem nobody talks about",
     preheader: "Same wine and cheese. Same 15 people.",
     body: (name, company, _city, contactId, step) => {
@@ -129,16 +129,19 @@ const TEMPLATES: EmailTemplate[] = [
       const link = contactId
         ? trackedLink(`${SITE_URL}/blog/why-resident-events-need-more-than-wine-and-cheese`, "See why it works →", contactId, step ?? 0)
         : `<a href="${SITE_URL}/blog/why-resident-events-need-more-than-wine-and-cheese" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">See why it works →</a>`;
+      const deckLink = contactId
+        ? trackedLink(`${SITE_URL}/deck`, "View our lookbook →", contactId, step ?? 0)
+        : `<a href="${SITE_URL}/deck" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);">View our lookbook →</a>`;
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
-<p style="margin:0 0 18px;">Quick question: how's attendance at ${buildingName}'s resident events? If it's the same group of regulars every time while the majority of residents stay upstairs, you're not alone. Every property manager I talk to hits the same wall.</p>
+<p style="margin:0 0 18px;">Quick question: how's attendance at your resident events? If it's the same group of regulars every time while the majority of residents stay upstairs, you're not alone. Every property manager I talk to hits the same wall.</p>
 <p style="margin:0 0 18px;">The problem isn't the budget or the catering. It's that residents have seen the same format at every building they've ever lived in. Nothing on the flyer is worth getting off the couch for.</p>
-<p style="margin:0 0 18px;">We've helped properties across Southern California break that pattern with something residents genuinely want to attend: a professional magic show. Not a children's entertainer. World-class close-up magic and mentalism that turns standard socials into the most talked-about events of the year.</p>
+<p style="margin:0 0 18px;">We've helped properties from Los Angeles to Denver to Miami break that pattern with something residents genuinely want to attend: a professional magic show. Not a children's entertainer. World-class close-up magic and mentalism that turns standard socials into the most talked-about events of the year.</p>
 <p style="margin:0 0 18px;">${link}</p>
 ${bookCallCTA()}
-<p style="margin:18px 0 18px;">Open to seeing how it fits ${buildingName}?</p>
+<p style="margin:18px 0 18px;">Open to seeing how this fits your next event?</p>
 ${signoff(true)}
-${ps("NetVendor approved. Fully insured. Turnkey setup. Zero coordination on your end.")}
+${ps(`NetVendor approved. Fully insured. Turnkey setup. ${deckLink}`)}
 </td></tr>`;
     },
   },
