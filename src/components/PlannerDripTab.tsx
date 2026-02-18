@@ -20,16 +20,16 @@ const WARM_LABELS = [
 ];
 
 const PULSE_LABELS = [
-  { step: 0, subjectA: "3 entertainment trends planners are booking this spring", subjectB: "Spring events are changing", date: "Mar 1", pillar: "Event Intel" },
-  { step: 1, subjectA: "What 30 guests at a Rolls-Royce unveiling experienced", subjectB: "Nobody wanted to leave", date: "Mar 15", pillar: "Behind the Curtain" },
+  { step: 0, subjectA: "3 entertainment trends planners are booking this spring", subjectB: "The problem with spring events (and the fix)", date: "Mar 1", pillar: "Event Intel" },
+  { step: 1, subjectA: "How we solved the 'dead air' problem at a Rolls-Royce unveiling", subjectB: "30 VIP guests, zero dead time", date: "Mar 15", pillar: "Behind the Curtain" },
   { step: 2, subjectA: "Cocktail hours are getting a serious upgrade", subjectB: "The cocktail hour problem, solved", date: "Apr 1", pillar: "Event Intel" },
-  { step: 3, subjectA: "A private dinner show for 30", subjectB: "The after-dinner surprise that changed the night", date: "Apr 15", pillar: "Behind the Curtain" },
-  { step: 4, subjectA: "Summer gala season starts now", subjectB: "What top planners are booking for summer", date: "May 1", pillar: "Event Intel" },
-  { step: 5, subjectA: "Magic under the stars at a Rivian retreat", subjectB: "The highlight of the retreat", date: "May 15", pillar: "Behind the Curtain" },
-  { step: 6, subjectA: "Steal this idea: wedding entertainment beyond the DJ", subjectB: "The wedding vendor nobody expected", date: "Jun 1", pillar: "Steal This Idea" },
-  { step: 7, subjectA: "What happened at a Taittinger champagne dinner", subjectB: "Champagne, cards, and 40 guests", date: "Jun 15", pillar: "Behind the Curtain" },
-  { step: 8, subjectA: "Smart planners are booking Q4 now", subjectB: "Holiday party season fills up fast", date: "Jul 1", pillar: "Event Intel" },
-  { step: 9, subjectA: "200 guests in a Hyatt ballroom", subjectB: "The event highlight nobody planned for", date: "Jul 15", pillar: "Behind the Curtain" },
+  { step: 3, subjectA: "How a Bel Air dinner party turned into the 'best party ever'", subjectB: "The after-dinner problem most hosts don't solve", date: "Apr 15", pillar: "Behind the Curtain" },
+  { step: 4, subjectA: "The summer event problem nobody talks about", subjectB: "What top planners are booking for summer (and why)", date: "May 1", pillar: "Event Intel" },
+  { step: 5, subjectA: "How we solved the 'everyone's scattered' problem at a Rivian retreat", subjectB: "The highlight of a Joshua Tree retreat", date: "May 15", pillar: "Behind the Curtain" },
+  { step: 6, subjectA: "The wedding vendor gap your couples don't know they have", subjectB: "The easiest vendor add your couples will love", date: "Jun 1", pillar: "Steal This Idea" },
+  { step: 7, subjectA: "The fine line between too much and just right", subjectB: "How Taittinger solved their luxury dinner problem", date: "Jun 15", pillar: "Behind the Curtain" },
+  { step: 8, subjectA: "The Q4 booking problem starts now", subjectB: "Holiday party season fills up fast", date: "Jul 1", pillar: "Event Intel" },
+  { step: 9, subjectA: "How a Hyatt property solved their 'same event, every year' problem", subjectB: "The event highlight nobody planned for", date: "Jul 15", pillar: "Behind the Curtain" },
 ];
 
 interface PlannerContact {
