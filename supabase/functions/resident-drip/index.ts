@@ -901,7 +901,7 @@ serve(async (req) => {
 
       const { data: contacts } = await supabase
         .from("newsletter_contacts")
-        .select("drip_step, subscribed, drip_campaign, engagement_status, reply_detected")
+        .select("id, drip_step, subscribed, drip_campaign, engagement_status, reply_detected")
         .in("drip_campaign", ["resident", "resident-done", "resident-pulse"]);
 
       const total = contacts?.length || 0;
