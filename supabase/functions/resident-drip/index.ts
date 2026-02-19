@@ -964,13 +964,19 @@ serve(async (req) => {
         }
       }
 
-      // Total emails sent
-      const { count: totalSent } = await supabase
+      // Total emails sent — check send_log first, fall back to contacts with last_emailed_at
+      const { count: totalSentLog } = await supabase
         .from("newsletter_send_log")
         .select("*", { count: "exact", head: true })
         .like("campaign_id", "resident%");
 
-      const openRate = (totalSent && totalSent > 0) ? Math.round((opensUnique / totalSent) * 100) : 0;
+      // If send log is empty (emails sent before logging was added), use emailed contact count
+      let totalSent = totalSentLog || 0;
+      if (totalSent === 0) {
+        totalSent = contacts?.filter(c => c.subscribed && c.drip_step >= 1).length || 0;
+      }
+
+      const openRate = (totalSent > 0) ? Math.round((opensUnique / totalSent) * 100) : 0;
 
       return new Response(JSON.stringify({
         total, active, unsubscribed, completed, stepCounts,
