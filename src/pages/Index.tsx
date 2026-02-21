@@ -55,7 +55,7 @@ const clients = [
 { name: "Hyatt", logo: hyattLogo },
 { name: "The Beverly Hilton", logo: beverlyHiltonLogo },
 { name: "Soho House", logo: sohohouseLogo },
-{ name: "The Hollywood Roosevelt", logo: hollywoodRooseveltLogo },
+{ name: "The Hollywood Roosevelt", logo: hollywoodRooseveltLogo, needsBlend: true },
 { name: "Rivian", logo: rivianLogo },
 { name: "Paramount", logo: paramountLogo },
 { name: "Olivia Rodrigo", logo: oliviarodrigoLogo },
@@ -148,7 +148,11 @@ const Index = () => {
                   alt={`${client.name} logo, White Rabbit client`}
                   loading="lazy"
                   decoding="async"
-                  className="max-h-full max-w-full w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity brightness-0 invert" />
+                  className={`max-h-full max-w-full w-auto h-auto object-contain transition-opacity ${
+                    (client as any).needsBlend
+                      ? "opacity-70 hover:opacity-90 mix-blend-screen"
+                      : "opacity-50 hover:opacity-80 brightness-0 invert"
+                  }`} />
                 </div>
               )}
             </div>
