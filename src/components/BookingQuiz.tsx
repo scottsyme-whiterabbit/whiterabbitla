@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { trackQuizStart, trackQuizComplete, trackFormSubmit } from "@/lib/analytics";
 
 const CLIENT_TYPES = [
   { id: "corporate", label: "Corporate / Brand", description: "Planning on behalf of a company or brand" },
@@ -185,6 +186,9 @@ const BookingQuiz = () => {
           content_category: data.eventLabel || 'Event Inquiry',
         });
       }
+      // GA4: track booking quiz completion
+      trackQuizComplete("booking", data.eventLabel);
+      trackFormSubmit("Booking Quiz", data.eventLabel);
       setSubmitted(true);
     } catch {
       toast({

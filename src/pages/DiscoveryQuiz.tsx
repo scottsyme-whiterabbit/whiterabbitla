@@ -5,6 +5,7 @@ import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import { supabase } from "@/integrations/supabase/client";
 import AnimatedSection from "@/components/AnimatedSection";
 import PersonaCard, { personas, getPersona } from "@/components/PersonaCard";
+import { trackQuizStart, trackQuizComplete } from "@/lib/analytics";
 
 interface QuizAnswer {
   eventType: string;
@@ -237,6 +238,8 @@ const DiscoveryQuiz = () => {
           content_category: recommendation.title,
         });
       }
+      // GA4: track discovery quiz completion
+      trackQuizComplete("discovery", recommendation.title);
       setSubmitted(true);
     } catch {
       setSubmitted(true);

@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useWebPageSchema } from "@/hooks/useSchemaOrg";
+import { trackFormSubmit } from "@/lib/analytics";
 
 const Contact = () => {
   usePageMeta({
@@ -61,6 +62,8 @@ const Contact = () => {
           content_category: formData.eventType || 'General Inquiry',
         });
       }
+      // GA4: track contact form submission
+      trackFormSubmit("Contact Form", formData.eventType || "General Inquiry");
       toast({
         title: "Inquiry Sent!",
         description: "We'll get back to you within 24 hours.",
