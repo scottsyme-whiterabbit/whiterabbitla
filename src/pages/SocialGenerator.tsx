@@ -68,6 +68,8 @@ const brandPhotos = [
 
 type AdFormat = "post" | "story" | "fb-ad" | "google-display";
 type LogoPosition = "top-left" | "center-top";
+type LogoStyle = "wordmark" | "rabbit";
+type LogoColor = "original" | "white";
 type ContentSource = "custom" | "article";
 
 const formatDimensions: Record<AdFormat, { w: number; h: number; label: string; aspect: string }> = {
@@ -89,6 +91,8 @@ const SocialGenerator = () => {
   const [ctaText, setCtaText] = useState("BOOK LEGENDARY MAGIC");
   const [showCta, setShowCta] = useState(true);
   const [logoPosition, setLogoPosition] = useState<LogoPosition>("top-left");
+  const [logoStyle, setLogoStyle] = useState<LogoStyle>("wordmark");
+  const [logoColor, setLogoColor] = useState<LogoColor>("original");
   const [selectedFormat, setSelectedFormat] = useState<AdFormat>("story");
   const [overlayOpacity, setOverlayOpacity] = useState(40);
 
@@ -292,6 +296,38 @@ const SocialGenerator = () => {
                 )}
               </div>
 
+              {/* Logo Style */}
+              <div>
+                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Logo Style</label>
+                <div className="flex gap-2">
+                  {([["wordmark", "Wordmark"], ["rabbit", "Rabbit Symbol"]] as [LogoStyle, string][]).map(([style, label]) => (
+                    <button
+                      key={style}
+                      onClick={() => setLogoStyle(style)}
+                      className={`font-sans text-xs tracking-[0.15em] uppercase px-5 py-2.5 border transition-colors ${logoStyle === style ? "bg-primary text-primary-foreground border-primary" : "border-border text-muted-foreground hover:border-accent"}`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Logo Color */}
+              <div>
+                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Logo Color</label>
+                <div className="flex gap-2">
+                  {([["original", "Original"], ["white", "White"]] as [LogoColor, string][]).map(([color, label]) => (
+                    <button
+                      key={color}
+                      onClick={() => setLogoColor(color)}
+                      className={`font-sans text-xs tracking-[0.15em] uppercase px-5 py-2.5 border transition-colors ${logoColor === color ? "bg-primary text-primary-foreground border-primary" : "border-border text-muted-foreground hover:border-accent"}`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* Logo Position */}
               <div>
                 <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Logo Placement</label>
@@ -399,7 +435,17 @@ const SocialGenerator = () => {
                   <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: selectedFormat === "story" ? "80px 60px 100px" : selectedFormat === "post" ? "60px" : "40px 50px" }}>
                     {/* Logo */}
                     <div style={{ display: "flex", justifyContent: logoPosition === "center-top" ? "center" : "flex-start" }}>
-                      <img src={wrSecondaryLogo} alt="White Rabbit" style={{ height: selectedFormat === "story" ? 55 : selectedFormat === "post" ? 45 : 35, objectFit: "contain" }} />
+                      <img
+                        src={logoStyle === "rabbit" ? wrSymbol : wrSecondaryLogo}
+                        alt="White Rabbit"
+                        style={{
+                          height: logoStyle === "rabbit"
+                            ? (selectedFormat === "story" ? 70 : selectedFormat === "post" ? 60 : 45)
+                            : (selectedFormat === "story" ? 55 : selectedFormat === "post" ? 45 : 35),
+                          objectFit: "contain",
+                          ...(logoColor === "white" ? { filter: "brightness(0) invert(1)" } : {}),
+                        }}
+                      />
                     </div>
                     {/* Text block */}
                     <div style={{ textAlign: "left" }}>
@@ -487,7 +533,18 @@ const SocialGenerator = () => {
           <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, ${forestDark}${Math.round(overlayOpacity * 2.55).toString(16).padStart(2, "0")} 0%, ${forestDark}${Math.round(Math.min(overlayOpacity + 20, 90) * 2.55).toString(16).padStart(2, "0")} 100%)` }} />
           <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: selectedFormat === "story" ? "80px 60px 100px" : selectedFormat === "post" ? "60px" : "40px 50px" }}>
             <div style={{ display: "flex", justifyContent: logoPosition === "center-top" ? "center" : "flex-start" }}>
-              <img src={wrSecondaryLogo} alt="White Rabbit" style={{ height: selectedFormat === "story" ? 55 : selectedFormat === "post" ? 45 : 35, objectFit: "contain" }} crossOrigin="anonymous" />
+              <img
+                src={logoStyle === "rabbit" ? wrSymbol : wrSecondaryLogo}
+                alt="White Rabbit"
+                style={{
+                  height: logoStyle === "rabbit"
+                    ? (selectedFormat === "story" ? 70 : selectedFormat === "post" ? 60 : 45)
+                    : (selectedFormat === "story" ? 55 : selectedFormat === "post" ? 45 : 35),
+                  objectFit: "contain",
+                  ...(logoColor === "white" ? { filter: "brightness(0) invert(1)" } : {}),
+                }}
+                crossOrigin="anonymous"
+              />
             </div>
             <div style={{ textAlign: "left" }}>
               <h2 style={{
