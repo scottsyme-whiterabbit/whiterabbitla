@@ -6,26 +6,95 @@ import AnimatedSection from "@/components/AnimatedSection";
 import { toPng } from "html-to-image";
 import wrSymbol from "@/assets/wr-symbol.png";
 import wrLogo from "@/assets/wr-primary-logo.png";
+import wrSecondaryLogo from "@/assets/wr-secondary-logo.png";
+
+// Brand photos library
+import heroDesert from "@/assets/hero-desert.jpg";
+import scottDesert from "@/assets/scott-desert-sitting.jpg";
+import aboutHero from "@/assets/about-hero-desert.jpg";
+import experienceHero from "@/assets/experience-hero-desert.jpg";
+import scottCouch from "@/assets/scott-couch.jpg";
+import eventParlorStage from "@/assets/event-parlor-stage.jpg";
+import eventPenthouse from "@/assets/event-penthouse-show.jpg";
+import eventScottBW from "@/assets/event-scott-bw-stage.jpg";
+import eventScottCards from "@/assets/event-scott-cards.jpg";
+import eventScottPerforming from "@/assets/event-scott-performing.jpg";
+import eventCrowdReaction from "@/assets/event-crowd-reaction.jpg";
+import eventGroupPhoto from "@/assets/event-group-photo.jpg";
+import eventCloseupCocktail from "@/assets/event-closeup-cocktail.jpg";
+import eventParlorAudience from "@/assets/event-parlor-audience.jpg";
+import eventSilhouette from "@/assets/event-silhouette.jpg";
+import eventCardsEmerald from "@/assets/event-cards-emerald.jpg";
+import eventCuMagic from "@/assets/event-cu-magic-reaction.jpg";
+import eventGuestReaction from "@/assets/event-guest-reaction.jpg";
+import cardsMotion from "@/assets/cards-motion-curtain.jpg";
+import cardsFan from "@/assets/cards-fan-closeup.jpg";
+import scottSyme from "@/assets/scott-syme-photo.jpg";
+import experienceCloseup from "@/assets/experience-closeup.jpg";
+import experienceCorporate from "@/assets/experience-corporate.jpg";
+import experiencePrivate from "@/assets/experience-private.jpg";
+import experienceParlor from "@/assets/experience-parlor.jpg";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
-type Format = "post" | "story";
+const brandPhotos = [
+  { src: heroDesert, label: "Desert Hero" },
+  { src: scottDesert, label: "Scott Desert Sitting" },
+  { src: aboutHero, label: "About Hero" },
+  { src: experienceHero, label: "Experience Hero" },
+  { src: scottCouch, label: "Scott Couch" },
+  { src: scottSyme, label: "Scott Portrait" },
+  { src: eventParlorStage, label: "Parlor Stage" },
+  { src: eventPenthouse, label: "Penthouse Show" },
+  { src: eventScottBW, label: "Scott B&W Stage" },
+  { src: eventScottCards, label: "Scott Cards" },
+  { src: eventScottPerforming, label: "Scott Performing" },
+  { src: eventCrowdReaction, label: "Crowd Reaction" },
+  { src: eventGroupPhoto, label: "Group Photo" },
+  { src: eventCloseupCocktail, label: "Closeup Cocktail" },
+  { src: eventParlorAudience, label: "Parlor Audience" },
+  { src: eventSilhouette, label: "Silhouette" },
+  { src: eventCardsEmerald, label: "Cards Emerald" },
+  { src: eventCuMagic, label: "Magic Reaction" },
+  { src: eventGuestReaction, label: "Guest Reaction" },
+  { src: cardsMotion, label: "Cards Motion" },
+  { src: cardsFan, label: "Cards Fan" },
+  { src: experienceCloseup, label: "Experience Close-Up" },
+  { src: experienceCorporate, label: "Experience Corporate" },
+  { src: experiencePrivate, label: "Experience Private" },
+  { src: experienceParlor, label: "Experience Parlor" },
+];
+
+type AdFormat = "post" | "story" | "fb-ad" | "google-display";
+type LogoPosition = "top-left" | "center-top";
+type ContentSource = "custom" | "article";
+
+const formatDimensions: Record<AdFormat, { w: number; h: number; label: string; aspect: string }> = {
+  post: { w: 1080, h: 1080, label: "Instagram Post", aspect: "1/1" },
+  story: { w: 1080, h: 1920, label: "Instagram Story", aspect: "9/16" },
+  "fb-ad": { w: 1200, h: 628, label: "Facebook Ad", aspect: "1200/628" },
+  "google-display": { w: 1200, h: 628, label: "Google Display", aspect: "1200/628" },
+};
 
 const SocialGenerator = () => {
   const [password, setPassword] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
-  const [storedPassword, setStoredPassword] = useState("");
 
-  const [selectedSlug, setSelectedSlug] = useState<string>("");
-  const [generating, setGenerating] = useState<Format | null>(null);
-  const [postBg, setPostBg] = useState<string | null>(null);
-  const [storyBg, setStoryBg] = useState<string | null>(null);
-  const [postFinal, setPostFinal] = useState<string | null>(null);
-  const [storyFinal, setStoryFinal] = useState<string | null>(null);
+  const [contentSource, setContentSource] = useState<ContentSource>("custom");
+  const [selectedSlug, setSelectedSlug] = useState("");
+  const [selectedPhoto, setSelectedPhoto] = useState<number>(0);
+  const [headline, setHeadline] = useState("EVER WONDER HOW\nEVENTS BECOME\nLEGENDARY?");
+  const [subheadline, setSubheadline] = useState("DISCOVER CINEMATIC WONDER.");
+  const [ctaText, setCtaText] = useState("BOOK LEGENDARY MAGIC");
+  const [showCta, setShowCta] = useState(true);
+  const [logoPosition, setLogoPosition] = useState<LogoPosition>("top-left");
+  const [selectedFormat, setSelectedFormat] = useState<AdFormat>("story");
+  const [overlayOpacity, setOverlayOpacity] = useState(40);
 
-  const postRef = useRef<HTMLDivElement>(null);
-  const storyRef = useRef<HTMLDivElement>(null);
+  const [finalImage, setFinalImage] = useState<string | null>(null);
+  const [compositing, setCompositing] = useState(false);
+  const canvasRef = useRef<HTMLDivElement>(null);
 
   const selectedArticle = blogArticles.find((a) => a.slug === selectedSlug);
 
@@ -34,14 +103,10 @@ const SocialGenerator = () => {
     try {
       const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${SUPABASE_KEY}`,
-        },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${SUPABASE_KEY}` },
         body: JSON.stringify({ action: "get_stats", adminPassword: password }),
       });
       if (res.ok) {
-        setStoredPassword(password);
         setAuthenticated(true);
         toast({ title: "Welcome back" });
       } else {
@@ -52,202 +117,56 @@ const SocialGenerator = () => {
     }
   };
 
-  const compositeImage = useCallback(async (ref: React.RefObject<HTMLDivElement>, format: Format) => {
-    if (!ref.current) return;
-    // Wait for background image to render
-    await new Promise((r) => setTimeout(r, 500));
+  // When article selected, populate fields
+  const handleArticleSelect = (slug: string) => {
+    setSelectedSlug(slug);
+    const article = blogArticles.find((a) => a.slug === slug);
+    if (article) {
+      setHeadline(article.title.toUpperCase());
+      setSubheadline(article.excerpt.split(".")[0].toUpperCase() + ".");
+      setCtaText("READ MORE");
+    }
+  };
+
+  const generateComposite = useCallback(async () => {
+    if (!canvasRef.current) return;
+    setCompositing(true);
+    setFinalImage(null);
+    // Allow render
+    await new Promise((r) => setTimeout(r, 600));
     try {
-      const dataUrl = await toPng(ref.current, {
-        width: format === "post" ? 1080 : 1080,
-        height: format === "post" ? 1080 : 1920,
+      const dim = formatDimensions[selectedFormat];
+      const dataUrl = await toPng(canvasRef.current, {
+        width: dim.w,
+        height: dim.h,
         pixelRatio: 1,
         cacheBust: true,
       });
-      if (format === "post") setPostFinal(dataUrl);
-      else setStoryFinal(dataUrl);
-      toast({ title: "Image ready", description: "Your branded image is ready to download." });
+      setFinalImage(dataUrl);
+      toast({ title: "Ad ready", description: "Your branded image is ready to download." });
     } catch (err) {
       console.error("Composite error:", err);
       toast({ title: "Compositing failed", variant: "destructive" });
-    }
-  }, []);
-
-  const generate = async (format: Format) => {
-    if (!selectedArticle) return;
-    setGenerating(format);
-    if (format === "post") { setPostBg(null); setPostFinal(null); }
-    else { setStoryBg(null); setStoryFinal(null); }
-
-    try {
-      const { data, error } = await supabase.functions.invoke("generate-social", {
-        body: {
-          title: selectedArticle.title,
-          excerpt: selectedArticle.excerpt,
-          category: selectedArticle.category,
-          format,
-        },
-      });
-
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
-
-      if (format === "post") setPostBg(data.image);
-      else setStoryBg(data.image);
-
-      // Composite after state update
-      setTimeout(() => {
-        compositeImage(format === "post" ? postRef : storyRef, format);
-      }, 800);
-    } catch (e: any) {
-      console.error(e);
-      toast({ title: "Generation failed", description: e.message || "Something went wrong.", variant: "destructive" });
     } finally {
-      setGenerating(null);
+      setCompositing(false);
     }
-  };
+  }, [selectedFormat]);
 
-  const download = (dataUrl: string, filename: string) => {
+  const download = (dataUrl: string) => {
     const a = document.createElement("a");
     a.href = dataUrl;
-    a.download = filename;
+    a.download = `wr-${selectedFormat}-${Date.now()}.png`;
     a.click();
   };
 
-  // Compositing template components
-  const PostTemplate = ({ bg }: { bg: string }) => (
-    <div
-      ref={postRef}
-      style={{
-        width: 1080,
-        height: 1080,
-        position: "relative",
-        overflow: "hidden",
-        fontFamily: "'Ogg', Georgia, serif",
-      }}
-    >
-      {/* Background */}
-      <img src={bg} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }} crossOrigin="anonymous" />
-      {/* Dark overlay for text legibility */}
-      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(30,53,44,0.4) 0%, rgba(30,53,44,0.75) 50%, rgba(30,53,44,0.9) 100%)" }} />
-      {/* Content */}
-      <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 80 }}>
-        {/* Top: Logo */}
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <img src={wrLogo} alt="White Rabbit" style={{ height: 70, objectFit: "contain" }} crossOrigin="anonymous" />
-        </div>
-        {/* Center: Title */}
-        <div style={{ textAlign: "center", padding: "0 20px" }}>
-          <p style={{
-            fontFamily: "'OggText-Book', sans-serif",
-            fontSize: 16,
-            letterSpacing: "0.3em",
-            textTransform: "uppercase" as const,
-            color: "#c8a0a0",
-            marginBottom: 24,
-          }}>
-            {selectedArticle?.category}
-          </p>
-          <h2 style={{
-            fontFamily: "'Ogg', Georgia, serif",
-            fontSize: selectedArticle && selectedArticle.title.length > 60 ? 42 : 52,
-            fontWeight: 400,
-            fontStyle: "normal",
-            lineHeight: 1.2,
-            color: "#f5f0e8",
-            margin: 0,
-          }}>
-            {selectedArticle?.title}
-          </h2>
-        </div>
-        {/* Bottom: Symbol + URL */}
-        <div style={{ textAlign: "center" }}>
-          <img src={wrSymbol} alt="" style={{ height: 40, objectFit: "contain", marginBottom: 16, opacity: 0.7 }} crossOrigin="anonymous" />
-          <p style={{
-            fontFamily: "'OggText-Book', sans-serif",
-            fontSize: 13,
-            letterSpacing: "0.25em",
-            textTransform: "uppercase" as const,
-            color: "rgba(245,240,232,0.5)",
-            margin: 0,
-          }}>
-            whiterabbitla.com
-          </p>
-        </div>
-      </div>
-    </div>
-  );
+  const dim = formatDimensions[selectedFormat];
+  const photo = brandPhotos[selectedPhoto];
 
-  const StoryTemplate = ({ bg }: { bg: string }) => (
-    <div
-      ref={storyRef}
-      style={{
-        width: 1080,
-        height: 1920,
-        position: "relative",
-        overflow: "hidden",
-        fontFamily: "'Ogg', Georgia, serif",
-      }}
-    >
-      <img src={bg} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }} crossOrigin="anonymous" />
-      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(30,53,44,0.3) 0%, rgba(30,53,44,0.5) 30%, rgba(30,53,44,0.85) 70%, rgba(30,53,44,0.95) 100%)" }} />
-      <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "120px 80px 100px" }}>
-        {/* Top: Logo */}
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <img src={wrLogo} alt="White Rabbit" style={{ height: 80, objectFit: "contain" }} crossOrigin="anonymous" />
-        </div>
-        {/* Center: Title */}
-        <div style={{ textAlign: "center", padding: "0 20px" }}>
-          <p style={{
-            fontFamily: "'OggText-Book', sans-serif",
-            fontSize: 18,
-            letterSpacing: "0.3em",
-            textTransform: "uppercase" as const,
-            color: "#c8a0a0",
-            marginBottom: 32,
-          }}>
-            {selectedArticle?.category}
-          </p>
-          <h2 style={{
-            fontFamily: "'Ogg', Georgia, serif",
-            fontSize: selectedArticle && selectedArticle.title.length > 60 ? 48 : 58,
-            fontWeight: 400,
-            fontStyle: "normal",
-            lineHeight: 1.25,
-            color: "#f5f0e8",
-            margin: "0 0 40px 0",
-          }}>
-            {selectedArticle?.title}
-          </h2>
-          <p style={{
-            fontFamily: "'OggText-Book', sans-serif",
-            fontSize: 20,
-            lineHeight: 1.6,
-            color: "rgba(245,240,232,0.7)",
-            margin: 0,
-            maxWidth: 800,
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}>
-            {selectedArticle?.excerpt}
-          </p>
-        </div>
-        {/* Bottom: Symbol + URL */}
-        <div style={{ textAlign: "center" }}>
-          <img src={wrSymbol} alt="" style={{ height: 48, objectFit: "contain", marginBottom: 20, opacity: 0.7 }} crossOrigin="anonymous" />
-          <p style={{
-            fontFamily: "'OggText-Book', sans-serif",
-            fontSize: 14,
-            letterSpacing: "0.25em",
-            textTransform: "uppercase" as const,
-            color: "rgba(245,240,232,0.5)",
-            margin: 0,
-          }}>
-            whiterabbitla.com
-          </p>
-        </div>
-      </div>
-    </div>
-  );
+  // Brand colors
+  const forestDark = "#223D34";
+  const cream = "#F8F5F0";
+  const gold = "#C8963E";
+  const rose = "#C9A3A8";
 
   if (!authenticated) {
     return (
@@ -256,7 +175,7 @@ const SocialGenerator = () => {
           <AnimatedSection>
             <div className="text-center mb-8">
               <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">Admin Access</p>
-              <h1 className="font-serif text-3xl text-foreground">Social Generator</h1>
+              <h1 className="font-serif text-3xl text-foreground">Ad Generator</h1>
             </div>
             <form onSubmit={handleLogin} className="space-y-4">
               <input
@@ -266,10 +185,7 @@ const SocialGenerator = () => {
                 placeholder="Enter admin password"
                 className="w-full bg-background border border-border text-foreground font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent"
               />
-              <button
-                type="submit"
-                className="w-full font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-3 hover:bg-accent/80 transition-colors"
-              >
+              <button type="submit" className="w-full font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-3 hover:bg-accent/80 transition-colors">
                 Enter
               </button>
             </form>
@@ -281,129 +197,345 @@ const SocialGenerator = () => {
 
   return (
     <main id="main-content" className="pt-20">
-      <section className="bg-forest-dark py-24">
+      {/* Header */}
+      <section className="bg-forest-dark py-16">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <AnimatedSection>
-            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">Admin Tool</p>
-            <h1 className="font-serif text-4xl md:text-5xl text-cream mb-6">Social Content Generator</h1>
-            <p className="font-sans text-base text-cream/70 max-w-xl mx-auto">
-              AI generates the background artwork, then your brand fonts, logos, and layout are composited with pixel-perfect precision.
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">Brand Toolkit</p>
+            <h1 className="font-serif text-4xl md:text-5xl text-cream mb-4">Ad Generator</h1>
+            <p className="font-sans text-sm text-cream/60 max-w-lg mx-auto">
+              Create on-brand ads using your real photos, typography, and brand identity. No AI backgrounds.
             </p>
           </AnimatedSection>
         </div>
       </section>
 
-      <section className="py-16">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="mb-12">
-            <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">
-              Select Article
-            </label>
-            <select
-              value={selectedSlug}
-              onChange={(e) => {
-                setSelectedSlug(e.target.value);
-                setPostBg(null); setStoryBg(null);
-                setPostFinal(null); setStoryFinal(null);
-              }}
-              className="w-full bg-background border border-border text-foreground font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent"
-            >
-              <option value="">Choose an article...</option>
-              {blogArticles.map((article) => (
-                <option key={article.slug} value={article.slug}>
-                  {article.title}
-                </option>
-              ))}
-            </select>
+      <section className="py-12">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* LEFT: Controls */}
+            <div className="space-y-8">
+              {/* Content Source Toggle */}
+              <div>
+                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Content Source</label>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setContentSource("custom")}
+                    className={`font-sans text-xs tracking-[0.15em] uppercase px-5 py-2.5 border transition-colors ${contentSource === "custom" ? "bg-primary text-primary-foreground border-primary" : "border-border text-muted-foreground hover:border-accent"}`}
+                  >
+                    Custom Text
+                  </button>
+                  <button
+                    onClick={() => setContentSource("article")}
+                    className={`font-sans text-xs tracking-[0.15em] uppercase px-5 py-2.5 border transition-colors ${contentSource === "article" ? "bg-primary text-primary-foreground border-primary" : "border-border text-muted-foreground hover:border-accent"}`}
+                  >
+                    From Article
+                  </button>
+                </div>
+              </div>
+
+              {/* Article selector */}
+              {contentSource === "article" && (
+                <div>
+                  <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Select Article</label>
+                  <select
+                    value={selectedSlug}
+                    onChange={(e) => handleArticleSelect(e.target.value)}
+                    className="w-full bg-background border border-border text-foreground font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent"
+                  >
+                    <option value="">Choose an article...</option>
+                    {blogArticles.map((a) => (
+                      <option key={a.slug} value={a.slug}>{a.title}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {/* Headline */}
+              <div>
+                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Headline</label>
+                <textarea
+                  value={headline}
+                  onChange={(e) => setHeadline(e.target.value)}
+                  rows={3}
+                  className="w-full bg-background border border-border text-foreground font-serif text-lg px-4 py-3 focus:outline-none focus:border-accent resize-none"
+                />
+              </div>
+
+              {/* Subheadline */}
+              <div>
+                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Subheadline</label>
+                <input
+                  value={subheadline}
+                  onChange={(e) => setSubheadline(e.target.value)}
+                  className="w-full bg-background border border-border text-foreground font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent"
+                />
+              </div>
+
+              {/* CTA */}
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <label className="font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground">CTA Button</label>
+                  <button
+                    onClick={() => setShowCta(!showCta)}
+                    className={`font-sans text-[10px] tracking-[0.15em] uppercase px-3 py-1 border transition-colors ${showCta ? "bg-accent text-accent-foreground border-accent" : "border-border text-muted-foreground"}`}
+                  >
+                    {showCta ? "On" : "Off"}
+                  </button>
+                </div>
+                {showCta && (
+                  <input
+                    value={ctaText}
+                    onChange={(e) => setCtaText(e.target.value)}
+                    className="w-full bg-background border border-border text-foreground font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent"
+                  />
+                )}
+              </div>
+
+              {/* Logo Position */}
+              <div>
+                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Logo Placement</label>
+                <div className="flex gap-2">
+                  {(["top-left", "center-top"] as LogoPosition[]).map((pos) => (
+                    <button
+                      key={pos}
+                      onClick={() => setLogoPosition(pos)}
+                      className={`font-sans text-xs tracking-[0.15em] uppercase px-5 py-2.5 border transition-colors ${logoPosition === pos ? "bg-primary text-primary-foreground border-primary" : "border-border text-muted-foreground hover:border-accent"}`}
+                    >
+                      {pos === "top-left" ? "Top Left" : "Center Top"}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Format */}
+              <div>
+                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Ad Format</label>
+                <div className="flex flex-wrap gap-2">
+                  {(Object.keys(formatDimensions) as AdFormat[]).map((fmt) => (
+                    <button
+                      key={fmt}
+                      onClick={() => { setSelectedFormat(fmt); setFinalImage(null); }}
+                      className={`font-sans text-xs tracking-[0.15em] uppercase px-4 py-2.5 border transition-colors ${selectedFormat === fmt ? "bg-primary text-primary-foreground border-primary" : "border-border text-muted-foreground hover:border-accent"}`}
+                    >
+                      {formatDimensions[fmt].label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Overlay opacity */}
+              <div>
+                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">
+                  Overlay Darkness: {overlayOpacity}%
+                </label>
+                <input
+                  type="range"
+                  min={0}
+                  max={80}
+                  value={overlayOpacity}
+                  onChange={(e) => setOverlayOpacity(Number(e.target.value))}
+                  className="w-full accent-accent"
+                />
+              </div>
+
+              {/* Photo Library */}
+              <div>
+                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Background Photo</label>
+                <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 max-h-[300px] overflow-y-auto pr-1">
+                  {brandPhotos.map((p, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setSelectedPhoto(i)}
+                      className={`aspect-square overflow-hidden border-2 transition-all ${selectedPhoto === i ? "border-accent scale-[0.95]" : "border-transparent opacity-70 hover:opacity-100"}`}
+                    >
+                      <img src={p.src} alt={p.label} className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Generate */}
+              <button
+                onClick={generateComposite}
+                disabled={compositing}
+                className="w-full font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-4 hover:bg-accent/80 transition-colors disabled:opacity-50"
+              >
+                {compositing ? "Compositing..." : "Generate Ad"}
+              </button>
+            </div>
+
+            {/* RIGHT: Preview + Download */}
+            <div>
+              <p className="font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">
+                Live Preview — {dim.label} ({dim.w}×{dim.h})
+              </p>
+
+              {/* Scaled preview */}
+              <div
+                className="border border-border overflow-hidden bg-muted/20 mx-auto"
+                style={{
+                  aspectRatio: dim.aspect,
+                  maxWidth: selectedFormat === "story" ? "320px" : "100%",
+                  maxHeight: "600px",
+                }}
+              >
+                <div
+                  style={{
+                    width: dim.w,
+                    height: dim.h,
+                    transform: `scale(${selectedFormat === "story" ? 320 / dim.w : Math.min(1, 600 / dim.h)})`,
+                    transformOrigin: "top left",
+                    position: "relative",
+                    overflow: "hidden",
+                    fontFamily: "'Ogg', Georgia, serif",
+                  }}
+                >
+                  {/* Background photo */}
+                  <img src={photo.src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }} />
+                  {/* Forest green overlay */}
+                  <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, ${forestDark}${Math.round(overlayOpacity * 2.55).toString(16).padStart(2, "0")} 0%, ${forestDark}${Math.round(Math.min(overlayOpacity + 20, 90) * 2.55).toString(16).padStart(2, "0")} 100%)` }} />
+                  {/* Content layout */}
+                  <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: selectedFormat === "story" ? "80px 60px 100px" : selectedFormat === "post" ? "60px" : "40px 50px" }}>
+                    {/* Logo */}
+                    <div style={{ display: "flex", justifyContent: logoPosition === "center-top" ? "center" : "flex-start" }}>
+                      <img src={wrSecondaryLogo} alt="White Rabbit" style={{ height: selectedFormat === "story" ? 55 : selectedFormat === "post" ? 45 : 35, objectFit: "contain" }} />
+                    </div>
+                    {/* Text block */}
+                    <div style={{ textAlign: "left" }}>
+                      <h2 style={{
+                        fontFamily: "'Ogg', Georgia, serif",
+                        fontSize: selectedFormat === "story" ? 64 : selectedFormat === "post" ? 56 : 42,
+                        fontWeight: 400,
+                        lineHeight: 1.1,
+                        color: cream,
+                        margin: 0,
+                        whiteSpace: "pre-line",
+                        textTransform: "uppercase" as const,
+                      }}>
+                        {headline}
+                      </h2>
+                      {subheadline && (
+                        <p style={{
+                          fontFamily: "'Montserrat', sans-serif",
+                          fontSize: selectedFormat === "story" ? 18 : selectedFormat === "post" ? 16 : 14,
+                          fontWeight: 500,
+                          letterSpacing: "0.15em",
+                          color: cream,
+                          marginTop: selectedFormat === "story" ? 24 : 16,
+                          textTransform: "uppercase" as const,
+                        }}>
+                          {subheadline}
+                        </p>
+                      )}
+                    </div>
+                    {/* CTA */}
+                    <div>
+                      {showCta && (
+                        <div style={{
+                          backgroundColor: gold,
+                          color: forestDark,
+                          fontFamily: "'Montserrat', sans-serif",
+                          fontSize: selectedFormat === "story" ? 18 : selectedFormat === "post" ? 16 : 13,
+                          fontWeight: 600,
+                          letterSpacing: "0.2em",
+                          textTransform: "uppercase" as const,
+                          textAlign: "center",
+                          padding: selectedFormat === "story" ? "22px 40px" : "16px 32px",
+                          borderRadius: 2,
+                        }}>
+                          {ctaText}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Final export + download */}
+              {finalImage && (
+                <div className="mt-6 space-y-3">
+                  <div className="border border-accent/30 overflow-hidden" style={{ aspectRatio: dim.aspect, maxWidth: selectedFormat === "story" ? "320px" : "100%", maxHeight: "500px", margin: "0 auto" }}>
+                    <img src={finalImage} alt="Final ad" className="w-full h-full object-contain" />
+                  </div>
+                  <button
+                    onClick={() => download(finalImage)}
+                    className="w-full font-sans text-sm tracking-[0.2em] uppercase border border-accent text-accent px-8 py-3 hover:bg-accent hover:text-accent-foreground transition-colors"
+                  >
+                    Download {dim.label} ↓
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
-
-          {selectedArticle && (
-            <AnimatedSection>
-              <div className="border border-border p-6 mb-8">
-                <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">
-                  {selectedArticle.category} · {selectedArticle.readTime}
-                </p>
-                <h2 className="font-serif text-2xl text-foreground mb-3">{selectedArticle.title}</h2>
-                <p className="font-sans text-sm text-muted-foreground leading-relaxed">
-                  {selectedArticle.excerpt}
-                </p>
-              </div>
-
-              <div className="flex flex-wrap gap-4 mb-12">
-                <button
-                  onClick={() => generate("post")}
-                  disabled={!!generating}
-                  className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-3 hover:bg-accent/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {generating === "post" ? "Generating..." : "Generate Square Post"}
-                </button>
-                <button
-                  onClick={() => generate("story")}
-                  disabled={!!generating}
-                  className="font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-8 py-3 hover:bg-primary/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {generating === "story" ? "Generating..." : "Generate Story"}
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Post */}
-                <div>
-                  <p className="font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Square Post (1:1)</p>
-                  {postFinal ? (
-                    <>
-                      <div className="aspect-square border border-border overflow-hidden">
-                        <img src={postFinal} alt="Generated post" className="w-full h-full object-cover" />
-                      </div>
-                      <button
-                        onClick={() => download(postFinal, `wr-post-${selectedSlug}.png`)}
-                        className="mt-3 font-sans text-xs tracking-[0.2em] uppercase text-accent hover:text-accent/80 transition-colors"
-                      >
-                        Download Post ↓
-                      </button>
-                    </>
-                  ) : (
-                    <div className="aspect-square bg-muted/20 border border-border flex items-center justify-center">
-                      <p className="font-sans text-sm text-muted-foreground">
-                        {generating === "post" ? "Generating background..." : "No image yet"}
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Story */}
-                <div>
-                  <p className="font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Story (9:16)</p>
-                  {storyFinal ? (
-                    <>
-                      <div className="aspect-[9/16] border border-border overflow-hidden max-h-[500px]">
-                        <img src={storyFinal} alt="Generated story" className="w-full h-full object-cover" />
-                      </div>
-                      <button
-                        onClick={() => download(storyFinal, `wr-story-${selectedSlug}.png`)}
-                        className="mt-3 font-sans text-xs tracking-[0.2em] uppercase text-accent hover:text-accent/80 transition-colors"
-                      >
-                        Download Story ↓
-                      </button>
-                    </>
-                  ) : (
-                    <div className="aspect-[9/16] bg-muted/20 border border-border flex items-center justify-center max-h-[500px]">
-                      <p className="font-sans text-sm text-muted-foreground">
-                        {generating === "story" ? "Generating background..." : "No image yet"}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </AnimatedSection>
-          )}
         </div>
       </section>
 
-      {/* Hidden compositing canvases - rendered offscreen at full resolution */}
+      {/* Hidden full-res compositing canvas */}
       <div style={{ position: "absolute", left: "-9999px", top: 0 }}>
-        {postBg && selectedArticle && <PostTemplate bg={postBg} />}
-        {storyBg && selectedArticle && <StoryTemplate bg={storyBg} />}
+        <div
+          ref={canvasRef}
+          style={{
+            width: dim.w,
+            height: dim.h,
+            position: "relative",
+            overflow: "hidden",
+            fontFamily: "'Ogg', Georgia, serif",
+          }}
+        >
+          <img src={photo.src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }} crossOrigin="anonymous" />
+          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, ${forestDark}${Math.round(overlayOpacity * 2.55).toString(16).padStart(2, "0")} 0%, ${forestDark}${Math.round(Math.min(overlayOpacity + 20, 90) * 2.55).toString(16).padStart(2, "0")} 100%)` }} />
+          <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: selectedFormat === "story" ? "80px 60px 100px" : selectedFormat === "post" ? "60px" : "40px 50px" }}>
+            <div style={{ display: "flex", justifyContent: logoPosition === "center-top" ? "center" : "flex-start" }}>
+              <img src={wrSecondaryLogo} alt="White Rabbit" style={{ height: selectedFormat === "story" ? 55 : selectedFormat === "post" ? 45 : 35, objectFit: "contain" }} crossOrigin="anonymous" />
+            </div>
+            <div style={{ textAlign: "left" }}>
+              <h2 style={{
+                fontFamily: "'Ogg', Georgia, serif",
+                fontSize: selectedFormat === "story" ? 64 : selectedFormat === "post" ? 56 : 42,
+                fontWeight: 400,
+                lineHeight: 1.1,
+                color: cream,
+                margin: 0,
+                whiteSpace: "pre-line",
+                textTransform: "uppercase" as const,
+              }}>
+                {headline}
+              </h2>
+              {subheadline && (
+                <p style={{
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontSize: selectedFormat === "story" ? 18 : selectedFormat === "post" ? 16 : 14,
+                  fontWeight: 500,
+                  letterSpacing: "0.15em",
+                  color: cream,
+                  marginTop: selectedFormat === "story" ? 24 : 16,
+                  textTransform: "uppercase" as const,
+                }}>
+                  {subheadline}
+                </p>
+              )}
+            </div>
+            <div>
+              {showCta && (
+                <div style={{
+                  backgroundColor: gold,
+                  color: forestDark,
+                  fontFamily: "'Montserrat', sans-serif",
+                  fontSize: selectedFormat === "story" ? 18 : selectedFormat === "post" ? 16 : 13,
+                  fontWeight: 600,
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase" as const,
+                  textAlign: "center",
+                  padding: selectedFormat === "story" ? "22px 40px" : "16px 32px",
+                  borderRadius: 2,
+                }}>
+                  {ctaText}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   );
