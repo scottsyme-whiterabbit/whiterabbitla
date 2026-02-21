@@ -83,6 +83,17 @@ serve(async (req) => {
             .replace(/\{\{NAME\}\}/g, contact.name || "there")
             .replace(/\{\{UNSUBSCRIBE_LINK\}\}/g, `https://whiterabbitla.com/unsubscribe?email=${encodeURIComponent(contact.email)}`);
 
+          // Inject UTM params into all whiterabbitla.com links for GA4 attribution
+          const campaignSlug = (campaign.campaign_type || "newsletter").replace(/\s+/g, "-").toLowerCase();
+          html = html.replace(
+            /href="(https:\/\/whiterabbitla\.com[^"]*?)"/g,
+            (_match: string, url: string) => {
+              if (url.includes("utm_source") || url.includes("/unsubscribe")) return `href="${url}"`;
+              const sep = url.includes("?") ? "&" : "?";
+              return `href="${url}${sep}utm_source=email&utm_medium=newsletter&utm_campaign=${encodeURIComponent(campaignSlug)}&utm_content=${encodeURIComponent(campaignId)}"`;
+            }
+          );
+
           // Inject open tracking pixel
           const openPixel = `<img src="https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-open?cid=${contact.id}&step=0&cam=${campaignId}" width="1" height="1" style="display:block;width:1px;height:1px;border:0;" alt="" />`;
           if (html.includes("</body>")) {
