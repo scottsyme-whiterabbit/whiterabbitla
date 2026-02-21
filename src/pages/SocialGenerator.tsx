@@ -95,6 +95,8 @@ const SocialGenerator = () => {
   const [logoColor, setLogoColor] = useState<LogoColor>("original");
   const [selectedFormat, setSelectedFormat] = useState<AdFormat>("story");
   const [overlayOpacity, setOverlayOpacity] = useState(40);
+  const [logoScale, setLogoScale] = useState(100);
+  const [fontScale, setFontScale] = useState(100);
 
   const [finalImage, setFinalImage] = useState<string | null>(null);
   const [compositing, setCompositing] = useState(false);
@@ -375,6 +377,36 @@ const SocialGenerator = () => {
                 />
               </div>
 
+              {/* Logo Size */}
+              <div>
+                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">
+                  Logo Size: {logoScale}%
+                </label>
+                <input
+                  type="range"
+                  min={30}
+                  max={250}
+                  value={logoScale}
+                  onChange={(e) => setLogoScale(Number(e.target.value))}
+                  className="w-full accent-accent"
+                />
+              </div>
+
+              {/* Font Size */}
+              <div>
+                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">
+                  Font Size: {fontScale}%
+                </label>
+                <input
+                  type="range"
+                  min={50}
+                  max={200}
+                  value={fontScale}
+                  onChange={(e) => setFontScale(Number(e.target.value))}
+                  className="w-full accent-accent"
+                />
+              </div>
+
               {/* Photo Library */}
               <div>
                 <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Background Photo</label>
@@ -439,9 +471,9 @@ const SocialGenerator = () => {
                         src={logoStyle === "rabbit" ? wrSymbol : wrSecondaryLogo}
                         alt="White Rabbit"
                         style={{
-                          height: logoStyle === "rabbit"
+                          height: (logoStyle === "rabbit"
                             ? (selectedFormat === "story" ? 70 : selectedFormat === "post" ? 60 : 45)
-                            : (selectedFormat === "story" ? 55 : selectedFormat === "post" ? 45 : 35),
+                            : (selectedFormat === "story" ? 55 : selectedFormat === "post" ? 45 : 35)) * logoScale / 100,
                           objectFit: "contain",
                           ...(logoColor === "white" ? { filter: "brightness(0) invert(1)" } : {}),
                         }}
@@ -451,7 +483,7 @@ const SocialGenerator = () => {
                     <div style={{ textAlign: "left" }}>
                       <h2 style={{
                         fontFamily: "'Ogg', Georgia, serif",
-                        fontSize: selectedFormat === "story" ? 64 : selectedFormat === "post" ? 56 : 42,
+                        fontSize: (selectedFormat === "story" ? 64 : selectedFormat === "post" ? 56 : 42) * fontScale / 100,
                         fontWeight: 400,
                         lineHeight: 1.1,
                         color: cream,
@@ -464,7 +496,7 @@ const SocialGenerator = () => {
                       {subheadline && (
                         <p style={{
                           fontFamily: "'Montserrat', sans-serif",
-                          fontSize: selectedFormat === "story" ? 18 : selectedFormat === "post" ? 16 : 14,
+                          fontSize: (selectedFormat === "story" ? 18 : selectedFormat === "post" ? 16 : 14) * fontScale / 100,
                           fontWeight: 500,
                           letterSpacing: "0.15em",
                           color: cream,
@@ -482,7 +514,7 @@ const SocialGenerator = () => {
                           backgroundColor: gold,
                           color: forestDark,
                           fontFamily: "'Montserrat', sans-serif",
-                          fontSize: selectedFormat === "story" ? 18 : selectedFormat === "post" ? 16 : 13,
+                          fontSize: (selectedFormat === "story" ? 18 : selectedFormat === "post" ? 16 : 13) * fontScale / 100,
                           fontWeight: 600,
                           letterSpacing: "0.2em",
                           textTransform: "uppercase" as const,
@@ -537,9 +569,9 @@ const SocialGenerator = () => {
                 src={logoStyle === "rabbit" ? wrSymbol : wrSecondaryLogo}
                 alt="White Rabbit"
                 style={{
-                  height: logoStyle === "rabbit"
+                  height: (logoStyle === "rabbit"
                     ? (selectedFormat === "story" ? 70 : selectedFormat === "post" ? 60 : 45)
-                    : (selectedFormat === "story" ? 55 : selectedFormat === "post" ? 45 : 35),
+                    : (selectedFormat === "story" ? 55 : selectedFormat === "post" ? 45 : 35)) * logoScale / 100,
                   objectFit: "contain",
                   ...(logoColor === "white" ? { filter: "brightness(0) invert(1)" } : {}),
                 }}
@@ -549,7 +581,7 @@ const SocialGenerator = () => {
             <div style={{ textAlign: "left" }}>
               <h2 style={{
                 fontFamily: "'Ogg', Georgia, serif",
-                fontSize: selectedFormat === "story" ? 64 : selectedFormat === "post" ? 56 : 42,
+                fontSize: (selectedFormat === "story" ? 64 : selectedFormat === "post" ? 56 : 42) * fontScale / 100,
                 fontWeight: 400,
                 lineHeight: 1.1,
                 color: cream,
@@ -562,7 +594,7 @@ const SocialGenerator = () => {
               {subheadline && (
                 <p style={{
                   fontFamily: "'Montserrat', sans-serif",
-                  fontSize: selectedFormat === "story" ? 18 : selectedFormat === "post" ? 16 : 14,
+                  fontSize: (selectedFormat === "story" ? 18 : selectedFormat === "post" ? 16 : 14) * fontScale / 100,
                   fontWeight: 500,
                   letterSpacing: "0.15em",
                   color: cream,
@@ -579,7 +611,7 @@ const SocialGenerator = () => {
                   backgroundColor: gold,
                   color: forestDark,
                   fontFamily: "'Montserrat', sans-serif",
-                  fontSize: selectedFormat === "story" ? 18 : selectedFormat === "post" ? 16 : 13,
+                  fontSize: (selectedFormat === "story" ? 18 : selectedFormat === "post" ? 16 : 13) * fontScale / 100,
                   fontWeight: 600,
                   letterSpacing: "0.2em",
                   textTransform: "uppercase" as const,
