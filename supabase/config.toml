@@ -41,3 +41,6 @@ verify_jwt = false
 
 [functions.send-thank-you]
 verify_jwt = false
+
+[functions.score-subject]
+verify_jwt = false

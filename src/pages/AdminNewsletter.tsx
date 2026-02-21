@@ -4,6 +4,9 @@ import { Upload, Send, FileText, Flame, ThermometerSun, RefreshCw, Trash2, Eye, 
 import PlannerDripTab from "@/components/PlannerDripTab";
 import ResidentDripTab from "@/components/ResidentDripTab";
 import ContactsListTab from "@/components/ContactsListTab";
+import CampaignCalendarTab from "@/components/CampaignCalendarTab";
+import AnalyticsTab from "@/components/AnalyticsTab";
+import SubjectScorer from "@/components/SubjectScorer";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -52,7 +55,7 @@ const AdminNewsletter = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [storedPassword, setStoredPassword] = useState("");
 
-  const [activeTab, setActiveTab] = useState<"dashboard" | "contacts" | "compose" | "campaigns" | "planner" | "apartment" | "thankyou">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "planner" | "apartment" | "thankyou">("dashboard");
   const [tyClientName, setTyClientName] = useState("");
   const [tyClientEmail, setTyClientEmail] = useState("");
   const [tyEventType, setTyEventType] = useState("");
@@ -462,12 +465,12 @@ const AdminNewsletter = () => {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 mb-8 border-b border-border">
-          {(["dashboard", "contacts", "compose", "campaigns", "planner", "apartment", "thankyou"] as const).map(tab => (
+        <div className="flex gap-1 mb-8 border-b border-border overflow-x-auto">
+          {(["dashboard", "contacts", "compose", "campaigns", "calendar", "analytics", "planner", "apartment", "thankyou"] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 font-sans text-sm tracking-wider uppercase transition-colors ${
+              className={`px-4 py-2 font-sans text-sm tracking-wider uppercase transition-colors whitespace-nowrap ${
                 activeTab === tab ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"
               }`}
             >
@@ -687,6 +690,7 @@ const AdminNewsletter = () => {
                         onChange={e => setDraftSubject(e.target.value)}
                         className="w-full bg-forest-dark/50 border border-border text-foreground px-4 py-2 font-sans text-sm focus:outline-none focus:border-accent"
                       />
+                      <SubjectScorer subjectLine={draftSubject} storedPassword={storedPassword} onUseSuggestion={(s) => setDraftSubject(s)} />
                     </div>
                     <div>
                       <label className="font-sans text-xs tracking-wider uppercase text-muted-foreground mb-1 block">Preview Text</label>
@@ -793,6 +797,16 @@ const AdminNewsletter = () => {
               <p className="text-center text-muted-foreground py-8">No campaigns yet. Go to Compose to create one.</p>
             )}
           </div>
+        )}
+
+        {/* Campaign Calendar */}
+        {activeTab === "calendar" && (
+          <CampaignCalendarTab campaigns={campaigns} sendLog={[]} />
+        )}
+
+        {/* Analytics */}
+        {activeTab === "analytics" && (
+          <AnalyticsTab storedPassword={storedPassword} />
         )}
 
         {/* Planner Drip Campaign */}
