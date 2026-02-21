@@ -6,7 +6,7 @@ import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import QuizCTA from "@/components/QuizCTA";
 import QuizNudge from "@/components/QuizNudge";
 import FAQSection from "@/components/FAQSection";
-import VideoReelGrid from "@/components/VideoReelGrid";
+
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 import heroImage from "@/assets/hero-magic-cinematic.jpg";
@@ -270,10 +270,6 @@ const Index = () => {
           </AnimatedSection>
         </div>
       </section>
-
-      {/* Video Highlight Reel */}
-      <VideoReelGrid />
-
       {/* Discover More */}
       <section className="py-24 lg:py-32">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
