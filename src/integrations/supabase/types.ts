@@ -383,7 +383,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_resident_opens_stats: { Args: never; Returns: Json }
     }
     Enums: {
       [_ in never]: never
