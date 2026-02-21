@@ -6,6 +6,7 @@ import { usePageMeta } from "@/hooks/usePageMeta";
 import { useArticleSchema } from "@/hooks/useSchemaOrg";
 import ShareButton from "@/components/ShareButton";
 import QuizNudge from "@/components/QuizNudge";
+import RelatedReads from "@/components/RelatedReads";
 
 import closeupImg from "@/assets/event-closeup-cocktail.jpg";
 import parlorImg from "@/assets/event-parlor-show.jpg";
@@ -219,6 +220,9 @@ const BlogArticle = () => {
           </div>
         </section>
       </AnimatedSection>
+
+      {/* Related Reads */}
+      <RelatedReads currentSlug={slug || ""} category={article.category} />
 
       {/* Back link */}
       <section className="py-16">

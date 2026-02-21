@@ -18,6 +18,17 @@ const Blog = () => {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [activeLocation, setActiveLocation] = useState<string | null>(null);
 
+  // Editor's picks — handpicked top-performing articles
+  const editorPickSlugs = [
+    "why-cocktail-hour-entertainment-matters",
+    "entertainment-gap-planners-dont-know",
+    "golf-tournament-entertainment-ideas",
+    "best-magic-experiences-los-angeles",
+  ];
+  const editorPicks = editorPickSlugs
+    .map((slug) => blogArticles.find((a) => a.slug === slug))
+    .filter(Boolean) as typeof blogArticles;
+
   const filteredPages = seoPages.filter((page) => {
     if (activeCategory && page.category !== activeCategory) return false;
     if (activeLocation && page.location !== activeLocation) return false;
@@ -103,11 +114,38 @@ const Blog = () => {
         </div>
       </section>
 
-      {/* Editorial Articles */}
+      {/* Editor's Picks */}
+      <section className="py-16 border-b border-border bg-card">
+        <div className="max-w-5xl mx-auto px-6">
+          <AnimatedSection>
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-secondary mb-4">Editor's Picks</p>
+            <h2 className="font-serif text-3xl text-foreground mb-8">Start Here</h2>
+          </AnimatedSection>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {editorPicks.map((article, i) => (
+              <AnimatedSection key={article.slug} delay={Math.min(i * 0.1, 0.3)}>
+                <Link to={`/blog/${article.slug}`} className="group block border border-accent/20 bg-background p-8 hover:border-accent/50 transition-colors h-full">
+                  <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3">
+                    {article.category} · {article.readTime}
+                  </p>
+                  <h3 className="font-serif text-xl text-foreground mb-3 group-hover:text-accent transition-colors">
+                    {article.title}
+                  </h3>
+                  <p className="font-sans text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                    {article.excerpt}
+                  </p>
+                </Link>
+              </AnimatedSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* All Articles */}
       <section className="py-16 border-b border-border">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
-            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">Featured Articles</p>
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">All Articles</p>
             <h2 className="font-serif text-3xl text-foreground mb-6">Insights on Luxury Entertainment</h2>
           </AnimatedSection>
           <div className="flex flex-wrap gap-2 mb-8">

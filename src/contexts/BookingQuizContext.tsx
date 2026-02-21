@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from "react";
+import { trackQuizStart } from "@/lib/analytics";
 
 interface BookingQuizContextType {
   isOpen: boolean;
@@ -20,7 +21,7 @@ export const BookingQuizProvider = ({ children }: { children: ReactNode }) => {
     <BookingQuizContext.Provider
       value={{
         isOpen,
-        openQuiz: () => setIsOpen(true),
+        openQuiz: () => { trackQuizStart("booking"); setIsOpen(true); },
         closeQuiz: () => setIsOpen(false),
       }}
     >
