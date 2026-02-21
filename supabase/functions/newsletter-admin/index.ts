@@ -193,6 +193,30 @@ serve(async (req) => {
         });
       }
 
+      case "get_send_log": {
+        const { data: sends, error: sendsErr } = await supabase
+          .from("newsletter_send_log")
+          .select("campaign_id, sent_at, contact_id")
+          .order("sent_at", { ascending: false })
+          .limit(2000);
+        if (sendsErr) throw sendsErr;
+        return new Response(JSON.stringify({ sends: sends || [] }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "get_opens_log": {
+        const { data: opensData, error: opensErr2 } = await supabase
+          .from("newsletter_opens")
+          .select("contact_id, opened_at, drip_step")
+          .order("opened_at", { ascending: false })
+          .limit(2000);
+        if (opensErr2) throw opensErr2;
+        return new Response(JSON.stringify({ opens: opensData || [] }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       case "get_opened_contact_ids": {
         const { data: opens, error: opensErr } = await supabase
           .from("newsletter_opens")
