@@ -103,14 +103,22 @@ function ps(text: string): string {
   return `<p style="margin:20px 0 0; font-family:Georgia,serif; font-size:13px; font-style:italic; line-height:1.7; color:rgba(245,240,232,0.5);">P.S. ${text}</p>`;
 }
 
-function bookCallCTA(): string {
+// Append UTM params to any URL for GA4 campaign attribution
+function utmUrl(url: string, campaign: string, content: string): string {
+  const sep = url.includes("?") ? "&" : "?";
+  return `${url}${sep}utm_source=email&utm_medium=drip&utm_campaign=${encodeURIComponent(campaign)}&utm_content=${encodeURIComponent(content)}`;
+}
+
+function bookCallCTA(campaign = "resident-drip", step = "cta"): string {
+  const url = utmUrl("https://calendar.app.google/58WjggPt3RFAcJjq8", campaign, `step-${step}-book-call`);
   return `<p style="margin:18px 0 0; text-align:center;">
-<a href="https://calendar.app.google/58WjggPt3RFAcJjq8" target="_blank" style="display:inline-block; padding:12px 32px; font-family:Georgia,serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#C9A3A8; text-decoration:none; font-weight:bold; border:1px solid #C9A3A8; border-radius:2px;">Book a Call</a>
+<a href="${url}" target="_blank" style="display:inline-block; padding:12px 32px; font-family:Georgia,serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#C9A3A8; text-decoration:none; font-weight:bold; border:1px solid #C9A3A8; border-radius:2px;">Book a Call</a>
 </p>`;
 }
 
-function trackedLink(url: string, text: string, contactId: string, step: number): string {
-  const trackingUrl = `${TRACK_URL}?cid=${contactId}&step=${step}&r=${encodeURIComponent(url)}`;
+function trackedLink(url: string, text: string, contactId: string, step: number, campaign = "resident-drip"): string {
+  const taggedUrl = utmUrl(url, campaign, `step-${step}`);
+  const trackingUrl = `${TRACK_URL}?cid=${contactId}&step=${step}&r=${encodeURIComponent(taggedUrl)}`;
   return `<a href="${trackingUrl}" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);" target="_blank">${text}</a>`;
 }
 
