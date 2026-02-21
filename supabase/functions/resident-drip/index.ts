@@ -923,46 +923,14 @@ serve(async (req) => {
       // Get contact IDs for this campaign
       const contactIds = (contacts || []).map((c: any) => c.id).filter(Boolean);
 
-      // Opens stats
-      let opensTotal = 0, opensUnique = 0, opensPerStep = [0, 0, 0, 0, 0];
-      if (contactIds.length) {
-        // We need full contact list with IDs
-        const { data: fullContacts } = await supabase
-          .from("newsletter_contacts")
-          .select("id")
-          .in("drip_campaign", ["resident", "resident-done", "resident-pulse"]);
-        const ids = (fullContacts || []).map((c: any) => c.id);
-        
-        if (ids.length) {
-          const { data: opens } = await supabase
-            .from("newsletter_opens")
-            .select("contact_id, drip_step")
-            .in("contact_id", ids);
-          opensTotal = opens?.length || 0;
-          opensUnique = new Set(opens?.map((o: any) => o.contact_id)).size;
-          opens?.forEach((o: any) => {
-            if (o.drip_step >= 0 && o.drip_step < 5) opensPerStep[o.drip_step]++;
-          });
-        }
-      }
-
-      // Clicks stats
-      let clicksTotal = 0, clicksUnique = 0;
-      if (contactIds.length) {
-        const { data: fullContacts } = await supabase
-          .from("newsletter_contacts")
-          .select("id")
-          .in("drip_campaign", ["resident", "resident-done", "resident-pulse"]);
-        const ids = (fullContacts || []).map((c: any) => c.id);
-        if (ids.length) {
-          const { data: clicks } = await supabase
-            .from("newsletter_clicks")
-            .select("contact_id")
-            .in("contact_id", ids);
-          clicksTotal = clicks?.length || 0;
-          clicksUnique = new Set(clicks?.map((c: any) => c.contact_id)).size;
-        }
-      }
+      // Use RPC for accurate opens/clicks stats (avoids PostgREST row limits with large IN queries)
+      const { data: engagementStats } = await supabase.rpc("get_resident_opens_stats");
+      const stats = engagementStats || {};
+      const opensTotal = stats.total || 0;
+      const opensUnique = stats.uniqueContacts || 0;
+      const opensPerStep = stats.perStep || [0, 0, 0, 0, 0];
+      const clicksTotal = stats.clicksTotal || 0;
+      const clicksUnique = stats.clicksUnique || 0;
 
       // Total emails sent — check send_log first, fall back to contacts with last_emailed_at
       const { count: totalSentLog } = await supabase
