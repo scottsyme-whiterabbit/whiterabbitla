@@ -43,6 +43,7 @@ import pistolaLogo from "@/assets/logos/pistola-new.png";
 import lionsgateLogo from "@/assets/logos/lionsgate.png";
 import agtLogo from "@/assets/logos/agt.png";
 import beverlyHiltonLogo from "@/assets/logos/beverlyhilton.png";
+import sohohouseLogo from "@/assets/logos/sohohouse-new.png";
 
 const clients = [
 { name: "Netflix", logo: netflixLogo },
@@ -52,6 +53,7 @@ const clients = [
 { name: "YouTube", logo: youtubeLogo },
 { name: "Hyatt", logo: hyattLogo },
 { name: "The Beverly Hilton", logo: beverlyHiltonLogo },
+{ name: "Soho House", logo: sohohouseLogo },
 { name: "Rivian", logo: rivianLogo },
 { name: "Paramount", logo: paramountLogo },
 { name: "Olivia Rodrigo", logo: oliviarodrigoLogo },
