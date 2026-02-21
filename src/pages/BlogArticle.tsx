@@ -6,6 +6,7 @@ import { usePageMeta } from "@/hooks/usePageMeta";
 import { useArticleSchema } from "@/hooks/useSchemaOrg";
 import ShareButton from "@/components/ShareButton";
 import QuizNudge from "@/components/QuizNudge";
+import QuizCTA from "@/components/QuizCTA";
 import RelatedReads from "@/components/RelatedReads";
 
 import closeupImg from "@/assets/event-closeup-cocktail.jpg";
@@ -220,6 +221,9 @@ const BlogArticle = () => {
           </div>
         </section>
       </AnimatedSection>
+
+      {/* Quiz CTA */}
+      <QuizCTA title="Not Sure What You Need? Take the Quiz" />
 
       {/* Related Reads */}
       <RelatedReads currentSlug={slug || ""} category={article.category} />
