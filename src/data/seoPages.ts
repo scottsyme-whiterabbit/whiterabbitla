@@ -487,7 +487,7 @@ function getVenueContext(location: string, serviceKey: string): string {
     case "premiere-red-carpet-magician":
       return `From after-parties at ${venues.hotels[0]} to screening receptions at ${venues.culture[2]}, White Rabbit brings the kind of entertainment that gives industry veterans in ${location} something they haven't experienced in years: genuine surprise.`;
     case "dmc-entertainment":
-      return `An incentive trip welcome reception at ${venues.hotels[0]}, a VIP dinner at ${venues.dining[0]}, a group activity at ${venues.culture[1]} — White Rabbit seamlessly integrates into the curated ${location} itineraries that destination management companies build for their top-tier clients.`;
+      return `An incentive trip welcome reception at ${venues.hotels[0]}, a VIP dinner at ${venues.dining[0]}, a group activity at ${venues.culture[1]} — White Rabbit fits right into the curated ${location} itineraries that destination management companies build for their top-tier clients.`;
     case "resident-event-magician":
       return `From luxury apartment communities near ${venues.culture[1]} to high-rise buildings overlooking ${venues.culture[0]}, White Rabbit transforms standard resident socials in ${location} into the kind of events that drive attendance, build community, and make residents proud of where they live.`;
     default:
@@ -746,7 +746,7 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
     "dmc-entertainment": [
       {
         question: "How does White Rabbit work with DMCs and destination management companies?",
-        answer: "White Rabbit integrates seamlessly into the curated itineraries DMCs build for incentive trips, corporate retreats, and VIP group experiences. Scott arrives ready to perform with zero setup, fitting into welcome receptions, dinner programs, team-building sessions, and post-excursion gatherings. Many DMCs add White Rabbit as a signature local entertainment option for their Los Angeles and nationwide programs.",
+        answer: "White Rabbit fits right into the curated itineraries DMCs build for incentive trips, corporate retreats, and VIP group experiences. Scott arrives ready to perform with zero setup, fitting into welcome receptions, dinner programs, team-building sessions, and post-excursion gatherings. Many DMCs add White Rabbit as a signature local entertainment option for their Los Angeles and nationwide programs.",
       },
       {
         question: "What types of incentive trip events work best for a magician?",
@@ -895,7 +895,7 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
       body = [
         `Trade shows are brutal. You've spent thousands on the booth, the travel, the team — and most attendees walk right past without a second glance. A trade show magician changes the equation entirely. Scott draws a crowd within minutes, holds their attention with jaw-dropping close-up magic, and weaves your product story or key messaging into the performance so naturally that attendees don't even realize they're being marketed to. They just know they can't look away.`,
         `Scott is a member of the world-famous Magic Castle® in Hollywood, and his trade show work is specifically designed for the expo floor environment. Quick-hit routines that hook passersby, custom reveals that feature your product, and a magnetic presence that makes your booth the one everyone's talking about at the after-party.`,
-        `The math is simple: more booth traffic = more leads = more ROI. Clients report 3-5x the foot traffic at their booth when White Rabbit is performing. But it's not just quantity — the quality of engagement is on a completely different level when people are amazed and emotionally connected to your brand experience.`,
+        `The math is simple: more booth traffic = more leads = more ROI. Clients report 3-5x the foot traffic at their booth when White Rabbit is performing. And it goes beyond quantity — the quality of engagement is on a completely different level when people are amazed and emotionally connected to your brand experience.`,
         `Available for trade shows, conferences, brand activations, product launches, and experiential marketing events across ${location}. Book early for major industry events. Custom messaging integration is included.`,
       ];
       break;
@@ -932,7 +932,7 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
       midCta = `Book Holiday Season Entertainment in ${location}`;
       intro = `Looking for a magician for your Christmas party or New Year's Eve celebration in ${location}? The holiday season deserves entertainment that matches the magic of the moment. White Rabbit delivers warm, sophisticated close-up magic and mentalism that brings people together during the most wonderful — and most socially complicated — time of the year.`;
       body = [
-        `Christmas parties and New Year's Eve events share a common challenge: high expectations. People want the evening to feel special, festive, and genuinely memorable. A good playlist isn't enough. White Rabbit delivers the "wow" factor that elevates your celebration from pleasant to legendary. Scott moves through the room performing intimate close-up magic that gives every guest their own personal moment of wonder.`,
+        `Christmas parties and New Year's Eve events share a common challenge: high expectations. People want the evening to feel special, festive, and genuinely memorable. A good playlist isn't enough. White Rabbit delivers the "wow" factor that turns your celebration from pleasant to legendary. Scott moves through the room performing intimate close-up magic that gives every guest their own personal moment of wonder.`,
         `A member of the world-famous Magic Castle® in Hollywood, Scott's style is warm, celebratory, and perfectly suited for the holiday atmosphere. A seated dinner where he visits each table, a cocktail party where he floats between groups — the magic creates the kind of shared joy that defines the holidays at their best.`,
         `For New Year's Eve, Scott can build toward a midnight crescendo — a grand finale of mentalism and magic that makes the countdown feel like the culmination of something extraordinary. It's the difference between watching the ball drop on a screen and being part of something you'll remember forever.`,
         `December is our busiest month. Christmas party dates book 2–3 months in advance. New Year's Eve is a single-night event that fills first. If you're planning a holiday celebration in ${location}, reach out now to secure your date.`,
@@ -956,7 +956,7 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
       heroHeadline = `DMC Entertainment & Magician in ${location}`;
       heroSub = `The local entertainment your incentive trip attendees will remember long after they check out.`;
       midCta = `Add White Rabbit to Your ${location} Program`;
-      intro = `Building a ${location} itinerary for an incentive trip, corporate retreat, or VIP group experience? White Rabbit gives destination management companies a premium, turnkey entertainment option that elevates welcome receptions, farewell dinners, and group activities. No stage, no setup, no risk. Just world-class close-up magic and mentalism that creates genuine connection between attendees from the moment they arrive.`;
+      intro = `Building a ${location} itinerary for an incentive trip, corporate retreat, or VIP group experience? White Rabbit gives destination management companies a premium, turnkey entertainment option that transforms welcome receptions, farewell dinners, and group activities. No stage, no setup, no risk. Just world-class close-up magic and mentalism that creates genuine connection between attendees from the moment they arrive.`;
       body = [
         `DMCs know the challenge: every incentive trip needs a "wow" moment that justifies the investment. The excursion is great. The restaurant is great. But what makes attendees say "that was the best company trip I've ever been on"? It's the unexpected. It's walking into a welcome reception in ${location} and having a performer approach your group with something that stops the room. Within minutes, VPs from different offices who've never met are laughing together, bonded over something they can't explain.`,
         `Scott Syme is a member of the world-famous Magic Castle® in Hollywood and has performed for Netflix, Disney, Morgan Stanley, Rolls Royce, and the kind of private clientele that demands flawless execution. His close-up magic and mentalism require zero infrastructure: no stage, no sound system, no power. He integrates into any venue, any format, any timeline. For DMCs, that means one less vendor to coordinate and one more reason attendees will rave about the program.`,
