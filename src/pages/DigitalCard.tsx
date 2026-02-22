@@ -71,11 +71,11 @@ const DigitalCard = () => {
         {/* Card Container */}
         <div className="bg-background rounded-2xl shadow-2xl overflow-hidden">
           {/* Header Band */}
-          <div className="bg-forest-dark py-8 flex justify-center">
+          <div className="bg-forest-dark flex justify-center">
             <img
               src={wrLogo}
               alt="White Rabbit Los Angeles logo"
-              className="h-40 object-contain"
+              className="w-full object-cover"
             />
           </div>
 
