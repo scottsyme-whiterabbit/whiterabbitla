@@ -36,6 +36,7 @@ import Refer from "./pages/Refer";
 import Unsubscribe from "./pages/Unsubscribe";
 import ServiceAreas from "./pages/ServiceAreas";
 import ServiceAreaDetail from "./pages/ServiceAreaDetail";
+import DigitalCard from "./pages/DigitalCard";
 import { getBlogArticleBySlug } from "./data/blogArticles";
 import { useParams } from "react-router-dom";
 
@@ -96,7 +97,10 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <AppContent />
+          <Routes>
+            <Route path="/card" element={<DigitalCard />} />
+            <Route path="/*" element={<AppContent />} />
+          </Routes>
         </BrowserRouter>
       </BookingQuizProvider>
     </TooltipProvider>
