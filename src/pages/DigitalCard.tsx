@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Instagram, Linkedin, Globe, Phone, Mail, MapPin, Download, ExternalLink, Sparkles } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
-import wrLogo from "@/assets/wr-secondary-logo.png";
+import wrLogo from "@/assets/wr-logo-stars-gold.png";
 import scottPhoto from "@/assets/scott-couch.jpg";
 
 const VCARD = `BEGIN:VCARD
@@ -75,7 +75,7 @@ const DigitalCard = () => {
             <img
               src={wrLogo}
               alt="White Rabbit Los Angeles logo"
-              className="h-20 object-contain brightness-0 invert"
+              className="h-24 object-contain"
             />
           </div>
 
