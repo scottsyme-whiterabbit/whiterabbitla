@@ -16,14 +16,14 @@ const reviews = [
 },
 {
   name: "Josh T.",
-  role: "Dad's Club School Event",
-  text: "We hired Scott for a Dad's Club meeting at my kid's school. He was fantastic to work with from the moment I reached out to him through to the night of the show when he stuck around and spoke with several members of our group well after his performance was over. Scott is warm, personable, funny, energetic and an EXCELLENT magician. I can't recommend him highly enough.",
+  role: "Men's Group Host",
+  text: "He was fantastic to work with from the moment I reached out to him through to the night of the show when he stuck around and spoke with several members of our group well after his performance was over. Scott is warm, personable, funny, energetic and an EXCELLENT magician. I can't recommend him highly enough.",
   rating: 5
 },
 {
   name: "Shaahin J.",
   role: "35th Birthday Celebration",
-  text: "For my 35th birthday, I wanted to something different. I had followed the white rabbit show for a while and finally got the idea of how cool it would be to have a magic show at my birthday! Boy was I right. Scott & White Rabbit made my birthday one I will never forget. The show itself left my friends in awe. I was getting messages for two days after from friends telling me how great the show was. I highly recommend and will be making sure I see the white rabbit show again soon!",
+  text: "Scott & White Rabbit made my birthday one I will never forget. The show left my friends in awe — I was getting messages for two days after from friends telling me how great it was. I highly recommend!",
   rating: 5
 },
 {
