@@ -138,6 +138,23 @@ export function useWebPageSchema(page: {
   ]);
 }
 
+// Speakable schema for voice assistant optimization
+export function useSpeakableSchema(page: {
+  name: string;
+  path: string;
+  cssSelectors?: string[];
+}) {
+  useJsonLd("speakable-schema", {
+    "@type": "WebPage",
+    name: page.name,
+    url: `${BASE_URL}${page.path}`,
+    speakable: {
+      "@type": "SpeakableSpecification",
+      cssSelector: page.cssSelectors || ["h1", "h2", "[data-speakable]"],
+    },
+  });
+}
+
 // Breadcrumb helper
 function breadcrumb(items: { name: string; url: string }[]) {
   return {
