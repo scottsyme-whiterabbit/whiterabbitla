@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Instagram, Linkedin, Globe, Phone, Mail, MapPin, Download, ExternalLink, Sparkles } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
-import wrLogo from "@/assets/wr-logo-stars-gold.png";
+import wrLogo from "@/assets/wr-email-logo.png";
 import scottPhoto from "@/assets/scott-couch.jpg";
 
 const VCARD = `BEGIN:VCARD
@@ -71,11 +71,11 @@ const DigitalCard = () => {
         {/* Card Container */}
         <div className="bg-background rounded-2xl shadow-2xl overflow-hidden">
           {/* Header Band */}
-          <div className="bg-forest-dark flex justify-center">
+          <div className="bg-forest-dark py-8 flex justify-center">
             <img
               src={wrLogo}
               alt="White Rabbit Los Angeles logo"
-              className="w-1/2 object-contain"
+              className="h-24 object-contain"
             />
           </div>
 
