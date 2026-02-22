@@ -71,11 +71,17 @@ const DigitalCard = () => {
         {/* Card Container */}
         <div className="bg-background rounded-2xl shadow-2xl overflow-hidden">
           {/* Header Band */}
-          <div className="bg-forest-dark py-8 flex justify-center">
+          <div className="bg-forest-dark py-8 flex flex-col items-center gap-2">
+            {/* Gold stars */}
+            <div className="flex items-center gap-3">
+              <svg viewBox="0 0 24 24" fill="hsl(40 70% 55%)" className="w-3.5 h-3.5"><polygon points="12,2 15,9 22,9 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9 9,9" /></svg>
+              <svg viewBox="0 0 24 24" fill="hsl(40 70% 55%)" className="w-3.5 h-3.5"><polygon points="12,2 15,9 22,9 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9 9,9" /></svg>
+              <svg viewBox="0 0 24 24" fill="hsl(40 70% 55%)" className="w-3.5 h-3.5"><polygon points="12,2 15,9 22,9 16.5,14 18.5,21 12,17 5.5,21 7.5,14 2,9 9,9" /></svg>
+            </div>
             <img
               src={wrLogo}
               alt="White Rabbit Los Angeles logo"
-              className="h-20 object-contain brightness-0 invert"
+              className="h-16 object-contain brightness-0 invert"
             />
           </div>
 
