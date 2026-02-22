@@ -461,7 +461,7 @@ function getVenueContext(location: string, serviceKey: string): string {
 
   switch (serviceKey) {
     case "corporate-event-magician":
-      return `Whether it's a product launch at ${venues.culture[2]}, a client appreciation dinner at ${venues.dining[0]}, or a gala at ${venues.hotels[0]}, White Rabbit brings the same world-class presence to every room in ${location}.`;
+      return `A product launch at ${venues.culture[2]}, a client appreciation dinner at ${venues.dining[0]}, a gala at ${venues.hotels[0]} — White Rabbit brings the same world-class presence to every room in ${location}.`;
     case "private-party-magician":
       return `From penthouse celebrations overlooking ${venues.culture[1]} to intimate dinner parties after an evening at ${venues.dining[1]}, ${location}'s finest hosts know: the entertainment is what separates a nice night from an unforgettable one.`;
     case "wedding-magician":
@@ -471,11 +471,11 @@ function getVenueContext(location: string, serviceKey: string): string {
     case "private-magic-show":
       return `Imagine transforming a private dining room at ${venues.dining[0]} or the event space at ${venues.hotels[0]} into an intimate theater. The Private Magic Show brings a level of sophistication that feels right at home in ${location}'s most refined spaces.`;
     case "golf-tournament-magician":
-      return `Whether it's the post-round reception at ${venues.culture[2]} or the awards dinner at ${venues.hotels[0]}, White Rabbit fills the gap between the last putt and the first toast with something your players will actually remember.`;
+      return `The post-round reception at ${venues.culture[2]}, the awards dinner at ${venues.hotels[0]} — White Rabbit fills the gap between the last putt and the first toast with something your players will actually remember.`;
     case "charity-gala-magician":
       return `From black-tie fundraisers at ${venues.hotels[1]} to intimate donor dinners at ${venues.dining[0]}, White Rabbit creates the kind of moments that loosen wallets and warm hearts across ${location}'s most prestigious philanthropic events.`;
     case "holiday-party-magician":
-      return `Whether your team is celebrating at ${venues.hotels[0]} or hosting an intimate gathering at ${venues.dining[1]}, White Rabbit transforms your ${location} holiday party from "nice" to "legendary."`;
+      return `Your team celebrating at ${venues.hotels[0]}, an intimate gathering at ${venues.dining[1]} — wherever the party lands, White Rabbit transforms your ${location} holiday party from "nice" to "legendary."`;
     case "trade-show-magician":
       return `On a crowded expo floor near ${venues.culture[2]}, your booth needs a competitive edge. White Rabbit draws crowds, holds attention, and turns foot traffic into qualified leads at ${location}'s biggest trade shows and brand activations.`;
     case "rehearsal-dinner-magician":
@@ -483,11 +483,11 @@ function getVenueContext(location: string, serviceKey: string): string {
     case "halloween-party-magician":
       return `From haunted soirées at ${venues.hotels[0]} to costumed gatherings at ${venues.dining[2]}, White Rabbit adds a layer of genuine mystery and dark wonder to ${location}'s most atmospheric Halloween celebrations.`;
      case "christmas-party-magician":
-      return `Whether it's the company holiday party at ${venues.hotels[1]} or a New Year's Eve celebration at ${venues.dining[0]}, White Rabbit brings the kind of magic that makes the season truly feel special in ${location}.`;
+      return `The company holiday party at ${venues.hotels[1]}, a New Year's Eve celebration at ${venues.dining[0]} — White Rabbit brings the kind of magic that makes the season truly feel special in ${location}.`;
     case "premiere-red-carpet-magician":
       return `From after-parties at ${venues.hotels[0]} to screening receptions at ${venues.culture[2]}, White Rabbit brings the kind of entertainment that gives industry veterans in ${location} something they haven't experienced in years: genuine surprise.`;
     case "dmc-entertainment":
-      return `Whether it's an incentive trip welcome reception at ${venues.hotels[0]}, a VIP dinner at ${venues.dining[0]}, or a group activity at ${venues.culture[1]}, White Rabbit seamlessly integrates into the curated ${location} itineraries that destination management companies build for their top-tier clients.`;
+      return `An incentive trip welcome reception at ${venues.hotels[0]}, a VIP dinner at ${venues.dining[0]}, a group activity at ${venues.culture[1]} — White Rabbit seamlessly integrates into the curated ${location} itineraries that destination management companies build for their top-tier clients.`;
     case "resident-event-magician":
       return `From luxury apartment communities near ${venues.culture[1]} to high-rise buildings overlooking ${venues.culture[0]}, White Rabbit transforms standard resident socials in ${location} into the kind of events that drive attendance, build community, and make residents proud of where they live.`;
     default:
@@ -620,7 +620,7 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
       },
       {
         question: "Can the performance be customized with our company branding?",
-        answer: "Absolutely. Scott tailors every performance to your event's goals, audience, and tone. Whether it's incorporating your company's messaging into a reveal or matching the energy of your event theme, every detail is considered.",
+        answer: "Absolutely. Scott tailors every performance to your event's goals, audience, and tone. He can incorporate your company's messaging into a reveal, match the energy of your event theme, or build custom routines around your brand story. Every detail is considered.",
       },
     ],
     "private-party-magician": [
@@ -680,7 +680,7 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
       },
       {
         question: "Can the performance tie into our fundraising mission?",
-        answer: "Yes. Scott tailors every performance to your organization's tone and goals. Whether it's weaving your mission into a mentalism reveal or creating a 'wow moment' that transitions into the live auction, the magic serves your event's purpose, not the other way around.",
+        answer: "Yes. Scott tailors every performance to your organization's tone and goals. He can weave your mission into a mentalism reveal, create a 'wow moment' that transitions into the live auction, or build the entire show around your cause. The magic serves your event's purpose, not the other way around.",
       },
     ],
     "holiday-party-magician": [
@@ -790,7 +790,7 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
       body = [
         `Here's the problem with most corporate entertainment: it's forgettable. A DJ nobody dances to. A comedian who doesn't read the room. Background noise. White Rabbit is the opposite. Scott Syme walks into your event and within minutes, your CEO is laughing, your clients are leaning in, and strangers are bonding over something they can't explain. That's not a party trick. That's a business advantage.`,
         `Scott Syme is a proud member of the world-famous Magic Castle® in Hollywood, the most prestigious private club for magicians on earth. He has performed for Netflix, Disney, Morgan Stanley, Rolls Royce, Paramount, Rivian, YouTube, and dozens of private clients who demand nothing less than extraordinary. His close-up magic and mentalism are specifically designed for the corporate environment: sophisticated, conversational, and calibrated to break the ice faster than any open bar ever could.`,
-        `Whether it's a cocktail hour performance where Scott moves table to table creating jaw-dropping moments, or a full parlor show that transforms your venue into an intimate theater, every detail is tailored to your event's goals, audience, and energy. This isn't one-size-fits-all entertainment. This is White Rabbit.`,
+        `Scott can perform during cocktail hour, moving table to table creating jaw-dropping moments, or deliver a full parlor show that transforms your venue into an intimate theater. Every detail is tailored to your event's goals, audience, and energy. This isn't one-size-fits-all entertainment. This is White Rabbit.`,
         `Based in Los Angeles and available throughout ${location} and beyond. Limited dates available. The best events book 4 to 8 weeks in advance.`,
       ];
       break;
@@ -881,7 +881,7 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
       intro = `Looking for holiday party entertainment in ${location} that your team will actually remember? Forget the generic DJ. Forget the awkward karaoke. White Rabbit delivers the kind of sophisticated, interactive entertainment that makes your holiday party the highlight of the year, and the reason people RSVP to next year's before you even send the invite.`;
       body = [
         `Holiday parties have a problem: everyone's been to a hundred of them, and they all blur together. The same playlist. The same small talk. The same "that was nice" on the way home. White Rabbit fixes that. Scott Syme moves through the room performing close-up magic that turns coworkers into friends, breaks down departmental silos, and gives everyone a shared experience they'll be retelling at the coffee machine for months.`,
-        `A member of the world-famous Magic Castle® in Hollywood, Scott's style is elegant, warm, and perfectly suited for the holiday atmosphere. Whether it's an intimate team dinner of 15 or a company-wide celebration of 500, the magic scales beautifully. And the best part? No setup, no teardown, no sound check. Just a world-class entertainer who arrives ready to make your party unforgettable.`,
+        `A member of the world-famous Magic Castle® in Hollywood, Scott's style is elegant, warm, and perfectly suited for the holiday atmosphere. An intimate team dinner of 15 or a company-wide celebration of 500 — the magic scales beautifully. And the best part? No setup, no teardown, no sound check. Just a world-class entertainer who arrives ready to make your party unforgettable.`,
         `Don't underestimate the ROI of a great holiday party. Employee retention, team morale, client relationships — they all improve when people associate your company with extraordinary experiences. That's what White Rabbit delivers.`,
         `Holiday season (October through January) is our busiest period. December dates fill months in advance. Many clients rebook the following year immediately after their event. Plan early to secure your preferred date in ${location}.`,
       ];
@@ -933,7 +933,7 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
       intro = `Looking for a magician for your Christmas party or New Year's Eve celebration in ${location}? The holiday season deserves entertainment that matches the magic of the moment. White Rabbit delivers warm, sophisticated close-up magic and mentalism that brings people together during the most wonderful — and most socially complicated — time of the year.`;
       body = [
         `Christmas parties and New Year's Eve events share a common challenge: high expectations. People want the evening to feel special, festive, and genuinely memorable. A good playlist isn't enough. White Rabbit delivers the "wow" factor that elevates your celebration from pleasant to legendary. Scott moves through the room performing intimate close-up magic that gives every guest their own personal moment of wonder.`,
-        `A member of the world-famous Magic Castle® in Hollywood, Scott's style is warm, celebratory, and perfectly suited for the holiday atmosphere. Whether it's a seated dinner where he visits each table or a cocktail party where he floats between groups, the magic creates the kind of shared joy that defines the holidays at their best.`,
+        `A member of the world-famous Magic Castle® in Hollywood, Scott's style is warm, celebratory, and perfectly suited for the holiday atmosphere. A seated dinner where he visits each table, a cocktail party where he floats between groups — the magic creates the kind of shared joy that defines the holidays at their best.`,
         `For New Year's Eve, Scott can build toward a midnight crescendo — a grand finale of mentalism and magic that makes the countdown feel like the culmination of something extraordinary. It's the difference between watching the ball drop on a screen and being part of something you'll remember forever.`,
         `December is our busiest month. Christmas party dates book 2–3 months in advance. New Year's Eve is a single-night event that fills first. If you're planning a holiday celebration in ${location}, reach out now to secure your date.`,
       ];
