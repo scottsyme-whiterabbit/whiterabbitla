@@ -75,7 +75,7 @@ const DigitalCard = () => {
             <img
               src={wrLogo}
               alt="White Rabbit Los Angeles logo"
-              className="w-full object-cover"
+              className="w-3/4 object-contain"
             />
           </div>
 
