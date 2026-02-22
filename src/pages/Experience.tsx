@@ -14,7 +14,7 @@ import intimateImg from "@/assets/event-closeup-intimate.jpg";
 import mentalistImg from "@/assets/event-mentalism-closeup.jpg";
 import guestLaughImg from "@/assets/event-guest-laughing.jpg";
 import { usePageMeta } from "@/hooks/usePageMeta";
-import { useWebPageSchema } from "@/hooks/useSchemaOrg";
+import { useWebPageSchema, useSpeakableSchema } from "@/hooks/useSchemaOrg";
 
 const services = [
   {
@@ -53,6 +53,7 @@ const Experience = () => {
     image: heroDesertImg,
   });
   useWebPageSchema({ name: "Our Services", description: "Explore White Rabbit's luxury magic experiences: close-up magic, parlor shows, corporate entertainment, and private party performances.", path: "/experience" });
+  useSpeakableSchema({ name: "Our Services", path: "/experience" });
 
   return (
     <main id="main-content" className="pt-20">
