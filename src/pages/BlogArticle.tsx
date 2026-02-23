@@ -14,6 +14,7 @@ import parlorImg from "@/assets/event-parlor-show.jpg";
 import corporateImg from "@/assets/event-penthouse-show.jpg";
 import scottCardsImg from "@/assets/event-scott-cards.jpg";
 import experienceImg from "@/assets/experience-closeup.jpg";
+import threeStars from "@/assets/three-stars-gold.png";
 
 const categoryImages: Record<string, string> = {
   "For Planners": corporateImg,
@@ -182,11 +183,7 @@ const BlogArticle = () => {
             if (i > 0 && i !== midIndex && i % 4 === 0) {
               elements.push(
                 <div key={`divider-${i}`} className="flex justify-center my-10 md:my-14">
-                  <div className="flex items-center gap-3">
-                    <span className="w-8 h-px bg-accent/40" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-accent/40" />
-                    <span className="w-8 h-px bg-accent/40" />
-                  </div>
+                  <img src={threeStars} alt="" aria-hidden="true" className="h-6 w-auto opacity-60" />
                 </div>
               );
             }
