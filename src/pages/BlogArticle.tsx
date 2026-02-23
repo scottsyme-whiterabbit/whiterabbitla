@@ -182,8 +182,8 @@ const BlogArticle = () => {
             // Insert decorative break every ~4 paragraphs (not first)
             if (i > 0 && i !== midIndex && i % 4 === 0) {
               elements.push(
-                <div key={`divider-${i}`} className="flex justify-center my-10 md:my-14">
-                  <img src={threeStars} alt="" aria-hidden="true" className="h-10 w-auto opacity-60" />
+                <div key={`divider-${i}`} className="flex justify-center my-6 md:my-8">
+                  <img src={threeStars} alt="" aria-hidden="true" className="h-17 w-auto opacity-60" />
                 </div>
               );
             }
