@@ -183,7 +183,7 @@ const BlogArticle = () => {
             if (i > 0 && i !== midIndex && i % 4 === 0) {
               elements.push(
                 <div key={`divider-${i}`} className="flex justify-center my-10 md:my-14">
-                  <img src={threeStars} alt="" aria-hidden="true" className="h-6 w-auto opacity-60" />
+                  <img src={threeStars} alt="" aria-hidden="true" className="h-10 w-auto opacity-60" />
                 </div>
               );
             }
