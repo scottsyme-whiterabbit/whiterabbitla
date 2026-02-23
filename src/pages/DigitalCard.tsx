@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Instagram, Linkedin, Globe, Phone, Mail, MapPin, Download, ExternalLink, Sparkles } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
-import wrLogo from "@/assets/wr-email-logo.png";
+import wrLogo from "@/assets/wr-logo-white.png";
 import scottPhoto from "@/assets/scott-couch.jpg";
 
 const VCARD = `BEGIN:VCARD
