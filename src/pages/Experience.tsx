@@ -15,6 +15,7 @@ import mentalistImg from "@/assets/event-mentalism-closeup.jpg";
 import guestLaughImg from "@/assets/event-guest-laughing.jpg";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useWebPageSchema, useSpeakableSchema } from "@/hooks/useSchemaOrg";
+import threeStars from "@/assets/three-stars-gold.png";
 
 const services = [
   {
@@ -113,6 +114,11 @@ const Experience = () => {
           </div>
         </section>
       ))}
+
+      {/* Branded divider */}
+      <div className="flex justify-center py-10">
+        <img src={threeStars} alt="" aria-hidden="true" className="h-8 w-auto opacity-50" />
+      </div>
 
       {/* Value Proposition — Hormozi-style offer */}
       <ValueProposition />

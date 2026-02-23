@@ -6,6 +6,7 @@ import QuizCTA from "@/components/QuizCTA";
 import audienceImg from "@/assets/event-audience.jpg";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useBreadcrumbSchema, useSpeakableSchema } from "@/hooks/useSchemaOrg";
+import threeStars from "@/assets/three-stars-gold.png";
 
 const reviews = [
 {
@@ -188,8 +189,13 @@ const Reviews = () => {
         </div>
       </section>
 
+      {/* Branded divider */}
+      <div className="flex justify-center py-8">
+        <img src={threeStars} alt="" aria-hidden="true" className="h-8 w-auto opacity-50" />
+      </div>
+
       {/* Reviews Grid */}
-      <section className="py-24">
+      <section className="py-24 pt-0">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {reviews.map((review, index) =>
@@ -214,6 +220,7 @@ const Reviews = () => {
 
           {/* Leave a Review CTA */}
           <div className="text-center mt-16 mb-4">
+            <img src={threeStars} alt="" aria-hidden="true" className="h-7 w-auto opacity-50 mx-auto mb-6" />
             <p className="font-serif text-2xl text-foreground mb-3">Experienced the Magic?</p>
             <p className="font-sans text-sm text-muted-foreground mb-6 max-w-md mx-auto">
               Your words help others discover the wonder. We'd love to hear about your experience.

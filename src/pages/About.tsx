@@ -10,6 +10,7 @@ import cardsFanImg from "@/assets/cards-fan-closeup.jpg";
 import { Link } from "react-router-dom";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useWebPageSchema, useSpeakableSchema } from "@/hooks/useSchemaOrg";
+import threeStars from "@/assets/three-stars-gold.png";
 
 const About = () => {
   usePageMeta({
@@ -95,6 +96,11 @@ const About = () => {
         </div>
       </section>
 
+      {/* Branded divider */}
+      <div className="flex justify-center py-6">
+        <img src={threeStars} alt="" aria-hidden="true" className="h-8 w-auto opacity-50" />
+      </div>
+
       {/* In Action */}
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -160,6 +166,11 @@ const About = () => {
           </div>
         </div>
       </section>
+
+      {/* Branded divider */}
+      <div className="flex justify-center py-6">
+        <img src={threeStars} alt="" aria-hidden="true" className="h-8 w-auto opacity-50" />
+      </div>
 
       {/* What Scott Offers — links to Experience */}
       <section className="py-20 lg:py-24">
