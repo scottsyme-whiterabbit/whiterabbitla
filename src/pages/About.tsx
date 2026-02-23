@@ -42,7 +42,7 @@ const About = () => {
       <QuizNudge />
 
       {/* Bio */}
-      <section className="py-16 lg:py-20">
+      <section className="py-20 lg:py-28">
         <div className="max-w-3xl mx-auto px-6">
           <AnimatedSection>
             <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-8">
@@ -141,7 +141,7 @@ const About = () => {
       </AnimatedSection>
 
       {/* Overheard — Celebrity Reactions */}
-      <section className="py-16 lg:py-20">
+      <section className="py-20 lg:py-28">
         <div className="max-w-4xl mx-auto px-6">
           <AnimatedSection>
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-10 text-center">Overheard</p>
@@ -173,7 +173,7 @@ const About = () => {
       </div>
 
       {/* What Scott Offers — links to Experience */}
-      <section className="py-20 lg:py-24">
+      <section className="py-24 lg:py-32">
         <div className="max-w-4xl mx-auto px-6">
           <AnimatedSection>
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4 text-center">What Scott Offers</p>

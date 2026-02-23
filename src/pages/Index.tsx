@@ -158,7 +158,7 @@ const Index = () => {
       <QuizNudge />
 
       {/* The Experience Teaser */}
-      <section className="py-24 lg:py-32">
+      <section className="py-28 lg:py-36">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <AnimatedSection>
             <div>
@@ -224,8 +224,11 @@ const Index = () => {
       {/* Discovery Quiz CTA */}
       <QuizCTA title="Wondering If Magic Is Right for Your Event?" />
 
+      {/* Thin gold rule */}
+      <div className="max-w-xs mx-auto border-t border-accent/20" />
+
       {/* Photo Gallery */}
-      <section className="py-16">
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-3 gap-4">
           <AnimatedSection>
             <div className="aspect-[4/3] overflow-hidden">
@@ -274,8 +277,11 @@ const Index = () => {
           </AnimatedSection>
         </div>
       </section>
+      {/* Thin gold rule */}
+      <div className="max-w-xs mx-auto border-t border-accent/20" />
+
       {/* Discover More */}
-      <section className="py-24 lg:py-32">
+      <section className="py-28 lg:py-36">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <AnimatedSection>
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4 text-center">Discover More</p>

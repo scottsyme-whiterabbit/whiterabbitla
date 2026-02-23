@@ -195,7 +195,7 @@ const Reviews = () => {
       </div>
 
       {/* Reviews Grid */}
-      <section className="py-24 pt-0">
+      <section className="py-28 pt-0">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {reviews.map((review, index) =>
