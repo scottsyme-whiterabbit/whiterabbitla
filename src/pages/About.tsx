@@ -98,7 +98,7 @@ const About = () => {
 
       {/* Branded divider */}
       <div className="flex justify-center py-6">
-        <img src={threeStars} alt="" aria-hidden="true" className="h-8 w-auto opacity-50" />
+        <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50" />
       </div>
 
       {/* In Action */}
@@ -169,7 +169,7 @@ const About = () => {
 
       {/* Branded divider */}
       <div className="flex justify-center py-6">
-        <img src={threeStars} alt="" aria-hidden="true" className="h-8 w-auto opacity-50" />
+        <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50" />
       </div>
 
       {/* What Scott Offers — links to Experience */}

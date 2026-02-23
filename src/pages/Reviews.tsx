@@ -191,7 +191,7 @@ const Reviews = () => {
 
       {/* Branded divider */}
       <div className="flex justify-center py-8">
-        <img src={threeStars} alt="" aria-hidden="true" className="h-8 w-auto opacity-50" />
+        <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50" />
       </div>
 
       {/* Reviews Grid */}
@@ -220,7 +220,7 @@ const Reviews = () => {
 
           {/* Leave a Review CTA */}
           <div className="text-center mt-16 mb-4">
-            <img src={threeStars} alt="" aria-hidden="true" className="h-7 w-auto opacity-50 mx-auto mb-6" />
+            <img src={threeStars} alt="" aria-hidden="true" className="h-11 w-auto opacity-50 mx-auto mb-6" />
             <p className="font-serif text-2xl text-foreground mb-3">Experienced the Magic?</p>
             <p className="font-sans text-sm text-muted-foreground mb-6 max-w-md mx-auto">
               Your words help others discover the wonder. We'd love to hear about your experience.
