@@ -3,6 +3,7 @@ import { Instagram, Linkedin, Mail, Phone } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import QuizCTA from "@/components/QuizCTA";
 import contactBg from "@/assets/event-silhouette.jpg";
+import threeStars from "@/assets/three-stars-gold.png";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -103,8 +104,13 @@ const Contact = () => {
         </div>
       </section>
 
+      {/* Branded divider */}
+      <div className="flex justify-center py-8">
+        <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50" />
+      </div>
+
       {/* Form + Contact Info */}
-      <section className="py-24">
+      <section className="py-28">
         <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-5 gap-16">
           {/* Form */}
           <AnimatedSection className="lg:col-span-3">
@@ -255,7 +261,7 @@ const Contact = () => {
                   <Linkedin size={18} className="text-accent" /> Scott Syme Jr.
                 </a>
               </div>
-              <div className="pt-8 border-t border-border">
+              <div className="pt-8 border-t border-accent/20">
                 <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2">Based in</p>
                 <p className="font-serif text-xl text-foreground">Los Angeles, California</p>
                 <p className="font-sans text-sm text-muted-foreground mt-1">Available worldwide for travel</p>
@@ -264,6 +270,9 @@ const Contact = () => {
           </AnimatedSection>
         </div>
       </section>
+
+      {/* Thin gold rule */}
+      <div className="max-w-xs mx-auto border-t border-accent/20 my-4" />
 
       {/* Quiz CTA */}
       <QuizCTA />

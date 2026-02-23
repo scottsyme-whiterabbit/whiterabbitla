@@ -126,8 +126,11 @@ const Experience = () => {
       {/* Quiz CTA - after services */}
       <QuizCTA title="Not Sure Which Experience Fits Your Event?" />
 
+      {/* Thin gold rule */}
+      <div className="max-w-xs mx-auto border-t border-accent/20" />
+
       {/* Atmosphere Photo Strip */}
-      <section className="py-16">
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           <AnimatedSection>
             <div className="aspect-[3/4] overflow-hidden">
