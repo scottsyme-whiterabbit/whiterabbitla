@@ -12,7 +12,7 @@ const QuizCTA = ({ title = "Discover Your Magic Guest Persona" }: QuizCTAProps) 
       <div className="max-w-3xl mx-auto px-6 text-center">
         <div className="border border-secondary/30 rounded p-10 md:p-14 bg-secondary/10">
           <div className="flex justify-center mb-4">
-            <img src={threeStars} alt="" aria-hidden="true" className="h-8 w-auto opacity-70" />
+            <img src={threeStars} alt="" aria-hidden="true" className="h-16 w-auto opacity-70" />
           </div>
           <p className="font-sans text-xs tracking-[0.3em] uppercase text-secondary mb-4">35-Second Quiz</p>
           <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-4">
