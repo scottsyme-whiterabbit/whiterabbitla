@@ -31,7 +31,7 @@ const handleSaveContact = () => {
 const socialLinks = [
   {
     label: "Venmo",
-    href: "https://venmo.com/Scott-SymeJr",
+    href: "https://venmo.com/u/Scott-SymeJr",
     icon: () => (
       <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
         <path d="M19.5 1.5c.9 1.5 1.3 3.1 1.3 5.1 0 6.3-5.4 14.5-9.8 20.3H3.3L.5 2.1l7.1-.7 1.7 13.8c1.6-2.6 3.5-6.7 3.5-9.5 0-1.9-.3-3.2-.8-4.2l7.5-0z" />
