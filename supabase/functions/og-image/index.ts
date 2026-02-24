@@ -1,116 +1,72 @@
-import satori from "npm:satori@0.12.1";
-import { Resvg, initWasm } from "npm:@resvg/resvg-wasm@2.6.2";
-
-let wasmInitialized = false;
-let fontCache: ArrayBuffer | null = null;
-
-async function ensureWasm() {
-  if (wasmInitialized) return;
-  const wasmUrl =
-    "https://unpkg.com/@aspect-build/resvg-wasm@0.1.0/resvg.wasm";
-  const res = await fetch(wasmUrl);
-  await initWasm(await res.arrayBuffer());
-  wasmInitialized = true;
-}
-
-async function loadFont(): Promise<ArrayBuffer> {
-  if (fontCache) return fontCache;
-  const res = await fetch(
-    "https://whiterabbitla.com/fonts/Ogg-Medium.ttf"
-  );
-  if (!res.ok) throw new Error("Font fetch failed");
-  fontCache = await res.arrayBuffer();
-  return fontCache;
-}
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
-    return new Response(null, {
-      headers: { "Access-Control-Allow-Origin": "*" },
-    });
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const url = new URL(req.url);
     const title = url.searchParams.get("title") || "White Rabbit Magic";
 
-    const [font] = await Promise.all([loadFont(), ensureWasm()]);
+    // Generate an SVG-based OG image (1200x630)
+    const fontSize = title.length > 50 ? 44 : 56;
+    const lines = wrapText(title, fontSize > 50 ? 28 : 22);
 
-    const svg = await satori(
-      {
-        type: "div",
-        props: {
-          style: {
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            height: "100%",
-            backgroundColor: "#2D4A3E",
-            padding: "60px 80px",
-          },
-          children: [
-            {
-              type: "div",
-              props: {
-                style: {
-                  color: "white",
-                  fontSize: title.length > 50 ? 44 : 56,
-                  fontFamily: "Ogg",
-                  textAlign: "center",
-                  lineHeight: 1.3,
-                  maxWidth: "1000px",
-                },
-                children: title,
-              },
-            },
-            {
-              type: "div",
-              props: {
-                style: {
-                  color: "rgba(255,255,255,0.45)",
-                  fontSize: 16,
-                  letterSpacing: "8px",
-                  marginTop: "48px",
-                  fontFamily: "Ogg",
-                },
-                children: "WHITE RABBIT",
-              },
-            },
-          ],
-        },
-      },
-      {
-        width: 1200,
-        height: 630,
-        fonts: [
-          {
-            name: "Ogg",
-            data: font as ArrayBuffer,
-            style: "normal" as const,
-            weight: 500,
-          },
-        ],
-      }
-    );
+    const textY = 315 - (lines.length * fontSize * 1.3) / 2;
 
-    const resvg = new Resvg(svg, {
-      fitTo: { mode: "width" as const, value: 1200 },
-    });
-    const pngData = resvg.render();
-    const pngBuffer = pngData.asPng();
+    const textElements = lines
+      .map(
+        (line, i) =>
+          `<text x="600" y="${textY + i * fontSize * 1.3}" font-family="Georgia, 'Times New Roman', serif" font-size="${fontSize}" fill="white" text-anchor="middle" dominant-baseline="middle">${escapeXml(line)}</text>`
+      )
+      .join("\n    ");
 
-    return new Response(pngBuffer, {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#2D4A3E"/>
+  <rect x="40" y="40" width="1120" height="550" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  ${textElements}
+  <text x="600" y="${textY + lines.length * fontSize * 1.3 + 48}" font-family="Georgia, 'Times New Roman', serif" font-size="16" fill="rgba(255,255,255,0.4)" text-anchor="middle" letter-spacing="8">WHITE RABBIT</text>
+</svg>`;
+
+    return new Response(svg, {
       headers: {
-        "Content-Type": "image/png",
+        "Content-Type": "image/svg+xml",
         "Cache-Control": "public, max-age=604800, s-maxage=604800, immutable",
-        "Access-Control-Allow-Origin": "*",
+        ...corsHeaders,
       },
     });
   } catch (error) {
     console.error("OG image error:", error);
-    // Fallback: redirect to default static OG image
     return Response.redirect("https://whiterabbitla.com/og-image.jpg", 302);
   }
 });
+
+function wrapText(text: string, maxCharsPerLine: number): string[] {
+  const words = text.split(" ");
+  const lines: string[] = [];
+  let currentLine = "";
+
+  for (const word of words) {
+    if (currentLine.length + word.length + 1 > maxCharsPerLine && currentLine.length > 0) {
+      lines.push(currentLine);
+      currentLine = word;
+    } else {
+      currentLine = currentLine ? `${currentLine} ${word}` : word;
+    }
+  }
+  if (currentLine) lines.push(currentLine);
+  return lines;
+}
+
+function escapeXml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
