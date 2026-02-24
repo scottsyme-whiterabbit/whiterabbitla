@@ -327,8 +327,9 @@ const DiscoveryQuiz = () => {
                   initial={{ scale: 0, rotate: -180 }}
                   animate={{ scale: 1, rotate: 0 }}
                   transition={{ type: "spring", duration: 0.8, delay: 0.2 }}
+                  className="flex justify-center mb-4"
                 >
-                  <Sparkles className="mx-auto mb-4 text-accent" size={36} />
+                  <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50" />
                 </motion.div>
                 <motion.p
                   initial={{ opacity: 0 }}
