@@ -288,6 +288,7 @@ html {
 
 .animate-scroll-logos {
   animation: scroll-logos 40s linear infinite;
+  will-change: transform;
 }
 
 .animate-scroll-logos:hover {
