@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
 import QuizCTA from "@/components/QuizCTA";
+import threeStars from "@/assets/three-stars-gold.png";
 import { serviceAreas, getAreasByRegion, serviceAreaRegions } from "@/data/serviceAreas";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useWebPageSchema } from "@/hooks/useSchemaOrg";
@@ -48,6 +49,9 @@ const ServiceAreas = () => {
           <section key={region} className="py-16 border-b border-border">
             <div className="max-w-6xl mx-auto px-6">
               <AnimatedSection>
+                <div className="flex justify-center mb-4">
+                  <img src={threeStars} alt="" aria-hidden="true" className="h-10 w-auto opacity-50" />
+                </div>
                 <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">
                   {region}
                 </p>
