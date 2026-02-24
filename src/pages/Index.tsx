@@ -83,10 +83,11 @@ const Index = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/30 to-forest-dark/10 hidden md:block" />
         </div>
 
-        {/* Mobile: text overlaid at top of photo */}
-        <div className="md:hidden absolute inset-0 z-10 flex flex-col items-center pt-24 px-6 text-center">
+        {/* Mobile: text overlaid at bottom of photo */}
+        <div className="md:hidden absolute inset-0 z-10 flex flex-col items-center justify-end pb-10 px-6 text-center">
+          <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
           <motion.p
-            className="text-xl text-cream/90 tracking-wide font-bold font-serif drop-shadow-lg"
+            className="relative text-2xl text-cream/90 tracking-wide font-bold font-serif drop-shadow-lg"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}>
@@ -97,12 +98,25 @@ const Index = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1 }}
-            className="mt-6">
+            className="relative mt-6">
             <button
               onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-10 py-4 hover:bg-accent hover:text-accent-foreground transition-colors">
-              Book an Experience
+              See What I Do
             </button>
+          </motion.div>
+          {/* Scroll indicator */}
+          <motion.div
+            className="relative mt-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1.5 }}>
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+              className="w-5 h-8 border border-cream/30 rounded-full flex items-start justify-center p-1">
+              <div className="w-1 h-2 bg-cream/50 rounded-full" />
+            </motion.div>
           </motion.div>
         </div>
 
@@ -127,6 +141,23 @@ const Index = () => {
               Book an Experience
             </button>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Instant Social Proof Strip */}
+      <section className="bg-forest-dark py-6 border-b border-accent/10">
+        <div className="max-w-3xl mx-auto px-6 flex flex-col md:flex-row items-center justify-center gap-3 md:gap-6">
+          <div className="flex gap-0.5">
+            {[...Array(5)].map((_, i) =>
+              <Star key={i} size={14} className="fill-accent text-accent" />
+            )}
+          </div>
+          <p className="font-serif text-sm md:text-base text-cream/80 text-center">
+            "He elevated our party in ways I didn't expect. He was everyone's favorite part."
+          </p>
+          <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-cream/40 whitespace-nowrap">
+            — Zara M.
+          </p>
         </div>
       </section>
 
