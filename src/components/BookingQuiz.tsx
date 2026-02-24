@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { trackQuizStart, trackQuizComplete, trackFormSubmit } from "@/lib/analytics";
+import threeStars from "@/assets/three-stars-gold.png";
 
 const CLIENT_TYPES = [
   { id: "corporate", label: "Corporate / Brand", description: "Planning on behalf of a company or brand" },
@@ -289,9 +290,7 @@ const BookingQuiz = () => {
                 >
                   {submitted ? (
                     <div className="text-center py-8">
-                      <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-accent/10 mb-6">
-                        <Sparkles size={28} className="text-accent" />
-                      </div>
+                      <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50 mx-auto mb-6" />
                       <h3 className="font-serif text-3xl text-foreground mb-4">You're All Set!</h3>
                       <p className="font-sans text-sm text-muted-foreground mb-4 max-w-sm mx-auto">
                         Scott will review your inquiry and get back to you within 24 hours with a personalized plan for your event.
