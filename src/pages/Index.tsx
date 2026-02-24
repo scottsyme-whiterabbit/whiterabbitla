@@ -86,14 +86,14 @@ const Index = () => {
         {/* Mobile: text overlaid at bottom of photo */}
         <div className="md:hidden absolute inset-0 z-10 flex flex-col items-center justify-end pb-10 px-6 text-center">
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
-          <motion.p
+          <motion.h1
             className="relative text-2xl text-cream/90 tracking-wide font-bold font-serif drop-shadow-lg"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}>
             Experience Magic<br />
             <span className="block mt-2">That Makes You Feel Truly Alive</span>
-          </motion.p>
+          </motion.h1>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -122,14 +122,14 @@ const Index = () => {
 
         {/* Desktop: text overlaid */}
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto hidden md:flex flex-col items-center justify-end pb-6 h-full">
-          <motion.p
+          <motion.h1
             className="text-4xl lg:text-5xl text-cream/90 tracking-wide font-bold text-center font-serif"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}>
             Experience Magic<br />
             <span className="block mt-3">That Makes You Feel Truly Alive</span>
-          </motion.p>
+          </motion.h1>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
