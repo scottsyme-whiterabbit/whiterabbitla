@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { X, Sparkles, Check, CalendarCheck } from "lucide-react";
+import { X, Check, CalendarCheck } from "lucide-react";
+import threeStars from "@/assets/three-stars-gold.png";
 import { useLocation } from "react-router-dom";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import { supabase } from "@/integrations/supabase/client";
@@ -82,7 +83,7 @@ const ExitIntentPopup = () => {
 
         {mode === "choice" && (
           <>
-            <Sparkles className="mx-auto mb-4 text-accent" size={28} />
+            <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50 mx-auto mb-4" />
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3">
               Before You Go
             </p>
@@ -118,7 +119,7 @@ const ExitIntentPopup = () => {
 
         {mode === "guide" && (
           <>
-            <Sparkles className="mx-auto mb-4 text-accent" size={28} />
+            <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50 mx-auto mb-4" />
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3">
               Free Guide
             </p>

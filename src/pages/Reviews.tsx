@@ -122,6 +122,18 @@ const reviews = [
   role: "Show Attendee",
   text: "Absolutely amazing show! Would highly recommend! Everyone was blown away by every trick!",
   rating: 5
+},
+{
+  name: "Selena",
+  role: "Private Party Guest",
+  text: "Scott was so kind the way he connects with everyone, the energy he brings, the little moments where you're just sitting there like wait… HOW?! It felt intimate and exciting at the same time. You can tell he truly loves what he does and it shows in every second of his performance. Thank you Scott!",
+  rating: 5
+},
+{
+  name: "Panda C.",
+  role: "Private Party Guest",
+  text: "Scott scares me in a good way. I thought I was safe in the world, and then he proved that magic is real and is around me. I now live in constant wonder and intrigue.",
+  rating: 5
 }];
 
 
