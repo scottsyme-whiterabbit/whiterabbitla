@@ -102,7 +102,7 @@ const Index = () => {
             <button
               onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-10 py-4 hover:bg-accent hover:text-accent-foreground transition-colors">
-              See What I Do
+              Explore the Experience
             </button>
           </motion.div>
           {/* Scroll indicator */}
