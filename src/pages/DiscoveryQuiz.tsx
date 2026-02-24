@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import AnimatedSection from "@/components/AnimatedSection";
 import PersonaCard, { personas, getPersona } from "@/components/PersonaCard";
 import { trackQuizStart, trackQuizComplete } from "@/lib/analytics";
+import threeStars from "@/assets/three-stars-gold.png";
 
 interface QuizAnswer {
   eventType: string;
@@ -508,7 +509,7 @@ const DiscoveryQuiz = () => {
                   </div>
                 ) : (
                   <div className="border-t border-cream/10 pt-8 text-center">
-                    <Check className="mx-auto mb-3 text-accent" size={28} />
+                    <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50 mx-auto mb-4" />
                     <p className="font-serif text-xl text-cream mb-2">You're all set.</p>
                     <p className="font-sans text-sm text-cream/50 mb-6">
                       We'll be in touch shortly with a personalized overview.
