@@ -293,12 +293,17 @@ const BookingQuiz = () => {
                         <Sparkles size={28} className="text-accent" />
                       </div>
                       <h3 className="font-serif text-3xl text-foreground mb-4">You're All Set!</h3>
-                      <p className="font-sans text-sm text-muted-foreground mb-8 max-w-sm mx-auto">
+                      <p className="font-sans text-sm text-muted-foreground mb-4 max-w-sm mx-auto">
                         Scott will review your inquiry and get back to you within 24 hours with a personalized plan for your event.
                       </p>
-                      <Button onClick={handleClose} className="font-sans text-sm tracking-[0.2em] uppercase px-8 py-5">
-                        Close
-                      </Button>
+                      <p className="font-sans text-xs text-muted-foreground/60 italic mb-6 max-w-xs mx-auto">
+                        Want to lock in your date? You can also check availability below.
+                      </p>
+                      <div className="flex flex-col gap-3 items-center">
+                        <Button onClick={handleClose} className="font-sans text-sm tracking-[0.2em] uppercase px-8 py-5">
+                          Close
+                        </Button>
+                      </div>
                     </div>
                   ) : step === "clientType" ? (
                     <div>
