@@ -513,6 +513,20 @@ const DiscoveryQuiz = () => {
                     <p className="font-sans text-sm text-cream/50 mb-6">
                       We'll be in touch shortly with a personalized overview.
                     </p>
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1.5, duration: 0.6 }}
+                      className="mt-4"
+                    >
+                      <p className="font-sans text-xs text-cream/40 mb-3">Already know your date?</p>
+                      <button
+                        onClick={openQuiz}
+                        className="inline-block font-sans text-xs tracking-[0.2em] uppercase border border-accent/50 text-accent px-8 py-3 hover:bg-accent hover:text-accent-foreground transition-colors"
+                      >
+                        Check Availability
+                      </button>
+                    </motion.div>
                   </div>
                 )}
               </motion.div>
