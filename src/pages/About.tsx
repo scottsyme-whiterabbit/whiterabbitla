@@ -101,6 +101,40 @@ const About = () => {
         <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50" />
       </div>
 
+      {/* Featured In — Press & Authority */}
+      <AnimatedSection>
+        <section className="py-16 bg-card">
+          <div className="max-w-3xl mx-auto px-6 text-center">
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-8">Featured In</p>
+            <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
+              {[
+                { name: "America's Got Talent", url: "https://www.nbc.com/americas-got-talent" },
+                { name: "ShoutoutLA", url: "https://shoutoutla.com/meet-scott-syme-jr-founder-magician/" },
+                { name: "Magic Castle®", url: "https://www.magiccastle.com" },
+                { name: "Disney Channel", url: null },
+              ].map((press) => (
+                <div key={press.name}>
+                  {press.url ? (
+                    <a
+                      href={press.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-serif text-lg md:text-xl text-foreground/60 hover:text-accent transition-colors"
+                    >
+                      {press.name}
+                    </a>
+                  ) : (
+                    <span className="font-serif text-lg md:text-xl text-foreground/60">
+                      {press.name}
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </AnimatedSection>
+
       {/* In Action */}
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-4 gap-4">
