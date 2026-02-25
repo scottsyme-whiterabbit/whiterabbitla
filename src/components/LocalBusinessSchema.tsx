@@ -159,6 +159,7 @@ const LocalBusinessSchema = () => {
       ],
       sameAs: [
         "https://www.instagram.com/scottsyme_/",
+        "https://shoutoutla.com/meet-scott-syme-jr-founder-magician/",
       ],
       memberOf: {
         "@type": "Organization",
