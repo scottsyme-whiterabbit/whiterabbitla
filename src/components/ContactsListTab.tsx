@@ -338,6 +338,8 @@ const ContactsListTab = ({ storedPassword, initialFilter, initialCampaign }: Con
               <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Email</th>
               <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Name</th>
               <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Company</th>
+              <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">City</th>
+              <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Tag</th>
               <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Status</th>
               <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground min-w-[180px]">Drip Progress</th>
               <th className="text-left p-3 font-sans text-xs tracking-wider uppercase text-muted-foreground">Last Emailed</th>
@@ -366,6 +368,18 @@ const ContactsListTab = ({ storedPassword, initialFilter, initialCampaign }: Con
                     <td className="p-3 text-foreground font-mono text-xs">{c.email}</td>
                     <td className="p-3 text-muted-foreground">{c.name || "—"}</td>
                     <td className="p-3 text-muted-foreground">{c.company || "—"}</td>
+                    <td className="p-3 text-muted-foreground text-xs">{c.city || "—"}</td>
+                    <td className="p-3">
+                      <span className={`text-[10px] px-2 py-0.5 font-sans tracking-[0.15em] uppercase ${
+                        c.drip_campaign.startsWith("planner")
+                          ? "bg-violet-900/30 text-violet-400 border border-violet-500/30"
+                          : c.drip_campaign.startsWith("resident")
+                          ? "bg-sky-900/30 text-sky-400 border border-sky-500/30"
+                          : "bg-muted text-muted-foreground border border-border"
+                      }`}>
+                        {c.drip_campaign.startsWith("planner") ? "Planner" : c.drip_campaign.startsWith("resident") ? "Apartment" : c.drip_campaign}
+                      </span>
+                    </td>
                     <td className="p-3">
                       <span className={`text-xs px-2 py-1 inline-flex items-center gap-1 ${config.colorClass}`}>
                         {c.reply_detected && "💬 "}
@@ -395,7 +409,7 @@ const ContactsListTab = ({ storedPassword, initialFilter, initialCampaign }: Con
                   </tr>
                   {isExpanded && (
                     <tr key={`${c.id}-activity`} className="border-b border-border/50">
-                      <td colSpan={8} className="p-0">
+                      <td colSpan={10} className="p-0">
                         <div className="bg-accent/5 px-6 py-4">
                           {/* Activity tabs */}
                           <div className="flex gap-4 mb-3">
@@ -466,7 +480,7 @@ const ContactsListTab = ({ storedPassword, initialFilter, initialCampaign }: Con
             })}
             {!filtered.length && (
               <tr>
-                <td colSpan={8} className="p-8 text-center text-muted-foreground">
+                <td colSpan={10} className="p-8 text-center text-muted-foreground">
                   {search ? "No contacts match your search." : "No contacts found."}
                 </td>
               </tr>
