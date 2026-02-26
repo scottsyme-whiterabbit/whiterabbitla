@@ -54,6 +54,14 @@ const LocalBusinessSchema = () => {
         { "@type": "City", name: "The Hamptons" },
         { "@type": "City", name: "Greenwich" },
         { "@type": "City", name: "Park City" },
+        { "@type": "City", name: "Nantucket" },
+        { "@type": "City", name: "Potomac" },
+        { "@type": "City", name: "Buckhead" },
+        { "@type": "City", name: "Highland Park" },
+        { "@type": "City", name: "Lake Tahoe" },
+        { "@type": "City", name: "Burlingame" },
+        { "@type": "City", name: "San Mateo" },
+        { "@type": "City", name: "Carmel-by-the-Sea" },
       ],
       address: {
         "@type": "PostalAddress",
@@ -141,7 +149,7 @@ const LocalBusinessSchema = () => {
       "@id": "https://whiterabbitla.com/#scott-syme",
       name: "Scott Syme",
       jobTitle: "Magician & Mentalist",
-      description: "Los Angeles based magician and mentalist specializing in close-up magic and parlor shows for luxury events. Member of the Magic Castle® in Hollywood. Featured on America's Got Talent.",
+      description: "Los Angeles based magician and mentalist specializing in close-up magic and parlor shows for luxury events. Member of the Magic Castle® in Hollywood. Featured on America's Got Talent. Performed for Netflix, Disney, Paramount, Morgan Stanley, Rolls-Royce, and Rivian. 500+ events. Perfect 5.0 Google rating.",
       url: "https://whiterabbitla.com/about",
       image: "https://whiterabbitla.com/og-image.jpg",
       worksFor: {
@@ -156,6 +164,47 @@ const LocalBusinessSchema = () => {
         "Corporate entertainment",
         "Event entertainment",
         "Parlor magic shows",
+        "Wedding entertainment",
+        "Trade show magic",
+        "Brand activations",
+      ],
+      hasCredential: [
+        {
+          "@type": "EducationalOccupationalCredential",
+          credentialCategory: "Professional Membership",
+          name: "Member, Academy of Magical Arts (Magic Castle®)",
+          recognizedBy: {
+            "@type": "Organization",
+            name: "The Academy of Magical Arts",
+            url: "https://www.magiccastle.com",
+          },
+        },
+      ],
+      hasOccupation: {
+        "@type": "Occupation",
+        name: "Professional Magician & Mentalist",
+        occupationLocation: {
+          "@type": "City",
+          name: "Los Angeles",
+        },
+      },
+      performerIn: [
+        {
+          "@type": "Event",
+          name: "America's Got Talent",
+          organizer: { "@type": "Organization", name: "NBC" },
+        },
+        {
+          "@type": "Event",
+          name: "Magic Mondays",
+          location: { "@type": "Place", name: "Hollywood, Los Angeles" },
+          organizer: { "@type": "Organization", name: "White Rabbit LA" },
+        },
+      ],
+      award: [
+        "Featured Performer — America's Got Talent (NBC)",
+        "Magic Consultant — Disney Channel (Bizaardvark)",
+        "Consultant to America's Got Talent Champion Dustin Tavella",
       ],
       sameAs: [
         "https://www.instagram.com/scottsyme_/",
