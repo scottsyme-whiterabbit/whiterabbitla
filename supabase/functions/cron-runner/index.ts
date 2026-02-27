@@ -14,16 +14,18 @@ serve(async (req) => {
   }
 
   try {
-    let password = "";
+    let authorized = false;
     if (req.method === "GET") {
       const url = new URL(req.url);
-      password = url.searchParams.get("key") || "";
+      const key = url.searchParams.get("key") || "";
+      authorized = key === Deno.env.get("CRON_SECRET");
     } else {
       const body = await req.json().catch(() => ({}));
-      password = body.adminPassword || "";
+      const password = body.adminPassword || "";
+      authorized = password === Deno.env.get("ADMIN_PASSWORD");
     }
 
-    if (password !== Deno.env.get("ADMIN_PASSWORD")) {
+    if (!authorized) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
