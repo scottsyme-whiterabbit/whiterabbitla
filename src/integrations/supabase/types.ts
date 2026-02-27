@@ -22,6 +22,8 @@ export type Database = {
           date: string | null
           email: string
           event_type: string | null
+          followup_started_at: string | null
+          followup_step: number
           guest_count: string | null
           id: string
           location: string | null
@@ -38,6 +40,8 @@ export type Database = {
           date?: string | null
           email: string
           event_type?: string | null
+          followup_started_at?: string | null
+          followup_step?: number
           guest_count?: string | null
           id?: string
           location?: string | null
@@ -54,6 +58,8 @@ export type Database = {
           date?: string | null
           email?: string
           event_type?: string | null
+          followup_started_at?: string | null
+          followup_step?: number
           guest_count?: string | null
           id?: string
           location?: string | null
