@@ -267,6 +267,96 @@ serve(async (req) => {
         });
       }
 
+      case "get_deals": {
+        const { data, error } = await supabase
+          .from("deals")
+          .select("*")
+          .order("created_at", { ascending: false });
+        if (error) throw error;
+        return new Response(JSON.stringify({ deals: data }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "create_deal": {
+        const { deal } = payload;
+        const { data, error } = await supabase
+          .from("deals")
+          .insert({
+            contact_email: deal.contact_email,
+            contact_name: deal.contact_name || null,
+            company: deal.company || null,
+            event_type: deal.event_type || null,
+            event_date: deal.event_date || null,
+            location: deal.location || null,
+            guest_count: deal.guest_count || null,
+            deal_value: deal.deal_value || null,
+            stage: deal.stage || "new",
+            notes: deal.notes || null,
+            next_follow_up: deal.next_follow_up || null,
+            source: deal.source || null,
+            lost_reason: deal.lost_reason || null,
+          })
+          .select()
+          .single();
+        if (error) throw error;
+        return new Response(JSON.stringify({ deal: data }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "update_deal": {
+        const { deal } = payload;
+        const { data, error } = await supabase
+          .from("deals")
+          .update({
+            contact_email: deal.contact_email,
+            contact_name: deal.contact_name || null,
+            company: deal.company || null,
+            event_type: deal.event_type || null,
+            event_date: deal.event_date || null,
+            location: deal.location || null,
+            guest_count: deal.guest_count || null,
+            deal_value: deal.deal_value || null,
+            stage: deal.stage || "new",
+            notes: deal.notes || null,
+            next_follow_up: deal.next_follow_up || null,
+            source: deal.source || null,
+            lost_reason: deal.lost_reason || null,
+          })
+          .eq("id", deal.id)
+          .select()
+          .single();
+        if (error) throw error;
+        return new Response(JSON.stringify({ deal: data }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "update_deal_stage": {
+        const { dealId, stage } = payload;
+        const { error } = await supabase
+          .from("deals")
+          .update({ stage })
+          .eq("id", dealId);
+        if (error) throw error;
+        return new Response(JSON.stringify({ success: true }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "delete_deal": {
+        const { dealId } = payload;
+        const { error } = await supabase
+          .from("deals")
+          .delete()
+          .eq("id", dealId);
+        if (error) throw error;
+        return new Response(JSON.stringify({ success: true }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       default:
         return new Response(JSON.stringify({ error: "Unknown action" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },

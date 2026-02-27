@@ -6,6 +6,7 @@ import ResidentDripTab from "@/components/ResidentDripTab";
 import ContactsListTab from "@/components/ContactsListTab";
 import CampaignCalendarTab from "@/components/CampaignCalendarTab";
 import AnalyticsTab from "@/components/AnalyticsTab";
+import PipelineTab from "@/components/PipelineTab";
 import SubjectScorer from "@/components/SubjectScorer";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -55,7 +56,7 @@ const AdminNewsletter = () => {
   const [authenticated, setAuthenticated] = useState(false);
   const [storedPassword, setStoredPassword] = useState("");
 
-  const [activeTab, setActiveTab] = useState<"dashboard" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "planner" | "apartment" | "thankyou">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "planner" | "apartment" | "thankyou">("dashboard");
   const [tyClientName, setTyClientName] = useState("");
   const [tyClientEmail, setTyClientEmail] = useState("");
   const [tyEventType, setTyEventType] = useState("");
@@ -466,7 +467,7 @@ const AdminNewsletter = () => {
 
         {/* Tabs */}
         <div className="flex gap-1 mb-8 border-b border-border overflow-x-auto">
-          {(["dashboard", "contacts", "compose", "campaigns", "calendar", "analytics", "planner", "apartment", "thankyou"] as const).map(tab => (
+          {(["dashboard", "pipeline", "contacts", "compose", "campaigns", "calendar", "analytics", "planner", "apartment", "thankyou"] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -478,6 +479,11 @@ const AdminNewsletter = () => {
             </button>
           ))}
         </div>
+
+        {/* Pipeline */}
+        {activeTab === "pipeline" && (
+          <PipelineTab adminPassword={storedPassword} />
+        )}
 
         {/* Dashboard */}
         {activeTab === "dashboard" && (
