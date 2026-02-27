@@ -38,18 +38,7 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      // Save to database
-      await supabase.from("contact_inquiries").insert({
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        event_type: formData.eventType,
-        date: formData.date,
-        location: formData.location,
-        message: formData.message,
-        client_type: formData.clientType || null,
-        source: "contact_form",
-      });
+      // Send email + save inquiry + create deal (all handled by edge function)
 
       // Send email
       const { error } = await supabase.functions.invoke("send-inquiry", {

@@ -13,7 +13,7 @@ serve(async (req) => {
   }
 
   try {
-    const { name, email, phone, eventType, date, location, message, clientType } = await req.json();
+    const { name, email, phone, eventType, date, location, message, clientType, guestCount, budget, recommendation, source: formSource } = await req.json();
 
     // Basic validation
     if (!name || !email || !eventType || !date || !location || !message) {
@@ -174,13 +174,55 @@ serve(async (req) => {
       console.error("Confirmation email error:", confirmErr);
     }
 
-    // Auto-convert: if this email is in the drip campaign, mark as converted and stop drip
+    // Save to contact_inquiries and create deal in pipeline
     try {
       const supabase = createClient(
         Deno.env.get("SUPABASE_URL")!,
         Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
       );
       const contactEmail = email.toLowerCase().trim();
+
+      // Save inquiry
+      const { data: inquiry } = await supabase
+        .from("contact_inquiries")
+        .insert({
+          name,
+          email: contactEmail,
+          phone: phone || null,
+          event_type: eventType,
+          date,
+          location,
+          message,
+          client_type: clientType || null,
+          guest_count: guestCount || null,
+          budget: budget || null,
+          recommendation: recommendation || null,
+          source: formSource || "contact_form",
+        })
+        .select("id")
+        .single();
+
+      // Create deal in pipeline
+      const eventTypeMap: Record<string, string> = {
+        "Corporate Event": "corporate",
+        "Wedding": "wedding",
+        "Private Party": "private_party",
+        "Parlor Show": "parlor_show",
+      };
+
+      await supabase.from("deals").insert({
+        contact_email: contactEmail,
+        contact_name: name,
+        event_type: eventTypeMap[eventType] || "other",
+        event_date: date || null,
+        location: location || null,
+        stage: "new",
+        source: "contact_form",
+        source_id: inquiry?.id || null,
+        notes: message || null,
+      });
+
+      // Auto-convert: if this email is in the drip campaign, mark as converted
       const { data: dripContact } = await supabase
         .from("newsletter_contacts")
         .select("id, drip_campaign")
@@ -198,7 +240,7 @@ serve(async (req) => {
         console.log(`Auto-converted drip contact: ${contactEmail}`);
       }
     } catch (convErr) {
-      console.error("Auto-convert check failed (non-blocking):", convErr);
+      console.error("Post-send processing failed (non-blocking):", convErr);
     }
 
     return new Response(

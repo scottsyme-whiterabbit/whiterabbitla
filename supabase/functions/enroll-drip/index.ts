@@ -67,6 +67,20 @@ serve(async (req) => {
       });
     }
 
+    // Create deal in pipeline for quiz leads
+    try {
+      await supabase.from("deals").insert({
+        contact_email: email.toLowerCase().trim(),
+        contact_name: name || null,
+        event_type: "other",
+        stage: "new",
+        source: "quiz",
+        notes: recommendation ? `Quiz result: ${recommendation}` : null,
+      });
+    } catch (dealErr) {
+      console.error("Deal creation failed (non-blocking):", dealErr);
+    }
+
     // Generate + send first drip email
     if (!LOVABLE_API_KEY || !RESEND_API_KEY) {
       console.warn("Missing API keys for drip email, contact enrolled but email not sent");

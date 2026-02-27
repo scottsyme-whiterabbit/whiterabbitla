@@ -151,21 +151,7 @@ const BookingQuiz = () => {
     setIsSubmitting(true);
     const rec = getRecommendation(data);
     try {
-      // Save to database
-      await supabase.from("contact_inquiries").insert({
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        event_type: data.eventLabel,
-        date: data.date,
-        location: data.location || "TBD",
-        guest_count: data.guestLabel,
-        budget: data.budgetLabel,
-        message: data.message || null,
-        client_type: data.clientType || null,
-        source: "booking_quiz",
-        recommendation: rec.title,
-      });
+      // Send email + save inquiry + create deal (all handled by edge function)
 
       // Send email notification
       const { error } = await supabase.functions.invoke("send-inquiry", {
@@ -177,6 +163,11 @@ const BookingQuiz = () => {
           date: data.date,
           location: data.location || "TBD",
           message: `Client Type: ${data.clientTypeLabel}\nGuest Count: ${data.guestLabel}\nBudget: ${data.budgetLabel}\nRecommended: ${rec.title}\n\n${data.message || "No additional message."}`,
+          clientType: data.clientType || null,
+          guestCount: data.guestLabel || null,
+          budget: data.budgetLabel || null,
+          recommendation: rec.title,
+          source: "booking_quiz",
         },
       });
       if (error) throw error;
