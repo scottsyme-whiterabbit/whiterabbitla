@@ -86,6 +86,8 @@ export type Database = {
           lost_reason: string | null
           next_follow_up: string | null
           notes: string | null
+          post_show_started_at: string | null
+          post_show_step: number
           source: string | null
           source_id: string | null
           stage: string
@@ -105,6 +107,8 @@ export type Database = {
           lost_reason?: string | null
           next_follow_up?: string | null
           notes?: string | null
+          post_show_started_at?: string | null
+          post_show_step?: number
           source?: string | null
           source_id?: string | null
           stage?: string
@@ -124,6 +128,8 @@ export type Database = {
           lost_reason?: string | null
           next_follow_up?: string | null
           notes?: string | null
+          post_show_started_at?: string | null
+          post_show_step?: number
           source?: string | null
           source_id?: string | null
           stage?: string
