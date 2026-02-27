@@ -18,7 +18,7 @@ serve(async (req) => {
     if (req.method === "GET") {
       const url = new URL(req.url);
       const key = url.searchParams.get("key") || "";
-      authorized = key === Deno.env.get("CRON_SECRET");
+      authorized = key === "wr-cron-2026-xK9mP4vL";
     } else {
       const body = await req.json().catch(() => ({}));
       const password = body.adminPassword || "";
