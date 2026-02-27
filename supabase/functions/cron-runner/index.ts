@@ -14,8 +14,16 @@ serve(async (req) => {
   }
 
   try {
-    const { adminPassword } = await req.json().catch(() => ({}));
-    if (adminPassword !== Deno.env.get("ADMIN_PASSWORD")) {
+    let password = "";
+    if (req.method === "GET") {
+      const url = new URL(req.url);
+      password = url.searchParams.get("key") || "";
+    } else {
+      const body = await req.json().catch(() => ({}));
+      password = body.adminPassword || "";
+    }
+
+    if (password !== Deno.env.get("ADMIN_PASSWORD")) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
