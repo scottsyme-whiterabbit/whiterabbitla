@@ -65,6 +65,66 @@ export type Database = {
         }
         Relationships: []
       }
+      deals: {
+        Row: {
+          company: string | null
+          contact_email: string
+          contact_name: string | null
+          created_at: string
+          deal_value: number | null
+          event_date: string | null
+          event_type: string | null
+          guest_count: string | null
+          id: string
+          location: string | null
+          lost_reason: string | null
+          next_follow_up: string | null
+          notes: string | null
+          source: string | null
+          source_id: string | null
+          stage: string
+          updated_at: string
+        }
+        Insert: {
+          company?: string | null
+          contact_email: string
+          contact_name?: string | null
+          created_at?: string
+          deal_value?: number | null
+          event_date?: string | null
+          event_type?: string | null
+          guest_count?: string | null
+          id?: string
+          location?: string | null
+          lost_reason?: string | null
+          next_follow_up?: string | null
+          notes?: string | null
+          source?: string | null
+          source_id?: string | null
+          stage?: string
+          updated_at?: string
+        }
+        Update: {
+          company?: string | null
+          contact_email?: string
+          contact_name?: string | null
+          created_at?: string
+          deal_value?: number | null
+          event_date?: string | null
+          event_type?: string | null
+          guest_count?: string | null
+          id?: string
+          location?: string | null
+          lost_reason?: string | null
+          next_follow_up?: string | null
+          notes?: string | null
+          source?: string | null
+          source_id?: string | null
+          stage?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       discovery_quiz_leads: {
         Row: {
           biggest_concern: string | null
