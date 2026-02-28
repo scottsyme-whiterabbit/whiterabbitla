@@ -1,0 +1,1 @@
+ALTER TABLE public.deals ADD COLUMN event_time time WITHOUT TIME ZONE DEFAULT NULL;

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import { Plus, DollarSign, TrendingUp, Calendar, BarChart3 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import ShowCalendar from "@/components/ShowCalendar";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -13,6 +14,7 @@ interface Deal {
   company: string | null;
   event_type: string | null;
   event_date: string | null;
+  event_time: string | null;
   location: string | null;
   guest_count: string | null;
   deal_value: number | null;
@@ -87,6 +89,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
     company: "",
     event_type: "corporate",
     event_date: "",
+    event_time: "",
     location: "",
     guest_count: "",
     deal_value: "",
@@ -134,6 +137,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
         ...form,
         deal_value: form.deal_value ? Math.round(parseFloat(form.deal_value) * 100) : null,
         event_date: form.event_date || null,
+        event_time: form.event_time || null,
         next_follow_up: form.next_follow_up || null,
         ...(editingDeal ? { id: editingDeal.id } : {}),
       };
@@ -158,7 +162,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
   };
 
   const resetForm = () => {
-    setForm({ contact_email: "", contact_name: "", company: "", event_type: "corporate", event_date: "", location: "", guest_count: "", deal_value: "", stage: "new", notes: "", next_follow_up: "", source: "manual", lost_reason: "" });
+    setForm({ contact_email: "", contact_name: "", company: "", event_type: "corporate", event_date: "", event_time: "", location: "", guest_count: "", deal_value: "", stage: "new", notes: "", next_follow_up: "", source: "manual", lost_reason: "" });
   };
 
   const openEdit = (deal: Deal) => {
@@ -169,6 +173,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
       company: deal.company || "",
       event_type: deal.event_type || "corporate",
       event_date: deal.event_date || "",
+      event_time: deal.event_time || "",
       location: deal.location || "",
       guest_count: deal.guest_count || "",
       deal_value: deal.deal_value ? (deal.deal_value / 100).toString() : "",
@@ -278,6 +283,9 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
         </div>
       </div>
 
+      {/* Show Calendar */}
+      <ShowCalendar deals={deals} />
+
       {/* Deal Form Modal */}
       <Dialog open={showForm} onOpenChange={setShowForm}>
         <DialogContent className="max-w-lg bg-background border-border max-h-[90vh] overflow-y-auto">
@@ -311,10 +319,14 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
                 </select>
               </div>
             </div>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-4 gap-3">
               <div>
                 <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Event Date</label>
                 <input type="date" value={form.event_date} onChange={e => setForm(f => ({ ...f, event_date: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+              </div>
+              <div>
+                <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Event Time</label>
+                <input type="time" value={form.event_time} onChange={e => setForm(f => ({ ...f, event_time: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
               </div>
               <div>
                 <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Location</label>

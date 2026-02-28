@@ -79,6 +79,7 @@ export type Database = {
           created_at: string
           deal_value: number | null
           event_date: string | null
+          event_time: string | null
           event_type: string | null
           guest_count: string | null
           id: string
@@ -100,6 +101,7 @@ export type Database = {
           created_at?: string
           deal_value?: number | null
           event_date?: string | null
+          event_time?: string | null
           event_type?: string | null
           guest_count?: string | null
           id?: string
@@ -121,6 +123,7 @@ export type Database = {
           created_at?: string
           deal_value?: number | null
           event_date?: string | null
+          event_time?: string | null
           event_type?: string | null
           guest_count?: string | null
           id?: string
