@@ -301,6 +301,23 @@ serve(async (req) => {
           .select()
           .single();
         if (error) throw error;
+
+        // Also upsert into newsletter_contacts so pipeline leads are tracked
+        await supabase
+          .from("newsletter_contacts")
+          .upsert(
+            {
+              email: deal.contact_email.toLowerCase().trim(),
+              name: deal.contact_name || null,
+              company: deal.company || null,
+              source: "pipeline",
+              drip_campaign: "welcome",
+              drip_step: 0,
+              subscribed: true,
+            },
+            { onConflict: "email", ignoreDuplicates: true }
+          );
+
         return new Response(JSON.stringify({ deal: data }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
