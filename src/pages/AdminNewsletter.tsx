@@ -54,8 +54,28 @@ interface Stats {
 
 const AdminNewsletter = () => {
   const [password, setPassword] = useState("");
-  const [authenticated, setAuthenticated] = useState(false);
-  const [storedPassword, setStoredPassword] = useState("");
+  const [authenticated, setAuthenticated] = useState(() => {
+    const saved = sessionStorage.getItem("wr_admin_session");
+    if (saved) {
+      try {
+        const { pw: _pw, ts } = JSON.parse(saved);
+        // Session lasts 24 hours
+        if (Date.now() - ts < 24 * 60 * 60 * 1000) return true;
+      } catch {}
+      sessionStorage.removeItem("wr_admin_session");
+    }
+    return false;
+  });
+  const [storedPassword, setStoredPassword] = useState(() => {
+    const saved = sessionStorage.getItem("wr_admin_session");
+    if (saved) {
+      try {
+        const { pw, ts } = JSON.parse(saved);
+        if (Date.now() - ts < 24 * 60 * 60 * 1000) return pw;
+      } catch {}
+    }
+    return "";
+  });
 
   const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "planner" | "apartment" | "thankyou">("dashboard");
   const [tyClientName, setTyClientName] = useState("");
@@ -136,6 +156,7 @@ const AdminNewsletter = () => {
       if (res.ok) {
         setStoredPassword(password);
         setAuthenticated(true);
+        sessionStorage.setItem("wr_admin_session", JSON.stringify({ pw: password, ts: Date.now() }));
         toast.success("Welcome back");
       } else {
         toast.error("Invalid password");
