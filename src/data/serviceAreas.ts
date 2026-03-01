@@ -36,7 +36,7 @@ const cityData: { city: string; region: string; photo: string; tagline: string }
   { city: "Bel Air", region: "Southern California", photo: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&h=400&fit=crop", tagline: "Ultra-private estate entertainment" }, // Luxury modern estate pool
   { city: "Pasadena", region: "Southern California", photo: "/areas/pasadena.jpg", tagline: "Historic venues and garden celebrations" },
   { city: "Calabasas", region: "Southern California", photo: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&h=400&fit=crop", tagline: "Celebrity neighborhoods and gated community events" }, // Luxury home exterior
-  { city: "Orange County", region: "Southern California", photo: "https://images.unsplash.com/photo-1598584223013-2cc01d1a5280?w=600&h=400&fit=crop", tagline: "Newport Coast galas and Laguna Beach gatherings" }, // Beach coastline people
+  { city: "Orange County", region: "Southern California", photo: "/areas/orange-county.jpg", tagline: "Newport Coast galas and Laguna Beach gatherings" },
   { city: "San Diego", region: "Southern California", photo: "https://images.unsplash.com/photo-1583195426307-cbbe1d867a32?w=600&h=400&fit=crop", tagline: "Waterfront conventions and La Jolla retreats" }, // San Diego city skyline
   { city: "Newport Beach", region: "Southern California", photo: "https://images.unsplash.com/photo-1637590376449-9a205e906063?w=600&h=400&fit=crop", tagline: "Harbor-view receptions and yacht club events" }, // California beach pier
   { city: "Montecito", region: "Southern California", photo: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=600&h=400&fit=crop", tagline: "Oprah-neighbor-level private affairs" }, // Spanish-style estate
