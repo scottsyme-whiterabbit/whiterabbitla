@@ -42,21 +42,21 @@ const cityData: { city: string; region: string; photo: string; tagline: string }
   { city: "Montecito", region: "Southern California", photo: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=600&h=400&fit=crop", tagline: "Oprah-neighbor-level private affairs" }, // Spanish-style estate
   { city: "Palm Springs", region: "Southern California", photo: "https://images.unsplash.com/photo-1558645836-e44122a743ee?w=600&h=400&fit=crop", tagline: "Mid-century modern retreats and desert galas" }, // Desert resort landscape
   { city: "Coronado", region: "Southern California", photo: "https://images.unsplash.com/photo-1560874219-1a7de57ab01d?w=600&h=400&fit=crop", tagline: "Island elegance at the Hotel del Coronado and beyond" }, // San Diego coastal aerial
-  { city: "Santa Barbara", region: "Southern California", photo: "https://images.unsplash.com/photo-1622157922317-7155b3679369?w=600&h=400&fit=crop", tagline: "American Riviera weddings and wine country affairs" }, // Green hills overlooking ocean
-  { city: "Pacific Palisades", region: "Southern California", photo: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop", tagline: "Ocean bluff estates and Getty Villa gatherings" },
+  { city: "Santa Barbara", region: "Southern California", photo: "/areas/santa-barbara.jpg", tagline: "American Riviera weddings and wine country affairs" },
+  { city: "Pacific Palisades", region: "Southern California", photo: "/areas/pacific-palisades.jpg", tagline: "Ocean bluff estates and Getty Villa gatherings" },
   { city: "Brentwood", region: "Southern California", photo: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&h=400&fit=crop", tagline: "San Vicente estates and Getty Center celebrations" },
-  { city: "Manhattan Beach", region: "Southern California", photo: "https://images.unsplash.com/photo-1531572753322-ad063cecc140?w=600&h=400&fit=crop", tagline: "South Bay elegance and Strand House soirées" },
+  { city: "Manhattan Beach", region: "Southern California", photo: "/areas/manhattan-beach.jpg", tagline: "South Bay elegance and Strand House soirées" },
   { city: "Encino", region: "Southern California", photo: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&h=400&fit=crop", tagline: "San Fernando Valley estate celebrations" },
   { city: "Downtown LA", region: "Southern California", photo: "https://images.unsplash.com/photo-1515896769750-31548aa180ed?w=600&h=400&fit=crop", tagline: "Arts District lofts and historic ballroom galas" },
   { city: "Laguna Beach", region: "Southern California", photo: "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&h=400&fit=crop", tagline: "Artist colony luxury and oceanfront celebrations" },
-  { city: "Long Beach", region: "Southern California", photo: "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=600&h=400&fit=crop", tagline: "Queen Mary elegance and waterfront conventions" },
-  { city: "Burbank", region: "Southern California", photo: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=600&h=400&fit=crop", tagline: "Studio lot parties and media industry events" },
-  { city: "Studio City", region: "Southern California", photo: "https://images.unsplash.com/photo-1517760444937-f6397edcbbcd?w=600&h=400&fit=crop", tagline: "Tujunga Village charm and canyon celebrations" },
+  { city: "Long Beach", region: "Southern California", photo: "/areas/long-beach.jpg", tagline: "Queen Mary elegance and waterfront conventions" },
+  { city: "Burbank", region: "Southern California", photo: "/areas/burbank.jpg", tagline: "Studio lot parties and media industry events" },
+  { city: "Studio City", region: "Southern California", photo: "/areas/studio-city.jpg", tagline: "Tujunga Village charm and canyon celebrations" },
   { city: "Westlake Village", region: "Southern California", photo: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&h=400&fit=crop", tagline: "Four Seasons lakeside luxury" },
   { city: "Thousand Oaks", region: "Southern California", photo: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&h=400&fit=crop", tagline: "Sherwood Country Club prestige" },
   { city: "Rancho Palos Verdes", region: "Southern California", photo: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&h=400&fit=crop", tagline: "Terranea Resort and ocean cliff elegance" },
-  { city: "Silver Lake", region: "Southern California", photo: "https://images.unsplash.com/photo-1494526585095-c41746248156?w=600&h=400&fit=crop", tagline: "Creative community hillside celebrations" },
-  { city: "Los Feliz", region: "Southern California", photo: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&h=400&fit=crop", tagline: "Old Hollywood charm and Greek Theatre nights" },
+  { city: "Silver Lake", region: "Southern California", photo: "/areas/silver-lake.jpg", tagline: "Creative community hillside celebrations" },
+  { city: "Los Feliz", region: "Southern California", photo: "/areas/los-feliz.jpg", tagline: "Old Hollywood charm and Greek Theatre nights" },
 
   // Northern California
   { city: "San Francisco", region: "Northern California", photo: "https://images.unsplash.com/photo-1521464302861-ce943915d1c3?w=600&h=400&fit=crop", tagline: "Tech galas and Pacific Heights soirées" }, // Golden Gate Bridge
