@@ -7,6 +7,7 @@ import ContactsListTab from "@/components/ContactsListTab";
 import CampaignCalendarTab from "@/components/CampaignCalendarTab";
 import AnalyticsTab from "@/components/AnalyticsTab";
 import PipelineTab from "@/components/PipelineTab";
+import ActionListTab from "@/components/ActionListTab";
 import RevenueTab from "@/components/RevenueTab";
 import SubjectScorer from "@/components/SubjectScorer";
 
@@ -77,7 +78,8 @@ const AdminNewsletter = () => {
     return "";
   });
 
-  const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "planner" | "apartment" | "thankyou">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "actions" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "planner" | "apartment" | "thankyou">("dashboard");
+  const [actionBadge, setActionBadge] = useState(0);
   const [tyClientName, setTyClientName] = useState("");
   const [tyClientEmail, setTyClientEmail] = useState("");
   const [tyEventType, setTyEventType] = useState("");
@@ -489,15 +491,18 @@ const AdminNewsletter = () => {
 
         {/* Tabs */}
         <div className="flex gap-1 mb-8 border-b border-border overflow-x-auto">
-          {(["dashboard", "pipeline", "revenue", "contacts", "compose", "campaigns", "calendar", "analytics", "planner", "apartment", "thankyou"] as const).map(tab => (
+          {(["dashboard", "pipeline", "actions", "revenue", "contacts", "compose", "campaigns", "calendar", "analytics", "planner", "apartment", "thankyou"] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-4 py-2 font-sans text-sm tracking-wider uppercase transition-colors whitespace-nowrap ${
+              className={`relative px-4 py-2 font-sans text-sm tracking-wider uppercase transition-colors whitespace-nowrap ${
                 activeTab === tab ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              {tab}
+              {tab === "actions" ? "ACTION LIST" : tab}
+              {tab === "actions" && actionBadge > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-sans min-w-[16px] h-4 flex items-center justify-center rounded-full px-1">{actionBadge}</span>
+              )}
             </button>
           ))}
         </div>
@@ -505,6 +510,11 @@ const AdminNewsletter = () => {
         {/* Pipeline */}
         {activeTab === "pipeline" && (
           <PipelineTab adminPassword={storedPassword} />
+        )}
+
+        {/* Action List */}
+        {activeTab === "actions" && (
+          <ActionListTab adminPassword={storedPassword} onBadgeCount={setActionBadge} />
         )}
 
         {/* Revenue */}
