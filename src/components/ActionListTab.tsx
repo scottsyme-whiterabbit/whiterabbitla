@@ -359,10 +359,65 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                   </div>
                   <div className="text-[11px] text-muted-foreground">{item.source}</div>
                   <div className="text-[11px] text-muted-foreground truncate pr-2">{item.engagement}</div>
-                  <div>
-                    <span className="text-[10px] px-2 py-0.5 border border-border text-muted-foreground font-sans tracking-wider">
-                      {STATUS_LABELS[item.outreachStatus] || item.outreachStatus}
-                    </span>
+                  <div className="relative group">
+                    <select
+                      value={item.outreachStatus}
+                      onChange={async (e) => {
+                        const newStatus = e.target.value;
+                        try {
+                          if (item.deal) {
+                            await callAdmin("log_outreach", {
+                              entry: {
+                                contact_email: item.email,
+                                contact_name: item.name,
+                                action_type: "status_update",
+                                outcome: newStatus,
+                                notes: `Status changed to ${STATUS_LABELS[newStatus] || newStatus}`,
+                                deal_id: item.deal.id,
+                              }
+                            });
+                            if (newStatus === "booked" && confirm("Mark this deal as 'Booked' in the pipeline too?")) {
+                              await callAdmin("update_deal_stage", { dealId: item.deal.id, stage: "booked" });
+                            } else if (newStatus === "not_interested" && confirm("Mark this deal as 'Lost' in the pipeline?")) {
+                              await callAdmin("update_deal_stage", { dealId: item.deal.id, stage: "lost" });
+                            }
+                          } else {
+                            await callAdmin("log_outreach", {
+                              entry: {
+                                contact_email: item.email,
+                                contact_name: item.name,
+                                action_type: "status_update",
+                                outcome: newStatus,
+                                notes: `Status changed to ${STATUS_LABELS[newStatus] || newStatus}`,
+                              }
+                            });
+                          }
+                          toast.success("Status updated");
+                          loadData();
+                        } catch (err) {
+                          toast.error(err instanceof Error ? err.message : "Update failed");
+                        }
+                      }}
+                      className="appearance-none bg-muted/20 border border-border text-[10px] text-foreground font-sans tracking-wider uppercase pl-2 pr-5 py-1 cursor-pointer focus:outline-none focus:border-accent hover:border-accent/50 transition-colors w-full"
+                      style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 4px center' }}
+                    >
+                      {Object.entries(STATUS_LABELS).map(([val, label]) => (
+                        <option key={val} value={val}>{label}</option>
+                      ))}
+                    </select>
+                    {/* Tooltip showing recent outreach history */}
+                    {contactLogs(item.email).length > 0 && (
+                      <div className="hidden group-hover:block absolute left-0 top-full mt-1 z-50 bg-background border border-border shadow-lg p-2 min-w-[240px]">
+                        <p className="font-sans text-[9px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Recent Updates</p>
+                        {contactLogs(item.email).slice(0, 4).map(log => (
+                          <div key={log.id} className="flex gap-2 text-[10px] py-0.5 border-b border-border/50 last:border-0">
+                            <span className="text-muted-foreground w-12 shrink-0">{format(new Date(log.created_at), "MMM d")}</span>
+                            <span className="text-accent w-14 shrink-0 uppercase">{log.action_type}</span>
+                            <span className="text-foreground truncate">{log.notes || log.outcome || "—"}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <div className="flex gap-1">
                     <button onClick={() => openLogModal(item, "call")} className="flex items-center gap-1 px-2 py-1 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 text-[10px] tracking-wider uppercase hover:bg-emerald-600/30 transition-colors">
