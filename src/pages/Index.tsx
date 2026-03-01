@@ -9,6 +9,7 @@ import QuizNudge from "@/components/QuizNudge";
 import FAQSection from "@/components/FAQSection";
 
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { useJsonLd } from "@/hooks/useSchemaOrg";
 
 import heroImage from "@/assets/hero-magic-cinematic.jpg";
 import experienceImg from "@/assets/experience-closeup.jpg";
@@ -71,6 +72,36 @@ const Index = () => {
     description: "Bespoke magical experiences for Fortune 500 events, private celebrations, and luxury gatherings across Los Angeles and beyond. Magician Scott Syme.",
     path: "/",
     image: heroImage,
+  });
+
+  // Homepage Event + Person schemas
+  const now = new Date();
+  const startDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+  const endDate = `${now.getFullYear() + 1}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+
+  useJsonLd("homepage-event-schema", {
+    "@type": "Event",
+    name: "White Rabbit Magic — Live Entertainment in Los Angeles",
+    description: "Luxury close-up magic and mentalism for private events in Los Angeles, California. Performed by Magic Castle member Scott Syme.",
+    startDate,
+    endDate,
+    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+    eventStatus: "https://schema.org/EventScheduled",
+    location: { "@type": "Place", name: "Los Angeles, California", address: { "@type": "PostalAddress", addressLocality: "Los Angeles", addressRegion: "CA", addressCountry: "US" } },
+    image: "https://whiterabbitla.com/og-image.jpg",
+    performer: { "@type": "Person", name: "Scott Syme", description: "Magic Castle member, consultant to America's Got Talent and Disney Channel" },
+    organizer: { "@type": "Organization", name: "White Rabbit LA", url: "https://whiterabbitla.com" },
+    offers: { "@type": "Offer", url: "https://whiterabbitla.com/contact", availability: "https://schema.org/InStock", category: "Custom pricing based on event type and size" },
+  });
+
+  useJsonLd("homepage-person-schema", {
+    "@type": "Person",
+    name: "Scott Syme",
+    jobTitle: "Magician & Mentalist",
+    worksFor: { "@type": "Organization", name: "White Rabbit LA" },
+    description: "World-class magician, Magic Castle member, and consultant to America's Got Talent and Disney Channel performers",
+    url: "https://whiterabbitla.com/about",
+    sameAs: ["https://www.instagram.com/scottsyme_/"],
   });
 
   return (
