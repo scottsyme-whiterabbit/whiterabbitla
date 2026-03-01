@@ -376,6 +376,68 @@ serve(async (req) => {
         });
       }
 
+      case "log_outreach": {
+        const { entry } = payload;
+        // Insert into outreach_log
+        const { error: logErr } = await supabase
+          .from("outreach_log")
+          .insert({
+            contact_email: entry.contact_email.toLowerCase().trim(),
+            contact_name: entry.contact_name || null,
+            action_type: entry.action_type || "call",
+            notes: entry.notes || null,
+            outcome: entry.outcome || null,
+          });
+        if (logErr) throw logErr;
+
+        // Update deal if exists
+        if (entry.deal_id) {
+          const updates: Record<string, unknown> = {
+            last_outreach_date: new Date().toISOString(),
+            outreach_notes: entry.notes || null,
+          };
+          if (entry.outcome) updates.outreach_status = entry.outcome === "booked" ? "booked" : entry.outcome === "not_interested" ? "not_interested" : entry.outcome === "connected" ? "connected" : entry.outcome === "follow_up" ? "follow_up_scheduled" : "attempted";
+          if (entry.follow_up_date) updates.next_follow_up = entry.follow_up_date;
+          await supabase.from("deals").update(updates).eq("id", entry.deal_id);
+        }
+
+        return new Response(JSON.stringify({ success: true }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "get_outreach_log": {
+        const { email } = payload;
+        let query = supabase.from("outreach_log").select("*").order("created_at", { ascending: false });
+        if (email) query = query.eq("contact_email", email.toLowerCase().trim());
+        else query = query.limit(500);
+        const { data, error } = await query;
+        if (error) throw error;
+        return new Response(JSON.stringify({ logs: data }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "get_action_list_data": {
+        // Get deals, hot/warm contacts, and outreach logs in one call
+        const [dealsRes, contactsRes, logsRes] = await Promise.all([
+          supabase.from("deals").select("*").not("stage", "in", "(completed,lost)").order("created_at", { ascending: false }),
+          supabase.from("newsletter_contacts").select("id, email, name, company, source, drip_campaign, drip_step, engagement_status, subscribed, created_at").in("engagement_status", ["hot", "warm"]).eq("subscribed", true).order("created_at", { ascending: false }),
+          supabase.from("outreach_log").select("*").order("created_at", { ascending: false }).limit(1000),
+        ]);
+        if (dealsRes.error) throw dealsRes.error;
+        if (contactsRes.error) throw contactsRes.error;
+        if (logsRes.error) throw logsRes.error;
+
+        return new Response(JSON.stringify({
+          deals: dealsRes.data || [],
+          hotWarmContacts: contactsRes.data || [],
+          outreachLogs: logsRes.data || [],
+        }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       default:
         return new Response(JSON.stringify({ error: "Unknown action" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },

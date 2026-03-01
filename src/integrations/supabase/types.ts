@@ -83,12 +83,16 @@ export type Database = {
           event_type: string | null
           guest_count: string | null
           id: string
+          last_outreach_date: string | null
           location: string | null
           lost_reason: string | null
           next_follow_up: string | null
           notes: string | null
+          outreach_notes: string | null
+          outreach_status: string | null
           post_show_started_at: string | null
           post_show_step: number
+          priority_score: number | null
           source: string | null
           source_id: string | null
           stage: string
@@ -105,12 +109,16 @@ export type Database = {
           event_type?: string | null
           guest_count?: string | null
           id?: string
+          last_outreach_date?: string | null
           location?: string | null
           lost_reason?: string | null
           next_follow_up?: string | null
           notes?: string | null
+          outreach_notes?: string | null
+          outreach_status?: string | null
           post_show_started_at?: string | null
           post_show_step?: number
+          priority_score?: number | null
           source?: string | null
           source_id?: string | null
           stage?: string
@@ -127,12 +135,16 @@ export type Database = {
           event_type?: string | null
           guest_count?: string | null
           id?: string
+          last_outreach_date?: string | null
           location?: string | null
           lost_reason?: string | null
           next_follow_up?: string | null
           notes?: string | null
+          outreach_notes?: string | null
+          outreach_status?: string | null
           post_show_started_at?: string | null
           post_show_step?: number
+          priority_score?: number | null
           source?: string | null
           source_id?: string | null
           stage?: string
@@ -410,6 +422,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      outreach_log: {
+        Row: {
+          action_type: string
+          contact_email: string
+          contact_name: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          outcome: string | null
+        }
+        Insert: {
+          action_type?: string
+          contact_email: string
+          contact_name?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          outcome?: string | null
+        }
+        Update: {
+          action_type?: string
+          contact_email?: string
+          contact_name?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          outcome?: string | null
+        }
+        Relationships: []
       }
       referrals: {
         Row: {
