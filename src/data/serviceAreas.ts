@@ -48,7 +48,7 @@ const cityData: { city: string; region: string; photo: string; tagline: string }
   { city: "Manhattan Beach", region: "Southern California", photo: "/areas/manhattan-beach.jpg", tagline: "South Bay elegance and Strand House soirées" },
   { city: "Encino", region: "Southern California", photo: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&h=400&fit=crop", tagline: "San Fernando Valley estate celebrations" },
   { city: "Downtown LA", region: "Southern California", photo: "https://images.unsplash.com/photo-1515896769750-31548aa180ed?w=600&h=400&fit=crop", tagline: "Arts District lofts and historic ballroom galas" },
-  { city: "Laguna Beach", region: "Southern California", photo: "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&h=400&fit=crop", tagline: "Artist colony luxury and oceanfront celebrations" },
+  { city: "Laguna Beach", region: "Southern California", photo: "/areas/laguna-beach.jpg", tagline: "Artist colony luxury and oceanfront celebrations" },
   { city: "Long Beach", region: "Southern California", photo: "/areas/long-beach.jpg", tagline: "Queen Mary elegance and waterfront conventions" },
   { city: "Burbank", region: "Southern California", photo: "/areas/burbank.jpg", tagline: "Studio lot parties and media industry events" },
   { city: "Studio City", region: "Southern California", photo: "/areas/studio-city.jpg", tagline: "Tujunga Village charm and canyon celebrations" },
