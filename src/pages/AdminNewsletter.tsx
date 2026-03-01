@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
-import { Upload, Send, FileText, Flame, ThermometerSun, RefreshCw, Trash2, Eye, Heart, Download } from "lucide-react";
+import { Upload, Send, FileText, Flame, ThermometerSun, RefreshCw, Trash2, Eye, Heart, Download, LayoutGrid, DollarSign, Users, MoreHorizontal, Plus, X, ClipboardList } from "lucide-react";
 import PlannerDripTab from "@/components/PlannerDripTab";
 import ResidentDripTab from "@/components/ResidentDripTab";
 import ContactsListTab from "@/components/ContactsListTab";
@@ -10,6 +10,7 @@ import PipelineTab from "@/components/PipelineTab";
 import ActionListTab from "@/components/ActionListTab";
 import RevenueTab from "@/components/RevenueTab";
 import SubjectScorer from "@/components/SubjectScorer";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -54,21 +55,23 @@ interface Stats {
 }
 
 const AdminNewsletter = () => {
+  const isMobile = useIsMobile();
   const [password, setPassword] = useState("");
   const [authenticated, setAuthenticated] = useState(() => {
-    const saved = sessionStorage.getItem("wr_admin_session");
+    // Check both localStorage and sessionStorage for session persistence
+    const saved = localStorage.getItem("wr_admin_session") || sessionStorage.getItem("wr_admin_session");
     if (saved) {
       try {
         const { pw: _pw, ts } = JSON.parse(saved);
-        // Session lasts 24 hours
         if (Date.now() - ts < 24 * 60 * 60 * 1000) return true;
       } catch {}
+      localStorage.removeItem("wr_admin_session");
       sessionStorage.removeItem("wr_admin_session");
     }
     return false;
   });
   const [storedPassword, setStoredPassword] = useState(() => {
-    const saved = sessionStorage.getItem("wr_admin_session");
+    const saved = localStorage.getItem("wr_admin_session") || sessionStorage.getItem("wr_admin_session");
     if (saved) {
       try {
         const { pw, ts } = JSON.parse(saved);
@@ -80,6 +83,10 @@ const AdminNewsletter = () => {
 
   const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "actions" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "planner" | "apartment" | "thankyou">("dashboard");
   const [actionBadge, setActionBadge] = useState(0);
+  const [showQuickAdd, setShowQuickAdd] = useState(false);
+  const [quickAddForm, setQuickAddForm] = useState({ name: "", email: "", phone: "", event_type: "", notes: "", source: "Referral" });
+  const [quickAddSaving, setQuickAddSaving] = useState(false);
+  const [showMoreTabs, setShowMoreTabs] = useState(false);
   const [tyClientName, setTyClientName] = useState("");
   const [tyClientEmail, setTyClientEmail] = useState("");
   const [tyEventType, setTyEventType] = useState("");
@@ -157,8 +164,9 @@ const AdminNewsletter = () => {
       });
       if (res.ok) {
         setStoredPassword(password);
-        setAuthenticated(true);
-        sessionStorage.setItem("wr_admin_session", JSON.stringify({ pw: password, ts: Date.now() }));
+        const session = JSON.stringify({ pw: password, ts: Date.now() });
+        localStorage.setItem("wr_admin_session", session);
+        sessionStorage.setItem("wr_admin_session", session);
         toast.success("Welcome back");
       } else {
         toast.error("Invalid password");
@@ -461,7 +469,7 @@ const AdminNewsletter = () => {
 
   if (!authenticated) {
     return (
-      <div className="min-h-screen bg-forest-dark flex items-center justify-center px-6">
+      <div className="min-h-screen bg-[hsl(var(--forest-dark))] flex items-center justify-center px-6">
         <form onSubmit={handleLogin} className="w-full max-w-sm">
           <h1 className="font-serif text-3xl text-cream mb-8 text-center">Newsletter Admin</h1>
           <input
@@ -469,9 +477,10 @@ const AdminNewsletter = () => {
             value={password}
             onChange={e => setPassword(e.target.value)}
             placeholder="Enter admin password"
-            className="w-full bg-forest-dark/50 border border-cream/20 text-cream px-4 py-3 mb-4 font-sans text-sm focus:outline-none focus:border-accent"
+            autoFocus
+            className="w-full bg-[hsl(var(--forest-dark))]/50 border border-cream/20 text-cream px-4 py-3 mb-4 font-sans text-base focus:outline-none focus:border-accent"
           />
-          <button type="submit" className="w-full bg-accent text-accent-foreground py-3 font-sans text-sm tracking-[0.2em] uppercase hover:bg-accent/80 transition-colors">
+          <button type="submit" className="w-full bg-accent text-accent-foreground py-3 font-sans text-sm tracking-[0.2em] uppercase hover:bg-accent/80 transition-colors min-h-[44px]">
             Enter
           </button>
         </form>
@@ -479,18 +488,55 @@ const AdminNewsletter = () => {
     );
   }
 
+  const handleQuickAddSave = async () => {
+    if (!quickAddForm.name || !quickAddForm.email) { toast.error("Name and email required"); return; }
+    setQuickAddSaving(true);
+    try {
+      await callAdmin("create_deal", {
+        deal: {
+          contact_name: quickAddForm.name,
+          contact_email: quickAddForm.email.toLowerCase(),
+          event_type: quickAddForm.event_type || null,
+          notes: [quickAddForm.phone ? `Phone: ${quickAddForm.phone}` : "", quickAddForm.notes].filter(Boolean).join("\n"),
+          source: quickAddForm.source,
+          stage: "new",
+        }
+      });
+      toast.success("Lead added to pipeline");
+      setShowQuickAdd(false);
+      setQuickAddForm({ name: "", email: "", phone: "", event_type: "", notes: "", source: "Referral" });
+      loadData();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Save failed");
+    } finally {
+      setQuickAddSaving(false);
+    }
+  };
+
+  // Mobile bottom nav tabs
+  const MOBILE_NAV_TABS = [
+    { key: "dashboard" as const, icon: LayoutGrid, label: "Dashboard" },
+    { key: "pipeline" as const, icon: FileText, label: "Pipeline" },
+    { key: "actions" as const, icon: ClipboardList, label: "Actions", badge: actionBadge },
+    { key: "revenue" as const, icon: DollarSign, label: "Revenue" },
+    { key: "contacts" as const, icon: Users, label: "Contacts" },
+  ];
+
+  
+
   return (
-    <div className="min-h-screen bg-background pt-24 pb-16">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="font-serif text-3xl text-foreground">Newsletter Admin</h1>
-          <button onClick={loadData} disabled={loading} className="text-muted-foreground hover:text-foreground transition-colors">
+    <div className="min-h-screen bg-background pt-24 pb-16 md:pb-16">
+      {/* Add bottom padding on mobile for the nav bar */}
+      <div className={`max-w-6xl mx-auto px-4 md:px-6 ${isMobile ? 'pb-24' : ''}`}>
+        <div className="flex items-center justify-between mb-6 md:mb-8">
+          <h1 className="font-serif text-2xl md:text-3xl text-foreground">Newsletter Admin</h1>
+          <button onClick={loadData} disabled={loading} className="text-muted-foreground hover:text-foreground transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
             <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
           </button>
         </div>
 
-        {/* Tabs */}
-        <div className="flex gap-1 mb-8 border-b border-border overflow-x-auto">
+        {/* Desktop Tabs — hidden on mobile */}
+        <div className="hidden md:flex gap-1 mb-8 border-b border-border overflow-x-auto">
           {(["dashboard", "pipeline", "actions", "revenue", "contacts", "compose", "campaigns", "calendar", "analytics", "planner", "apartment", "thankyou"] as const).map(tab => (
             <button
               key={tab}
@@ -501,11 +547,93 @@ const AdminNewsletter = () => {
             >
               {tab === "actions" ? "ACTION LIST" : tab}
               {tab === "actions" && actionBadge > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-sans min-w-[16px] h-4 flex items-center justify-center rounded-full px-1">{actionBadge}</span>
+                <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-[9px] font-sans min-w-[16px] h-4 flex items-center justify-center rounded-full px-1">{actionBadge}</span>
               )}
             </button>
           ))}
         </div>
+
+        {/* Mobile "More" tabs — shown when more tabs overlay is open */}
+        {isMobile && showMoreTabs && (
+          <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex flex-col">
+            <div className="flex items-center justify-between p-4 border-b border-border">
+              <h2 className="font-sans text-sm tracking-[0.2em] uppercase text-foreground">All Tabs</h2>
+              <button onClick={() => setShowMoreTabs(false)} className="min-h-[44px] min-w-[44px] flex items-center justify-center text-muted-foreground">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4 space-y-1">
+              {(["dashboard", "pipeline", "actions", "revenue", "contacts", "compose", "campaigns", "calendar", "analytics", "planner", "apartment", "thankyou"] as const).map(tab => (
+                <button
+                  key={tab}
+                  onClick={() => { setActiveTab(tab); setShowMoreTabs(false); }}
+                  className={`w-full text-left px-4 py-3 font-sans text-sm tracking-wider uppercase transition-colors min-h-[44px] ${
+                    activeTab === tab ? "text-accent bg-accent/10" : "text-foreground hover:bg-muted/20"
+                  }`}
+                >
+                  {tab === "actions" ? "ACTION LIST" : tab}
+                  {tab === "actions" && actionBadge > 0 && (
+                    <span className="ml-2 bg-destructive text-destructive-foreground text-[9px] font-sans min-w-[16px] h-4 inline-flex items-center justify-center rounded-full px-1">{actionBadge}</span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Quick Add Lead Modal */}
+        {showQuickAdd && (
+          <div className="fixed inset-0 z-50 bg-background flex flex-col">
+            <div className="flex items-center justify-between p-4 border-b border-border">
+              <h2 className="font-serif text-xl text-foreground">Quick Add Lead</h2>
+              <button onClick={() => setShowQuickAdd(false)} className="min-h-[44px] min-w-[44px] flex items-center justify-center text-muted-foreground">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              <div>
+                <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground block mb-1">Name *</label>
+                <input value={quickAddForm.name} onChange={e => setQuickAddForm(f => ({ ...f, name: e.target.value }))} placeholder="Contact name" className="w-full bg-muted/20 border border-border text-foreground px-4 py-3 text-base focus:outline-none focus:border-accent" />
+              </div>
+              <div>
+                <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground block mb-1">Email *</label>
+                <input type="email" value={quickAddForm.email} onChange={e => setQuickAddForm(f => ({ ...f, email: e.target.value }))} placeholder="email@company.com" className="w-full bg-muted/20 border border-border text-foreground px-4 py-3 text-base focus:outline-none focus:border-accent" />
+              </div>
+              <div>
+                <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground block mb-1">Phone</label>
+                <input type="tel" value={quickAddForm.phone} onChange={e => setQuickAddForm(f => ({ ...f, phone: e.target.value }))} placeholder="(310) 555-0100" className="w-full bg-muted/20 border border-border text-foreground px-4 py-3 text-base focus:outline-none focus:border-accent" />
+              </div>
+              <div>
+                <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground block mb-1">Event Type</label>
+                <select value={quickAddForm.event_type} onChange={e => setQuickAddForm(f => ({ ...f, event_type: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-4 py-3 text-base focus:outline-none focus:border-accent">
+                  <option value="">Select type...</option>
+                  <option value="Corporate">Corporate</option>
+                  <option value="Wedding">Wedding</option>
+                  <option value="Private Party">Private Party</option>
+                  <option value="Fundraiser">Fundraiser</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground block mb-1">Source</label>
+                <select value={quickAddForm.source} onChange={e => setQuickAddForm(f => ({ ...f, source: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-4 py-3 text-base focus:outline-none focus:border-accent">
+                  <option value="Referral">Referral</option>
+                  <option value="Magic Castle">Magic Castle</option>
+                  <option value="Event">Event</option>
+                  <option value="Cold Outreach">Cold Outreach</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground block mb-1">Notes</label>
+                <textarea value={quickAddForm.notes} onChange={e => setQuickAddForm(f => ({ ...f, notes: e.target.value }))} rows={3} placeholder="Met at the Netflix party..." className="w-full bg-muted/20 border border-border text-foreground px-4 py-3 text-base focus:outline-none focus:border-accent resize-none" />
+              </div>
+              <button onClick={handleQuickAddSave} disabled={quickAddSaving} className="w-full bg-accent text-accent-foreground py-3 font-sans text-sm tracking-[0.2em] uppercase hover:bg-accent/80 transition-colors disabled:opacity-50 min-h-[44px]">
+                {quickAddSaving ? "Saving..." : "Save Lead"}
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Pipeline */}
         {activeTab === "pipeline" && (
@@ -966,6 +1094,49 @@ const AdminNewsletter = () => {
           </div>
         )}
       </div>
+
+      {/* Mobile Bottom Navigation */}
+      {isMobile && (
+        <>
+          {/* FAB - Quick Add Lead */}
+          <button
+            onClick={() => setShowQuickAdd(true)}
+            className="fixed bottom-[76px] right-4 z-40 w-14 h-14 rounded-full bg-accent text-accent-foreground shadow-lg flex items-center justify-center hover:bg-accent/80 transition-colors active:scale-95"
+            aria-label="Quick add lead"
+          >
+            <Plus size={24} />
+          </button>
+
+          {/* Bottom Nav Bar */}
+          <nav className="fixed bottom-0 left-0 right-0 z-40 bg-background border-t border-border h-[60px] flex items-center justify-around px-1 safe-area-pb">
+            {MOBILE_NAV_TABS.map(tab => {
+              const isActive = activeTab === tab.key;
+              return (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  className={`relative flex flex-col items-center justify-center gap-0.5 min-h-[44px] min-w-[44px] px-2 transition-colors ${
+                    isActive ? "text-accent" : "text-muted-foreground"
+                  }`}
+                >
+                  <tab.icon size={20} />
+                  <span className="text-[9px] font-sans tracking-wider uppercase">{tab.label}</span>
+                  {tab.badge && tab.badge > 0 && (
+                    <span className="absolute -top-0.5 right-0 bg-destructive text-destructive-foreground text-[8px] font-sans min-w-[14px] h-3.5 flex items-center justify-center rounded-full px-0.5">{tab.badge}</span>
+                  )}
+                </button>
+              );
+            })}
+            <button
+              onClick={() => setShowMoreTabs(true)}
+              className={`flex flex-col items-center justify-center gap-0.5 min-h-[44px] min-w-[44px] px-2 transition-colors text-muted-foreground`}
+            >
+              <MoreHorizontal size={20} />
+              <span className="text-[9px] font-sans tracking-wider uppercase">More</span>
+            </button>
+          </nav>
+        </>
+      )}
     </div>
   );
 };

@@ -1,0 +1,22 @@
+{
+  "name": "White Rabbit CRM",
+  "short_name": "WR CRM",
+  "description": "White Rabbit LA — Pipeline & Lead Management",
+  "start_url": "/admin/newsletter",
+  "display": "standalone",
+  "background_color": "#1B3A2D",
+  "theme_color": "#1B3A2D",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
