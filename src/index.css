@@ -313,3 +313,8 @@ html {
     animation: none;
   }
 }
+
+/* PWA safe area padding for iOS */
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
