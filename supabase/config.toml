@@ -47,6 +47,3 @@ verify_jwt = false
 
 [functions.post-show-sequence]
 verify_jwt = false
-
-[functions.import-square-clients]
-verify_jwt = false
