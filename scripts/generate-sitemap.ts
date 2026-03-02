@@ -20,7 +20,8 @@ const locations = [
   "Jupiter", "Sarasota", "Vail", "Jackson Hole", "Sun Valley", "Lake Tahoe",
   "Telluride", "Coral Gables", "Highland Park", "River Oaks", "Buckhead",
   "Winnetka", "Short Hills", "Potomac", "Paradise Valley", "Sonoma",
-  "Carmel-by-the-Sea", "Santa Barbara",
+  "Carmel-by-the-Sea", "Santa Barbara", "Pacific Palisades", "Brentwood",
+  "Manhattan Beach", "Laguna Beach", "Downtown LA", "Studio City",
 ];
 
 const serviceKeys = [

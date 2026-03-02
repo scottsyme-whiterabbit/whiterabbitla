@@ -94,6 +94,12 @@ const locations = [
   "Sonoma",
   "Carmel-by-the-Sea",
   "Santa Barbara",
+  "Pacific Palisades",
+  "Brentwood",
+  "Manhattan Beach",
+  "Laguna Beach",
+  "Downtown LA",
+  "Studio City",
 ] as const;
 
 // Curated luxury venue references per location for authentic local SEO
@@ -452,6 +458,36 @@ const locationVenues: Record<string, { dining: string[]; hotels: string[]; cultu
     dining: ["The Lark", "Bouchon", "Yoichi's"],
     hotels: ["Belmond El Encanto", "The Ritz-Carlton Bacara", "Kimpton Canary Hotel"],
     culture: ["State Street", "Santa Barbara Museum of Art", "Stearns Wharf"],
+  },
+  "Pacific Palisades": {
+    dining: ["Palisades Garden Café", "Draycott", "The Palisades Village"],
+    hotels: ["The Bel-Air Bay Club", "Shutters on the Beach", "Hotel Casa del Mar"],
+    culture: ["The Getty Villa", "Self-Realization Fellowship Lake Shrine", "Palisades Village"],
+  },
+  "Brentwood": {
+    dining: ["Katsuya Brentwood", "Baltaire", "Farmshop"],
+    hotels: ["Hotel Bel-Air", "W Los Angeles", "The Brentwood Inn"],
+    culture: ["The Getty Center", "San Vicente Boulevard", "Brentwood Country Club"],
+  },
+  "Manhattan Beach": {
+    dining: ["The Strand House", "Love & Salt", "MB Post"],
+    hotels: ["Shade Hotel", "Manhattan Beach Marriott", "The Belamar Hotel"],
+    culture: ["Manhattan Beach Pier", "The Strand", "Metlox Plaza"],
+  },
+  "Laguna Beach": {
+    dining: ["The Cliff Restaurant", "Splashes at Surf & Sand", "Broadway by Amar Santana"],
+    hotels: ["Montage Laguna Beach", "The Ranch at Laguna Beach", "Surf & Sand Resort"],
+    culture: ["Laguna Art Museum", "Heisler Park", "Crystal Cove State Park"],
+  },
+  "Downtown LA": {
+    dining: ["Otium", "Bestia", "71Above"],
+    hotels: ["The NoMad Los Angeles", "Proper Hotel Downtown LA", "The Hoxton"],
+    culture: ["The Broad", "Walt Disney Concert Hall", "Arts District"],
+  },
+  "Studio City": {
+    dining: ["Firefly", "Aroma Coffee & Tea", "Vitello's"],
+    hotels: ["Sportsmen's Lodge", "The Garland", "The Beverly Garland"],
+    culture: ["Tujunga Village", "Fryman Canyon", "CBS Studio Center"],
   },
 };
 
@@ -1016,7 +1052,8 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
 
 const premiereLocations = new Set([
   "Los Angeles", "Beverly Hills", "Hollywood", "Santa Monica", "Malibu",
-  "West Hollywood", "Bel Air", "Pasadena", "Calabasas",
+  "West Hollywood", "Bel Air", "Pasadena", "Calabasas", "Pacific Palisades",
+  "Brentwood", "Manhattan Beach", "Downtown LA", "Studio City",
 ]);
 
 export const seoPages: SeoPage[] = locations.flatMap((location) =>
