@@ -316,13 +316,17 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
               </div>
               <div>
                 <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Event Type</label>
-                <select value={form.event_type} onChange={e => setForm(f => ({ ...f, event_type: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent">
+                <select value={["corporate","wedding","private_party","parlor_show","other"].includes(form.event_type) ? form.event_type : "__custom"} onChange={e => { if (e.target.value === "__custom") { setForm(f => ({ ...f, event_type: "" })); } else { setForm(f => ({ ...f, event_type: e.target.value })); } }} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent">
                   <option value="corporate">Corporate</option>
                   <option value="wedding">Wedding</option>
                   <option value="private_party">Private Party</option>
                   <option value="parlor_show">Parlor Show</option>
                   <option value="other">Other</option>
+                  <option value="__custom">Custom...</option>
                 </select>
+                {!["corporate","wedding","private_party","parlor_show","other"].includes(form.event_type) && (
+                  <input value={form.event_type} onChange={e => setForm(f => ({ ...f, event_type: e.target.value }))} placeholder="e.g. charity gala, birthday dinner" className="w-full mt-1 bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+                )}
               </div>
             </div>
             <div className="grid grid-cols-4 gap-3">
