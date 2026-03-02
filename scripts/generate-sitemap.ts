@@ -22,6 +22,8 @@ const locations = [
   "Winnetka", "Short Hills", "Potomac", "Paradise Valley", "Sonoma",
   "Carmel-by-the-Sea", "Santa Barbara", "Pacific Palisades", "Brentwood",
   "Manhattan Beach", "Laguna Beach", "Downtown LA", "Studio City",
+  "Encino", "Long Beach", "Burbank", "Westlake Village",
+  "Thousand Oaks", "Rancho Palos Verdes", "Silver Lake", "Los Feliz",
 ];
 
 const serviceKeys = [
