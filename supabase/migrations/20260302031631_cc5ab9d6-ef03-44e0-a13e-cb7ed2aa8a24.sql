@@ -1,0 +1,1 @@
+ALTER TABLE public.deals ADD COLUMN review_completed_at timestamp with time zone DEFAULT NULL;

@@ -13,7 +13,24 @@ serve(async (req) => {
   }
 
   try {
-    const { name, email, phone, eventType, date, location, message, clientType, guestCount, budget, recommendation, source: formSource } = await req.json();
+    const body = await req.json();
+
+    // ── Review completion flag (from /review?cid=xxx) ──
+    if (body._reviewFlag && body.dealId) {
+      const supabase = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      );
+      await supabase
+        .from("deals")
+        .update({ review_completed_at: new Date().toISOString() })
+        .eq("id", body.dealId);
+      return new Response(JSON.stringify({ ok: true }), {
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const { name, email, phone, eventType, date, location, message, clientType, guestCount, budget, recommendation, source: formSource } = body;
 
     // Basic validation
     if (!name || !email || !eventType || !date || !location || !message) {
