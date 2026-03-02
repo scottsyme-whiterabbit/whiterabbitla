@@ -108,6 +108,10 @@ const locations = [
   "Rancho Palos Verdes",
   "Silver Lake",
   "Los Feliz",
+  "San Antonio",
+  "Fort Worth",
+  "Charleston",
+  "Minneapolis",
 ] as const;
 
 // Curated luxury venue references per location for authentic local SEO
@@ -536,6 +540,26 @@ const locationVenues: Record<string, { dining: string[]; hotels: string[]; cultu
     dining: ["Little Dom's", "Alcove Café", "Figaro Bistrot"],
     hotels: ["The Hotel & Spa", "Best Western Plus Atrium Inn", "The Moment Hotel"],
     culture: ["Griffith Observatory", "The Greek Theatre", "Vermont Avenue"],
+  },
+  "San Antonio": {
+    dining: ["Mixtli", "Biga on the Banks", "Cured at Pearl"],
+    hotels: ["Hotel Emma", "The St. Anthony Hotel", "La Cantera Resort"],
+    culture: ["The Pearl District", "The Briscoe Western Art Museum", "San Antonio River Walk"],
+  },
+  "Fort Worth": {
+    dining: ["Lonesome Dove Western Bistro", "Grace", "B&B Butchers"],
+    hotels: ["The Ashton Hotel", "The Worthington Renaissance", "Hotel Drover"],
+    culture: ["Kimbell Art Museum", "Sundance Square", "The Stockyards"],
+  },
+  "Charleston": {
+    dining: ["FIG", "Husk", "The Ordinary"],
+    hotels: ["Belmond Charleston Place", "The Dewberry", "The Spectator Hotel"],
+    culture: ["King Street", "Boone Hall Plantation", "Rainbow Row"],
+  },
+  "Minneapolis": {
+    dining: ["Spoon and Stable", "Owamni", "Alma"],
+    hotels: ["The Hewing Hotel", "Hotel Ivy", "The Marquette Hotel"],
+    culture: ["Minneapolis Institute of Art", "The Walker Art Center", "Mill City Museum"],
   },
 };
 
