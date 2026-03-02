@@ -298,9 +298,15 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
                 <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Email *</label>
                 <input value={form.contact_email} onChange={e => setForm(f => ({ ...f, contact_email: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
               </div>
-              <div>
-                <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Name</label>
-                <input value={form.contact_name} onChange={e => setForm(f => ({ ...f, contact_name: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">First Name</label>
+                  <input value={form.contact_name.split(" ")[0] || ""} onChange={e => { const last = form.contact_name.split(" ").slice(1).join(" "); setForm(f => ({ ...f, contact_name: e.target.value + (last ? ` ${last}` : "") })); }} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+                </div>
+                <div>
+                  <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Last Name</label>
+                  <input value={form.contact_name.split(" ").slice(1).join(" ")} onChange={e => { const first = form.contact_name.split(" ")[0] || ""; setForm(f => ({ ...f, contact_name: first + (e.target.value ? ` ${e.target.value}` : "") })); }} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+                </div>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
