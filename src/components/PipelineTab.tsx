@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
-import { Plus, DollarSign, TrendingUp, Calendar, BarChart3 } from "lucide-react";
+import { Plus, DollarSign, TrendingUp, Calendar, BarChart3, ChevronDown, ChevronRight, Mail, Eye, MousePointerClick } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import ShowCalendar from "@/components/ShowCalendar";
 
@@ -26,6 +26,8 @@ interface Deal {
   source_id: string | null;
   created_at: string;
   updated_at: string;
+  post_show_step?: number;
+  post_show_started_at?: string | null;
 }
 
 const STAGES = [
@@ -39,13 +41,31 @@ const STAGES = [
   { key: "on_hold", label: "On Hold" },
 ];
 
+const COLLAPSIBLE_STAGES = ["completed", "lost"];
+const PREVIEW_COUNT = 3;
+
 const EVENT_EMOJIS: Record<string, string> = {
-  corporate: "🏢",
-  wedding: "💍",
-  private_party: "🎉",
+  corporate: "🏢", Corporate: "🏢",
+  wedding: "💍", Wedding: "💍",
+  private_party: "🎉", "Private Party": "🎉",
   parlor_show: "🎩",
   other: "✨",
 };
+
+const POST_SHOW_SEQUENCE = [
+  { step: 0, label: "Thank You Email", timing: "Day 0", desc: "Personalized thank-you with event details" },
+  { step: 1, label: "Review Request", timing: "Day 3", desc: "Google review ask with direct link" },
+  { step: 2, label: "Referral Ask", timing: "Day 14", desc: "Referral request with incentive" },
+  { step: 3, label: "Seasonal Re-Engage", timing: "Day 90", desc: "Dynamic season-aware content for upcoming events" },
+];
+
+const HOLIDAY_EMAILS = [
+  { label: "Valentine's Day", window: "Jan 15 – Feb 14" },
+  { label: "4th of July", window: "Jun 4 – Jul 4" },
+  { label: "Halloween", window: "Oct 1 – Oct 31" },
+  { label: "Thanksgiving", window: "Oct 28 – Nov 27" },
+  { label: "Christmas / NYE", window: "Nov 25 – Dec 25" },
+];
 
 const formatCurrency = (cents: number | null) => {
   if (!cents) return "—";
@@ -78,10 +98,13 @@ interface PipelineTabProps {
 
 const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
   const [deals, setDeals] = useState<Deal[]>([]);
-  const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editingDeal, setEditingDeal] = useState<Deal | null>(null);
   const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [expandedCols, setExpandedCols] = useState<Record<string, boolean>>({});
+  const [emailActivity, setEmailActivity] = useState<{ clicks: any[]; opens: any[] } | null>(null);
+  const [loadingActivity, setLoadingActivity] = useState(false);
+  const [showEmailPanel, setShowEmailPanel] = useState(false);
 
   const [form, setForm] = useState({
     contact_email: "",
@@ -118,18 +141,37 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
   }, [adminPassword]);
 
   const loadDeals = useCallback(async () => {
-    setLoading(true);
     try {
       const res = await callAdmin("get_deals");
       setDeals(res.deals || []);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed to load deals");
-    } finally {
-      setLoading(false);
     }
   }, [callAdmin]);
 
   useEffect(() => { loadDeals(); }, [loadDeals]);
+
+  const loadEmailActivity = useCallback(async (deal: Deal) => {
+    setLoadingActivity(true);
+    setEmailActivity(null);
+    try {
+      // We need the contact_id from newsletter_contacts for this email
+      const contactsRes = await callAdmin("get_contacts");
+      const contact = (contactsRes.contacts || []).find(
+        (c: { email: string }) => c.email.toLowerCase() === deal.contact_email.toLowerCase()
+      );
+      if (contact) {
+        const activityRes = await callAdmin("get_contact_clicks", { contactId: contact.id });
+        setEmailActivity({ clicks: activityRes.clicks || [], opens: activityRes.opens || [] });
+      } else {
+        setEmailActivity({ clicks: [], opens: [] });
+      }
+    } catch {
+      setEmailActivity({ clicks: [], opens: [] });
+    } finally {
+      setLoadingActivity(false);
+    }
+  }, [callAdmin]);
 
   const handleSave = async () => {
     if (!form.contact_email) { toast.error("Email required"); return; }
@@ -188,6 +230,15 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
       skip_thank_you: false,
     });
     setShowForm(true);
+    setShowEmailPanel(false);
+    setEmailActivity(null);
+  };
+
+  const openEmailPanel = (deal: Deal) => {
+    setEditingDeal(deal);
+    setShowEmailPanel(true);
+    setShowForm(false);
+    loadEmailActivity(deal);
   };
 
   // Stats
@@ -240,6 +291,11 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
         <div className="flex gap-3 min-w-[1200px] pb-4">
           {STAGES.map(stage => {
             const stageDeals = deals.filter(d => d.stage === stage.key);
+            const isCollapsible = COLLAPSIBLE_STAGES.includes(stage.key) && stageDeals.length > PREVIEW_COUNT;
+            const isExpanded = expandedCols[stage.key] || false;
+            const visibleDeals = isCollapsible && !isExpanded ? stageDeals.slice(0, PREVIEW_COUNT) : stageDeals;
+            const hiddenCount = stageDeals.length - PREVIEW_COUNT;
+
             return (
               <div
                 key={stage.key}
@@ -256,30 +312,59 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
                   <span className="text-[10px] bg-border px-1.5 py-0.5 text-muted-foreground">{stageDeals.length}</span>
                 </div>
                 <div className="space-y-2 min-h-[100px]">
-                  {stageDeals.map(deal => {
+                  {visibleDeals.map(deal => {
                     const fuStatus = getFollowUpStatus(deal.next_follow_up);
                     return (
                       <div
                         key={deal.id}
                         draggable
                         onDragStart={() => setDraggedId(deal.id)}
-                        onClick={() => openEdit(deal)}
                         className={`border border-border border-l-4 ${followUpBorder[fuStatus]} bg-background p-3 cursor-pointer hover:bg-muted/20 transition-colors`}
                       >
-                        <div className="flex items-center gap-1.5 mb-1">
+                        <div className="flex items-center gap-1.5 mb-1" onClick={() => openEdit(deal)}>
                           <span className="text-sm">{EVENT_EMOJIS[deal.event_type || "other"] || "✨"}</span>
                           <span className="font-sans text-xs text-foreground truncate">{deal.contact_name || deal.contact_email}</span>
                         </div>
                         {deal.event_date && (
-                          <p className="text-[10px] text-muted-foreground">{new Date(deal.event_date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</p>
+                          <p className="text-[10px] text-muted-foreground" onClick={() => openEdit(deal)}>{new Date(deal.event_date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</p>
                         )}
                         <div className="flex items-center justify-between mt-1.5">
-                          <span className="font-mono text-xs text-accent">{formatCurrency(deal.deal_value)}</span>
-                          <span className="text-[9px] text-muted-foreground">{daysSince(deal.updated_at)}d ago</span>
+                          <span className="font-mono text-xs text-accent" onClick={() => openEdit(deal)}>{formatCurrency(deal.deal_value)}</span>
+                          {stage.key === "completed" ? (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); openEmailPanel(deal); }}
+                              className="flex items-center gap-1 text-[9px] text-accent hover:text-accent/80 transition-colors"
+                              title="View email activity"
+                            >
+                              <Mail size={10} /> Emails
+                            </button>
+                          ) : (
+                            <span className="text-[9px] text-muted-foreground">{daysSince(deal.updated_at)}d ago</span>
+                          )}
                         </div>
                       </div>
                     );
                   })}
+
+                  {/* Collapse/Expand toggle for completed & lost */}
+                  {isCollapsible && (
+                    <button
+                      onClick={() => setExpandedCols(prev => ({ ...prev, [stage.key]: !isExpanded }))}
+                      className="w-full flex items-center justify-center gap-1.5 py-2 border border-dashed border-border text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-colors"
+                    >
+                      {isExpanded ? (
+                        <>
+                          <ChevronDown size={12} />
+                          <span className="font-sans text-[10px] tracking-[0.1em] uppercase">Collapse</span>
+                        </>
+                      ) : (
+                        <>
+                          <ChevronRight size={12} />
+                          <span className="font-sans text-[10px] tracking-[0.1em] uppercase">Show {hiddenCount} more</span>
+                        </>
+                      )}
+                    </button>
+                  )}
                 </div>
               </div>
             );
@@ -393,6 +478,44 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
               <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Notes</label>
               <textarea value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} rows={3} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent resize-none" />
             </div>
+
+            {/* Show email sequence preview when editing a completed deal */}
+            {editingDeal && editingDeal.stage === "completed" && (
+              <div className="border border-border p-3 mt-2">
+                <button
+                  onClick={() => loadEmailActivity(editingDeal)}
+                  className="flex items-center gap-2 text-accent hover:text-accent/80 font-sans text-[10px] tracking-[0.15em] uppercase mb-2"
+                >
+                  <Mail size={12} /> View Email Activity
+                </button>
+                {loadingActivity && <p className="text-xs text-muted-foreground">Loading...</p>}
+                {emailActivity && (
+                  <div className="space-y-1.5 text-xs">
+                    <div className="flex items-center gap-3 text-muted-foreground">
+                      <span className="flex items-center gap-1"><Eye size={10} /> {emailActivity.opens.length} opens</span>
+                      <span className="flex items-center gap-1"><MousePointerClick size={10} /> {emailActivity.clicks.length} clicks</span>
+                    </div>
+                    {emailActivity.opens.length > 0 && (
+                      <div className="mt-1">
+                        <p className="font-sans text-[9px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Recent Opens</p>
+                        {emailActivity.opens.slice(0, 5).map((o: any, i: number) => (
+                          <p key={i} className="text-[10px] text-muted-foreground">Step {o.drip_step} — {new Date(o.opened_at).toLocaleDateString()}</p>
+                        ))}
+                      </div>
+                    )}
+                    {emailActivity.clicks.length > 0 && (
+                      <div className="mt-1">
+                        <p className="font-sans text-[9px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Recent Clicks</p>
+                        {emailActivity.clicks.slice(0, 5).map((c: any, i: number) => (
+                          <p key={i} className="text-[10px] text-muted-foreground">{c.link_slug} — {new Date(c.clicked_at).toLocaleDateString()}</p>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
             <div className="flex gap-3 pt-2">
               <button onClick={handleSave} className="flex-1 bg-accent text-accent-foreground py-2.5 font-sans text-xs tracking-[0.15em] uppercase hover:bg-accent/80 transition-colors">
                 {editingDeal ? "Update Deal" : "Create Deal"}
@@ -411,13 +534,109 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
                       toast.error(e instanceof Error ? e.message : "Delete failed");
                     }
                   }}
-                  className="px-4 py-2.5 border border-red-500/30 text-red-400 font-sans text-xs tracking-[0.15em] uppercase hover:bg-red-500/10 transition-colors"
+                  className="px-4 py-2.5 border border-destructive/30 text-destructive font-sans text-xs tracking-[0.15em] uppercase hover:bg-destructive/10 transition-colors"
                 >
                   Delete
                 </button>
               )}
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Email Activity Panel (standalone for quick access from Kanban) */}
+      <Dialog open={showEmailPanel} onOpenChange={setShowEmailPanel}>
+        <DialogContent className="max-w-md bg-background border-border max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="font-serif text-xl flex items-center gap-2">
+              <Mail size={18} /> Post-Show Emails
+            </DialogTitle>
+            {editingDeal && (
+              <p className="text-sm text-muted-foreground">{editingDeal.contact_name || editingDeal.contact_email}</p>
+            )}
+          </DialogHeader>
+
+          {/* Email Sequence Preview */}
+          <div className="space-y-3">
+            <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent">Email Sequence</p>
+            {POST_SHOW_SEQUENCE.map(email => {
+              const currentStep = editingDeal?.post_show_step ?? 0;
+              const isSent = currentStep > email.step;
+              const isCurrent = currentStep === email.step;
+              const isSkipped = (editingDeal?.post_show_step ?? 0) >= 2 && email.step < 2;
+              return (
+                <div key={email.step} className={`border px-3 py-2.5 ${isSent ? "border-emerald-500/30 bg-emerald-500/5" : isCurrent ? "border-accent/50 bg-accent/5" : isSkipped ? "border-border/50 bg-muted/10 opacity-50" : "border-border"}`}>
+                  <div className="flex items-center justify-between">
+                    <span className="font-sans text-xs text-foreground">{email.label}</span>
+                    <span className={`font-sans text-[9px] tracking-[0.1em] uppercase ${isSent ? "text-emerald-500" : isSkipped ? "text-muted-foreground line-through" : isCurrent ? "text-accent" : "text-muted-foreground"}`}>
+                      {isSkipped ? "Skipped" : isSent ? "Sent ✓" : isCurrent ? "Next Up" : email.timing}
+                    </span>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">{email.desc}</p>
+                </div>
+              );
+            })}
+
+            <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent mt-4">Holiday Re-Engagement</p>
+            {HOLIDAY_EMAILS.map(h => (
+              <div key={h.label} className="border border-border px-3 py-2">
+                <div className="flex items-center justify-between">
+                  <span className="font-sans text-xs text-foreground">{h.label}</span>
+                  <span className="font-sans text-[9px] text-muted-foreground">{h.window}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Activity log */}
+          <div className="mt-4 border-t border-border pt-4">
+            <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent mb-3">Engagement Activity</p>
+            {loadingActivity && <p className="text-xs text-muted-foreground">Loading activity...</p>}
+            {emailActivity && (
+              <div className="space-y-3">
+                <div className="flex items-center gap-4 text-sm">
+                  <span className="flex items-center gap-1.5 text-muted-foreground"><Eye size={14} /> {emailActivity.opens.length} opens</span>
+                  <span className="flex items-center gap-1.5 text-muted-foreground"><MousePointerClick size={14} /> {emailActivity.clicks.length} clicks</span>
+                </div>
+                {emailActivity.opens.length === 0 && emailActivity.clicks.length === 0 && (
+                  <p className="text-xs text-muted-foreground italic">No engagement recorded yet. Emails will start sending based on the sequence above.</p>
+                )}
+                {emailActivity.opens.length > 0 && (
+                  <div>
+                    <p className="font-sans text-[9px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5">Opens</p>
+                    <div className="space-y-1">
+                      {emailActivity.opens.slice(0, 10).map((o: any, i: number) => (
+                        <div key={i} className="flex items-center justify-between text-[10px] border-b border-border/30 pb-1">
+                          <span className="text-foreground">Step {o.drip_step} — {POST_SHOW_SEQUENCE[o.drip_step]?.label || `Email ${o.drip_step}`}</span>
+                          <span className="text-muted-foreground">{new Date(o.opened_at).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {emailActivity.clicks.length > 0 && (
+                  <div>
+                    <p className="font-sans text-[9px] tracking-[0.15em] uppercase text-muted-foreground mb-1.5">Clicks</p>
+                    <div className="space-y-1">
+                      {emailActivity.clicks.slice(0, 10).map((c: any, i: number) => (
+                        <div key={i} className="flex items-center justify-between text-[10px] border-b border-border/30 pb-1">
+                          <span className="text-foreground">{c.link_slug}</span>
+                          <span className="text-muted-foreground">{new Date(c.clicked_at).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          <button
+            onClick={() => { setShowEmailPanel(false); if (editingDeal) openEdit(editingDeal); }}
+            className="w-full mt-3 border border-border py-2 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Edit Deal Details →
+          </button>
         </DialogContent>
       </Dialog>
     </div>
