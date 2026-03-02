@@ -98,6 +98,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
     next_follow_up: "",
     source: "manual",
     lost_reason: "",
+    skip_thank_you: false,
   });
 
   const callAdmin = useCallback(async (action: string, payload: Record<string, unknown> = {}) => {
@@ -133,13 +134,15 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
   const handleSave = async () => {
     if (!form.contact_email) { toast.error("Email required"); return; }
     try {
+      const { skip_thank_you, ...rest } = form;
       const dealData = {
-        ...form,
-        deal_value: form.deal_value ? Math.round(parseFloat(form.deal_value) * 100) : null,
-        event_date: form.event_date || null,
-        event_time: form.event_time || null,
-        next_follow_up: form.next_follow_up || null,
+        ...rest,
+        deal_value: rest.deal_value ? Math.round(parseFloat(rest.deal_value) * 100) : null,
+        event_date: rest.event_date || null,
+        event_time: rest.event_time || null,
+        next_follow_up: rest.next_follow_up || null,
         ...(editingDeal ? { id: editingDeal.id } : {}),
+        ...(skip_thank_you && rest.stage === "completed" ? { post_show_step: 2, post_show_started_at: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString() } : {}),
       };
       await callAdmin(editingDeal ? "update_deal" : "create_deal", { deal: dealData });
       toast.success(editingDeal ? "Deal updated" : "Deal created");
@@ -162,7 +165,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
   };
 
   const resetForm = () => {
-    setForm({ contact_email: "", contact_name: "", company: "", event_type: "corporate", event_date: "", event_time: "", location: "", guest_count: "", deal_value: "", stage: "new", notes: "", next_follow_up: "", source: "manual", lost_reason: "" });
+    setForm({ contact_email: "", contact_name: "", company: "", event_type: "corporate", event_date: "", event_time: "", location: "", guest_count: "", deal_value: "", stage: "new", notes: "", next_follow_up: "", source: "manual", lost_reason: "", skip_thank_you: false });
   };
 
   const openEdit = (deal: Deal) => {
@@ -182,6 +185,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
       next_follow_up: deal.next_follow_up || "",
       source: deal.source || "manual",
       lost_reason: deal.lost_reason || "",
+      skip_thank_you: false,
     });
     setShowForm(true);
   };
@@ -378,6 +382,12 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
                 <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Lost Reason</label>
                 <input value={form.lost_reason} onChange={e => setForm(f => ({ ...f, lost_reason: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
               </div>
+            )}
+            {form.stage === "completed" && (
+              <label className="flex items-center gap-2 cursor-pointer py-1">
+                <input type="checkbox" checked={form.skip_thank_you} onChange={e => setForm(f => ({ ...f, skip_thank_you: e.target.checked }))} className="accent-accent" />
+                <span className="font-sans text-xs text-muted-foreground">Skip Thank You & Review emails (past client — start at Referral & Re-engage drips only)</span>
+              </label>
             )}
             <div>
               <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Notes</label>
