@@ -217,6 +217,18 @@ serve(async (req) => {
         });
       }
 
+      case "get_clicks_log": {
+        const { data: clicksData, error: clicksErr } = await supabase
+          .from("newsletter_clicks")
+          .select("contact_id, clicked_at, drip_step, link_slug")
+          .order("clicked_at", { ascending: false })
+          .limit(2000);
+        if (clicksErr) throw clicksErr;
+        return new Response(JSON.stringify({ clicks: clicksData || [] }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       case "get_opened_contact_ids": {
         const { data: opens, error: opensErr } = await supabase
           .from("newsletter_opens")
