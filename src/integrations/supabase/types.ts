@@ -90,6 +90,7 @@ export type Database = {
           notes: string | null
           outreach_notes: string | null
           outreach_status: string | null
+          phone: string | null
           post_show_started_at: string | null
           post_show_step: number
           priority_score: number | null
@@ -117,6 +118,7 @@ export type Database = {
           notes?: string | null
           outreach_notes?: string | null
           outreach_status?: string | null
+          phone?: string | null
           post_show_started_at?: string | null
           post_show_step?: number
           priority_score?: number | null
@@ -144,6 +146,7 @@ export type Database = {
           notes?: string | null
           outreach_notes?: string | null
           outreach_status?: string | null
+          phone?: string | null
           post_show_started_at?: string | null
           post_show_step?: number
           priority_score?: number | null

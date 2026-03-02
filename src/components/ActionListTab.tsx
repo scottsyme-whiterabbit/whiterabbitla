@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { toast } from "sonner";
-import { Phone, Mail, ChevronDown, ChevronUp, Search, Flame, Clock, CheckCircle, TrendingUp } from "lucide-react";
+import { Phone, PhoneOutgoing, Mail, ChevronDown, ChevronUp, Search, Flame, Clock, CheckCircle, TrendingUp, ClipboardList } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { format } from "date-fns";
 
@@ -26,6 +26,7 @@ interface Deal {
   last_outreach_date: string | null;
   outreach_notes: string | null;
   priority_score: number | null;
+  phone: string | null;
 }
 
 interface HotWarmContact {
@@ -58,6 +59,7 @@ interface ActionItem {
   engagement: string;
   priority: "hot" | "warm" | "follow_up" | "new";
   priorityScore: number;
+  phone?: string | null;
   deal?: Deal;
   contact?: HotWarmContact;
   lastOutreach?: OutreachLog;
@@ -160,6 +162,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
       items.push({
         type: "deal", email, name: deal.contact_name, company: deal.company,
         source: deal.source || "Manual", engagement, priority, priorityScore,
+        phone: deal.phone,
         deal, lastOutreach: lastLog, outreachStatus: status,
       });
     }
@@ -420,8 +423,17 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                     )}
                   </div>
                   <div className="flex gap-1">
-                    <button onClick={() => openLogModal(item, "call")} className="flex items-center gap-1 px-2 py-1 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 text-[10px] tracking-wider uppercase hover:bg-emerald-600/30 transition-colors">
-                      <Phone size={10} /> Call
+                    {item.phone ? (
+                      <a href={`tel:${item.phone.replace(/\D/g, "")}`} className="flex items-center gap-1 px-2 py-1 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 text-[10px] tracking-wider uppercase hover:bg-emerald-600/30 transition-colors" title={`Call ${item.phone}`}>
+                        <PhoneOutgoing size={10} /> Call
+                      </a>
+                    ) : (
+                      <span className="flex items-center gap-1 px-2 py-1 bg-muted/20 text-muted-foreground border border-border text-[10px] tracking-wider uppercase cursor-not-allowed" title="No phone number">
+                        <Phone size={10} /> No #
+                      </span>
+                    )}
+                    <button onClick={() => openLogModal(item, "call")} className="flex items-center gap-1 px-2 py-1 bg-muted/20 text-foreground border border-border text-[10px] tracking-wider uppercase hover:bg-muted/30 transition-colors" title="Log a call">
+                      <ClipboardList size={10} /> Log
                     </button>
                     <button onClick={() => openLogModal(item, "email")} className="flex items-center gap-1 px-2 py-1 bg-accent/20 text-accent border border-accent/30 text-[10px] tracking-wider uppercase hover:bg-accent/30 transition-colors">
                       <Mail size={10} /> Email
@@ -437,6 +449,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                   <div className="bg-muted/10 border-b border-border px-6 py-4 space-y-3">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Email</span>{item.email}</div>
+                      <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Phone</span>{item.phone ? <a href={`tel:${item.phone.replace(/\D/g, "")}`} className="text-accent hover:underline">{item.phone}</a> : "—"}</div>
                       <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Company</span>{item.company || "—"}</div>
                       {item.deal && (
                         <>
@@ -482,7 +495,12 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
             <div className="flex items-center justify-between mb-2">
               {priorityBadge(item.priority)}
               <div className="flex gap-1">
-                <button onClick={() => openLogModal(item, "call")} className="p-1.5 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30"><Phone size={12} /></button>
+                {item.phone ? (
+                  <a href={`tel:${item.phone.replace(/\D/g, "")}`} className="p-1.5 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30" title={`Call ${item.phone}`}><PhoneOutgoing size={12} /></a>
+                ) : (
+                  <span className="p-1.5 bg-muted/20 text-muted-foreground border border-border cursor-not-allowed" title="No phone number"><Phone size={12} /></span>
+                )}
+                <button onClick={() => openLogModal(item, "call")} className="p-1.5 bg-muted/20 text-foreground border border-border" title="Log call"><ClipboardList size={12} /></button>
                 <button onClick={() => openLogModal(item, "email")} className="p-1.5 bg-accent/20 text-accent border border-accent/30"><Mail size={12} /></button>
               </div>
             </div>

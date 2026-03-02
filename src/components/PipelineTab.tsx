@@ -24,6 +24,7 @@ interface Deal {
   next_follow_up: string | null;
   source: string | null;
   source_id: string | null;
+  phone: string | null;
   created_at: string;
   updated_at: string;
   post_show_step?: number;
@@ -110,6 +111,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
     contact_email: "",
     contact_name: "",
     company: "",
+    phone: "",
     event_type: "corporate",
     event_date: "",
     event_time: "",
@@ -207,7 +209,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
   };
 
   const resetForm = () => {
-    setForm({ contact_email: "", contact_name: "", company: "", event_type: "corporate", event_date: "", event_time: "", location: "", guest_count: "", deal_value: "", stage: "new", notes: "", next_follow_up: "", source: "manual", lost_reason: "", skip_thank_you: false });
+    setForm({ contact_email: "", contact_name: "", company: "", phone: "", event_type: "corporate", event_date: "", event_time: "", location: "", guest_count: "", deal_value: "", stage: "new", notes: "", next_follow_up: "", source: "manual", lost_reason: "", skip_thank_you: false });
   };
 
   const openEdit = (deal: Deal) => {
@@ -216,6 +218,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
       contact_email: deal.contact_email,
       contact_name: deal.contact_name || "",
       company: deal.company || "",
+      phone: deal.phone || "",
       event_type: deal.event_type || "corporate",
       event_date: deal.event_date || "",
       event_time: deal.event_time || "",
@@ -398,10 +401,14 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <div>
                 <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Company</label>
                 <input value={form.company} onChange={e => setForm(f => ({ ...f, company: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+              </div>
+              <div>
+                <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Phone</label>
+                <input type="tel" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} placeholder="(555) 123-4567" className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
               </div>
               <div>
                 <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Event Type</label>
