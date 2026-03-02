@@ -136,8 +136,10 @@ function getSeasonalHook(): string {
 
 function email1ThankYou(deal: Deal): { subject: string; preheader: string; html: string } {
   const name = deal.contact_name?.split(" ")[0] || "there";
+  const STANDARD_TYPES = ["corporate", "wedding", "private party", "parlor show", "other"];
   const rawType = deal.event_type?.replace(/_/g, " ") || "";
-  const eventLabel = rawType ? `your ${rawType}` : "your event";
+  const isStandard = STANDARD_TYPES.includes(rawType.toLowerCase());
+  const eventLabel = rawType ? (isStandard ? `your ${rawType}` : rawType) : "your event";
   const contactId = deal.id;
 
   const innerHtml = `<!-- Headline -->
@@ -192,12 +194,15 @@ ${signoff()}
 function email3Referral(deal: Deal): { subject: string; preheader: string; html: string } {
   const name = deal.contact_name?.split(" ")[0] || "there";
   const contactId = deal.id;
-  const eventType = deal.event_type?.replace(/_/g, " ") || "event";
+  const STANDARD_TYPES = ["corporate", "wedding", "private party", "parlor show", "other"];
+  const rawType = deal.event_type?.replace(/_/g, " ") || "";
+  const isStandard = STANDARD_TYPES.includes(rawType.toLowerCase());
+  const eventLabel = rawType ? (isStandard ? `your ${rawType}` : rawType) : "your event";
   const referLink = trackedLink(`${SITE_URL}/refer`, "Share White Rabbit", contactId, 2);
 
   const innerHtml = `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
-<p style="margin:0 0 18px;">I keep thinking about your ${eventType} — those are the nights that remind me why I love this work.</p>
+<p style="margin:0 0 18px;">I keep thinking about ${eventLabel} — those are the nights that remind me why I love this work.</p>
 <p style="margin:0 0 18px;">If anyone in your network is planning something special — a corporate event, a wedding, a milestone celebration — I'd love to be the first name you share. Word of mouth from hosts like you is how I've built everything.</p>
 <p style="margin:0 0 18px;">${referLink}</p>
 ${trackedCTA(`${SITE_URL}/refer`, "Refer a Friend", contactId, 2)}
