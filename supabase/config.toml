@@ -44,3 +44,6 @@ verify_jwt = false
 
 [functions.score-subject]
 verify_jwt = false
+
+[functions.post-show-sequence]
+verify_jwt = false
