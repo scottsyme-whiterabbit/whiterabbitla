@@ -136,7 +136,8 @@ function getSeasonalHook(): string {
 
 function email1ThankYou(deal: Deal): { subject: string; preheader: string; html: string } {
   const name = deal.contact_name?.split(" ")[0] || "there";
-  const eventLabel = deal.event_type?.replace(/_/g, " ") || "your event";
+  const rawType = deal.event_type?.replace(/_/g, " ") || "";
+  const eventLabel = rawType ? `your ${rawType}` : "your event";
   const contactId = deal.id;
 
   const innerHtml = `<!-- Headline -->
