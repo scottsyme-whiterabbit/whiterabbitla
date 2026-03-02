@@ -499,29 +499,80 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
 
       {/* Mobile Cards */}
       <div className="md:hidden space-y-2">
-        {filtered.map(item => (
-          <div key={item.email} className={`border border-border p-3 ${item.outreachStatus === "booked" ? "bg-emerald-500/5" : item.outreachStatus === "not_interested" ? "bg-muted/30 opacity-60" : "bg-background"}`}>
-            <div className="flex items-center justify-between mb-2">
-              {priorityBadge(item.priority)}
-              <div className="flex gap-1">
-              {item.phone ? (
-                  <>
-                    <a href={`tel:${item.phone.replace(/\D/g, "").length === 10 ? "+1" + item.phone.replace(/\D/g, "") : "+" + item.phone.replace(/\D/g, "")}`} className="p-1.5 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30" title={`Call ${item.phone}`}><Phone size={12} /></a>
-                    <a href={gvCallUrl(item.phone)} target="_blank" rel="noopener noreferrer" className="p-1.5 bg-emerald-600/10 text-emerald-400/70 border border-emerald-600/20" title="Call via Google Voice"><PhoneOutgoing size={12} /></a>
-                  </>
-                ) : (
-                  <span className="p-1.5 bg-muted/20 text-muted-foreground border border-border cursor-not-allowed" title="No phone number"><Phone size={12} /></span>
-                )}
-                <button onClick={() => openLogModal(item, "call")} className="p-1.5 bg-muted/20 text-foreground border border-border" title="Log call"><ClipboardList size={12} /></button>
-                <button onClick={() => openLogModal(item, "email")} className="p-1.5 bg-accent/20 text-accent border border-accent/30"><Mail size={12} /></button>
+        {filtered.map(item => {
+          const isExpanded = expandedEmail === item.email;
+          return (
+          <div key={item.email} className={`border border-border ${item.outreachStatus === "booked" ? "bg-emerald-500/5" : item.outreachStatus === "not_interested" ? "bg-muted/30 opacity-60" : "bg-background"}`}>
+            <button onClick={() => setExpandedEmail(isExpanded ? null : item.email)} className="w-full text-left p-3">
+              <div className="flex items-center justify-between mb-2">
+                {priorityBadge(item.priority)}
+                <div className="flex items-center gap-1">
+                  <span className="text-[10px] text-muted-foreground">{STATUS_LABELS[item.outreachStatus] || item.outreachStatus}</span>
+                  {isExpanded ? <ChevronUp size={14} className="text-muted-foreground" /> : <ChevronDown size={14} className="text-muted-foreground" />}
+                </div>
               </div>
-            </div>
-            <p className="font-sans text-sm text-foreground font-medium">{item.name || item.email.split("@")[0]}</p>
-            <p className="text-[11px] text-muted-foreground">{item.email}</p>
-            {item.company && <p className="text-[10px] text-muted-foreground">{item.company}</p>}
-            <p className="text-[10px] text-muted-foreground mt-1">{item.engagement}</p>
+              <p className="font-sans text-sm text-foreground font-medium">{item.name || item.email.split("@")[0]}</p>
+              <p className="text-[11px] text-muted-foreground">{item.email}</p>
+              {item.company && <p className="text-[10px] text-muted-foreground">{item.company}</p>}
+              <p className="text-[10px] text-muted-foreground mt-1">{item.engagement}</p>
+            </button>
+
+            {isExpanded && (
+              <div className="border-t border-border px-3 pb-3 pt-2 space-y-3">
+                {/* Quick Actions */}
+                <div className="flex gap-2">
+                  {item.phone ? (
+                    <a href={`tel:${item.phone.replace(/\D/g, "").length === 10 ? "+1" + item.phone.replace(/\D/g, "") : "+" + item.phone.replace(/\D/g, "")}`} className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 text-xs tracking-wider uppercase font-sans">
+                      <Phone size={14} /> Call {item.phone}
+                    </a>
+                  ) : (
+                    <span className="flex-1 flex items-center justify-center gap-2 py-3 bg-muted/20 text-muted-foreground border border-border text-xs tracking-wider uppercase font-sans cursor-not-allowed">
+                      <Phone size={14} /> No Phone #
+                    </span>
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  <a href={`mailto:${item.email}`} className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-accent/20 text-accent border border-accent/30 text-[10px] tracking-wider uppercase font-sans">
+                    <Mail size={12} /> Email
+                  </a>
+                  <button onClick={() => openLogModal(item, "call")} className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-muted/20 text-foreground border border-border text-[10px] tracking-wider uppercase font-sans">
+                    <ClipboardList size={12} /> Log
+                  </button>
+                  {item.phone && (
+                    <a href={gvCallUrl(item.phone)} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-emerald-600/10 text-emerald-400/70 border border-emerald-600/20 text-[10px] tracking-wider uppercase font-sans">
+                      <PhoneOutgoing size={12} /> GV
+                    </a>
+                  )}
+                </div>
+
+                {/* Contact Details */}
+                <div className="grid grid-cols-2 gap-2 text-sm">
+                  {item.deal?.event_type && <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block">Event</span>{item.deal.event_type}</div>}
+                  {item.deal?.event_date && <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block">Date</span>{format(new Date(item.deal.event_date + "T00:00:00"), "MMM d, yyyy")}</div>}
+                  {item.deal?.location && <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block">Location</span>{item.deal.location}</div>}
+                  {item.deal?.guest_count && <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block">Guests</span>{item.deal.guest_count}</div>}
+                  {item.deal?.deal_value && <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block">Value</span>{formatCurrency(item.deal.deal_value)}</div>}
+                  <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block">Source</span>{item.source}</div>
+                </div>
+
+                {/* Outreach History */}
+                {contactLogs(item.email).length > 0 && (
+                  <div>
+                    <p className="font-sans text-[9px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Recent Outreach</p>
+                    {contactLogs(item.email).slice(0, 3).map(log => (
+                      <div key={log.id} className="flex gap-2 text-[10px] py-0.5 border-b border-border/50 last:border-0">
+                        <span className="text-muted-foreground w-12 shrink-0">{format(new Date(log.created_at), "MMM d")}</span>
+                        <span className="text-accent w-14 shrink-0 uppercase">{log.action_type}</span>
+                        <span className="text-foreground truncate">{log.notes || log.outcome || "—"}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Log Outreach Modal */}
