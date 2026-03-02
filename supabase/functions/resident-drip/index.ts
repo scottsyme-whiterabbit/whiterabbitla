@@ -607,6 +607,9 @@ serve(async (req) => {
           .maybeSingle();
 
         if (existing) {
+          // Always update phone if provided, even for already-enrolled contacts
+          const phoneUpdate = c.phone ? { phone: c.phone.trim() } : {};
+          
           if (existing.drip_campaign !== "resident") {
             await supabase
               .from("newsletter_contacts")
@@ -618,10 +621,18 @@ serve(async (req) => {
                 name: c.name || undefined,
                 city: c.city || null,
                 engagement_status: "new",
+                ...phoneUpdate,
               })
               .eq("id", existing.id);
             enrolled++;
           } else {
+            // Already resident — still update phone if we have it
+            if (c.phone) {
+              await supabase
+                .from("newsletter_contacts")
+                .update(phoneUpdate)
+                .eq("id", existing.id);
+            }
             skipped++;
           }
         } else {
@@ -630,6 +641,7 @@ serve(async (req) => {
             name: c.name || null,
             company: c.company || null,
             city: c.city || null,
+            phone: c.phone?.trim() || null,
             source: "resident-drip",
             subscribed: true,
             drip_step: 0,
