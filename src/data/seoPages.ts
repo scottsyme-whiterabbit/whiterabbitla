@@ -100,6 +100,14 @@ const locations = [
   "Laguna Beach",
   "Downtown LA",
   "Studio City",
+  "Encino",
+  "Long Beach",
+  "Burbank",
+  "Westlake Village",
+  "Thousand Oaks",
+  "Rancho Palos Verdes",
+  "Silver Lake",
+  "Los Feliz",
 ] as const;
 
 // Curated luxury venue references per location for authentic local SEO
@@ -488,6 +496,46 @@ const locationVenues: Record<string, { dining: string[]; hotels: string[]; cultu
     dining: ["Firefly", "Aroma Coffee & Tea", "Vitello's"],
     hotels: ["Sportsmen's Lodge", "The Garland", "The Beverly Garland"],
     culture: ["Tujunga Village", "Fryman Canyon", "CBS Studio Center"],
+  },
+  "Encino": {
+    dining: ["Katsu-Ya Encino", "Gasolina Café", "Buca di Beppo"],
+    hotels: ["Hilton Woodland Hills", "Warner Center Marriott", "The Garland"],
+    culture: ["Balboa Park", "Encino Commons", "Los Encinos State Historic Park"],
+  },
+  "Long Beach": {
+    dining: ["L'Opera Ristorante", "The Attic on Broadway", "Michael's on Naples"],
+    hotels: ["The Queen Mary", "Hotel Maya", "The Westin Long Beach"],
+    culture: ["The Queen Mary", "Museum of Latin American Art", "Naples Island"],
+  },
+  "Burbank": {
+    dining: ["Castaway", "Porto's Bakery", "Smokehouse Restaurant"],
+    hotels: ["Hotel Amarano", "Marriott Burbank Airport", "The Castaway"],
+    culture: ["Warner Bros. Studio Tour", "Walt Disney Studios", "Magnolia Park"],
+  },
+  "Westlake Village": {
+    dining: ["Mastro's Steakhouse", "Boccaccio's", "Zin Bistro"],
+    hotels: ["Four Seasons Westlake Village", "Westlake Village Inn", "Hyatt Regency Westlake"],
+    culture: ["Westlake Village Lake", "The Landing", "The Promenade at Westlake"],
+  },
+  "Thousand Oaks": {
+    dining: ["Mastro's Steakhouse", "Stonefire Grill", "Margo's"],
+    hotels: ["Thousand Oaks Inn", "Hyatt Regency Westlake", "The Oaks Hotel"],
+    culture: ["Sherwood Country Club", "The Civic Arts Plaza", "Gardens of the World"],
+  },
+  "Rancho Palos Verdes": {
+    dining: ["Mar'sel at Terranea", "The Catalina Kitchen", "Nelson's at Terranea"],
+    hotels: ["Terranea Resort", "The Palos Verdes Inn", "Best Western Plus Palos Verdes"],
+    culture: ["Trump National Golf Club", "Point Vicente Lighthouse", "Abalone Cove"],
+  },
+  "Silver Lake": {
+    dining: ["Botanica", "Night + Market Song", "Pine & Crane"],
+    hotels: ["The Silver Lake Pool & Inn", "Palihotel", "Hotel Covell"],
+    culture: ["Silver Lake Reservoir", "Sunset Junction", "The Edendale"],
+  },
+  "Los Feliz": {
+    dining: ["Little Dom's", "Alcove Café", "Figaro Bistrot"],
+    hotels: ["The Hotel & Spa", "Best Western Plus Atrium Inn", "The Moment Hotel"],
+    culture: ["Griffith Observatory", "The Greek Theatre", "Vermont Avenue"],
   },
 };
 
@@ -1053,7 +1101,8 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
 const premiereLocations = new Set([
   "Los Angeles", "Beverly Hills", "Hollywood", "Santa Monica", "Malibu",
   "West Hollywood", "Bel Air", "Pasadena", "Calabasas", "Pacific Palisades",
-  "Brentwood", "Manhattan Beach", "Downtown LA", "Studio City",
+  "Brentwood", "Manhattan Beach", "Downtown LA", "Studio City", "Burbank",
+  "Long Beach", "Silver Lake", "Los Feliz",
 ]);
 
 export const seoPages: SeoPage[] = locations.flatMap((location) =>
