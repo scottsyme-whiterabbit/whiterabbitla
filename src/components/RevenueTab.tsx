@@ -4,7 +4,7 @@ import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
   ReferenceLine, Cell,
 } from "recharts";
-import { DollarSign, TrendingUp, Calendar, AlertTriangle, CheckCircle, Clock } from "lucide-react";
+import { DollarSign, TrendingUp, Calendar, AlertTriangle, CheckCircle, Clock, Mail, MousePointerClick, Eye } from "lucide-react";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -21,6 +21,26 @@ interface Deal {
   next_follow_up: string | null;
   source: string | null;
   created_at: string;
+  post_show_step: number;
+}
+
+interface SendLog {
+  campaign_id: string;
+  sent_at: string;
+  contact_id: string;
+}
+
+interface OpenLog {
+  contact_id: string;
+  opened_at: string;
+  drip_step: number;
+}
+
+interface ClickLog {
+  contact_id: string;
+  clicked_at: string;
+  drip_step: number;
+  link_slug: string;
 }
 
 const STAGES_ORDER = ["new", "contacted", "proposal_sent", "negotiating", "booked", "completed", "lost", "on_hold"];
@@ -33,6 +53,8 @@ const SOURCE_LABELS: Record<string, string> = {
   planner_drip: "Planner Drip", contact_form: "Contact Form",
   referral: "Referral", quiz: "Quiz", manual: "Manual",
 };
+
+const POST_SHOW_LABELS = ["Thank You", "Review Ask", "Referral Ask", "Re-engage"];
 
 type DateRange = "month" | "quarter" | "year" | "all";
 
@@ -50,13 +72,15 @@ const getDateRangeStart = (range: DateRange): Date | null => {
   return new Date(now.getFullYear(), 0, 1);
 };
 
-
 interface Props {
   adminPassword: string;
 }
 
 const RevenueTab = ({ adminPassword }: Props) => {
   const [deals, setDeals] = useState<Deal[]>([]);
+  const [sendLog, setSendLog] = useState<SendLog[]>([]);
+  const [opens, setOpens] = useState<OpenLog[]>([]);
+  const [clicks, setClicks] = useState<ClickLog[]>([]);
   const [loading, setLoading] = useState(true);
   const [dateRange, setDateRange] = useState<DateRange>("year");
 
@@ -73,8 +97,16 @@ const RevenueTab = ({ adminPassword }: Props) => {
   useEffect(() => {
     const load = async () => {
       try {
-        const res = await callAdmin("get_deals");
-        setDeals(res.deals || []);
+        const [dealsRes, sendsRes, opensRes, clicksRes] = await Promise.all([
+          callAdmin("get_deals"),
+          callAdmin("get_send_log"),
+          callAdmin("get_opens_log"),
+          callAdmin("get_clicks_log"),
+        ]);
+        setDeals(dealsRes.deals || []);
+        setSendLog(sendsRes.sends || []);
+        setOpens(opensRes.opens || []);
+        setClicks(clicksRes.clicks || []);
       } catch {
         toast.error("Failed to load revenue data");
       } finally {
@@ -90,7 +122,34 @@ const RevenueTab = ({ adminPassword }: Props) => {
     return deals.filter(d => new Date(d.created_at) >= start);
   }, [deals, dateRange]);
 
-  // 1) Monthly Show Tracker — booked/completed shows per month
+  // Revenue Summary — split booked vs completed
+  const revenueSummary = useMemo(() => {
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const quarterStart = new Date(now.getFullYear(), Math.floor(now.getMonth() / 3) * 3, 1);
+    const yearStart = new Date(now.getFullYear(), 0, 1);
+
+    const booked = deals.filter(d => d.stage === "booked");
+    const completed = deals.filter(d => d.stage === "completed");
+    const all = [...booked, ...completed];
+    const sum = (arr: Deal[]) => arr.reduce((s, d) => s + (d.deal_value || 0), 0);
+    const inRange = (d: Deal, start: Date) => new Date(d.created_at) >= start;
+
+    return {
+      bookedTotal: sum(booked),
+      completedTotal: sum(completed),
+      grossMonth: sum(completed.filter(d => inRange(d, monthStart))),
+      grossQuarter: sum(completed.filter(d => inRange(d, quarterStart))),
+      grossYear: sum(completed.filter(d => inRange(d, yearStart))),
+      bookedMonth: sum(booked.filter(d => inRange(d, monthStart))),
+      bookedQuarter: sum(booked.filter(d => inRange(d, quarterStart))),
+      bookedYear: sum(booked.filter(d => inRange(d, yearStart))),
+      avgDeal: all.length ? sum(all) / all.length : 0,
+      totalDeals: all.length,
+    };
+  }, [deals]);
+
+  // Monthly Show Tracker
   const monthlyShows = useMemo(() => {
     const now = new Date();
     const months: { month: string; shows: number }[] = [];
@@ -107,7 +166,7 @@ const RevenueTab = ({ adminPassword }: Props) => {
     return months;
   }, [deals]);
 
-  // 2) Pipeline Funnel
+  // Pipeline Funnel
   const funnelData = useMemo(() => {
     return STAGES_ORDER.map(stage => ({
       stage: STAGE_LABELS[stage],
@@ -115,26 +174,7 @@ const RevenueTab = ({ adminPassword }: Props) => {
     }));
   }, [filtered]);
 
-  // 3) Revenue Summary
-  const revenueSummary = useMemo(() => {
-    const now = new Date();
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    const quarterStart = new Date(now.getFullYear(), Math.floor(now.getMonth() / 3) * 3, 1);
-    const yearStart = new Date(now.getFullYear(), 0, 1);
-
-    const bookedOrCompleted = deals.filter(d => ["booked", "completed"].includes(d.stage));
-    const sum = (arr: Deal[]) => arr.reduce((s, d) => s + (d.deal_value || 0), 0);
-    const inRange = (d: Deal, start: Date) => new Date(d.created_at) >= start;
-
-    const thisMonth = sum(bookedOrCompleted.filter(d => inRange(d, monthStart)));
-    const thisQuarter = sum(bookedOrCompleted.filter(d => inRange(d, quarterStart)));
-    const thisYear = sum(bookedOrCompleted.filter(d => inRange(d, yearStart)));
-    const avgDeal = bookedOrCompleted.length ? sum(bookedOrCompleted) / bookedOrCompleted.length : 0;
-
-    return { thisMonth, thisQuarter, thisYear, avgDeal, totalDeals: bookedOrCompleted.length };
-  }, [deals]);
-
-  // 4) Source Performance
+  // Source Performance
   const sourcePerformance = useMemo(() => {
     const sources = new Map<string, { leads: number; booked: number; revenue: number }>();
     filtered.forEach(d => {
@@ -157,7 +197,7 @@ const RevenueTab = ({ adminPassword }: Props) => {
       .sort((a, b) => b.revenue - a.revenue);
   }, [filtered]);
 
-  // 5) Follow-Up Health
+  // Follow-Up Health
   const followUpHealth = useMemo(() => {
     const today = new Date().toISOString().slice(0, 10);
     const weekEnd = new Date();
@@ -172,6 +212,40 @@ const RevenueTab = ({ adminPassword }: Props) => {
 
     return { overdue, today: todayFollowUps, thisWeek, noFollowUp };
   }, [deals]);
+
+  // Post-Show Email Engagement
+  const postShowEngagement = useMemo(() => {
+    const completedDealIds = new Set(deals.filter(d => d.stage === "completed").map(d => d.id));
+
+    // Filter sends/opens/clicks to post-show campaigns
+    const postSends = sendLog.filter(s => s.campaign_id.startsWith("post-show-"));
+    const postOpens = opens.filter(o => completedDealIds.has(o.contact_id));
+    const postClicks = clicks.filter(c => completedDealIds.has(c.contact_id));
+
+    // Per-step breakdown
+    const steps = [0, 1, 2, 3].map(step => {
+      const stepSends = postSends.filter(s => s.campaign_id === `post-show-${step}`).length;
+      const stepOpens = postOpens.filter(o => o.drip_step === step).length;
+      const stepClicks = postClicks.filter(c => c.drip_step === step).length;
+      return {
+        step,
+        label: POST_SHOW_LABELS[step],
+        sends: stepSends,
+        opens: stepOpens,
+        clicks: stepClicks,
+        openRate: stepSends > 0 ? Math.round((stepOpens / stepSends) * 100) : 0,
+        clickRate: stepSends > 0 ? Math.round((stepClicks / stepSends) * 100) : 0,
+      };
+    });
+
+    return {
+      totalSends: postSends.length,
+      totalOpens: postOpens.length,
+      totalClicks: postClicks.length,
+      uniqueOpeners: new Set(postOpens.map(o => o.contact_id)).size,
+      steps,
+    };
+  }, [deals, sendLog, opens, clicks]);
 
   if (loading) {
     return <p className="text-center text-muted-foreground py-12">Loading revenue data...</p>;
@@ -208,22 +282,111 @@ const RevenueTab = ({ adminPassword }: Props) => {
         ))}
       </div>
 
-      {/* Revenue Summary Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          { icon: DollarSign, label: "This Month", value: formatCurrency(revenueSummary.thisMonth) },
-          { icon: TrendingUp, label: "This Quarter", value: formatCurrency(revenueSummary.thisQuarter) },
-          { icon: Calendar, label: "This Year", value: formatCurrency(revenueSummary.thisYear) },
-          { icon: DollarSign, label: "Avg Deal Value", value: formatCurrency(revenueSummary.avgDeal) },
-        ].map(stat => (
-          <div key={stat.label} className="border border-border p-4">
-            <div className="flex items-center gap-2 text-muted-foreground mb-1">
-              <stat.icon size={14} />
-              <span className="font-sans text-[10px] tracking-[0.15em] uppercase">{stat.label}</span>
+      {/* Revenue Summary Cards — Booked vs Gross */}
+      <div>
+        <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-accent mb-4">Revenue Overview</h3>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { icon: Calendar, label: "Booked Revenue", value: formatCurrency(revenueSummary.bookedTotal), sub: "Upcoming confirmed shows" },
+            { icon: CheckCircle, label: "Gross Revenue", value: formatCurrency(revenueSummary.completedTotal), sub: "Completed shows" },
+            { icon: TrendingUp, label: "Combined Total", value: formatCurrency(revenueSummary.bookedTotal + revenueSummary.completedTotal), sub: "Booked + Completed" },
+            { icon: DollarSign, label: "Avg Deal Value", value: formatCurrency(revenueSummary.avgDeal), sub: `${revenueSummary.totalDeals} total deals` },
+          ].map(stat => (
+            <div key={stat.label} className="border border-border p-4">
+              <div className="flex items-center gap-2 text-muted-foreground mb-1">
+                <stat.icon size={14} />
+                <span className="font-sans text-[10px] tracking-[0.15em] uppercase">{stat.label}</span>
+              </div>
+              <p className="font-serif text-xl text-foreground">{stat.value}</p>
+              <p className="font-sans text-[10px] text-muted-foreground mt-1">{stat.sub}</p>
             </div>
-            <p className="font-serif text-xl text-foreground">{stat.value}</p>
-          </div>
-        ))}
+          ))}
+        </div>
+      </div>
+
+      {/* Period Breakdown */}
+      <div className="border border-border p-6">
+        <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-accent mb-4">Period Breakdown</h3>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-border">
+                {["Period", "Booked Revenue", "Gross Revenue", "Total"].map(h => (
+                  <th key={h} className="text-left font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground py-2 px-3">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { period: "This Month", booked: revenueSummary.bookedMonth, gross: revenueSummary.grossMonth },
+                { period: "This Quarter", booked: revenueSummary.bookedQuarter, gross: revenueSummary.grossQuarter },
+                { period: "This Year", booked: revenueSummary.bookedYear, gross: revenueSummary.grossYear },
+              ].map(row => (
+                <tr key={row.period} className="border-b border-border/50">
+                  <td className="py-2.5 px-3 font-sans text-xs text-foreground">{row.period}</td>
+                  <td className="py-2.5 px-3 font-mono text-xs text-amber-500">{formatCurrency(row.booked)}</td>
+                  <td className="py-2.5 px-3 font-mono text-xs text-emerald-500">{formatCurrency(row.gross)}</td>
+                  <td className="py-2.5 px-3 font-mono text-xs text-accent">{formatCurrency(row.booked + row.gross)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Post-Show Email Engagement */}
+      <div className="border border-border p-6">
+        <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-accent mb-1">Post-Show Email Engagement</h3>
+        <p className="font-sans text-[10px] text-muted-foreground mb-4">How completed clients engage with the post-show drip sequence</p>
+        
+        {/* Summary stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+          {[
+            { icon: Mail, label: "Emails Sent", value: postShowEngagement.totalSends },
+            { icon: Eye, label: "Total Opens", value: postShowEngagement.totalOpens },
+            { icon: MousePointerClick, label: "Total Clicks", value: postShowEngagement.totalClicks },
+            { icon: CheckCircle, label: "Unique Openers", value: postShowEngagement.uniqueOpeners },
+          ].map(stat => (
+            <div key={stat.label} className="text-center">
+              <stat.icon size={18} className="mx-auto mb-1 text-muted-foreground" />
+              <p className="font-serif text-2xl text-foreground">{stat.value}</p>
+              <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Per-step table */}
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-border">
+                {["Email", "Sends", "Opens", "Open Rate", "Clicks", "Click Rate"].map(h => (
+                  <th key={h} className="text-left font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground py-2 px-3">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {postShowEngagement.steps.map(row => (
+                <tr key={row.step} className="border-b border-border/50 hover:bg-muted/20 transition-colors">
+                  <td className="py-2.5 px-3 font-sans text-xs text-foreground">{row.label}</td>
+                  <td className="py-2.5 px-3 font-mono text-xs text-muted-foreground">{row.sends}</td>
+                  <td className="py-2.5 px-3 font-mono text-xs text-foreground">{row.opens}</td>
+                  <td className="py-2.5 px-3">
+                    <span className={`font-mono text-xs ${row.openRate >= 40 ? "text-emerald-500" : row.openRate >= 20 ? "text-amber-500" : "text-muted-foreground"}`}>
+                      {row.openRate}%
+                    </span>
+                  </td>
+                  <td className="py-2.5 px-3 font-mono text-xs text-foreground">{row.clicks}</td>
+                  <td className="py-2.5 px-3">
+                    <span className={`font-mono text-xs ${row.clickRate >= 10 ? "text-emerald-500" : row.clickRate >= 3 ? "text-amber-500" : "text-muted-foreground"}`}>
+                      {row.clickRate}%
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Monthly Show Tracker */}
@@ -310,7 +473,6 @@ const RevenueTab = ({ adminPassword }: Props) => {
           ))}
         </div>
 
-        {/* Overdue list */}
         {followUpHealth.overdue.length > 0 && (
           <div>
             <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-red-500 mb-2">Overdue Follow-Ups</p>
