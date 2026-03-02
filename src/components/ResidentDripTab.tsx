@@ -186,6 +186,7 @@ const ResidentDripTab = ({ storedPassword, onNavigateToContacts }: ResidentDripT
     const apartmentIdx = cols.findIndex(h => h.includes("apartment name") || h === "building name");
     const companyIdx = cols.findIndex(h => h.includes("company") || h.includes("apartment name") || h === "building name");
     const cityIdx = cols.findIndex(h => h.includes("city") || h.includes("location"));
+    const phoneIdx = cols.findIndex(h => h.includes("phone") || h.includes("mobile") || h.includes("cell"));
 
     if (emailIdx === -1) {
       toast.error("CSV must have an 'email' column");
@@ -209,8 +210,9 @@ const ResidentDripTab = ({ storedPassword, onNavigateToContacts }: ResidentDripT
 
       const company = isApartmentCSV && apartmentName ? apartmentName : (companyIdx >= 0 ? c[companyIdx]?.trim() || undefined : undefined);
       const city = cityIdx >= 0 ? c[cityIdx]?.trim() || undefined : undefined;
+      const phone = phoneIdx >= 0 ? c[phoneIdx]?.trim() || undefined : undefined;
 
-      return { email: email.toLowerCase(), name: contactName, company, city };
+      return { email: email.toLowerCase(), name: contactName, company, city, phone };
     }).filter(Boolean);
 
     if (!parsed.length) {
