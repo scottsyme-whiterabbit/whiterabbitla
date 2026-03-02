@@ -1147,6 +1147,130 @@ export const cityContentMap: Record<string, CityContentData> = {
       "White Rabbit LA is based in Los Angeles and travels nationwide for private events. Travel fees may apply for events in Minneapolis — contact us for a custom quote.",
     ],
   },
+
+  // ─── Texas sub-markets ─────────────────────────────────────────────────────
+
+  "highland-park": {
+    cityName: "Highland Park",
+    citySlug: "highland-park",
+    state: "TX",
+    stateFullName: "Texas",
+    region: "Texas",
+    venues: ["Highland Park Village", "The Room on Main", "Arlington Hall at Lee Park", "Park Cities Club", "Highland Park Town Hall"],
+    nearbyLinks: ["dallas", "fort-worth", "austin", "houston", "san-antonio"],
+    uniqueContent: [
+      "Highland Park is Dallas's most storied enclave — a neighborhood where old Texas money, SMU legacy families, and Park Cities society converge at events that balance Southern grace with understated grandeur. Scott Syme has performed at Highland Park Village's exclusive private dining rooms, Arlington Hall at Lee Park's columned elegance, and private estate celebrations along Beverly Drive and Lakeside Drive where debutante ball committees and oil dynasty families expect entertainment as polished as their silver. His Magic Castle credentials and work with brands like Rolls-Royce and Morgan Stanley make him the natural choice for Highland Park's most discerning hosts.",
+      "The Park Cities Club's intimate member dinners and The Room on Main's downtown-adjacent sophistication reflect Highland Park's dual personality — deeply traditional yet genuinely warm. Scott's close-up magic and mentalism thrive in the relational, hospitality-first culture that defines Highland Park entertaining. Whether it's a Highland Park Village shopping event after-party, a charity gala benefiting Scottish Rite Hospital, or a milestone birthday at Highland Park Town Hall, White Rabbit delivers entertainment that Dallas's most exacting social circle calls 'absolutely extraordinary — and that's coming from someone who doesn't impress easily.'",
+      "White Rabbit LA is based in Los Angeles and travels nationwide for private events. Travel fees may apply for events in Highland Park — contact us for a custom quote.",
+    ],
+  },
+  "river-oaks": {
+    cityName: "River Oaks",
+    citySlug: "river-oaks",
+    state: "TX",
+    stateFullName: "Texas",
+    region: "Texas",
+    venues: ["River Oaks Country Club", "The River Oaks", "Hotel Granduca Houston", "Stables at River Oaks", "La Colombe d'Or Hotel"],
+    nearbyLinks: ["houston", "dallas", "fort-worth", "austin", "san-antonio"],
+    uniqueContent: [
+      "River Oaks is Houston's crown jewel — the neighborhood where energy industry titans, shipping magnates, and multigenerational Texas families host celebrations that reflect both oil-boom ambition and cultivated Southern taste. Scott Syme has performed at River Oaks Country Club's legendary event spaces, Hotel Granduca Houston's Tuscan-inspired grandeur, and private estate parties along Inwood Drive and River Oaks Boulevard where the guest lists include names that shape global energy policy. His Magic Castle membership and Fortune 500 experience — Netflix, Disney, Hyatt — give River Oaks hosts the confidence that their entertainment matches the caliber of their homes.",
+      "La Colombe d'Or Hotel's boutique art collection and the Stables at River Oaks' garden party atmosphere represent the neighborhood's range from intimate connoisseur gatherings to expansive celebrations beneath live oaks draped in Spanish moss. Scott's interactive close-up magic at a Memorial Park-adjacent cocktail reception creates the kind of genuine, personal amazement that River Oaks' worldly guests — who've seen everything from Monte Carlo to Aspen — call 'the best entertainment we've ever had at a private event, period.'",
+      "White Rabbit LA is based in Los Angeles and travels nationwide for private events. Travel fees may apply for events in River Oaks — contact us for a custom quote.",
+    ],
+  },
+
+  // ─── Atlanta ───────────────────────────────────────────────────────────────
+
+  "atlanta": {
+    cityName: "Atlanta",
+    citySlug: "atlanta",
+    state: "GA",
+    stateFullName: "Georgia",
+    region: "Southeast",
+    venues: ["The St. Regis Atlanta", "The Ritz-Carlton Buckhead", "Atlanta History Center", "Swan House", "Fox Theatre", "High Museum of Art"],
+    nearbyLinks: ["buckhead", "nashville", "charleston", "miami", "charlotte"],
+    uniqueContent: [
+      "Atlanta's explosive emergence as a global city — home to CNN, Coca-Cola, Delta, and the film industry's busiest production hub outside of Hollywood — creates an event scene where Fortune 500 corporate galas, film wrap parties, and Peachtree Street fundraisers share a calendar bursting with ambition. Scott Syme has performed at The St. Regis Atlanta, Swan House's neoclassical grandeur at the Atlanta History Center, and private Buckhead and Tuxedo Park estate celebrations where studio executives, Southern philanthropists, and tech entrepreneurs gather. His Magic Castle credentials carry genuine weight in a city that has become the new Hollywood for production professionals who recognize world-class performance.",
+      "The High Museum of Art's Richard Meier-designed atrium and Fox Theatre's Moorish Revival splendor represent Atlanta's extraordinary cultural infrastructure. Scott's mentalism at a CNN after-party — predicting a producer's breaking story, revealing a correspondent's secret thought — or his close-up magic at a Coca-Cola corporate gala creates the kind of shared amazement that Atlanta's ambitious, hospitable social culture turns into the evening's defining moment. In a city where Southern charm meets urban sophistication, White Rabbit delivers entertainment that bridges both with grace.",
+      "White Rabbit LA is based in Los Angeles and travels nationwide for private events. Travel fees may apply for events in Atlanta — contact us for a custom quote.",
+    ],
+  },
+
+  // ─── Northeast additions ───────────────────────────────────────────────────
+
+  "new-york": {
+    cityName: "New York",
+    citySlug: "new-york",
+    state: "NY",
+    stateFullName: "New York",
+    region: "Northeast",
+    venues: ["The Plaza Hotel", "The Metropolitan Museum of Art", "Cipriani Wall Street", "The Rainbow Room", "Gotham Hall", "The Pierre", "Central Park Conservatory Garden", "The Bowery Hotel"],
+    nearbyLinks: ["the-hamptons", "greenwich", "short-hills", "boston", "philadelphia"],
+    uniqueContent: [
+      "New York demands the best of everything — and its private event entertainment is no exception. Wall Street hedge fund managers, Upper East Side society, Tribeca loft hosts, and Museum Mile gala committees all share one requirement: the performer must be genuinely world-class, because their guests have seen everything. Scott Syme has performed at The Plaza Hotel's Palm Court, Cipriani Wall Street's soaring columns, The Rainbow Room sixty-five stories above Rockefeller Center, and private Manhattan penthouse celebrations where Broadway producers, media executives, and global financiers expect entertainment caliber that matches the city's impossible standards. His Magic Castle membership and clients including Netflix, Disney, and Morgan Stanley establish credentials that New York's most skeptical hosts trust.",
+      "Gotham Hall's gilded ceiling, The Pierre's Fifth Avenue elegance, and The Bowery Hotel's downtown cool represent New York's staggering range — and Scott's performance style adapts to every room. His close-up magic during cocktails at a Central Park Conservatory Garden reception creates intimate wonder amid Manhattan's relentless energy, while his seated mentalism at a Metropolitan Museum benefit reveals hidden thoughts and creates impossible predictions that leave even New York's most jaded power players visibly astonished. In a city where 'impressive' is the bare minimum, White Rabbit delivers entertainment that New Yorkers call 'the single best thing at the party — and I've been to a thousand parties.'",
+      "White Rabbit LA is based in Los Angeles and travels nationwide for private events. Travel fees may apply for events in New York — contact us for a custom quote.",
+    ],
+  },
+  "the-hamptons": {
+    cityName: "The Hamptons",
+    citySlug: "the-hamptons",
+    state: "NY",
+    stateFullName: "New York",
+    region: "Northeast",
+    venues: ["Topping Rose House", "The Maidstone Hotel", "Wölffer Estate Vineyard", "The Baker House 1650", "Gurney's Montauk Resort", "Ram's Head Inn Shelter Island"],
+    nearbyLinks: ["new-york", "nantucket", "marthas-vineyard", "greenwich", "boston"],
+    uniqueContent: [
+      "The Hamptons' summer social calendar — celebrity benefit galas, vineyard harvest dinners, East End philanthropy events, and Montauk weekend gatherings — represents America's most concentrated luxury event season. Scott Syme has performed at Topping Rose House's Bridgehampton elegance, Wölffer Estate Vineyard sunset receptions, and private estate celebrations along Meadow Lane, Further Lane, and Lily Pond Lane where hedge fund billionaires, media moguls, and Hollywood A-listers host intimate gatherings that rival any event in the world. His Magic Castle credentials and work with brands like Netflix and Rolls-Royce make him the entertainment that Hamptons hosts trust when their guest list includes names from the front page of the Wall Street Journal.",
+      "Gurney's Montauk Resort's beach-chic atmosphere and The Baker House 1650's historic colonial charm represent the Hamptons' range from casual oceanfront celebrations to refined candlelit dinners. Scott's roaming close-up magic at a North Fork vineyard tasting transforms strangers into friends over shared amazement, while his parlor mentalism show at a Shelter Island retreat creates the kind of intimate, impossible experience that Hamptons guests — who have access to anything money can buy — call 'the most memorable entertainment we've ever had at our home.'",
+      "White Rabbit LA is based in Los Angeles and travels nationwide for private events. Travel fees may apply for events in The Hamptons — contact us for a custom quote.",
+    ],
+  },
+  "nantucket": {
+    cityName: "Nantucket",
+    citySlug: "nantucket",
+    state: "MA",
+    stateFullName: "Massachusetts",
+    region: "Northeast",
+    venues: ["The White Elephant Hotel", "The Wauwinet", "Nantucket Yacht Club", "The Whaling Museum", "Great Harbor Yacht Club", "Galley Beach"],
+    nearbyLinks: ["marthas-vineyard", "the-hamptons", "boston", "new-york", "greenwich"],
+    uniqueContent: [
+      "Nantucket's cobblestone streets, grey-shingled cottages, and old-money summer colony create an island atmosphere where understated elegance is the only acceptable standard. The Grey Lady's wedding season — harbor-view rehearsal dinners at The White Elephant, candlelit receptions at The Wauwinet, and yacht club celebrations overlooking Nantucket Sound — demands entertainment with the same quiet confidence and impeccable taste that define island life. Scott Syme has performed at Galley Beach sunset events, Nantucket Yacht Club receptions, and private Brant Point and Cliff Road estate celebrations where Boston Brahmin families, Wall Street partners, and old Nantucket summer colonists gather with the implicit understanding that nothing showy survives the ferry crossing.",
+      "The Whaling Museum's dramatic architectural spaces and Great Harbor Yacht Club's exclusive membership represent Nantucket's unique blend of cultural heritage and social prestige. Scott's intimate close-up magic — performed tableside at a Wauwinet dinner or during cocktails on a Polpis Harbor terrace — fits the island's scale perfectly. No loud music, no elaborate staging, just genuinely impossible moments shared between guests who value craft, authenticity, and the kind of personal attention that mass entertainment can never deliver. Nantucket hosts choose White Rabbit because their island gatherings deserve entertainment as rare and beautiful as the setting itself.",
+      "White Rabbit LA is based in Los Angeles and travels nationwide for private events. Travel fees may apply for events in Nantucket — contact us for a custom quote.",
+    ],
+  },
+  "marthas-vineyard": {
+    cityName: "Martha's Vineyard",
+    citySlug: "marthas-vineyard",
+    state: "MA",
+    stateFullName: "Massachusetts",
+    region: "Northeast",
+    venues: ["Harbor View Hotel", "The Charlotte Inn", "Farm Neck Golf Club", "The Edgartown Yacht Club", "Winnetu Oceanside Resort", "The Red Cat Kitchen"],
+    nearbyLinks: ["nantucket", "the-hamptons", "boston", "new-york", "greenwich"],
+    uniqueContent: [
+      "Martha's Vineyard carries a legacy of presidential retreats, literary festivals, and a summer society that values intellectual depth alongside coastal beauty. From Edgartown's whaling captain mansions to Chilmark's rolling farmland and Aquinnah's dramatic cliffs, the island attracts hosts who seek entertainment with substance — not spectacle. Scott Syme has performed at Harbor View Hotel's veranda overlooking Edgartown Harbor, Farm Neck Golf Club celebrations where presidents have teed off, and private Oak Bluffs and West Tisbury estate gatherings where Pulitzer Prize-winning authors, film directors, and political luminaries spend their summers. His mentalism — predicting hidden thoughts, revealing impossible connections — creates exactly the kind of intellectually thrilling experience that Vineyard audiences crave.",
+      "The Charlotte Inn's intimate English garden and Winnetu Oceanside Resort's family-friendly elegance represent the Vineyard's range from exclusive adult gatherings to multigenerational celebrations. Scott's close-up magic at an Edgartown Yacht Club cocktail reception or a Red Cat Kitchen private dinner creates shared wonder that transcends age and background — the five-year-old and the retired senator are equally amazed, equally delighted. In an island community that has hosted the most powerful and creative people in America, White Rabbit delivers entertainment that Martha's Vineyard's most discerning hosts call 'perfect for us — sophisticated, warm, and genuinely extraordinary.'",
+      "White Rabbit LA is based in Los Angeles and travels nationwide for private events. Travel fees may apply for events in Martha's Vineyard — contact us for a custom quote.",
+    ],
+  },
+
+  // ─── Midwest addition ──────────────────────────────────────────────────────
+
+  "winnetka": {
+    cityName: "Winnetka",
+    citySlug: "winnetka",
+    state: "IL",
+    stateFullName: "Illinois",
+    region: "Midwest",
+    venues: ["Indian Hill Club", "North Shore Country Club", "Skokie Country Club", "Winnetka Community House", "Michigan Shores Club"],
+    nearbyLinks: ["chicago", "minneapolis", "milwaukee", "lake-forest", "highland-park"],
+    uniqueContent: [
+      "Winnetka's tree-lined streets, lakefront estates, and country club culture make it the crown jewel of Chicago's North Shore — a community where old money, corporate leadership, and family tradition converge at celebrations that value warmth over ostentation. Scott Syme has performed at Indian Hill Club's historic clubhouse, North Shore Country Club galas overlooking Lake Michigan, and private estate celebrations on Sheridan Road and along the Green Bay Trail where Chicago's most successful families host with Midwestern graciousness and world-class taste. His Magic Castle credentials and Fortune 500 client experience — Netflix, Disney, Morgan Stanley — give Winnetka hosts confidence that their entertainment matches the caliber of their homes. And yes, this is the neighborhood made famous by Home Alone — though Scott's magic is considerably more sophisticated than Kevin McCallister's booby traps.",
+      "Skokie Country Club's championship golf culture and Winnetka Community House's beloved village gathering space represent the community's blend of competitive achievement and genuine neighborliness. Scott's interactive close-up magic at a Michigan Shores Club sunset reception creates the kind of organic, joyful engagement that Winnetka's relationship-driven social scene values above all — guests don't just watch, they participate, laugh together, and leave talking about the magician who knew what they were thinking before they said it. In a community where reputation is everything, White Rabbit delivers entertainment that North Shore families make a recurring part of their holiday party, anniversary celebration, and milestone birthday traditions.",
+      "White Rabbit LA is based in Los Angeles and travels nationwide for private events. Travel fees may apply for events in Winnetka — contact us for a custom quote.",
+    ],
+  },
 };
 
 /** Get city content data by slug. Returns undefined if not in the enhanced content map. */
