@@ -504,8 +504,11 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
             <div className="flex items-center justify-between mb-2">
               {priorityBadge(item.priority)}
               <div className="flex gap-1">
-                {item.phone ? (
-                  <a href={gvCallUrl(item.phone)} target="_blank" rel="noopener noreferrer" className="p-1.5 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30" title={`Call ${item.phone}`}><PhoneOutgoing size={12} /></a>
+              {item.phone ? (
+                  <>
+                    <a href={`tel:${item.phone.replace(/\D/g, "").length === 10 ? "+1" + item.phone.replace(/\D/g, "") : "+" + item.phone.replace(/\D/g, "")}`} className="p-1.5 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30" title={`Call ${item.phone}`}><Phone size={12} /></a>
+                    <a href={gvCallUrl(item.phone)} target="_blank" rel="noopener noreferrer" className="p-1.5 bg-emerald-600/10 text-emerald-400/70 border border-emerald-600/20" title="Call via Google Voice"><PhoneOutgoing size={12} /></a>
+                  </>
                 ) : (
                   <span className="p-1.5 bg-muted/20 text-muted-foreground border border-border cursor-not-allowed" title="No phone number"><Phone size={12} /></span>
                 )}
