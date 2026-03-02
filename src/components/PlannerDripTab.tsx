@@ -177,6 +177,7 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
     const nameIdx = cols.findIndex(h => (h.includes("first") && h.includes("name")) || (h === "name") || (h.includes("name") && !h.includes("company") && !h.includes("last")));
     const companyIdx = cols.findIndex(h => h.includes("company") || h.includes("business"));
     const cityIdx = cols.findIndex(h => h.includes("city") || h.includes("location"));
+    const phoneIdx = cols.findIndex(h => h.includes("phone") || h.includes("mobile") || h.includes("cell"));
 
     if (emailIdx === -1) {
       toast.error("CSV must have an 'email' column");
@@ -190,6 +191,7 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
         name: nameIdx >= 0 ? c[nameIdx] : undefined,
         company: companyIdx >= 0 ? c[companyIdx] : undefined,
         city: cityIdx >= 0 ? c[cityIdx] : undefined,
+        phone: phoneIdx >= 0 ? c[phoneIdx]?.trim() || undefined : undefined,
       };
     }).filter(c => c.email?.includes("@"));
 
