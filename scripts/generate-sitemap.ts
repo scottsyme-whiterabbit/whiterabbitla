@@ -24,6 +24,7 @@ const locations = [
   "Manhattan Beach", "Laguna Beach", "Downtown LA", "Studio City",
   "Encino", "Long Beach", "Burbank", "Westlake Village",
   "Thousand Oaks", "Rancho Palos Verdes", "Silver Lake", "Los Feliz",
+  "Fort Worth", "San Antonio", "Charleston", "Minneapolis",
 ];
 
 const serviceKeys = [
@@ -68,6 +69,7 @@ const serviceAreaCities = [
   "pacific-palisades", "brentwood", "manhattan-beach", "encino", "downtown-la",
   "laguna-beach", "long-beach", "burbank", "studio-city", "westlake-village",
   "thousand-oaks", "rancho-palos-verdes", "silver-lake", "los-feliz",
+  "bel-air",
   "san-francisco", "palo-alto", "atherton", "hillsborough", "san-mateo",
   "burlingame", "woodside", "los-altos", "menlo-park", "saratoga",
   "los-gatos", "tiburon", "mill-valley", "napa-valley", "sonoma",
@@ -75,11 +77,12 @@ const serviceAreaCities = [
   "aspen", "vail", "park-city", "jackson-hole", "sun-valley",
   "lake-tahoe", "telluride", "scottsdale", "paradise-valley",
   "dallas", "highland-park", "houston", "river-oaks", "austin",
+  "fort-worth", "san-antonio",
   "atlanta", "buckhead", "miami", "coral-gables", "palm-beach",
-  "naples", "jupiter", "sarasota", "nashville",
+  "naples", "jupiter", "sarasota", "nashville", "charleston",
   "new-york", "the-hamptons", "greenwich", "nantucket", "marthas-vineyard",
   "short-hills", "boston", "washington-dc", "potomac", "philadelphia",
-  "chicago", "winnetka", "denver", "las-vegas",
+  "chicago", "winnetka", "denver", "las-vegas", "minneapolis",
 ];
 
 function slugify(text: string): string {
