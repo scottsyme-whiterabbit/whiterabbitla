@@ -114,7 +114,7 @@ const cityData: { city: string; region: string; photo: string; tagline: string }
   { city: "Jupiter", region: "Southeast", photo: "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&h=400&fit=crop", tagline: "Exclusive Florida coastal celebrations" }, // Beach and ocean
   { city: "Sarasota", region: "Southeast", photo: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&h=400&fit=crop", tagline: "Ringling-era elegance and barrier island events" }, // White sand beach
   { city: "Buckhead", region: "Southeast", photo: "/areas/buckhead.jpg", tagline: "Atlanta's most prestigious neighborhood events" },
-  { city: "Charleston", region: "Southeast", photo: "https://images.unsplash.com/photo-1569974507005-6dc61f97fb5c?w=600&h=400&fit=crop", tagline: "Southern charm and historic plantation celebrations" }, // Charleston waterfront
+  { city: "Charleston", region: "Southeast", photo: "/areas/charleston.jpg", tagline: "Southern charm and historic plantation celebrations" },
   { city: "Nantucket", region: "Northeast", photo: "/areas/nantucket.jpg", tagline: "Island getaway celebrations" },
   { city: "Martha's Vineyard", region: "Northeast", photo: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600&h=400&fit=crop", tagline: "Coastal New England estate parties" }, // New England meadow coast
 
@@ -130,7 +130,7 @@ const cityData: { city: string; region: string; photo: string; tagline: string }
 
   // Midwest
   { city: "Chicago", region: "Midwest", photo: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=600&h=400&fit=crop", tagline: "Gold Coast penthouses and Lake Shore galas" }, // Chicago skyline
-  { city: "Minneapolis", region: "Midwest", photo: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=400&fit=crop", tagline: "Twin Cities corporate events and lakeside celebrations" }, // Minneapolis skyline
+  { city: "Minneapolis", region: "Midwest", photo: "/areas/minneapolis.jpg", tagline: "Twin Cities corporate events and lakeside celebrations" },
   { city: "Winnetka", region: "Midwest", photo: "https://images.unsplash.com/photo-1598228723793-52759bba239c?w=600&h=400&fit=crop", tagline: "North Shore estate celebrations" }, // Grand North Shore home
 ];
 
