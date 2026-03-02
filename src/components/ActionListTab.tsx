@@ -38,6 +38,7 @@ interface HotWarmContact {
   drip_campaign: string;
   engagement_status: string;
   created_at: string;
+  phone: string | null;
 }
 
 interface OutreachLog {
@@ -179,6 +180,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
         engagement: isHot ? "Highly engaged (3+ interactions)" : "Warm (1-2 interactions)",
         priority: isHot ? "hot" : "warm",
         priorityScore: isHot ? 100 : 60,
+        phone: c.phone,
         contact: c, lastOutreach: lastLog,
         outreachStatus: lastLog ? "attempted" : "not_contacted",
       });
