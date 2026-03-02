@@ -309,6 +309,7 @@ export type Database = {
           last_emailed_at: string | null
           name: string | null
           optimal_send_hour: number | null
+          phone: string | null
           reply_detected: boolean
           source: string | null
           subscribed: boolean
@@ -327,6 +328,7 @@ export type Database = {
           last_emailed_at?: string | null
           name?: string | null
           optimal_send_hour?: number | null
+          phone?: string | null
           reply_detected?: boolean
           source?: string | null
           subscribed?: boolean
@@ -345,6 +347,7 @@ export type Database = {
           last_emailed_at?: string | null
           name?: string | null
           optimal_send_hour?: number | null
+          phone?: string | null
           reply_detected?: boolean
           source?: string | null
           subscribed?: boolean

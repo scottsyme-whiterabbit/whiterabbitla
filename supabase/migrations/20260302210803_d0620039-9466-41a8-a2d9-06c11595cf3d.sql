@@ -1,0 +1,1 @@
+ALTER TABLE public.newsletter_contacts ADD COLUMN phone text;

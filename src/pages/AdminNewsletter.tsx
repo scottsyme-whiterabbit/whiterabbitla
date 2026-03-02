@@ -230,6 +230,7 @@ const AdminNewsletter = () => {
     const firstNameIdx = headerCols.findIndex(h => h.includes("first name"));
     const companyIdx = headerCols.findIndex(h => h.includes("company") || h.includes("apartment name") || h === "building name");
     const cityIdx = headerCols.findIndex(h => h === "city");
+    const phoneIdx = headerCols.findIndex(h => h.includes("phone") || h.includes("mobile") || h.includes("cell"));
     const nameIdx = headerCols.findIndex(h => h.includes("name") && !h.includes("first") && !h.includes("last") && !h.includes("apartment") && !h.includes("building"));
 
     if (emailIdx === -1) {
@@ -258,12 +259,14 @@ const AdminNewsletter = () => {
 
       const company = isApartmentCSV && apartmentName ? apartmentName : (companyIdx >= 0 ? cols[companyIdx]?.replace(/^"|"$/g, "").trim() || undefined : undefined);
       const city = cityIdx >= 0 ? cols[cityIdx]?.replace(/^"|"$/g, "").replace(/,$/g, "").trim() || undefined : undefined;
+      const phone = phoneIdx >= 0 ? cols[phoneIdx]?.replace(/^"|"$/g, "").trim() || undefined : undefined;
 
       return {
         email: email.toLowerCase(),
         name: contactName,
         company,
         city,
+        phone,
         source: "csv",
       };
     }).filter(Boolean);

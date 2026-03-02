@@ -47,12 +47,13 @@ serve(async (req) => {
         const { data, error } = await supabase
           .from("newsletter_contacts")
           .upsert(
-            unique.map((c: { email: string; name?: string; company?: string; city?: string; source?: string }) => ({
+            unique.map((c: { email: string; name?: string; company?: string; city?: string; source?: string; phone?: string }) => ({
               email: c.email.toLowerCase().trim(),
               name: c.name?.trim() || null,
               company: c.company?.trim() || null,
               city: c.city?.trim() || null,
               source: c.source || "csv",
+              phone: c.phone?.trim() || null,
             })),
             { onConflict: "email" }
           )
@@ -436,7 +437,7 @@ serve(async (req) => {
         // Get deals, hot/warm contacts, and outreach logs in one call
         const [dealsRes, contactsRes, logsRes] = await Promise.all([
           supabase.from("deals").select("*").not("stage", "in", "(completed,lost)").order("created_at", { ascending: false }),
-          supabase.from("newsletter_contacts").select("id, email, name, company, source, drip_campaign, drip_step, engagement_status, subscribed, created_at").in("engagement_status", ["hot", "warm"]).eq("subscribed", true).order("created_at", { ascending: false }),
+          supabase.from("newsletter_contacts").select("id, email, name, company, source, drip_campaign, drip_step, engagement_status, subscribed, created_at, phone").in("engagement_status", ["hot", "warm"]).eq("subscribed", true).order("created_at", { ascending: false }),
           supabase.from("outreach_log").select("*").order("created_at", { ascending: false }).limit(1000),
         ]);
         if (dealsRes.error) throw dealsRes.error;
