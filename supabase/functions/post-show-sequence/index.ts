@@ -118,6 +118,7 @@ interface Deal {
   location: string | null;
   post_show_step: number;
   post_show_started_at: string | null;
+  review_completed_at: string | null;
 }
 
 function getSeason(): string {
@@ -265,7 +266,7 @@ Thank You, ${name}
 <p style="margin:0 0 18px;">It was a genuine pleasure performing at ${eventLabel}. I hope the magic created a few moments your guests will be talking about for a while.</p>
 <p style="margin:0 0 18px;">Every event is different, and yours had a special energy. Those are the nights that remind me why I do this.</p>
 <p style="margin:0 0 18px;">If you have a moment, I'd love to hear what stood out. And if you'd like to share the experience with others, a quick note would mean the world.</p>
-${trackedCTA(`${SITE_URL}/review`, "Share Your Experience", contactId, 0)}
+${trackedCTA(`${SITE_URL}/review?cid=${contactId}`, "Share Your Experience", contactId, 0)}
 <p style="margin:24px 0 18px;">And of course — if you ever need entertainment for a future event, or know someone who does, I'm always just an email away.</p>
 ${signoff(true)}
 </td></tr>`;
@@ -280,13 +281,13 @@ ${signoff(true)}
 function email2Review(deal: Deal): { subject: string; preheader: string; html: string } {
   const name = deal.contact_name?.split(" ")[0] || "there";
   const contactId = deal.id;
-  const reviewLink = trackedLink(`${SITE_URL}/review`, "Leave a quick review", contactId, 1);
+  const reviewLink = trackedLink(`${SITE_URL}/review?cid=${contactId}`, "Leave a quick review", contactId, 1);
 
   const innerHtml = `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">Hey ${name},</p>
 <p style="margin:0 0 18px;">A small favor — if the experience lived up to your expectations, a quick Google review means the world to me. It's how other hosts find White Rabbit, and it truly makes a difference.</p>
 <p style="margin:0 0 18px;">Takes about 30 seconds: ${reviewLink}</p>
-${trackedCTA(`${SITE_URL}/review`, "Leave a Review", contactId, 1)}
+${trackedCTA(`${SITE_URL}/review?cid=${contactId}`, "Leave a Review", contactId, 1)}
 <p style="margin:24px 0 18px;">Either way, thank you again for trusting me with your event. It was a great night.</p>
 ${signoff()}
 </td></tr>`;
@@ -390,7 +391,7 @@ serve(async (req) => {
     // Get all completed deals that still need post-show emails OR are eligible for holiday emails
     const { data: deals, error: fetchErr } = await supabase
       .from("deals")
-      .select("id, contact_email, contact_name, company, event_type, event_date, location, post_show_step, post_show_started_at")
+      .select("id, contact_email, contact_name, company, event_type, event_date, location, post_show_step, post_show_started_at, review_completed_at")
       .eq("stage", "completed")
       .order("updated_at", { ascending: true });
 
@@ -437,7 +438,15 @@ serve(async (req) => {
 
           switch (currentStep) {
             case 0: { const e = email1ThankYou(deal as Deal); subject = e.subject; html = e.html; break; }
-            case 1: { const e = email2Review(deal as Deal); subject = e.subject; html = e.html; break; }
+            case 1: {
+              // Skip review ask if client already left a review
+              if ((deal as Deal).review_completed_at) {
+                console.log(`Skipping review email for ${deal.contact_email} — review already completed`);
+                await supabase.from("deals").update({ post_show_step: currentStep + 1 }).eq("id", deal.id);
+                continue;
+              }
+              const e = email2Review(deal as Deal); subject = e.subject; html = e.html; break;
+            }
             case 2: { const e = email3Referral(deal as Deal); subject = e.subject; html = e.html; break; }
             case 3: { const e = email4Reengage(deal as Deal); subject = e.subject; html = e.html; break; }
             default: continue;

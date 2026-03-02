@@ -93,6 +93,7 @@ export type Database = {
           post_show_started_at: string | null
           post_show_step: number
           priority_score: number | null
+          review_completed_at: string | null
           source: string | null
           source_id: string | null
           stage: string
@@ -119,6 +120,7 @@ export type Database = {
           post_show_started_at?: string | null
           post_show_step?: number
           priority_score?: number | null
+          review_completed_at?: string | null
           source?: string | null
           source_id?: string | null
           stage?: string
@@ -145,6 +147,7 @@ export type Database = {
           post_show_started_at?: string | null
           post_show_step?: number
           priority_score?: number | null
+          review_completed_at?: string | null
           source?: string | null
           source_id?: string | null
           stage?: string

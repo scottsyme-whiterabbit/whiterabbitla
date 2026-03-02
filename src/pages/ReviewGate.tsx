@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Star, SmilePlus, MessageCircle, Send, ArrowRight } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { Button } from "@/components/ui/button";
@@ -15,9 +15,23 @@ const ReviewGate = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedbackData, setFeedbackData] = useState({ name: "", email: "", message: "" });
 
+  // Extract deal ID from URL param for review tracking
+  const dealId = new URLSearchParams(window.location.search).get("cid");
+
+  const flagReviewCompleted = async () => {
+    if (!dealId) return;
+    try {
+      await supabase.functions.invoke("send-inquiry", {
+        body: { _reviewFlag: true, dealId },
+      });
+    } catch {
+      // silent — don't block the review flow
+    }
+  };
+
   const handlePositive = () => {
     setStep("positive");
-    // Brief pause to show thank-you, then redirect
+    flagReviewCompleted();
     setTimeout(() => {
       window.open(GOOGLE_REVIEW_URL, "_blank", "noopener,noreferrer");
     }, 1500);
