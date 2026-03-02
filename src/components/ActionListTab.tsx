@@ -7,6 +7,13 @@ import { format } from "date-fns";
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
+// Google Voice dialer — opens GV app on mobile, web dialer on desktop
+const gvCallUrl = (phone: string) => {
+  const digits = phone.replace(/\D/g, "");
+  const num = digits.length === 10 ? `+1${digits}` : `+${digits}`;
+  return `https://voice.google.com/u/0/calls?a=nc,${encodeURIComponent(num)}`;
+};
+
 interface Deal {
   id: string;
   contact_email: string;
@@ -426,7 +433,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                   </div>
                   <div className="flex gap-1">
                     {item.phone ? (
-                      <a href={`tel:${item.phone.replace(/\D/g, "")}`} className="flex items-center gap-1 px-2 py-1 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 text-[10px] tracking-wider uppercase hover:bg-emerald-600/30 transition-colors" title={`Call ${item.phone}`}>
+                      <a href={gvCallUrl(item.phone)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-2 py-1 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 text-[10px] tracking-wider uppercase hover:bg-emerald-600/30 transition-colors" title={`Call ${item.phone}`}>
                         <PhoneOutgoing size={10} /> Call
                       </a>
                     ) : (
@@ -451,7 +458,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                   <div className="bg-muted/10 border-b border-border px-6 py-4 space-y-3">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Email</span>{item.email}</div>
-                      <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Phone</span>{item.phone ? <a href={`tel:${item.phone.replace(/\D/g, "")}`} className="text-accent hover:underline">{item.phone}</a> : "—"}</div>
+                      <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Phone</span>{item.phone ? <a href={gvCallUrl(item.phone)} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">{item.phone}</a> : "—"}</div>
                       <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Company</span>{item.company || "—"}</div>
                       {item.deal && (
                         <>
@@ -498,7 +505,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
               {priorityBadge(item.priority)}
               <div className="flex gap-1">
                 {item.phone ? (
-                  <a href={`tel:${item.phone.replace(/\D/g, "")}`} className="p-1.5 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30" title={`Call ${item.phone}`}><PhoneOutgoing size={12} /></a>
+                  <a href={gvCallUrl(item.phone)} target="_blank" rel="noopener noreferrer" className="p-1.5 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30" title={`Call ${item.phone}`}><PhoneOutgoing size={12} /></a>
                 ) : (
                   <span className="p-1.5 bg-muted/20 text-muted-foreground border border-border cursor-not-allowed" title="No phone number"><Phone size={12} /></span>
                 )}
