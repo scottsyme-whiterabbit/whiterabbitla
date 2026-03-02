@@ -230,6 +230,7 @@ serve(async (req) => {
       await supabase.from("deals").insert({
         contact_email: contactEmail,
         contact_name: name,
+        phone: phone || null,
         event_type: eventTypeMap[eventType] || "other",
         event_date: date || null,
         location: location || null,

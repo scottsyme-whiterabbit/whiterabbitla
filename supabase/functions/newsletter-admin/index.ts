@@ -292,12 +292,13 @@ serve(async (req) => {
 
       case "create_deal": {
         const { deal } = payload;
-        const { data, error } = await supabase
+           const { data, error } = await supabase
           .from("deals")
           .insert({
             contact_email: deal.contact_email,
             contact_name: deal.contact_name || null,
             company: deal.company || null,
+            phone: deal.phone || null,
             event_type: deal.event_type || null,
             event_date: deal.event_date || null,
             event_time: deal.event_time || null,
@@ -343,6 +344,7 @@ serve(async (req) => {
             contact_email: deal.contact_email,
             contact_name: deal.contact_name || null,
             company: deal.company || null,
+            phone: deal.phone || null,
             event_type: deal.event_type || null,
             event_date: deal.event_date || null,
             event_time: deal.event_time || null,
