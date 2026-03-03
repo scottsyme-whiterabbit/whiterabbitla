@@ -520,9 +520,9 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
             {isExpanded && (
               <div className="border-t border-border px-3 pb-3 pt-2 space-y-3">
                 {/* Quick Actions */}
-                <div className="flex gap-2">
+                <div className="flex gap-2" onClick={e => e.stopPropagation()}>
                   {item.phone ? (
-                    <a href={`tel:${item.phone.replace(/\D/g, "").length === 10 ? "+1" + item.phone.replace(/\D/g, "") : "+" + item.phone.replace(/\D/g, "")}`} className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 text-xs tracking-wider uppercase font-sans">
+                    <a href={`tel:${item.phone.replace(/\D/g, "").length === 10 ? "+1" + item.phone.replace(/\D/g, "") : "+" + item.phone.replace(/\D/g, "")}`} className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 text-xs tracking-wider uppercase font-sans active:bg-emerald-600/40 touch-manipulation">
                       <Phone size={14} /> Call {item.phone}
                     </a>
                   ) : (
@@ -531,15 +531,15 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                     </span>
                   )}
                 </div>
-                <div className="flex gap-2">
-                  <a href={`mailto:${item.email}`} className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-accent/20 text-accent border border-accent/30 text-[10px] tracking-wider uppercase font-sans">
+                <div className="flex gap-2" onClick={e => e.stopPropagation()}>
+                  <a href={`mailto:${item.email}`} className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-accent/20 text-accent border border-accent/30 text-[10px] tracking-wider uppercase font-sans active:bg-accent/40 touch-manipulation">
                     <Mail size={12} /> Email
                   </a>
-                  <button onClick={() => openLogModal(item, "call")} className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-muted/20 text-foreground border border-border text-[10px] tracking-wider uppercase font-sans">
+                  <button onClick={() => openLogModal(item, "call")} className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-muted/20 text-foreground border border-border text-[10px] tracking-wider uppercase font-sans active:bg-muted/40 touch-manipulation">
                     <ClipboardList size={12} /> Log
                   </button>
                   {item.phone && (
-                    <a href={gvCallUrl(item.phone)} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-emerald-600/10 text-emerald-400/70 border border-emerald-600/20 text-[10px] tracking-wider uppercase font-sans">
+                    <a href={gvCallUrl(item.phone)} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-emerald-600/10 text-emerald-400/70 border border-emerald-600/20 text-[10px] tracking-wider uppercase font-sans active:bg-emerald-600/30 touch-manipulation">
                       <PhoneOutgoing size={12} /> GV
                     </a>
                   )}
