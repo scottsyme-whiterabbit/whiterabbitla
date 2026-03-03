@@ -10,6 +10,12 @@ import threeStars from "@/assets/three-stars-gold.png";
 
 const reviews = [
 {
+  name: "Meridith F.",
+  role: "40th Birthday Party",
+  text: "Scott performed up close magic for small groups at my 40th birthday party and was OUTSTANDING. I can't tell you how many guests told me he was the highlight of the evening and his magic/mentalism was out of this world good. I cannot recommend him enough — hire him. You will not be disappointed.",
+  rating: 5
+},
+{
   name: "Jamie I.",
   role: "Morgan Stanley, 200-Person Corporate Event",
   text: "Scott performed at a 200-person event for us this week and the guests absolutely LOVED him and were amazed by his talents. I could not recommend him more! We can't wait to have him back.",
