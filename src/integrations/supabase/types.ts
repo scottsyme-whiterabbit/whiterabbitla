@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      cold_email_campaigns: {
+        Row: {
+          campaign_category: string
+          company: string | null
+          created_at: string
+          current_step: number
+          email: string
+          id: string
+          last_email_sent_at: string | null
+          name: string | null
+          phone: string | null
+          started_at: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          campaign_category: string
+          company?: string | null
+          created_at?: string
+          current_step?: number
+          email: string
+          id?: string
+          last_email_sent_at?: string | null
+          name?: string | null
+          phone?: string | null
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          campaign_category?: string
+          company?: string | null
+          created_at?: string
+          current_step?: number
+          email?: string
+          id?: string
+          last_email_sent_at?: string | null
+          name?: string | null
+          phone?: string | null
+          started_at?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       contact_inquiries: {
         Row: {
           budget: string | null

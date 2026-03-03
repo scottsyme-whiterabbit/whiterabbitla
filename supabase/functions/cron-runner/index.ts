@@ -56,6 +56,13 @@ serve(async (req) => {
     });
     results["post-show-sequence"] = { status: r2.status, body: await r2.json().catch(() => r2.statusText) };
 
+    // Run cold-drip
+    const r3 = await fetch(`${FUNCTIONS_BASE}/cold-drip`, {
+      method: "POST",
+      headers,
+      body: "{}",
+    });
+    results["cold-drip"] = { status: r3.status, body: await r3.json().catch(() => r3.statusText) };
     return new Response(JSON.stringify({ success: true, results }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },

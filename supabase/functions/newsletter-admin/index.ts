@@ -453,6 +453,78 @@ serve(async (req) => {
         });
       }
 
+      // ═══════════════════════════════════════════════
+      // COLD EMAIL CAMPAIGNS
+      // ═══════════════════════════════════════════════
+
+      case "get_cold_campaigns": {
+        const { data, error } = await supabase
+          .from("cold_email_campaigns")
+          .select("*")
+          .order("created_at", { ascending: false });
+        if (error) throw error;
+        return new Response(JSON.stringify({ campaigns: data }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "add_cold_campaign": {
+        const { campaign } = payload;
+        if (!campaign?.email) {
+          return new Response(JSON.stringify({ error: "Email required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const { data, error } = await supabase
+          .from("cold_email_campaigns")
+          .insert({
+            email: campaign.email.toLowerCase().trim(),
+            name: campaign.name?.trim() || null,
+            company: campaign.company?.trim() || null,
+            phone: campaign.phone?.trim() || null,
+            campaign_category: campaign.campaign_category,
+            status: "active",
+            current_step: 0,
+          })
+          .select()
+          .single();
+        if (error) {
+          if (error.code === "23505") {
+            return new Response(JSON.stringify({ error: "This email is already in a cold campaign" }), {
+              status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+          }
+          throw error;
+        }
+        return new Response(JSON.stringify({ campaign: data }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "update_cold_campaign_status": {
+        const { campaignId, status } = payload;
+        const { error } = await supabase
+          .from("cold_email_campaigns")
+          .update({ status, updated_at: new Date().toISOString() })
+          .eq("id", campaignId);
+        if (error) throw error;
+        return new Response(JSON.stringify({ success: true }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "delete_cold_campaign": {
+        const { campaignId } = payload;
+        const { error } = await supabase
+          .from("cold_email_campaigns")
+          .delete()
+          .eq("id", campaignId);
+        if (error) throw error;
+        return new Response(JSON.stringify({ success: true }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       default:
         return new Response(JSON.stringify({ error: "Unknown action" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
