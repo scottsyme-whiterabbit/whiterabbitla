@@ -10,6 +10,7 @@ import PipelineTab from "@/components/PipelineTab";
 import ActionListTab from "@/components/ActionListTab";
 import RevenueTab from "@/components/RevenueTab";
 import SubjectScorer from "@/components/SubjectScorer";
+import ColdCampaignsTab from "@/components/ColdCampaignsTab";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -81,7 +82,7 @@ const AdminNewsletter = () => {
     return "";
   });
 
-  const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "actions" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "planner" | "apartment" | "thankyou">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "actions" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "planner" | "apartment" | "thankyou" | "cold">("dashboard");
   const [actionBadge, setActionBadge] = useState(0);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
   const [quickAddForm, setQuickAddForm] = useState({ name: "", email: "", phone: "", event_type: "", notes: "", source: "Referral" });
@@ -567,7 +568,7 @@ const AdminNewsletter = () => {
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-4 space-y-1">
-              {(["dashboard", "pipeline", "actions", "revenue", "contacts", "compose", "campaigns", "calendar", "analytics", "planner", "apartment", "thankyou"] as const).map(tab => (
+              {(["dashboard", "pipeline", "actions", "revenue", "contacts", "cold", "compose", "campaigns", "calendar", "analytics", "planner", "apartment", "thankyou"] as const).map(tab => (
                 <button
                   key={tab}
                   onClick={() => { setActiveTab(tab); setShowMoreTabs(false); }}
@@ -991,6 +992,9 @@ const AdminNewsletter = () => {
         {/* Apartment / Resident Drip Campaign */}
         {activeTab === "apartment" && (
           <ResidentDripTab storedPassword={storedPassword} onNavigateToContacts={(filter) => { setContactsFilter(filter); setActiveTab("contacts"); }} />
+        )}
+        {activeTab === "cold" && (
+          <ColdCampaignsTab adminPassword={storedPassword} />
         )}
         {/* Thank You Email */}
         {activeTab === "thankyou" && (

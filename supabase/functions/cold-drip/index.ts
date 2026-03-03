@@ -1,0 +1,568 @@
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+};
+
+const LOGO_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-email-logo.png";
+const SITE_URL = "https://whiterabbitla.com";
+const TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-click";
+const OPEN_TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-open";
+
+// Day offsets: Email 1 (0), Email 2 (3), Email 3 (10), Breakup (24)
+const COLD_SCHEDULE = [0, 3, 10, 24];
+
+type CampaignCategory = "corporate_planner" | "wedding_planner" | "country_club" | "pr_agency" | "nonprofit" | "talent_management" | "restaurant";
+
+interface ColdCampaign {
+  id: string;
+  email: string;
+  name: string | null;
+  company: string | null;
+  phone: string | null;
+  campaign_category: CampaignCategory;
+  current_step: number;
+  started_at: string | null;
+  last_email_sent_at: string | null;
+  status: string;
+}
+
+// ═══════════════════════════════════════════════
+// SHARED HELPERS
+// ═══════════════════════════════════════════════
+
+function signoff(): string {
+  return `<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
+Scott<br/>
+<span style="font-size:13px; color:rgba(245,240,232,0.5);">White Rabbit · Los Angeles</span><br/>
+<span style="font-size:12px; color:rgba(245,240,232,0.35);">(424) 394-1850 · scott.syme@whiterabbitla.com</span>
+</p>`;
+}
+
+function signoffShort(): string {
+  return `<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
+Scott<br/>
+<span style="font-size:12px; color:rgba(245,240,232,0.35);">(424) 394-1850</span>
+</p>`;
+}
+
+function signoffFull(): string {
+  return `<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
+Scott Syme<br/>
+<span style="font-size:13px; color:rgba(245,240,232,0.5);">White Rabbit · Los Angeles</span><br/>
+<span style="font-size:12px; color:rgba(245,240,232,0.35);">whiterabbitla.com · (424) 394-1850</span>
+</p>`;
+}
+
+function trackedLink(url: string, text: string, contactId: string, step: number, campaign: string): string {
+  const sep = url.includes("?") ? "&" : "?";
+  const taggedUrl = `${url}${sep}utm_source=email&utm_medium=cold-drip&utm_campaign=${encodeURIComponent(campaign)}&utm_content=step-${step}`;
+  const trackingUrl = `${TRACK_URL}?cid=${contactId}&step=${step}&r=${encodeURIComponent(taggedUrl)}`;
+  return `<a href="${trackingUrl}" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);" target="_blank">${text}</a>`;
+}
+
+function wrapEmail(preheader: string, innerHtml: string, email: string, contactId: string, step: number): string {
+  const openPixel = `<img src="${OPEN_TRACK_URL}?cid=${contactId}&step=${step}" width="1" height="1" style="display:block;width:1px;height:1px;border:0;" alt="" />`;
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<style>
+body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+body { margin: 0; padding: 0; width: 100% !important; background-color: #335747; }
+@media screen and (max-width: 600px) {
+  .email-container { width: 100% !important; }
+  .padding-mobile { padding-left: 20px !important; padding-right: 20px !important; }
+}
+</style>
+</head>
+<body style="margin:0; padding:0; background-color:#335747;">
+<div style="display:none; max-height:0; overflow:hidden; font-size:1px; line-height:1px; color:#335747;">${preheader}</div>
+<center style="width:100%; background-color:#335747;">
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color:#335747;">
+<tr><td style="padding: 30px 0;">
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="560" align="center" class="email-container" style="max-width:560px; margin:auto; background-color:#223D34; border-radius:4px;">
+
+<!-- Logo -->
+<tr><td style="padding: 40px 40px 24px; text-align:center;" class="padding-mobile">
+<img src="${LOGO_URL}" alt="White Rabbit" width="90" style="width:90px; height:auto; display:block; margin:0 auto;" />
+</td></tr>
+
+${innerHtml}
+
+<!-- Footer -->
+<tr><td style="padding: 0 40px;" class="padding-mobile">
+<hr style="border:none; border-top:1px solid rgba(201,163,168,0.15); margin:0 0 24px;" />
+</td></tr>
+<tr><td style="padding: 0 40px 12px; text-align:center;" class="padding-mobile">
+<p style="margin:0; font-family:Georgia,serif; font-size:12px; color:rgba(245,240,232,0.4);">
+White Rabbit · Los Angeles<br/>
+7393 W. Manchester Ave #209, Los Angeles, CA 90045<br/>
+<a href="mailto:events@whiterabbitla.com" style="color:#C9A3A8; text-decoration:none;">events@whiterabbitla.com</a> · <a href="tel:+14243941850" style="color:rgba(248,245,240,0.4); text-decoration:none;">(424) 394-1850</a>
+</p>
+</td></tr>
+<tr><td style="padding: 0 40px 32px; text-align:center;" class="padding-mobile">
+<p style="margin:0; font-family:Georgia,serif; font-size:11px; color:rgba(245,240,232,0.25);">
+<a href="${SITE_URL}/unsubscribe?email=${encodeURIComponent(email)}" style="color:rgba(245,240,232,0.3); text-decoration:underline;">Unsubscribe</a>
+</p>
+</td></tr>
+
+</table>
+</td></tr></table>
+</center>
+${openPixel}
+</body></html>`;
+}
+
+function bodyCell(html: string): string {
+  return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
+${html}
+</td></tr>`;
+}
+
+// ═══════════════════════════════════════════════
+// ALL 7 CAMPAIGN TEMPLATES (4 emails each)
+// ═══════════════════════════════════════════════
+
+function getCampaignEmail(category: CampaignCategory, step: number, name: string, contactId: string): { subject: string; preheader: string; innerHtml: string } {
+  const firstName = name || "there";
+  const link = trackedLink(`${SITE_URL}/experience`, "whiterabbitla.com/event-magician", contactId, step, category);
+  const siteLink = trackedLink(SITE_URL, "whiterabbitla.com", contactId, step, category);
+
+  const TEMPLATES: Record<CampaignCategory, Array<{ subject: string; preheader: string; innerHtml: string }>> = {
+    // ═══════════════════════════════════════════════
+    // CAMPAIGN 1: CORPORATE EVENT PLANNERS
+    // ═══════════════════════════════════════════════
+    corporate_planner: [
+      {
+        subject: `nobody remembers last year's holiday party`,
+        preheader: "Quick question about your corporate events.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Quick question — can your clients' employees describe what happened at last year's holiday party?</p>
+<p style="margin:0 0 18px;">If the answer is "open bar and a DJ," that's exactly why I exist.</p>
+<p style="margin:0 0 18px;">I perform close-up magic and mentalism at Fortune 500 corporate events. Not a stage show — I move through the room during cocktail hour making small groups of executives say "wait, WHAT just happened?" It turns networking from obligatory to electric.</p>
+<p style="margin:0 0 18px;">Companies like Netflix, Disney, and CBS have trusted me with their events. Here's how it works: ${link}</p>
+<p style="margin:0 0 18px;">Worth a quick look?</p>
+${signoff()}`),
+      },
+      {
+        subject: `Re: nobody remembers last year's holiday party`,
+        preheader: "Forgot to mention — here's a quick reel.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Forgot to mention — here's a 60-second reel from a recent corporate event: ${link}</p>
+<p style="margin:0 0 18px;">The reactions from the execs are the best part.</p>
+${signoff()}`),
+      },
+      {
+        subject: "Q2 event calendar",
+        preheader: "If you've got Q2 or Q3 events on the books...",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Different thought —</p>
+<p style="margin:0 0 18px;">If you've got any Q2 or Q3 corporate events on the books (product launches, client appreciation, team offsites), I'm booking those now.</p>
+<p style="margin:0 0 18px;">Happy to send over a short deck showing how this has worked for similar companies. Just say the word.</p>
+${signoffShort()}`),
+      },
+      {
+        subject: "last note from me",
+        preheader: "I'll keep this short.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">I'll keep this short — I know you're swamped.</p>
+<p style="margin:0 0 18px;">If a client ever needs entertainment that isn't another photo booth, I'm at ${siteLink}.</p>
+<p style="margin:0 0 18px;">All the best with your 2026 events.</p>
+${signoff()}`),
+      },
+    ],
+
+    // ═══════════════════════════════════════════════
+    // CAMPAIGN 2: WEDDING PLANNERS
+    // ═══════════════════════════════════════════════
+    wedding_planner: [
+      {
+        subject: "what happens during the 45 minutes your couple is gone",
+        preheader: "Quick question about your weddings.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Quick question — what's happening at your weddings during that 45-minute cocktail hour while the couple's doing photos?</p>
+<p style="margin:0 0 18px;">For most planners, it's the one window that's hard to control. Guests mill around, energy dips, and the momentum from the ceremony fades.</p>
+<p style="margin:0 0 18px;">I fix that. Close-up magic woven through the cocktail hour — no stage, no cheesy announcements. Just intimate, elegant moments that get tables of strangers laughing together. Clients like Netflix and Hyatt Hotels trust me for exactly this.</p>
+<p style="margin:0 0 18px;">Open to a quick call to see if this is a fit for your couples?</p>
+${signoff()}`),
+      },
+      {
+        subject: "Re: what happens during the 45 minutes your couple is gone",
+        preheader: "One more thought — here's what it looks like.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">One more thought —</p>
+<p style="margin:0 0 18px;">Here's a 60-second clip of what this looks like in action at a recent event: ${link}</p>
+<p style="margin:0 0 18px;">The reactions say more than I can in an email.</p>
+${signoff()}`),
+      },
+      {
+        subject: "your vendor list for 2026",
+        preheader: "A few LA planners have started adding me...",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Different angle —</p>
+<p style="margin:0 0 18px;">A few LA planners have started adding me to their preferred vendor lists after seeing how cocktail hour magic changes the guest experience (and the reviews their couples leave).</p>
+<p style="margin:0 0 18px;">If you're building out your 2026 roster, happy to do a quick private demo so you can see it firsthand. No commitment.</p>
+${signoffShort()}`),
+      },
+      {
+        subject: "closing the loop",
+        preheader: "Totally get it if the timing isn't right.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Totally get it if the timing isn't right.</p>
+<p style="margin:0 0 18px;">If a couple ever asks about entertainment beyond the DJ, I'm at ${siteLink} or (424) 394-1850.</p>
+<p style="margin:0 0 18px;">Wishing you a packed 2026 season.</p>
+${signoff()}`),
+      },
+    ],
+
+    // ═══════════════════════════════════════════════
+    // CAMPAIGN 3: COUNTRY CLUBS & GOLF CLUBS
+    // ═══════════════════════════════════════════════
+    country_club: [
+      {
+        subject: "the member event everyone actually talks about",
+        preheader: "What makes a club event feel different?",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Quick thought — when members come to a club event, what's the one thing that makes it feel different from last month's?</p>
+<p style="margin:0 0 18px;">The food is always great. The setting is beautiful. But the entertainment? That's usually where events start to feel interchangeable.</p>
+<p style="margin:0 0 18px;">I perform close-up magic and mentalism at private clubs and country club events across Southern California. I move through the room during cocktails, creating intimate moments of genuine wonder — the kind of thing members bring up at the next round of golf.</p>
+<p style="margin:0 0 18px;">I've performed for Netflix, Disney, Morgan Stanley, and Hyatt Hotels. Happy to come by for a complimentary 15-minute demo for your events team.</p>
+<p style="margin:0 0 18px;">Worth setting up?</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "Re: the member event everyone actually talks about",
+        preheader: "Quick follow-up with a clip.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Quick follow-up — here's a 60-second clip from a recent private club event: ${link}</p>
+<p style="margin:0 0 18px;">The demo offer stands — happy to come by any afternoon that works for your team.</p>
+${signoff()}`),
+      },
+      {
+        subject: "holiday party and member event season",
+        preheader: "A few clubs have started booking me for recurring events.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Different angle —</p>
+<p style="margin:0 0 18px;">A few private clubs have started booking me for their recurring member events — holiday galas, father-daughter dances, wine dinners, new member receptions. It's become their signature entertainment that members genuinely look forward to.</p>
+<p style="margin:0 0 18px;">If you're planning your event calendar, I'm booking Q2 and Q3 now. Happy to share how this has worked at similar clubs.</p>
+${signoffShort()}`),
+      },
+      {
+        subject: "last thing",
+        preheader: "If the events team ever wants to try something different...",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">I'll leave this with you — if the events team ever wants to try something different for a member event, I'm at ${siteLink} or (424) 394-1850.</p>
+<p style="margin:0 0 18px;">Appreciate your time, and here's to a great season at the club.</p>
+${signoff()}`),
+      },
+    ],
+
+    // ═══════════════════════════════════════════════
+    // CAMPAIGN 4: PR & MARKETING AGENCIES
+    // ═══════════════════════════════════════════════
+    pr_agency: [
+      {
+        subject: "the moment that makes everyone pull out their phone",
+        preheader: "What guarantees organic social content?",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">When you're planning a brand activation or client event, what's the one element that guarantees organic social content?</p>
+<p style="margin:0 0 18px;">Not the step-and-repeat. Not the branded cocktails. It's the moment where someone says "wait — you HAVE to see this" and pulls out their phone.</p>
+<p style="margin:0 0 18px;">I create those moments. Close-up magic and mentalism woven through cocktail receptions — no stage, no corny setup. Just jaw-dropping, intimate experiences that generate organic shares and keep guests talking about the brand long after the event.</p>
+<p style="margin:0 0 18px;">I've done this for Netflix, Rivian, Morgan Stanley, and Rolls-Royce. Here's how it works: ${link}</p>
+<p style="margin:0 0 18px;">Worth exploring for an upcoming activation?</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "Re: the moment that makes everyone pull out their phone",
+        preheader: "Quick reel showing guest reactions.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">One add — here's a quick reel showing guest reactions at a recent brand event: ${link}</p>
+<p style="margin:0 0 18px;">The phone-out moments are the best part.</p>
+${signoff()}`),
+      },
+      {
+        subject: "brand activation idea",
+        preheader: "A few agencies have started booking me for launches.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Quick thought —</p>
+<p style="margin:0 0 18px;">A few agencies have started booking me specifically for product launches and VIP client dinners. The magic becomes a branded conversation piece — guests associate the wonder with the brand experience.</p>
+<p style="margin:0 0 18px;">If you've got any Q2 activations or client events on deck, happy to share a one-pager on how this works. Takes 2 minutes to read.</p>
+${signoffShort()}`),
+      },
+      {
+        subject: "keeping this brief",
+        preheader: "No worries if the timing isn't right.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">No worries if the timing isn't right.</p>
+<p style="margin:0 0 18px;">If a client ever needs experiential entertainment that actually generates buzz, I'm at ${siteLink}.</p>
+<p style="margin:0 0 18px;">All the best with your upcoming campaigns.</p>
+${signoff()}`),
+      },
+    ],
+
+    // ═══════════════════════════════════════════════
+    // CAMPAIGN 5: NONPROFIT & CHARITY GALAS
+    // ═══════════════════════════════════════════════
+    nonprofit: [
+      {
+        subject: "what happens between cocktails and the paddle raise",
+        preheader: "That gap is where energy either builds or fades.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Quick question — at your galas, what's keeping donors engaged during that window between cocktail hour and the live auction?</p>
+<p style="margin:0 0 18px;">That gap is where energy either builds or fades. And when it fades, it shows up in the giving.</p>
+<p style="margin:0 0 18px;">I perform close-up magic and mentalism at fundraisers and charity galas — moving through the room during cocktails, creating moments of genuine wonder that put donors in an elevated mood right before the ask. It's not a stage act — it's intimate, elegant, and designed for high-net-worth rooms.</p>
+<p style="margin:0 0 18px;">Organizations like FosterAll and the Bachelors Ball have trusted me with their events. Clients include Netflix, Disney, and Morgan Stanley.</p>
+<p style="margin:0 0 18px;">Worth a quick call to see if this fits your next gala?</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "Re: what happens between cocktails and the paddle raise",
+        preheader: "The donor reactions are the best part.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Quick add — here's a 60-second clip from a recent gala event: ${link}</p>
+<p style="margin:0 0 18px;">The donor reactions are the best part — that's the mood you want right before the paddle raise.</p>
+${signoff()}`),
+      },
+      {
+        subject: "gala entertainment that pays for itself",
+        preheader: "Engaged donors give more generously.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Different thought —</p>
+<p style="margin:0 0 18px;">A few gala organizers have told me the entertainment paid for itself — engaged donors give more generously, and the "wow factor" gets sponsors excited about next year.</p>
+<p style="margin:0 0 18px;">If you're planning your 2026 gala season, happy to chat about how this fits your format. No obligation.</p>
+${signoffShort()}`),
+      },
+      {
+        subject: "wishing you a great gala season",
+        preheader: "Keeping the door open.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">I'll keep the door open — if you ever need entertainment that energizes donors and elevates the evening, I'm at ${siteLink} or (424) 394-1850.</p>
+<p style="margin:0 0 18px;">Wishing you a wildly successful fundraising season.</p>
+${signoff()}`),
+      },
+    ],
+
+    // ═══════════════════════════════════════════════
+    // CAMPAIGN 6: CELEBRITY & TALENT MANAGEMENT
+    // ═══════════════════════════════════════════════
+    talent_management: [
+      {
+        subject: "entertainment for rooms where everyone's seen everything",
+        preheader: "That's exactly where I thrive.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">When your clients host private events, the guest list is usually full of people who've seen the best of everything — and they're hard to impress.</p>
+<p style="margin:0 0 18px;">That's exactly where I thrive.</p>
+<p style="margin:0 0 18px;">I perform close-up magic and mentalism at private parties for entertainment industry clients — the kind of intimate, sophisticated experience that makes A-listers say "how did you DO that?" I'm a member of the Magic Castle in Hollywood and have performed for Netflix, Disney, Paramount, and Rolls-Royce.</p>
+<p style="margin:0 0 18px;">No stage, no setup — I move through the room creating moments of genuine wonder during cocktails and dinner. It's the entertainment your clients' guests will actually talk about.</p>
+<p style="margin:0 0 18px;">Worth a quick call?</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "Re: entertainment for rooms where everyone's seen everything",
+        preheader: "This plays differently than anything else.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">One more thought — here's a 60-second reel: ${link}</p>
+<p style="margin:0 0 18px;">The celebrity reactions are priceless. This plays differently than anything else you'd book for a private event.</p>
+${signoff()}`),
+      },
+      {
+        subject: "private party season",
+        preheader: "The best entertainment decision we made.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Different angle —</p>
+<p style="margin:0 0 18px;">I've performed at private events for clients of several major agencies and management companies. The feedback is always the same — "this was the single best entertainment decision we made."</p>
+<p style="margin:0 0 18px;">If any of your clients have birthdays, holidays, or milestone celebrations coming up, I'd love to be on your radar. Happy to do a private demo at your office anytime.</p>
+${signoffShort()}`),
+      },
+      {
+        subject: "keeping this short",
+        preheader: "If a client ever needs private entertainment...",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Totally understand if the timing isn't right.</p>
+<p style="margin:0 0 18px;">If a client ever needs private entertainment that matches the caliber of their guest list, I'm at ${siteLink} or (424) 394-1850.</p>
+<p style="margin:0 0 18px;">All the best.</p>
+${signoff()}`),
+      },
+    ],
+
+    // ═══════════════════════════════════════════════
+    // CAMPAIGN 7: RESTAURANTS & NIGHTLIFE
+    // ═══════════════════════════════════════════════
+    restaurant: [
+      {
+        subject: "filling seats on your slowest night",
+        preheader: "What if that night became your most talked-about?",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Quick question — what's your slowest night of the week?</p>
+<p style="margin:0 0 18px;">What if that night became your most talked-about?</p>
+<p style="margin:0 0 18px;">I perform weekly magic residencies at restaurants and venues across LA — close-up magic at the tables during dinner service. Guests get an unforgettable experience, the venue gets social media content and repeat visits, and suddenly your Tuesday feels like a Saturday.</p>
+<p style="margin:0 0 18px;">I currently perform weekly at a venue in Los Angeles, and I've performed for brands like Netflix, Disney, and Rolls-Royce. My style is intimate, elegant, and designed to elevate — not interrupt — the dining experience.</p>
+<p style="margin:0 0 18px;">Worth a quick conversation?</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "Re: filling seats on your slowest night",
+        preheader: "Here's what tableside magic looks like.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Quick add — here's what tableside magic looks like in a restaurant setting: ${link}</p>
+<p style="margin:0 0 18px;">The guest reactions and the social media content it generates are the best part.</p>
+${signoff()}`),
+      },
+      {
+        subject: "weekly magic residency — how it works",
+        preheader: "More covers on your slow night.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Different thought —</p>
+<p style="margin:0 0 18px;">Here's how the residency model works: I come in one night a week, perform tableside magic for 2-3 hours during dinner service. The venue promotes it as a signature experience. Over time, it becomes the thing people come specifically for — and they bring friends.</p>
+<p style="margin:0 0 18px;">The ROI is straightforward: more covers on your slow night, organic social content, and a reputation as the place with the coolest experience in town.</p>
+<p style="margin:0 0 18px;">Happy to swing by for a quick 15-minute demo any evening. No commitment.</p>
+${signoffShort()}`),
+      },
+      {
+        subject: "last note",
+        preheader: "No worries if the timing doesn't work right now.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">No worries if the timing doesn't work right now.</p>
+<p style="margin:0 0 18px;">If you ever want to try a magic night or need entertainment for a private event at the venue, I'm at ${siteLink} or (424) 394-1850.</p>
+<p style="margin:0 0 18px;">Cheers to a packed house.</p>
+${signoff()}`),
+      },
+    ],
+  };
+
+  const templates = TEMPLATES[category];
+  if (!templates || step < 0 || step >= templates.length) {
+    return { subject: "", preheader: "", innerHtml: "" };
+  }
+  return templates[step];
+}
+
+// ═══════════════════════════════════════════════
+// MAIN HANDLER
+// ═══════════════════════════════════════════════
+
+serve(async (req) => {
+  if (req.method === "OPTIONS") {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+    );
+
+    const RESEND_KEY = Deno.env.get("RESEND_API_KEY")!;
+    const now = new Date();
+    let sent = 0;
+    let skipped = 0;
+    let completed = 0;
+
+    // Get all active campaigns
+    const { data: campaigns, error: fetchErr } = await supabase
+      .from("cold_email_campaigns")
+      .select("*")
+      .eq("status", "active")
+      .lt("current_step", 4);
+
+    if (fetchErr) throw fetchErr;
+    if (!campaigns || campaigns.length === 0) {
+      return new Response(JSON.stringify({ sent: 0, skipped: 0, completed: 0, message: "No active campaigns" }), {
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    for (const campaign of campaigns as ColdCampaign[]) {
+      const step = campaign.current_step;
+      const lastSent = campaign.last_email_sent_at ? new Date(campaign.last_email_sent_at) : null;
+      const started = campaign.started_at ? new Date(campaign.started_at) : null;
+
+      // Step 0: send immediately (if not already sent)
+      if (step === 0 && !started) {
+        // First email — send now
+      } else if (step >= 4) {
+        // Completed
+        await supabase.from("cold_email_campaigns").update({ status: "completed" }).eq("id", campaign.id);
+        completed++;
+        continue;
+      } else {
+        // Check timing for next email
+        if (!lastSent) { skipped++; continue; }
+        const daysSinceLast = (now.getTime() - lastSent.getTime()) / (1000 * 60 * 60 * 24);
+        const requiredDays = step === 1 ? 3 : step === 2 ? 7 : step === 3 ? 14 : 999;
+        if (daysSinceLast < requiredDays) {
+          skipped++;
+          continue;
+        }
+      }
+
+      // Get email content
+      const firstName = campaign.name?.split(" ")[0] || "there";
+      const template = getCampaignEmail(campaign.campaign_category as CampaignCategory, step, firstName, campaign.id);
+
+      if (!template.subject) { skipped++; continue; }
+
+      const html = wrapEmail(template.preheader, template.innerHtml, campaign.email, campaign.id, step);
+
+      // Send via Resend
+      const emailRes = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${RESEND_KEY}`,
+        },
+        body: JSON.stringify({
+          from: "Scott Syme <scott.syme@whiterabbitla.com>",
+          reply_to: "scott.syme@whiterabbitla.com",
+          to: campaign.email,
+          subject: template.subject,
+          html,
+          headers: {
+            "List-Unsubscribe": `<${SITE_URL}/unsubscribe?email=${encodeURIComponent(campaign.email)}>`,
+            "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+          },
+        }),
+      });
+
+      if (emailRes.ok) {
+        const nextStep = step + 1;
+        const updates: Record<string, unknown> = {
+          current_step: nextStep,
+          last_email_sent_at: now.toISOString(),
+          updated_at: now.toISOString(),
+        };
+        if (step === 0) {
+          updates.started_at = now.toISOString();
+        }
+        if (nextStep >= 4) {
+          updates.status = "completed";
+          completed++;
+        }
+        await supabase.from("cold_email_campaigns").update(updates).eq("id", campaign.id);
+        sent++;
+        console.log(`Cold drip: sent step ${step} to ${campaign.email} (${campaign.campaign_category})`);
+      } else {
+        const errBody = await emailRes.text();
+        console.error(`Cold drip: failed to send to ${campaign.email}: ${errBody}`);
+        skipped++;
+      }
+    }
+
+    return new Response(JSON.stringify({ sent, skipped, completed }), {
+      status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error("cold-drip error:", error);
+    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }), {
+      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+});
