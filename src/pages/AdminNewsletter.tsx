@@ -164,6 +164,7 @@ const AdminNewsletter = () => {
       });
       if (res.ok) {
         setStoredPassword(password);
+        setAuthenticated(true);
         const session = JSON.stringify({ pw: password, ts: Date.now() });
         localStorage.setItem("wr_admin_session", session);
         sessionStorage.setItem("wr_admin_session", session);
