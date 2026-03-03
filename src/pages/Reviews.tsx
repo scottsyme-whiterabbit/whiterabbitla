@@ -112,7 +112,7 @@ const reviews = [
   rating: 5
 },
 {
-  name: "Jennie",
+  name: "Jennie O.",
   role: "Private Show Guest",
   text: "Scott is a tremendously talented magician whose sleight of hand mastery is unmatched. He has a funny and charming personality that makes every moment enjoyable.",
   rating: 5
