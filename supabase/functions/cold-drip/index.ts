@@ -455,6 +455,29 @@ serve(async (req) => {
   }
 
   try {
+    // Handle preview requests
+    if (req.method === "POST") {
+      const body = await req.json();
+      if (body.action === "preview") {
+        const { category, step } = body;
+        if (!category || step === undefined) {
+          return new Response(JSON.stringify({ error: "category and step required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const template = getCampaignEmail(category as CampaignCategory, step, "there", "preview");
+        if (!template.subject) {
+          return new Response(JSON.stringify({ error: "No template found" }), {
+            status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const html = wrapEmail(template.preheader, template.innerHtml, "preview@example.com", "preview", step);
+        return new Response(JSON.stringify({ subject: template.subject, body_html: html }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!

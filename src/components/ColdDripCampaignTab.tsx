@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { toast } from "sonner";
-import { Target, Upload, Eye, RefreshCw, Users, Mail, UserX, Pause, Play, MessageSquare, ChevronDown, ChevronRight, Trash2, Plus } from "lucide-react";
+import { Target, Upload, Eye, RefreshCw, Users, Mail, Pause, Play, MessageSquare, ChevronDown, ChevronRight, Trash2, Plus, X } from "lucide-react";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -115,6 +115,8 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
   const [saving, setSaving] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [showContacts, setShowContacts] = useState(false);
+  const [previewStep, setPreviewStep] = useState<number | null>(null);
+  const [previewHtml, setPreviewHtml] = useState("");
 
   const callAdmin = useCallback(async (action: string, payload: Record<string, unknown> = {}) => {
     const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
@@ -256,6 +258,27 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
     }
   };
 
+  const handlePreview = async (step: number) => {
+    if (previewStep === step && previewHtml) {
+      setPreviewStep(null);
+      setPreviewHtml("");
+      return;
+    }
+    setPreviewStep(step);
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/cold-drip`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${SUPABASE_KEY}` },
+        body: JSON.stringify({ action: "preview", category, step }),
+      });
+      if (!res.ok) throw new Error("Preview failed");
+      const data = await res.json();
+      setPreviewHtml(data.body_html);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Preview failed");
+    }
+  };
+
   if (!campaignInfo) return <div className="p-8 text-center text-muted-foreground">Unknown campaign category</div>;
 
   return (
@@ -320,9 +343,10 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {campaignInfo.emails.map((email, i) => (
-            <div
+            <button
               key={i}
-              className="border border-border p-4 text-left transition-colors hover:border-accent/50"
+              onClick={() => handlePreview(i)}
+              className={`border p-4 text-left transition-colors hover:border-accent ${previewStep === i && previewHtml ? "border-accent bg-accent/5" : "border-border"}`}
             >
               <div className="flex items-center justify-between mb-2">
                 <span className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent/70">{email.type}</span>
@@ -331,13 +355,38 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
               <p className="font-sans text-sm text-foreground leading-tight mb-3">"{email.subject}"</p>
               <div className="flex items-center justify-between">
                 <span className="font-sans text-xs text-accent">{stats.stepCounts[i]} waiting</span>
-                <span className="text-[10px] text-muted-foreground">
-                  Email {i + 1}/4
-                </span>
+                <div className="flex items-center gap-1">
+                  <Eye size={10} className="text-muted-foreground" />
+                  <span className="text-[10px] text-muted-foreground">
+                    Email {i + 1}/4
+                  </span>
+                </div>
               </div>
-            </div>
+            </button>
           ))}
         </div>
+
+        {/* Email Preview */}
+        {previewHtml && previewStep !== null && (
+          <div className="mt-4 border border-accent/30 bg-muted/10">
+            <div className="flex items-center justify-between px-4 py-2 border-b border-border">
+              <span className="font-sans text-xs tracking-[0.15em] uppercase text-accent">
+                Preview: {campaignInfo.emails[previewStep]?.type} — "{campaignInfo.emails[previewStep]?.subject}"
+              </span>
+              <button onClick={() => { setPreviewStep(null); setPreviewHtml(""); }} className="text-muted-foreground hover:text-foreground">
+                <X size={14} />
+              </button>
+            </div>
+            <div className="p-4 max-h-[600px] overflow-y-auto">
+              <iframe
+                srcDoc={previewHtml}
+                className="w-full min-h-[500px] border-0"
+                title="Email preview"
+                sandbox=""
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Contacts Section */}
