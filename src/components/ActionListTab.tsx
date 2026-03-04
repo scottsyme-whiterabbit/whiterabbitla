@@ -503,44 +503,82 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
           const isExpanded = expandedEmail === item.email;
           return (
           <div key={item.email} className={`border border-border ${item.outreachStatus === "booked" ? "bg-emerald-500/5" : item.outreachStatus === "not_interested" ? "bg-muted/30 opacity-60" : "bg-background"}`}>
-            <button onClick={() => setExpandedEmail(isExpanded ? null : item.email)} className="w-full text-left p-3">
+            <div
+              role="button"
+              tabIndex={0}
+              onClick={() => setExpandedEmail(isExpanded ? null : item.email)}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setExpandedEmail(isExpanded ? null : item.email); }}
+              className="w-full text-left p-4 cursor-pointer touch-manipulation select-none active:bg-muted/10"
+              style={{ WebkitTapHighlightColor: 'transparent', minHeight: '60px' }}
+            >
               <div className="flex items-center justify-between mb-2">
                 {priorityBadge(item.priority)}
                 <div className="flex items-center gap-1">
                   <span className="text-[10px] text-muted-foreground">{STATUS_LABELS[item.outreachStatus] || item.outreachStatus}</span>
-                  {isExpanded ? <ChevronUp size={14} className="text-muted-foreground" /> : <ChevronDown size={14} className="text-muted-foreground" />}
+                  {isExpanded ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
                 </div>
               </div>
               <p className="font-sans text-sm text-foreground font-medium">{item.name || item.email.split("@")[0]}</p>
               <p className="text-[11px] text-muted-foreground">{item.email}</p>
               {item.company && <p className="text-[10px] text-muted-foreground">{item.company}</p>}
               <p className="text-[10px] text-muted-foreground mt-1">{item.engagement}</p>
-            </button>
+            </div>
 
             {isExpanded && (
               <div className="border-t border-border px-3 pb-3 pt-2 space-y-3">
                 {/* Quick Actions */}
-                <div className="flex gap-2" onClick={e => e.stopPropagation()}>
+                <div className="flex gap-2">
                   {item.phone ? (
-                    <a href={`tel:${item.phone.replace(/\D/g, "").length === 10 ? "+1" + item.phone.replace(/\D/g, "") : "+" + item.phone.replace(/\D/g, "")}`} className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 text-xs tracking-wider uppercase font-sans active:bg-emerald-600/40 touch-manipulation">
-                      <Phone size={14} /> Call {item.phone}
+                    <a
+                      href={`tel:${item.phone.replace(/\D/g, "").length === 10 ? "+1" + item.phone.replace(/\D/g, "") : "+" + item.phone.replace(/\D/g, "")}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // Fallback for PWA standalone mode
+                        try {
+                          const digits = item.phone!.replace(/\D/g, "");
+                          const num = digits.length === 10 ? `+1${digits}` : `+${digits}`;
+                          window.location.href = `tel:${num}`;
+                        } catch (err) {
+                          console.error("Call failed:", err);
+                        }
+                      }}
+                      className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 text-xs tracking-wider uppercase font-sans active:bg-emerald-600/40 touch-manipulation"
+                      style={{ WebkitTapHighlightColor: 'transparent', minHeight: '48px' }}
+                    >
+                      <Phone size={16} /> Call {item.phone}
                     </a>
                   ) : (
-                    <span className="flex-1 flex items-center justify-center gap-2 py-3 bg-muted/20 text-muted-foreground border border-border text-xs tracking-wider uppercase font-sans cursor-not-allowed">
-                      <Phone size={14} /> No Phone #
+                    <span className="flex-1 flex items-center justify-center gap-2 py-3 bg-muted/20 text-muted-foreground border border-border text-xs tracking-wider uppercase font-sans cursor-not-allowed" style={{ minHeight: '48px' }}>
+                      <Phone size={16} /> No Phone #
                     </span>
                   )}
                 </div>
-                <div className="flex gap-2" onClick={e => e.stopPropagation()}>
-                  <a href={`mailto:${item.email}`} className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-accent/20 text-accent border border-accent/30 text-[10px] tracking-wider uppercase font-sans active:bg-accent/40 touch-manipulation">
-                    <Mail size={12} /> Email
+                <div className="flex gap-2">
+                  <a
+                    href={`mailto:${item.email}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-accent/20 text-accent border border-accent/30 text-[10px] tracking-wider uppercase font-sans active:bg-accent/40 touch-manipulation"
+                    style={{ minHeight: '44px' }}
+                  >
+                    <Mail size={14} /> Email
                   </a>
-                  <button onClick={() => openLogModal(item, "call")} className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-muted/20 text-foreground border border-border text-[10px] tracking-wider uppercase font-sans active:bg-muted/40 touch-manipulation">
-                    <ClipboardList size={12} /> Log
+                  <button
+                    onClick={(e) => { e.stopPropagation(); openLogModal(item, "call"); }}
+                    className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-muted/20 text-foreground border border-border text-[10px] tracking-wider uppercase font-sans active:bg-muted/40 touch-manipulation"
+                    style={{ minHeight: '44px' }}
+                  >
+                    <ClipboardList size={14} /> Log
                   </button>
                   {item.phone && (
-                    <a href={gvCallUrl(item.phone)} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-emerald-600/10 text-emerald-400/70 border border-emerald-600/20 text-[10px] tracking-wider uppercase font-sans active:bg-emerald-600/30 touch-manipulation">
-                      <PhoneOutgoing size={12} /> GV
+                    <a
+                      href={gvCallUrl(item.phone)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-emerald-600/10 text-emerald-400/70 border border-emerald-600/20 text-[10px] tracking-wider uppercase font-sans active:bg-emerald-600/30 touch-manipulation"
+                      style={{ minHeight: '44px' }}
+                    >
+                      <PhoneOutgoing size={14} /> GV
                     </a>
                   )}
                 </div>
