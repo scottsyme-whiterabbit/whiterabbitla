@@ -465,7 +465,8 @@ serve(async (req) => {
             status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }
-        const template = getCampaignEmail(category as CampaignCategory, step, "there", "preview");
+        const previewName = body.previewName || "Kevin";
+        const template = getCampaignEmail(category as CampaignCategory, step, previewName, "preview");
         if (!template.subject) {
           return new Response(JSON.stringify({ error: "No template found" }), {
             status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },

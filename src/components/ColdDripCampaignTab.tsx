@@ -258,10 +258,13 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
     }
   };
 
+  const [previewSubject, setPreviewSubject] = useState("");
+
   const handlePreview = async (step: number) => {
     if (previewStep === step && previewHtml) {
       setPreviewStep(null);
       setPreviewHtml("");
+      setPreviewSubject("");
       return;
     }
     setPreviewStep(step);
@@ -269,11 +272,12 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
       const res = await fetch(`${SUPABASE_URL}/functions/v1/cold-drip`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${SUPABASE_KEY}` },
-        body: JSON.stringify({ action: "preview", category, step }),
+        body: JSON.stringify({ action: "preview", category, step, previewName: "Kevin" }),
       });
       if (!res.ok) throw new Error("Preview failed");
       const data = await res.json();
       setPreviewHtml(data.body_html);
+      setPreviewSubject(data.subject || "");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Preview failed");
     }
@@ -369,13 +373,23 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
         {/* Email Preview */}
         {previewHtml && previewStep !== null && (
           <div className="mt-4 border border-accent/30 bg-muted/10">
-            <div className="flex items-center justify-between px-4 py-2 border-b border-border">
-              <span className="font-sans text-xs tracking-[0.15em] uppercase text-accent">
-                Preview: {campaignInfo.emails[previewStep]?.type} — "{campaignInfo.emails[previewStep]?.subject}"
-              </span>
-              <button onClick={() => { setPreviewStep(null); setPreviewHtml(""); }} className="text-muted-foreground hover:text-foreground">
-                <X size={14} />
-              </button>
+            <div className="px-4 py-3 border-b border-border space-y-1">
+              <div className="flex items-center justify-between">
+                <span className="font-sans text-xs tracking-[0.15em] uppercase text-accent">
+                  Preview: {campaignInfo.emails[previewStep]?.type} (Email {previewStep + 1}/4 · Day {campaignInfo.emails[previewStep]?.day})
+                </span>
+                <button onClick={() => { setPreviewStep(null); setPreviewHtml(""); setPreviewSubject(""); }} className="text-muted-foreground hover:text-foreground">
+                  <X size={14} />
+                </button>
+              </div>
+              {previewSubject && (
+                <p className="font-sans text-sm text-foreground">
+                  <span className="text-muted-foreground">Subject:</span> {previewSubject}
+                </p>
+              )}
+              <p className="font-sans text-xs text-muted-foreground">
+                <span className="text-muted-foreground">To:</span> Kevin (test preview — real emails will use each contact's first name)
+              </p>
             </div>
             <div className="p-4 max-h-[600px] overflow-y-auto">
               <iframe
