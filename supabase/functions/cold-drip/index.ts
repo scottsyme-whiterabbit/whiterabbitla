@@ -131,10 +131,57 @@ ${html}
 // ALL 7 CAMPAIGN TEMPLATES (4 emails each)
 // ═══════════════════════════════════════════════
 
+const CALENDAR_URL = "https://calendar.app.google/58WjggPt3RFAcJjq8";
+
+function bookCallCTA(contactId: string, step: number, campaign: string): string {
+  const sep = CALENDAR_URL.includes("?") ? "&" : "?";
+  const taggedUrl = `${CALENDAR_URL}${sep}utm_source=email&utm_medium=cold-drip&utm_campaign=${encodeURIComponent(campaign)}&utm_content=step-${step}`;
+  const trackingUrl = `${TRACK_URL}?cid=${contactId}&step=${step}&r=${encodeURIComponent(taggedUrl)}`;
+  return `<p style="margin:24px 0 0; text-align:center;">
+<a href="${trackingUrl}" target="_blank" style="display:inline-block; padding:12px 32px; font-family:Georgia,serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#C9A3A8; text-decoration:none; font-weight:bold; border:1px solid #C9A3A8; border-radius:2px;">Book a Call</a>
+</p>`;
+}
+
 function getCampaignEmail(category: CampaignCategory, step: number, name: string, contactId: string): { subject: string; preheader: string; innerHtml: string } {
   const firstName = name || "there";
   const link = trackedLink(`${SITE_URL}/experience`, "whiterabbitla.com/event-magician", contactId, step, category);
   const siteLink = trackedLink(SITE_URL, "whiterabbitla.com", contactId, step, category);
+  const deckLink = trackedLink(`${SITE_URL}/deck`, "digital lookbook", contactId, step, category);
+  const quizLink = trackedLink(`${SITE_URL}/quiz`, "35-second quiz", contactId, step, category);
+  const cta = bookCallCTA(contactId, step, category);
+
+  // Category-specific article links
+  const articleLinks = {
+    corporate_planner: {
+      a1: trackedLink(`${SITE_URL}/blog/corporate-entertainment-trends-2026`, "Corporate Entertainment Trends for 2026", contactId, step, category),
+      a2: trackedLink(`${SITE_URL}/blog/why-cocktail-hour-entertainment-matters`, "Why Cocktail Hour Entertainment Matters", contactId, step, category),
+    },
+    wedding_planner: {
+      a1: trackedLink(`${SITE_URL}/blog/wedding-entertainment-beyond-the-dj`, "Wedding Entertainment Beyond the DJ", contactId, step, category),
+      a2: trackedLink(`${SITE_URL}/blog/why-cocktail-hour-entertainment-matters`, "Why Cocktail Hour Entertainment Matters", contactId, step, category),
+    },
+    country_club: {
+      a1: trackedLink(`${SITE_URL}/blog/golf-tournament-entertainment-ideas`, "Golf Tournament Entertainment Ideas", contactId, step, category),
+      a2: trackedLink(`${SITE_URL}/blog/why-cocktail-hour-entertainment-matters`, "Why Cocktail Hour Entertainment Matters", contactId, step, category),
+    },
+    pr_agency: {
+      a1: trackedLink(`${SITE_URL}/blog/corporate-entertainment-trends-2026`, "Corporate Entertainment Trends for 2026", contactId, step, category),
+      a2: trackedLink(`${SITE_URL}/blog/how-to-choose-entertainment-for-luxury-event`, "How to Choose Entertainment for a Luxury Event", contactId, step, category),
+    },
+    nonprofit: {
+      a1: trackedLink(`${SITE_URL}/blog/why-cocktail-hour-entertainment-matters`, "Why Cocktail Hour Entertainment Matters", contactId, step, category),
+      a2: trackedLink(`${SITE_URL}/blog/entertainment-gap-planners-dont-know`, "The Entertainment Gap Most Planners Don't Know They Have", contactId, step, category),
+    },
+    talent_management: {
+      a1: trackedLink(`${SITE_URL}/blog/how-to-choose-entertainment-for-luxury-event`, "How to Choose Entertainment for a Luxury Event", contactId, step, category),
+      a2: trackedLink(`${SITE_URL}/blog/planning-private-party-los-angeles`, "Guide to Planning a Private Party in LA", contactId, step, category),
+    },
+    restaurant: {
+      a1: trackedLink(`${SITE_URL}/blog/magic-spirits-tastings-cigar-nights`, "Magic at Spirits Tastings & Cigar Nights", contactId, step, category),
+      a2: trackedLink(`${SITE_URL}/blog/why-cocktail-hour-entertainment-matters`, "Why Cocktail Hour Entertainment Matters", contactId, step, category),
+    },
+  };
+  const arts = articleLinks[category];
 
   const TEMPLATES: Record<CampaignCategory, Array<{ subject: string; preheader: string; innerHtml: string }>> = {
     // ═══════════════════════════════════════════════
@@ -150,14 +197,16 @@ function getCampaignEmail(category: CampaignCategory, step: number, name: string
 <p style="margin:0 0 18px;">I perform close-up magic and mentalism at Fortune 500 corporate events. Not a stage show — I move through the room during cocktail hour making small groups of executives say "wait, WHAT just happened?" It turns networking from obligatory to electric.</p>
 <p style="margin:0 0 18px;">Companies like Netflix, Disney, and CBS have trusted me with their events. Here's how it works: ${link}</p>
 <p style="margin:0 0 18px;">Worth a quick look?</p>
+${cta}
 ${signoff()}`),
       },
       {
         subject: `Re: nobody remembers last year's holiday party`,
-        preheader: "Forgot to mention — here's a quick reel.",
+        preheader: "Thought this might be useful for your team.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Forgot to mention — here's a 60-second reel from a recent corporate event: ${link}</p>
-<p style="margin:0 0 18px;">The reactions from the execs are the best part.</p>
+<p style="margin:0 0 18px;">Thought you might find this useful — I wrote a piece on ${arts.a1} that breaks down what the most innovative companies are doing differently with event entertainment this year.</p>
+<p style="margin:0 0 18px;">The short version: interactive, intimate experiences are replacing the generic DJ-and-photo-booth formula. The companies getting the best ROI from events are the ones making guests feel something unexpected.</p>
+<p style="margin:0 0 18px;">Happy to send over a ${deckLink} showing exactly how this works at corporate events. Takes 2 minutes to flip through.</p>
 ${signoff()}`),
       },
       {
@@ -166,7 +215,8 @@ ${signoff()}`),
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
 <p style="margin:0 0 18px;">Different thought —</p>
 <p style="margin:0 0 18px;">If you've got any Q2 or Q3 corporate events on the books (product launches, client appreciation, team offsites), I'm booking those now.</p>
-<p style="margin:0 0 18px;">Happy to send over a short deck showing how this has worked for similar companies. Just say the word.</p>
+<p style="margin:0 0 18px;">Not sure what format fits best? This ${quizLink} can help — takes 35 seconds and gives you a tailored recommendation.</p>
+${cta}
 ${signoffShort()}`),
       },
       {
@@ -192,15 +242,16 @@ ${signoff()}`),
 <p style="margin:0 0 18px;">For most planners, it's the one window that's hard to control. Guests mill around, energy dips, and the momentum from the ceremony fades.</p>
 <p style="margin:0 0 18px;">I fix that. Close-up magic woven through the cocktail hour — no stage, no cheesy announcements. Just intimate, elegant moments that get tables of strangers laughing together. Clients like Netflix and Hyatt Hotels trust me for exactly this.</p>
 <p style="margin:0 0 18px;">Open to a quick call to see if this is a fit for your couples?</p>
+${cta}
 ${signoff()}`),
       },
       {
         subject: "Re: what happens during the 45 minutes your couple is gone",
-        preheader: "One more thought — here's what it looks like.",
+        preheader: "Thought this might resonate.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">One more thought —</p>
-<p style="margin:0 0 18px;">Here's a 60-second clip of what this looks like in action at a recent event: ${link}</p>
-<p style="margin:0 0 18px;">The reactions say more than I can in an email.</p>
+<p style="margin:0 0 18px;">One more thought — I put together a piece on ${arts.a1} that I think might resonate with how you approach your couples' events.</p>
+<p style="margin:0 0 18px;">The takeaway: the planners getting the best guest feedback (and the best reviews for their couples) are the ones solving that cocktail hour gap with something interactive and memorable, not just background music.</p>
+<p style="margin:0 0 18px;">Also — here's my ${deckLink} if you'd like to share something visual with a couple who's curious. It shows the experience better than I can explain in an email.</p>
 ${signoff()}`),
       },
       {
@@ -210,6 +261,7 @@ ${signoff()}`),
 <p style="margin:0 0 18px;">Different angle —</p>
 <p style="margin:0 0 18px;">A few LA planners have started adding me to their preferred vendor lists after seeing how cocktail hour magic changes the guest experience (and the reviews their couples leave).</p>
 <p style="margin:0 0 18px;">If you're building out your 2026 roster, happy to do a quick private demo so you can see it firsthand. No commitment.</p>
+${cta}
 ${signoffShort()}`),
       },
       {
@@ -233,16 +285,18 @@ ${signoff()}`),
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
 <p style="margin:0 0 18px;">Quick thought — when members come to a club event, what's the one thing that makes it feel different from last month's?</p>
 <p style="margin:0 0 18px;">The food is always great. The setting is beautiful. But the entertainment? That's usually where events start to feel interchangeable.</p>
-<p style="margin:0 0 18px;">I perform close-up magic and mentalism at private clubs and country club events across Southern California. I move through the room during cocktails, creating intimate moments of genuine wonder — the kind of thing members bring up at the next round of golf.</p>
+<p style="margin:0 0 18px;">I perform close-up magic and mentalism at private clubs and country club events across the country. I move through the room during cocktails, creating intimate moments of genuine wonder — the kind of thing members bring up at the next round of golf.</p>
 <p style="margin:0 0 18px;">I've performed for Netflix, Disney, Morgan Stanley, and Hyatt Hotels. Happy to come by for a complimentary 15-minute demo for your events team.</p>
 <p style="margin:0 0 18px;">Worth setting up?</p>
+${cta}
 ${signoffFull()}`),
       },
       {
         subject: "Re: the member event everyone actually talks about",
-        preheader: "Quick follow-up with a clip.",
+        preheader: "Thought your events team might find this useful.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Quick follow-up — here's a 60-second clip from a recent private club event: ${link}</p>
+<p style="margin:0 0 18px;">Quick follow-up — I wrote a piece on ${arts.a1} that I think your events team would find interesting. It covers how clubs are using on-course entertainment during tournaments and 19th hole magic to keep members engaged.</p>
+<p style="margin:0 0 18px;">Also worth a read: ${arts.a2} — it breaks down why that cocktail/reception window is the highest-impact moment for entertainment at any club event.</p>
 <p style="margin:0 0 18px;">The demo offer stands — happy to come by any afternoon that works for your team.</p>
 ${signoff()}`),
       },
@@ -252,7 +306,8 @@ ${signoff()}`),
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
 <p style="margin:0 0 18px;">Different angle —</p>
 <p style="margin:0 0 18px;">A few private clubs have started booking me for their recurring member events — holiday galas, father-daughter dances, wine dinners, new member receptions. It's become their signature entertainment that members genuinely look forward to.</p>
-<p style="margin:0 0 18px;">If you're planning your event calendar, I'm booking Q2 and Q3 now. Happy to share how this has worked at similar clubs.</p>
+<p style="margin:0 0 18px;">If you're planning your event calendar, I'm booking Q2 and Q3 now. Take this ${quizLink} to see which format fits your events best.</p>
+${cta}
 ${signoffShort()}`),
       },
       {
@@ -278,14 +333,16 @@ ${signoff()}`),
 <p style="margin:0 0 18px;">I create those moments. Close-up magic and mentalism woven through cocktail receptions — no stage, no corny setup. Just jaw-dropping, intimate experiences that generate organic shares and keep guests talking about the brand long after the event.</p>
 <p style="margin:0 0 18px;">I've done this for Netflix, Rivian, Morgan Stanley, and Rolls-Royce. Here's how it works: ${link}</p>
 <p style="margin:0 0 18px;">Worth exploring for an upcoming activation?</p>
+${cta}
 ${signoffFull()}`),
       },
       {
         subject: "Re: the moment that makes everyone pull out their phone",
-        preheader: "Quick reel showing guest reactions.",
+        preheader: "Thought your team might find this relevant.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">One add — here's a quick reel showing guest reactions at a recent brand event: ${link}</p>
-<p style="margin:0 0 18px;">The phone-out moments are the best part.</p>
+<p style="margin:0 0 18px;">One add — I wrote a piece on ${arts.a1} that breaks down the shift agencies are seeing: experiential, interactive entertainment is replacing passive formats at brand events because it generates the organic content and guest engagement that clients actually measure.</p>
+<p style="margin:0 0 18px;">Also put together a ${deckLink} showing how this has worked at past brand activations — it's a quick flip-through that might be worth sharing with your events team.</p>
+<p style="margin:0 0 18px;">Happy to chat about any upcoming activations where this could fit.</p>
 ${signoff()}`),
       },
       {
@@ -294,7 +351,8 @@ ${signoff()}`),
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
 <p style="margin:0 0 18px;">Quick thought —</p>
 <p style="margin:0 0 18px;">A few agencies have started booking me specifically for product launches and VIP client dinners. The magic becomes a branded conversation piece — guests associate the wonder with the brand experience.</p>
-<p style="margin:0 0 18px;">If you've got any Q2 activations or client events on deck, happy to share a one-pager on how this works. Takes 2 minutes to read.</p>
+<p style="margin:0 0 18px;">If you've got any Q2 activations or client events on deck, this ${quizLink} can help you figure out the right format in 35 seconds.</p>
+${cta}
 ${signoffShort()}`),
       },
       {
@@ -321,14 +379,16 @@ ${signoff()}`),
 <p style="margin:0 0 18px;">I perform close-up magic and mentalism at fundraisers and charity galas — moving through the room during cocktails, creating moments of genuine wonder that put donors in an elevated mood right before the ask. It's not a stage act — it's intimate, elegant, and designed for high-net-worth rooms.</p>
 <p style="margin:0 0 18px;">Organizations like FosterAll and the Bachelors Ball have trusted me with their events. Clients include Netflix, Disney, and Morgan Stanley.</p>
 <p style="margin:0 0 18px;">Worth a quick call to see if this fits your next gala?</p>
+${cta}
 ${signoffFull()}`),
       },
       {
         subject: "Re: what happens between cocktails and the paddle raise",
-        preheader: "The donor reactions are the best part.",
+        preheader: "This might help with your planning.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Quick add — here's a 60-second clip from a recent gala event: ${link}</p>
-<p style="margin:0 0 18px;">The donor reactions are the best part — that's the mood you want right before the paddle raise.</p>
+<p style="margin:0 0 18px;">Quick add — I put together an article on ${arts.a1} that I think speaks directly to the challenge most gala organizers face: keeping energy high during those transitional moments so donors are engaged and generous when the ask comes.</p>
+<p style="margin:0 0 18px;">Also: ${arts.a2} — it covers the specific gaps in event programming that most planners don't realize they have, and how the right entertainment solves them.</p>
+<p style="margin:0 0 18px;">Worth a look if you're building out your 2026 gala entertainment lineup.</p>
 ${signoff()}`),
       },
       {
@@ -337,7 +397,8 @@ ${signoff()}`),
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
 <p style="margin:0 0 18px;">Different thought —</p>
 <p style="margin:0 0 18px;">A few gala organizers have told me the entertainment paid for itself — engaged donors give more generously, and the "wow factor" gets sponsors excited about next year.</p>
-<p style="margin:0 0 18px;">If you're planning your 2026 gala season, happy to chat about how this fits your format. No obligation.</p>
+<p style="margin:0 0 18px;">If you're planning your 2026 gala season, take this ${quizLink} to see which format fits your event — or let's jump on a quick call.</p>
+${cta}
 ${signoffShort()}`),
       },
       {
@@ -363,14 +424,16 @@ ${signoff()}`),
 <p style="margin:0 0 18px;">I perform close-up magic and mentalism at private parties for entertainment industry clients — the kind of intimate, sophisticated experience that makes A-listers say "how did you DO that?" I'm a member of the Magic Castle in Hollywood and have performed for Netflix, Disney, Paramount, and Rolls-Royce.</p>
 <p style="margin:0 0 18px;">No stage, no setup — I move through the room creating moments of genuine wonder during cocktails and dinner. It's the entertainment your clients' guests will actually talk about.</p>
 <p style="margin:0 0 18px;">Worth a quick call?</p>
+${cta}
 ${signoffFull()}`),
       },
       {
         subject: "Re: entertainment for rooms where everyone's seen everything",
-        preheader: "This plays differently than anything else.",
+        preheader: "Thought this might be relevant for your clients.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">One more thought — here's a 60-second reel: ${link}</p>
-<p style="margin:0 0 18px;">The celebrity reactions are priceless. This plays differently than anything else you'd book for a private event.</p>
+<p style="margin:0 0 18px;">One more thought — I wrote a piece on ${arts.a1} that covers what separates forgettable entertainment from the kind that actually impresses high-caliber guest lists. I think it speaks to exactly the rooms your clients are hosting.</p>
+<p style="margin:0 0 18px;">Also worth a look: ${arts.a2} — a practical guide to making private celebrations in Los Angeles unforgettable.</p>
+<p style="margin:0 0 18px;">If any of your clients have something coming up, I'd love to be on your radar. Happy to do a private demo at your office anytime.</p>
 ${signoff()}`),
       },
       {
@@ -379,7 +442,8 @@ ${signoff()}`),
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
 <p style="margin:0 0 18px;">Different angle —</p>
 <p style="margin:0 0 18px;">I've performed at private events for clients of several major agencies and management companies. The feedback is always the same — "this was the single best entertainment decision we made."</p>
-<p style="margin:0 0 18px;">If any of your clients have birthdays, holidays, or milestone celebrations coming up, I'd love to be on your radar. Happy to do a private demo at your office anytime.</p>
+<p style="margin:0 0 18px;">If any of your clients have birthdays, holidays, or milestone celebrations coming up, here's my ${deckLink} — easy to forward. Or take this ${quizLink} for a personalized recommendation.</p>
+${cta}
 ${signoffShort()}`),
       },
       {
@@ -406,14 +470,16 @@ ${signoff()}`),
 <p style="margin:0 0 18px;">I perform weekly magic residencies at restaurants and venues across LA — close-up magic at the tables during dinner service. Guests get an unforgettable experience, the venue gets social media content and repeat visits, and suddenly your Tuesday feels like a Saturday.</p>
 <p style="margin:0 0 18px;">I currently perform weekly at a venue in Los Angeles, and I've performed for brands like Netflix, Disney, and Rolls-Royce. My style is intimate, elegant, and designed to elevate — not interrupt — the dining experience.</p>
 <p style="margin:0 0 18px;">Worth a quick conversation?</p>
+${cta}
 ${signoffFull()}`),
       },
       {
         subject: "Re: filling seats on your slowest night",
-        preheader: "Here's what tableside magic looks like.",
+        preheader: "Thought this might spark an idea.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Quick add — here's what tableside magic looks like in a restaurant setting: ${link}</p>
-<p style="margin:0 0 18px;">The guest reactions and the social media content it generates are the best part.</p>
+<p style="margin:0 0 18px;">Quick add — I wrote a piece on ${arts.a1} that explores how restaurants and lounges are using live magic to elevate the dining experience. Whiskey tastings, private dining, cigar nights — the intimacy of these settings is where close-up magic shines brightest.</p>
+<p style="margin:0 0 18px;">Also: ${arts.a2} — it covers why that cocktail/reception window is the highest-impact moment for any venue looking to create a signature experience.</p>
+<p style="margin:0 0 18px;">Happy to swing by for a quick demo any evening. No commitment.</p>
 ${signoff()}`),
       },
       {
@@ -424,6 +490,7 @@ ${signoff()}`),
 <p style="margin:0 0 18px;">Here's how the residency model works: I come in one night a week, perform tableside magic for 2-3 hours during dinner service. The venue promotes it as a signature experience. Over time, it becomes the thing people come specifically for — and they bring friends.</p>
 <p style="margin:0 0 18px;">The ROI is straightforward: more covers on your slow night, organic social content, and a reputation as the place with the coolest experience in town.</p>
 <p style="margin:0 0 18px;">Happy to swing by for a quick 15-minute demo any evening. No commitment.</p>
+${cta}
 ${signoffShort()}`),
       },
       {
