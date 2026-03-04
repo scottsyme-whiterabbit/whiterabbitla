@@ -498,119 +498,168 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
       </div>
 
       {/* Mobile Cards */}
-      <div className="md:hidden space-y-2">
-        {filtered.map(item => {
-          const isExpanded = expandedEmail === item.email;
-          return (
-          <div key={item.email} className={`border border-border ${item.outreachStatus === "booked" ? "bg-emerald-500/5" : item.outreachStatus === "not_interested" ? "bg-muted/30 opacity-60" : "bg-background"}`}>
-            <div
-              role="button"
-              tabIndex={0}
-              onClick={() => setExpandedEmail(isExpanded ? null : item.email)}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setExpandedEmail(isExpanded ? null : item.email); }}
-              className="w-full text-left p-4 cursor-pointer touch-manipulation select-none active:bg-muted/10"
-              style={{ WebkitTapHighlightColor: 'transparent', minHeight: '60px' }}
-            >
-              <div className="flex items-center justify-between mb-2">
-                {priorityBadge(item.priority)}
-                <div className="flex items-center gap-1">
-                  <span className="text-[10px] text-muted-foreground">{STATUS_LABELS[item.outreachStatus] || item.outreachStatus}</span>
-                  {isExpanded ? <ChevronUp size={16} className="text-muted-foreground" /> : <ChevronDown size={16} className="text-muted-foreground" />}
+      <div className="md:hidden space-y-3">
+        {loading ? (
+          <div className="p-8 text-center text-muted-foreground text-sm">Loading...</div>
+        ) : filtered.length === 0 ? (
+          <div className="p-8 text-center text-muted-foreground text-sm">No items match your filters</div>
+        ) : (
+          filtered.map(item => {
+            const isExpanded = expandedEmail === item.email;
+            const cardBg = item.outreachStatus === "booked" ? "bg-emerald-500/5" : item.outreachStatus === "not_interested" ? "bg-muted/30 opacity-60" : "bg-background";
+            return (
+            <div key={item.email} className={`border border-border overflow-hidden ${cardBg}`}>
+              {/* Card Header — always visible, tappable */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setExpandedEmail(isExpanded ? null : item.email);
+                }}
+                className="w-full text-left p-4 touch-manipulation select-none"
+                style={{ WebkitTapHighlightColor: 'rgba(0,0,0,0.05)', WebkitUserSelect: 'none', minHeight: '64px' } as React.CSSProperties}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  {priorityBadge(item.priority)}
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-muted-foreground">{STATUS_LABELS[item.outreachStatus] || item.outreachStatus}</span>
+                    {isExpanded ? <ChevronUp size={18} className="text-accent" /> : <ChevronDown size={18} className="text-muted-foreground" />}
+                  </div>
                 </div>
-              </div>
-              <p className="font-sans text-sm text-foreground font-medium">{item.name || item.email.split("@")[0]}</p>
-              <p className="text-[11px] text-muted-foreground">{item.email}</p>
-              {item.company && <p className="text-[10px] text-muted-foreground">{item.company}</p>}
-              <p className="text-[10px] text-muted-foreground mt-1">{item.engagement}</p>
-            </div>
+                <p className="font-sans text-sm text-foreground font-medium">{item.name || item.email.split("@")[0]}</p>
+                <p className="text-[11px] text-muted-foreground">{item.email}</p>
+                {item.company && <p className="text-[10px] text-muted-foreground mt-0.5">{item.company}</p>}
+                <p className="text-[10px] text-muted-foreground mt-1">{item.engagement}</p>
+              </button>
 
-            {isExpanded && (
-              <div className="border-t border-border px-3 pb-3 pt-2 space-y-3">
-                {/* Quick Actions */}
-                <div className="flex gap-2">
+              {/* Expanded Detail Panel */}
+              {isExpanded && (
+                <div className="border-t border-border px-4 pb-4 pt-3 space-y-4">
+                  {/* Call Button — Google Voice */}
                   {item.phone ? (
-                    <a
-                      href={`tel:${item.phone.replace(/\D/g, "").length === 10 ? "+1" + item.phone.replace(/\D/g, "") : "+" + item.phone.replace(/\D/g, "")}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // Fallback for PWA standalone mode
-                        try {
-                          const digits = item.phone!.replace(/\D/g, "");
-                          const num = digits.length === 10 ? `+1${digits}` : `+${digits}`;
-                          window.location.href = `tel:${num}`;
-                        } catch (err) {
-                          console.error("Call failed:", err);
-                        }
-                      }}
-                      className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 text-xs tracking-wider uppercase font-sans active:bg-emerald-600/40 touch-manipulation"
-                      style={{ WebkitTapHighlightColor: 'transparent', minHeight: '48px' }}
-                    >
-                      <Phone size={16} /> Call {item.phone}
-                    </a>
-                  ) : (
-                    <span className="flex-1 flex items-center justify-center gap-2 py-3 bg-muted/20 text-muted-foreground border border-border text-xs tracking-wider uppercase font-sans cursor-not-allowed" style={{ minHeight: '48px' }}>
-                      <Phone size={16} /> No Phone #
-                    </span>
-                  )}
-                </div>
-                <div className="flex gap-2">
-                  <a
-                    href={`mailto:${item.email}`}
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-accent/20 text-accent border border-accent/30 text-[10px] tracking-wider uppercase font-sans active:bg-accent/40 touch-manipulation"
-                    style={{ minHeight: '44px' }}
-                  >
-                    <Mail size={14} /> Email
-                  </a>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); openLogModal(item, "call"); }}
-                    className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-muted/20 text-foreground border border-border text-[10px] tracking-wider uppercase font-sans active:bg-muted/40 touch-manipulation"
-                    style={{ minHeight: '44px' }}
-                  >
-                    <ClipboardList size={14} /> Log
-                  </button>
-                  {item.phone && (
                     <a
                       href={gvCallUrl(item.phone)}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-emerald-600/10 text-emerald-400/70 border border-emerald-600/20 text-[10px] tracking-wider uppercase font-sans active:bg-emerald-600/30 touch-manipulation"
+                      className="w-full flex items-center justify-center gap-3 py-4 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 text-sm tracking-wider uppercase font-sans font-medium active:bg-emerald-600/40 touch-manipulation rounded-sm"
+                      style={{ WebkitTapHighlightColor: 'transparent', minHeight: '52px' } as React.CSSProperties}
+                    >
+                      <PhoneOutgoing size={18} /> Call via Google Voice
+                    </a>
+                  ) : (
+                    <div className="w-full flex items-center justify-center gap-2 py-4 bg-muted/20 text-muted-foreground border border-border text-sm tracking-wider uppercase font-sans cursor-not-allowed" style={{ minHeight: '52px' }}>
+                      <Phone size={18} /> No Phone Number
+                    </div>
+                  )}
+
+                  {/* Secondary actions row */}
+                  <div className="grid grid-cols-3 gap-2">
+                    {item.phone && (
+                      <a
+                        href={`tel:${item.phone.replace(/\D/g, "").length === 10 ? "+1" + item.phone.replace(/\D/g, "") : "+" + item.phone.replace(/\D/g, "")}`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="flex items-center justify-center gap-1.5 py-3 bg-muted/20 text-foreground border border-border text-[10px] tracking-wider uppercase font-sans active:bg-muted/40 touch-manipulation"
+                        style={{ minHeight: '44px' }}
+                      >
+                        <Phone size={14} /> Direct
+                      </a>
+                    )}
+                    <a
+                      href={`mailto:${item.email}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="flex items-center justify-center gap-1.5 py-3 bg-accent/20 text-accent border border-accent/30 text-[10px] tracking-wider uppercase font-sans active:bg-accent/40 touch-manipulation"
                       style={{ minHeight: '44px' }}
                     >
-                      <PhoneOutgoing size={14} /> GV
+                      <Mail size={14} /> Email
                     </a>
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); openLogModal(item, "call"); }}
+                      className="flex items-center justify-center gap-1.5 py-3 bg-muted/20 text-foreground border border-border text-[10px] tracking-wider uppercase font-sans active:bg-muted/40 touch-manipulation"
+                      style={{ minHeight: '44px' }}
+                    >
+                      <ClipboardList size={14} /> Log
+                    </button>
+                  </div>
+
+                  {/* Contact Details Grid */}
+                  <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block mb-0.5">Phone</span><span className="text-foreground">{item.phone || "—"}</span></div>
+                    <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block mb-0.5">Source</span><span className="text-foreground">{item.source}</span></div>
+                    {item.deal?.event_type && <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block mb-0.5">Event</span><span className="text-foreground">{item.deal.event_type}</span></div>}
+                    {item.deal?.event_date && <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block mb-0.5">Date</span><span className="text-foreground">{format(new Date(item.deal.event_date + "T00:00:00"), "MMM d, yyyy")}</span></div>}
+                    {item.deal?.location && <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block mb-0.5">Location</span><span className="text-foreground">{item.deal.location}</span></div>}
+                    {item.deal?.guest_count && <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block mb-0.5">Guests</span><span className="text-foreground">{item.deal.guest_count}</span></div>}
+                    {item.deal?.deal_value && <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block mb-0.5">Value</span><span className="text-foreground">{formatCurrency(item.deal.deal_value)}</span></div>}
+                    {item.deal && <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block mb-0.5">Stage</span><span className="text-foreground capitalize">{item.deal.stage}</span></div>}
+                  </div>
+
+                  {/* Status Dropdown */}
+                  <div>
+                    <span className="text-muted-foreground text-[9px] uppercase tracking-wider block mb-1">Outreach Status</span>
+                    <select
+                      value={item.outreachStatus}
+                      onClick={(e) => e.stopPropagation()}
+                      onChange={async (e) => {
+                        e.stopPropagation();
+                        const newStatus = e.target.value;
+                        try {
+                          await callAdmin("log_outreach", {
+                            entry: {
+                              contact_email: item.email,
+                              contact_name: item.name,
+                              action_type: "status_update",
+                              outcome: newStatus,
+                              notes: `Status changed to ${STATUS_LABELS[newStatus] || newStatus}`,
+                              deal_id: item.deal?.id,
+                            }
+                          });
+                          if (newStatus === "booked" && item.deal && confirm("Mark as 'Booked' in pipeline too?")) {
+                            await callAdmin("update_deal_stage", { dealId: item.deal.id, stage: "booked" });
+                          } else if (newStatus === "not_interested" && item.deal && confirm("Mark as 'Lost' in pipeline?")) {
+                            await callAdmin("update_deal_stage", { dealId: item.deal.id, stage: "lost" });
+                          }
+                          toast.success("Status updated");
+                          loadData();
+                        } catch (err) {
+                          toast.error(err instanceof Error ? err.message : "Update failed");
+                        }
+                      }}
+                      className="w-full appearance-none bg-muted/20 border border-border text-sm text-foreground font-sans pl-3 pr-8 py-3 cursor-pointer focus:outline-none focus:border-accent touch-manipulation"
+                      style={{
+                        fontSize: '16px',
+                        backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'right 8px center'
+                      }}
+                    >
+                      {Object.entries(STATUS_LABELS).map(([val, label]) => (
+                        <option key={val} value={val}>{label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Outreach History */}
+                  {contactLogs(item.email).length > 0 && (
+                    <div>
+                      <p className="font-sans text-[9px] tracking-[0.15em] uppercase text-muted-foreground mb-2">Recent Outreach</p>
+                      {contactLogs(item.email).slice(0, 3).map(log => (
+                        <div key={log.id} className="flex gap-2 text-[11px] py-1 border-b border-border/50 last:border-0">
+                          <span className="text-muted-foreground w-14 shrink-0">{format(new Date(log.created_at), "MMM d")}</span>
+                          <span className="text-accent w-16 shrink-0 uppercase">{log.action_type}</span>
+                          <span className="text-foreground truncate">{log.notes || log.outcome || "—"}</span>
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </div>
-
-                {/* Contact Details */}
-                <div className="grid grid-cols-2 gap-2 text-sm">
-                  {item.deal?.event_type && <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block">Event</span>{item.deal.event_type}</div>}
-                  {item.deal?.event_date && <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block">Date</span>{format(new Date(item.deal.event_date + "T00:00:00"), "MMM d, yyyy")}</div>}
-                  {item.deal?.location && <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block">Location</span>{item.deal.location}</div>}
-                  {item.deal?.guest_count && <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block">Guests</span>{item.deal.guest_count}</div>}
-                  {item.deal?.deal_value && <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block">Value</span>{formatCurrency(item.deal.deal_value)}</div>}
-                  <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block">Source</span>{item.source}</div>
-                </div>
-
-                {/* Outreach History */}
-                {contactLogs(item.email).length > 0 && (
-                  <div>
-                    <p className="font-sans text-[9px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Recent Outreach</p>
-                    {contactLogs(item.email).slice(0, 3).map(log => (
-                      <div key={log.id} className="flex gap-2 text-[10px] py-0.5 border-b border-border/50 last:border-0">
-                        <span className="text-muted-foreground w-12 shrink-0">{format(new Date(log.created_at), "MMM d")}</span>
-                        <span className="text-accent w-14 shrink-0 uppercase">{log.action_type}</span>
-                        <span className="text-foreground truncate">{log.notes || log.outcome || "—"}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-          );
-        })}
+              )}
+            </div>
+            );
+          })
+        )}
       </div>
 
       {/* Log Outreach Modal */}
