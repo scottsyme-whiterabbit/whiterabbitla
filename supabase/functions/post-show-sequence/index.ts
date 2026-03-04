@@ -380,6 +380,14 @@ serve(async (req) => {
   }
 
   try {
+    // Send window guard: only send on Tue/Wed/Thu Pacific
+    const pacificDay = new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", weekday: "short" }).format(new Date());
+    if (!["Tue", "Wed", "Thu"].includes(pacificDay)) {
+      return new Response(JSON.stringify({ sent: 0, message: `Skipped: ${pacificDay} is outside the Tue-Thu send window` }), {
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
     if (!RESEND_API_KEY) throw new Error("RESEND_API_KEY not configured");
 

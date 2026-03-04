@@ -660,6 +660,14 @@ serve(async (req) => {
 
     // ── Action: process ── Send due drip emails (called by cron)
     if (action === "process") {
+      // Send window guard: only send on Tue/Wed/Thu Pacific
+      const pacificDay = new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", weekday: "short" }).format(new Date());
+      if (!["Tue", "Wed", "Thu"].includes(pacificDay)) {
+        return new Response(JSON.stringify({ sent: 0, message: `Skipped: ${pacificDay} is outside the Tue-Thu send window` }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       if (!RESEND_API_KEY) {
         return new Response(JSON.stringify({ error: "Email service not configured" }), {
           status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },

@@ -32,6 +32,15 @@ serve(async (req) => {
       });
     }
 
+    // Send window guard: only send on Tue/Wed/Thu Pacific
+    const pacificDay = new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", weekday: "short" }).format(new Date());
+    if (!["Tue", "Wed", "Thu"].includes(pacificDay)) {
+      return new Response(JSON.stringify({ success: true, skipped: true, message: `Skipped: ${pacificDay} is outside the Tue-Thu send window` }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const anonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
     const headers = {
       "Content-Type": "application/json",
