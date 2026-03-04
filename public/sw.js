@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wr-crm-v1';
+const CACHE_NAME = 'wr-crm-v3';
 const urlsToCache = ['/', '/admin/newsletter'];
 
 self.addEventListener('install', event => {
@@ -28,8 +28,14 @@ self.addEventListener('fetch', event => {
     event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
     return;
   }
-  // Cache first for static assets
+  // Network first, fall back to cache (prevents stale UI)
   event.respondWith(
-    caches.match(event.request).then(response => response || fetch(event.request))
+    fetch(event.request)
+      .then(response => {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
 });
