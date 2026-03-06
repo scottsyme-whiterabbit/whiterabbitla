@@ -258,8 +258,86 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
     ? activeDeals.reduce((s, d) => s + (d.deal_value || 0), 0) / activeDeals.length
     : 0;
 
+  // Revenue meter calculations
+  const ANNUAL_TARGET = 50000000; // $500,000 in cents
+  const MONTHLY_TARGET = Math.round(ANNUAL_TARGET / 12);
+  const PROPOSED_STAGES = ["new", "contacted", "negotiating", "proposal_sent"];
+  
+  const bookedRevenue = deals
+    .filter(d => d.stage === "booked" || d.stage === "completed")
+    .reduce((s, d) => s + (d.deal_value || 0), 0);
+  const proposedRevenue = deals
+    .filter(d => PROPOSED_STAGES.includes(d.stage))
+    .reduce((s, d) => s + (d.deal_value || 0), 0);
+  const totalPipeline = bookedRevenue + proposedRevenue;
+  const bookedPct = Math.min((bookedRevenue / ANNUAL_TARGET) * 100, 100);
+  const proposedPct = Math.min((proposedRevenue / ANNUAL_TARGET) * 100, 100 - bookedPct);
+  const monthlyPct = (MONTHLY_TARGET / ANNUAL_TARGET) * 100;
+
+  const openDealById = (dealId: string) => {
+    const deal = deals.find(d => d.id === dealId);
+    if (deal) openEdit(deal);
+  };
+
   return (
     <div className="space-y-6">
+      {/* Revenue Meter */}
+      <div className="border border-border p-5 space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="font-serif text-lg text-foreground">Revenue Pipeline</h3>
+          <span className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">
+            Annual Target: {formatCurrency(ANNUAL_TARGET)}
+          </span>
+        </div>
+        
+        {/* Progress bar */}
+        <div className="relative">
+          <div className="w-full h-8 bg-muted/30 border border-border relative overflow-hidden">
+            {/* Booked bar */}
+            <div 
+              className="absolute left-0 top-0 h-full bg-emerald-700/60 transition-all duration-500"
+              style={{ width: `${bookedPct}%` }}
+            />
+            {/* Proposed bar stacked on top */}
+            <div 
+              className="absolute top-0 h-full bg-[#C9A96E]/40 transition-all duration-500"
+              style={{ left: `${bookedPct}%`, width: `${proposedPct}%` }}
+            />
+            {/* Monthly target marker */}
+            <div 
+              className="absolute top-0 h-full w-px bg-foreground/30" 
+              style={{ left: `${monthlyPct}%` }}
+              title={`Monthly Target: ${formatCurrency(MONTHLY_TARGET)}`}
+            />
+          </div>
+          {/* Monthly label */}
+          <div className="absolute -bottom-4 text-[8px] text-muted-foreground font-sans" style={{ left: `${monthlyPct}%`, transform: 'translateX(-50%)' }}>
+            Mo. Target
+          </div>
+        </div>
+
+        {/* Summary text */}
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pt-2">
+          <span className="flex items-center gap-1.5">
+            <span className="w-3 h-3 bg-emerald-700/60 rounded-sm" />
+            <span className="font-mono text-sm text-foreground">{formatCurrency(bookedRevenue)}</span>
+            <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Booked</span>
+          </span>
+          <span className="text-muted-foreground text-sm">+</span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-3 h-3 bg-[#C9A96E]/40 rounded-sm" />
+            <span className="font-mono text-sm text-[#C9A96E]">{formatCurrency(proposedRevenue)}</span>
+            <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Proposed</span>
+          </span>
+          <span className="text-muted-foreground text-sm">=</span>
+          <span className="font-mono text-sm text-foreground font-medium">{formatCurrency(totalPipeline)}</span>
+          <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Pipeline</span>
+          <span className="ml-auto font-sans text-xs text-accent font-medium">
+            {Math.round((totalPipeline / ANNUAL_TARGET) * 100)}% of Goal
+          </span>
+        </div>
+      </div>
+
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
