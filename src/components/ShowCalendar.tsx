@@ -288,12 +288,23 @@ const ShowCalendar = ({ deals, onOpenDeal }: ShowCalendarProps) => {
         </div>
       </div>
 
+      {/* Legend */}
+      <div className="flex gap-4 text-xs font-sans text-muted-foreground flex-wrap">
+        <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-emerald-900/30 border border-emerald-600/40 rounded-sm" /> Confirmed</span>
+        <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-[#C9A96E]/15 border border-dashed border-[#C9A96E]/50 rounded-sm" /> Hold Date</span>
+      </div>
+
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-4 gap-4">
         <div className="border border-border p-4 text-center">
           <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Booked Shows</p>
           <p className="font-serif text-2xl text-foreground">{bookedDeals.filter(d => d.event_date! >= today).length}</p>
           <p className="text-[10px] text-muted-foreground">upcoming</p>
+        </div>
+        <div className="border border-border p-4 text-center">
+          <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Hold Dates</p>
+          <p className="font-serif text-2xl text-[#C9A96E]">{holdDeals.filter(d => d.event_date! >= today).length}</p>
+          <p className="text-[10px] text-muted-foreground">pending</p>
         </div>
         <div className="border border-border p-4 text-center">
           <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">This Month</p>
