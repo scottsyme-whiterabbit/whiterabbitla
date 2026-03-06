@@ -17,7 +17,10 @@ interface BookedDeal {
 
 interface ShowCalendarProps {
   deals: BookedDeal[];
+  onOpenDeal?: (dealId: string) => void;
 }
+
+const HOLD_STAGES = ["new", "contacted", "negotiating", "proposal_sent"];
 
 const EVENT_EMOJIS: Record<string, string> = {
   corporate: "🏢",
@@ -113,7 +116,7 @@ const downloadICS = (deal: BookedDeal) => {
   URL.revokeObjectURL(url);
 };
 
-const ShowCalendar = ({ deals }: ShowCalendarProps) => {
+const ShowCalendar = ({ deals, onOpenDeal }: ShowCalendarProps) => {
   const [currentMonth, setCurrentMonth] = useState(() => {
     const now = new Date();
     return { year: now.getFullYear(), month: now.getMonth() };
@@ -121,6 +124,11 @@ const ShowCalendar = ({ deals }: ShowCalendarProps) => {
 
   const bookedDeals = useMemo(
     () => deals.filter(d => (d.stage === "booked" || d.stage === "completed") && d.event_date),
+    [deals]
+  );
+
+  const holdDeals = useMemo(
+    () => deals.filter(d => HOLD_STAGES.includes(d.stage) && d.event_date),
     [deals]
   );
 
@@ -133,6 +141,16 @@ const ShowCalendar = ({ deals }: ShowCalendarProps) => {
     });
     return map;
   }, [bookedDeals]);
+
+  const holdDates = useMemo(() => {
+    const map = new Map<string, BookedDeal[]>();
+    holdDeals.forEach(d => {
+      const key = d.event_date!;
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(d);
+    });
+    return map;
+  }, [holdDeals]);
 
   const { year, month } = currentMonth;
   const firstDay = new Date(year, month, 1).getDay();
