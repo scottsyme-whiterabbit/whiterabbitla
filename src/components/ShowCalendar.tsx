@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Download, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
+import { Download, ExternalLink, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, MapPin, Users, Phone, Mail, FileText } from "lucide-react";
 
 interface BookedDeal {
   id: string;
