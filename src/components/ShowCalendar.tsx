@@ -318,46 +318,35 @@ const ShowCalendar = ({ deals, onOpenDeal }: ShowCalendarProps) => {
           </div>
         </div>
 
-        {/* Upcoming Shows Sidebar */}
-        <div className="border border-border p-4">
-          <h3 className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-4">Upcoming Shows</h3>
-          {upcoming.length === 0 ? (
-            <p className="text-muted-foreground text-sm">No upcoming booked shows</p>
-          ) : (
-            <div className="space-y-3">
-              {upcoming.map(deal => (
-                <div key={deal.id} className="border border-border p-3 space-y-2">
-                  <div className="flex items-center gap-1.5">
-                    <span>{EVENT_EMOJIS[deal.event_type || "other"] || "✨"}</span>
-                    <span className="font-sans text-sm text-foreground font-medium">{deal.contact_name || deal.company || deal.contact_email}</span>
-                  </div>
-                  <div className="text-[11px] text-muted-foreground space-y-0.5">
-                    <p>{new Date(deal.event_date! + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
-                      {deal.event_time && ` at ${deal.event_time.slice(0, 5)}`}
-                    </p>
-                    {deal.location && <p>📍 {deal.location}</p>}
-                    {deal.deal_value && <p className="text-accent font-mono">{formatCurrency(deal.deal_value)}</p>}
-                  </div>
-                  <div className="flex gap-2 pt-1">
-                    <a
-                      href={generateGoogleCalendarUrl(deal)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-[10px] font-sans tracking-[0.1em] uppercase text-muted-foreground hover:text-accent transition-colors"
-                    >
-                      <ExternalLink size={10} /> Google
-                    </a>
-                    <button
-                      onClick={() => downloadICS(deal)}
-                      className="flex items-center gap-1 text-[10px] font-sans tracking-[0.1em] uppercase text-muted-foreground hover:text-accent transition-colors"
-                    >
-                      <Download size={10} /> Apple / iCal
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+        {/* Sidebar: Upcoming Shows & Holds */}
+        <div className="space-y-6">
+          {/* Upcoming Confirmed Shows */}
+          <div className="border border-border p-4">
+            <h3 className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-4">
+              Upcoming Shows <span className="text-emerald-500">●</span>
+            </h3>
+            {upcoming.length === 0 ? (
+              <p className="text-muted-foreground text-sm">No upcoming booked shows</p>
+            ) : (
+              <div className="space-y-3">
+                {upcoming.map(deal => renderDealCard(deal, false))}
+              </div>
+            )}
+          </div>
+
+          {/* Upcoming Hold Dates */}
+          <div className="border border-dashed border-[#C9A96E]/40 p-4">
+            <h3 className="font-sans text-[10px] tracking-[0.15em] uppercase text-[#C9A96E] mb-4">
+              Hold Dates <span className="text-[#C9A96E]">●</span>
+            </h3>
+            {upcomingHolds.length === 0 ? (
+              <p className="text-muted-foreground text-sm">No pending hold dates</p>
+            ) : (
+              <div className="space-y-3">
+                {upcomingHolds.map(deal => renderDealCard(deal, true))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
