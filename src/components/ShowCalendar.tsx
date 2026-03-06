@@ -17,7 +17,10 @@ interface BookedDeal {
 
 interface ShowCalendarProps {
   deals: BookedDeal[];
+  onOpenDeal?: (dealId: string) => void;
 }
+
+const HOLD_STAGES = ["new", "contacted", "negotiating", "proposal_sent"];
 
 const EVENT_EMOJIS: Record<string, string> = {
   corporate: "🏢",
@@ -113,7 +116,7 @@ const downloadICS = (deal: BookedDeal) => {
   URL.revokeObjectURL(url);
 };
 
-const ShowCalendar = ({ deals }: ShowCalendarProps) => {
+const ShowCalendar = ({ deals, onOpenDeal }: ShowCalendarProps) => {
   const [currentMonth, setCurrentMonth] = useState(() => {
     const now = new Date();
     return { year: now.getFullYear(), month: now.getMonth() };
@@ -121,6 +124,11 @@ const ShowCalendar = ({ deals }: ShowCalendarProps) => {
 
   const bookedDeals = useMemo(
     () => deals.filter(d => (d.stage === "booked" || d.stage === "completed") && d.event_date),
+    [deals]
+  );
+
+  const holdDeals = useMemo(
+    () => deals.filter(d => HOLD_STAGES.includes(d.stage) && d.event_date),
     [deals]
   );
 
@@ -133,6 +141,16 @@ const ShowCalendar = ({ deals }: ShowCalendarProps) => {
     });
     return map;
   }, [bookedDeals]);
+
+  const holdDates = useMemo(() => {
+    const map = new Map<string, BookedDeal[]>();
+    holdDeals.forEach(d => {
+      const key = d.event_date!;
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(d);
+    });
+    return map;
+  }, [holdDeals]);
 
   const { year, month } = currentMonth;
   const firstDay = new Date(year, month, 1).getDay();
@@ -186,25 +204,39 @@ const ShowCalendar = ({ deals }: ShowCalendarProps) => {
               if (day === null) return <div key={`empty-${i}`} className="h-20" />;
               const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
               const showsOnDay = bookedDates.get(dateStr);
+              const holdsOnDay = holdDates.get(dateStr);
               const isToday = dateStr === today;
               const isBooked = !!showsOnDay;
+              const hasHolds = !!holdsOnDay;
 
               return (
                 <div
                   key={dateStr}
-                  className={`h-20 border border-border/50 p-1 relative transition-colors ${
-                    isBooked ? "bg-accent/10 border-accent/30" : ""
+                  className={`h-20 border p-1 relative transition-colors overflow-hidden ${
+                    isBooked ? "bg-emerald-900/20 border-emerald-600/40" :
+                    hasHolds ? "bg-[#C9A96E]/10 border-dashed border-[#C9A96E]/50" :
+                    "border-border/50"
                   } ${isToday ? "ring-1 ring-accent" : ""}`}
                 >
                   <span className={`text-xs font-sans ${isToday ? "text-accent font-bold" : "text-muted-foreground"}`}>{day}</span>
                   {showsOnDay?.map(deal => (
-                    <div key={deal.id} className="mt-0.5 bg-accent/20 border border-accent/30 px-1 py-0.5 text-[9px] text-foreground truncate rounded-sm" title={deal.contact_name || deal.contact_email}>
+                    <div key={deal.id} onClick={() => onOpenDeal?.(deal.id)} className="mt-0.5 bg-emerald-900/30 border border-emerald-600/40 px-1 py-0.5 text-[9px] text-foreground truncate rounded-sm cursor-pointer hover:bg-emerald-900/50" title={deal.contact_name || deal.contact_email}>
                       {EVENT_EMOJIS[deal.event_type || "other"] || "✨"} {deal.event_time?.slice(0, 5) || ""} {deal.contact_name?.split(" ")[0] || deal.company || "Show"}
+                    </div>
+                  ))}
+                  {holdsOnDay?.map(deal => (
+                    <div key={deal.id} onClick={() => onOpenDeal?.(deal.id)} className="mt-0.5 bg-[#C9A96E]/15 border border-dashed border-[#C9A96E]/50 px-1 py-0.5 text-[9px] text-[#C9A96E] truncate rounded-sm cursor-pointer hover:bg-[#C9A96E]/25" title={`HOLD: ${deal.contact_name || deal.contact_email}`}>
+                      🔒 HOLD: {deal.contact_name?.split(" ")[0] || deal.company || "TBD"}
                     </div>
                   ))}
                   {isBooked && (
                     <div className="absolute top-1 right-1">
-                      <span className="inline-block w-2 h-2 bg-accent rounded-full" />
+                      <span className="inline-block w-2 h-2 bg-emerald-500 rounded-full" />
+                    </div>
+                  )}
+                  {hasHolds && !isBooked && (
+                    <div className="absolute top-1 right-1">
+                      <span className="inline-block w-2 h-2 bg-[#C9A96E]/60 rounded-full" />
                     </div>
                   )}
                 </div>
@@ -256,12 +288,23 @@ const ShowCalendar = ({ deals }: ShowCalendarProps) => {
         </div>
       </div>
 
+      {/* Legend */}
+      <div className="flex gap-4 text-xs font-sans text-muted-foreground flex-wrap">
+        <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-emerald-900/30 border border-emerald-600/40 rounded-sm" /> Confirmed</span>
+        <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-[#C9A96E]/15 border border-dashed border-[#C9A96E]/50 rounded-sm" /> Hold Date</span>
+      </div>
+
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-4 gap-4">
         <div className="border border-border p-4 text-center">
           <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Booked Shows</p>
           <p className="font-serif text-2xl text-foreground">{bookedDeals.filter(d => d.event_date! >= today).length}</p>
           <p className="text-[10px] text-muted-foreground">upcoming</p>
+        </div>
+        <div className="border border-border p-4 text-center">
+          <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Hold Dates</p>
+          <p className="font-serif text-2xl text-[#C9A96E]">{holdDeals.filter(d => d.event_date! >= today).length}</p>
+          <p className="text-[10px] text-muted-foreground">pending</p>
         </div>
         <div className="border border-border p-4 text-center">
           <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">This Month</p>
