@@ -41,6 +41,20 @@ interface Props {
 const HOLD_STAGES = ["new", "contacted", "negotiating", "proposal_sent"];
 const BOOKED_STAGES = ["booked", "completed"];
 
+/** Convert "HH:mm" or ISO datetime to 12-hour format like "6:00 PM" */
+const to12Hour = (timeStr: string | null | undefined): string => {
+  if (!timeStr) return "";
+  // Extract HH:mm from either "HH:mm:ss" or ISO "...T18:00:00..."
+  const match = timeStr.match(/(\d{1,2}):(\d{2})/);
+  if (!match) return timeStr;
+  let h = parseInt(match[1]);
+  const m = match[2];
+  const ampm = h >= 12 ? "PM" : "AM";
+  if (h === 0) h = 12;
+  else if (h > 12) h -= 12;
+  return `${h}:${m} ${ampm}`;
+};
+
 const EVENT_COLORS: Record<string, { bg: string; border: string; text: string }> = {
   corporate: { bg: "bg-blue-900/30", border: "border-blue-500/50", text: "text-blue-300" },
   wedding: { bg: "bg-pink-900/30", border: "border-pink-500/50", text: "text-pink-300" },
@@ -302,7 +316,7 @@ const CampaignCalendarTab = (_props: Props) => {
               <p className="font-sans text-sm text-foreground font-medium">{deal.contact_name || deal.company || deal.contact_email}</p>
               <p className="text-[11px] text-muted-foreground">
                 {new Date(deal.event_date! + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
-                {deal.event_time && ` · ${deal.event_time.slice(0, 5)}`}
+                {deal.event_time && ` · ${to12Hour(deal.event_time)}`}
               </p>
             </div>
           </div>
@@ -316,7 +330,7 @@ const CampaignCalendarTab = (_props: Props) => {
             {deal.event_type && <p className="flex items-center gap-1.5 text-muted-foreground">{EVENT_EMOJIS[deal.event_type] || "✨"} {deal.event_type.replace(/_/g, " ")}</p>}
             {deal.location && <p className="flex items-center gap-1.5 text-muted-foreground"><MapPin size={12} /> {deal.location}</p>}
             {deal.guest_count && <p className="flex items-center gap-1.5 text-muted-foreground"><Users size={12} /> {deal.guest_count} guests</p>}
-            {deal.event_time && <p className="flex items-center gap-1.5 text-muted-foreground"><Clock size={12} /> {deal.event_time.slice(0, 5)}</p>}
+            {deal.event_time && <p className="flex items-center gap-1.5 text-muted-foreground"><Clock size={12} /> {to12Hour(deal.event_time)}</p>}
             {deal.deal_value && <p className="flex items-center gap-1.5 text-accent"><DollarSign size={12} /> {formatCurrency(deal.deal_value)}</p>}
             <p className="flex items-center gap-1.5 text-muted-foreground"><Mail size={12} /> {deal.contact_email}</p>
             {deal.phone && <p className="flex items-center gap-1.5 text-muted-foreground"><Phone size={12} /> {deal.phone}</p>}
@@ -474,7 +488,7 @@ const CampaignCalendarTab = (_props: Props) => {
                       const colors = getColors(deal.event_type);
                       return (
                         <div key={deal.id} className={`${colors.bg} border ${colors.border} px-1 py-0.5 text-[8px] ${colors.text} truncate rounded-sm leading-tight`}>
-                          {EVENT_EMOJIS[deal.event_type || "other"] || "✨"} {deal.event_time?.slice(0, 5) || ""} {deal.contact_name?.split(" ")[0] || deal.company || "Show"}
+                          {EVENT_EMOJIS[deal.event_type || "other"] || "✨"} {to12Hour(deal.event_time)} {deal.contact_name?.split(" ")[0] || deal.company || "Show"}
                         </div>
                       );
                     })}
@@ -484,7 +498,7 @@ const CampaignCalendarTab = (_props: Props) => {
                       </div>
                     ))}
                     {events?.gcal?.slice(0, 1).map(ev => {
-                      const time = ev.start && ev.start.length > 10 ? ev.start.slice(11, 16) : "";
+                      const time = ev.start && ev.start.length > 10 ? to12Hour(ev.start) : "";
                       const label = ev.summary === "(No title)" ? (ev.allDay ? "Busy" : "Event") : ev.summary;
                       return (
                         <div key={ev.id} className="bg-sky-900/20 border border-sky-500/30 px-1 py-0.5 text-[8px] text-sky-300 truncate rounded-sm leading-tight">
@@ -539,8 +553,8 @@ const CampaignCalendarTab = (_props: Props) => {
               {selectedDeals.booked.map(d => renderDealDetail(d, false))}
               {selectedDeals.holds.map(d => renderDealDetail(d, true))}
               {selectedDeals.gcal?.map(ev => {
-                const time = ev.start && ev.start.length > 10 ? ev.start.slice(11, 16) : "All day";
-                const endTime = ev.end && ev.end.length > 10 ? ev.end.slice(11, 16) : "";
+                const time = ev.start && ev.start.length > 10 ? to12Hour(ev.start) : "All day";
+                const endTime = ev.end && ev.end.length > 10 ? to12Hour(ev.end) : "";
                 const isUntitled = ev.summary === "(No title)";
                 const displayName = isUntitled ? (ev.allDay ? "Busy (All Day)" : `Personal Event`) : ev.summary;
                 return (
