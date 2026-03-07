@@ -508,6 +508,11 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
                               <MessageSquare size={12} />
                             </button>
                           )}
+                          {c.status === "replied" && (
+                            <button onClick={() => handleStatusChange(c.id, "active")} className="p-1.5 border border-border text-emerald-400 hover:bg-emerald-500/10" title="Reactivate">
+                              <Play size={12} />
+                            </button>
+                          )}
                           <button onClick={() => handleDelete(c.id)} className="p-1.5 border border-border text-red-400 hover:bg-red-500/10" title="Remove">
                             <Trash2 size={12} />
                           </button>
