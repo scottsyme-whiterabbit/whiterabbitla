@@ -194,17 +194,20 @@ const PitchDeck = () => {
               <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">Scott Syme</h2>
               <div className="space-y-4 font-sans text-base text-muted-foreground leading-relaxed">
                 <p>
-                  Scott is a proud member of the world-famous Magic Castle® in Hollywood and the
-                  International Brotherhood of Magicians, traveling nationwide to bring luxury
-                  entertainment to the most discerning private events and corporate gatherings. He
-                  has consulted for America's Got Talent, coached performers for Disney Channel, and
-                  entertained guests for Netflix, Morgan Stanley, Rolls Royce, and dozens of
-                  Fortune 500 brands.
+                  Scott Syme believes every great event deserves a moment that makes the room feel
+                  truly alive — for the guests and the host alike. That's the mission behind White
+                  Rabbit: to create an experience so personal and unexpected that people talk about
+                  it for years. A proud member of the world-famous Magic Castle® in Hollywood and
+                  the International Brotherhood of Magicians, Scott travels nationwide to bring
+                  luxury entertainment to the most discerning private events and corporate
+                  gatherings.
                 </p>
                 <p>
-                  With a background in luxury real estate and high-net-worth client services, Scott
-                  brings a white-glove hospitality approach to every performance. Guests don't just
-                  watch a show — they feel genuinely cared for from the moment the evening begins.
+                  He has consulted for America's Got Talent, coached performers for Disney Channel,
+                  and entertained guests for Netflix, Morgan Stanley, Rolls Royce, and dozens of
+                  Fortune 500 brands. With a background in high-net-worth client services, Scott
+                  brings a white-glove hospitality approach to every performance — guests don't just
+                  watch a show, they feel genuinely cared for from the moment the evening begins.
                 </p>
               </div>
             </div>
