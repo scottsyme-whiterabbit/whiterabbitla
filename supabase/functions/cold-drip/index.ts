@@ -173,8 +173,8 @@ function getCampaignEmail(category: CampaignCategory, step: number, name: string
       a2: trackedLink(`${SITE_URL}/event-magician`, "See How White Rabbit Transforms Events", contactId, step, category),
     },
     talent_management: {
-      a1: trackedLink(`${SITE_URL}/blog/how-to-choose-entertainment-for-luxury-event`, "How to Choose Entertainment for a Luxury Event", contactId, step, category),
-      a2: trackedLink(`${SITE_URL}/blog/planning-private-party-los-angeles`, "Guide to Planning a Private Party in LA", contactId, step, category),
+      a1: trackedLink(`${SITE_URL}/event-magician`, "See What a White Rabbit Experience Looks Like", contactId, step, category),
+      a2: trackedLink(`${SITE_URL}/event-magician`, "See What a White Rabbit Experience Looks Like", contactId, step, category),
     },
     restaurant: {
       a1: trackedLink(`${SITE_URL}/blog/magic-spirits-tastings-cigar-nights`, "Magic at Spirits Tastings & Cigar Nights", contactId, step, category),
@@ -420,44 +420,44 @@ ${signoffFull()}`),
     // ═══════════════════════════════════════════════
     talent_management: [
       {
-        subject: "entertainment for rooms where everyone's seen everything",
-        preheader: "That's exactly where I thrive.",
+        subject: "Specialty talent for your clients private events",
+        preheader: "Close-up magic and mind reading for VIP events.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">When your clients host private events, the guest list is usually full of people who've seen the best of everything — and they're hard to impress.</p>
-<p style="margin:0 0 18px;">That's exactly where I thrive.</p>
-<p style="margin:0 0 18px;">I perform close-up magic and mentalism at private parties for entertainment industry clients — the kind of intimate, sophisticated experience that makes A-listers say "how did you DO that?" I'm a member of the Magic Castle in Hollywood and have performed for Netflix, Disney, Paramount, and Rolls-Royce.</p>
-<p style="margin:0 0 18px;">No stage, no setup — I move through the room creating moments of genuine wonder during cocktails and dinner. It's the entertainment your clients' guests will actually talk about.</p>
-<p style="margin:0 0 18px;">Worth a quick call?</p>
+<p style="margin:0 0 18px;">I am a close-up magician and mind reader based in LA. I work private events and VIP receptions for clients like Netflix, Disney, and Rolls-Royce.</p>
+<p style="margin:0 0 18px;">If your agency ever books specialty talent for private parties, brand events, or client dinners, I would love to be on your roster. I am a Magic Castle member, AGT consultant, and I carry my own insurance.</p>
+<p style="margin:0 0 18px;">Happy to send my info or an avails check for any upcoming dates.</p>
+${cta}
+<p style="margin:0 0 18px;">${arts.a1}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "The talent your VIP clients do not expect",
+        preheader: "Mind reading three feet away.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Here is why close-up magic and mind reading works at private celebrity and VIP events: these guests have seen everything. Live bands, DJs, photo booths. What they have not seen is someone reading their mind three feet away, using their own phone to create something impossible, and making a prediction come true in their hands.</p>
+<p style="margin:0 0 18px;">I perform in small groups during cocktail receptions. No stage, no setup, no attention-grabbing announcements. Just quiet, jaw-dropping experiences that the room cannot stop talking about.</p>
+<p style="margin:0 0 18px;">I am comfortable in any environment. Private estates, hotel suites, yachts, you name it.</p>
+<p style="margin:0 0 18px;">${arts.a1}</p>
+${signoff()}`),
+      },
+      {
+        subject: "Why I get rebooked for VIP events",
+        preheader: "Discretion is standard.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">A client manager recently told me that after bringing me in for a private birthday event, three guests at the party independently asked for my contact info. That is the reaction that gets me rebooked.</p>
+<p style="margin:0 0 18px;">I understand discretion is paramount. No photos, no social posts, no name-dropping unless a client gives explicit permission. That is standard for me.</p>
+<p style="margin:0 0 18px;">Happy to chat about any upcoming events your clients are hosting.</p>
 ${cta}
 ${signoffFull()}`),
       },
       {
-        subject: "Re: entertainment for rooms where everyone's seen everything",
-        preheader: "Thought this might be relevant for your clients.",
+        subject: "On your talent radar",
+        preheader: "Private parties, brand dinners, milestones.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">One more thought — I wrote a piece on ${arts.a1} that covers what separates forgettable entertainment from the kind that actually impresses high-caliber guest lists. I think it speaks to exactly the rooms your clients are hosting.</p>
-<p style="margin:0 0 18px;">Also worth a look: ${arts.a2} — a practical guide to making private celebrations in Los Angeles unforgettable.</p>
-<p style="margin:0 0 18px;">If any of your clients have something coming up, I'd love to be on your radar. Happy to do a private demo at your office anytime.</p>
-${signoff()}`),
-      },
-      {
-        subject: "private party season",
-        preheader: "The best entertainment decision we made.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Different angle —</p>
-<p style="margin:0 0 18px;">I've performed at private events for clients of several major agencies and management companies. The feedback is always the same — "this was the single best entertainment decision we made."</p>
-<p style="margin:0 0 18px;">If any of your clients have birthdays, holidays, or milestone celebrations coming up, here's my ${deckLink} — easy to forward. Or take this ${quizLink} for a personalized recommendation.</p>
-${cta}
-${signoffShort()}`),
-      },
-      {
-        subject: "keeping this short",
-        preheader: "If a client ever needs private entertainment...",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Totally understand if the timing isn't right.</p>
-<p style="margin:0 0 18px;">If a client ever needs private entertainment that matches the caliber of their guest list, I'm at ${siteLink} or (424) 394-1850.</p>
-<p style="margin:0 0 18px;">All the best.</p>
-${signoff()}`),
+<p style="margin:0 0 18px;">Just wanted to make sure you have my info for when the right event comes up. Private parties, brand dinners, milestone celebrations. I work across all of them.</p>
+<p style="margin:0 0 18px;">My spring calendar is filling up, so if anything is coming down the pipeline, I am happy to check avails.</p>
+<p style="margin:0 0 18px;">${arts.a1}</p>
+${signoffFull()}`),
       },
     ],
 
