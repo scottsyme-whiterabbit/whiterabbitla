@@ -161,8 +161,8 @@ function getCampaignEmail(category: CampaignCategory, step: number, name: string
       a2: trackedLink(`${SITE_URL}/blog/lake-tahoe-rehearsal-dinner-magician`, "Destination Wedding Entertainment That Travels With You", contactId, step, category),
     },
     country_club: {
-      a1: trackedLink(`${SITE_URL}/blog/golf-tournament-entertainment-ideas`, "Golf Tournament Entertainment Ideas", contactId, step, category),
-      a2: trackedLink(`${SITE_URL}/blog/why-cocktail-hour-entertainment-matters`, "Why Cocktail Hour Entertainment Matters", contactId, step, category),
+      a1: trackedLink(`${SITE_URL}/event-magician`, "See What a White Rabbit Event Looks Like", contactId, step, category),
+      a2: trackedLink(`${SITE_URL}/event-magician`, "See What a White Rabbit Event Looks Like", contactId, step, category),
     },
     pr_agency: {
       a1: trackedLink(`${SITE_URL}/blog/corporate-entertainment-trends-2026`, "Corporate Entertainment Trends for 2026", contactId, step, category),
@@ -283,43 +283,44 @@ ${signoffFull()}`),
     // ═══════════════════════════════════════════════
     country_club: [
       {
-        subject: "the member event everyone actually talks about",
-        preheader: "What makes a club event feel different?",
+        subject: "A member event idea your social calendar might be missing",
+        preheader: "Interactive entertainment for private clubs.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Quick thought — when members come to a club event, what's the one thing that makes it feel different from last month's?</p>
-<p style="margin:0 0 18px;">The food is always great. The setting is beautiful. But the entertainment? That's usually where events start to feel interchangeable.</p>
-<p style="margin:0 0 18px;">I perform close-up magic and mentalism at private clubs and country club events across the country. I move through the room during cocktails, creating intimate moments of genuine wonder — the kind of thing members bring up at the next round of golf.</p>
-<p style="margin:0 0 18px;">I've performed for Netflix, Disney, Morgan Stanley, and Hyatt Hotels. Happy to come by for a complimentary 15-minute demo for your events team.</p>
-<p style="margin:0 0 18px;">Worth setting up?</p>
+<p style="margin:0 0 18px;">I work with private clubs in Southern California as an interactive entertainment option for member events. I perform close-up magic and mind reading during cocktail receptions, holiday galas, and themed dinner nights.</p>
+<p style="margin:0 0 18px;">It is the kind of programming that members talk about for weeks. Imagine a member handing you their phone and watching something impossible happen on the screen, or having me tell them the exact word they were thinking of. That kind of moment differentiates your social calendar from every other club in the area.</p>
+<p style="margin:0 0 18px;">Would it make sense to chat about adding something like this to an upcoming member event?</p>
+${cta}
+<p style="margin:0 0 18px;">${arts.a1}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "How private clubs use strolling entertainment",
+        preheader: "No stage, no AV, no disruption.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Here is how this typically works at a club event: I arrive 15 minutes before the reception starts and perform strolling close-up magic and mind reading during the cocktail hour. I move between groups of members, performing 3 to 5 minute interactive sets where they are participating the entire time.</p>
+<p style="margin:0 0 18px;">No stage needed. No AV setup. No disruption to your event flow. Members get an elevated experience, and you get an engagement event that practically runs itself.</p>
+<p style="margin:0 0 18px;">I have performed at an intimate private reception for 30 Rolls-Royce clients and large-scale events for over 200 Morgan Stanley guests, so the caliber matches what your members expect.</p>
+<p style="margin:0 0 18px;">${arts.a1}</p>
+${signoff()}`),
+      },
+      {
+        subject: "The event members remember all year",
+        preheader: "Member engagement through interactive magic.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">The events that drive member engagement are rarely the ones with the biggest budgets. They are the ones with the unexpected element.</p>
+<p style="margin:0 0 18px;">Close-up magic and mind reading at a dinner or cocktail event creates exactly that. Members do not just watch. They participate. They hand me objects, I use their phones, and I tell them things about themselves they have not said out loud. The conversations it sparks between members who might not usually interact is something club directors tell me they value most.</p>
+<p style="margin:0 0 18px;">I am a member at the Magic Castle in Hollywood and a consultant for America's Got Talent. Happy to chat anytime about how this would work for your club.</p>
 ${cta}
 ${signoffFull()}`),
       },
       {
-        subject: "Re: the member event everyone actually talks about",
-        preheader: "Thought your events team might find this useful.",
+        subject: "Keeping it on your radar",
+        preheader: "For your next member event or holiday gala.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Quick follow-up — I wrote a piece on ${arts.a1} that I think your events team would find interesting. It covers how clubs are using on-course entertainment during tournaments and 19th hole magic to keep members engaged.</p>
-<p style="margin:0 0 18px;">Also worth a read: ${arts.a2} — it breaks down why that cocktail/reception window is the highest-impact moment for entertainment at any club event.</p>
-<p style="margin:0 0 18px;">The demo offer stands — happy to come by any afternoon that works for your team.</p>
-${signoff()}`),
-      },
-      {
-        subject: "holiday party and member event season",
-        preheader: "A few clubs have started booking me for recurring events.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Different angle —</p>
-<p style="margin:0 0 18px;">A few private clubs have started booking me for their recurring member events — holiday galas, father-daughter dances, wine dinners, new member receptions. It's become their signature entertainment that members genuinely look forward to.</p>
-<p style="margin:0 0 18px;">If you're planning your event calendar, I'm booking Q2 and Q3 now. Take this ${quizLink} to see which format fits your events best.</p>
-${cta}
-${signoffShort()}`),
-      },
-      {
-        subject: "last thing",
-        preheader: "If the events team ever wants to try something different...",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">I'll leave this with you — if the events team ever wants to try something different for a member event, I'm at ${siteLink} or (424) 394-1850.</p>
-<p style="margin:0 0 18px;">Appreciate your time, and here's to a great season at the club.</p>
-${signoff()}`),
+<p style="margin:0 0 18px;">No rush on this at all. I just wanted to make sure you had my info for whenever a member event or holiday gala comes up where you need something fresh for the social calendar.</p>
+<p style="margin:0 0 18px;">Happy to put together a custom proposal anytime. I also do recurring monthly or quarterly programming if that is a better fit for your events schedule.</p>
+<p style="margin:0 0 18px;">${arts.a1}</p>
+${signoffFull()}`),
       },
     ],
 
