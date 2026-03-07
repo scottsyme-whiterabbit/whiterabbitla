@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Plus, X, ExternalLink, Download, MapPin, Users, Clock, DollarSign, Building2, Mail, Phone, Calendar } from "lucide-react";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isToday as isTodayFn, parseISO } from "date-fns";
+import { ChevronLeft, ChevronRight, Plus, X, ExternalLink, Download, MapPin, Users, Clock, DollarSign, Building2, Mail, Phone } from "lucide-react";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isToday as isTodayFn } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -136,11 +136,14 @@ const downloadICS = (deal: Deal) => {
 
 const CampaignCalendarTab = (_props: Props) => {
   const [deals, setDeals] = useState<Deal[]>([]);
+  const [gcalEvents, setGcalEvents] = useState<GoogleCalEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [expandedDealId, setExpandedDealId] = useState<string | null>(null);
+  const [expandedGcalId, setExpandedGcalId] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showGcal, setShowGcal] = useState(true);
   const [addForm, setAddForm] = useState({
     contact_name: "", contact_email: "", company: "", event_type: "corporate",
     event_date: "", event_time: "", location: "", guest_count: "", deal_value: "",
@@ -149,7 +152,6 @@ const CampaignCalendarTab = (_props: Props) => {
   const [saving, setSaving] = useState(false);
 
   const fetchDeals = async () => {
-    setLoading(true);
     const { data, error } = await supabase
       .from("deals")
       .select("id, contact_name, contact_email, company, event_type, event_date, event_time, location, guest_count, deal_value, stage, phone, notes")
@@ -160,10 +162,35 @@ const CampaignCalendarTab = (_props: Props) => {
     } else {
       setDeals(data || []);
     }
-    setLoading(false);
   };
 
-  useEffect(() => { fetchDeals(); }, []);
+  const fetchGoogleCalEvents = async () => {
+    try {
+      const start = startOfMonth(subMonths(currentMonth, 1));
+      const end = endOfMonth(addMonths(currentMonth, 2));
+      const { data, error } = await supabase.functions.invoke("google-calendar", {
+        body: {
+          timeMin: start.toISOString(),
+          timeMax: end.toISOString(),
+        },
+      });
+      if (error) {
+        console.error("Google Calendar fetch error:", error);
+      } else if (data?.events) {
+        setGcalEvents(data.events);
+      }
+    } catch (err) {
+      console.error("Failed to fetch Google Calendar:", err);
+    }
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    Promise.all([fetchDeals(), fetchGoogleCalEvents()]).finally(() => setLoading(false));
+  }, []);
+
+  // Refetch gcal when month changes
+  useEffect(() => { fetchGoogleCalEvents(); }, [currentMonth]);
 
   const bookedDeals = useMemo(() => deals.filter(d => BOOKED_STAGES.includes(d.stage)), [deals]);
   const holdDeals = useMemo(() => deals.filter(d => HOLD_STAGES.includes(d.stage)), [deals]);
@@ -176,20 +203,38 @@ const CampaignCalendarTab = (_props: Props) => {
 
   const startDayOffset = getDay(startOfMonth(currentMonth));
 
+  // Map gcal events by date
+  const gcalDateMap = useMemo(() => {
+    const map = new Map<string, GoogleCalEvent[]>();
+    gcalEvents.forEach(ev => {
+      if (!ev.start) return;
+      const dateStr = ev.start.length > 10 ? ev.start.slice(0, 10) : ev.start;
+      if (!map.has(dateStr)) map.set(dateStr, []);
+      map.get(dateStr)!.push(ev);
+    });
+    return map;
+  }, [gcalEvents]);
+
   const dateMap = useMemo(() => {
-    const map = new Map<string, { booked: Deal[]; holds: Deal[] }>();
+    const map = new Map<string, { booked: Deal[]; holds: Deal[]; gcal: GoogleCalEvent[] }>();
     bookedDeals.forEach(d => {
       const key = d.event_date!;
-      if (!map.has(key)) map.set(key, { booked: [], holds: [] });
+      if (!map.has(key)) map.set(key, { booked: [], holds: [], gcal: [] });
       map.get(key)!.booked.push(d);
     });
     holdDeals.forEach(d => {
       const key = d.event_date!;
-      if (!map.has(key)) map.set(key, { booked: [], holds: [] });
+      if (!map.has(key)) map.set(key, { booked: [], holds: [], gcal: [] });
       map.get(key)!.holds.push(d);
     });
+    if (showGcal) {
+      gcalDateMap.forEach((events, key) => {
+        if (!map.has(key)) map.set(key, { booked: [], holds: [], gcal: [] });
+        map.get(key)!.gcal.push(...events);
+      });
+    }
     return map;
-  }, [bookedDeals, holdDeals]);
+  }, [bookedDeals, holdDeals, gcalDateMap, showGcal]);
 
   const today = format(new Date(), "yyyy-MM-dd");
 
