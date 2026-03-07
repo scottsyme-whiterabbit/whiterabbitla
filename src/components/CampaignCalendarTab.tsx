@@ -4,6 +4,19 @@ import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths,
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+interface GoogleCalEvent {
+  id: string;
+  summary: string;
+  description: string | null;
+  location: string | null;
+  start: string | null;
+  end: string | null;
+  allDay: boolean;
+  htmlLink: string | null;
+  status: string;
+  colorId: string | null;
+}
+
 interface Deal {
   id: string;
   contact_name: string | null;
@@ -123,11 +136,13 @@ const downloadICS = (deal: Deal) => {
 
 const CampaignCalendarTab = (_props: Props) => {
   const [deals, setDeals] = useState<Deal[]>([]);
+  const [gcalEvents, setGcalEvents] = useState<GoogleCalEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [expandedDealId, setExpandedDealId] = useState<string | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showGcal, setShowGcal] = useState(true);
   const [addForm, setAddForm] = useState({
     contact_name: "", contact_email: "", company: "", event_type: "corporate",
     event_date: "", event_time: "", location: "", guest_count: "", deal_value: "",
@@ -136,7 +151,6 @@ const CampaignCalendarTab = (_props: Props) => {
   const [saving, setSaving] = useState(false);
 
   const fetchDeals = async () => {
-    setLoading(true);
     const { data, error } = await supabase
       .from("deals")
       .select("id, contact_name, contact_email, company, event_type, event_date, event_time, location, guest_count, deal_value, stage, phone, notes")
@@ -147,10 +161,35 @@ const CampaignCalendarTab = (_props: Props) => {
     } else {
       setDeals(data || []);
     }
-    setLoading(false);
   };
 
-  useEffect(() => { fetchDeals(); }, []);
+  const fetchGoogleCalEvents = async () => {
+    try {
+      const start = startOfMonth(subMonths(currentMonth, 1));
+      const end = endOfMonth(addMonths(currentMonth, 2));
+      const { data, error } = await supabase.functions.invoke("google-calendar", {
+        body: {
+          timeMin: start.toISOString(),
+          timeMax: end.toISOString(),
+        },
+      });
+      if (error) {
+        console.error("Google Calendar fetch error:", error);
+      } else if (data?.events) {
+        setGcalEvents(data.events);
+      }
+    } catch (err) {
+      console.error("Failed to fetch Google Calendar:", err);
+    }
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    Promise.all([fetchDeals(), fetchGoogleCalEvents()]).finally(() => setLoading(false));
+  }, []);
+
+  // Refetch gcal when month changes
+  useEffect(() => { fetchGoogleCalEvents(); }, [currentMonth]);
 
   const bookedDeals = useMemo(() => deals.filter(d => BOOKED_STAGES.includes(d.stage)), [deals]);
   const holdDeals = useMemo(() => deals.filter(d => HOLD_STAGES.includes(d.stage)), [deals]);
@@ -163,20 +202,38 @@ const CampaignCalendarTab = (_props: Props) => {
 
   const startDayOffset = getDay(startOfMonth(currentMonth));
 
+  // Map gcal events by date
+  const gcalDateMap = useMemo(() => {
+    const map = new Map<string, GoogleCalEvent[]>();
+    gcalEvents.forEach(ev => {
+      if (!ev.start) return;
+      const dateStr = ev.start.length > 10 ? ev.start.slice(0, 10) : ev.start;
+      if (!map.has(dateStr)) map.set(dateStr, []);
+      map.get(dateStr)!.push(ev);
+    });
+    return map;
+  }, [gcalEvents]);
+
   const dateMap = useMemo(() => {
-    const map = new Map<string, { booked: Deal[]; holds: Deal[] }>();
+    const map = new Map<string, { booked: Deal[]; holds: Deal[]; gcal: GoogleCalEvent[] }>();
     bookedDeals.forEach(d => {
       const key = d.event_date!;
-      if (!map.has(key)) map.set(key, { booked: [], holds: [] });
+      if (!map.has(key)) map.set(key, { booked: [], holds: [], gcal: [] });
       map.get(key)!.booked.push(d);
     });
     holdDeals.forEach(d => {
       const key = d.event_date!;
-      if (!map.has(key)) map.set(key, { booked: [], holds: [] });
+      if (!map.has(key)) map.set(key, { booked: [], holds: [], gcal: [] });
       map.get(key)!.holds.push(d);
     });
+    if (showGcal) {
+      gcalDateMap.forEach((events, key) => {
+        if (!map.has(key)) map.set(key, { booked: [], holds: [], gcal: [] });
+        map.get(key)!.gcal.push(...events);
+      });
+    }
     return map;
-  }, [bookedDeals, holdDeals]);
+  }, [bookedDeals, holdDeals, gcalDateMap, showGcal]);
 
   const today = format(new Date(), "yyyy-MM-dd");
 
@@ -294,20 +351,31 @@ const CampaignCalendarTab = (_props: Props) => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h2 className="font-serif text-xl text-foreground">Show Calendar</h2>
           <p className="text-xs text-muted-foreground mt-0.5">
             {bookedDeals.filter(d => d.event_date! >= today).length} upcoming · {holdDeals.filter(d => d.event_date! >= today).length} holds
+            {showGcal && gcalEvents.length > 0 && ` · ${gcalEvents.length} Google events`}
           </p>
         </div>
-        <button
-          onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center gap-1.5 text-xs font-sans tracking-[0.12em] uppercase bg-accent text-background px-4 py-2 hover:bg-accent/90 transition-colors"
-        >
-          {showAddForm ? <X size={14} /> : <Plus size={14} />}
-          {showAddForm ? "Cancel" : "Add Event"}
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setShowGcal(!showGcal)}
+            className={`flex items-center gap-1.5 text-xs font-sans tracking-[0.12em] uppercase px-4 py-2 border transition-colors ${
+              showGcal ? "border-sky-500/50 bg-sky-900/20 text-sky-300" : "border-border text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            📅 {showGcal ? "Google Cal On" : "Google Cal Off"}
+          </button>
+          <button
+            onClick={() => setShowAddForm(!showAddForm)}
+            className="flex items-center gap-1.5 text-xs font-sans tracking-[0.12em] uppercase bg-accent text-background px-4 py-2 hover:bg-accent/90 transition-colors"
+          >
+            {showAddForm ? <X size={14} /> : <Plus size={14} />}
+            {showAddForm ? "Cancel" : "Add Event"}
+          </button>
+        </div>
       </div>
 
       {/* Add Event Form */}
@@ -384,6 +452,7 @@ const CampaignCalendarTab = (_props: Props) => {
               const isSelected = selectedDate === dateKey;
               const hasBooked = events && events.booked.length > 0;
               const hasHolds = events && events.holds.length > 0;
+              const hasGcal = events && events.gcal && events.gcal.length > 0;
 
               return (
                 <button
@@ -393,6 +462,7 @@ const CampaignCalendarTab = (_props: Props) => {
                     isSelected ? "border-accent bg-accent/10" :
                     hasBooked ? "bg-emerald-900/15 border-emerald-600/30" :
                     hasHolds ? "bg-[#C9A96E]/8 border-dashed border-[#C9A96E]/40" :
+                    hasGcal ? "bg-sky-900/10 border-sky-600/20" :
                     "border-border/30 hover:border-border/60"
                   } ${isToday ? "ring-1 ring-accent" : ""}`}
                 >
@@ -413,8 +483,16 @@ const CampaignCalendarTab = (_props: Props) => {
                         🔒 {deal.contact_name?.split(" ")[0] || "HOLD"}
                       </div>
                     ))}
-                    {events && (events.booked.length + events.holds.length) > 3 && (
-                      <span className="text-[7px] text-muted-foreground">+{events.booked.length + events.holds.length - 3} more</span>
+                    {events?.gcal?.slice(0, 1).map(ev => {
+                      const time = ev.start && ev.start.length > 10 ? ev.start.slice(11, 16) : "";
+                      return (
+                        <div key={ev.id} className="bg-sky-900/20 border border-sky-500/30 px-1 py-0.5 text-[8px] text-sky-300 truncate rounded-sm leading-tight">
+                          📅 {time} {ev.summary}
+                        </div>
+                      );
+                    })}
+                    {events && ((events.booked.length + events.holds.length + (events.gcal?.length || 0)) > 3) && (
+                      <span className="text-[7px] text-muted-foreground">+{events.booked.length + events.holds.length + (events.gcal?.length || 0) - 3} more</span>
                     )}
                   </div>
                   {hasBooked && (
@@ -427,6 +505,11 @@ const CampaignCalendarTab = (_props: Props) => {
                       <span className="inline-block w-2 h-2 bg-[#C9A96E]/60 rounded-full" />
                     </div>
                   )}
+                  {hasGcal && !hasBooked && !hasHolds && (
+                    <div className="absolute top-1 right-1">
+                      <span className="inline-block w-2 h-2 bg-sky-500/60 rounded-full" />
+                    </div>
+                  )}
                 </button>
               );
             })}
@@ -436,6 +519,7 @@ const CampaignCalendarTab = (_props: Props) => {
           <div className="flex gap-4 text-xs font-sans text-muted-foreground mt-4 flex-wrap">
             <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-emerald-900/30 border border-emerald-600/40 rounded-sm" /> Confirmed</span>
             <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-[#C9A96E]/15 border border-dashed border-[#C9A96E]/50 rounded-sm" /> Hold</span>
+            {showGcal && <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-sky-900/20 border border-sky-500/30 rounded-sm" /> Google Cal</span>}
             <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-blue-900/30 border border-blue-500/50 rounded-sm" /> Corporate</span>
             <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-pink-900/30 border border-pink-500/50 rounded-sm" /> Wedding</span>
             <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-purple-900/30 border border-purple-500/50 rounded-sm" /> Private</span>
@@ -453,6 +537,33 @@ const CampaignCalendarTab = (_props: Props) => {
               </h3>
               {selectedDeals.booked.map(d => renderDealDetail(d, false))}
               {selectedDeals.holds.map(d => renderDealDetail(d, true))}
+              {selectedDeals.gcal?.map(ev => {
+                const time = ev.start && ev.start.length > 10 ? ev.start.slice(11, 16) : "All day";
+                const endTime = ev.end && ev.end.length > 10 ? ev.end.slice(11, 16) : "";
+                return (
+                  <div key={ev.id} className="border border-sky-500/30 bg-sky-900/10 p-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-base">📅</span>
+                        <div>
+                          <p className="font-sans text-sm text-foreground font-medium">{ev.summary}</p>
+                          <p className="text-[11px] text-muted-foreground">
+                            {time}{endTime && ` – ${endTime}`}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-[8px] font-sans tracking-[0.15em] uppercase text-sky-400 bg-sky-500/15 px-2 py-0.5">GCAL</span>
+                    </div>
+                    {ev.location && <p className="flex items-center gap-1.5 text-muted-foreground text-[12px] mt-2"><MapPin size={12} /> {ev.location}</p>}
+                    {ev.description && <p className="text-muted-foreground/70 text-[12px] italic mt-1 line-clamp-3">"{ev.description}"</p>}
+                    {ev.htmlLink && (
+                      <a href={ev.htmlLink} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-[10px] font-sans tracking-[0.12em] uppercase text-sky-400 hover:text-sky-300 transition-colors mt-2">
+                        <ExternalLink size={11} /> Open in Google Calendar
+                      </a>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
 

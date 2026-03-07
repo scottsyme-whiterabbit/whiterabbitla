@@ -47,3 +47,6 @@ verify_jwt = false
 
 [functions.post-show-sequence]
 verify_jwt = false
+
+[functions.google-calendar]
+verify_jwt = false
