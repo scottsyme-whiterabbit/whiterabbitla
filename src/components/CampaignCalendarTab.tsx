@@ -41,6 +41,20 @@ interface Props {
 const HOLD_STAGES = ["new", "contacted", "negotiating", "proposal_sent"];
 const BOOKED_STAGES = ["booked", "completed"];
 
+/** Convert "HH:mm" or ISO datetime to 12-hour format like "6:00 PM" */
+const to12Hour = (timeStr: string | null | undefined): string => {
+  if (!timeStr) return "";
+  // Extract HH:mm from either "HH:mm:ss" or ISO "...T18:00:00..."
+  const match = timeStr.match(/(\d{1,2}):(\d{2})/);
+  if (!match) return timeStr;
+  let h = parseInt(match[1]);
+  const m = match[2];
+  const ampm = h >= 12 ? "PM" : "AM";
+  if (h === 0) h = 12;
+  else if (h > 12) h -= 12;
+  return `${h}:${m} ${ampm}`;
+};
+
 const EVENT_COLORS: Record<string, { bg: string; border: string; text: string }> = {
   corporate: { bg: "bg-blue-900/30", border: "border-blue-500/50", text: "text-blue-300" },
   wedding: { bg: "bg-pink-900/30", border: "border-pink-500/50", text: "text-pink-300" },
