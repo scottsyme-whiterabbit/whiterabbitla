@@ -194,15 +194,17 @@ const PitchDeck = () => {
               <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">Scott Syme</h2>
               <div className="space-y-4 font-sans text-base text-muted-foreground leading-relaxed">
                 <p>
-                  Based in Los Angeles, Scott is a proud member of the world-famous Magic Castle® in
-                  Hollywood and the International Brotherhood of Magicians. He has consulted for
-                  America's Got Talent, coached performers for Disney Channel, and entertained guests
-                  for Netflix, Morgan Stanley, Rolls Royce, and dozens of Fortune 500 brands.
+                  Scott is a proud member of the world-famous Magic Castle® in Hollywood and the
+                  International Brotherhood of Magicians, traveling nationwide to bring luxury
+                  entertainment to the most discerning private events and corporate gatherings. He
+                  has consulted for America's Got Talent, coached performers for Disney Channel, and
+                  entertained guests for Netflix, Morgan Stanley, Rolls Royce, and dozens of
+                  Fortune 500 brands.
                 </p>
                 <p>
-                  Before magic, Scott built a career in luxury real estate at Compass in Beverly Hills.
-                  That background in white-glove service shapes every White Rabbit experience — guests
-                  don't just watch a show, they feel genuinely cared for.
+                  With a background in luxury real estate and high-net-worth client services, Scott
+                  brings a white-glove hospitality approach to every performance. Guests don't just
+                  watch a show — they feel genuinely cared for from the moment the evening begins.
                 </p>
               </div>
             </div>
