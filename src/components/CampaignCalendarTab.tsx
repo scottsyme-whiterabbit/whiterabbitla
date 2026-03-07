@@ -1,8 +1,21 @@
 import { useState, useMemo, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Plus, X, ExternalLink, Download, MapPin, Users, Clock, DollarSign, Building2, Mail, Phone } from "lucide-react";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isToday as isTodayFn } from "date-fns";
+import { ChevronLeft, ChevronRight, Plus, X, ExternalLink, Download, MapPin, Users, Clock, DollarSign, Building2, Mail, Phone, Calendar } from "lucide-react";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isToday as isTodayFn, parseISO } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+
+interface GoogleCalEvent {
+  id: string;
+  summary: string;
+  description: string | null;
+  location: string | null;
+  start: string | null;
+  end: string | null;
+  allDay: boolean;
+  htmlLink: string | null;
+  status: string;
+  colorId: string | null;
+}
 
 interface Deal {
   id: string;
