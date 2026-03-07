@@ -169,8 +169,8 @@ function getCampaignEmail(category: CampaignCategory, step: number, name: string
       a2: trackedLink(`${SITE_URL}/post/why-a-magic-show-in-los-angeles-is-the-perfect-entertainment-for-your-next-event`, "Why Magic Is the Perfect Experiential Element for Your Next Event", contactId, step, category),
     },
     nonprofit: {
-      a1: trackedLink(`${SITE_URL}/blog/why-cocktail-hour-entertainment-matters`, "Why Cocktail Hour Entertainment Matters", contactId, step, category),
-      a2: trackedLink(`${SITE_URL}/blog/entertainment-gap-planners-dont-know`, "The Entertainment Gap Most Planners Don't Know They Have", contactId, step, category),
+      a1: trackedLink(`${SITE_URL}/event-magician`, "See How White Rabbit Transforms Events", contactId, step, category),
+      a2: trackedLink(`${SITE_URL}/event-magician`, "See How White Rabbit Transforms Events", contactId, step, category),
     },
     talent_management: {
       a1: trackedLink(`${SITE_URL}/blog/how-to-choose-entertainment-for-luxury-event`, "How to Choose Entertainment for a Luxury Event", contactId, step, category),
@@ -374,43 +374,44 @@ ${signoffFull()}`),
     // ═══════════════════════════════════════════════
     nonprofit: [
       {
-        subject: "what happens between cocktails and the paddle raise",
-        preheader: "That gap is where energy either builds or fades.",
+        subject: "Keeping donors engaged before the paddle raise",
+        preheader: "Table-side magic for fundraising galas.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Quick question — at your galas, what's keeping donors engaged during that window between cocktail hour and the live auction?</p>
-<p style="margin:0 0 18px;">That gap is where energy either builds or fades. And when it fades, it shows up in the giving.</p>
-<p style="margin:0 0 18px;">I perform close-up magic and mentalism at fundraisers and charity galas — moving through the room during cocktails, creating moments of genuine wonder that put donors in an elevated mood right before the ask. It's not a stage act — it's intimate, elegant, and designed for high-net-worth rooms.</p>
-<p style="margin:0 0 18px;">Organizations like FosterAll and the Bachelors Ball have trusted me with their events. Clients include Netflix, Disney, and Morgan Stanley.</p>
-<p style="margin:0 0 18px;">Worth a quick call to see if this fits your next gala?</p>
+<p style="margin:0 0 18px;">I perform close-up magic and mind reading at fundraising galas as a table-side experience during cocktail hour and dinner.</p>
+<p style="margin:0 0 18px;">The goal is simple: keep your donors engaged, energized, and in the room before the paddle raise. Instead of guests checking phones or slipping out early, they are handing me their own phones, watching me read their minds, and seeing impossible things appear right in their hands. It creates a warmth and energy in the room that carries into the giving portion.</p>
+<p style="margin:0 0 18px;">Are you planning any galas or fundraising events in the next few months?</p>
+${cta}
+<p style="margin:0 0 18px;">${arts.a1}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "Why table-side magic works at galas",
+        preheader: "Personal, participatory, right at the donor table.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Here is why close-up magic works differently than a stage act at a fundraiser: it happens right at the donor's table. It is personal and participatory. Guests are not watching from a distance. They are holding objects, handing me their phones, and reacting out loud when I tell them exactly what they are thinking. It creates a one-on-one connection that puts the room in an emotionally open state before the fundraising portion begins.</p>
+<p style="margin:0 0 18px;">I move between tables performing 3 to 5 minute sets for groups of 6 to 10 guests. No microphone, no stage, no disruption to your event flow.</p>
+<p style="margin:0 0 18px;">I have performed at corporate events for Disney, CBS, and Morgan Stanley. Happy to walk you through how this would work at your next event.</p>
+<p style="margin:0 0 18px;">${arts.a1}</p>
+${signoff()}`),
+      },
+      {
+        subject: "The gala entertainment guests talk about at the next board meeting",
+        preheader: "FosterAll at the Jonathan Club.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">I recently performed at a FosterAll fundraising gala at the Jonathan Club. I did table-side close-up magic during the cocktail reception, moving between donor tables and creating moments that had the entire room buzzing. Then I stepped in as the auctioneer for the live auction portion. The combination of entertainment and fundraising energy in the same person created a seamless flow through the evening that kept donors engaged from the first drink to the final bid.</p>
+<p style="margin:0 0 18px;">The best gala programming creates moments that board members and major donors reference long after the event. Close-up magic does that because it happens to them, not in front of them.</p>
+<p style="margin:0 0 18px;">I would love to bring that same energy to your next event.</p>
 ${cta}
 ${signoffFull()}`),
       },
       {
-        subject: "Re: what happens between cocktails and the paddle raise",
-        preheader: "This might help with your planning.",
+        subject: "For your next gala",
+        preheader: "Interactive entertainment plus auctioneer.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Quick add — I put together an article on ${arts.a1} that I think speaks directly to the challenge most gala organizers face: keeping energy high during those transitional moments so donors are engaged and generous when the ask comes.</p>
-<p style="margin:0 0 18px;">Also: ${arts.a2} — it covers the specific gaps in event programming that most planners don't realize they have, and how the right entertainment solves them.</p>
-<p style="margin:0 0 18px;">Worth a look if you're building out your 2026 gala entertainment lineup.</p>
-${signoff()}`),
-      },
-      {
-        subject: "gala entertainment that pays for itself",
-        preheader: "Engaged donors give more generously.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Different thought —</p>
-<p style="margin:0 0 18px;">A few gala organizers have told me the entertainment paid for itself — engaged donors give more generously, and the "wow factor" gets sponsors excited about next year.</p>
-<p style="margin:0 0 18px;">If you're planning your 2026 gala season, take this ${quizLink} to see which format fits your event — or let's jump on a quick call.</p>
-${cta}
-${signoffShort()}`),
-      },
-      {
-        subject: "wishing you a great gala season",
-        preheader: "Keeping the door open.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">I'll keep the door open — if you ever need entertainment that energizes donors and elevates the evening, I'm at ${siteLink} or (424) 394-1850.</p>
-<p style="margin:0 0 18px;">Wishing you a wildly successful fundraising season.</p>
-${signoff()}`),
+<p style="margin:0 0 18px;">I know gala planning has a long lead time, so I just wanted to plant the seed for whenever your next event is on the horizon.</p>
+<p style="margin:0 0 18px;">If you ever need an interactive entertainment element that keeps donors present and engaged, or even someone who can double as an auctioneer, I am always happy to put together a custom proposal.</p>
+<p style="margin:0 0 18px;">${arts.a1}</p>
+${signoffFull()}`),
       },
     ],
 
