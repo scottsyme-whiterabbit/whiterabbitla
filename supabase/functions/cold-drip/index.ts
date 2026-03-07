@@ -153,8 +153,8 @@ function getCampaignEmail(category: CampaignCategory, step: number, name: string
   // Category-specific article links
   const articleLinks = {
     corporate_planner: {
-      a1: trackedLink(`${SITE_URL}/blog/corporate-entertainment-trends-2026`, "Corporate Entertainment Trends for 2026", contactId, step, category),
-      a2: trackedLink(`${SITE_URL}/blog/why-cocktail-hour-entertainment-matters`, "Why Cocktail Hour Entertainment Matters", contactId, step, category),
+      a1: trackedLink(`${SITE_URL}/blog/west-hollywood-holiday-party-magician`, "How to Choose the Perfect Corporate Event Entertainment", contactId, step, category),
+      a2: trackedLink(`${SITE_URL}/event-magician`, "See What a White Rabbit Event Looks Like", contactId, step, category),
     },
     wedding_planner: {
       a1: trackedLink(`${SITE_URL}/blog/wedding-entertainment-beyond-the-dj`, "Wedding Entertainment Beyond the DJ", contactId, step, category),
@@ -189,44 +189,46 @@ function getCampaignEmail(category: CampaignCategory, step: number, name: string
     // ═══════════════════════════════════════════════
     corporate_planner: [
       {
-        subject: `nobody remembers last year's holiday party`,
-        preheader: "Quick question about your corporate events.",
+        subject: "Quick question about your upcoming events",
+        preheader: "Interactive cocktail hour entertainment for corporate events.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Quick question — can your clients' employees describe what happened at last year's holiday party?</p>
-<p style="margin:0 0 18px;">If the answer is "open bar and a DJ," that's exactly why I exist.</p>
-<p style="margin:0 0 18px;">I perform close-up magic and mentalism at Fortune 500 corporate events. Not a stage show — I move through the room during cocktail hour making small groups of executives say "wait, WHAT just happened?" It turns networking from obligatory to electric.</p>
-<p style="margin:0 0 18px;">Companies like Netflix, Disney, and CBS have trusted me with their events. Here's how it works: ${link}</p>
-<p style="margin:0 0 18px;">Worth a quick look?</p>
+<p style="margin:0 0 18px;">I work with corporate teams at Netflix, Disney, and Morgan Stanley as their go-to for interactive cocktail hour entertainment. I perform close-up magic and mind reading, moving between groups of guests during receptions and networking portions.</p>
+<p style="margin:0 0 18px;">Most planners bring me in for the cocktail hour. Guests are mingling, and instead of awkward small talk, I am right there with them, using their phones, reading their minds, and making impossible things appear in their hands. It changes the energy of the room in minutes.</p>
+<p style="margin:0 0 18px;">Are you planning any client-facing events or team gatherings in the next few months where guest engagement matters?</p>
 ${cta}
+<p style="margin:0 0 18px;">${arts.a2}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "What Netflix does differently at their events",
+        preheader: "The events people actually remember.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">One thing I have noticed working corporate events for the past decade: the events people remember are never about the venue or the food. It is always the unexpected moment.</p>
+<p style="margin:0 0 18px;">That is why companies like Netflix and Rivian bring me in during cocktail hour. I do strolling close-up magic and mind reading, moving between groups of 4 to 8 guests at a time. No stage. No setup. No AV requirements. I show up 15 minutes early, blend in with your guests, and within seconds people are handing me their phones, picking cards, and losing their minds when I tell them exactly what they are thinking.</p>
+<p style="margin:0 0 18px;">At a recent Morgan Stanley event, I performed for over 200 guests across a large indoor reception space. The format scales seamlessly whether it is an intimate dinner or a full corporate gathering.</p>
+<p style="margin:0 0 18px;">${arts.a1}</p>
 ${signoff()}`),
       },
       {
-        subject: `Re: nobody remembers last year's holiday party`,
-        preheader: "Thought this might be useful for your team.",
+        subject: "How a 45-minute set changed a client reception",
+        preheader: "An intimate evening for Rolls-Royce.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Thought you might find this useful — I wrote a piece on ${arts.a1} that breaks down what the most innovative companies are doing differently with event entertainment this year.</p>
-<p style="margin:0 0 18px;">The short version: interactive, intimate experiences are replacing the generic DJ-and-photo-booth formula. The companies getting the best ROI from events are the ones making guests feel something unexpected.</p>
-<p style="margin:0 0 18px;">Happy to send over a ${deckLink} showing exactly how this works at corporate events. Takes 2 minutes to flip through.</p>
-${signoff()}`),
-      },
-      {
-        subject: "Q2 event calendar",
-        preheader: "If you've got Q2 or Q3 events on the books...",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Different thought —</p>
-<p style="margin:0 0 18px;">If you've got any Q2 or Q3 corporate events on the books (product launches, client appreciation, team offsites), I'm booking those now.</p>
-<p style="margin:0 0 18px;">Not sure what format fits best? This ${quizLink} can help — takes 35 seconds and gives you a tailored recommendation.</p>
+<p style="margin:0 0 18px;">I recently performed at an intimate evening for Rolls-Royce. 30 guests, all clients of the brand. Close-up magic and mind reading at a private reception where every person in the room mattered. By the end of the night, guests were pulling their friends over to watch, handing me their phones to use, and trying to figure out how I knew exactly what they were thinking.</p>
+<p style="margin:0 0 18px;">The host told me afterward that multiple guests came up to her asking how she found me. That is the reaction I aim for: your guests crediting you for the experience.</p>
+<p style="margin:0 0 18px;">I am a member at the Magic Castle in Hollywood and was a consultant on America's Got Talent. I mention that only because planners tell me it helps when they need to justify the vendor choice internally.</p>
+<p style="margin:0 0 18px;">Would a quick call make sense to see if this fits an upcoming event?</p>
 ${cta}
-${signoffShort()}`),
+${signoffFull()}`),
       },
       {
-        subject: "last note from me",
-        preheader: "I'll keep this short.",
+        subject: "Last note from me",
+        preheader: "Planting the seed for your next event.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">I'll keep this short — I know you're swamped.</p>
-<p style="margin:0 0 18px;">If a client ever needs entertainment that isn't another photo booth, I'm at ${siteLink}.</p>
-<p style="margin:0 0 18px;">All the best with your 2026 events.</p>
-${signoff()}`),
+<p style="margin:0 0 18px;">I know your inbox is relentless, so I will keep this short.</p>
+<p style="margin:0 0 18px;">If you ever need a reliable entertainment option for a cocktail reception, client dinner, or team event, I would love to be on your radar. My calendar fills 4 to 6 weeks out during peak season.</p>
+<p style="margin:0 0 18px;">No pressure at all. Just planting the seed.</p>
+<p style="margin:0 0 18px;">${arts.a2}</p>
+${signoffFull()}`),
       },
     ],
 
