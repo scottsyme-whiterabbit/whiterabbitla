@@ -177,8 +177,8 @@ function getCampaignEmail(category: CampaignCategory, step: number, name: string
       a2: trackedLink(`${SITE_URL}/event-magician`, "See What a White Rabbit Experience Looks Like", contactId, step, category),
     },
     restaurant: {
-      a1: trackedLink(`${SITE_URL}/blog/magic-spirits-tastings-cigar-nights`, "Magic at Spirits Tastings & Cigar Nights", contactId, step, category),
-      a2: trackedLink(`${SITE_URL}/blog/why-cocktail-hour-entertainment-matters`, "Why Cocktail Hour Entertainment Matters", contactId, step, category),
+      a1: trackedLink(`${SITE_URL}/post/why-a-magic-show-in-los-angeles-is-the-perfect-entertainment-for-your-next-event`, "Why Restaurants Are Adding Table-Side Magic to Their Programming", contactId, step, category),
+      a2: trackedLink(`${SITE_URL}/post/why-a-magic-show-in-los-angeles-is-the-perfect-entertainment-for-your-next-event`, "Why Restaurants Are Adding Table-Side Magic to Their Programming", contactId, step, category),
     },
   };
   const arts = articleLinks[category];
@@ -466,45 +466,44 @@ ${signoffFull()}`),
     // ═══════════════════════════════════════════════
     restaurant: [
       {
-        subject: "filling seats on your slowest night",
-        preheader: "What if that night became your most talked-about?",
+        subject: "A guest experience idea for your slower nights",
+        preheader: "Table-side magic that fills seats.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Quick question — what's your slowest night of the week?</p>
-<p style="margin:0 0 18px;">What if that night became your most talked-about?</p>
-<p style="margin:0 0 18px;">I perform weekly magic residencies at restaurants and venues across LA — close-up magic at the tables during dinner service. Guests get an unforgettable experience, the venue gets social media content and repeat visits, and suddenly your Tuesday feels like a Saturday.</p>
-<p style="margin:0 0 18px;">I currently perform weekly at a venue in Los Angeles, and I've performed for brands like Netflix, Disney, and Rolls-Royce. My style is intimate, elegant, and designed to elevate — not interrupt — the dining experience.</p>
-<p style="margin:0 0 18px;">Worth a quick conversation?</p>
+<p style="margin:0 0 18px;">I work with upscale restaurants in LA as a table-side entertainer. I perform close-up magic and mind reading right at the guest's table during dinner service. Guests hand me their phones and watch something impossible happen on the screen. I tell them the exact dish they were about to order. Things appear in their hands that were not there a second ago.</p>
+<p style="margin:0 0 18px;">Restaurants that bring me in for a weekly or biweekly night see two things: increased covers on that night and guests who come back specifically for the experience. It turns a slow Tuesday into a destination night.</p>
+<p style="margin:0 0 18px;">Would a quick conversation about trying this at your restaurant make sense?</p>
+${cta}
+<p style="margin:0 0 18px;">${arts.a1}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "How table-side magic increases your average check",
+        preheader: "Guests stay longer and order more.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Here is what typically happens when I perform at a restaurant: guests stay longer. They order another round. They tell the table next to them to watch. And they tell their friends to come next week.</p>
+<p style="margin:0 0 18px;">I perform 3 to 5 minute sets at each table, moving through the dining room over 2 to 3 hours. The experience is intimate, interactive, and completely participatory. Guests are involved the entire time. It gives your diners something to post about and a reason to come back.</p>
+<p style="margin:0 0 18px;">No stage. No sound system. No disruption to service. I work with your host to time my table visits between courses.</p>
+<p style="margin:0 0 18px;">${arts.a1}</p>
+${signoff()}`),
+      },
+      {
+        subject: "What guests say about the table-side experience",
+        preheader: "Guests start making reservations for magic nights.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">The restaurants I work with tell me the same thing: guests start making reservations specifically for the nights I perform. It becomes a reason to choose your restaurant over the one next door.</p>
+<p style="margin:0 0 18px;">I have performed at an intimate private dinner for 30 Rolls-Royce clients and large-scale receptions for over 200 Morgan Stanley guests. The quality of the experience matches the caliber of your guests.</p>
+<p style="margin:0 0 18px;">Happy to do a complimentary trial night so you can see the guest reaction firsthand.</p>
 ${cta}
 ${signoffFull()}`),
       },
       {
-        subject: "Re: filling seats on your slowest night",
-        preheader: "Thought this might spark an idea.",
+        subject: "If you ever want to try something different",
+        preheader: "No commitment trial night.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Quick add — I wrote a piece on ${arts.a1} that explores how restaurants and lounges are using live magic to elevate the dining experience. Whiskey tastings, private dining, cigar nights — the intimacy of these settings is where close-up magic shines brightest.</p>
-<p style="margin:0 0 18px;">Also: ${arts.a2} — it covers why that cocktail/reception window is the highest-impact moment for any venue looking to create a signature experience.</p>
-<p style="margin:0 0 18px;">Happy to swing by for a quick demo any evening. No commitment.</p>
-${signoff()}`),
-      },
-      {
-        subject: "weekly magic residency — how it works",
-        preheader: "More covers on your slow night.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Different thought —</p>
-<p style="margin:0 0 18px;">Here's how the residency model works: I come in one night a week, perform tableside magic for 2-3 hours during dinner service. The venue promotes it as a signature experience. Over time, it becomes the thing people come specifically for — and they bring friends.</p>
-<p style="margin:0 0 18px;">The ROI is straightforward: more covers on your slow night, organic social content, and a reputation as the place with the coolest experience in town.</p>
-<p style="margin:0 0 18px;">Happy to swing by for a quick 15-minute demo any evening. No commitment.</p>
-${cta}
-${signoffShort()}`),
-      },
-      {
-        subject: "last note",
-        preheader: "No worries if the timing doesn't work right now.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">No worries if the timing doesn't work right now.</p>
-<p style="margin:0 0 18px;">If you ever want to try a magic night or need entertainment for a private event at the venue, I'm at ${siteLink} or (424) 394-1850.</p>
-<p style="margin:0 0 18px;">Cheers to a packed house.</p>
-${signoff()}`),
+<p style="margin:0 0 18px;">Just keeping this brief. If you ever want to test a table-side entertainment night at your restaurant, I am happy to set up a trial. No commitment, no contract. Just one night to see how your guests react.</p>
+<p style="margin:0 0 18px;">My calendar gets busy on weekends, but I have availability on weeknight evenings, which is usually when restaurants want the programming most.</p>
+<p style="margin:0 0 18px;">${arts.a1}</p>
+${signoffFull()}`),
       },
     ],
   };
