@@ -165,8 +165,8 @@ function getCampaignEmail(category: CampaignCategory, step: number, name: string
       a2: trackedLink(`${SITE_URL}/event-magician`, "See What a White Rabbit Event Looks Like", contactId, step, category),
     },
     pr_agency: {
-      a1: trackedLink(`${SITE_URL}/blog/corporate-entertainment-trends-2026`, "Corporate Entertainment Trends for 2026", contactId, step, category),
-      a2: trackedLink(`${SITE_URL}/blog/how-to-choose-entertainment-for-luxury-event`, "How to Choose Entertainment for a Luxury Event", contactId, step, category),
+      a1: trackedLink(`${SITE_URL}/post/why-a-magic-show-in-los-angeles-is-the-perfect-entertainment-for-your-next-event`, "Why Magic Is the Perfect Experiential Element for Your Next Event", contactId, step, category),
+      a2: trackedLink(`${SITE_URL}/post/why-a-magic-show-in-los-angeles-is-the-perfect-entertainment-for-your-next-event`, "Why Magic Is the Perfect Experiential Element for Your Next Event", contactId, step, category),
     },
     nonprofit: {
       a1: trackedLink(`${SITE_URL}/blog/why-cocktail-hour-entertainment-matters`, "Why Cocktail Hour Entertainment Matters", contactId, step, category),
@@ -329,44 +329,43 @@ ${signoffFull()}`),
     // ═══════════════════════════════════════════════
     pr_agency: [
       {
-        subject: "the moment that makes everyone pull out their phone",
-        preheader: "What guarantees organic social content?",
+        subject: "Experiential talent for your next client activation",
+        preheader: "Close-up magic for brand events and activations.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">When you're planning a brand activation or client event, what's the one element that guarantees organic social content?</p>
-<p style="margin:0 0 18px;">Not the step-and-repeat. Not the branded cocktails. It's the moment where someone says "wait — you HAVE to see this" and pulls out their phone.</p>
-<p style="margin:0 0 18px;">I create those moments. Close-up magic and mentalism woven through cocktail receptions — no stage, no corny setup. Just jaw-dropping, intimate experiences that generate organic shares and keep guests talking about the brand long after the event.</p>
-<p style="margin:0 0 18px;">I've done this for Netflix, Rivian, Morgan Stanley, and Rolls-Royce. Here's how it works: ${link}</p>
-<p style="margin:0 0 18px;">Worth exploring for an upcoming activation?</p>
+<p style="margin:0 0 18px;">I am a close-up magician and mind reader who works with brands like Netflix, Disney, and CBS for experiential events and activations.</p>
+<p style="margin:0 0 18px;">My work is designed for the cocktail hour of a launch party, the VIP lounge at a brand event, or the unexpected moment during a press dinner that guests post about before they leave. No stage, no AV, just real-time interaction that photographs well and creates shareable content. Guests hand me their phones, I read their minds, and things appear in their hands that should not be there. The reactions are genuine and they film themselves.</p>
+<p style="margin:0 0 18px;">If your agency ever sources talent for client events, I would love to be on your roster.</p>
 ${cta}
+<p style="margin:0 0 18px;">${arts.a1}</p>
 ${signoffFull()}`),
       },
       {
-        subject: "Re: the moment that makes everyone pull out their phone",
-        preheader: "Thought your team might find this relevant.",
+        subject: "The moment that makes your activation go viral",
+        preheader: "Organic social content from real guest reactions.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">One add — I wrote a piece on ${arts.a1} that breaks down the shift agencies are seeing: experiential, interactive entertainment is replacing passive formats at brand events because it generates the organic content and guest engagement that clients actually measure.</p>
-<p style="margin:0 0 18px;">Also put together a ${deckLink} showing how this has worked at past brand activations — it's a quick flip-through that might be worth sharing with your events team.</p>
-<p style="margin:0 0 18px;">Happy to chat about any upcoming activations where this could fit.</p>
+<p style="margin:0 0 18px;">Here is what happens when you add a mind reader to a client event: guests stop scrolling their phones and start engaging with each other. Then they pull out their phones to record what just happened. That organic content is worth more than any branded photo booth.</p>
+<p style="margin:0 0 18px;">I specialize in close-up experiences for groups of 4 to 8 people. I move through the event creating these moments over and over, using their personal objects, reading their thoughts, making predictions that come true in their hands. By the end of the night, your client has dozens of organic social posts from their guests.</p>
+<p style="margin:0 0 18px;">${arts.a1}</p>
 ${signoff()}`),
       },
       {
-        subject: "brand activation idea",
-        preheader: "A few agencies have started booking me for launches.",
+        subject: "Why agencies keep bringing me back",
+        preheader: "Zero logistics for your event day.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Quick thought —</p>
-<p style="margin:0 0 18px;">A few agencies have started booking me specifically for product launches and VIP client dinners. The magic becomes a branded conversation piece — guests associate the wonder with the brand experience.</p>
-<p style="margin:0 0 18px;">If you've got any Q2 activations or client events on deck, this ${quizLink} can help you figure out the right format in 35 seconds.</p>
+<p style="margin:0 0 18px;">I work with a Vogue-listed event producer in LA who books me for multi-day client activations. The reason she keeps bringing me back: zero logistics. I show up, perform, and leave. No rider, no tech requirements, no coordination beyond a start time.</p>
+<p style="margin:0 0 18px;">For an agency managing a dozen vendors on event day, having one that requires nothing from your team is valuable.</p>
+<p style="margin:0 0 18px;">I am also a Magic Castle member and AGT consultant, which helps when agencies need a quick credential check for their client.</p>
 ${cta}
-${signoffShort()}`),
+${signoff()}`),
       },
       {
-        subject: "keeping this brief",
-        preheader: "No worries if the timing isn't right.",
+        subject: "On your radar for client events",
+        preheader: "Product launches, press dinners, VIP receptions.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">No worries if the timing isn't right.</p>
-<p style="margin:0 0 18px;">If a client ever needs experiential entertainment that actually generates buzz, I'm at ${siteLink}.</p>
-<p style="margin:0 0 18px;">All the best with your upcoming campaigns.</p>
-${signoff()}`),
+<p style="margin:0 0 18px;">Just a final note to say I am always available if you need experiential talent for a client event. Product launches, press dinners, VIP receptions, brand activations. I work across all of them.</p>
+<p style="margin:0 0 18px;">Happy to jump on a quick call anytime.</p>
+<p style="margin:0 0 18px;">${arts.a1}</p>
+${signoffFull()}`),
       },
     ],
 
