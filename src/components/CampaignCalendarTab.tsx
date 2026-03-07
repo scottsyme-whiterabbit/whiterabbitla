@@ -1,11 +1,8 @@
 import { useState, useMemo, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Plus, X, ExternalLink, Download, MapPin, Users, Clock, DollarSign, Building2, Mail, Phone } from "lucide-react";
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isSameDay, isToday as isTodayFn } from "date-fns";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, getDay, addMonths, subMonths, isToday as isTodayFn } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 interface Deal {
   id: string;
@@ -124,7 +121,7 @@ const downloadICS = (deal: Deal) => {
   URL.revokeObjectURL(url);
 };
 
-const CampaignCalendarTab = ({ }: Props) => {
+const CampaignCalendarTab = (_props: Props) => {
   const [deals, setDeals] = useState<Deal[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentMonth, setCurrentMonth] = useState(new Date());
