@@ -485,9 +485,10 @@ const CampaignCalendarTab = (_props: Props) => {
                     ))}
                     {events?.gcal?.slice(0, 1).map(ev => {
                       const time = ev.start && ev.start.length > 10 ? ev.start.slice(11, 16) : "";
+                      const label = ev.summary === "(No title)" ? (ev.allDay ? "Busy" : "Event") : ev.summary;
                       return (
                         <div key={ev.id} className="bg-sky-900/20 border border-sky-500/30 px-1 py-0.5 text-[8px] text-sky-300 truncate rounded-sm leading-tight">
-                          📅 {time} {ev.summary}
+                          📅 {time && `${time} `}{label}
                         </div>
                       );
                     })}
@@ -540,15 +541,18 @@ const CampaignCalendarTab = (_props: Props) => {
               {selectedDeals.gcal?.map(ev => {
                 const time = ev.start && ev.start.length > 10 ? ev.start.slice(11, 16) : "All day";
                 const endTime = ev.end && ev.end.length > 10 ? ev.end.slice(11, 16) : "";
+                const isUntitled = ev.summary === "(No title)";
+                const displayName = isUntitled ? (ev.allDay ? "Busy (All Day)" : `Personal Event`) : ev.summary;
                 return (
                   <div key={ev.id} className="border border-sky-500/30 bg-sky-900/10 p-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="text-base">📅</span>
                         <div>
-                          <p className="font-sans text-sm text-foreground font-medium">{ev.summary}</p>
+                          <p className="font-sans text-sm text-foreground font-medium">{displayName}</p>
                           <p className="text-[11px] text-muted-foreground">
                             {time}{endTime && ` – ${endTime}`}
+                            {isUntitled && " · Details hidden"}
                           </p>
                         </div>
                       </div>
