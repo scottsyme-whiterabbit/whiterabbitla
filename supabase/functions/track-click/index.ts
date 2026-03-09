@@ -4,6 +4,19 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const SITE_URL = "https://whiterabbitla.com";
 const LOGO_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-email-logo.png";
 
+function extractFirstName(name: string | null | undefined): string {
+  if (!name) return "there";
+  if (name.includes(" and ") || name.includes(" & ")) return name;
+  if (name.trim().toLowerCase().endsWith("team")) return name;
+  return name.split(" ")[0];
+}
+
+// Campaign types that have warm nurture sequences
+const WARM_NURTURE_CAMPAIGNS: Record<string, string> = {
+  "planner": "planner-warm",
+  "resident": "resident-warm",
+};
+
 // Nurture Email 1 — sent immediately on 3rd click
 function buildNurtureEmail1(name: string, email: string): { subject: string; html: string } {
   const subject = "Quick thought for your next event";
@@ -104,71 +117,75 @@ serve(async (req) => {
 
       const totalClicks = clickCount || 1;
 
-      if (totalClicks >= 3) {
-        // 3+ clicks: mark as Hot and transition to warm nurture sequence
-        const { data: contact } = await supabase
-          .from("newsletter_contacts")
-          .select("drip_campaign, engagement_status, name, email")
-          .eq("id", contactId)
-          .single();
+      // Fetch contact for all escalation paths
+      const { data: contact } = await supabase
+        .from("newsletter_contacts")
+        .select("drip_campaign, engagement_status, name, email")
+        .eq("id", contactId)
+        .single();
 
-        if (contact && contact.drip_campaign === "planner") {
-          // Move to warm nurture sequence — start at step 1 since we send step 0 now
-          await supabase
-            .from("newsletter_contacts")
-            .update({
-              engagement_status: "hot",
-              drip_campaign: "planner-warm",
-              drip_step: 1,
-              drip_started_at: new Date().toISOString(),
-              last_emailed_at: new Date().toISOString(),
-            })
-            .eq("id", contactId);
+      if (contact) {
+        if (totalClicks >= 3 && contact.engagement_status !== "hot") {
+          // 3+ clicks: mark as Hot for ANY campaign type
+          const warmNurtureCampaign = WARM_NURTURE_CAMPAIGNS[contact.drip_campaign];
 
-          // Send Nurture Email 1 immediately
-          const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-          if (RESEND_API_KEY && contact.email) {
-            const firstName = contact.name?.split(" ")[0] || "there";
-            const { subject, html } = buildNurtureEmail1(firstName, contact.email);
-            try {
-              await fetch("https://api.resend.com/emails", {
-                method: "POST",
-                headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
-                body: JSON.stringify({
-                  from: "Scott Syme | White Rabbit LA <scott.syme@whiterabbitla.com>",
-                  to: [contact.email],
-                  reply_to: "events@whiterabbitla.com",
-                  subject,
-                  html,
-                  headers: {
-                    "List-Unsubscribe": `<${SITE_URL}/unsubscribe?email=${encodeURIComponent(contact.email)}>, <mailto:events@whiterabbitla.com?subject=Unsubscribe>`,
-                    "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
-                  },
-                }),
-              });
-              // Log the send
-              await supabase.from("newsletter_send_log").insert({
-                campaign_id: "planner-warm-step-0",
-                contact_id: contactId,
-                ab_variant: "A",
-              });
-            } catch (e) {
-              console.error("Failed to send immediate nurture email:", e);
+          if (warmNurtureCampaign) {
+            // Has a warm nurture sequence — transition into it
+            await supabase
+              .from("newsletter_contacts")
+              .update({
+                engagement_status: "hot",
+                drip_campaign: warmNurtureCampaign,
+                drip_step: 1,
+                drip_started_at: new Date().toISOString(),
+                last_emailed_at: new Date().toISOString(),
+              })
+              .eq("id", contactId);
+
+            // Send Nurture Email 1 immediately
+            const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+            if (RESEND_API_KEY && contact.email) {
+              const firstName = extractFirstName(contact.name);
+              const { subject, html } = buildNurtureEmail1(firstName, contact.email);
+              try {
+                await fetch("https://api.resend.com/emails", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
+                  body: JSON.stringify({
+                    from: "Scott Syme | White Rabbit LA <scott.syme@whiterabbitla.com>",
+                    to: [contact.email],
+                    reply_to: "events@whiterabbitla.com",
+                    subject,
+                    html,
+                    headers: {
+                      "List-Unsubscribe": `<${SITE_URL}/unsubscribe?email=${encodeURIComponent(contact.email)}>, <mailto:events@whiterabbitla.com?subject=Unsubscribe>`,
+                      "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+                    },
+                  }),
+                });
+                await supabase.from("newsletter_send_log").insert({
+                  campaign_id: `${warmNurtureCampaign}-step-0`,
+                  contact_id: contactId,
+                  ab_variant: "A",
+                });
+              } catch (e) {
+                console.error("Failed to send immediate nurture email:", e);
+              }
             }
+          } else {
+            // No warm nurture sequence — just mark as hot
+            await supabase
+              .from("newsletter_contacts")
+              .update({ engagement_status: "hot" })
+              .eq("id", contactId);
           }
-        } else if (contact && contact.engagement_status !== "hot") {
+        } else if (totalClicks >= 1 && contact.engagement_status === "new") {
+          // 1-2 clicks: mark as warm for ANY campaign type
           await supabase
             .from("newsletter_contacts")
-            .update({ engagement_status: "hot" })
+            .update({ engagement_status: "warm" })
             .eq("id", contactId);
         }
-      } else if (totalClicks >= 1) {
-        // 1-2 clicks: mark as warm, keep drip running
-        await supabase
-          .from("newsletter_contacts")
-          .update({ engagement_status: "warm" })
-          .eq("id", contactId)
-          .in("engagement_status", ["new"]);
       }
     }
 

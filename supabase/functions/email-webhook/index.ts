@@ -64,7 +64,7 @@ serve(async (req) => {
       }
     }
 
-    // Handle opened events — bump engagement
+    // Handle opened events — bump engagement based on total opens
     if (eventType === "email.opened") {
       const recipientEmail = body.data?.to?.[0] || body.data?.email;
       if (recipientEmail) {
@@ -74,12 +74,28 @@ serve(async (req) => {
           .eq("email", recipientEmail.toLowerCase())
           .maybeSingle();
 
-        if (contact && contact.engagement_status === "new") {
-          await supabase
-            .from("newsletter_contacts")
-            .update({ engagement_status: "warm" })
-            .eq("id", contact.id);
-          console.log(`Contact ${recipientEmail} upgraded to warm (opened)`);
+        if (contact && (contact.engagement_status === "new" || contact.engagement_status === "warm")) {
+          // Count total opens for this contact
+          const { count: openCount } = await supabase
+            .from("newsletter_opens")
+            .select("*", { count: "exact", head: true })
+            .eq("contact_id", contact.id);
+
+          const totalOpens = openCount || 1;
+
+          if (totalOpens >= 5 && contact.engagement_status !== "hot") {
+            await supabase
+              .from("newsletter_contacts")
+              .update({ engagement_status: "hot" })
+              .eq("id", contact.id);
+            console.log(`Contact ${recipientEmail} upgraded to hot (${totalOpens} opens)`);
+          } else if (totalOpens >= 1 && contact.engagement_status === "new") {
+            await supabase
+              .from("newsletter_contacts")
+              .update({ engagement_status: "warm" })
+              .eq("id", contact.id);
+            console.log(`Contact ${recipientEmail} upgraded to warm (opened)`);
+          }
         }
       }
     }
