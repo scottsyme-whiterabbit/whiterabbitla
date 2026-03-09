@@ -1,5 +1,6 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, Navigate } from "react-router-dom";
 import NotFound from "./NotFound";
+import { getSeoPageBySlug } from "@/data/seoPages";
 import { useEffect } from "react";
 import { Star, CheckCircle } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
@@ -294,6 +295,10 @@ const ServicePage = () => {
   }, [page]);
 
   if (!page) {
+    // If this slug matches an SEO landing page, redirect to /blog/ canonical URL
+    if (serviceSlug && getSeoPageBySlug(serviceSlug)) {
+      return <Navigate to={`/blog/${serviceSlug}`} replace />;
+    }
     return <NotFound />;
   }
 
