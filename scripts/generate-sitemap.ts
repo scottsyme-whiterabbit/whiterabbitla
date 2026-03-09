@@ -121,11 +121,20 @@ for (const city of serviceAreaCities) {
   lines.push(url(`/areas/${city}`, "monthly", "0.6"));
 }
 
+// Premiere pages only exist for LA-area locations (must match seoPages.ts premiereLocations)
+const premiereLocations = new Set([
+  "Los Angeles", "Beverly Hills", "Hollywood", "Santa Monica", "Malibu",
+  "West Hollywood", "Bel Air", "Pasadena", "Calabasas", "Pacific Palisades",
+  "Brentwood", "Manhattan Beach", "Downtown LA", "Studio City", "Burbank",
+  "Long Beach", "Silver Lake", "Los Feliz",
+]);
+
 lines.push("");
 lines.push('  <!-- SEO Landing Pages -->');
 
 for (const loc of locations) {
   for (const key of serviceKeys) {
+    if (key === "premiere-red-carpet-magician" && !premiereLocations.has(loc)) continue;
     lines.push(url(`/blog/${slugify(loc)}-${key}`, "monthly", "0.7"));
   }
 }
