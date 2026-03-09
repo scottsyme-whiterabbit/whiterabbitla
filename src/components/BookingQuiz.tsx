@@ -199,7 +199,7 @@ const BookingQuiz = () => {
     setTimeout(() => {
       setStep("clientType");
       setSubmitted(false);
-      setData({ clientType: "", clientTypeLabel: "", eventType: "", eventLabel: "", location: "", guestCount: "", guestLabel: "", date: "", budget: "", budgetLabel: "", name: "", email: "", phone: "", message: "" });
+      setData({ clientType: "", clientTypeLabel: "", eventType: "", eventLabel: "", location: "", guestCount: "", guestLabel: "", date: "", budget: "", budgetLabel: "", name: "", email: "", phone: "", referralSource: "", message: "" });
     }, 300);
   };
 
