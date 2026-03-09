@@ -431,6 +431,27 @@ const BookingQuiz = () => {
                           />
                         </div>
                         <div>
+                          <label htmlFor="quiz-source" className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 block">How Did You Find Us?</label>
+                          <select
+                            id="quiz-source"
+                            required
+                            value={data.referralSource}
+                            onChange={(e) => setData({ ...data, referralSource: e.target.value })}
+                            className="flex h-10 w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                          >
+                            <option value="" disabled>Select one...</option>
+                            <option value="Google Search">Google Search</option>
+                            <option value="Instagram">Instagram</option>
+                            <option value="TikTok">TikTok</option>
+                            <option value="Referral from a Friend">Referral from a Friend</option>
+                            <option value="Event Planner Recommendation">Event Planner Recommendation</option>
+                            <option value="The Magic Castle">The Magic Castle</option>
+                            <option value="Wedding Venue / Planner">Wedding Venue / Planner</option>
+                            <option value="Blog or Article">Blog or Article</option>
+                            <option value="Other">Other</option>
+                          </select>
+                        </div>
+                        <div>
                           <label htmlFor="quiz-message" className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 block">
                             Anything else? <span className="normal-case tracking-normal text-muted-foreground/60">(optional)</span>
                           </label>
