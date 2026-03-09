@@ -1,4 +1,5 @@
-import { useParams, Link, Navigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import NotFound from "./NotFound";
 import { useEffect, useState } from "react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useServiceSchema } from "@/hooks/useSchemaOrg";
