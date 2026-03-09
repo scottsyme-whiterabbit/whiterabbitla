@@ -25,12 +25,38 @@ serve(async (req) => {
         Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
       );
 
+      // Insert open record
       await supabase.from("newsletter_opens").insert({
         contact_id: contactId,
         drip_step: step,
         campaign_id: campaignId,
         user_agent: userAgent,
       });
+
+      // Count total opens for this contact
+      const { count: openCount } = await supabase
+        .from("newsletter_opens")
+        .select("*", { count: "exact", head: true })
+        .eq("contact_id", contactId);
+
+      const totalOpens = openCount || 1;
+
+      // Status escalation based on opens
+      if (totalOpens >= 5) {
+        // 5+ opens: escalate to hot (from new or warm)
+        await supabase
+          .from("newsletter_contacts")
+          .update({ engagement_status: "hot" })
+          .eq("id", contactId)
+          .in("engagement_status", ["new", "warm"]);
+      } else if (totalOpens >= 3) {
+        // 3+ opens: escalate to warm (from new only)
+        await supabase
+          .from("newsletter_contacts")
+          .update({ engagement_status: "warm" })
+          .eq("id", contactId)
+          .in("engagement_status", ["new"]);
+      }
     } catch (e) {
       console.error("track-open error:", e);
     }
