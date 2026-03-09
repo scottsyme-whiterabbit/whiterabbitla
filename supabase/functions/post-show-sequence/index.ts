@@ -333,7 +333,7 @@ ${signoff()}
 }
 
 function email4Reengage(deal: Deal): { subject: string; preheader: string; html: string } {
-  const name = deal.contact_name?.split(" ")[0] || "there";
+  const name = extractFirstName(deal.contact_name);
   const contactId = deal.id;
   const season = getSeason();
   const seasonalHook = getSeasonalHook();
