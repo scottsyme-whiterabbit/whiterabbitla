@@ -133,7 +133,7 @@ const BookingQuiz = () => {
       case "guests": return !!data.guestCount;
       case "date": return !!data.date;
       case "budget": return !!data.budget;
-      case "contact": return !!data.name && !!data.email && !!data.phone;
+      case "contact": return !!data.name && !!data.email && !!data.phone && !!data.referralSource;
       default: return true;
     }
   };
