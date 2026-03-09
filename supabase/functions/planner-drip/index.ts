@@ -847,7 +847,7 @@ serve(async (req) => {
           const template = WARM_TEMPLATES[step];
           const warmVariant = pickVariant();
           const warmSubject = getSubject(template, warmVariant);
-          const firstName = contact.name?.split(" ")[0] || "there";
+          const firstName = extractFirstName(contact.name);
           const bodyInner = template.body(firstName, contact.company || "", contact.city || "");
           const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, step);
 
