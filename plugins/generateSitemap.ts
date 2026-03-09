@@ -1,8 +1,5 @@
-/**
- * Generates sitemap.xml from seoPages data + static routes.
- * Run: npx tsx scripts/generate-sitemap.ts
- */
 import { writeFileSync } from "fs";
+import type { Plugin } from "vite";
 
 const BASE = "https://whiterabbitla.com";
 
@@ -35,6 +32,13 @@ const serviceKeys = [
   "premiere-red-carpet-magician", "dmc-entertainment", "resident-event-magician",
 ];
 
+const premiereLocations = new Set([
+  "Los Angeles", "Beverly Hills", "Hollywood", "Santa Monica", "Malibu",
+  "West Hollywood", "Bel Air", "Pasadena", "Calabasas", "Pacific Palisades",
+  "Brentwood", "Manhattan Beach", "Downtown LA", "Studio City", "Burbank",
+  "Long Beach", "Silver Lake", "Los Feliz",
+]);
+
 const editorialArticles = [
   "why-event-planners-adding-magician-vendor-list",
   "not-kids-birthday-party-modern-magic",
@@ -61,7 +65,6 @@ const editorialArticles = [
   "resident-event-ideas-that-actually-get-rsvps",
 ];
 
-// Service area city slugs for /areas/:city pages
 const serviceAreaCities = [
   "los-angeles", "beverly-hills", "hollywood", "santa-monica", "malibu",
   "west-hollywood", "calabasas", "pasadena", "orange-county", "san-diego",
@@ -93,61 +96,58 @@ function url(path: string, freq: string, priority: string): string {
   return `  <url><loc>${BASE}${path}</loc><changefreq>${freq}</changefreq><priority>${priority}</priority></url>`;
 }
 
-const lines: string[] = [
-  '<?xml version="1.0" encoding="UTF-8"?>',
-  '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-  '  <!-- Core Pages -->',
-  url("/", "weekly", "1.0"),
-  url("/experience", "monthly", "0.9"),
-  url("/about", "monthly", "0.8"),
-  url("/reviews", "monthly", "0.8"),
-  url("/contact", "monthly", "0.9"),
-  url("/blog", "weekly", "0.8"),
-  url("/areas", "monthly", "0.7"),
-  url("/quiz", "monthly", "0.7"),
-  url("/deck", "monthly", "0.6"),
-  "",
-  '  <!-- Dedicated Service Pages -->',
-  url("/services/corporate-magician", "monthly", "0.9"),
-  url("/services/wedding-magician", "monthly", "0.9"),
-  url("/services/private-party-magician", "monthly", "0.9"),
-  url("/services/close-up-magician", "monthly", "0.9"),
-  url("/services/private-magic-show", "monthly", "0.9"),
-  "",
-  '  <!-- Service Area Pages -->',
-];
+export function generateSitemap(): Plugin {
+  return {
+    name: "generate-sitemap",
+    buildStart() {
+      const lines: string[] = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+        '  <!-- Core Pages -->',
+        url("/", "weekly", "1.0"),
+        url("/experience", "monthly", "0.9"),
+        url("/about", "monthly", "0.8"),
+        url("/reviews", "monthly", "0.8"),
+        url("/contact", "monthly", "0.9"),
+        url("/blog", "weekly", "0.8"),
+        url("/areas", "monthly", "0.7"),
+        url("/quiz", "monthly", "0.7"),
+        url("/deck", "monthly", "0.6"),
+        "",
+        '  <!-- Dedicated Service Pages -->',
+        url("/services/corporate-magician", "monthly", "0.9"),
+        url("/services/wedding-magician", "monthly", "0.9"),
+        url("/services/private-party-magician", "monthly", "0.9"),
+        url("/services/close-up-magician", "monthly", "0.9"),
+        url("/services/private-magic-show", "monthly", "0.9"),
+        "",
+        '  <!-- Service Area Pages -->',
+      ];
 
-for (const city of serviceAreaCities) {
-  lines.push(url(`/areas/${city}`, "monthly", "0.6"));
+      for (const city of serviceAreaCities) {
+        lines.push(url(`/areas/${city}`, "monthly", "0.6"));
+      }
+
+      lines.push("");
+      lines.push('  <!-- SEO Landing Pages -->');
+
+      for (const loc of locations) {
+        for (const key of serviceKeys) {
+          if (key === "premiere-red-carpet-magician" && !premiereLocations.has(loc)) continue;
+          lines.push(url(`/blog/${slugify(loc)}-${key}`, "monthly", "0.7"));
+        }
+      }
+
+      lines.push("");
+      lines.push('  <!-- Editorial Blog Articles -->');
+      for (const slug of editorialArticles) {
+        lines.push(url(`/blog/${slug}`, "monthly", "0.8"));
+      }
+
+      lines.push("</urlset>");
+
+      writeFileSync("public/sitemap.xml", lines.join("\n"));
+      console.log(`[sitemap] Generated sitemap.xml`);
+    },
+  };
 }
-
-// Premiere pages only exist for LA-area locations (must match seoPages.ts premiereLocations)
-const premiereLocations = new Set([
-  "Los Angeles", "Beverly Hills", "Hollywood", "Santa Monica", "Malibu",
-  "West Hollywood", "Bel Air", "Pasadena", "Calabasas", "Pacific Palisades",
-  "Brentwood", "Manhattan Beach", "Downtown LA", "Studio City", "Burbank",
-  "Long Beach", "Silver Lake", "Los Feliz",
-]);
-
-lines.push("");
-lines.push('  <!-- SEO Landing Pages -->');
-
-for (const loc of locations) {
-  for (const key of serviceKeys) {
-    if (key === "premiere-red-carpet-magician" && !premiereLocations.has(loc)) continue;
-    lines.push(url(`/blog/${slugify(loc)}-${key}`, "monthly", "0.7"));
-  }
-}
-
-lines.push("");
-lines.push('  <!-- Editorial Blog Articles -->');
-for (const slug of editorialArticles) {
-  lines.push(url(`/blog/${slug}`, "monthly", "0.8"));
-}
-
-lines.push("</urlset>");
-
-writeFileSync("public/sitemap.xml", lines.join("\n"));
-const seoCount = locations.length * serviceKeys.length;
-const totalUrls = 9 + 5 + serviceAreaCities.length + seoCount + editorialArticles.length;
-console.log(`Sitemap generated: ${totalUrls} URLs (${seoCount} SEO + ${editorialArticles.length} editorial + ${serviceAreaCities.length} area pages + 14 core/service)`);

@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { generateSharePages } from "./plugins/generateSharePages";
+import { generateSitemap } from "./plugins/generateSitemap";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -17,6 +18,7 @@ export default defineConfig(({ mode }) => ({
     react(),
     mode === "development" && componentTagger(),
     generateSharePages(),
+    generateSitemap(),
   ].filter(Boolean),
   resolve: {
     alias: {

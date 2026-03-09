@@ -1,4 +1,5 @@
-import { useParams, Navigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import NotFound from "./NotFound";
 import { useEffect } from "react";
 import { Star, CheckCircle } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
@@ -293,7 +294,7 @@ const ServicePage = () => {
   }, [page]);
 
   if (!page) {
-    return <Navigate to="/experience" replace />;
+    return <NotFound />;
   }
 
   return (
