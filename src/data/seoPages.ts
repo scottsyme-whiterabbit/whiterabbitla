@@ -1234,6 +1234,20 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
     body.splice(2, 0, venueContext);
   }
 
+  // Inject region-specific content for uniqueness (after venue context)
+  const region = locationRegion[location];
+  if (region && regionHooks[region]) {
+    const hooks = regionHooks[region];
+    // Add region event culture context as a body paragraph
+    body.push(hooks.eventCulture);
+    // Add audience style note
+    body.push(hooks.audienceStyle);
+    // For non-local markets, add travel note
+    if (!tier1Markets.has(location)) {
+      body.push(hooks.travelNote);
+    }
+  }
+
   const faqs = generateFaqs(location, service.key);
 
   return {
