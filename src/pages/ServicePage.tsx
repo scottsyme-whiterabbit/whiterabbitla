@@ -1,5 +1,6 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, Navigate } from "react-router-dom";
 import NotFound from "./NotFound";
+import { getSeoPageBySlug } from "@/data/seoPages";
 import { useEffect } from "react";
 import { Star, CheckCircle } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
