@@ -614,7 +614,7 @@ serve(async (req) => {
       }
 
       // Get email content
-      const firstName = campaign.name?.split(" ")[0] || "there";
+      const firstName = extractFirstName(campaign.name);
       const template = getCampaignEmail(campaign.campaign_category as CampaignCategory, step, firstName, campaign.id);
 
       if (!template.subject) { skipped++; continue; }
