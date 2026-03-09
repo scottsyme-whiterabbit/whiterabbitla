@@ -121,7 +121,7 @@ for (const city of serviceAreaCities) {
   lines.push(url(`/areas/${city}`, "monthly", "0.6"));
 }
 
-// Premiere pages only exist for LA-area locations (must match seoPages.ts premiereLocations)
+// Market tiers — must mirror seoPages.ts
 const premiereLocations = new Set([
   "Los Angeles", "Beverly Hills", "Hollywood", "Santa Monica", "Malibu",
   "West Hollywood", "Bel Air", "Pasadena", "Calabasas", "Pacific Palisades",
@@ -129,13 +129,51 @@ const premiereLocations = new Set([
   "Long Beach", "Silver Lake", "Los Feliz",
 ]);
 
+const tier1Markets = new Set([
+  "Los Angeles", "Beverly Hills", "Hollywood", "Santa Monica", "Malibu",
+  "West Hollywood", "Bel Air", "Pasadena", "Calabasas", "Pacific Palisades",
+  "Brentwood", "Manhattan Beach", "Downtown LA", "Studio City", "Burbank",
+  "Long Beach", "Silver Lake", "Los Feliz", "Encino", "Westlake Village",
+  "Thousand Oaks", "Rancho Palos Verdes", "Laguna Beach", "Orange County",
+]);
+
+const tier2Markets = new Set([
+  "San Diego", "Las Vegas", "Miami", "New York", "Austin", "Chicago",
+  "Dallas", "San Francisco", "Scottsdale", "Nashville", "Houston",
+  "Seattle", "Denver", "Atlanta", "Boston", "Washington DC", "Philadelphia",
+  "Palm Springs", "Santa Barbara", "Montecito", "Newport Beach",
+  "Napa Valley", "The Hamptons", "Aspen", "Park City", "Palm Beach",
+  "Coral Gables", "Highland Park", "River Oaks", "Buckhead", "Portland",
+  "Coronado", "Fort Worth", "San Antonio", "Charleston", "Minneapolis",
+]);
+
+const tier2ServiceKeys = new Set([
+  "corporate-event-magician", "private-party-magician", "wedding-magician",
+  "close-up-magician", "private-magic-show", "holiday-party-magician",
+  "charity-gala-magician", "golf-tournament-magician",
+]);
+
+const tier3ServiceKeys = new Set([
+  "corporate-event-magician", "private-party-magician", "wedding-magician",
+  "close-up-magician", "private-magic-show",
+]);
+
+function shouldGeneratePage(loc: string, key: string): boolean {
+  if (key === "premiere-red-carpet-magician") return premiereLocations.has(loc);
+  if (tier1Markets.has(loc)) return true;
+  if (tier2Markets.has(loc)) return tier2ServiceKeys.has(key);
+  return tier3ServiceKeys.has(key);
+}
+
 lines.push("");
 lines.push('  <!-- SEO Landing Pages -->');
 
+let seoCount = 0;
 for (const loc of locations) {
   for (const key of serviceKeys) {
-    if (key === "premiere-red-carpet-magician" && !premiereLocations.has(loc)) continue;
+    if (!shouldGeneratePage(loc, key)) continue;
     lines.push(url(`/blog/${slugify(loc)}-${key}`, "monthly", "0.7"));
+    seoCount++;
   }
 }
 
@@ -148,6 +186,4 @@ for (const slug of editorialArticles) {
 lines.push("</urlset>");
 
 writeFileSync("public/sitemap.xml", lines.join("\n"));
-const seoCount = locations.length * serviceKeys.length;
-const totalUrls = 9 + 5 + serviceAreaCities.length + seoCount + editorialArticles.length;
-console.log(`Sitemap generated: ${totalUrls} URLs (${seoCount} SEO + ${editorialArticles.length} editorial + ${serviceAreaCities.length} area pages + 14 core/service)`);
+console.log(`Sitemap generated: ${seoCount} SEO landing pages + ${editorialArticles.length} editorial + ${serviceAreaCities.length} area pages + 14 core/service`);
