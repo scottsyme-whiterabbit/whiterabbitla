@@ -146,6 +146,12 @@ const reviews = [
   role: "Birthday Celebration",
   text: "Scott performed a fantastic show for my birthday. Amazing close up magic that left us all stunned. All our friends still talk about the show and what a great time they had. Highly recommend!",
   rating: 5
+},
+{
+  name: "Miguel V.",
+  role: "Company Outing",
+  text: "Scott was a phenomenal addition to have at our company's outing. He kept all of us engaged from start to finish and created such a fun, energetic atmosphere. His magic was impressive, but what really stood out was how interactive and personable he was with everyone. Our team is still talking about some of the tricks he performed. If you're looking for someone who can truly entertain a crowd and make an event memorable, Scott is the perfect choice.",
+  rating: 5
 }];
 
 
