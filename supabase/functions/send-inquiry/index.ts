@@ -58,7 +58,10 @@ serve(async (req) => {
         <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Client Type</td><td style="padding:8px;border-bottom:1px solid #eee;">${clientType || "Not specified"}</td></tr>
         <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Event Type</td><td style="padding:8px;border-bottom:1px solid #eee;">${eventType}</td></tr>
         <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Date</td><td style="padding:8px;border-bottom:1px solid #eee;">${date}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Guest Count</td><td style="padding:8px;border-bottom:1px solid #eee;">${guestCount || "Not specified"}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Budget</td><td style="padding:8px;border-bottom:1px solid #eee;">${budget || "Not specified"}</td></tr>
         <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Location</td><td style="padding:8px;border-bottom:1px solid #eee;">${location}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">How They Found Us</td><td style="padding:8px;border-bottom:1px solid #eee;color:#2a7d5f;font-weight:bold;">${formSource || "Not specified"}</td></tr>
       </table>
       <h3 style="margin-top:24px;">Message</h3>
       <p style="white-space:pre-wrap;">${message}</p>
