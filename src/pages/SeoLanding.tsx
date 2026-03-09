@@ -174,6 +174,7 @@ const SeoLanding = () => {
 
   if (!page) {
     return <NotFound />;
+  }
 
   const heroImage = page.category === "Parlor Shows" ? parlorImg : experienceImg;
   const testimonial = getCityTestimonial(page.slug, page.category);
