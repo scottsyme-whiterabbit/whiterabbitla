@@ -18,6 +18,7 @@ export default defineConfig(({ mode }) => ({
     react(),
     mode === "development" && componentTagger(),
     generateSharePages(),
+    generateSitemap(),
   ].filter(Boolean),
   resolve: {
     alias: {
