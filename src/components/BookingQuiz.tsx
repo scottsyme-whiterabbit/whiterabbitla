@@ -163,7 +163,7 @@ const BookingQuiz = () => {
           eventType: `${data.eventLabel} (${rec.format})`,
           date: data.date,
           location: data.location || "TBD",
-          message: `Client Type: ${data.clientTypeLabel}\nGuest Count: ${data.guestLabel}\nBudget: ${data.budgetLabel}\nRecommended: ${rec.title}\n\n${data.message || "No additional message."}`,
+          message: `Client Type: ${data.clientTypeLabel}\nGuest Count: ${data.guestLabel}\nBudget: ${data.budgetLabel}\nHow They Found Us: ${data.referralSource}\nRecommended: ${rec.title}\n\n${data.message || "No additional message."}`,
           clientType: data.clientType || null,
           guestCount: data.guestLabel || null,
           budget: data.budgetLabel || null,
