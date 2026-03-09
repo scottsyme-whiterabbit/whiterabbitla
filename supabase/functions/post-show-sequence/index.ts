@@ -250,7 +250,7 @@ function getUpcomingHoliday(now: Date): Holiday | null {
 // ═══════════════════════════════════════════════
 
 function email1ThankYou(deal: Deal): { subject: string; preheader: string; html: string } {
-  const name = deal.contact_name?.split(" ")[0] || "there";
+  const name = extractFirstName(deal.contact_name);
   const STANDARD_TYPES = ["corporate", "wedding", "private party", "parlor show", "other"];
   const rawType = deal.event_type?.replace(/_/g, " ") || "";
   const isStandard = STANDARD_TYPES.includes(rawType.toLowerCase());
