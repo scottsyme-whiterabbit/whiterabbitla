@@ -148,6 +148,13 @@ const tier3ServiceKeys = new Set([
   "close-up-magician", "private-magic-show",
 ]);
 
+const premiereLocations = new Set([
+  "Los Angeles", "Beverly Hills", "Hollywood", "Santa Monica", "Malibu",
+  "West Hollywood", "Bel Air", "Pasadena", "Calabasas", "Pacific Palisades",
+  "Brentwood", "Manhattan Beach", "Downtown LA", "Studio City", "Burbank",
+  "Long Beach", "Silver Lake", "Los Feliz",
+]);
+
 function shouldGeneratePage(location: string, serviceKey: string): boolean {
   if (serviceKey === "premiere-red-carpet-magician") return premiereLocations.has(location);
   if (tier1Markets.has(location)) return true;
