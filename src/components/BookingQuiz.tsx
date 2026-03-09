@@ -55,6 +55,7 @@ interface QuizData {
   name: string;
   email: string;
   phone: string;
+  referralSource: string;
   message: string;
 }
 
