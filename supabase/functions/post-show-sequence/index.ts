@@ -8,6 +8,12 @@ const corsHeaders = {
 };
 
 const LOGO_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-email-logo.png";
+
+function extractFirstName(name: string | null | undefined): string {
+  if (!name) return "there";
+  if (name.includes(" and ")) return name;
+  if (name.trim().toLowerCase().endsWith("team")) return name;
+  return name
 const SITE_URL = "https://whiterabbitla.com";
 const TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-click";
 const OPEN_TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-open";
