@@ -8,6 +8,13 @@ const corsHeaders = {
 };
 
 const LOGO_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-email-logo.png";
+
+function extractFirstName(name: string | null | undefined): string {
+  if (!name) return "there";
+  if (name.includes(" and ")) return name;
+  if (name.trim().toLowerCase().endsWith("team")) return name;
+  return name.split(" ")[0];
+}
 const SITE_URL = "https://whiterabbitla.com";
 const TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-click";
 const OPEN_TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-open";
@@ -143,7 +150,7 @@ function bookCallCTA(contactId: string, step: number, campaign: string): string 
 }
 
 function getCampaignEmail(category: CampaignCategory, step: number, name: string, contactId: string): { subject: string; preheader: string; innerHtml: string } {
-  const firstName = name ? name.split(" ")[0] : "there";
+  const firstName = extractFirstName(name);
   const link = trackedLink(`${SITE_URL}/experience`, "whiterabbitla.com/event-magician", contactId, step, category);
   const siteLink = trackedLink(SITE_URL, "whiterabbitla.com", contactId, step, category);
   const deckLink = trackedLink(`${SITE_URL}/deck`, "digital lookbook", contactId, step, category);
@@ -607,7 +614,7 @@ serve(async (req) => {
       }
 
       // Get email content
-      const firstName = campaign.name?.split(" ")[0] || "there";
+      const firstName = extractFirstName(campaign.name);
       const template = getCampaignEmail(campaign.campaign_category as CampaignCategory, step, firstName, campaign.id);
 
       if (!template.subject) { skipped++; continue; }

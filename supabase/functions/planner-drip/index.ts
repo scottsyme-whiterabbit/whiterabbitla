@@ -722,7 +722,7 @@ serve(async (req) => {
           const template = TEMPLATES[step];
           const variant = pickVariant();
           const subject = getSubject(template, variant);
-          const firstName = contact.name?.split(" ")[0] || "there";
+          const firstName = extractFirstName(contact.name);
           const bodyInner = template.body(firstName, contact.company || "", contact.city || "", contact.id, step);
           const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, step);
 
@@ -790,7 +790,7 @@ serve(async (req) => {
             const startedAt = new Date(contact.drip_started_at);
             const daysSinceStart = (now.getTime() - startedAt.getTime()) / (1000 * 60 * 60 * 24);
             if (daysSinceStart >= BREAKUP_DAY) {
-              const firstName = contact.name?.split(" ")[0] || "there";
+              const firstName = extractFirstName(contact.name);
               const breakupVariant = pickVariant();
               const breakupSubject = getSubject(BREAKUP_TEMPLATE, breakupVariant);
               const bodyInner = BREAKUP_TEMPLATE.body(firstName, contact.company || "", contact.city || "");
@@ -847,7 +847,7 @@ serve(async (req) => {
           const template = WARM_TEMPLATES[step];
           const warmVariant = pickVariant();
           const warmSubject = getSubject(template, warmVariant);
-          const firstName = contact.name?.split(" ")[0] || "there";
+          const firstName = extractFirstName(contact.name);
           const bodyInner = template.body(firstName, contact.company || "", contact.city || "");
           const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, step);
 
@@ -910,7 +910,7 @@ serve(async (req) => {
               const template = PULSE_TEMPLATES[pulseIndex];
               const pulseVariant = pickVariant();
               const pulseSubject = getSubject(template, pulseVariant);
-              const firstName = contact.name?.split(" ")[0] || "there";
+              const firstName = extractFirstName(contact.name);
               const bodyInner = template.body(firstName, contact.company || "", contact.city || "");
               const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, 100 + pulseIndex);
 
