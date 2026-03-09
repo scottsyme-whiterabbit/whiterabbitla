@@ -77,7 +77,7 @@ const ReviewGate = () => {
                 How Was the Magic?
               </h1>
               <p className="font-sans text-base text-muted-foreground max-w-md mx-auto mb-12">
-                We'd love to hear about your experience with White Rabbit. Your feedback helps us create even more unforgettable moments.
+                We'd love to hear about your time with Scott Syme and the White Rabbit experience. Your feedback helps us create even more unforgettable moments.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-lg mx-auto">
