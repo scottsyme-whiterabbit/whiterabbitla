@@ -245,6 +245,44 @@ export type Database = {
         }
         Relationships: []
       }
+      email_bounces: {
+        Row: {
+          bounce_type: string
+          contact_id: string | null
+          created_at: string
+          email: string
+          id: string
+          raw_payload: Json | null
+          reason: string | null
+        }
+        Insert: {
+          bounce_type: string
+          contact_id?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          raw_payload?: Json | null
+          reason?: string | null
+        }
+        Update: {
+          bounce_type?: string
+          contact_id?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          raw_payload?: Json | null
+          reason?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_bounces_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "newsletter_contacts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lead_magnet_signups: {
         Row: {
           created_at: string
