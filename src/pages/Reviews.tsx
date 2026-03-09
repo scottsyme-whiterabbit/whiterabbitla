@@ -140,6 +140,12 @@ const reviews = [
   role: "Private Party Guest",
   text: "Scott scares me in a good way. I thought I was safe in the world, and then he proved that magic is real and is around me. I now live in constant wonder and intrigue.",
   rating: 5
+},
+{
+  name: "Craig T.",
+  role: "Birthday Celebration",
+  text: "Scott performed a fantastic show for my birthday. Amazing close up magic that left us all stunned. All our friends still talk about the show and what a great time they had. Highly recommend!",
+  rating: 5
 }];
 
 
