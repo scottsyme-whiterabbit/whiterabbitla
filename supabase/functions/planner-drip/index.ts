@@ -11,7 +11,7 @@ const LOGO_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/pub
 
 function extractFirstName(name: string | null | undefined): string {
   if (!name) return "there";
-  if (name.includes(" and ")) return name;
+  if (name.includes(" and ") || name.includes(" & ")) return name;
   if (name.trim().toLowerCase().endsWith("team")) return name;
   return name.split(" ")[0];
 }
