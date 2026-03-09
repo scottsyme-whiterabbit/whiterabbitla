@@ -114,6 +114,147 @@ const locations = [
   "Minneapolis",
 ] as const;
 
+// Market tiers determine which service types are generated per location
+// Tier 1: LA-area (all 15 services) — home market, full coverage
+const tier1Markets = new Set([
+  "Los Angeles", "Beverly Hills", "Hollywood", "Santa Monica", "Malibu",
+  "West Hollywood", "Bel Air", "Pasadena", "Calabasas", "Pacific Palisades",
+  "Brentwood", "Manhattan Beach", "Downtown LA", "Studio City", "Burbank",
+  "Long Beach", "Silver Lake", "Los Feliz", "Encino", "Westlake Village",
+  "Thousand Oaks", "Rancho Palos Verdes", "Laguna Beach", "Orange County",
+]);
+
+// Tier 2: Major metros + affluent enclaves (top 8 services)
+const tier2Markets = new Set([
+  "San Diego", "Las Vegas", "Miami", "New York", "Austin", "Chicago",
+  "Dallas", "San Francisco", "Scottsdale", "Nashville", "Houston",
+  "Seattle", "Denver", "Atlanta", "Boston", "Washington DC", "Philadelphia",
+  "Palm Springs", "Santa Barbara", "Montecito", "Newport Beach",
+  "Napa Valley", "The Hamptons", "Aspen", "Park City", "Palm Beach",
+  "Coral Gables", "Highland Park", "River Oaks", "Buckhead", "Portland",
+  "Coronado", "Fort Worth", "San Antonio", "Charleston", "Minneapolis",
+]);
+
+// Tier 2 gets these service types
+const tier2ServiceKeys = new Set([
+  "corporate-event-magician", "private-party-magician", "wedding-magician",
+  "close-up-magician", "private-magic-show", "holiday-party-magician",
+  "charity-gala-magician", "golf-tournament-magician",
+]);
+
+// Tier 3 (all remaining markets) gets only the top 5
+const tier3ServiceKeys = new Set([
+  "corporate-event-magician", "private-party-magician", "wedding-magician",
+  "close-up-magician", "private-magic-show",
+]);
+
+const premiereLocations = new Set([
+  "Los Angeles", "Beverly Hills", "Hollywood", "Santa Monica", "Malibu",
+  "West Hollywood", "Bel Air", "Pasadena", "Calabasas", "Pacific Palisades",
+  "Brentwood", "Manhattan Beach", "Downtown LA", "Studio City", "Burbank",
+  "Long Beach", "Silver Lake", "Los Feliz",
+]);
+
+function shouldGeneratePage(location: string, serviceKey: string): boolean {
+  if (serviceKey === "premiere-red-carpet-magician") return premiereLocations.has(location);
+  if (tier1Markets.has(location)) return true;
+  if (tier2Markets.has(location)) return tier2ServiceKeys.has(serviceKey);
+  return tier3ServiceKeys.has(serviceKey);
+}
+
+// Region assignments for content variation
+type Region = "socal" | "norcal" | "centralcal" | "southwest" | "mountain" | "texas" | "southeast" | "florida" | "northeast" | "midwest" | "pnw";
+
+const locationRegion: Record<string, Region> = {
+  "Los Angeles": "socal", "Beverly Hills": "socal", "Hollywood": "socal", "Santa Monica": "socal",
+  "Malibu": "socal", "West Hollywood": "socal", "Bel Air": "socal", "Pasadena": "socal",
+  "Orange County": "socal", "San Diego": "socal", "Calabasas": "socal",
+  "Pacific Palisades": "socal", "Brentwood": "socal", "Manhattan Beach": "socal",
+  "Laguna Beach": "socal", "Downtown LA": "socal", "Studio City": "socal", "Encino": "socal",
+  "Long Beach": "socal", "Burbank": "socal", "Westlake Village": "socal",
+  "Thousand Oaks": "socal", "Rancho Palos Verdes": "socal", "Silver Lake": "socal",
+  "Los Feliz": "socal", "Newport Beach": "socal", "Coronado": "socal",
+  "San Francisco": "norcal", "Hillsborough": "norcal", "San Mateo": "norcal",
+  "Burlingame": "norcal", "Atherton": "norcal", "Palo Alto": "norcal", "Woodside": "norcal",
+  "Los Altos": "norcal", "Menlo Park": "norcal", "Saratoga": "norcal", "Los Gatos": "norcal",
+  "Tiburon": "norcal", "Mill Valley": "norcal", "Napa Valley": "norcal", "Sonoma": "norcal",
+  "Carmel-by-the-Sea": "norcal", "Lake Tahoe": "norcal",
+  "Santa Barbara": "centralcal", "Montecito": "centralcal", "Palm Springs": "centralcal",
+  "Las Vegas": "southwest", "Scottsdale": "southwest", "Paradise Valley": "southwest",
+  "Aspen": "mountain", "Vail": "mountain", "Park City": "mountain", "Jackson Hole": "mountain",
+  "Sun Valley": "mountain", "Telluride": "mountain", "Denver": "mountain",
+  "Dallas": "texas", "Highland Park": "texas", "Houston": "texas", "River Oaks": "texas",
+  "Austin": "texas", "Fort Worth": "texas", "San Antonio": "texas",
+  "Atlanta": "southeast", "Buckhead": "southeast", "Nashville": "southeast", "Charleston": "southeast",
+  "Miami": "florida", "Coral Gables": "florida", "Palm Beach": "florida", "Naples": "florida",
+  "Jupiter": "florida", "Sarasota": "florida",
+  "New York": "northeast", "The Hamptons": "northeast", "Greenwich": "northeast",
+  "Nantucket": "northeast", "Martha's Vineyard": "northeast", "Short Hills": "northeast",
+  "Boston": "northeast", "Washington DC": "northeast", "Potomac": "northeast",
+  "Philadelphia": "northeast", "Winnetka": "midwest",
+  "Chicago": "midwest", "Minneapolis": "midwest",
+  "Seattle": "pnw", "Portland": "pnw",
+};
+
+// Region-specific content hooks that get woven into body text for uniqueness
+const regionHooks: Record<Region, { eventCulture: string; travelNote: string; audienceStyle: string }> = {
+  socal: {
+    eventCulture: "In a city where world-class entertainment is the baseline expectation, your guests have seen it all — studio premieres, private screenings, exclusive launches. That's what makes White Rabbit different: the magic is intimate, personal, and impossible to fake a reaction to, even for the most jaded LA audience.",
+    travelNote: "Based right here in Los Angeles, Scott is available throughout Southern California with zero travel coordination needed.",
+    audienceStyle: "Southern California audiences appreciate sophistication without pretension — effortless cool backed by genuine craft.",
+  },
+  norcal: {
+    eventCulture: "Northern California's culture of innovation means your guests are analytical, curious, and hard to impress with surface-level entertainment. White Rabbit thrives in exactly this environment — Scott's mentalism and psychological magic challenge the sharpest minds in the room, and the reactions from tech executives who 'know there must be an explanation' are the most rewarding moments of any performance.",
+    travelNote: "Scott travels regularly from Los Angeles to the Bay Area and Northern California wine country. Travel coordination is handled seamlessly.",
+    audienceStyle: "Bay Area audiences bring an intellectual curiosity that makes the mentalism and mind-reading portions of the performance especially electric.",
+  },
+  centralcal: {
+    eventCulture: "The Central Coast's blend of old-money elegance and relaxed sophistication creates the perfect atmosphere for White Rabbit. Events here prioritize quality over flash, and the magic matches — intimate, refined, and calibrated for guests who value substance.",
+    travelNote: "Just a short trip from LA, Scott regularly performs at venues throughout Santa Barbara, Montecito, and Palm Springs.",
+    audienceStyle: "Central Coast audiences appreciate understated excellence — the kind of entertainment that feels effortless because every detail has been carefully considered.",
+  },
+  southwest: {
+    eventCulture: "The Southwest's resort culture creates events where guests expect a premium experience from arrival to departure. White Rabbit fills the entertainment gap that most resort events miss — the personal, interactive moments between cocktails and dinner that transform a nice evening into an unforgettable one.",
+    travelNote: "Scott frequently performs throughout Arizona and Nevada, with seamless travel coordination from Los Angeles.",
+    audienceStyle: "Desert audiences bring a relaxed warmth that makes the interactive elements of close-up magic feel like a conversation between friends — guests lean in rather than sit back.",
+  },
+  mountain: {
+    eventCulture: "Mountain resort events carry a specific energy: guests have traveled to be there, the setting is extraordinary, and there's an expectation that every element of the experience matches the surroundings. White Rabbit delivers entertainment worthy of the destination — intimate, personal, and as memorable as the scenery.",
+    travelNote: "Scott travels nationally for select engagements and has performed at events throughout the Mountain West resort communities.",
+    audienceStyle: "Resort audiences are already in an elevated mood — away from daily routines, open to new experiences, and primed for the kind of wonder that close-up magic delivers.",
+  },
+  texas: {
+    eventCulture: "Texas hospitality sets a high bar: events are generous, guests are warm, and entertainment is expected to deliver. White Rabbit meets that standard with world-class magic that matches the scale of Texas celebrations while keeping the intimate, personal touch that makes every guest feel like the most important person in the room.",
+    travelNote: "Scott regularly performs across Texas, with direct flights from Los Angeles to all major markets. Travel coordination is completely seamless.",
+    audienceStyle: "Texas audiences are generous with their enthusiasm — they lean in, they react big, and they make every performance feel like a hometown show.",
+  },
+  southeast: {
+    eventCulture: "Southern events run on charm, hospitality, and the understanding that how you make people feel matters more than anything on the agenda. White Rabbit fits perfectly into this tradition — Scott's magic creates the kind of genuine, personal moments that Southern hosts value most.",
+    travelNote: "Scott travels from Los Angeles for select engagements throughout the Southeast, with seamless coordination for destination events.",
+    audienceStyle: "Southern audiences appreciate storytelling and personal connection — the conversational style of White Rabbit's close-up magic resonates deeply with guests who value authenticity.",
+  },
+  florida: {
+    eventCulture: "Florida's year-round event culture and international clientele demand entertainment that transcends language and cultural barriers. Close-up magic is universal — the gasps, the laughter, the wide-eyed amazement translate instantly whether your guests are from Palm Beach or São Paulo.",
+    travelNote: "Scott frequently travels to Florida for private events, corporate galas, and destination celebrations. Travel logistics are handled completely.",
+    audienceStyle: "Florida audiences bring a cosmopolitan energy — worldly, well-traveled, and delighted when they encounter something genuinely new.",
+  },
+  northeast: {
+    eventCulture: "The Northeast's events carry a specific sophistication: guests are discerning, attention spans are earned, and quality is assumed rather than advertised. White Rabbit thrives in exactly this environment — Scott's craft-level magic and sharp mentalism earn respect from the most discerning audiences in the country.",
+    travelNote: "Scott regularly travels to the Northeast corridor for private and corporate events. Direct flights from Los Angeles make coordination seamless.",
+    audienceStyle: "Northeastern audiences bring a healthy skepticism that makes the impossible moments land even harder — when a New York audience gasps, you know you've earned it.",
+  },
+  midwest: {
+    eventCulture: "Midwest events balance warmth with high standards. Guests are generous, welcoming, and genuinely engaged — they don't need to be convinced to have a good time, but they absolutely know the difference between good entertainment and great entertainment. White Rabbit delivers the latter.",
+    travelNote: "Scott travels from Los Angeles to serve clients throughout the Midwest, with direct flights to all major markets.",
+    audienceStyle: "Midwest audiences are the most rewarding to perform for — genuinely warm, fully present, and unafraid to show amazement.",
+  },
+  pnw: {
+    eventCulture: "The Pacific Northwest's creative, independent culture means your guests value authenticity over spectacle. White Rabbit's close-up magic is exactly that — no elaborate stage setups, no flashy productions, just genuine artistry performed inches from your guests' hands.",
+    travelNote: "Scott regularly travels to Seattle and Portland from Los Angeles. Short direct flights make coordination easy.",
+    audienceStyle: "Pacific Northwest audiences bring an artistic sensibility and appreciation for craft that elevates every performance — they notice the details, and the details are where White Rabbit shines.",
+  },
+};
+
 // Curated luxury venue references per location for authentic local SEO
 const locationVenues: Record<string, { dining: string[]; hotels: string[]; culture: string[] }> = {
   "Los Angeles": {
@@ -1100,6 +1241,20 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
     body.splice(2, 0, venueContext);
   }
 
+  // Inject region-specific content for uniqueness (after venue context)
+  const region = locationRegion[location];
+  if (region && regionHooks[region]) {
+    const hooks = regionHooks[region];
+    // Add region event culture context as a body paragraph
+    body.push(hooks.eventCulture);
+    // Add audience style note
+    body.push(hooks.audienceStyle);
+    // For non-local markets, add travel note
+    if (!tier1Markets.has(location)) {
+      body.push(hooks.travelNote);
+    }
+  }
+
   const faqs = generateFaqs(location, service.key);
 
   return {
@@ -1122,16 +1277,11 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
   };
 }
 
-const premiereLocations = new Set([
-  "Los Angeles", "Beverly Hills", "Hollywood", "Santa Monica", "Malibu",
-  "West Hollywood", "Bel Air", "Pasadena", "Calabasas", "Pacific Palisades",
-  "Brentwood", "Manhattan Beach", "Downtown LA", "Studio City", "Burbank",
-  "Long Beach", "Silver Lake", "Los Feliz",
-]);
+// premiereLocations is defined above in the tier system
 
 export const seoPages: SeoPage[] = locations.flatMap((location) =>
   serviceTypes
-    .filter((service) => service.key !== "premiere-red-carpet-magician" || premiereLocations.has(location))
+    .filter((service) => shouldGeneratePage(location, service.key))
     .map((service) => generatePage(location, service))
 );
 
