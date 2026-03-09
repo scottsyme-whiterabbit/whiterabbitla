@@ -294,8 +294,7 @@ const ServicePage = () => {
   }, [page]);
 
   if (!page) {
-    return <Navigate to="/experience" replace />;
-  }
+    return <NotFound />;
 
   return (
     <main id="main-content" className="pt-20">

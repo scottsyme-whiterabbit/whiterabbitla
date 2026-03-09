@@ -173,8 +173,7 @@ const SeoLanding = () => {
   }, [page]);
 
   if (!page) {
-    return <Navigate to="/blog" replace />;
-  }
+    return <NotFound />;
 
   const heroImage = page.category === "Parlor Shows" ? parlorImg : experienceImg;
   const testimonial = getCityTestimonial(page.slug, page.category);
