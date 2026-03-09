@@ -165,8 +165,8 @@ function getCampaignEmail(category: CampaignCategory, step: number, name: string
       a2: trackedLink(`${SITE_URL}/event-magician`, "See What a White Rabbit Event Looks Like", contactId, step, category),
     },
     pr_agency: {
-      a1: trackedLink(`${SITE_URL}/post/why-a-magic-show-in-los-angeles-is-the-perfect-entertainment-for-your-next-event`, "Why Magic Is the Perfect Experiential Element for Your Next Event", contactId, step, category),
-      a2: trackedLink(`${SITE_URL}/post/why-a-magic-show-in-los-angeles-is-the-perfect-entertainment-for-your-next-event`, "Why Magic Is the Perfect Experiential Element for Your Next Event", contactId, step, category),
+      a1: trackedLink(`${SITE_URL}/blog/best-magic-experiences-los-angeles`, "Why Magic Is the Perfect Experiential Element for Your Next Event", contactId, step, category),
+      a2: trackedLink(`${SITE_URL}/blog/best-magic-experiences-los-angeles`, "Why Magic Is the Perfect Experiential Element for Your Next Event", contactId, step, category),
     },
     nonprofit: {
       a1: trackedLink(`${SITE_URL}/event-magician`, "See How White Rabbit Transforms Events", contactId, step, category),
