@@ -578,7 +578,7 @@ const AdminNewsletter = () => {
                     activeTab === tab ? "text-accent bg-accent/10" : "text-foreground hover:bg-muted/20"
                   }`}
                 >
-                  {tab === "actions" ? "ACTION LIST" : tab === "cold_corporate" ? "🏢 Corporate Outreach" : tab === "cold_wedding" ? "💍 Wedding Outreach" : tab === "cold_club" ? "⛳ Country Club Outreach" : tab === "cold_pr" ? "📱 PR & Marketing Outreach" : tab === "cold_nonprofit" ? "❤️ Nonprofit Outreach" : tab === "cold_talent" ? "⭐ Talent Mgmt Outreach" : tab === "cold_restaurant" ? "🍽️ Restaurant Outreach" : tab}
+                  {tab === "actions" ? "ACTION LIST" : tab === "email_analytics" ? "📊 Email Analytics" : tab === "cold_corporate" ? "🏢 Corporate Outreach" : tab === "cold_wedding" ? "💍 Wedding Outreach" : tab === "cold_club" ? "⛳ Country Club Outreach" : tab === "cold_pr" ? "📱 PR & Marketing Outreach" : tab === "cold_nonprofit" ? "❤️ Nonprofit Outreach" : tab === "cold_talent" ? "⭐ Talent Mgmt Outreach" : tab === "cold_restaurant" ? "🍽️ Restaurant Outreach" : tab}
                   {tab === "actions" && actionBadge > 0 && (
                     <span className="ml-2 bg-destructive text-destructive-foreground text-[9px] font-sans min-w-[16px] h-4 inline-flex items-center justify-center rounded-full px-1">{actionBadge}</span>
                   )}
