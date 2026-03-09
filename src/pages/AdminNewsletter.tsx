@@ -986,6 +986,11 @@ const AdminNewsletter = () => {
           <AnalyticsTab storedPassword={storedPassword} />
         )}
 
+        {/* Email Analytics */}
+        {activeTab === "email_analytics" && (
+          <EmailAnalyticsTab />
+        )}
+
         {/* Planner Drip Campaign */}
         {activeTab === "planner" && (
           <PlannerDripTab storedPassword={storedPassword} onNavigateToContacts={(filter) => { setContactsFilter(filter); setActiveTab("contacts"); }} />
