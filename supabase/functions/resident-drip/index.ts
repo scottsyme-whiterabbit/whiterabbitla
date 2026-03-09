@@ -829,7 +829,7 @@ serve(async (req) => {
               const template = PULSE_TEMPLATES[pulseIndex];
               const pulseVariant = pickVariant();
               const pulseSubject = getSubject(template, pulseVariant);
-              const firstName = contact.name?.split(" ")[0] || "there";
+              const firstName = extractFirstName(contact.name);
               const bodyInner = template.body(firstName, contact.company || "", contact.city || "");
               const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, 200 + pulseIndex);
 
