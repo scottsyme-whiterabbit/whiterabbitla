@@ -295,6 +295,10 @@ const ServicePage = () => {
   }, [page]);
 
   if (!page) {
+    // If this slug matches an SEO landing page, redirect to /blog/ canonical URL
+    if (serviceSlug && getSeoPageBySlug(serviceSlug)) {
+      return <Navigate to={`/blog/${serviceSlug}`} replace />;
+    }
     return <NotFound />;
   }
 
