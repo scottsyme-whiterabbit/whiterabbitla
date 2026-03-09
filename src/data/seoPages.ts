@@ -1270,16 +1270,11 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
   };
 }
 
-const premiereLocations = new Set([
-  "Los Angeles", "Beverly Hills", "Hollywood", "Santa Monica", "Malibu",
-  "West Hollywood", "Bel Air", "Pasadena", "Calabasas", "Pacific Palisades",
-  "Brentwood", "Manhattan Beach", "Downtown LA", "Studio City", "Burbank",
-  "Long Beach", "Silver Lake", "Los Feliz",
-]);
+// premiereLocations is defined above in the tier system
 
 export const seoPages: SeoPage[] = locations.flatMap((location) =>
   serviceTypes
-    .filter((service) => service.key !== "premiere-red-carpet-magician" || premiereLocations.has(location))
+    .filter((service) => shouldGeneratePage(location, service.key))
     .map((service) => generatePage(location, service))
 );
 
