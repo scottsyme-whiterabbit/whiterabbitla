@@ -12,6 +12,7 @@ import RevenueTab from "@/components/RevenueTab";
 import SubjectScorer from "@/components/SubjectScorer";
 import ColdCampaignsTab from "@/components/ColdCampaignsTab";
 import ColdDripCampaignTab from "@/components/ColdDripCampaignTab";
+import EmailAnalyticsTab from "@/components/EmailAnalyticsTab";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
