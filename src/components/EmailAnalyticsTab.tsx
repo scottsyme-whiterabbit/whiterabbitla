@@ -1,8 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { Mail, Eye, MousePointer, TrendingUp, ChevronDown, ChevronRight } from "lucide-react";
+import { Mail, Eye, MousePointer, TrendingUp, ChevronDown, ChevronRight, AlertTriangle, Filter } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { format, subDays, parseISO } from "date-fns";
+
+interface BounceRecord {
+  id: string;
+  contact_id: string | null;
+  email: string;
+  bounce_type: string;
+  reason: string | null;
+  created_at: string;
+}
 
 interface ContactEngagement {
   id: string;
@@ -14,6 +23,7 @@ interface ContactEngagement {
   opens_count: number;
   clicks_count: number;
   last_activity: string | null;
+  has_bounced: boolean;
   opens: { id: string; opened_at: string; drip_step: number }[];
   clicks: { id: string; clicked_at: string; drip_step: number; link_slug: string }[];
 }
@@ -29,28 +39,38 @@ const EmailAnalyticsTab = () => {
   const [totalSent, setTotalSent] = useState(0);
   const [totalOpens, setTotalOpens] = useState(0);
   const [totalClicks, setTotalClicks] = useState(0);
+  const [totalBounced, setTotalBounced] = useState(0);
   const [chartData, setChartData] = useState<DayData[]>([]);
   const [contactEngagements, setContactEngagements] = useState<ContactEngagement[]>([]);
+  const [bounceRecords, setBounceRecords] = useState<BounceRecord[]>([]);
   const [expandedContact, setExpandedContact] = useState<string | null>(null);
+  const [showBouncedOnly, setShowBouncedOnly] = useState(false);
 
   const loadAnalytics = useCallback(async () => {
     setLoading(true);
     try {
-      // Parallel queries
-      const [sentRes, opensRes, clicksRes, contactsRes] = await Promise.all([
+      const [sentRes, opensRes, clicksRes, contactsRes, bouncesRes] = await Promise.all([
         supabase.from("newsletter_contacts").select("id", { count: "exact", head: true }).not("last_emailed_at", "is", null),
         supabase.from("newsletter_opens").select("*"),
         supabase.from("newsletter_clicks").select("*"),
         supabase.from("newsletter_contacts").select("id, name, email, company, drip_campaign, engagement_status"),
+        supabase.from("email_bounces").select("*").order("created_at", { ascending: false }),
       ]);
 
       const opens = opensRes.data || [];
       const clicks = clicksRes.data || [];
       const contacts = contactsRes.data || [];
+      const bounces = (bouncesRes.data || []) as BounceRecord[];
 
       setTotalSent(sentRes.count || 0);
       setTotalOpens(opens.length);
       setTotalClicks(clicks.length);
+      setBounceRecords(bounces);
+
+      // Count unique bounced contacts
+      const bouncedContactIds = new Set(bounces.map(b => b.contact_id).filter(Boolean));
+      const bouncedEmails = new Set(bounces.map(b => b.email.toLowerCase()));
+      setTotalBounced(Math.max(bouncedContactIds.size, bouncedEmails.size));
 
       // Chart data: last 30 days
       const now = new Date();
@@ -77,17 +97,19 @@ const EmailAnalyticsTab = () => {
           ...cClicks.map(cl => cl.clicked_at),
         ].filter(Boolean).sort().reverse();
 
+        const hasBounced = bouncedContactIds.has(c.id) || bouncedEmails.has(c.email.toLowerCase());
+
         return {
           ...c,
           opens_count: cOpens.length,
           clicks_count: cClicks.length,
           last_activity: allDates[0] || null,
+          has_bounced: hasBounced,
           opens: cOpens.map(o => ({ id: o.id, opened_at: o.opened_at, drip_step: o.drip_step })).sort((a, b) => b.opened_at.localeCompare(a.opened_at)),
           clicks: cClicks.map(cl => ({ id: cl.id, clicked_at: cl.clicked_at, drip_step: cl.drip_step, link_slug: cl.link_slug })).sort((a, b) => b.clicked_at.localeCompare(a.clicked_at)),
         };
       });
 
-      // Sort by most engaged first
       engagements.sort((a, b) => (b.opens_count + b.clicks_count) - (a.opens_count + a.clicks_count));
       setContactEngagements(engagements);
     } catch (e) {
@@ -106,20 +128,26 @@ const EmailAnalyticsTab = () => {
     return <div className="text-center py-12 text-muted-foreground font-sans text-sm">Loading analytics...</div>;
   }
 
+  const filteredContacts = contactEngagements.filter(c => {
+    if (showBouncedOnly) return c.has_bounced;
+    return c.opens_count > 0 || c.clicks_count > 0 || c.has_bounced;
+  });
+
   return (
     <div className="space-y-8">
       {/* Aggregate Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
         {[
-          { label: "Emails Sent", value: totalSent.toLocaleString(), icon: Mail },
-          { label: "Total Opens", value: totalOpens.toLocaleString(), icon: Eye },
-          { label: "Total Clicks", value: totalClicks.toLocaleString(), icon: MousePointer },
-          { label: "Open Rate", value: `${openRate}%`, icon: TrendingUp },
-          { label: "Click Rate", value: `${clickRate}%`, icon: TrendingUp },
+          { label: "Emails Sent", value: totalSent.toLocaleString(), icon: Mail, color: "text-accent" },
+          { label: "Total Opens", value: totalOpens.toLocaleString(), icon: Eye, color: "text-accent" },
+          { label: "Total Clicks", value: totalClicks.toLocaleString(), icon: MousePointer, color: "text-accent" },
+          { label: "Open Rate", value: `${openRate}%`, icon: TrendingUp, color: "text-accent" },
+          { label: "Click Rate", value: `${clickRate}%`, icon: TrendingUp, color: "text-accent" },
+          { label: "Bounced", value: totalBounced.toLocaleString(), icon: AlertTriangle, color: "text-destructive" },
         ].map(stat => (
           <div key={stat.label} className="border border-border p-4 md:p-6">
             <div className="flex items-center gap-2 mb-2">
-              <stat.icon size={14} className="text-accent" />
+              <stat.icon size={14} className={stat.color} />
               <span className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">{stat.label}</span>
             </div>
             <p className="font-serif text-2xl md:text-3xl text-foreground">{stat.value}</p>
@@ -152,10 +180,61 @@ const EmailAnalyticsTab = () => {
         </div>
       </div>
 
+      {/* Bounced Contacts Section */}
+      {bounceRecords.length > 0 && (
+        <div className="border border-destructive/30">
+          <div className="p-4 md:p-6 border-b border-destructive/30 bg-destructive/5">
+            <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-destructive flex items-center gap-2">
+              <AlertTriangle size={14} /> Bounced / Complained Contacts ({bounceRecords.length} events)
+            </h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm font-sans">
+              <thead>
+                <tr className="border-b border-border text-left">
+                  <th className="px-4 py-3 text-[10px] tracking-[0.15em] uppercase text-muted-foreground font-medium">Email</th>
+                  <th className="px-4 py-3 text-[10px] tracking-[0.15em] uppercase text-muted-foreground font-medium hidden md:table-cell">Name</th>
+                  <th className="px-4 py-3 text-[10px] tracking-[0.15em] uppercase text-muted-foreground font-medium">Type</th>
+                  <th className="px-4 py-3 text-[10px] tracking-[0.15em] uppercase text-muted-foreground font-medium hidden md:table-cell">Reason</th>
+                  <th className="px-4 py-3 text-[10px] tracking-[0.15em] uppercase text-muted-foreground font-medium">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {bounceRecords.map(b => {
+                  const contact = contactEngagements.find(c => c.id === b.contact_id || c.email.toLowerCase() === b.email.toLowerCase());
+                  return (
+                    <tr key={b.id} className="border-b border-border/50">
+                      <td className="px-4 py-3 text-foreground">{b.email}</td>
+                      <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">{contact?.name || "—"}</td>
+                      <td className="px-4 py-3">
+                        <span className={`text-[10px] tracking-wider uppercase font-medium ${
+                          b.bounce_type === "complained" ? "text-destructive" : "text-orange-400"
+                        }`}>{b.bounce_type}</span>
+                      </td>
+                      <td className="px-4 py-3 text-muted-foreground text-xs hidden md:table-cell max-w-[300px] truncate">{b.reason || "—"}</td>
+                      <td className="px-4 py-3 text-muted-foreground text-xs">{format(parseISO(b.created_at), "MMM d, h:mm a")}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
       {/* Contacts Table */}
       <div className="border border-border">
-        <div className="p-4 md:p-6 border-b border-border">
+        <div className="p-4 md:p-6 border-b border-border flex items-center justify-between">
           <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Per-Contact Engagement</h3>
+          <button
+            onClick={() => setShowBouncedOnly(!showBouncedOnly)}
+            className={`flex items-center gap-1.5 font-sans text-[10px] tracking-[0.15em] uppercase transition-colors ${
+              showBouncedOnly ? "text-destructive" : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Filter size={12} />
+            {showBouncedOnly ? "Showing Bounced" : "Filter Bounced"}
+          </button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm font-sans">
@@ -173,7 +252,7 @@ const EmailAnalyticsTab = () => {
               </tr>
             </thead>
             <tbody>
-              {contactEngagements.filter(c => c.opens_count > 0 || c.clicks_count > 0).map(c => (
+              {filteredContacts.map(c => (
                 <>
                   <tr
                     key={c.id}
@@ -183,7 +262,16 @@ const EmailAnalyticsTab = () => {
                     <td className="px-4 py-3 text-muted-foreground">
                       {expandedContact === c.id ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                     </td>
-                    <td className="px-4 py-3 text-foreground">{c.name || "—"}</td>
+                    <td className="px-4 py-3 text-foreground">
+                      <span className="flex items-center gap-2">
+                        {c.name || "—"}
+                        {c.has_bounced && (
+                          <span className="inline-flex items-center gap-0.5 bg-destructive/15 text-destructive text-[9px] tracking-wider uppercase font-medium px-1.5 py-0.5 rounded">
+                            <AlertTriangle size={9} /> Bounced
+                          </span>
+                        )}
+                      </span>
+                    </td>
                     <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">{c.email}</td>
                     <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">{c.company || "—"}</td>
                     <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">{c.drip_campaign}</td>
@@ -191,6 +279,7 @@ const EmailAnalyticsTab = () => {
                       <span className={`text-[10px] tracking-wider uppercase ${
                         c.engagement_status === "hot" ? "text-destructive" :
                         c.engagement_status === "warm" ? "text-orange-400" :
+                        c.engagement_status === "bounced" ? "text-destructive" :
                         "text-muted-foreground"
                       }`}>{c.engagement_status}</span>
                     </td>
@@ -234,9 +323,11 @@ const EmailAnalyticsTab = () => {
                   )}
                 </>
               ))}
-              {contactEngagements.filter(c => c.opens_count > 0 || c.clicks_count > 0).length === 0 && (
+              {filteredContacts.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="text-center py-8 text-muted-foreground">No engagement data yet</td>
+                  <td colSpan={9} className="text-center py-8 text-muted-foreground">
+                    {showBouncedOnly ? "No bounced contacts" : "No engagement data yet"}
+                  </td>
                 </tr>
               )}
             </tbody>

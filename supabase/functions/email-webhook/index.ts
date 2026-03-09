@@ -28,15 +28,38 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Handle complaint (spam) events — auto-unsubscribe
+    // Helper: look up contact by email
+    async function getContactByEmail(email: string) {
+      const { data } = await supabase
+        .from("newsletter_contacts")
+        .select("id, engagement_status")
+        .eq("email", email.toLowerCase())
+        .maybeSingle();
+      return data;
+    }
+
+    // Helper: log bounce to email_bounces table
+    async function logBounce(contactId: string | null, email: string, bounceType: string, reason: string | null) {
+      await supabase.from("email_bounces").insert({
+        contact_id: contactId,
+        email: email.toLowerCase(),
+        bounce_type: bounceType,
+        reason,
+        raw_payload: body,
+      });
+    }
+
+    // Handle complaint (spam) events — auto-unsubscribe + log bounce
     if (eventType === "email.complained") {
       const recipientEmail = body.data?.to?.[0] || body.data?.email;
       if (recipientEmail) {
+        const contact = await getContactByEmail(recipientEmail);
         await supabase
           .from("newsletter_contacts")
-          .update({ subscribed: false, engagement_status: "unsubscribed" })
+          .update({ subscribed: false, engagement_status: "bounced" })
           .eq("email", recipientEmail.toLowerCase());
-        console.log(`Contact ${recipientEmail} unsubscribed (spam complaint)`);
+        await logBounce(contact?.id || null, recipientEmail, "complained", body.data?.reason || body.data?.error || "Spam complaint");
+        console.log(`Contact ${recipientEmail} unsubscribed + logged bounce (spam complaint)`);
       }
     }
 
@@ -52,15 +75,18 @@ serve(async (req) => {
       }
     }
 
-    // Handle bounce events — auto-unsubscribe
+    // Handle bounce events — auto-unsubscribe + log bounce
     if (eventType === "email.bounced" || eventType === "email.delivery_delayed") {
       const recipientEmail = body.data?.to?.[0] || body.data?.email;
       if (recipientEmail) {
+        const contact = await getContactByEmail(recipientEmail);
+        const bounceType = eventType === "email.bounced" ? "bounced" : "delivery_delayed";
         await supabase
           .from("newsletter_contacts")
-          .update({ subscribed: false })
+          .update({ subscribed: false, engagement_status: "bounced" })
           .eq("email", recipientEmail.toLowerCase());
-        console.log(`Contact ${recipientEmail} unsubscribed (${eventType})`);
+        await logBounce(contact?.id || null, recipientEmail, bounceType, body.data?.reason || body.data?.error || null);
+        console.log(`Contact ${recipientEmail} unsubscribed + logged bounce (${eventType})`);
       }
     }
 
@@ -68,11 +94,7 @@ serve(async (req) => {
     if (eventType === "email.opened") {
       const recipientEmail = body.data?.to?.[0] || body.data?.email;
       if (recipientEmail) {
-        const { data: contact } = await supabase
-          .from("newsletter_contacts")
-          .select("id, engagement_status")
-          .eq("email", recipientEmail.toLowerCase())
-          .maybeSingle();
+        const contact = await getContactByEmail(recipientEmail);
 
         if (contact && (contact.engagement_status === "new" || contact.engagement_status === "warm")) {
           // Count total opens for this contact
@@ -104,11 +126,7 @@ serve(async (req) => {
     if (eventType === "email.clicked") {
       const recipientEmail = body.data?.to?.[0] || body.data?.email;
       if (recipientEmail) {
-        const { data: contact } = await supabase
-          .from("newsletter_contacts")
-          .select("id, engagement_status")
-          .eq("email", recipientEmail.toLowerCase())
-          .maybeSingle();
+        const contact = await getContactByEmail(recipientEmail);
 
         if (contact) {
           await supabase
