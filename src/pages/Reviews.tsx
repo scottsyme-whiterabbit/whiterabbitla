@@ -155,7 +155,7 @@ const reviews = [
 },
 {
   name: "Weston M.",
-  role: "Bachelor's Ball, Beverly Hilton",
+  role: "Private Corporate Event",
   text: "Honestly one of the best magicians around. Not corny, very professional and cool. My party guests won't shut up about him.",
   rating: 5
 },
