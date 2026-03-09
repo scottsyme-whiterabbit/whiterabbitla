@@ -170,7 +170,7 @@ HTML styling:
 
     // Personalize
     const html = draft.body_html
-      .replace(/\{\{NAME\}\}/g, name || "there")
+      .replace(/\{\{NAME\}\}/g, name ? name.split(" ")[0] : "there")
       .replace(
         /\{\{UNSUBSCRIBE_LINK\}\}/g,
         `https://whiterabbitla.com/unsubscribe?email=${encodeURIComponent(email)}`
