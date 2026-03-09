@@ -307,7 +307,7 @@ ${signoff()}
 }
 
 function email3Referral(deal: Deal): { subject: string; preheader: string; html: string } {
-  const name = deal.contact_name?.split(" ")[0] || "there";
+  const name = extractFirstName(deal.contact_name);
   const contactId = deal.id;
   const STANDARD_TYPES = ["corporate", "wedding", "private party", "parlor show", "other"];
   const rawType = deal.event_type?.replace(/_/g, " ") || "";
