@@ -150,7 +150,7 @@ function bookCallCTA(contactId: string, step: number, campaign: string): string 
 }
 
 function getCampaignEmail(category: CampaignCategory, step: number, name: string, contactId: string): { subject: string; preheader: string; innerHtml: string } {
-  const firstName = name ? name.split(" ")[0] : "there";
+  const firstName = extractFirstName(name);
   const link = trackedLink(`${SITE_URL}/experience`, "whiterabbitla.com/event-magician", contactId, step, category);
   const siteLink = trackedLink(SITE_URL, "whiterabbitla.com", contactId, step, category);
   const deckLink = trackedLink(`${SITE_URL}/deck`, "digital lookbook", contactId, step, category);
