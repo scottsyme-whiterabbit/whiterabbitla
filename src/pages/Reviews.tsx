@@ -152,6 +152,18 @@ const reviews = [
   role: "Company Outing",
   text: "Scott was a phenomenal addition to have at our company's outing. He kept all of us engaged from start to finish and created such a fun, energetic atmosphere. His magic was impressive, but what really stood out was how interactive and personable he was with everyone. Our team is still talking about some of the tricks he performed. If you're looking for someone who can truly entertain a crowd and make an event memorable, Scott is the perfect choice.",
   rating: 5
+},
+{
+  name: "Weston M.",
+  role: "Private Party Host",
+  text: "Honestly one of the best magicians around. Not corny, very professional and cool. My party guests won't shut up about him.",
+  rating: 5
+},
+{
+  name: "Jacob S.",
+  role: "Private Home Event",
+  text: "In one word: Elevated. We had an amazing experience with Scott! We hosted an event at our home and he's the absolute best. Skilled in magic, skilled with people, and creates a luxurious and magical environment that complements literally any event. Highly recommend!",
+  rating: 5
 }];
 
 
