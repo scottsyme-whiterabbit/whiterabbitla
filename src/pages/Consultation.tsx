@@ -5,6 +5,7 @@ import { usePageMeta } from "@/hooks/usePageMeta";
 import { trackFormSubmit } from "@/lib/analytics";
 import { Star, Calendar, DollarSign, Clock, ChevronDown } from "lucide-react";
 import wrLogo from "@/assets/wr-logo-stars-white.png";
+import heroImg from "@/assets/event-parlor-stage.jpg";
 
 const EVENT_TYPES = [
   "Corporate Event",
@@ -96,46 +97,58 @@ const Consultation = () => {
   return (
     <div className="min-h-screen bg-forest-dark text-cream">
       {/* HERO */}
-      <section className="relative flex flex-col items-center justify-center text-center px-6 pt-20 pb-16 md:pt-32 md:pb-24">
-        <motion.img
-          src={wrLogo}
-          alt="White Rabbit LA"
-          className="h-16 md:h-20 w-auto mb-10 opacity-90"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 0.9, y: 0 }}
-          transition={{ duration: 0.6 }}
-        />
-        <motion.h1
-          className="font-serif text-4xl md:text-6xl lg:text-7xl leading-tight max-w-4xl"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1 }}
-        >
-          Make Your Next Event{" "}
-          <span className="text-accent">Unforgettable</span>
-        </motion.h1>
-        <motion.p
-          className="mt-6 font-sans text-base md:text-lg text-cream/70 max-w-2xl leading-relaxed"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.25 }}
-        >
-          Scott Syme brings the White Rabbit experience to life — an intimate,
-          interactive style of magic and mind reading that turns any gathering
-          into something your guests will talk about for years. Book a
-          complimentary consultation and let's design the perfect moment for
-          your event.
-        </motion.p>
-        <motion.button
-          onClick={scrollToForm}
-          className="mt-10 bg-accent text-accent-foreground font-sans text-sm md:text-base tracking-[0.2em] uppercase px-10 py-4 hover:bg-accent/85 transition-colors"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
-        >
-          Book Your Free Consultation
-        </motion.button>
-        <ChevronDown className="mt-12 w-6 h-6 text-cream/30 animate-bounce" />
+      <section className="relative min-h-[70vh] flex flex-col items-center justify-end text-center overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src={heroImg}
+            alt="White Rabbit private magic show with emerald curtains and cinematic lighting"
+            className="w-full h-full object-cover object-[center_30%]"
+            fetchPriority="high"
+            decoding="async"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-forest-dark via-forest-dark/60 to-forest-dark/20" />
+        </div>
+        <div className="relative z-10 px-6 pb-16 md:pb-20 max-w-4xl">
+          <motion.img
+            src={wrLogo}
+            alt="White Rabbit LA"
+            className="h-16 md:h-20 w-auto mb-10 opacity-90 mx-auto"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 0.9, y: 0 }}
+            transition={{ duration: 0.6 }}
+          />
+          <motion.h1
+            className="font-serif text-4xl md:text-6xl lg:text-7xl leading-tight"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+          >
+            Make Your Next Event{" "}
+            <span className="text-accent">Unforgettable</span>
+          </motion.h1>
+          <motion.p
+            className="mt-6 font-sans text-base md:text-lg text-cream/80 max-w-2xl mx-auto leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.25 }}
+          >
+            Scott Syme brings the White Rabbit experience to life — an intimate,
+            interactive style of magic and mind reading that turns any gathering
+            into something your guests will talk about for years. Book a
+            complimentary consultation and let's design the perfect moment for
+            your event.
+          </motion.p>
+          <motion.button
+            onClick={scrollToForm}
+            className="mt-10 bg-accent text-accent-foreground font-sans text-sm md:text-base tracking-[0.2em] uppercase px-10 py-4 hover:bg-accent/85 transition-colors"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+          >
+            Book Your Free Consultation
+          </motion.button>
+          <ChevronDown className="mt-12 w-6 h-6 text-cream/30 animate-bounce mx-auto" />
+        </div>
       </section>
 
       {/* SOCIAL PROOF */}
