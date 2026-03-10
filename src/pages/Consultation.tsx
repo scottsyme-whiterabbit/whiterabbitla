@@ -154,7 +154,7 @@ const Consultation = () => {
               </div>
               <p className="font-serif text-base md:text-lg italic text-cream/90">"{t.quote}"</p>
               <p className="font-sans text-xs tracking-[0.2em] uppercase text-accent/80">
-                {t.role} — {t.location}
+                — {t.role}
               </p>
             </motion.div>
           ))}
