@@ -575,6 +575,17 @@ serve(async (req) => {
     let sent = 0;
     let skipped = 0;
     let completed = 0;
+    let backlogged = 0;
+    let dailyCapReached = false;
+
+    // Count emails already sent today (Pacific time)
+    const todayPacific = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Los_Angeles" }).format(now); // YYYY-MM-DD
+    const todayStart = new Date(`${todayPacific}T00:00:00-08:00`).toISOString();
+    const { count: sentTodayCount } = await supabase
+      .from("cold_email_campaigns")
+      .select("id", { count: "exact", head: true })
+      .gte("last_email_sent_at", todayStart);
+    const sentToday = sentTodayCount ?? 0;
 
     // Get all active campaigns
     const { data: campaigns, error: fetchErr } = await supabase
