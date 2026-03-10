@@ -156,8 +156,18 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
   const filtered = useMemo(() => {
     let items = [...campaigns];
     if (filterStatus !== "all") items = items.filter(c => c.status === filterStatus);
+    if (filterStep !== null) items = items.filter(c => c.current_step === filterStep && c.status === "active");
     return items.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-  }, [campaigns, filterStatus]);
+  }, [campaigns, filterStatus, filterStep]);
+
+  const openContactsWithFilter = (status: string, step: number | null = null) => {
+    setFilterStatus(status);
+    setFilterStep(step);
+    if (!showContacts) {
+      if (campaigns.length === 0) loadData();
+      setShowContacts(true);
+    }
+  };
 
   const handleAdd = async () => {
     if (!addForm.email) { toast.error("Email required"); return; }
