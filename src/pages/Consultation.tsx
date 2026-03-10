@@ -72,7 +72,7 @@ const Consultation = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name.trim() || !form.email.trim()) return;
+    if (!form.name.trim() || !form.email.trim() || !form.phone.trim()) return;
     setLoading(true);
     try {
       await (supabase as any).from("consultation_leads").insert({
