@@ -164,6 +164,12 @@ const reviews = [
   role: "Private Home Event",
   text: "In one word: Elevated. We had an amazing experience with Scott! We hosted an event at our home and he's the absolute best. Skilled in magic, skilled with people, and creates a luxurious and magical environment that complements literally any event. Highly recommend!",
   rating: 5
+},
+{
+  name: "Danielle G.",
+  role: "Private Party Host",
+  text: "Scott is incredible. He has everyone engaged and excited throughout his show and is so talented. Would absolutely recommend booking him for your next party!",
+  rating: 5
 }];
 
 
