@@ -120,8 +120,8 @@ const Consultation = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.25 }}
         >
-          Los Angeles' premier close-up magician for corporate events, private parties,
-          weddings &amp; galas. Book a free consultation to see how magic transforms your event.
+          Book a complimentary consultation with White Rabbit LA. We'll design a custom
+          magic experience your guests will talk about for years.
         </motion.p>
         <motion.button
           onClick={scrollToForm}
