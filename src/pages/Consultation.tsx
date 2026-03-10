@@ -78,7 +78,7 @@ const Consultation = () => {
       await (supabase as any).from("consultation_leads").insert({
         name: form.name.trim(),
         email: form.email.trim(),
-        phone: form.phone.trim() || null,
+        phone: form.phone.trim(),
         event_type: form.event_type || null,
         event_date: form.event_date || null,
         description: form.description.trim() || null,
