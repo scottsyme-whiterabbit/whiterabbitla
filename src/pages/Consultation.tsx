@@ -242,6 +242,7 @@ const Consultation = () => {
               <input
                 name="phone"
                 type="tel"
+                required
                 maxLength={20}
                 placeholder="Phone Number"
                 value={form.phone}
