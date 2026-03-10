@@ -21,6 +21,7 @@ const OPEN_TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/tr
 
 // Day offsets: Email 1 (0), Email 2 (3), Email 3 (10), Breakup (24)
 const COLD_SCHEDULE = [0, 3, 10, 24];
+const DAILY_SEND_CAP = 25;
 
 type CampaignCategory = "corporate_planner" | "wedding_planner" | "country_club" | "pr_agency" | "nonprofit" | "talent_management" | "restaurant";
 
@@ -574,6 +575,17 @@ serve(async (req) => {
     let sent = 0;
     let skipped = 0;
     let completed = 0;
+    let backlogged = 0;
+    let dailyCapReached = false;
+
+    // Count emails already sent today (Pacific time)
+    const todayPacific = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Los_Angeles" }).format(now); // YYYY-MM-DD
+    const todayStart = new Date(`${todayPacific}T00:00:00-08:00`).toISOString();
+    const { count: sentTodayCount } = await supabase
+      .from("cold_email_campaigns")
+      .select("id", { count: "exact", head: true })
+      .gte("last_email_sent_at", todayStart);
+    const sentToday = sentTodayCount ?? 0;
 
     // Get all active campaigns
     const { data: campaigns, error: fetchErr } = await supabase
@@ -611,6 +623,13 @@ serve(async (req) => {
           skipped++;
           continue;
         }
+      }
+
+      // Daily send cap check
+      if (sentToday + sent >= DAILY_SEND_CAP) {
+        dailyCapReached = true;
+        backlogged++;
+        continue;
       }
 
       // Get email content
@@ -665,7 +684,7 @@ serve(async (req) => {
       }
     }
 
-    return new Response(JSON.stringify({ sent, skipped, completed }), {
+    return new Response(JSON.stringify({ sent, skipped, completed, backlogged, dailyCapReached, sentToday }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
