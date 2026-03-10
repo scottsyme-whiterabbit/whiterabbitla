@@ -369,7 +369,12 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
               </div>
               <p className="font-sans text-sm text-foreground leading-tight mb-3">"{email.subject}"</p>
               <div className="flex items-center justify-between">
-                <span className="font-sans text-xs text-accent">{stats.stepCounts[i]} waiting</span>
+                <button
+                  onClick={(e) => { e.stopPropagation(); openContactsWithFilter("all", filterStep === i ? null : i); }}
+                  className="font-sans text-xs text-accent hover:underline"
+                >
+                  {stats.stepCounts[i]} waiting
+                </button>
                 <div className="flex items-center gap-1">
                   <Eye size={10} className="text-muted-foreground" />
                   <span className="text-[10px] text-muted-foreground">
