@@ -120,8 +120,11 @@ const Consultation = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.25 }}
         >
-          Book a complimentary consultation with White Rabbit LA. We'll design a custom
-          magic experience your guests will talk about for years.
+          Scott Syme brings the White Rabbit experience to life — an intimate,
+          interactive style of magic and mind reading that turns any gathering
+          into something your guests will talk about for years. Book a
+          complimentary consultation and let's design the perfect moment for
+          your event.
         </motion.p>
         <motion.button
           onClick={scrollToForm}
