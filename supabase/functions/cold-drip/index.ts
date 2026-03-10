@@ -21,7 +21,7 @@ const OPEN_TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/tr
 
 // Day offsets: Email 1 (0), Email 2 (3), Email 3 (10), Breakup (24)
 const COLD_SCHEDULE = [0, 3, 10, 24];
-const DAILY_SEND_CAP = 25;
+const DAILY_SEND_CAP = 50;
 
 type CampaignCategory = "corporate_planner" | "wedding_planner" | "country_club" | "pr_agency" | "nonprofit" | "talent_management" | "restaurant";
 
