@@ -436,16 +436,22 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
         {showContacts && (
           <div>
             {/* Filter + Actions */}
-            <div className="px-4 pb-3 flex gap-2 flex-wrap">
+            <div className="px-4 pb-3 flex gap-2 flex-wrap items-center">
               {["all", "active", "paused", "replied", "completed"].map(f => (
                 <button
                   key={f}
-                  onClick={() => setFilterStatus(f)}
-                  className={`px-3 py-1 text-xs tracking-wider uppercase transition-colors ${filterStatus === f ? "bg-accent text-accent-foreground" : "border border-border text-muted-foreground hover:text-foreground"}`}
+                  onClick={() => { setFilterStatus(f); setFilterStep(null); }}
+                  className={`px-3 py-1 text-xs tracking-wider uppercase transition-colors ${filterStatus === f && filterStep === null ? "bg-accent text-accent-foreground" : "border border-border text-muted-foreground hover:text-foreground"}`}
                 >
                   {f}
                 </button>
               ))}
+              {filterStep !== null && (
+                <span className="flex items-center gap-1 px-3 py-1 text-xs tracking-wider uppercase bg-accent/20 text-accent border border-accent/30">
+                  Step {filterStep + 1}
+                  <button onClick={() => setFilterStep(null)} className="ml-1 hover:text-foreground">✕</button>
+                </span>
+              )}
               <button onClick={() => setShowAdd(!showAdd)} className="ml-auto px-3 py-1 text-xs tracking-wider uppercase bg-accent text-accent-foreground hover:bg-accent/80 flex items-center gap-1">
                 <Plus size={12} /> Add
               </button>
