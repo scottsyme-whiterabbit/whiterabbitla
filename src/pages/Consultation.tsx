@@ -10,38 +10,38 @@ const EVENT_TYPES = [
   "Corporate Event",
   "Wedding",
   "Private Party",
-  "Gala / Fundraiser",
-  "Restaurant / Dining",
+  "Nonprofit Gala",
+  "Restaurant / Venue",
   "Other",
 ];
 
 const testimonials = [
-  { quote: "The highlight of our entire corporate gala.", role: "Event Planner", location: "Beverly Hills" },
-  { quote: "Our guests are STILL talking about it.", role: "Wedding Coordinator", location: "Malibu" },
-  { quote: "Scott made our product launch truly magical.", role: "Marketing Director", location: "Santa Monica" },
+  { quote: "The best entertainment decision we ever made.", role: "Corporate Event Planner" },
+  { quote: "Our guests are STILL talking about it.", role: "Wedding Coordinator" },
+  { quote: "Scott made our fundraiser unforgettable.", role: "Nonprofit Director" },
 ];
 
 const stats = [
-  { value: "200+", label: "Events" },
+  { value: "500+", label: "Events" },
   { value: "5-Star", label: "Rated" },
-  { value: "Featured at", label: "The Magic Castle" },
+  { value: "Los Angeles", label: "Based" },
 ];
 
 const features = [
   {
     icon: <Calendar className="w-8 h-8 text-accent" />,
     title: "Custom Event Plan",
-    desc: "We design the perfect magic experience for your specific event.",
+    desc: "Tailored to your event type and audience.",
   },
   {
     icon: <DollarSign className="w-8 h-8 text-accent" />,
     title: "Transparent Pricing",
-    desc: "Clear packages starting at $1,000 — no hidden fees.",
+    desc: "Clear quotes with no hidden fees.",
   },
   {
     icon: <Clock className="w-8 h-8 text-accent" />,
     title: "Flexible Scheduling",
-    desc: "Evening, weekend, and holiday availability across LA.",
+    desc: "We work around your timeline.",
   },
 ];
 
