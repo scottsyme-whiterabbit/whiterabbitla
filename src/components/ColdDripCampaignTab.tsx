@@ -311,41 +311,41 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
 
       {/* Stats Row */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="border border-border p-5">
+        <button onClick={() => openContactsWithFilter("all")} className="border border-border p-5 text-left hover:border-accent/50 transition-colors cursor-pointer">
           <div className="flex items-center gap-2 mb-1">
             <Target size={16} className="text-accent" />
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Total</p>
           </div>
           <p className="font-serif text-3xl text-foreground">{stats.total}</p>
-        </div>
-        <div className="border border-border p-5">
+        </button>
+        <button onClick={() => openContactsWithFilter("active")} className="border border-border p-5 text-left hover:border-accent/50 transition-colors cursor-pointer">
           <div className="flex items-center gap-2 mb-1">
             <Users size={16} className="text-accent" />
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Active</p>
           </div>
           <p className="font-serif text-3xl text-foreground">{stats.active}</p>
-        </div>
-        <div className="border border-border p-5">
+        </button>
+        <button onClick={() => openContactsWithFilter("replied")} className="border border-border p-5 text-left hover:border-accent/50 transition-colors cursor-pointer">
           <div className="flex items-center gap-2 mb-1">
             <MessageSquare size={16} className="text-accent" />
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Replied</p>
           </div>
           <p className="font-serif text-3xl text-foreground">{stats.replied}</p>
-        </div>
-        <div className="border border-border p-5">
+        </button>
+        <button onClick={() => openContactsWithFilter("completed")} className="border border-border p-5 text-left hover:border-accent/50 transition-colors cursor-pointer">
           <div className="flex items-center gap-2 mb-1">
             <Mail size={16} className="text-accent" />
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Completed</p>
           </div>
           <p className="font-serif text-3xl text-foreground">{stats.completed}</p>
-        </div>
-        <div className="border border-border p-5">
+        </button>
+        <button onClick={() => openContactsWithFilter("paused")} className="border border-border p-5 text-left hover:border-accent/50 transition-colors cursor-pointer">
           <div className="flex items-center gap-2 mb-1">
             <Pause size={16} className="text-yellow-400" />
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Paused</p>
           </div>
           <p className="font-serif text-3xl text-foreground">{stats.paused}</p>
-        </div>
+        </button>
       </div>
 
       {/* Email Sequence Pipeline */}
