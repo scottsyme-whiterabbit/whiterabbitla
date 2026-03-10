@@ -10,38 +10,38 @@ const EVENT_TYPES = [
   "Corporate Event",
   "Wedding",
   "Private Party",
-  "Gala / Fundraiser",
-  "Restaurant / Dining",
+  "Nonprofit Gala",
+  "Restaurant / Venue",
   "Other",
 ];
 
 const testimonials = [
-  { quote: "The highlight of our entire corporate gala.", role: "Event Planner", location: "Beverly Hills" },
-  { quote: "Our guests are STILL talking about it.", role: "Wedding Coordinator", location: "Malibu" },
-  { quote: "Scott made our product launch truly magical.", role: "Marketing Director", location: "Santa Monica" },
+  { quote: "The best entertainment decision we ever made.", role: "Corporate Event Planner" },
+  { quote: "Our guests are STILL talking about it.", role: "Wedding Coordinator" },
+  { quote: "Scott made our fundraiser unforgettable.", role: "Nonprofit Director" },
 ];
 
 const stats = [
-  { value: "200+", label: "Events" },
+  { value: "500+", label: "Events" },
   { value: "5-Star", label: "Rated" },
-  { value: "Featured at", label: "The Magic Castle" },
+  { value: "Los Angeles", label: "Based" },
 ];
 
 const features = [
   {
     icon: <Calendar className="w-8 h-8 text-accent" />,
     title: "Custom Event Plan",
-    desc: "We design the perfect magic experience for your specific event.",
+    desc: "Tailored to your event type and audience.",
   },
   {
     icon: <DollarSign className="w-8 h-8 text-accent" />,
     title: "Transparent Pricing",
-    desc: "Clear packages starting at $1,000 — no hidden fees.",
+    desc: "Clear quotes with no hidden fees.",
   },
   {
     icon: <Clock className="w-8 h-8 text-accent" />,
     title: "Flexible Scheduling",
-    desc: "Evening, weekend, and holiday availability across LA.",
+    desc: "We work around your timeline.",
   },
 ];
 
@@ -72,13 +72,13 @@ const Consultation = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.name.trim() || !form.email.trim()) return;
+    if (!form.name.trim() || !form.email.trim() || !form.phone.trim()) return;
     setLoading(true);
     try {
       await (supabase as any).from("consultation_leads").insert({
         name: form.name.trim(),
         email: form.email.trim(),
-        phone: form.phone.trim() || null,
+        phone: form.phone.trim(),
         event_type: form.event_type || null,
         event_date: form.event_date || null,
         description: form.description.trim() || null,
@@ -120,8 +120,8 @@ const Consultation = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.25 }}
         >
-          Los Angeles' premier close-up magician for corporate events, private parties,
-          weddings &amp; galas. Book a free consultation to see how magic transforms your event.
+          Book a complimentary consultation with White Rabbit LA. We'll design a custom
+          magic experience your guests will talk about for years.
         </motion.p>
         <motion.button
           onClick={scrollToForm}
@@ -154,7 +154,7 @@ const Consultation = () => {
               </div>
               <p className="font-serif text-base md:text-lg italic text-cream/90">"{t.quote}"</p>
               <p className="font-sans text-xs tracking-[0.2em] uppercase text-accent/80">
-                {t.role} — {t.location}
+                — {t.role}
               </p>
             </motion.div>
           ))}
@@ -242,6 +242,7 @@ const Consultation = () => {
               <input
                 name="phone"
                 type="tel"
+                required
                 maxLength={20}
                 placeholder="Phone Number"
                 value={form.phone}
@@ -273,7 +274,7 @@ const Consultation = () => {
                 name="description"
                 maxLength={1000}
                 rows={4}
-                placeholder="Brief Event Description"
+                placeholder="Tell Us About Your Event"
                 value={form.description}
                 onChange={handleChange}
                 className="w-full bg-cream/5 border border-cream/15 text-cream placeholder:text-cream/40 font-sans text-sm px-5 py-4 focus:outline-none focus:border-accent/60 transition-colors resize-none"
