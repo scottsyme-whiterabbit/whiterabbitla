@@ -152,7 +152,7 @@ const Consultation = () => {
                   <Star key={s} className="w-4 h-4 fill-accent text-accent" />
                 ))}
               </div>
-              <p className="font-serif text-base md:text-lg italic text-cream/90">"{t.quote}"</p>
+              <p className="font-serif text-base md:text-lg text-cream/90 leading-relaxed">"{t.quote}"</p>
               <p className="font-sans text-xs tracking-[0.2em] uppercase text-accent/80">
                 — {t.role}
               </p>
