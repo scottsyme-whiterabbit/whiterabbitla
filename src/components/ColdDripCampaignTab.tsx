@@ -114,6 +114,7 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
   const [addForm, setAddForm] = useState({ email: "", name: "", company: "", phone: "" });
   const [saving, setSaving] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [filterStep, setFilterStep] = useState<number | null>(null);
   const [showContacts, setShowContacts] = useState(false);
   const [previewStep, setPreviewStep] = useState<number | null>(null);
   const [previewHtml, setPreviewHtml] = useState("");
