@@ -274,7 +274,7 @@ const Consultation = () => {
                 name="description"
                 maxLength={1000}
                 rows={4}
-                placeholder="Brief Event Description"
+                placeholder="Tell Us About Your Event"
                 value={form.description}
                 onChange={handleChange}
                 className="w-full bg-cream/5 border border-cream/15 text-cream placeholder:text-cream/40 font-sans text-sm px-5 py-4 focus:outline-none focus:border-accent/60 transition-colors resize-none"
