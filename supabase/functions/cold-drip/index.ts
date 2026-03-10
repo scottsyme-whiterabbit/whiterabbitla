@@ -684,7 +684,7 @@ serve(async (req) => {
       }
     }
 
-    return new Response(JSON.stringify({ sent, skipped, completed }), {
+    return new Response(JSON.stringify({ sent, skipped, completed, backlogged, dailyCapReached, sentToday }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
