@@ -114,6 +114,7 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
   const [addForm, setAddForm] = useState({ email: "", name: "", company: "", phone: "" });
   const [saving, setSaving] = useState(false);
   const [filterStatus, setFilterStatus] = useState<string>("all");
+  const [filterStep, setFilterStep] = useState<number | null>(null);
   const [showContacts, setShowContacts] = useState(false);
   const [previewStep, setPreviewStep] = useState<number | null>(null);
   const [previewHtml, setPreviewHtml] = useState("");
@@ -155,8 +156,18 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
   const filtered = useMemo(() => {
     let items = [...campaigns];
     if (filterStatus !== "all") items = items.filter(c => c.status === filterStatus);
+    if (filterStep !== null) items = items.filter(c => c.current_step === filterStep && c.status === "active");
     return items.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-  }, [campaigns, filterStatus]);
+  }, [campaigns, filterStatus, filterStep]);
+
+  const openContactsWithFilter = (status: string, step: number | null = null) => {
+    setFilterStatus(status);
+    setFilterStep(step);
+    if (!showContacts) {
+      if (campaigns.length === 0) loadData();
+      setShowContacts(true);
+    }
+  };
 
   const handleAdd = async () => {
     if (!addForm.email) { toast.error("Email required"); return; }
@@ -300,41 +311,41 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
 
       {/* Stats Row */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-        <div className="border border-border p-5">
+        <button onClick={() => openContactsWithFilter("all")} className="border border-border p-5 text-left hover:border-accent/50 transition-colors cursor-pointer">
           <div className="flex items-center gap-2 mb-1">
             <Target size={16} className="text-accent" />
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Total</p>
           </div>
           <p className="font-serif text-3xl text-foreground">{stats.total}</p>
-        </div>
-        <div className="border border-border p-5">
+        </button>
+        <button onClick={() => openContactsWithFilter("active")} className="border border-border p-5 text-left hover:border-accent/50 transition-colors cursor-pointer">
           <div className="flex items-center gap-2 mb-1">
             <Users size={16} className="text-accent" />
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Active</p>
           </div>
           <p className="font-serif text-3xl text-foreground">{stats.active}</p>
-        </div>
-        <div className="border border-border p-5">
+        </button>
+        <button onClick={() => openContactsWithFilter("replied")} className="border border-border p-5 text-left hover:border-accent/50 transition-colors cursor-pointer">
           <div className="flex items-center gap-2 mb-1">
             <MessageSquare size={16} className="text-accent" />
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Replied</p>
           </div>
           <p className="font-serif text-3xl text-foreground">{stats.replied}</p>
-        </div>
-        <div className="border border-border p-5">
+        </button>
+        <button onClick={() => openContactsWithFilter("completed")} className="border border-border p-5 text-left hover:border-accent/50 transition-colors cursor-pointer">
           <div className="flex items-center gap-2 mb-1">
             <Mail size={16} className="text-accent" />
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Completed</p>
           </div>
           <p className="font-serif text-3xl text-foreground">{stats.completed}</p>
-        </div>
-        <div className="border border-border p-5">
+        </button>
+        <button onClick={() => openContactsWithFilter("paused")} className="border border-border p-5 text-left hover:border-accent/50 transition-colors cursor-pointer">
           <div className="flex items-center gap-2 mb-1">
             <Pause size={16} className="text-yellow-400" />
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Paused</p>
           </div>
           <p className="font-serif text-3xl text-foreground">{stats.paused}</p>
-        </div>
+        </button>
       </div>
 
       {/* Email Sequence Pipeline */}
@@ -358,7 +369,12 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
               </div>
               <p className="font-sans text-sm text-foreground leading-tight mb-3">"{email.subject}"</p>
               <div className="flex items-center justify-between">
-                <span className="font-sans text-xs text-accent">{stats.stepCounts[i]} waiting</span>
+                <button
+                  onClick={(e) => { e.stopPropagation(); openContactsWithFilter("all", filterStep === i ? null : i); }}
+                  className="font-sans text-xs text-accent hover:underline"
+                >
+                  {stats.stepCounts[i]} waiting
+                </button>
                 <div className="flex items-center gap-1">
                   <Eye size={10} className="text-muted-foreground" />
                   <span className="text-[10px] text-muted-foreground">
@@ -420,16 +436,22 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
         {showContacts && (
           <div>
             {/* Filter + Actions */}
-            <div className="px-4 pb-3 flex gap-2 flex-wrap">
+            <div className="px-4 pb-3 flex gap-2 flex-wrap items-center">
               {["all", "active", "paused", "replied", "completed"].map(f => (
                 <button
                   key={f}
-                  onClick={() => setFilterStatus(f)}
-                  className={`px-3 py-1 text-xs tracking-wider uppercase transition-colors ${filterStatus === f ? "bg-accent text-accent-foreground" : "border border-border text-muted-foreground hover:text-foreground"}`}
+                  onClick={() => { setFilterStatus(f); setFilterStep(null); }}
+                  className={`px-3 py-1 text-xs tracking-wider uppercase transition-colors ${filterStatus === f && filterStep === null ? "bg-accent text-accent-foreground" : "border border-border text-muted-foreground hover:text-foreground"}`}
                 >
                   {f}
                 </button>
               ))}
+              {filterStep !== null && (
+                <span className="flex items-center gap-1 px-3 py-1 text-xs tracking-wider uppercase bg-accent/20 text-accent border border-accent/30">
+                  Step {filterStep + 1}
+                  <button onClick={() => setFilterStep(null)} className="ml-1 hover:text-foreground">✕</button>
+                </span>
+              )}
               <button onClick={() => setShowAdd(!showAdd)} className="ml-auto px-3 py-1 text-xs tracking-wider uppercase bg-accent text-accent-foreground hover:bg-accent/80 flex items-center gap-1">
                 <Plus size={12} /> Add
               </button>
