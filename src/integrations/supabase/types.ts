@@ -59,6 +59,42 @@ export type Database = {
         }
         Relationships: []
       }
+      consultation_leads: {
+        Row: {
+          created_at: string
+          description: string | null
+          email: string
+          event_date: string | null
+          event_type: string | null
+          id: string
+          name: string
+          phone: string | null
+          source: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          email: string
+          event_date?: string | null
+          event_type?: string | null
+          id?: string
+          name: string
+          phone?: string | null
+          source?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          email?: string
+          event_date?: string | null
+          event_type?: string | null
+          id?: string
+          name?: string
+          phone?: string | null
+          source?: string
+        }
+        Relationships: []
+      }
       contact_inquiries: {
         Row: {
           budget: string | null
