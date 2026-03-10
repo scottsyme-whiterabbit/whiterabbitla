@@ -625,6 +625,13 @@ serve(async (req) => {
         }
       }
 
+      // Daily send cap check
+      if (sentToday + sent >= DAILY_SEND_CAP) {
+        dailyCapReached = true;
+        backlogged++;
+        continue;
+      }
+
       // Get email content
       const firstName = extractFirstName(campaign.name);
       const template = getCampaignEmail(campaign.campaign_category as CampaignCategory, step, firstName, campaign.id);
