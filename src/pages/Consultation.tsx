@@ -5,6 +5,7 @@ import { usePageMeta } from "@/hooks/usePageMeta";
 import { trackFormSubmit } from "@/lib/analytics";
 import { Star, Calendar, DollarSign, Clock, ChevronDown } from "lucide-react";
 import wrLogo from "@/assets/wr-logo-stars-white.png";
+import heroImg from "@/assets/event-parlor-stage.jpg";
 
 const EVENT_TYPES = [
   "Corporate Event",
