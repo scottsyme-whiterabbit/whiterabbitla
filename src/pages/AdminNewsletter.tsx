@@ -379,6 +379,7 @@ const AdminNewsletter = () => {
           topic: topic || undefined,
           campaignType,
           dripStep: campaignType === "drip" ? dripStep : undefined,
+          adminPassword: storedPassword,
         }),
       });
       if (!res.ok) {
