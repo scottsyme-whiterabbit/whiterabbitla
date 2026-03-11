@@ -538,6 +538,25 @@ serve(async (req) => {
         });
       }
 
+      case "bulk_update_drip_campaign": {
+        const { emails, drip_campaign } = payload;
+        if (!emails?.length || !drip_campaign) {
+          return new Response(JSON.stringify({ error: "emails and drip_campaign required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const normalized = emails.map((e: string) => e.toLowerCase().trim());
+        const { data: updated, error: bulkErr } = await supabase
+          .from("newsletter_contacts")
+          .update({ drip_campaign })
+          .in("email", normalized)
+          .select("id");
+        if (bulkErr) throw bulkErr;
+        return new Response(JSON.stringify({ updated: updated?.length || 0 }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       case "delete_cold_campaign": {
         const { campaignId } = payload;
         const { error } = await supabase
