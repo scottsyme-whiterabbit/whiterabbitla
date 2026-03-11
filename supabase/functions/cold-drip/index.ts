@@ -520,56 +520,54 @@ ${signoffFull()}`),
     ],
 
     // ═══════════════════════════════════════════════
-    // CAMPAIGN 8: SPIRITS BRANDS (5 emails)
+    // CAMPAIGN 8: SPIRITS BRANDS (5 emails over 21 days)
     // ═══════════════════════════════════════════════
     spirits: [
       {
-        subject: "30 minutes to Presidents Club",
-        preheader: "The activation element your competitors haven't found yet.",
+        subject: "A different kind of activation talent",
+        preheader: "Interactive magic for premium brand events.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Your next activation has 30 minutes to make people feel something. Not see something. Not photograph something. Feel it.</p>
-<p style="margin:0 0 18px;">I am a magician who works with premium brands during their highest-stakes moments — product launches, ambassador dinners, trade show activations. I move through the crowd and create impossible, intimate experiences right in guests' hands. No stage. No microphone. No setup. Just real reactions that people cannot stop talking about.</p>
-<p style="margin:0 0 18px;">Brands like Taittinger, Rolls-Royce, and Netflix have used me for exactly this. The ROI is not in impressions — it is in the organic content guests create because they genuinely cannot believe what just happened.</p>
+<p style="margin:0 0 18px;">I work with brands like Taittinger, Rolls-Royce, and Netflix as interactive entertainment for activations and VIP events. I perform close-up magic during cocktail receptions — moving between groups, creating impossible moments right in guests' hands.</p>
+<p style="margin:0 0 18px;">No stage, no AV, no disruption. Guests are participating, filming, and tagging your brand before you ask them to.</p>
+<p style="margin:0 0 18px;">Would it make sense to explore this for an upcoming activation?</p>
 ${cta}
 ${signoffFull()}`),
       },
       {
-        subject: "Your guests are already filming — give them something worth posting",
-        preheader: "Organic social from real guest reactions.",
+        subject: "What happened at a recent brand tasting",
+        preheader: "Organic content from real guest reactions.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">At a recent brand event, something happened that no influencer brief could have planned. Within 10 minutes of my first performance, guests were pulling friends over, phones were out, and the brand was being tagged — unprompted.</p>
-<p style="margin:0 0 18px;">That is the difference between entertainment that fills a time slot and entertainment that generates content. The magic happens three feet from the guest. It is personal. It is visceral. And it gives them a story they are desperate to share.</p>
-<p style="margin:0 0 18px;">No AV requirements. No disruption to your event flow. I blend in and create moments your brand gets credited for.</p>
+<p style="margin:0 0 18px;">At a recent brand event, within 10 minutes guests were pulling friends over to watch, phones were out, and the brand was being tagged — unprompted. No influencer brief required.</p>
+<p style="margin:0 0 18px;">That is the difference between entertainment that fills a time slot and entertainment that generates content. I blend into the crowd and create moments your brand gets credited for.</p>
 <p style="margin:0 0 18px;">${arts.a1}</p>
 ${signoff()}`),
       },
       {
-        subject: "The activation line item nobody questions twice",
+        subject: "The vendor every guest mentions the next day",
         preheader: "What brand teams say after the first booking.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
 <p style="margin:0 0 18px;">Here is something I hear from brand teams after the first event: "We have never had a vendor that every single guest mentioned the next day."</p>
-<p style="margin:0 0 18px;">Every activation has tastings, branded lounges, maybe a DJ. What none of your competitors have is someone creating impossible moments with a guest's own watch, their own phone, their own glass — making them feel like the entire experience was designed just for them.</p>
-<p style="margin:0 0 18px;">I am a member at the Magic Castle in Hollywood and have consulted on America's Got Talent. But what actually sells is what happens in the room: people losing their minds and associating that feeling with your brand.</p>
+<p style="margin:0 0 18px;">I am a member at the Magic Castle in Hollywood and have consulted on America's Got Talent. But what actually sells is what happens in the room — people genuinely losing their minds and connecting that feeling to your brand.</p>
+<p style="margin:0 0 18px;">Happy to chat about how this works for your next event.</p>
 ${cta}
 ${signoffFull()}`),
       },
       {
-        subject: "The brand moment you cannot buy with media spend",
-        preheader: "Why experiential teams are adding this to every activation.",
+        subject: "The moment you cannot buy with media spend",
+        preheader: "Why experiential teams keep rebooking.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">You can buy impressions. You can buy influencer posts. You cannot buy the look on someone's face when something impossible happens in their hands — and you definitely cannot buy the story they tell at dinner the next night.</p>
-<p style="margin:0 0 18px;">That is what I do. I create the un-purchasable moment. The one your guests replay in their heads. The one that makes them say your brand's name to people who were not even there.</p>
-<p style="margin:0 0 18px;">Product launches. Trade shows. VIP dinners. Ambassador tastings. If there is a crowd and a cocktail, I can turn it into something they will not forget.</p>
+<p style="margin:0 0 18px;">You can buy impressions. You can buy influencer posts. You cannot buy the look on someone's face when something impossible happens in their hands — or the story they tell at dinner the next night.</p>
+<p style="margin:0 0 18px;">Product launches. Trade shows. VIP dinners. If there is a crowd and a cocktail, I can turn it into something they will not forget.</p>
 <p style="margin:0 0 18px;">${arts.a2}</p>
 ${signoff()}`),
       },
       {
-        subject: "Saving this for whenever your next big activation lands",
-        preheader: "For whenever the timing is right.",
+        subject: "For whenever the right activation comes up",
+        preheader: "Just planting the seed.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">I know brand calendars plan months out. I am not going to keep emailing — just wanted to make sure you have my info for whenever the right activation comes up.</p>
-<p style="margin:0 0 18px;">Launches. Trade events. Tasting dinners. Press moments. I work across all of them, and my calendar fills 4 to 6 weeks out during peak season.</p>
-<p style="margin:0 0 18px;">If you ever want to see what this looks like: ${arts.a2}</p>
+<p style="margin:0 0 18px;">I know brand calendars plan months out. Just wanted to make sure you have my info for whenever the right activation lands. Launches, trade events, tasting dinners — I work across all of them.</p>
+<p style="margin:0 0 18px;">My calendar fills 4 to 6 weeks out during peak season, so early planning helps.</p>
+<p style="margin:0 0 18px;">${arts.a2}</p>
 ${signoffFull()}`),
       },
     ],
