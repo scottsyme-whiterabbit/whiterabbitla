@@ -1,0 +1,2 @@
+ALTER TABLE cold_email_campaigns DROP CONSTRAINT cold_email_campaigns_campaign_category_check;
+ALTER TABLE cold_email_campaigns ADD CONSTRAINT cold_email_campaigns_campaign_category_check CHECK (campaign_category = ANY (ARRAY['corporate_planner','wedding_planner','country_club','pr_agency','nonprofit','talent_management','restaurant','spirits']));
