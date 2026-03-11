@@ -668,7 +668,7 @@ serve(async (req) => {
       // Step 0: send immediately (if not already sent)
       if (step === 0 && !started) {
         // First email — send now
-      } else if (step >= 4) {
+      } else if (step >= maxSteps) {
         // Completed
         await supabase.from("cold_email_campaigns").update({ status: "completed" }).eq("id", campaign.id);
         completed++;
@@ -677,7 +677,7 @@ serve(async (req) => {
         // Check timing for next email
         if (!lastSent) { skipped++; continue; }
         const daysSinceLast = (now.getTime() - lastSent.getTime()) / (1000 * 60 * 60 * 24);
-        const requiredDays = step === 1 ? 3 : step === 2 ? 7 : step === 3 ? 14 : 999;
+        const requiredDays = step === 1 ? 3 : step === 2 ? 7 : step === 3 ? 14 : step === 4 ? 10 : 999;
         if (daysSinceLast < requiredDays) {
           skipped++;
           continue;
