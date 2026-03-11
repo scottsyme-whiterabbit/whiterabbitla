@@ -49,12 +49,26 @@ interface CampaignStats {
   warm: number;
 }
 
+interface ColdCampaignStats {
+  total: number;
+  active: number;
+  paused: number;
+  replied: number;
+  completed: number;
+}
+
 interface Stats {
   subscribers: number;
   campaigns: number;
   emailsSent: number;
   planner?: CampaignStats;
   resident?: CampaignStats;
+  cold_corporate?: ColdCampaignStats;
+  cold_wedding?: ColdCampaignStats;
+  cold_club?: ColdCampaignStats;
+  cold_pr?: ColdCampaignStats;
+  cold_nonprofit?: ColdCampaignStats;
+  cold_talent?: ColdCampaignStats;
 }
 
 const AdminNewsletter = () => {
