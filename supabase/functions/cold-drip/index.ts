@@ -188,6 +188,10 @@ function getCampaignEmail(category: CampaignCategory, step: number, name: string
       a1: trackedLink(`${SITE_URL}/blog/best-magic-experiences-los-angeles`, "Why Restaurants Are Adding Table-Side Magic to Their Programming", contactId, step, category),
       a2: trackedLink(`${SITE_URL}/blog/best-magic-experiences-los-angeles`, "Why Restaurants Are Adding Table-Side Magic to Their Programming", contactId, step, category),
     },
+    spirits: {
+      a1: trackedLink(`${SITE_URL}/blog/magic-for-spirits-brands-activations`, "Why Spirits Brands Are Adding Live Magic to Their Activations", contactId, step, category),
+      a2: trackedLink(`${SITE_URL}/event-magician`, "See What a White Rabbit Brand Activation Looks Like", contactId, step, category),
+    },
   };
   const arts = articleLinks[category];
 
