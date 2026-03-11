@@ -188,6 +188,100 @@ const Consultation = () => {
         </div>
       </section>
 
+      {/* ABOUT SCOTT — B&W Photo + Bio */}
+      <section className="py-20 lg:py-28">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <motion.div
+            className="aspect-[4/5] overflow-hidden"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            <img
+              src={scottBwImg}
+              alt="Scott Syme, luxury event magician in Los Angeles"
+              loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+          >
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">The Magician</p>
+            <h2 className="font-serif text-3xl md:text-5xl text-cream mb-6 leading-tight">
+              Scott Syme
+            </h2>
+            <p className="font-sans text-base text-cream/70 leading-relaxed mb-6">
+              Based in Los Angeles, Scott is the creative force behind White Rabbit — a luxury magic experience 
+              built on a simple belief: the best entertainment makes people feel truly alive. A proud member 
+              of the world-famous Magic Castle® in Hollywood and consultant to performers on America's Got 
+              Talent and Disney Channel, Scott brings both elite craft and warm showmanship to every performance.
+            </p>
+            <p className="font-sans text-base text-cream/70 leading-relaxed">
+              Fortune 500 companies, charitable organizations, and the most discerning private clients 
+              — Netflix, Disney, Rolls Royce, Morgan Stanley — trust Scott with their most important events. 
+              When you hire White Rabbit, you're not just booking a magician. You're hiring someone who has 
+              dedicated his life to making people feel extraordinary.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Branded divider */}
+      <div className="flex justify-center py-4">
+        <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50" />
+      </div>
+
+      {/* MORE THAN MAGIC — Card Photo */}
+      <section className="py-20 lg:py-28">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <motion.div
+            className="order-2 lg:order-1"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">The Experience</p>
+            <h2 className="font-serif text-3xl md:text-5xl lg:text-6xl text-cream mb-6 leading-tight">
+              More Than Magic.<br />A Feeling.
+            </h2>
+            <p className="font-sans text-base text-cream/70 leading-relaxed mb-8 max-w-lg">
+              Scott blends interactive magic, mentalism, and impossible coincidences with the warmth 
+              of a seasoned host — transforming any room into something cinematic, intimate, and utterly 
+              alive. Curated lighting, a signature soundtrack, and moments so close you can feel them. 
+              This isn't a magic show. It's a White Rabbit experience.
+            </p>
+            <button
+              onClick={scrollToForm}
+              className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-accent px-8 py-3 hover:bg-accent hover:text-accent-foreground transition-colors"
+            >
+              Book a Consultation
+            </button>
+          </motion.div>
+          <motion.div
+            className="order-1 lg:order-2 aspect-[4/5] overflow-hidden"
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+          >
+            <img
+              src={cardsImg}
+              alt="Scott Syme performing close-up card magic at a luxury event"
+              loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
+        </div>
+      </section>
+
       {/* WHAT YOU GET */}
       <section className="py-16 md:py-24 px-6">
         <div className="max-w-5xl mx-auto">
