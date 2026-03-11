@@ -69,6 +69,7 @@ interface Stats {
   cold_pr?: ColdCampaignStats;
   cold_nonprofit?: ColdCampaignStats;
   cold_talent?: ColdCampaignStats;
+  cold_spirits?: ColdCampaignStats;
 }
 
 const AdminNewsletter = () => {
@@ -98,7 +99,7 @@ const AdminNewsletter = () => {
     return "";
   });
 
-  const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "actions" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "email_analytics" | "planner" | "apartment" | "thankyou" | "cold" | "cold_corporate" | "cold_wedding" | "cold_club" | "cold_pr" | "cold_nonprofit" | "cold_talent" | "cold_restaurant">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "actions" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "email_analytics" | "planner" | "apartment" | "thankyou" | "cold" | "cold_corporate" | "cold_wedding" | "cold_club" | "cold_pr" | "cold_nonprofit" | "cold_talent" | "cold_restaurant" | "cold_spirits">("dashboard");
   const [actionBadge, setActionBadge] = useState(0);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
   const [quickAddForm, setQuickAddForm] = useState({ name: "", email: "", phone: "", event_type: "", notes: "", source: "Referral" });
@@ -559,7 +560,7 @@ const AdminNewsletter = () => {
 
         {/* Desktop Tabs — hidden on mobile */}
         <div className="hidden md:flex gap-1 mb-8 border-b border-border overflow-x-auto">
-          {(["dashboard", "pipeline", "actions", "revenue", "contacts", "cold", "cold_corporate", "cold_wedding", "cold_club", "cold_pr", "cold_nonprofit", "cold_talent", "cold_restaurant", "compose", "campaigns", "calendar", "analytics", "email_analytics", "planner", "apartment", "thankyou"] as const).map(tab => (
+          {(["dashboard", "pipeline", "actions", "revenue", "contacts", "cold", "cold_corporate", "cold_wedding", "cold_club", "cold_pr", "cold_nonprofit", "cold_talent", "cold_spirits", "cold_restaurant", "compose", "campaigns", "calendar", "analytics", "email_analytics", "planner", "apartment", "thankyou"] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -567,7 +568,7 @@ const AdminNewsletter = () => {
                 activeTab === tab ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              {tab === "actions" ? "ACTION LIST" : tab === "email_analytics" ? "📊 EMAIL ANALYTICS" : tab === "cold_corporate" ? "🏢 Corporate" : tab === "cold_wedding" ? "💍 Wedding" : tab === "cold_club" ? "⛳ Clubs" : tab === "cold_pr" ? "📱 PR" : tab === "cold_nonprofit" ? "❤️ Nonprofit" : tab === "cold_talent" ? "⭐ Talent" : tab === "cold_restaurant" ? "🍽️ Restaurant" : tab}
+              {tab === "actions" ? "ACTION LIST" : tab === "email_analytics" ? "📊 EMAIL ANALYTICS" : tab === "cold_corporate" ? "🏢 Corporate" : tab === "cold_wedding" ? "💍 Wedding" : tab === "cold_club" ? "⛳ Clubs" : tab === "cold_pr" ? "📱 PR" : tab === "cold_nonprofit" ? "❤️ Nonprofit" : tab === "cold_talent" ? "⭐ Talent" : tab === "cold_spirits" ? "🍸 Spirits" : tab === "cold_restaurant" ? "🍽️ Restaurant" : tab}
               {tab === "actions" && actionBadge > 0 && (
                 <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-[9px] font-sans min-w-[16px] h-4 flex items-center justify-center rounded-full px-1">{actionBadge}</span>
               )}
@@ -585,7 +586,7 @@ const AdminNewsletter = () => {
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-4 space-y-1">
-              {(["dashboard", "pipeline", "actions", "revenue", "contacts", "cold", "cold_corporate", "cold_wedding", "cold_club", "cold_pr", "cold_nonprofit", "cold_talent", "cold_restaurant", "compose", "campaigns", "calendar", "analytics", "email_analytics", "planner", "apartment", "thankyou"] as const).map(tab => (
+              {(["dashboard", "pipeline", "actions", "revenue", "contacts", "cold", "cold_corporate", "cold_wedding", "cold_club", "cold_pr", "cold_nonprofit", "cold_talent", "cold_spirits", "cold_restaurant", "compose", "campaigns", "calendar", "analytics", "email_analytics", "planner", "apartment", "thankyou"] as const).map(tab => (
                 <button
                   key={tab}
                   onClick={() => { setActiveTab(tab); setShowMoreTabs(false); }}
@@ -593,7 +594,7 @@ const AdminNewsletter = () => {
                     activeTab === tab ? "text-accent bg-accent/10" : "text-foreground hover:bg-muted/20"
                   }`}
                 >
-                  {tab === "actions" ? "ACTION LIST" : tab === "email_analytics" ? "📊 Email Analytics" : tab === "cold_corporate" ? "🏢 Corporate Outreach" : tab === "cold_wedding" ? "💍 Wedding Outreach" : tab === "cold_club" ? "⛳ Country Club Outreach" : tab === "cold_pr" ? "📱 PR & Marketing Outreach" : tab === "cold_nonprofit" ? "❤️ Nonprofit Outreach" : tab === "cold_talent" ? "⭐ Talent Mgmt Outreach" : tab === "cold_restaurant" ? "🍽️ Restaurant Outreach" : tab}
+                  {tab === "actions" ? "ACTION LIST" : tab === "email_analytics" ? "📊 Email Analytics" : tab === "cold_corporate" ? "🏢 Corporate Outreach" : tab === "cold_wedding" ? "💍 Wedding Outreach" : tab === "cold_club" ? "⛳ Country Club Outreach" : tab === "cold_pr" ? "📱 PR & Marketing Outreach" : tab === "cold_nonprofit" ? "❤️ Nonprofit Outreach" : tab === "cold_talent" ? "⭐ Talent Mgmt Outreach" : tab === "cold_spirits" ? "🍸 Spirits Brands" : tab === "cold_restaurant" ? "🍽️ Restaurant Outreach" : tab}
                   {tab === "actions" && actionBadge > 0 && (
                     <span className="ml-2 bg-destructive text-destructive-foreground text-[9px] font-sans min-w-[16px] h-4 inline-flex items-center justify-center rounded-full px-1">{actionBadge}</span>
                   )}
@@ -772,6 +773,7 @@ const AdminNewsletter = () => {
                 { key: "cold_pr" as const, label: "PR", emoji: "📱", tab: "cold_pr" as const },
                 { key: "cold_nonprofit" as const, label: "Nonprofit", emoji: "❤️", tab: "cold_nonprofit" as const },
                 { key: "cold_talent" as const, label: "Talent", emoji: "⭐", tab: "cold_talent" as const },
+                { key: "cold_spirits" as const, label: "Spirits", emoji: "🍸", tab: "cold_spirits" as const },
               ]).map(cat => {
                 const s = stats[cat.key] || { total: 0, active: 0, paused: 0, replied: 0, completed: 0 };
                 return (
@@ -1068,6 +1070,9 @@ const AdminNewsletter = () => {
         )}
         {activeTab === "cold_restaurant" && (
           <ColdDripCampaignTab category="restaurant" storedPassword={storedPassword} />
+        )}
+        {activeTab === "cold_spirits" && (
+          <ColdDripCampaignTab category="spirits" storedPassword={storedPassword} />
         )}
         {/* Thank You Email */}
         {activeTab === "thankyou" && (
