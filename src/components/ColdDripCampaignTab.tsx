@@ -81,10 +81,11 @@ const CAMPAIGN_DATA: Record<string, { label: string; emoji: string; emails: Arra
     label: "Spirits Brands",
     emoji: "🍸",
     emails: [
-      { subject: "A unique idea for your next brand activation", day: 0, type: "Cold Open" },
-      { subject: "What happened when a spirits brand tried live magic", day: 3, type: "Value Add" },
-      { subject: "The activation idea your competitors haven't tried", day: 10, type: "Different Angle" },
-      { subject: "Last note about your brand experience strategy", day: 24, type: "Breakup" },
+      { subject: "30 minutes to Presidents Club", day: 0, type: "Cold Open" },
+      { subject: "Your guests are already filming — give them something worth posting", day: 3, type: "Value Add" },
+      { subject: "The activation line item nobody questions twice", day: 10, type: "Social Proof" },
+      { subject: "The brand moment you cannot buy with media spend", day: 20, type: "Different Angle" },
+      { subject: "Saving this for whenever your next big activation lands", day: 30, type: "Breakup" },
     ],
   },
 };
@@ -402,7 +403,7 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
             <div className="px-4 py-3 border-b border-border space-y-1">
               <div className="flex items-center justify-between">
                 <span className="font-sans text-xs tracking-[0.15em] uppercase text-accent">
-                  Preview: {campaignInfo.emails[previewStep]?.type} (Email {previewStep + 1}/4 · Day {campaignInfo.emails[previewStep]?.day})
+                  Preview: {campaignInfo.emails[previewStep]?.type} (Email {previewStep + 1}/{campaignInfo.emails.length} · Day {campaignInfo.emails[previewStep]?.day})
                 </span>
                 <button onClick={() => { setPreviewStep(null); setPreviewHtml(""); setPreviewSubject(""); }} className="text-muted-foreground hover:text-foreground">
                   <X size={14} />
@@ -509,11 +510,11 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
                       <td className="px-4 py-2.5 text-muted-foreground hidden md:table-cell">{c.company || "—"}</td>
                       <td className="px-4 py-2.5">
                         <div className="flex gap-0.5 mb-1">
-                          {[0, 1, 2, 3].map(s => (
+                          {Array.from({ length: (CAMPAIGN_DATA[c.campaign_category]?.emails.length || 4) }, (_, s) => (
                             <div key={s} className={`h-1.5 w-4 rounded-full ${s < c.current_step ? "bg-accent" : "bg-muted/30"}`} />
                           ))}
                         </div>
-                        <span className="text-[10px] text-muted-foreground">{c.current_step === 0 ? "Not started" : c.current_step >= 4 ? "All sent" : `${c.current_step}/4 sent`}</span>
+                        <span className="text-[10px] text-muted-foreground">{c.current_step === 0 ? "Not started" : c.current_step >= (CAMPAIGN_DATA[c.campaign_category]?.emails.length || 4) ? "All sent" : `${c.current_step}/${CAMPAIGN_DATA[c.campaign_category]?.emails.length || 4} sent`}</span>
                       </td>
                       <td className="px-4 py-2.5">
                         <span className={`text-[10px] px-2 py-0.5 rounded ${STATUS_COLORS[c.status] || ""} font-sans tracking-wider uppercase`}>

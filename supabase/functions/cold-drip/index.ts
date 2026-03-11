@@ -520,47 +520,56 @@ ${signoffFull()}`),
     ],
 
     // ═══════════════════════════════════════════════
-    // CAMPAIGN 8: SPIRITS BRANDS
+    // CAMPAIGN 8: SPIRITS BRANDS (5 emails)
     // ═══════════════════════════════════════════════
     spirits: [
       {
-        subject: "A unique idea for your next brand activation",
-        preheader: "Close-up magic for spirits brand events.",
+        subject: "30 minutes to Presidents Club",
+        preheader: "The activation element your competitors haven't found yet.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">I work with premium brands as an interactive entertainment option for activations, launch events, and tasting experiences. I perform close-up magic and mind reading during cocktail receptions, moving between groups of guests and creating moments that feel personal and impossible.</p>
-<p style="margin:0 0 18px;">Imagine a guest holding their cocktail and watching me make a signed card appear inside a sealed bottle. Or having me predict the exact spirit they were about to order before they say it out loud. These are the kind of shareable moments that get guests filming and posting organically.</p>
-<p style="margin:0 0 18px;">I have worked with brands like Taittinger, Rolls-Royce, and Netflix on experiential events where guest engagement and content creation matter. Would it make sense to explore this for an upcoming activation?</p>
+<p style="margin:0 0 18px;">Your next activation has 30 minutes to make people feel something. Not see something. Not photograph something. Feel it.</p>
+<p style="margin:0 0 18px;">I am a magician who works with premium brands during their highest-stakes moments — product launches, ambassador dinners, trade show activations. I move through the crowd and create impossible, intimate experiences right in guests' hands. No stage. No microphone. No setup. Just real reactions that people cannot stop talking about.</p>
+<p style="margin:0 0 18px;">Brands like Taittinger, Rolls-Royce, and Netflix have used me for exactly this. The ROI is not in impressions — it is in the organic content guests create because they genuinely cannot believe what just happened.</p>
 ${cta}
-<p style="margin:0 0 18px;">${arts.a1}</p>
 ${signoffFull()}`),
       },
       {
-        subject: "What happened when a spirits brand tried live magic",
-        preheader: "Organic social content from real guest reactions.",
+        subject: "Your guests are already filming — give them something worth posting",
+        preheader: "Organic social from real guest reactions.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">At a recent brand tasting event, I performed close-up magic during the reception portion. Within the first 10 minutes, guests were pulling friends over to watch, filming reactions on their phones, and tagging the brand in their stories without being asked.</p>
-<p style="margin:0 0 18px;">That is the power of interactive entertainment at a spirits activation: it creates genuine, shareable moments that no photo booth or DJ set can replicate. Guests are not just drinking your product. They are having an experience around it that they want to tell people about.</p>
-<p style="margin:0 0 18px;">No stage, no AV, no disruption to your event flow. I blend into the crowd and create magic right in their hands.</p>
+<p style="margin:0 0 18px;">At a recent brand event, something happened that no influencer brief could have planned. Within 10 minutes of my first performance, guests were pulling friends over, phones were out, and the brand was being tagged — unprompted.</p>
+<p style="margin:0 0 18px;">That is the difference between entertainment that fills a time slot and entertainment that generates content. The magic happens three feet from the guest. It is personal. It is visceral. And it gives them a story they are desperate to share.</p>
+<p style="margin:0 0 18px;">No AV requirements. No disruption to your event flow. I blend in and create moments your brand gets credited for.</p>
 <p style="margin:0 0 18px;">${arts.a1}</p>
 ${signoff()}`),
       },
       {
-        subject: "The activation idea your competitors haven't tried",
-        preheader: "Differentiate your brand experience.",
+        subject: "The activation line item nobody questions twice",
+        preheader: "What brand teams say after the first booking.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Every spirits brand does tastings, live music, and branded lounges. What none of your competitors are doing is putting a world-class mind reader three feet from their guests, reading their thoughts and making impossible things happen with their personal objects.</p>
-<p style="margin:0 0 18px;">I am a member at the Magic Castle in Hollywood and was a consultant on America's Got Talent. I mention that because brand teams tell me it helps when justifying the talent choice internally. But what actually sells is the guest reaction: people genuinely losing their minds and associating that feeling with your brand.</p>
-<p style="margin:0 0 18px;">Happy to chat about how this could work for your next event.</p>
+<p style="margin:0 0 18px;">Here is something I hear from brand teams after the first event: "We have never had a vendor that every single guest mentioned the next day."</p>
+<p style="margin:0 0 18px;">Every activation has tastings, branded lounges, maybe a DJ. What none of your competitors have is someone creating impossible moments with a guest's own watch, their own phone, their own glass — making them feel like the entire experience was designed just for them.</p>
+<p style="margin:0 0 18px;">I am a member at the Magic Castle in Hollywood and have consulted on America's Got Talent. But what actually sells is what happens in the room: people losing their minds and associating that feeling with your brand.</p>
 ${cta}
 ${signoffFull()}`),
       },
       {
-        subject: "Last note about your brand experience strategy",
-        preheader: "For whenever the right activation comes up.",
+        subject: "The brand moment you cannot buy with media spend",
+        preheader: "Why experiential teams are adding this to every activation.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">I know brand calendars plan months ahead, so I just wanted to make sure you had my info for whenever the right activation comes up. Product launches, trade events, VIP tastings, ambassador dinners. I work across all of them.</p>
-<p style="margin:0 0 18px;">My calendar fills 4 to 6 weeks out during peak season, so early planning helps.</p>
+<p style="margin:0 0 18px;">You can buy impressions. You can buy influencer posts. You cannot buy the look on someone's face when something impossible happens in their hands — and you definitely cannot buy the story they tell at dinner the next night.</p>
+<p style="margin:0 0 18px;">That is what I do. I create the un-purchasable moment. The one your guests replay in their heads. The one that makes them say your brand's name to people who were not even there.</p>
+<p style="margin:0 0 18px;">Product launches. Trade shows. VIP dinners. Ambassador tastings. If there is a crowd and a cocktail, I can turn it into something they will not forget.</p>
 <p style="margin:0 0 18px;">${arts.a2}</p>
+${signoff()}`),
+      },
+      {
+        subject: "Saving this for whenever your next big activation lands",
+        preheader: "For whenever the timing is right.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">I know brand calendars plan months out. I am not going to keep emailing — just wanted to make sure you have my info for whenever the right activation comes up.</p>
+<p style="margin:0 0 18px;">Launches. Trade events. Tasting dinners. Press moments. I work across all of them, and my calendar fills 4 to 6 weeks out during peak season.</p>
+<p style="margin:0 0 18px;">If you ever want to see what this looks like: ${arts.a2}</p>
 ${signoffFull()}`),
       },
     ],
@@ -642,7 +651,7 @@ serve(async (req) => {
       .from("cold_email_campaigns")
       .select("*")
       .eq("status", "active")
-      .lt("current_step", 4);
+      .lt("current_step", 5);
 
     if (fetchErr) throw fetchErr;
     if (!campaigns || campaigns.length === 0) {
@@ -652,6 +661,7 @@ serve(async (req) => {
     }
 
     for (const campaign of campaigns as ColdCampaign[]) {
+      const maxSteps = campaign.campaign_category === "spirits" ? 5 : 4;
       const step = campaign.current_step;
       const lastSent = campaign.last_email_sent_at ? new Date(campaign.last_email_sent_at) : null;
       const started = campaign.started_at ? new Date(campaign.started_at) : null;
@@ -659,7 +669,7 @@ serve(async (req) => {
       // Step 0: send immediately (if not already sent)
       if (step === 0 && !started) {
         // First email — send now
-      } else if (step >= 4) {
+      } else if (step >= maxSteps) {
         // Completed
         await supabase.from("cold_email_campaigns").update({ status: "completed" }).eq("id", campaign.id);
         completed++;
@@ -668,7 +678,7 @@ serve(async (req) => {
         // Check timing for next email
         if (!lastSent) { skipped++; continue; }
         const daysSinceLast = (now.getTime() - lastSent.getTime()) / (1000 * 60 * 60 * 24);
-        const requiredDays = step === 1 ? 3 : step === 2 ? 7 : step === 3 ? 14 : 999;
+        const requiredDays = step === 1 ? 3 : step === 2 ? 7 : step === 3 ? 14 : step === 4 ? 10 : 999;
         if (daysSinceLast < requiredDays) {
           skipped++;
           continue;
@@ -720,7 +730,7 @@ serve(async (req) => {
         if (step === 0) {
           updates.started_at = now.toISOString();
         }
-        if (nextStep >= 4) {
+        if (nextStep >= maxSteps) {
           updates.status = "completed";
           completed++;
         }
