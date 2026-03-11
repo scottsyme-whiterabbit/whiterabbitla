@@ -489,6 +489,29 @@ serve(async (req) => {
       // ═══════════════════════════════════════════════
 
       case "get_cold_campaigns": {
+        const { category } = payload;
+        if (category === "spirits") {
+          const { data, error } = await supabase
+            .from("newsletter_contacts")
+            .select("email, name, company, phone, created_at")
+            .eq("drip_campaign", "cold_spirits");
+          if (error) return new Response(JSON.stringify({ error: error.message }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+          const mapped = (data || []).map((c: { email: string; name: string | null; company: string | null; phone: string | null; created_at: string }) => ({
+            email: c.email,
+            name: c.name || null,
+            company: c.company || null,
+            phone: c.phone || null,
+            campaign_category: "spirits",
+            status: "active",
+            current_step: 0,
+            created_at: c.created_at,
+          }));
+          return new Response(JSON.stringify({ campaigns: mapped }), {
+            status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
         const { data, error } = await supabase
           .from("cold_email_campaigns")
           .select("*")
