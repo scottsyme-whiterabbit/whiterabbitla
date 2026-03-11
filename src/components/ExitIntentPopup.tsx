@@ -179,7 +179,7 @@ const ExitIntentPopup = () => {
               onClick={handleCheckAvailability}
               className="w-full font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-3.5 hover:bg-accent/80 transition-colors mb-3"
             >
-              Check Availability
+              Book Now
             </button>
             <button
               onClick={dismiss}
