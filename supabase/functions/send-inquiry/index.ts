@@ -264,31 +264,6 @@ serve(async (req) => {
       console.error("Post-send processing failed (non-blocking):", convErr);
     }
 
-    // Auto-create deal in pipeline
-    const supabaseUrl2 = Deno.env.get("SUPABASE_URL")!;
-    const supabaseKey2 = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    try {
-      await fetch(supabaseUrl2 + "/rest/v1/deals", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": supabaseKey2,
-          "Authorization": "Bearer " + supabaseKey2,
-          "Prefer": "return=minimal"
-        },
-        body: JSON.stringify({
-          contact_name: name,
-          contact_email: email,
-          phone: phone || null,
-          event_type: eventType || null,
-          event_date: date || null,
-          stage: "new",
-          source: "website",
-          notes: message || null
-        })
-      });
-    } catch (e) { console.error("Deal creation error:", e); }
-
     return new Response(
       JSON.stringify({ success: true, id: data.id }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
