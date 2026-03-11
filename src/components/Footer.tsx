@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Instagram, Linkedin, Mail, Phone } from "lucide-react";
 import wrLogo from "@/assets/wr-logo-stars-white.png";
 import threeStars from "@/assets/three-stars-gold.png";
+import NewsletterSignup from "@/components/NewsletterSignup";
 
 const Footer = () => {
   return (
