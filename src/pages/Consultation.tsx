@@ -212,20 +212,22 @@ const Consultation = () => {
       </section>
 
       {/* CLIENT LOGOS */}
-      <section className="py-12 border-y border-border bg-muted/30">
-        <div className="max-w-5xl mx-auto px-6">
-          <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-8">
+      <section className="bg-forest-dark py-16 overflow-hidden">
+        <div className="max-w-6xl mx-auto px-6">
+          <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-cream/40 mb-10">
             Trusted by World-Class Brands
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-12">
-            {clients.map((client) => (
-              <div key={client.name} className="flex items-center justify-center" style={{ width: "100px", height: "40px" }}>
+        </div>
+        <div className="relative">
+          <div className="flex animate-scroll-logos" style={{ width: 'max-content' }}>
+            {[...clients, ...clients, ...clients].map((client, i) => (
+              <div key={`${client.name}-${i}`} className="flex-shrink-0 flex items-center justify-center px-8 md:px-10" style={{ width: '180px', height: '60px' }}>
                 <img
                   src={client.logo}
                   alt={`${client.name} logo`}
                   loading="lazy"
                   decoding="async"
-                  className="max-h-full max-w-full w-auto h-auto object-contain opacity-40 dark:brightness-0 dark:invert"
+                  className="max-h-full max-w-full w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity brightness-0 invert"
                 />
               </div>
             ))}
