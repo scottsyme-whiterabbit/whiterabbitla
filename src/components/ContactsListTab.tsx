@@ -39,7 +39,7 @@ interface OpenEvent {
 }
 
 type FilterStatus = "all" | "hot" | "warm" | "new" | "cold" | "unsubscribed" | "opened";
-type CampaignFilter = "all" | "planner" | "resident";
+type CampaignFilter = "all" | "planner" | "resident" | "corporate" | "wedding" | "clubs" | "pr" | "nonprofit" | "talent";
 
 interface ContactsListTabProps {
   storedPassword: string;
@@ -226,6 +226,12 @@ const ContactsListTab = ({ storedPassword, initialFilter, initialCampaign }: Con
     // Campaign filter
     if (campaignFilter === "planner" && !c.drip_campaign.startsWith("planner")) return false;
     if (campaignFilter === "resident" && !c.drip_campaign.startsWith("resident")) return false;
+    if (campaignFilter === "corporate" && !c.source?.toLowerCase().includes("corporate")) return false;
+    if (campaignFilter === "wedding" && !c.source?.toLowerCase().includes("wedding")) return false;
+    if (campaignFilter === "clubs" && !c.source?.toLowerCase().includes("club")) return false;
+    if (campaignFilter === "pr" && !c.source?.toLowerCase().includes("pr")) return false;
+    if (campaignFilter === "nonprofit" && !c.source?.toLowerCase().includes("nonprofit")) return false;
+    if (campaignFilter === "talent" && !c.source?.toLowerCase().includes("talent")) return false;
 
     if (filter === "unsubscribed" && c.subscribed) return false;
     if (filter === "hot" && (c.engagement_status !== "hot" || !c.subscribed)) return false;
@@ -271,18 +277,28 @@ const ContactsListTab = ({ storedPassword, initialFilter, initialCampaign }: Con
     <>
     <div className="space-y-6">
       {/* Campaign Filter */}
-      <div className="flex gap-2 mb-4">
-        {(["all", "planner", "resident"] as CampaignFilter[]).map(cf => (
+      <div className="flex flex-wrap gap-2 mb-4">
+        {([
+          { key: "all" as CampaignFilter, label: "All Campaigns" },
+          { key: "planner" as CampaignFilter, label: "Planner" },
+          { key: "resident" as CampaignFilter, label: "Apartment" },
+          { key: "corporate" as CampaignFilter, label: "Corporate" },
+          { key: "wedding" as CampaignFilter, label: "Wedding" },
+          { key: "clubs" as CampaignFilter, label: "Clubs" },
+          { key: "pr" as CampaignFilter, label: "PR" },
+          { key: "nonprofit" as CampaignFilter, label: "Nonprofit" },
+          { key: "talent" as CampaignFilter, label: "Talent" },
+        ]).map(cf => (
           <button
-            key={cf}
-            onClick={() => setCampaignFilter(cf)}
+            key={cf.key}
+            onClick={() => setCampaignFilter(cf.key)}
             className={`px-4 py-2 border font-sans text-xs tracking-[0.15em] uppercase transition-colors ${
-              campaignFilter === cf
+              campaignFilter === cf.key
                 ? "border-accent text-accent bg-accent/10"
                 : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/30"
             }`}
           >
-            {cf === "all" ? "All Campaigns" : cf === "planner" ? "Planner" : "Apartment"}
+            {cf.label}
           </button>
         ))}
       </div>
