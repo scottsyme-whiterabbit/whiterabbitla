@@ -661,6 +661,7 @@ serve(async (req) => {
     }
 
     for (const campaign of campaigns as ColdCampaign[]) {
+      const maxSteps = campaign.campaign_category === "spirits" ? 5 : 4;
       const step = campaign.current_step;
       const lastSent = campaign.last_email_sent_at ? new Date(campaign.last_email_sent_at) : null;
       const started = campaign.started_at ? new Date(campaign.started_at) : null;
