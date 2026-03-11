@@ -7,6 +7,7 @@ import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import QuizCTA from "@/components/QuizCTA";
 import QuizNudge from "@/components/QuizNudge";
 import FAQSection from "@/components/FAQSection";
+import NewsletterSignup from "@/components/NewsletterSignup";
 
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useJsonLd } from "@/hooks/useSchemaOrg";
