@@ -61,6 +61,38 @@ serve(async (req) => {
       );
     }
 
+    // Create contact in Apollo.io CRM (non-blocking)
+    try {
+      const APOLLO_API_KEY = Deno.env.get("APOLLO_API_KEY");
+      if (APOLLO_API_KEY && email) {
+        const [firstName, ...lastParts] = (name || "").split(" ");
+        const lastName = lastParts.join(" ") || undefined;
+        const apolloRes = await fetch("https://api.apollo.io/api/v1/contacts", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Api-Key": APOLLO_API_KEY,
+          },
+          body: JSON.stringify({
+            first_name: firstName || undefined,
+            last_name: lastName,
+            email: email,
+            phone_numbers: phone ? [{ raw_number: phone }] : undefined,
+            label_names: ["Consultation Lead", "Meta Ads"],
+          }),
+        });
+        if (!apolloRes.ok) {
+          const err = await apolloRes.text();
+          console.error("Apollo.io error:", apolloRes.status, err);
+        } else {
+          await apolloRes.text();
+          console.log("Apollo.io contact created for:", email);
+        }
+      }
+    } catch (apolloErr) {
+      console.error("Apollo.io creation failed (non-blocking):", apolloErr);
+    }
+
     return new Response(
       JSON.stringify({ success: true, id: data.id }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
