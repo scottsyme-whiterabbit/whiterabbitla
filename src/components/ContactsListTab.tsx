@@ -226,6 +226,12 @@ const ContactsListTab = ({ storedPassword, initialFilter, initialCampaign }: Con
     // Campaign filter
     if (campaignFilter === "planner" && !c.drip_campaign.startsWith("planner")) return false;
     if (campaignFilter === "resident" && !c.drip_campaign.startsWith("resident")) return false;
+    if (campaignFilter === "corporate" && !c.source?.toLowerCase().includes("corporate")) return false;
+    if (campaignFilter === "wedding" && !c.source?.toLowerCase().includes("wedding")) return false;
+    if (campaignFilter === "clubs" && !c.source?.toLowerCase().includes("club")) return false;
+    if (campaignFilter === "pr" && !c.source?.toLowerCase().includes("pr")) return false;
+    if (campaignFilter === "nonprofit" && !c.source?.toLowerCase().includes("nonprofit")) return false;
+    if (campaignFilter === "talent" && !c.source?.toLowerCase().includes("talent")) return false;
 
     if (filter === "unsubscribed" && c.subscribed) return false;
     if (filter === "hot" && (c.engagement_status !== "hot" || !c.subscribed)) return false;
