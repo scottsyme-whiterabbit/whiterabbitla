@@ -510,11 +510,11 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
                       <td className="px-4 py-2.5 text-muted-foreground hidden md:table-cell">{c.company || "—"}</td>
                       <td className="px-4 py-2.5">
                         <div className="flex gap-0.5 mb-1">
-                          {[0, 1, 2, 3].map(s => (
+                          {Array.from({ length: (CAMPAIGN_DATA[c.campaign_category]?.emails.length || 4) }, (_, s) => (
                             <div key={s} className={`h-1.5 w-4 rounded-full ${s < c.current_step ? "bg-accent" : "bg-muted/30"}`} />
                           ))}
                         </div>
-                        <span className="text-[10px] text-muted-foreground">{c.current_step === 0 ? "Not started" : c.current_step >= 4 ? "All sent" : `${c.current_step}/4 sent`}</span>
+                        <span className="text-[10px] text-muted-foreground">{c.current_step === 0 ? "Not started" : c.current_step >= (CAMPAIGN_DATA[c.campaign_category]?.emails.length || 4) ? "All sent" : `${c.current_step}/${CAMPAIGN_DATA[c.campaign_category]?.emails.length || 4} sent`}</span>
                       </td>
                       <td className="px-4 py-2.5">
                         <span className={`text-[10px] px-2 py-0.5 rounded ${STATUS_COLORS[c.status] || ""} font-sans tracking-wider uppercase`}>
