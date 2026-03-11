@@ -382,7 +382,7 @@ const PitchDeck = () => {
                 onClick={openQuiz}
                 className="inline-flex items-center justify-center gap-2 font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors"
               >
-                Check Availability <ArrowRight size={14} />
+                Book Now <ArrowRight size={14} />
               </button>
               <a
                 href="tel:+14243941850"

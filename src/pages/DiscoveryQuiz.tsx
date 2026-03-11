@@ -526,7 +526,7 @@ const DiscoveryQuiz = () => {
                         onClick={openQuiz}
                         className="inline-block font-sans text-xs tracking-[0.2em] uppercase border border-accent/50 text-accent px-8 py-3 hover:bg-accent hover:text-accent-foreground transition-colors"
                       >
-                        Check Availability
+                        Book Now
                       </button>
                     </motion.div>
                   </div>

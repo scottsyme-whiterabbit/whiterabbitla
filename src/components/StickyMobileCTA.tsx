@@ -35,21 +35,21 @@ const StickyMobileCTA = () => {
       {/* Mobile: full-width bottom bar */}
       <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-forest-dark/95 backdrop-blur-md border-t border-accent/20 p-3">
         <button
-          onClick={() => { trackCTAClick("Check Availability", "sticky_mobile"); openQuiz(); }}
+          onClick={() => { trackCTAClick("Book Now", "sticky_mobile"); openQuiz(); }}
           className="w-full font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground py-3.5 hover:bg-accent/80 transition-colors"
         >
-          Check Availability
+          Book Now
         </button>
       </div>
 
       {/* Desktop: floating pill button bottom-right */}
       <button
-        onClick={() => { trackCTAClick("Check Availability", "sticky_desktop"); openQuiz(); }}
+        onClick={() => { trackCTAClick("Book Now", "sticky_desktop"); openQuiz(); }}
         className="hidden md:flex fixed bottom-8 right-8 z-50 items-center gap-2.5 bg-accent text-accent-foreground font-sans text-xs tracking-[0.2em] uppercase px-6 py-3.5 shadow-lg hover:bg-accent/90 hover:shadow-xl hover:scale-105 transition-all duration-300"
-        aria-label="Check Availability"
+        aria-label="Book Now"
       >
         <CalendarCheck size={16} strokeWidth={1.5} />
-        Check Availability
+        Book Now
       </button>
     </>
   );

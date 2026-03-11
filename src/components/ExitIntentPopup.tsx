@@ -94,13 +94,13 @@ const ExitIntentPopup = () => {
               Whether you're ready to book or still exploring, we've got you covered.
             </p>
 
-            {/* Primary CTA: Check Availability */}
+            {/* Primary CTA: Book Now */}
             <button
               onClick={handleCheckAvailability}
               className="w-full flex items-center justify-center gap-2.5 font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-4 hover:bg-accent/80 transition-colors mb-4"
             >
               <CalendarCheck size={16} strokeWidth={1.5} />
-              Check Availability
+              Book Now
             </button>
 
             {/* Secondary CTA: Free Guide */}
@@ -179,7 +179,7 @@ const ExitIntentPopup = () => {
               onClick={handleCheckAvailability}
               className="w-full font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-3.5 hover:bg-accent/80 transition-colors mb-3"
             >
-              Check Availability
+              Book Now
             </button>
             <button
               onClick={dismiss}
