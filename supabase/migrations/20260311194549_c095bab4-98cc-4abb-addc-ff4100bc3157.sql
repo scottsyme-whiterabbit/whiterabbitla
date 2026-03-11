@@ -1,0 +1,1 @@
+ALTER TABLE public.newsletter_send_log DROP CONSTRAINT newsletter_send_log_contact_id_fkey;

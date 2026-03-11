@@ -541,15 +541,7 @@ export type Database = {
           sent_at?: string
           status?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "newsletter_send_log_contact_id_fkey"
-            columns: ["contact_id"]
-            isOneToOne: false
-            referencedRelation: "newsletter_contacts"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       outreach_log: {
         Row: {
