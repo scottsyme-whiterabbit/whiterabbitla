@@ -211,6 +211,17 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
     else if (filter === "warm") items = items.filter(i => i.priority === "warm");
     else if (filter === "completed") items = items.filter(i => i.outreachStatus === "booked" || i.outreachStatus === "not_interested");
 
+    // Source filter
+    if (sourceFilter !== "all") {
+      items = items.filter(i => {
+        const src = (i.source || "").toLowerCase();
+        const drip = i.contact?.drip_campaign?.toLowerCase() || "";
+        if (sourceFilter === "planner") return src.includes("planner") || drip === "planner";
+        if (sourceFilter === "apartment") return src.includes("apartment") || src.includes("resident") || drip === "resident";
+        return src.includes(sourceFilter);
+      });
+    }
+
     if (search) {
       const q = search.toLowerCase();
       items = items.filter(i => i.email.includes(q) || i.name?.toLowerCase().includes(q) || i.company?.toLowerCase().includes(q));
