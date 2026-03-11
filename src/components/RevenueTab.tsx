@@ -304,6 +304,69 @@ const RevenueTab = ({ adminPassword }: Props) => {
         </div>
       </div>
 
+      {/* Monthly Pace Tracker */}
+      <div className="border border-border p-6">
+        <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-accent mb-4">Monthly Pace Tracker</h3>
+        {(() => {
+          const ANNUAL_TARGET = 50000000; // $500,000 in cents
+          const MONTHLY_TARGET = 4166700; // $41,667 in cents
+          const now = new Date();
+          const currentMonth = now.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+          const monthsRemaining = 12 - (now.getMonth() + 1);
+          const combinedTotal = revenueSummary.bookedTotal + revenueSummary.completedTotal;
+          const currentMonthRevenue = revenueSummary.bookedMonth + revenueSummary.grossMonth;
+          const pctOfAnnual = Math.min(Math.round((combinedTotal / ANNUAL_TARGET) * 100), 100);
+          const pctOfMonth = Math.min(Math.round((currentMonthRevenue / MONTHLY_TARGET) * 100), 100);
+
+          return (
+            <div className="space-y-5">
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                {[
+                  { label: "Annual Target", value: formatCurrency(ANNUAL_TARGET) },
+                  { label: "Monthly Target", value: formatCurrency(MONTHLY_TARGET) },
+                  { label: currentMonth, value: formatCurrency(currentMonthRevenue) },
+                  { label: "Months Remaining", value: String(monthsRemaining) },
+                  { label: "Annual Progress", value: `${pctOfAnnual}%` },
+                ].map(stat => (
+                  <div key={stat.label} className="text-center">
+                    <p className="font-serif text-xl text-foreground">{stat.value}</p>
+                    <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Annual progress bar */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Annual Goal</span>
+                  <span className="font-mono text-[10px] text-emerald-500">{formatCurrency(combinedTotal)} / {formatCurrency(ANNUAL_TARGET)}</span>
+                </div>
+                <div className="relative h-3 w-full overflow-hidden rounded-full bg-secondary">
+                  <div
+                    className="h-full rounded-full transition-all"
+                    style={{ width: `${pctOfAnnual}%`, background: "linear-gradient(90deg, #10b981, #14b8a6)" }}
+                  />
+                </div>
+              </div>
+
+              {/* Monthly progress bar */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Monthly Goal</span>
+                  <span className="font-mono text-[10px] text-amber-500">{formatCurrency(currentMonthRevenue)} / {formatCurrency(MONTHLY_TARGET)}</span>
+                </div>
+                <div className="relative h-3 w-full overflow-hidden rounded-full bg-secondary">
+                  <div
+                    className="h-full rounded-full transition-all"
+                    style={{ width: `${pctOfMonth}%`, background: "linear-gradient(90deg, #f59e0b, #eab308)" }}
+                  />
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+      </div>
+
       {/* Period Breakdown */}
       <div className="border border-border p-6">
         <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-accent mb-4">Period Breakdown</h3>
