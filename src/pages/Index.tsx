@@ -114,31 +114,32 @@ const Index = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/30 to-forest-dark/10 hidden md:block" />
         </div>
 
-        {/* Mobile: text overlaid at bottom of photo */}
-        <div className="md:hidden absolute inset-0 z-10 flex flex-col items-center justify-end pb-10 px-6 text-center">
-          <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
+        {/* Text overlaid – single responsive block */}
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-10 md:pb-6 px-6 text-center">
+          <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent md:from-forest-dark/70 md:via-forest-dark/30 md:to-forest-dark/10" />
           <motion.h1
-            className="relative text-2xl text-cream/90 tracking-wide font-bold font-serif drop-shadow-lg"
+            className="relative text-2xl md:text-4xl lg:text-5xl text-cream/90 tracking-wide font-bold font-serif drop-shadow-lg max-w-4xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}>
             Experience Magic<br />
-            <span className="block mt-2">That Makes You Feel Truly Alive</span>
+            <span className="block mt-2 md:mt-3">That Makes You Feel Truly Alive</span>
           </motion.h1>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1 }}
-            className="relative mt-6">
+            className="relative mt-6 md:mt-12">
             <button
               onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-10 py-4 hover:bg-accent hover:text-accent-foreground transition-colors">
-              Explore the Experience
+              <span className="md:hidden">Explore the Experience</span>
+              <span className="hidden md:inline">Book an Experience</span>
             </button>
           </motion.div>
-          {/* Scroll indicator */}
+          {/* Scroll indicator – mobile only */}
           <motion.div
-            className="relative mt-6"
+            className="relative mt-6 md:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1.5 }}>
@@ -148,29 +149,6 @@ const Index = () => {
               className="w-5 h-8 border border-cream/30 rounded-full flex items-start justify-center p-1">
               <div className="w-1 h-2 bg-cream/50 rounded-full" />
             </motion.div>
-          </motion.div>
-        </div>
-
-        {/* Desktop: text overlaid */}
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto hidden md:flex flex-col items-center justify-end pb-6 h-full">
-          <motion.h1
-            className="text-4xl lg:text-5xl text-cream/90 tracking-wide font-bold text-center font-serif"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}>
-            Experience Magic<br />
-            <span className="block mt-3">That Makes You Feel Truly Alive</span>
-          </motion.h1>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1 }}
-            className="mt-12">
-            <button
-              onClick={openQuiz}
-              className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-10 py-4 hover:bg-accent hover:text-accent-foreground transition-colors">
-              Book an Experience
-            </button>
           </motion.div>
         </div>
       </section>
