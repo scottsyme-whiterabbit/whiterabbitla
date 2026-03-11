@@ -6,6 +6,9 @@ import { trackFormSubmit } from "@/lib/analytics";
 import { Star, Calendar, DollarSign, Clock, ChevronDown } from "lucide-react";
 import wrLogo from "@/assets/wr-logo-stars-white.png";
 import heroImg from "@/assets/event-parlor-stage.jpg";
+import scottBwImg from "@/assets/scott-couch.jpg";
+import cardsImg from "@/assets/cards-spring-bw.jpg";
+import threeStars from "@/assets/three-stars-gold.png";
 
 const EVENT_TYPES = [
   "Corporate Event",
