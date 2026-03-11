@@ -147,7 +147,7 @@ const Consultation = () => {
         source: "meta_ads",
       });
       trackFormSubmit("consultation", "meta_ads");
-      if (typeof fbq !== 'undefined') { fbq('track', 'Lead'); }
+      if (typeof (window as any).fbq !== 'undefined') { (window as any).fbq('track', 'Lead'); }
       setSubmitted(true);
     } catch {
       // silent fail — lead still likely saved
