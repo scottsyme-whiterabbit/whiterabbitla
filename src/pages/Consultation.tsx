@@ -148,6 +148,19 @@ const Consultation = () => {
       });
       trackFormSubmit("consultation", "meta_ads");
       if (typeof (window as any).fbq !== 'undefined') { (window as any).fbq('track', 'Lead'); }
+
+      // Send email notification to Scott (non-blocking)
+      supabase.functions.invoke("send-consultation-notification", {
+        body: {
+          name: form.name.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
+          event_type: form.event_type || null,
+          event_date: form.event_date || null,
+          description: form.description.trim() || null,
+        },
+      }).catch((err) => console.error("Notification email error:", err));
+
       setSubmitted(true);
     } catch {
       // silent fail — lead still likely saved
