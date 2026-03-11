@@ -162,7 +162,7 @@ const Consultation = () => {
         <img
           src={heroImg}
           alt="White Rabbit private magic show with emerald curtains and cinematic lighting"
-          className="absolute inset-0 w-full h-full object-cover object-[center_30%]"
+          className="absolute inset-0 w-full h-full object-cover object-[center_40%] md:object-[center_30%]"
           fetchPriority="high"
           decoding="async"
         />
