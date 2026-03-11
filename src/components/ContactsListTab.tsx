@@ -39,7 +39,7 @@ interface OpenEvent {
 }
 
 type FilterStatus = "all" | "hot" | "warm" | "new" | "cold" | "unsubscribed" | "opened";
-type CampaignFilter = "all" | "planner" | "resident";
+type CampaignFilter = "all" | "planner" | "resident" | "corporate" | "wedding" | "clubs" | "pr" | "nonprofit" | "talent";
 
 interface ContactsListTabProps {
   storedPassword: string;
