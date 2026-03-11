@@ -403,7 +403,7 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
             <div className="px-4 py-3 border-b border-border space-y-1">
               <div className="flex items-center justify-between">
                 <span className="font-sans text-xs tracking-[0.15em] uppercase text-accent">
-                  Preview: {campaignInfo.emails[previewStep]?.type} (Email {previewStep + 1}/4 · Day {campaignInfo.emails[previewStep]?.day})
+                  Preview: {campaignInfo.emails[previewStep]?.type} (Email {previewStep + 1}/{campaignInfo.emails.length} · Day {campaignInfo.emails[previewStep]?.day})
                 </span>
                 <button onClick={() => { setPreviewStep(null); setPreviewHtml(""); setPreviewSubject(""); }} className="text-muted-foreground hover:text-foreground">
                   <X size={14} />
