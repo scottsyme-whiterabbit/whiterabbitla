@@ -132,7 +132,7 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await callAdmin("get_cold_campaigns");
+      const res = await callAdmin("get_cold_campaigns", { category });
       setCampaigns((res.campaigns || []).filter((c: ColdCampaign) => c.campaign_category === category));
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed to load");
