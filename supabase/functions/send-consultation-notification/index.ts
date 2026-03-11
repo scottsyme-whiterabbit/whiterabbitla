@@ -61,36 +61,18 @@ serve(async (req) => {
       );
     }
 
-    // Create contact in Apollo.io CRM (non-blocking)
-    try {
-      const APOLLO_API_KEY = Deno.env.get("APOLLO_API_KEY");
-      if (APOLLO_API_KEY && email) {
-        const [firstName, ...lastParts] = (name || "").split(" ");
-        const lastName = lastParts.join(" ") || undefined;
-        const apolloRes = await fetch("https://api.apollo.io/api/v1/contacts", {
+    const APOLLO_API_KEY = Deno.env.get("APOLLO_API_KEY");
+    if (APOLLO_API_KEY) {
+      const nameParts = name.split(" ");
+      const firstName = nameParts[0] || "";
+      const lastName = nameParts.slice(1).join(" ") || "";
+      try {
+        await fetch("https://api.apollo.io/api/v1/contacts", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Api-Key": APOLLO_API_KEY,
-          },
-          body: JSON.stringify({
-            first_name: firstName || undefined,
-            last_name: lastName,
-            email: email,
-            phone_numbers: phone ? [{ raw_number: phone }] : undefined,
-            label_names: ["Consultation Lead", "Meta Ads"],
-          }),
+          headers: { "Content-Type": "application/json", "X-Api-Key": APOLLO_API_KEY },
+          body: JSON.stringify({ first_name: firstName, last_name: lastName, email, organization_name: "", label_names: ["New Lead"] })
         });
-        if (!apolloRes.ok) {
-          const err = await apolloRes.text();
-          console.error("Apollo.io error:", apolloRes.status, err);
-        } else {
-          await apolloRes.text();
-          console.log("Apollo.io contact created for:", email);
-        }
-      }
-    } catch (apolloErr) {
-      console.error("Apollo.io creation failed (non-blocking):", apolloErr);
+      } catch (e) { console.error("Apollo error:", e); }
     }
 
     return new Response(
