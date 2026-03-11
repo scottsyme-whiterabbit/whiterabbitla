@@ -54,6 +54,7 @@ serve(async (req) => {
               city: c.city?.trim() || null,
               source: c.source || "csv",
               phone: c.phone?.trim() || null,
+              drip_campaign: c.drip_campaign || "welcome",
             })),
             { onConflict: "email" }
           )
@@ -533,6 +534,25 @@ serve(async (req) => {
           .eq("id", campaignId);
         if (error) throw error;
         return new Response(JSON.stringify({ success: true }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "bulk_update_drip_campaign": {
+        const { emails, drip_campaign } = payload;
+        if (!emails?.length || !drip_campaign) {
+          return new Response(JSON.stringify({ error: "emails and drip_campaign required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const normalized = emails.map((e: string) => e.toLowerCase().trim());
+        const { data: updated, error: bulkErr } = await supabase
+          .from("newsletter_contacts")
+          .update({ drip_campaign })
+          .in("email", normalized)
+          .select("id");
+        if (bulkErr) throw bulkErr;
+        return new Response(JSON.stringify({ updated: updated?.length || 0 }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
