@@ -108,6 +108,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
   const [outreachLogs, setOutreachLogs] = useState<OutreachLog[]>([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<string>("all");
+  const [sourceFilter, setSourceFilter] = useState<string>("all");
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"priority" | "newest" | "follow_up" | "value">("priority");
   const [expandedEmail, setExpandedEmail] = useState<string | null>(null);
