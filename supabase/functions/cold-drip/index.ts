@@ -730,7 +730,7 @@ serve(async (req) => {
         if (step === 0) {
           updates.started_at = now.toISOString();
         }
-        if (nextStep >= 4) {
+        if (nextStep >= maxSteps) {
           updates.status = "completed";
           completed++;
         }
