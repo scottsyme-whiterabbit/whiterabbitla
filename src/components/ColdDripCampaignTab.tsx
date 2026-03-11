@@ -81,11 +81,11 @@ const CAMPAIGN_DATA: Record<string, { label: string; emoji: string; emails: Arra
     label: "Spirits Brands",
     emoji: "🍸",
     emails: [
-      { subject: "30 minutes to Presidents Club", day: 0, type: "Cold Open" },
-      { subject: "Your guests are already filming — give them something worth posting", day: 3, type: "Value Add" },
-      { subject: "The activation line item nobody questions twice", day: 10, type: "Social Proof" },
-      { subject: "The brand moment you cannot buy with media spend", day: 20, type: "Different Angle" },
-      { subject: "Saving this for whenever your next big activation lands", day: 30, type: "Breakup" },
+      { subject: "A different kind of activation talent", day: 0, type: "Cold Open" },
+      { subject: "What happened at a recent brand tasting", day: 3, type: "Value Add" },
+      { subject: "The vendor every guest mentions the next day", day: 7, type: "Social Proof" },
+      { subject: "The moment you cannot buy with media spend", day: 14, type: "Different Angle" },
+      { subject: "For whenever the right activation comes up", day: 21, type: "Breakup" },
     ],
   },
 };
