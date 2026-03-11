@@ -245,7 +245,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
       return 0;
     });
     return items;
-  }, [actionItems, filter, search, sortBy]);
+  }, [actionItems, filter, search, sortBy, sourceFilter]);
 
   const hotCount = actionItems.filter(i => i.priority === "hot").length;
   const todayCalls = actionItems.filter(i => i.priority === "follow_up").length;
