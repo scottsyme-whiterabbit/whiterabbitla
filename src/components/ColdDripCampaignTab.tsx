@@ -77,6 +77,16 @@ const CAMPAIGN_DATA: Record<string, { label: string; emoji: string; emails: Arra
       { subject: "If you ever want to try something different", day: 24, type: "Breakup" },
     ],
   },
+  spirits: {
+    label: "Spirits Brands",
+    emoji: "🍸",
+    emails: [
+      { subject: "A unique idea for your next brand activation", day: 0, type: "Cold Open" },
+      { subject: "What happened when a spirits brand tried live magic", day: 3, type: "Value Add" },
+      { subject: "The activation idea your competitors haven't tried", day: 10, type: "Different Angle" },
+      { subject: "Last note about your brand experience strategy", day: 24, type: "Breakup" },
+    ],
+  },
 };
 
 const STATUS_COLORS: Record<string, string> = {
@@ -132,7 +142,7 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await callAdmin("get_cold_campaigns");
+      const res = await callAdmin("get_cold_campaigns", { category });
       setCampaigns((res.campaigns || []).filter((c: ColdCampaign) => c.campaign_category === category));
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed to load");
