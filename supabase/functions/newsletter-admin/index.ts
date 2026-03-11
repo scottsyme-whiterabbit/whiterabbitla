@@ -557,6 +557,44 @@ serve(async (req) => {
         });
       }
 
+      case "bulk_add_cold_campaigns": {
+        const { emails, campaign_category } = payload;
+        if (!emails?.length || !campaign_category) {
+          return new Response(JSON.stringify({ error: "emails and campaign_category required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const normalizedEmails = emails.map((e: string) => e.toLowerCase().trim());
+
+        // Look up contacts to get name/company
+        const { data: contactsLookup } = await supabase
+          .from("newsletter_contacts")
+          .select("email, name, company")
+          .in("email", normalizedEmails);
+        const contactMap = new Map((contactsLookup || []).map((c: { email: string; name: string | null; company: string | null }) => [c.email, c]));
+
+        const rows = normalizedEmails.map((email: string) => {
+          const contact = contactMap.get(email);
+          return {
+            email,
+            name: contact?.name || null,
+            company: contact?.company || null,
+            campaign_category,
+            status: "active",
+            current_step: 0,
+          };
+        });
+
+        const { data: enrolled, error: bulkColdErr } = await supabase
+          .from("cold_email_campaigns")
+          .upsert(rows, { onConflict: "email" })
+          .select("id");
+        if (bulkColdErr) throw bulkColdErr;
+        return new Response(JSON.stringify({ enrolled: enrolled?.length || 0 }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       case "delete_cold_campaign": {
         const { campaignId } = payload;
         const { error } = await supabase
