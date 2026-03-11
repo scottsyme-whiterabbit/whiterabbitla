@@ -287,6 +287,12 @@ serve(async (req) => {
           };
         };
 
+        // Spirits: count from newsletter_contacts instead of cold_email_campaigns
+        const { count: spiritsCount } = await supabase
+          .from("newsletter_contacts")
+          .select("*", { count: "exact", head: true })
+          .eq("drip_campaign", "cold_spirits");
+
         return new Response(JSON.stringify({
           subscribers: contacts.filter((c: { subscribed: boolean }) => c.subscribed).length,
           campaigns: campaignCount || 0,
@@ -299,7 +305,7 @@ serve(async (req) => {
           cold_pr: buildColdStats("pr_agency"),
           cold_nonprofit: buildColdStats("nonprofit"),
           cold_talent: buildColdStats("talent_management"),
-          cold_spirits: buildColdStats("spirits"),
+          cold_spirits: { total: spiritsCount || 0, active: spiritsCount || 0, paused: 0, replied: 0, completed: 0 },
         }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
