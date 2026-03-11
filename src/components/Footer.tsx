@@ -51,6 +51,11 @@ const Footer = () => {
               <Phone size={16} /> (424) 394-1850
             </a>
           </div>
+
+          {/* Newsletter Signup */}
+          <div className="flex flex-col items-center md:items-start">
+            <NewsletterSignup variant="footer" />
+          </div>
         </div>
 
         {/* Social Follow Banner */}

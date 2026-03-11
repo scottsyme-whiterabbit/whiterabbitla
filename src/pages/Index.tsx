@@ -409,6 +409,15 @@ const Index = () => {
         ]}
       />
 
+      {/* Newsletter Signup */}
+      <AnimatedSection>
+        <section className="py-16 lg:py-20 border-t border-border/30">
+          <div className="max-w-2xl mx-auto px-6">
+            <NewsletterSignup variant="section" />
+          </div>
+        </section>
+      </AnimatedSection>
+
       {/* Final CTA */}
       <AnimatedSection>
         <section className="py-12 lg:py-16 text-center">
