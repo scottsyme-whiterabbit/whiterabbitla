@@ -108,6 +108,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
   const [outreachLogs, setOutreachLogs] = useState<OutreachLog[]>([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<string>("all");
+  const [sourceFilter, setSourceFilter] = useState<string>("all");
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"priority" | "newest" | "follow_up" | "value">("priority");
   const [expandedEmail, setExpandedEmail] = useState<string | null>(null);
@@ -210,6 +211,17 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
     else if (filter === "warm") items = items.filter(i => i.priority === "warm");
     else if (filter === "completed") items = items.filter(i => i.outreachStatus === "booked" || i.outreachStatus === "not_interested");
 
+    // Source filter
+    if (sourceFilter !== "all") {
+      items = items.filter(i => {
+        const src = (i.source || "").toLowerCase();
+        const drip = i.contact?.drip_campaign?.toLowerCase() || "";
+        if (sourceFilter === "planner") return src.includes("planner") || drip === "planner";
+        if (sourceFilter === "apartment") return src.includes("apartment") || src.includes("resident") || drip === "resident";
+        return src.includes(sourceFilter);
+      });
+    }
+
     if (search) {
       const q = search.toLowerCase();
       items = items.filter(i => i.email.includes(q) || i.name?.toLowerCase().includes(q) || i.company?.toLowerCase().includes(q));
@@ -233,7 +245,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
       return 0;
     });
     return items;
-  }, [actionItems, filter, search, sortBy]);
+  }, [actionItems, filter, search, sortBy, sourceFilter]);
 
   const hotCount = actionItems.filter(i => i.priority === "hot").length;
   const todayCalls = actionItems.filter(i => i.priority === "follow_up").length;
@@ -317,6 +329,25 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
             </div>
             <p className="font-serif text-xl text-foreground">{stat.value}</p>
           </div>
+        ))}
+      </div>
+
+      {/* Source Filter */}
+      <div className="flex flex-wrap gap-2">
+        {([
+          { key: "all", label: "All" },
+          { key: "planner", label: "Planner" },
+          { key: "apartment", label: "Apartment" },
+          { key: "corporate", label: "Corporate" },
+          { key: "wedding", label: "Wedding" },
+          { key: "clubs", label: "Clubs" },
+          { key: "pr", label: "PR" },
+          { key: "nonprofit", label: "Nonprofit" },
+          { key: "talent", label: "Talent" },
+        ]).map(opt => (
+          <button key={opt.key} onClick={() => setSourceFilter(opt.key)} className={`px-3 py-1.5 text-[10px] font-sans tracking-[0.15em] uppercase border transition-colors ${sourceFilter === opt.key ? "border-accent text-accent bg-accent/10" : "border-border text-muted-foreground hover:text-foreground"}`}>
+            {opt.label}
+          </button>
         ))}
       </div>
 
