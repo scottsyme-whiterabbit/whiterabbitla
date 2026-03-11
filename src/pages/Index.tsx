@@ -428,7 +428,7 @@ const Index = () => {
             <button
               onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors">
-              Check Availability
+              Book Now
             </button>
             <p className="font-sans text-xs text-muted-foreground/60 mt-4">Limited dates each month. No associates. Just Scott.</p>
           </div>
