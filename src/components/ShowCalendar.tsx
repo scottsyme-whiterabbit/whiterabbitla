@@ -1,5 +1,6 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Download, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface BookedDeal {
   id: string;
@@ -13,6 +14,19 @@ interface BookedDeal {
   guest_count: string | null;
   deal_value: number | null;
   stage: string;
+}
+
+interface GoogleCalEvent {
+  id: string;
+  summary: string;
+  description: string | null;
+  location: string | null;
+  start: string | null;
+  end: string | null;
+  allDay: boolean;
+  htmlLink: string | null;
+  status: string;
+  colorId: string | null;
 }
 
 interface ShowCalendarProps {
@@ -35,6 +49,14 @@ const formatCurrency = (cents: number | null) => {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0 }).format(cents / 100);
 };
 
+const formatTime12h = (timeStr: string) => {
+  const [h, m] = timeStr.split(":");
+  const hour = parseInt(h);
+  const ampm = hour >= 12 ? "PM" : "AM";
+  const h12 = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour;
+  return `${h12}:${m} ${ampm}`;
+};
+
 const generateGoogleCalendarUrl = (deal: BookedDeal): string => {
   const title = encodeURIComponent(`Show: ${deal.contact_name || deal.company || deal.contact_email}`);
   const location = encodeURIComponent(deal.location || "");
@@ -48,12 +70,10 @@ const generateGoogleCalendarUrl = (deal: BookedDeal): string => {
     ].filter(Boolean).join("\n")
   );
 
-  // Build date/time
   const date = deal.event_date!.replace(/-/g, "");
   let dates: string;
   if (deal.event_time) {
     const time = deal.event_time.replace(/:/g, "").slice(0, 4) + "00";
-    // End time = 2 hours later
     const startH = parseInt(deal.event_time.split(":")[0]);
     const endH = String(Math.min(startH + 2, 23)).padStart(2, "0");
     const endTime = `${endH}${deal.event_time.split(":")[1]}00`;
@@ -122,6 +142,44 @@ const ShowCalendar = ({ deals, onOpenDeal }: ShowCalendarProps) => {
     return { year: now.getFullYear(), month: now.getMonth() };
   });
 
+  const [gcalEvents, setGcalEvents] = useState<GoogleCalEvent[]>([]);
+  const [showGcal, setShowGcal] = useState(true);
+
+  const { year, month } = currentMonth;
+
+  // Fetch Google Calendar events
+  useEffect(() => {
+    const fetchGcal = async () => {
+      try {
+        const start = new Date(year, month - 1, 1);
+        const end = new Date(year, month + 2, 0);
+        const { data, error } = await supabase.functions.invoke("google-calendar", {
+          body: { timeMin: start.toISOString(), timeMax: end.toISOString() },
+        });
+        if (error) {
+          console.error("Google Calendar fetch error:", error);
+        } else if (data?.events) {
+          setGcalEvents(data.events);
+        }
+      } catch (err) {
+        console.error("Failed to fetch Google Calendar:", err);
+      }
+    };
+    fetchGcal();
+  }, [year, month]);
+
+  // Map gcal events by date
+  const gcalDateMap = useMemo(() => {
+    const map = new Map<string, GoogleCalEvent[]>();
+    gcalEvents.forEach(ev => {
+      if (!ev.start) return;
+      const dateKey = ev.start.slice(0, 10);
+      if (!map.has(dateKey)) map.set(dateKey, []);
+      map.get(dateKey)!.push(ev);
+    });
+    return map;
+  }, [gcalEvents]);
+
   const bookedDeals = useMemo(
     () => deals.filter(d => (d.stage === "booked" || d.stage === "completed") && d.event_date),
     [deals]
@@ -152,7 +210,6 @@ const ShowCalendar = ({ deals, onOpenDeal }: ShowCalendarProps) => {
     return map;
   }, [holdDeals]);
 
-  const { year, month } = currentMonth;
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const today = new Date().toISOString().slice(0, 10);
@@ -180,7 +237,6 @@ const ShowCalendar = ({ deals, onOpenDeal }: ShowCalendarProps) => {
 
   const monthName = new Date(year, month).toLocaleDateString("en-US", { month: "long", year: "numeric" });
 
-  // Upcoming shows & holds
   const upcoming = bookedDeals
     .filter(d => d.event_date! >= today)
     .sort((a, b) => a.event_date!.localeCompare(b.event_date!))
@@ -195,6 +251,17 @@ const ShowCalendar = ({ deals, onOpenDeal }: ShowCalendarProps) => {
 
   const toggleExpand = (id: string) => {
     setExpandedDealId(prev => prev === id ? null : id);
+  };
+
+  const getGcalLabel = (ev: GoogleCalEvent) => {
+    if (ev.summary === "(No title)" || !ev.summary) {
+      if (ev.start && ev.start.includes("T")) {
+        const time = ev.start.slice(11, 16);
+        return `Event ${formatTime12h(time)}`;
+      }
+      return "Busy";
+    }
+    return ev.summary;
   };
 
   const renderDealCard = (deal: BookedDeal, isHold: boolean) => {
@@ -214,10 +281,9 @@ const ShowCalendar = ({ deals, onOpenDeal }: ShowCalendarProps) => {
         </div>
         <div className="text-[11px] text-muted-foreground">
           {new Date(deal.event_date! + "T12:00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
-          {deal.event_time && ` at ${deal.event_time.slice(0, 5)}`}
+          {deal.event_time && ` at ${formatTime12h(deal.event_time.slice(0, 5))}`}
         </div>
 
-        {/* Expanded details */}
         {isExpanded && (
           <div className="pt-2 border-t border-border/50 space-y-1.5 text-[11px]">
             {deal.company && <p className="text-muted-foreground">🏢 {deal.company}</p>}
@@ -266,7 +332,17 @@ const ShowCalendar = ({ deals, onOpenDeal }: ShowCalendarProps) => {
         <div className="lg:col-span-2 border border-border p-4">
           <div className="flex items-center justify-between mb-4">
             <button onClick={prevMonth} className="text-muted-foreground hover:text-foreground p-1"><ChevronLeft size={18} /></button>
-            <h3 className="font-serif text-lg text-foreground">{monthName}</h3>
+            <div className="flex items-center gap-3">
+              <h3 className="font-serif text-lg text-foreground">{monthName}</h3>
+              <button
+                onClick={() => setShowGcal(p => !p)}
+                className={`text-[9px] font-sans tracking-[0.12em] uppercase px-2 py-1 border transition-colors ${
+                  showGcal ? "border-sky-500/50 text-sky-400 bg-sky-900/20" : "border-border text-muted-foreground"
+                }`}
+              >
+                📅 {showGcal ? "Google Cal On" : "Google Cal Off"}
+              </button>
+            </div>
             <button onClick={nextMonth} className="text-muted-foreground hover:text-foreground p-1"><ChevronRight size={18} /></button>
           </div>
           <div className="grid grid-cols-7 gap-px">
@@ -278,9 +354,11 @@ const ShowCalendar = ({ deals, onOpenDeal }: ShowCalendarProps) => {
               const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
               const showsOnDay = bookedDates.get(dateStr);
               const holdsOnDay = holdDates.get(dateStr);
+              const gcalOnDay = showGcal ? gcalDateMap.get(dateStr) : undefined;
               const isToday = dateStr === today;
               const isBooked = !!showsOnDay;
               const hasHolds = !!holdsOnDay;
+              const hasGcal = !!gcalOnDay?.length;
 
               return (
                 <div
@@ -288,18 +366,24 @@ const ShowCalendar = ({ deals, onOpenDeal }: ShowCalendarProps) => {
                   className={`h-20 border p-1 relative transition-colors overflow-hidden ${
                     isBooked ? "bg-emerald-900/20 border-emerald-600/40" :
                     hasHolds ? "bg-[#C9A96E]/10 border-dashed border-[#C9A96E]/50" :
+                    hasGcal ? "bg-sky-900/10 border-sky-500/20" :
                     "border-border/50"
                   } ${isToday ? "ring-1 ring-accent" : ""}`}
                 >
                   <span className={`text-xs font-sans ${isToday ? "text-accent font-bold" : "text-muted-foreground"}`}>{day}</span>
                   {showsOnDay?.map(deal => (
                     <div key={deal.id} onClick={() => onOpenDeal?.(deal.id)} className="mt-0.5 bg-emerald-900/30 border border-emerald-600/40 px-1 py-0.5 text-[9px] text-foreground truncate rounded-sm cursor-pointer hover:bg-emerald-900/50" title={deal.contact_name || deal.contact_email}>
-                      {EVENT_EMOJIS[deal.event_type || "other"] || "✨"} {deal.event_time?.slice(0, 5) || ""} {deal.contact_name?.split(" ")[0] || deal.company || "Show"}
+                      {EVENT_EMOJIS[deal.event_type || "other"] || "✨"} {deal.event_time ? formatTime12h(deal.event_time.slice(0, 5)) : ""} {deal.contact_name?.split(" ")[0] || deal.company || "Show"}
                     </div>
                   ))}
                   {holdsOnDay?.map(deal => (
                     <div key={deal.id} onClick={() => onOpenDeal?.(deal.id)} className="mt-0.5 bg-[#C9A96E]/15 border border-dashed border-[#C9A96E]/50 px-1 py-0.5 text-[9px] text-[#C9A96E] truncate rounded-sm cursor-pointer hover:bg-[#C9A96E]/25" title={`HOLD: ${deal.contact_name || deal.contact_email}`}>
                       🔒 HOLD: {deal.contact_name?.split(" ")[0] || deal.company || "TBD"}
+                    </div>
+                  ))}
+                  {gcalOnDay?.map(ev => (
+                    <div key={ev.id} className="mt-0.5 bg-sky-900/20 border border-sky-500/30 px-1 py-0.5 text-[9px] text-sky-300 truncate rounded-sm" title={ev.summary || "Busy"}>
+                      {ev.start?.includes("T") ? formatTime12h(ev.start.slice(11, 16)) + " " : ""}{getGcalLabel(ev)}
                     </div>
                   ))}
                   {isBooked && (
@@ -312,15 +396,19 @@ const ShowCalendar = ({ deals, onOpenDeal }: ShowCalendarProps) => {
                       <span className="inline-block w-2 h-2 bg-[#C9A96E]/60 rounded-full" />
                     </div>
                   )}
+                  {hasGcal && !isBooked && !hasHolds && (
+                    <div className="absolute top-1 right-1">
+                      <span className="inline-block w-2 h-2 bg-sky-500/60 rounded-full" />
+                    </div>
+                  )}
                 </div>
               );
             })}
           </div>
         </div>
 
-        {/* Sidebar: Upcoming Shows & Holds */}
+        {/* Sidebar */}
         <div className="space-y-6">
-          {/* Upcoming Confirmed Shows */}
           <div className="border border-border p-4">
             <h3 className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-4">
               Upcoming Shows <span className="text-emerald-500">●</span>
@@ -334,7 +422,6 @@ const ShowCalendar = ({ deals, onOpenDeal }: ShowCalendarProps) => {
             )}
           </div>
 
-          {/* Upcoming Hold Dates */}
           <div className="border border-dashed border-[#C9A96E]/40 p-4">
             <h3 className="font-sans text-[10px] tracking-[0.15em] uppercase text-[#C9A96E] mb-4">
               Hold Dates <span className="text-[#C9A96E]">●</span>
@@ -354,6 +441,7 @@ const ShowCalendar = ({ deals, onOpenDeal }: ShowCalendarProps) => {
       <div className="flex gap-4 text-xs font-sans text-muted-foreground flex-wrap">
         <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-emerald-900/30 border border-emerald-600/40 rounded-sm" /> Confirmed</span>
         <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-[#C9A96E]/15 border border-dashed border-[#C9A96E]/50 rounded-sm" /> Hold Date</span>
+        {showGcal && <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-sky-900/20 border border-sky-500/30 rounded-sm" /> Google Cal</span>}
       </div>
 
       {/* Stats */}

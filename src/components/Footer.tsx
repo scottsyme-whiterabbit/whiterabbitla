@@ -2,12 +2,13 @@ import { Link } from "react-router-dom";
 import { Instagram, Linkedin, Mail, Phone } from "lucide-react";
 import wrLogo from "@/assets/wr-logo-stars-white.png";
 import threeStars from "@/assets/three-stars-gold.png";
+import NewsletterSignup from "@/components/NewsletterSignup";
 
 const Footer = () => {
   return (
     <footer aria-label="Site footer" className="bg-forest-dark text-cream/80 py-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 items-start">
           {/* Logo & tagline */}
           <div className="flex flex-col items-center md:items-start justify-center h-full">
             <img src={wrLogo} alt="White Rabbit Los Angeles luxury magic entertainment logo" loading="lazy" decoding="async" className="h-32 w-auto opacity-90" />
@@ -49,6 +50,11 @@ const Footer = () => {
             <a href="tel:+14243941850" className="flex items-center gap-2 text-sm hover:text-cream transition-colors">
               <Phone size={16} /> (424) 394-1850
             </a>
+          </div>
+
+          {/* Newsletter Signup */}
+          <div className="flex flex-col items-center md:items-start">
+            <NewsletterSignup variant="footer" />
           </div>
         </div>
 
