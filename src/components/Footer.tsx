@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <footer aria-label="Site footer" className="bg-forest-dark text-cream/80 py-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 items-start">
           {/* Logo & tagline */}
           <div className="flex flex-col items-center md:items-start justify-center h-full">
             <img src={wrLogo} alt="White Rabbit Los Angeles luxury magic entertainment logo" loading="lazy" decoding="async" className="h-32 w-auto opacity-90" />
