@@ -271,18 +271,28 @@ const ContactsListTab = ({ storedPassword, initialFilter, initialCampaign }: Con
     <>
     <div className="space-y-6">
       {/* Campaign Filter */}
-      <div className="flex gap-2 mb-4">
-        {(["all", "planner", "resident"] as CampaignFilter[]).map(cf => (
+      <div className="flex flex-wrap gap-2 mb-4">
+        {([
+          { key: "all" as CampaignFilter, label: "All Campaigns" },
+          { key: "planner" as CampaignFilter, label: "Planner" },
+          { key: "resident" as CampaignFilter, label: "Apartment" },
+          { key: "corporate" as CampaignFilter, label: "Corporate" },
+          { key: "wedding" as CampaignFilter, label: "Wedding" },
+          { key: "clubs" as CampaignFilter, label: "Clubs" },
+          { key: "pr" as CampaignFilter, label: "PR" },
+          { key: "nonprofit" as CampaignFilter, label: "Nonprofit" },
+          { key: "talent" as CampaignFilter, label: "Talent" },
+        ]).map(cf => (
           <button
-            key={cf}
-            onClick={() => setCampaignFilter(cf)}
+            key={cf.key}
+            onClick={() => setCampaignFilter(cf.key)}
             className={`px-4 py-2 border font-sans text-xs tracking-[0.15em] uppercase transition-colors ${
-              campaignFilter === cf
+              campaignFilter === cf.key
                 ? "border-accent text-accent bg-accent/10"
                 : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/30"
             }`}
           >
-            {cf === "all" ? "All Campaigns" : cf === "planner" ? "Planner" : "Apartment"}
+            {cf.label}
           </button>
         ))}
       </div>
