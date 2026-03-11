@@ -512,12 +512,24 @@ serve(async (req) => {
             status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }
-        const { data, error } = await supabase
-          .from("cold_email_campaigns")
-          .select("*")
-          .order("created_at", { ascending: false });
-        if (error) throw error;
-        return new Response(JSON.stringify({ campaigns: data }), {
+        // Default: get all campaigns from cold_email_campaigns + spirits from newsletter_contacts
+        const [coldRes, spiritsRes] = await Promise.all([
+          supabase.from("cold_email_campaigns").select("*").order("created_at", { ascending: false }),
+          supabase.from("newsletter_contacts").select("email, name, company, phone, created_at, drip_step, subscribed").eq("drip_campaign", "cold_spirits"),
+        ]);
+        if (coldRes.error) throw coldRes.error;
+        const spiritsData = (spiritsRes.data || []).map((c: { email: string; name: string | null; company: string | null; phone: string | null; created_at: string; drip_step: number; subscribed: boolean }) => ({
+          email: c.email,
+          name: c.name || null,
+          company: c.company || null,
+          phone: c.phone || null,
+          campaign_category: "spirits",
+          status: c.subscribed ? "active" : "paused",
+          current_step: c.drip_step || 0,
+          created_at: c.created_at,
+        }));
+        const allCampaigns = [...(coldRes.data || []), ...spiritsData];
+        return new Response(JSON.stringify({ campaigns: allCampaigns }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
