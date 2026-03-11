@@ -332,6 +332,25 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
         ))}
       </div>
 
+      {/* Source Filter */}
+      <div className="flex flex-wrap gap-2">
+        {([
+          { key: "all", label: "All" },
+          { key: "planner", label: "Planner" },
+          { key: "apartment", label: "Apartment" },
+          { key: "corporate", label: "Corporate" },
+          { key: "wedding", label: "Wedding" },
+          { key: "clubs", label: "Clubs" },
+          { key: "pr", label: "PR" },
+          { key: "nonprofit", label: "Nonprofit" },
+          { key: "talent", label: "Talent" },
+        ]).map(opt => (
+          <button key={opt.key} onClick={() => setSourceFilter(opt.key)} className={`px-3 py-1.5 text-[10px] font-sans tracking-[0.15em] uppercase border transition-colors ${sourceFilter === opt.key ? "border-accent text-accent bg-accent/10" : "border-border text-muted-foreground hover:text-foreground"}`}>
+            {opt.label}
+          </button>
+        ))}
+      </div>
+
       {/* Filter Bar */}
       <div className="flex flex-wrap gap-2 items-center">
         {FILTERS.map(f => (
