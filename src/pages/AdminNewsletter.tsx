@@ -773,6 +773,7 @@ const AdminNewsletter = () => {
                 { key: "cold_pr" as const, label: "PR", emoji: "📱", tab: "cold_pr" as const },
                 { key: "cold_nonprofit" as const, label: "Nonprofit", emoji: "❤️", tab: "cold_nonprofit" as const },
                 { key: "cold_talent" as const, label: "Talent", emoji: "⭐", tab: "cold_talent" as const },
+                { key: "cold_spirits" as const, label: "Spirits", emoji: "🍸", tab: "cold_spirits" as const },
               ]).map(cat => {
                 const s = stats[cat.key] || { total: 0, active: 0, paused: 0, replied: 0, completed: 0 };
                 return (
