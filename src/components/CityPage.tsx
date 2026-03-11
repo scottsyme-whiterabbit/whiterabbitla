@@ -275,7 +275,7 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
           <AnimatedSection>
             <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-4">Book a Magician in {cityName}</h2>
             <p className="font-sans text-base text-muted-foreground mb-2">
-              Ready to make your {cityName} event unforgettable? Check availability or call{" "}
+              Ready to make your {cityName} event unforgettable? Book now or call{" "}
               <a href="tel:+14243941850" className="text-accent hover:underline">(424) 394-1850</a>.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
