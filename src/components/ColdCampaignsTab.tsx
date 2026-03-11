@@ -13,6 +13,7 @@ const CATEGORIES = [
   { value: "nonprofit", label: "Nonprofits", emoji: "❤️" },
   { value: "talent_management", label: "Talent Mgmt", emoji: "⭐" },
   { value: "restaurant", label: "Restaurants", emoji: "🍽️" },
+  { value: "spirits", label: "Spirits Brands", emoji: "🍸" },
 ] as const;
 
 const STEP_LABELS = ["Not Started", "Email 1 ✓", "Email 2 ✓", "Email 3 ✓", "Breakup ✓"];

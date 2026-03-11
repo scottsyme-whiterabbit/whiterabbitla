@@ -298,6 +298,7 @@ serve(async (req) => {
           cold_pr: buildColdStats("pr_agency"),
           cold_nonprofit: buildColdStats("nonprofit"),
           cold_talent: buildColdStats("talent_management"),
+          cold_spirits: buildColdStats("spirits"),
         }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
