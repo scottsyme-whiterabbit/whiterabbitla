@@ -269,12 +269,35 @@ serve(async (req) => {
           };
         };
 
+        // Cold campaign stats from cold_email_campaigns table
+        const { data: coldData } = await supabase
+          .from("cold_email_campaigns")
+          .select("campaign_category, status");
+        const coldContacts = coldData || [];
+
+        const buildColdStats = (category: string) => {
+          const cc = coldContacts.filter((c: { campaign_category: string }) => c.campaign_category === category);
+          return {
+            total: cc.length,
+            active: cc.filter((c: { status: string }) => c.status === "active").length,
+            paused: cc.filter((c: { status: string }) => c.status === "paused").length,
+            replied: cc.filter((c: { status: string }) => c.status === "replied").length,
+            completed: cc.filter((c: { status: string }) => c.status === "completed").length,
+          };
+        };
+
         return new Response(JSON.stringify({
           subscribers: contacts.filter((c: { subscribed: boolean }) => c.subscribed).length,
           campaigns: campaignCount || 0,
           emailsSent: sends.length,
           planner: buildCampaignStats("planner"),
           resident: buildCampaignStats("resident"),
+          cold_corporate: buildColdStats("corporate_planner"),
+          cold_wedding: buildColdStats("wedding_planner"),
+          cold_club: buildColdStats("country_club"),
+          cold_pr: buildColdStats("pr_agency"),
+          cold_nonprofit: buildColdStats("nonprofit"),
+          cold_talent: buildColdStats("talent_management"),
         }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });

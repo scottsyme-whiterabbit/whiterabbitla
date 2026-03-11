@@ -49,12 +49,26 @@ interface CampaignStats {
   warm: number;
 }
 
+interface ColdCampaignStats {
+  total: number;
+  active: number;
+  paused: number;
+  replied: number;
+  completed: number;
+}
+
 interface Stats {
   subscribers: number;
   campaigns: number;
   emailsSent: number;
   planner?: CampaignStats;
   resident?: CampaignStats;
+  cold_corporate?: ColdCampaignStats;
+  cold_wedding?: ColdCampaignStats;
+  cold_club?: ColdCampaignStats;
+  cold_pr?: ColdCampaignStats;
+  cold_nonprofit?: ColdCampaignStats;
+  cold_talent?: ColdCampaignStats;
 }
 
 const AdminNewsletter = () => {
@@ -747,6 +761,36 @@ const AdminNewsletter = () => {
                   <p className="text-[10px] text-muted-foreground mt-2">{stats.resident?.unsubscribed} unsubscribed</p>
                 )}
               </div>
+            </div>
+
+            {/* Cold Campaign Categories */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {([
+                { key: "cold_corporate" as const, label: "Corporate", emoji: "🏢", tab: "cold_corporate" as const },
+                { key: "cold_wedding" as const, label: "Wedding", emoji: "💍", tab: "cold_wedding" as const },
+                { key: "cold_club" as const, label: "Clubs", emoji: "⛳", tab: "cold_club" as const },
+                { key: "cold_pr" as const, label: "PR", emoji: "📱", tab: "cold_pr" as const },
+                { key: "cold_nonprofit" as const, label: "Nonprofit", emoji: "❤️", tab: "cold_nonprofit" as const },
+                { key: "cold_talent" as const, label: "Talent", emoji: "⭐", tab: "cold_talent" as const },
+              ]).map(cat => {
+                const s = stats[cat.key] || { total: 0, active: 0, paused: 0, replied: 0, completed: 0 };
+                return (
+                  <button
+                    key={cat.key}
+                    onClick={() => setActiveTab(cat.tab)}
+                    className="border border-border p-4 text-left hover:border-accent/30 transition-colors group"
+                  >
+                    <span className="text-lg">{cat.emoji}</span>
+                    <h3 className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mt-1">{cat.label}</h3>
+                    <p className="font-serif text-3xl text-foreground group-hover:text-accent transition-colors">{s.total}</p>
+                    <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-2 text-[9px] font-sans">
+                      {s.active > 0 && <span className="text-emerald-400">{s.active} active</span>}
+                      {s.replied > 0 && <span className="text-accent">{s.replied} replied</span>}
+                      {s.completed > 0 && <span className="text-muted-foreground">{s.completed} done</span>}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
 
             {/* Combined totals row */}
