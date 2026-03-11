@@ -1071,6 +1071,11 @@ const AdminNewsletter = () => {
         {activeTab === "cold_restaurant" && (
           <ColdDripCampaignTab category="restaurant" storedPassword={storedPassword} />
         )}
+        {activeTab === "cold_spirits" && (
+          <ColdDripCampaignTab category="spirits" storedPassword={storedPassword} />
+        )}
+          <ColdDripCampaignTab category="restaurant" storedPassword={storedPassword} />
+        )}
         {/* Thank You Email */}
         {activeTab === "thankyou" && (
           <div className="max-w-xl">
