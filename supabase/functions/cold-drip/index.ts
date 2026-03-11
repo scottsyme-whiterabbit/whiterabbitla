@@ -651,7 +651,7 @@ serve(async (req) => {
       .from("cold_email_campaigns")
       .select("*")
       .eq("status", "active")
-      .lt("current_step", 4);
+      .lt("current_step", 5);
 
     if (fetchErr) throw fetchErr;
     if (!campaigns || campaigns.length === 0) {
