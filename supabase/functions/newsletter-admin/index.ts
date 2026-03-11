@@ -54,6 +54,7 @@ serve(async (req) => {
               city: c.city?.trim() || null,
               source: c.source || "csv",
               phone: c.phone?.trim() || null,
+              drip_campaign: c.drip_campaign || "welcome",
             })),
             { onConflict: "email" }
           )
