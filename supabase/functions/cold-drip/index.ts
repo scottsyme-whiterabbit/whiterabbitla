@@ -518,6 +518,52 @@ ${signoffFull()}`),
 ${signoffFull()}`),
       },
     ],
+
+    // ═══════════════════════════════════════════════
+    // CAMPAIGN 8: SPIRITS BRANDS
+    // ═══════════════════════════════════════════════
+    spirits: [
+      {
+        subject: "A unique idea for your next brand activation",
+        preheader: "Close-up magic for spirits brand events.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">I work with premium brands as an interactive entertainment option for activations, launch events, and tasting experiences. I perform close-up magic and mind reading during cocktail receptions, moving between groups of guests and creating moments that feel personal and impossible.</p>
+<p style="margin:0 0 18px;">Imagine a guest holding their cocktail and watching me make a signed card appear inside a sealed bottle. Or having me predict the exact spirit they were about to order before they say it out loud. These are the kind of shareable moments that get guests filming and posting organically.</p>
+<p style="margin:0 0 18px;">I have worked with brands like Taittinger, Rolls-Royce, and Netflix on experiential events where guest engagement and content creation matter. Would it make sense to explore this for an upcoming activation?</p>
+${cta}
+<p style="margin:0 0 18px;">${arts.a1}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "What happened when a spirits brand tried live magic",
+        preheader: "Organic social content from real guest reactions.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">At a recent brand tasting event, I performed close-up magic during the reception portion. Within the first 10 minutes, guests were pulling friends over to watch, filming reactions on their phones, and tagging the brand in their stories without being asked.</p>
+<p style="margin:0 0 18px;">That is the power of interactive entertainment at a spirits activation: it creates genuine, shareable moments that no photo booth or DJ set can replicate. Guests are not just drinking your product. They are having an experience around it that they want to tell people about.</p>
+<p style="margin:0 0 18px;">No stage, no AV, no disruption to your event flow. I blend into the crowd and create magic right in their hands.</p>
+<p style="margin:0 0 18px;">${arts.a1}</p>
+${signoff()}`),
+      },
+      {
+        subject: "The activation idea your competitors haven't tried",
+        preheader: "Differentiate your brand experience.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Every spirits brand does tastings, live music, and branded lounges. What none of your competitors are doing is putting a world-class mind reader three feet from their guests, reading their thoughts and making impossible things happen with their personal objects.</p>
+<p style="margin:0 0 18px;">I am a member at the Magic Castle in Hollywood and was a consultant on America's Got Talent. I mention that because brand teams tell me it helps when justifying the talent choice internally. But what actually sells is the guest reaction: people genuinely losing their minds and associating that feeling with your brand.</p>
+<p style="margin:0 0 18px;">Happy to chat about how this could work for your next event.</p>
+${cta}
+${signoffFull()}`),
+      },
+      {
+        subject: "Last note about your brand experience strategy",
+        preheader: "For whenever the right activation comes up.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">I know brand calendars plan months ahead, so I just wanted to make sure you had my info for whenever the right activation comes up. Product launches, trade events, VIP tastings, ambassador dinners. I work across all of them.</p>
+<p style="margin:0 0 18px;">My calendar fills 4 to 6 weeks out during peak season, so early planning helps.</p>
+<p style="margin:0 0 18px;">${arts.a2}</p>
+${signoffFull()}`),
+      },
+    ],
   };
 
   const templates = TEMPLATES[category];
