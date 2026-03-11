@@ -233,7 +233,6 @@ const Consultation = () => {
             ))}
           </div>
         </div>
-        </div>
       </section>
 
       {/* ABOUT SCOTT — B&W Photo + Bio */}
