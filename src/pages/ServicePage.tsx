@@ -325,7 +325,7 @@ const ServicePage = () => {
               onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors"
             >
-              Check Availability
+              Book Now
             </button>
           </AnimatedSection>
         </div>
