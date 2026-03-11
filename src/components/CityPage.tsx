@@ -280,7 +280,7 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
               <Link to="/contact" className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors">
-                Check Availability
+                Book Now
               </Link>
               <Link to="/quiz" className="font-sans text-sm tracking-[0.2em] uppercase border border-border text-foreground px-10 py-4 hover:border-accent/40 transition-colors">
                 Take the Quiz
