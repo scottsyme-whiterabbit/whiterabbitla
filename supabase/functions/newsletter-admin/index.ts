@@ -287,6 +287,12 @@ serve(async (req) => {
           };
         };
 
+        // Spirits: count from newsletter_contacts instead of cold_email_campaigns
+        const { count: spiritsCount } = await supabase
+          .from("newsletter_contacts")
+          .select("*", { count: "exact", head: true })
+          .eq("drip_campaign", "cold_spirits");
+
         return new Response(JSON.stringify({
           subscribers: contacts.filter((c: { subscribed: boolean }) => c.subscribed).length,
           campaigns: campaignCount || 0,
@@ -299,7 +305,7 @@ serve(async (req) => {
           cold_pr: buildColdStats("pr_agency"),
           cold_nonprofit: buildColdStats("nonprofit"),
           cold_talent: buildColdStats("talent_management"),
-          cold_spirits: buildColdStats("spirits"),
+          cold_spirits: { total: spiritsCount || 0, active: spiritsCount || 0, paused: 0, replied: 0, completed: 0 },
         }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -483,6 +489,29 @@ serve(async (req) => {
       // ═══════════════════════════════════════════════
 
       case "get_cold_campaigns": {
+        const { category } = payload;
+        if (category === "spirits") {
+          const { data, error } = await supabase
+            .from("newsletter_contacts")
+            .select("email, name, company, phone, created_at")
+            .eq("drip_campaign", "cold_spirits");
+          if (error) return new Response(JSON.stringify({ error: error.message }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+          const mapped = (data || []).map((c: { email: string; name: string | null; company: string | null; phone: string | null; created_at: string }) => ({
+            email: c.email,
+            name: c.name || null,
+            company: c.company || null,
+            phone: c.phone || null,
+            campaign_category: "spirits",
+            status: "active",
+            current_step: 0,
+            created_at: c.created_at,
+          }));
+          return new Response(JSON.stringify({ campaigns: mapped }), {
+            status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
         const { data, error } = await supabase
           .from("cold_email_campaigns")
           .select("*")
