@@ -768,19 +768,19 @@ const AdminNewsletter = () => {
             {/* Cold Campaign Categories */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               {([
-                { key: "cold_corporate" as const, label: "Corporate", emoji: "🏢", tab: "cold_corporate" as const },
-                { key: "cold_wedding" as const, label: "Wedding", emoji: "💍", tab: "cold_wedding" as const },
-                { key: "cold_club" as const, label: "Clubs", emoji: "⛳", tab: "cold_club" as const },
-                { key: "cold_pr" as const, label: "PR", emoji: "📱", tab: "cold_pr" as const },
-                { key: "cold_nonprofit" as const, label: "Nonprofit", emoji: "❤️", tab: "cold_nonprofit" as const },
-                { key: "cold_talent" as const, label: "Talent", emoji: "⭐", tab: "cold_talent" as const },
-                { key: "cold_spirits" as const, label: "Spirits", emoji: "🍸", tab: "cold_spirits" as const },
+                { key: "cold_corporate" as const, label: "Corporate", emoji: "🏢", category: "corporate_planner" },
+                { key: "cold_wedding" as const, label: "Wedding", emoji: "💍", category: "wedding_planner" },
+                { key: "cold_club" as const, label: "Clubs", emoji: "⛳", category: "country_club" },
+                { key: "cold_pr" as const, label: "PR", emoji: "📱", category: "pr_agency" },
+                { key: "cold_nonprofit" as const, label: "Nonprofit", emoji: "❤️", category: "nonprofit" },
+                { key: "cold_talent" as const, label: "Talent", emoji: "⭐", category: "talent_management" },
+                { key: "cold_spirits" as const, label: "Spirits", emoji: "🍸", category: "spirits" },
               ]).map(cat => {
                 const s = stats[cat.key] || { total: 0, active: 0, paused: 0, replied: 0, completed: 0 };
                 return (
                   <button
                     key={cat.key}
-                    onClick={() => setActiveTab(cat.tab)}
+                    onClick={() => { setColdCategory(cat.category); setActiveTab("cold"); }}
                     className="border border-border p-4 text-left hover:border-accent/30 transition-colors group"
                   >
                     <span className="text-lg">{cat.emoji}</span>
