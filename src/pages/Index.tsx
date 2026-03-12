@@ -207,21 +207,17 @@ const Index = () => {
               Trusted by World-Class Brands
             </p>
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-4 md:gap-x-8 md:gap-y-5">
-              {clients.map((client) => {
-                const needsScale = ['Rolls Royce', 'Soho House', 'Rivian'].includes(client.name);
-                return (
-                  <div key={client.name} className="flex items-center justify-center overflow-hidden" style={{ width: '90px', height: '32px' }}>
-                    <img
-                      src={client.logo}
-                      alt={`${client.name} logo, White Rabbit client`}
-                      loading="lazy"
-                      decoding="async"
-                      className="max-w-full w-auto h-auto object-contain opacity-60 hover:opacity-90 transition-opacity brightness-0"
-                      style={needsScale ? { transform: 'scale(1.6)', maxHeight: '100%' } : { maxHeight: '100%' }}
-                    />
-                  </div>
-                );
-              })}
+              {clients.map((client) => (
+                <div key={client.name} className="flex items-center justify-center" style={{ width: (client.name === 'Soho House' || client.name === 'Rivian') ? '120px' : '90px', height: (client.name === 'Soho House' || client.name === 'Rivian') ? '42px' : '32px' }}>
+                  <img
+                    src={client.logo}
+                    alt={`${client.name} logo, White Rabbit client`}
+                    loading="lazy"
+                    decoding="async"
+                    className="max-h-full max-w-full w-auto h-auto object-contain opacity-60 hover:opacity-90 transition-opacity brightness-0"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </section>
