@@ -215,13 +215,16 @@ const Contact = () => {
                   placeholder="Number of guests, venue, what you're envisioning..."
                 />
               </div>
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-6 hover:bg-primary/90"
-              >
-                {isSubmitting ? "Sending..." : "Send Inquiry"}
-              </Button>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-6 hover:bg-primary/90"
+                >
+                  {isSubmitting ? "Sending..." : "Send Inquiry"}
+                </Button>
+                <GoogleReviewsBadge variant="light" />
+              </div>
             </form>
           </AnimatedSection>
 
