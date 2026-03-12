@@ -1049,31 +1049,32 @@ const AdminNewsletter = () => {
           <ResidentDripTab storedPassword={storedPassword} onNavigateToContacts={(filter) => { setContactsFilter(filter); setActiveTab("contacts"); }} />
         )}
         {activeTab === "cold" && (
-          <ColdCampaignsTab adminPassword={storedPassword} />
-        )}
-        {activeTab === "cold_corporate" && (
-          <ColdDripCampaignTab category="corporate_planner" storedPassword={storedPassword} />
-        )}
-        {activeTab === "cold_wedding" && (
-          <ColdDripCampaignTab category="wedding_planner" storedPassword={storedPassword} />
-        )}
-        {activeTab === "cold_club" && (
-          <ColdDripCampaignTab category="country_club" storedPassword={storedPassword} />
-        )}
-        {activeTab === "cold_pr" && (
-          <ColdDripCampaignTab category="pr_agency" storedPassword={storedPassword} />
-        )}
-        {activeTab === "cold_nonprofit" && (
-          <ColdDripCampaignTab category="nonprofit" storedPassword={storedPassword} />
-        )}
-        {activeTab === "cold_talent" && (
-          <ColdDripCampaignTab category="talent_management" storedPassword={storedPassword} />
-        )}
-        {activeTab === "cold_restaurant" && (
-          <ColdDripCampaignTab category="restaurant" storedPassword={storedPassword} />
-        )}
-        {activeTab === "cold_spirits" && (
-          <ColdDripCampaignTab category="spirits" storedPassword={storedPassword} />
+          <div>
+            {/* Category sub-selector */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {([
+                { category: "corporate_planner", label: "🏢 Corporate" },
+                { category: "wedding_planner", label: "💍 Wedding" },
+                { category: "country_club", label: "⛳ Clubs" },
+                { category: "pr_agency", label: "📱 PR" },
+                { category: "nonprofit", label: "❤️ Nonprofit" },
+                { category: "talent_management", label: "⭐ Talent" },
+                { category: "spirits", label: "🍸 Spirits" },
+                { category: "restaurant", label: "🍽️ Restaurant" },
+              ]).map(cat => (
+                <button
+                  key={cat.category}
+                  onClick={() => setColdCategory(cat.category)}
+                  className={`px-4 py-2 font-sans text-xs tracking-[0.15em] uppercase border transition-colors ${
+                    coldCategory === cat.category ? "border-accent text-accent bg-accent/10" : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/30"
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
+            <ColdDripCampaignTab category={coldCategory} storedPassword={storedPassword} />
+          </div>
         )}
         {/* Thank You Email */}
         {activeTab === "thankyou" && (
