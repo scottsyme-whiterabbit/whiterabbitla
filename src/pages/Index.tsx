@@ -201,14 +201,14 @@ const Index = () => {
 
       {/* Client Logos — static grid */}
       <AnimatedSection>
-        <section className="bg-forest-dark py-16">
-          <div className="max-w-6xl mx-auto px-6">
-            <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-cream/40 mb-10">
+        <section className="bg-forest-dark py-10">
+          <div className="max-w-5xl mx-auto px-6">
+            <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-cream/40 mb-6">
               Trusted by World-Class Brands
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6 md:gap-x-12 md:gap-y-8">
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-4 md:gap-x-8 md:gap-y-5">
               {clients.map((client) => (
-                <div key={client.name} className="flex items-center justify-center" style={{ width: '120px', height: '45px' }}>
+                <div key={client.name} className="flex items-center justify-center" style={{ width: '90px', height: '32px' }}>
                   <img
                     src={client.logo}
                     alt={`${client.name} logo, White Rabbit client`}
