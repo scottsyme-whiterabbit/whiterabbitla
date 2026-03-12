@@ -66,9 +66,24 @@ const clients = [
 { name: "Lionsgate", logo: lionsgateLogo },
 { name: "Pistola", logo: pistolaLogo }];
 
+const heroReviews = [
+  { text: "He elevated our party in ways I didn't expect. He was everyone's favorite part.", name: "Zara M." },
+  { text: "Scott performed at a 200-person event for us and the guests absolutely LOVED him.", name: "Jamie I." },
+  { text: "I can't tell you how many guests told me he was the highlight of the evening.", name: "Meridith F." },
+  { text: "He is incredible and had the whole room captivated.", name: "Grace G." },
+  { text: "Jaws were hitting the floor so hard the downstairs neighbors started wondering what was going down.", name: "Mohammad R." },
+];
 
 const Index = () => {
   const { openQuiz } = useBookingQuiz();
+  const [heroReviewIndex, setHeroReviewIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeroReviewIndex((prev) => (prev + 1) % heroReviews.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   usePageMeta({
     title: "White Rabbit LA | Luxury Magic Entertainment — Los Angeles",
