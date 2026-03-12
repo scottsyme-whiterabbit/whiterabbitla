@@ -864,7 +864,95 @@ const AdminNewsletter = () => {
               </div>
             </div>
 
-            {/* Audience Overview - Side by Side */}
+            {/* Email Health + Recent Form Submissions */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Email Health */}
+              <div className="border border-border p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Mail size={16} className="text-accent" />
+                  <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Email Health</h3>
+                </div>
+                {dashSummary?.emailHealth ? (
+                  <div className="space-y-3">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-muted/10 px-4 py-3">
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <ShieldAlert size={12} className="text-destructive" />
+                          <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Bounces (30d)</span>
+                        </div>
+                        <p className="font-serif text-2xl text-foreground">{dashSummary.emailHealth.bounces30d}</p>
+                        <p className="text-[10px] text-muted-foreground">
+                          {dashSummary.emailHealth.totalSent > 0
+                            ? `${((dashSummary.emailHealth.bouncesTotal / dashSummary.emailHealth.totalSent) * 100).toFixed(1)}% lifetime rate`
+                            : "No sends yet"}
+                        </p>
+                      </div>
+                      <div className="bg-muted/10 px-4 py-3">
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <UserMinus size={12} className="text-orange-400" />
+                          <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Unsubs (30d)</span>
+                        </div>
+                        <p className="font-serif text-2xl text-foreground">{dashSummary.emailHealth.unsubs30d}</p>
+                        <p className="text-[10px] text-muted-foreground">
+                          {dashSummary.emailHealth.totalContacts > 0
+                            ? `${dashSummary.emailHealth.unsubsTotal} total of ${dashSummary.emailHealth.totalContacts}`
+                            : "No contacts yet"}
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setActiveTab("email_analytics")}
+                      className="flex items-center gap-1 text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-accent transition-colors"
+                    >
+                      View full analytics <ArrowRight size={10} />
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground">Loading...</p>
+                )}
+              </div>
+
+              {/* Recent Form Submissions Feed */}
+              <div className="border border-border p-6">
+                <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-4">Recent Submissions (24h)</h3>
+                {dashSummary && (dashSummary.recentInquiriesList?.length > 0 || dashSummary.recentQuizList?.length > 0 || dashSummary.recentConsultationsList?.length > 0) ? (
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {[
+                      ...(dashSummary.recentInquiriesList || []).map(i => ({ ...i, _type: "inquiry" as const })),
+                      ...(dashSummary.recentQuizList || []).map(i => ({ ...i, _type: "quiz" as const })),
+                      ...(dashSummary.recentConsultationsList || []).map(i => ({ ...i, _type: "consultation" as const })),
+                    ]
+                      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+                      .slice(0, 8)
+                      .map(item => (
+                        <div key={`${item._type}-${item.id}`} className="flex items-start gap-3 py-2 border-b border-border/30 last:border-0">
+                          <span className="text-sm mt-0.5">
+                            {item._type === "inquiry" ? "📩" : item._type === "quiz" ? "🎯" : "📞"}
+                          </span>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm text-foreground truncate">{item.name || item.email || "Anonymous"}</p>
+                            <p className="text-[10px] text-muted-foreground">
+                              {item._type === "inquiry" ? "Booking inquiry" : item._type === "quiz" ? "Quiz lead" : "Consultation"}
+                              {" · "}
+                              {new Date(item.created_at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}
+                            </p>
+                          </div>
+                          <span className={`text-[9px] px-1.5 py-0.5 font-sans uppercase tracking-wider ${
+                            item._type === "inquiry" ? "bg-accent/10 text-accent" :
+                            item._type === "quiz" ? "bg-primary/10 text-primary" :
+                            "bg-emerald-500/10 text-emerald-400"
+                          }`}>
+                            {item._type}
+                          </span>
+                        </div>
+                      ))}
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground">No submissions in the last 24 hours</p>
+                )}
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Planner Audience */}
               <div className="border border-border p-6">
