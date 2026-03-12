@@ -167,20 +167,35 @@ const AdminNewsletter = () => {
     if (!storedPassword) return;
     setLoading(true);
     try {
-      const [statsRes, contactsRes, campaignsRes] = await Promise.all([
+      const [statsRes, contactsRes, campaignsRes, summaryRes] = await Promise.all([
         callAdmin("get_stats"),
         callAdmin("get_contacts"),
         callAdmin("get_campaigns"),
+        callAdmin("get_dashboard_summary"),
       ]);
       setStats(statsRes);
       setContacts(contactsRes.contacts || []);
       setCampaigns(campaignsRes.campaigns || []);
+      setDashSummary(summaryRes);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed to load data");
     } finally {
       setLoading(false);
     }
   }, [storedPassword, callAdmin]);
+
+  // Global search with debounce
+  const handleSearch = useCallback((q: string) => {
+    setSearchQuery(q);
+    if (searchTimeout.current) clearTimeout(searchTimeout.current);
+    if (q.length < 2) { setSearchResults(null); return; }
+    searchTimeout.current = setTimeout(async () => {
+      try {
+        const res = await callAdmin("global_search", { query: q });
+        setSearchResults(res);
+      } catch { setSearchResults(null); }
+    }, 300);
+  }, [callAdmin]);
 
   useEffect(() => {
     if (authenticated) loadData();
