@@ -214,7 +214,7 @@ const Index = () => {
                     alt={`${client.name} logo, White Rabbit client`}
                     loading="lazy"
                     decoding="async"
-                    className="max-h-full max-w-full w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity brightness-0 invert"
+                    className="max-h-full max-w-full w-auto h-auto object-contain opacity-60 hover:opacity-90 transition-opacity brightness-0"
                   />
                 </div>
               ))}
