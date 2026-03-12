@@ -764,6 +764,90 @@ const AdminNewsletter = () => {
 
         {activeTab === "dashboard" && (
           <div className="space-y-8">
+            {/* Today's Pulse + Source Attribution */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Follow-up Reminders */}
+              <button
+                onClick={() => setActiveTab("actions")}
+                className="border border-border p-6 text-left hover:border-accent/30 transition-colors group"
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <CalendarCheck size={16} className="text-accent" />
+                  <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Follow-Ups</h3>
+                </div>
+                <div className="flex gap-6">
+                  <div>
+                    <p className="font-serif text-3xl text-foreground group-hover:text-accent transition-colors">{dashSummary?.dueToday ?? 0}</p>
+                    <p className="text-[10px] text-muted-foreground">due today</p>
+                  </div>
+                  {(dashSummary?.overdue ?? 0) > 0 && (
+                    <div>
+                      <p className="font-serif text-3xl text-destructive">{dashSummary?.overdue}</p>
+                      <p className="text-[10px] text-destructive/70 flex items-center gap-1"><AlertTriangle size={10} /> overdue</p>
+                    </div>
+                  )}
+                </div>
+              </button>
+
+              {/* Recent Activity */}
+              <div className="border border-border p-6">
+                <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3">Last 24 Hours</h3>
+                <div className="flex gap-6">
+                  <div>
+                    <p className="font-serif text-3xl text-foreground">{dashSummary?.recentInquiries ?? 0}</p>
+                    <p className="text-[10px] text-muted-foreground">new inquiries</p>
+                  </div>
+                  <div>
+                    <p className="font-serif text-3xl text-foreground">{dashSummary?.recentQuiz ?? 0}</p>
+                    <p className="text-[10px] text-muted-foreground">quiz leads</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Lead Source Attribution Pie Chart */}
+              <div className="border border-border p-6">
+                <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3">Lead Sources</h3>
+                {dashSummary?.sourceCounts && Object.keys(dashSummary.sourceCounts).length > 0 ? (
+                  <div className="flex items-center gap-4">
+                    <div className="w-24 h-24">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={Object.entries(dashSummary.sourceCounts).map(([name, value]) => ({ name, value }))}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={20}
+                            outerRadius={40}
+                            dataKey="value"
+                            stroke="none"
+                          >
+                            {Object.keys(dashSummary.sourceCounts).map((_, i) => (
+                              <Cell key={i} fill={["hsl(var(--accent))", "hsl(var(--primary))", "hsl(150, 40%, 45%)", "hsl(210, 50%, 50%)", "hsl(340, 40%, 55%)", "hsl(45, 70%, 50%)", "hsl(270, 40%, 50%)", "hsl(180, 40%, 45%)"][i % 8]} />
+                            ))}
+                          </Pie>
+                          <Tooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", fontSize: "12px" }} />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <div className="flex-1 space-y-1">
+                      {Object.entries(dashSummary.sourceCounts)
+                        .sort(([, a], [, b]) => b - a)
+                        .slice(0, 5)
+                        .map(([source, count], i) => (
+                          <div key={source} className="flex items-center gap-2 text-xs">
+                            <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: ["hsl(var(--accent))", "hsl(var(--primary))", "hsl(150, 40%, 45%)", "hsl(210, 50%, 50%)", "hsl(340, 40%, 55%)", "hsl(45, 70%, 50%)", "hsl(270, 40%, 50%)", "hsl(180, 40%, 45%)"][i % 8] }} />
+                            <span className="text-muted-foreground truncate">{source}</span>
+                            <span className="text-foreground font-medium ml-auto">{count}</span>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground">No data yet</p>
+                )}
+              </div>
+            </div>
+
             {/* Audience Overview - Side by Side */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Planner Audience */}
