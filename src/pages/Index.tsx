@@ -201,7 +201,7 @@ const Index = () => {
 
       {/* Client Logos — static grid */}
       <AnimatedSection>
-        <section className="bg-[#C9A3A8] py-10">
+        <section className="bg-[#E8D5D8] py-10">
           <div className="max-w-5xl mx-auto px-6">
             <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-forest-dark/50 mb-6">
               Trusted by World-Class Brands
