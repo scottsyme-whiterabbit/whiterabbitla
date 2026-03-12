@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { toast } from "sonner";
-import { Upload, Send, FileText, Flame, ThermometerSun, RefreshCw, Trash2, Eye, Heart, Download, LayoutGrid, DollarSign, Users, MoreHorizontal, Plus, X, ClipboardList } from "lucide-react";
+import { Upload, Send, FileText, Flame, ThermometerSun, RefreshCw, Trash2, Eye, Heart, Download, LayoutGrid, DollarSign, Users, MoreHorizontal, Plus, X, ClipboardList, Search, AlertTriangle, CalendarCheck } from "lucide-react";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import PlannerDripTab from "@/components/PlannerDripTab";
 import ResidentDripTab from "@/components/ResidentDripTab";
 import ContactsListTab from "@/components/ContactsListTab";
@@ -118,6 +119,21 @@ const AdminNewsletter = () => {
   const [stats, setStats] = useState<Stats>({ subscribers: 0, campaigns: 0, emailsSent: 0 });
   const [loading, setLoading] = useState(false);
 
+  // Global search state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<{ contacts: any[]; deals: any[]; cold: any[] } | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Dashboard summary state
+  const [dashSummary, setDashSummary] = useState<{
+    dueToday: number;
+    overdue: number;
+    recentInquiries: number;
+    recentQuiz: number;
+    sourceCounts: Record<string, number>;
+  } | null>(null);
+
   // Compose state
   const [topic, setTopic] = useState("");
   const [campaignType, setCampaignType] = useState<"broadcast" | "drip">("broadcast");
@@ -151,20 +167,35 @@ const AdminNewsletter = () => {
     if (!storedPassword) return;
     setLoading(true);
     try {
-      const [statsRes, contactsRes, campaignsRes] = await Promise.all([
+      const [statsRes, contactsRes, campaignsRes, summaryRes] = await Promise.all([
         callAdmin("get_stats"),
         callAdmin("get_contacts"),
         callAdmin("get_campaigns"),
+        callAdmin("get_dashboard_summary"),
       ]);
       setStats(statsRes);
       setContacts(contactsRes.contacts || []);
       setCampaigns(campaignsRes.campaigns || []);
+      setDashSummary(summaryRes);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed to load data");
     } finally {
       setLoading(false);
     }
   }, [storedPassword, callAdmin]);
+
+  // Global search with debounce
+  const handleSearch = useCallback((q: string) => {
+    setSearchQuery(q);
+    if (searchTimeout.current) clearTimeout(searchTimeout.current);
+    if (q.length < 2) { setSearchResults(null); return; }
+    searchTimeout.current = setTimeout(async () => {
+      try {
+        const res = await callAdmin("global_search", { query: q });
+        setSearchResults(res);
+      } catch { setSearchResults(null); }
+    }, 300);
+  }, [callAdmin]);
 
   useEffect(() => {
     if (authenticated) loadData();
@@ -549,14 +580,71 @@ const AdminNewsletter = () => {
   
 
   return (
-    <div className="min-h-screen bg-background pt-24 pb-16 md:pb-16">
+    <div className="min-h-screen bg-background pt-24 pb-16 md:pb-16" onClick={() => searchOpen && setSearchOpen(false)}>
       {/* Add bottom padding on mobile for the nav bar */}
       <div className={`max-w-6xl mx-auto px-4 md:px-6 ${isMobile ? 'pb-24' : ''}`}>
-        <div className="flex items-center justify-between mb-6 md:mb-8">
+        <div className="flex items-center justify-between mb-4 md:mb-6">
           <h1 className="font-serif text-2xl md:text-3xl text-foreground">Newsletter Admin</h1>
           <button onClick={loadData} disabled={loading} className="text-muted-foreground hover:text-foreground transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
             <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
           </button>
+        </div>
+
+        {/* Global Search Bar */}
+        <div className="relative mb-6">
+          <div className="relative">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+              onFocus={() => setSearchOpen(true)}
+              placeholder="Search contacts, deals, outreach by name or email..."
+              className="w-full bg-muted/20 border border-border text-foreground pl-10 pr-4 py-2.5 font-sans text-sm focus:outline-none focus:border-accent transition-colors"
+            />
+            {searchQuery && (
+              <button onClick={() => { setSearchQuery(""); setSearchResults(null); setSearchOpen(false); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                <X size={14} />
+              </button>
+            )}
+          </div>
+          {searchOpen && searchResults && (searchResults.contacts.length > 0 || searchResults.deals.length > 0 || searchResults.cold.length > 0) && (
+            <div className="absolute top-full left-0 right-0 z-50 bg-background border border-border shadow-lg max-h-80 overflow-y-auto mt-1">
+              {searchResults.deals.length > 0 && (
+                <div>
+                  <p className="px-4 py-2 text-[10px] tracking-[0.2em] uppercase text-muted-foreground bg-muted/10 border-b border-border">Pipeline ({searchResults.deals.length})</p>
+                  {searchResults.deals.map((d: any) => (
+                    <button key={d.id} onClick={() => { setActiveTab("pipeline"); setSearchOpen(false); setSearchQuery(""); setSearchResults(null); }} className="w-full text-left px-4 py-2.5 hover:bg-muted/20 border-b border-border/50 transition-colors">
+                      <p className="text-sm text-foreground">{d.contact_name || d.contact_email}</p>
+                      <p className="text-[10px] text-muted-foreground">{d.stage} · {d.event_type || "No type"} · {d.source || "Unknown source"}</p>
+                    </button>
+                  ))}
+                </div>
+              )}
+              {searchResults.contacts.length > 0 && (
+                <div>
+                  <p className="px-4 py-2 text-[10px] tracking-[0.2em] uppercase text-muted-foreground bg-muted/10 border-b border-border">Contacts ({searchResults.contacts.length})</p>
+                  {searchResults.contacts.map((c: any) => (
+                    <button key={c.id} onClick={() => { setContactsFilter("all"); setContactsCampaign("all"); setActiveTab("contacts"); setSearchOpen(false); setSearchQuery(""); setSearchResults(null); }} className="w-full text-left px-4 py-2.5 hover:bg-muted/20 border-b border-border/50 transition-colors">
+                      <p className="text-sm text-foreground">{c.name || c.email}</p>
+                      <p className="text-[10px] text-muted-foreground">{c.email} · {c.drip_campaign} · {c.engagement_status}</p>
+                    </button>
+                  ))}
+                </div>
+              )}
+              {searchResults.cold.length > 0 && (
+                <div>
+                  <p className="px-4 py-2 text-[10px] tracking-[0.2em] uppercase text-muted-foreground bg-muted/10 border-b border-border">Cold Outreach ({searchResults.cold.length})</p>
+                  {searchResults.cold.map((c: any) => (
+                    <button key={c.id} onClick={() => { setColdCategory(c.campaign_category); setActiveTab("cold"); setSearchOpen(false); setSearchQuery(""); setSearchResults(null); }} className="w-full text-left px-4 py-2.5 hover:bg-muted/20 border-b border-border/50 transition-colors">
+                      <p className="text-sm text-foreground">{c.name || c.email}</p>
+                      <p className="text-[10px] text-muted-foreground">{c.email} · {c.campaign_category} · {c.status}</p>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Desktop Tabs — hidden on mobile */}
@@ -676,6 +764,90 @@ const AdminNewsletter = () => {
 
         {activeTab === "dashboard" && (
           <div className="space-y-8">
+            {/* Today's Pulse + Source Attribution */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Follow-up Reminders */}
+              <button
+                onClick={() => setActiveTab("actions")}
+                className="border border-border p-6 text-left hover:border-accent/30 transition-colors group"
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <CalendarCheck size={16} className="text-accent" />
+                  <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">Follow-Ups</h3>
+                </div>
+                <div className="flex gap-6">
+                  <div>
+                    <p className="font-serif text-3xl text-foreground group-hover:text-accent transition-colors">{dashSummary?.dueToday ?? 0}</p>
+                    <p className="text-[10px] text-muted-foreground">due today</p>
+                  </div>
+                  {(dashSummary?.overdue ?? 0) > 0 && (
+                    <div>
+                      <p className="font-serif text-3xl text-destructive">{dashSummary?.overdue}</p>
+                      <p className="text-[10px] text-destructive/70 flex items-center gap-1"><AlertTriangle size={10} /> overdue</p>
+                    </div>
+                  )}
+                </div>
+              </button>
+
+              {/* Recent Activity */}
+              <div className="border border-border p-6">
+                <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3">Last 24 Hours</h3>
+                <div className="flex gap-6">
+                  <div>
+                    <p className="font-serif text-3xl text-foreground">{dashSummary?.recentInquiries ?? 0}</p>
+                    <p className="text-[10px] text-muted-foreground">new inquiries</p>
+                  </div>
+                  <div>
+                    <p className="font-serif text-3xl text-foreground">{dashSummary?.recentQuiz ?? 0}</p>
+                    <p className="text-[10px] text-muted-foreground">quiz leads</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Lead Source Attribution Pie Chart */}
+              <div className="border border-border p-6">
+                <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3">Lead Sources</h3>
+                {dashSummary?.sourceCounts && Object.keys(dashSummary.sourceCounts).length > 0 ? (
+                  <div className="flex items-center gap-4">
+                    <div className="w-24 h-24">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={Object.entries(dashSummary.sourceCounts).map(([name, value]) => ({ name, value }))}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={20}
+                            outerRadius={40}
+                            dataKey="value"
+                            stroke="none"
+                          >
+                            {Object.keys(dashSummary.sourceCounts).map((_, i) => (
+                              <Cell key={i} fill={["hsl(var(--accent))", "hsl(var(--primary))", "hsl(150, 40%, 45%)", "hsl(210, 50%, 50%)", "hsl(340, 40%, 55%)", "hsl(45, 70%, 50%)", "hsl(270, 40%, 50%)", "hsl(180, 40%, 45%)"][i % 8]} />
+                            ))}
+                          </Pie>
+                          <Tooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", fontSize: "12px" }} />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <div className="flex-1 space-y-1">
+                      {Object.entries(dashSummary.sourceCounts)
+                        .sort(([, a], [, b]) => b - a)
+                        .slice(0, 5)
+                        .map(([source, count], i) => (
+                          <div key={source} className="flex items-center gap-2 text-xs">
+                            <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: ["hsl(var(--accent))", "hsl(var(--primary))", "hsl(150, 40%, 45%)", "hsl(210, 50%, 50%)", "hsl(340, 40%, 55%)", "hsl(45, 70%, 50%)", "hsl(270, 40%, 50%)", "hsl(180, 40%, 45%)"][i % 8] }} />
+                            <span className="text-muted-foreground truncate">{source}</span>
+                            <span className="text-foreground font-medium ml-auto">{count}</span>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground">No data yet</p>
+                )}
+              </div>
+            </div>
+
             {/* Audience Overview - Side by Side */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Planner Audience */}

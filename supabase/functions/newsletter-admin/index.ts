@@ -648,6 +648,73 @@ serve(async (req) => {
         });
       }
 
+      case "global_search": {
+        const { query } = payload;
+        if (!query || query.length < 2) {
+          return new Response(JSON.stringify({ contacts: [], deals: [], cold: [] }), {
+            status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const q = `%${query.toLowerCase()}%`;
+        const [contactsRes, dealsRes, coldRes] = await Promise.all([
+          supabase.from("newsletter_contacts")
+            .select("id, email, name, company, drip_campaign, engagement_status")
+            .or(`email.ilike.${q},name.ilike.${q},company.ilike.${q}`)
+            .limit(10),
+          supabase.from("deals")
+            .select("id, contact_email, contact_name, company, stage, event_type, source")
+            .or(`contact_email.ilike.${q},contact_name.ilike.${q},company.ilike.${q}`)
+            .limit(10),
+          supabase.from("cold_email_campaigns")
+            .select("id, email, name, company, campaign_category, status")
+            .or(`email.ilike.${q},name.ilike.${q},company.ilike.${q}`)
+            .limit(10),
+        ]);
+        return new Response(JSON.stringify({
+          contacts: contactsRes.data || [],
+          deals: dealsRes.data || [],
+          cold: coldRes.data || [],
+        }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "get_dashboard_summary": {
+        const today = new Date().toISOString().split("T")[0];
+        const [dealsRes, recentInquiries, recentQuiz] = await Promise.all([
+          supabase.from("deals")
+            .select("id, next_follow_up, source, stage")
+            .not("stage", "in", "(lost,completed)"),
+          supabase.from("contact_inquiries")
+            .select("id")
+            .gte("created_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()),
+          supabase.from("discovery_quiz_leads")
+            .select("id")
+            .gte("created_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()),
+        ]);
+        const deals = dealsRes.data || [];
+        const dueToday = deals.filter(d => d.next_follow_up === today).length;
+        const overdue = deals.filter(d => d.next_follow_up && d.next_follow_up < today).length;
+
+        // Source attribution from ALL deals (including completed)
+        const { data: allDeals } = await supabase.from("deals").select("source, stage");
+        const sourceCounts: Record<string, number> = {};
+        (allDeals || []).forEach(d => {
+          const src = d.source || "Unknown";
+          sourceCounts[src] = (sourceCounts[src] || 0) + 1;
+        });
+
+        return new Response(JSON.stringify({
+          dueToday,
+          overdue,
+          recentInquiries: recentInquiries.data?.length || 0,
+          recentQuiz: recentQuiz.data?.length || 0,
+          sourceCounts,
+        }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       default:
         return new Response(JSON.stringify({ error: "Unknown action" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
