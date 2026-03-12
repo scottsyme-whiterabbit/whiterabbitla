@@ -155,43 +155,53 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Instant Social Proof Strip */}
-      <section className="bg-forest-dark py-6 border-b border-accent/10">
-        <div className="max-w-3xl mx-auto px-6 flex flex-col md:flex-row items-center justify-center gap-3 md:gap-6">
-          <div className="flex gap-0.5">
-            {[...Array(5)].map((_, i) =>
-              <Star key={i} size={14} className="fill-accent text-accent" />
-            )}
-          </div>
-          <p className="font-serif text-sm md:text-base text-cream/80 text-center">
-            "He elevated our party in ways I didn't expect. He was everyone's favorite part."
-          </p>
-          <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-cream/40 whitespace-nowrap">
-            — Zara M.
-          </p>
+      {/* Instant Social Proof Strip — rotating mini-reviews */}
+      <section className="bg-forest-dark py-6 border-b border-accent/10 overflow-hidden">
+        <div className="max-w-3xl mx-auto px-6">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={heroReviewIndex}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.4 }}
+              className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-6"
+            >
+              <div className="flex gap-0.5">
+                {[...Array(5)].map((_, i) =>
+                  <Star key={i} size={14} className="fill-accent text-accent" />
+                )}
+              </div>
+              <p className="font-serif text-sm md:text-base text-cream/80 text-center">
+                "{heroReviews[heroReviewIndex].text}"
+              </p>
+              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-cream/40 whitespace-nowrap">
+                — {heroReviews[heroReviewIndex].name}
+              </p>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </section>
 
-      {/* Client Logo Carousel */}
+      {/* Client Logos — static grid */}
       <AnimatedSection>
-        <section className="bg-forest-dark py-16 overflow-hidden">
+        <section className="bg-forest-dark py-16">
           <div className="max-w-6xl mx-auto px-6">
             <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-cream/40 mb-10">
               Trusted by World-Class Brands
             </p>
-          </div>
-          <div className="relative">
-            <div className="flex animate-scroll-logos" style={{ width: 'max-content' }}>
-              {[...clients, ...clients, ...clients].map((client, i) =>
-              <div key={`${client.name}-${i}`} className="flex-shrink-0 flex items-center justify-center px-8 md:px-10" style={{ width: '180px', height: '60px' }}>
+            <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-6 md:gap-x-12 md:gap-y-8">
+              {clients.map((client) => (
+                <div key={client.name} className="flex items-center justify-center" style={{ width: '120px', height: '45px' }}>
                   <img
-                  src={client.logo}
-                  alt={`${client.name} logo, White Rabbit client`}
-                  loading="lazy"
-                  decoding="async"
-                  className="max-h-full max-w-full w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity brightness-0 invert" />
+                    src={client.logo}
+                    alt={`${client.name} logo, White Rabbit client`}
+                    loading="lazy"
+                    decoding="async"
+                    className="max-h-full max-w-full w-auto h-auto object-contain opacity-50 hover:opacity-80 transition-opacity brightness-0 invert"
+                  />
                 </div>
-              )}
+              ))}
             </div>
           </div>
         </section>
