@@ -203,7 +203,7 @@ const Index = () => {
       <AnimatedSection>
         <section className="bg-[#E8D5D8] py-10">
           <div className="max-w-5xl mx-auto px-6">
-            <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-forest-dark/50 mb-6">
+            <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-accent mb-6">
               Trusted by World-Class Brands
             </p>
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-4 md:gap-x-8 md:gap-y-5">
