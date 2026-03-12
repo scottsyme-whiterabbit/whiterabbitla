@@ -137,51 +137,39 @@ const ExitIntentPopup = () => {
         </button>
 
         {mode === "choice" && (
-          <div className="flex flex-col md:flex-row">
-            {/* Guide Preview Image */}
-            <div className="md:w-2/5 bg-forest-dark/50 flex items-center justify-center p-8 md:p-6">
-              <img
-                src={playbookMockup}
-                alt="The Host's Playbook - Free Guide"
-                className="w-40 md:w-full max-w-[180px] h-auto drop-shadow-2xl"
-              />
-            </div>
+          <div className="p-8 md:p-10 text-center">
+            <img src={threeStars} alt="" aria-hidden="true" className="h-8 w-auto opacity-50 mx-auto mb-4" />
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">
+              Wait — Take This With You
+            </p>
+            <h3 className="font-serif text-2xl md:text-3xl text-cream mb-3 leading-tight">
+              The Guide Luxury Hosts Swear By
+            </h3>
+            <p className="font-sans text-sm text-cream/50 leading-relaxed mb-6 max-w-sm mx-auto">
+              Used by planners at Morgan Stanley, Netflix & Soho House. Get the 7 secrets before your next event.
+            </p>
 
-            {/* Content */}
-            <div className="md:w-3/5 p-8 md:p-10">
-              <img src={threeStars} alt="" aria-hidden="true" className="h-8 w-auto opacity-50 mb-4" />
-              <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">
-                Wait — Take This With You
-              </p>
-              <h3 className="font-serif text-2xl md:text-3xl text-cream mb-3 leading-tight">
-                The Guide Luxury Hosts Swear By
-              </h3>
-              <p className="font-sans text-sm text-cream/50 leading-relaxed mb-6">
-                Used by planners at Morgan Stanley, Netflix & Soho House. Get the 7 secrets before your next event.
-              </p>
+            {/* Primary: Get the Guide */}
+            <button
+              onClick={handleGetGuide}
+              className="w-full flex items-center justify-center gap-2.5 font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-4 hover:bg-accent/80 transition-colors mb-3"
+            >
+              Get the Free Guide
+              <ArrowRight size={14} strokeWidth={2} />
+            </button>
 
-              {/* Primary: Get the Guide */}
-              <button
-                onClick={handleGetGuide}
-                className="w-full flex items-center justify-center gap-2.5 font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-4 hover:bg-accent/80 transition-colors mb-3"
-              >
-                Get the Free Guide
-                <ArrowRight size={14} strokeWidth={2} />
-              </button>
+            {/* Secondary: Check Availability */}
+            <button
+              onClick={handleCheckAvailability}
+              className="w-full flex items-center justify-center gap-2 font-sans text-xs tracking-[0.2em] uppercase bg-accent text-accent-foreground px-6 py-3 hover:bg-accent/80 transition-colors"
+            >
+              <CalendarCheck size={14} strokeWidth={1.5} />
+              Check Availability
+            </button>
 
-              {/* Secondary: Book */}
-              <button
-                onClick={handleCheckAvailability}
-                className="w-full flex items-center justify-center gap-2 font-sans text-xs tracking-[0.2em] uppercase text-cream/50 hover:text-cream transition-colors py-2"
-              >
-                <CalendarCheck size={14} strokeWidth={1.5} />
-                Or check availability now
-              </button>
-
-              <p className="font-sans text-[10px] text-cream/25 mt-4">
-                Free instant download · No spam · Unsubscribe anytime
-              </p>
-            </div>
+            <p className="font-sans text-[10px] text-cream/25 mt-5">
+              Free instant download · No spam · Unsubscribe anytime
+            </p>
           </div>
         )}
 
