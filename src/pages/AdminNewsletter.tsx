@@ -580,7 +580,7 @@ const AdminNewsletter = () => {
   
 
   return (
-    <div className="min-h-screen bg-background pt-24 pb-16 md:pb-16">
+    <div className="min-h-screen bg-background pt-24 pb-16 md:pb-16" onClick={() => searchOpen && setSearchOpen(false)}>
       {/* Add bottom padding on mobile for the nav bar */}
       <div className={`max-w-6xl mx-auto px-4 md:px-6 ${isMobile ? 'pb-24' : ''}`}>
         <div className="flex items-center justify-between mb-4 md:mb-6">
