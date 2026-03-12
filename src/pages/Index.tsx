@@ -208,7 +208,7 @@ const Index = () => {
             </p>
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-4 md:gap-x-8 md:gap-y-5">
               {clients.map((client) => (
-                <div key={client.name} className="flex items-center justify-center" style={{ width: '90px', height: '32px' }}>
+                <div key={client.name} className="flex items-center justify-center" style={{ width: (client.name === 'Soho House' || client.name === 'Rivian') ? '120px' : '90px', height: (client.name === 'Soho House' || client.name === 'Rivian') ? '42px' : '32px' }}>
                   <img
                     src={client.logo}
                     alt={`${client.name} logo, White Rabbit client`}
