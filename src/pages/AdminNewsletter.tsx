@@ -10,7 +10,7 @@ import PipelineTab from "@/components/PipelineTab";
 import ActionListTab from "@/components/ActionListTab";
 import RevenueTab from "@/components/RevenueTab";
 import SubjectScorer from "@/components/SubjectScorer";
-import ColdCampaignsTab from "@/components/ColdCampaignsTab";
+// ColdCampaignsTab removed — consolidated into ColdDripCampaignTab with sub-selector
 import ColdDripCampaignTab from "@/components/ColdDripCampaignTab";
 import EmailAnalyticsTab from "@/components/EmailAnalyticsTab";
 import { useIsMobile } from "@/hooks/use-mobile";
