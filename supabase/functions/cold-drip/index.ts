@@ -676,7 +676,14 @@ serve(async (req) => {
         // Check timing for next email
         if (!lastSent) { skipped++; continue; }
         const daysSinceLast = (now.getTime() - lastSent.getTime()) / (1000 * 60 * 60 * 24);
-        const requiredDays = step === 1 ? 3 : step === 2 ? 7 : step === 3 ? 14 : step === 4 ? 10 : 999;
+        // Spirits: 0, 3, 7, 14, 21 → intervals 3, 4, 7, 7
+        // Others:  0, 3, 10, 24    → intervals 3, 7, 14
+        let requiredDays: number;
+        if (campaign.campaign_category === "spirits") {
+          requiredDays = step === 1 ? 3 : step === 2 ? 4 : step === 3 ? 7 : step === 4 ? 7 : 999;
+        } else {
+          requiredDays = step === 1 ? 3 : step === 2 ? 7 : step === 3 ? 14 : 999;
+        }
         if (daysSinceLast < requiredDays) {
           skipped++;
           continue;
