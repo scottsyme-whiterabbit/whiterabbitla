@@ -807,11 +807,15 @@ const AdminNewsletter = () => {
                 <div className="flex gap-6">
                   <div>
                     <p className="font-serif text-3xl text-foreground">{dashSummary?.recentInquiries ?? 0}</p>
-                    <p className="text-[10px] text-muted-foreground">new inquiries</p>
+                    <p className="text-[10px] text-muted-foreground">inquiries</p>
                   </div>
                   <div>
                     <p className="font-serif text-3xl text-foreground">{dashSummary?.recentQuiz ?? 0}</p>
                     <p className="text-[10px] text-muted-foreground">quiz leads</p>
+                  </div>
+                  <div>
+                    <p className="font-serif text-3xl text-foreground">{dashSummary?.recentConsultations ?? 0}</p>
+                    <p className="text-[10px] text-muted-foreground">consultations</p>
                   </div>
                 </div>
               </div>
