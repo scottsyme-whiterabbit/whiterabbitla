@@ -296,11 +296,6 @@ const Index = () => {
       {/* Thin gold rule */}
       <div className="max-w-xs mx-auto border-t border-accent/20" />
 
-      {/* Rotating Testimonials Carousel */}
-      <AnimatedSection>
-        <TestimonialCarousel />
-      </AnimatedSection>
-
       {/* Photo Gallery */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -351,6 +346,12 @@ const Index = () => {
           </AnimatedSection>
         </div>
       </section>
+
+      {/* Rotating Testimonials Carousel */}
+      <AnimatedSection>
+        <TestimonialCarousel />
+      </AnimatedSection>
+
       {/* Thin gold rule */}
       <div className="max-w-xs mx-auto border-t border-accent/20" />
 
