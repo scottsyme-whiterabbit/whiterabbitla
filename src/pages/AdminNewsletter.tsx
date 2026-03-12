@@ -583,11 +583,68 @@ const AdminNewsletter = () => {
     <div className="min-h-screen bg-background pt-24 pb-16 md:pb-16">
       {/* Add bottom padding on mobile for the nav bar */}
       <div className={`max-w-6xl mx-auto px-4 md:px-6 ${isMobile ? 'pb-24' : ''}`}>
-        <div className="flex items-center justify-between mb-6 md:mb-8">
+        <div className="flex items-center justify-between mb-4 md:mb-6">
           <h1 className="font-serif text-2xl md:text-3xl text-foreground">Newsletter Admin</h1>
           <button onClick={loadData} disabled={loading} className="text-muted-foreground hover:text-foreground transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
             <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
           </button>
+        </div>
+
+        {/* Global Search Bar */}
+        <div className="relative mb-6">
+          <div className="relative">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+              onFocus={() => setSearchOpen(true)}
+              placeholder="Search contacts, deals, outreach by name or email..."
+              className="w-full bg-muted/20 border border-border text-foreground pl-10 pr-4 py-2.5 font-sans text-sm focus:outline-none focus:border-accent transition-colors"
+            />
+            {searchQuery && (
+              <button onClick={() => { setSearchQuery(""); setSearchResults(null); setSearchOpen(false); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                <X size={14} />
+              </button>
+            )}
+          </div>
+          {searchOpen && searchResults && (searchResults.contacts.length > 0 || searchResults.deals.length > 0 || searchResults.cold.length > 0) && (
+            <div className="absolute top-full left-0 right-0 z-50 bg-background border border-border shadow-lg max-h-80 overflow-y-auto mt-1">
+              {searchResults.deals.length > 0 && (
+                <div>
+                  <p className="px-4 py-2 text-[10px] tracking-[0.2em] uppercase text-muted-foreground bg-muted/10 border-b border-border">Pipeline ({searchResults.deals.length})</p>
+                  {searchResults.deals.map((d: any) => (
+                    <button key={d.id} onClick={() => { setActiveTab("pipeline"); setSearchOpen(false); setSearchQuery(""); setSearchResults(null); }} className="w-full text-left px-4 py-2.5 hover:bg-muted/20 border-b border-border/50 transition-colors">
+                      <p className="text-sm text-foreground">{d.contact_name || d.contact_email}</p>
+                      <p className="text-[10px] text-muted-foreground">{d.stage} · {d.event_type || "No type"} · {d.source || "Unknown source"}</p>
+                    </button>
+                  ))}
+                </div>
+              )}
+              {searchResults.contacts.length > 0 && (
+                <div>
+                  <p className="px-4 py-2 text-[10px] tracking-[0.2em] uppercase text-muted-foreground bg-muted/10 border-b border-border">Contacts ({searchResults.contacts.length})</p>
+                  {searchResults.contacts.map((c: any) => (
+                    <button key={c.id} onClick={() => { setContactsFilter("all"); setContactsCampaign("all"); setActiveTab("contacts"); setSearchOpen(false); setSearchQuery(""); setSearchResults(null); }} className="w-full text-left px-4 py-2.5 hover:bg-muted/20 border-b border-border/50 transition-colors">
+                      <p className="text-sm text-foreground">{c.name || c.email}</p>
+                      <p className="text-[10px] text-muted-foreground">{c.email} · {c.drip_campaign} · {c.engagement_status}</p>
+                    </button>
+                  ))}
+                </div>
+              )}
+              {searchResults.cold.length > 0 && (
+                <div>
+                  <p className="px-4 py-2 text-[10px] tracking-[0.2em] uppercase text-muted-foreground bg-muted/10 border-b border-border">Cold Outreach ({searchResults.cold.length})</p>
+                  {searchResults.cold.map((c: any) => (
+                    <button key={c.id} onClick={() => { setColdCategory(c.campaign_category); setActiveTab("cold"); setSearchOpen(false); setSearchQuery(""); setSearchResults(null); }} className="w-full text-left px-4 py-2.5 hover:bg-muted/20 border-b border-border/50 transition-colors">
+                      <p className="text-sm text-foreground">{c.name || c.email}</p>
+                      <p className="text-[10px] text-muted-foreground">{c.email} · {c.campaign_category} · {c.status}</p>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Desktop Tabs — hidden on mobile */}
