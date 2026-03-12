@@ -119,6 +119,21 @@ const AdminNewsletter = () => {
   const [stats, setStats] = useState<Stats>({ subscribers: 0, campaigns: 0, emailsSent: 0 });
   const [loading, setLoading] = useState(false);
 
+  // Global search state
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<{ contacts: any[]; deals: any[]; cold: any[] } | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const searchTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Dashboard summary state
+  const [dashSummary, setDashSummary] = useState<{
+    dueToday: number;
+    overdue: number;
+    recentInquiries: number;
+    recentQuiz: number;
+    sourceCounts: Record<string, number>;
+  } | null>(null);
+
   // Compose state
   const [topic, setTopic] = useState("");
   const [campaignType, setCampaignType] = useState<"broadcast" | "drip">("broadcast");
