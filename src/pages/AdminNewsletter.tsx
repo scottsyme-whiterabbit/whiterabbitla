@@ -99,7 +99,8 @@ const AdminNewsletter = () => {
     return "";
   });
 
-  const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "actions" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "email_analytics" | "planner" | "apartment" | "thankyou" | "cold" | "cold_corporate" | "cold_wedding" | "cold_club" | "cold_pr" | "cold_nonprofit" | "cold_talent" | "cold_restaurant" | "cold_spirits">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "actions" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "email_analytics" | "planner" | "apartment" | "thankyou" | "cold">("dashboard");
+  const [coldCategory, setColdCategory] = useState<string>("corporate_planner");
   const [actionBadge, setActionBadge] = useState(0);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
   const [quickAddForm, setQuickAddForm] = useState({ name: "", email: "", phone: "", event_type: "", notes: "", source: "Referral" });
