@@ -7,7 +7,7 @@ import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import { supabase } from "@/integrations/supabase/client";
 
 const ExitIntentPopup = () => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true); // TEMP: preview mode
   const [mode, setMode] = useState<"choice" | "guide" | "success">("choice");
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
