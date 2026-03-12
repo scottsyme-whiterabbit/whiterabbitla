@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 import { trackFormSubmit } from "@/lib/analytics";
+import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
 
 const Contact = () => {
   usePageMeta({
