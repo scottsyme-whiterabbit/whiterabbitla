@@ -681,17 +681,43 @@ serve(async (req) => {
 
       case "get_dashboard_summary": {
         const today = new Date().toISOString().split("T")[0];
-        const [dealsRes, recentInquiries, recentQuiz] = await Promise.all([
+        const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+        const last30d = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+
+        const [dealsRes, recentInquiries, recentQuiz, recentConsultations,
+               bouncesTotal, bounces30d, unsubsTotal, unsubs30d, totalContacts, totalSent] = await Promise.all([
           supabase.from("deals")
             .select("id, next_follow_up, source, stage")
             .not("stage", "in", "(lost,completed)"),
           supabase.from("contact_inquiries")
-            .select("id")
-            .gte("created_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()),
+            .select("id, name, email, event_type, created_at")
+            .gte("created_at", last24h)
+            .order("created_at", { ascending: false })
+            .limit(10),
           supabase.from("discovery_quiz_leads")
-            .select("id")
-            .gte("created_at", new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()),
+            .select("id, name, email, recommendation, created_at")
+            .gte("created_at", last24h)
+            .order("created_at", { ascending: false })
+            .limit(10),
+          supabase.from("consultation_leads")
+            .select("id, name, email, event_type, created_at")
+            .gte("created_at", last24h)
+            .order("created_at", { ascending: false })
+            .limit(10),
+          // Email health: total bounces
+          supabase.from("email_bounces").select("id", { count: "exact", head: true }),
+          // Bounces in last 30 days
+          supabase.from("email_bounces").select("id", { count: "exact", head: true }).gte("created_at", last30d),
+          // Total unsubscribed contacts
+          supabase.from("newsletter_contacts").select("id", { count: "exact", head: true }).eq("subscribed", false),
+          // Unsubscribed in last 30 days (approximation: updated_at recent + unsubscribed)
+          supabase.from("newsletter_contacts").select("id", { count: "exact", head: true }).eq("subscribed", false).gte("updated_at", last30d),
+          // Total contacts for rate calc
+          supabase.from("newsletter_contacts").select("id", { count: "exact", head: true }),
+          // Total sent for bounce rate
+          supabase.from("newsletter_send_log").select("id", { count: "exact", head: true }),
         ]);
+
         const deals = dealsRes.data || [];
         const dueToday = deals.filter(d => d.next_follow_up === today).length;
         const overdue = deals.filter(d => d.next_follow_up && d.next_follow_up < today).length;
@@ -709,7 +735,19 @@ serve(async (req) => {
           overdue,
           recentInquiries: recentInquiries.data?.length || 0,
           recentQuiz: recentQuiz.data?.length || 0,
+          recentConsultations: recentConsultations.data?.length || 0,
+          recentInquiriesList: recentInquiries.data || [],
+          recentQuizList: recentQuiz.data || [],
+          recentConsultationsList: recentConsultations.data || [],
           sourceCounts,
+          emailHealth: {
+            bouncesTotal: bouncesTotal.count || 0,
+            bounces30d: bounces30d.count || 0,
+            unsubsTotal: unsubsTotal.count || 0,
+            unsubs30d: unsubs30d.count || 0,
+            totalContacts: totalContacts.count || 0,
+            totalSent: totalSent.count || 0,
+          },
         }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
