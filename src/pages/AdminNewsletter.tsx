@@ -132,7 +132,19 @@ const AdminNewsletter = () => {
     overdue: number;
     recentInquiries: number;
     recentQuiz: number;
+    recentConsultations: number;
+    recentInquiriesList: Array<{ id: string; name: string; email: string; event_type?: string; created_at: string }>;
+    recentQuizList: Array<{ id: string; name?: string; email?: string; recommendation: string; created_at: string }>;
+    recentConsultationsList: Array<{ id: string; name: string; email: string; event_type?: string; created_at: string }>;
     sourceCounts: Record<string, number>;
+    emailHealth: {
+      bouncesTotal: number;
+      bounces30d: number;
+      unsubsTotal: number;
+      unsubs30d: number;
+      totalContacts: number;
+      totalSent: number;
+    };
   } | null>(null);
 
   // Compose state
