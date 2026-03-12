@@ -8,6 +8,7 @@ import QuizCTA from "@/components/QuizCTA";
 import QuizNudge from "@/components/QuizNudge";
 import FAQSection from "@/components/FAQSection";
 import NewsletterSignup from "@/components/NewsletterSignup";
+import TestimonialCarousel from "@/components/TestimonialCarousel";
 
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useJsonLd } from "@/hooks/useSchemaOrg";
@@ -268,6 +269,11 @@ const Index = () => {
 
       {/* Thin gold rule */}
       <div className="max-w-xs mx-auto border-t border-accent/20" />
+
+      {/* Rotating Testimonials Carousel */}
+      <AnimatedSection>
+        <TestimonialCarousel />
+      </AnimatedSection>
 
       {/* Photo Gallery */}
       <section className="py-20">
