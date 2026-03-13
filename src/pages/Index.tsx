@@ -67,6 +67,8 @@ const clients = [
 { name: "Pistola", logo: pistolaLogo }];
 
 const heroReviews = [
+  { text: "That was well worth it.", name: "Don Cheadle", role: "Actor" },
+  { text: "Love it.", name: "Dolph Lundgren", role: "Actor" },
   { text: "He was everyone's favorite part of the night.", name: "Zara M." },
   { text: "The guests absolutely LOVED him.", name: "Jamie I." },
   { text: "He was the highlight of the entire evening.", name: "Meridith F." },
