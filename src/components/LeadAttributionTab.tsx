@@ -85,7 +85,8 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
         contact_name: form.contact_name,
         event_date: form.event_date || null,
         event_type: form.event_type || null,
-        source: form.vertical,
+        source: form.lead_source,
+        location: form.vertical,
       });
       if (res.deal) {
         setClosedDeals(prev => [res.deal, ...prev]);
