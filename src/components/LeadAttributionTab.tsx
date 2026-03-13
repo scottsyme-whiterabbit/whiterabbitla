@@ -187,6 +187,26 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
                   ))}
                 </select>
               </div>
+              <div>
+                <label className="block font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Show Value ($)</label>
+                <input
+                  type="number"
+                  value={form.deal_value}
+                  onChange={e => setForm(f => ({ ...f, deal_value: e.target.value }))}
+                  className="w-full bg-background border border-border px-3 py-2 text-sm text-foreground rounded focus:outline-none focus:border-accent"
+                  placeholder="2500"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Notes</label>
+              <textarea
+                value={form.notes}
+                onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
+                className="w-full bg-background border border-border px-3 py-2 text-sm text-foreground rounded focus:outline-none focus:border-accent resize-none"
+                rows={2}
+                placeholder="Optional notes about this booking…"
+              />
             </div>
             <div className="flex justify-end">
               <button
