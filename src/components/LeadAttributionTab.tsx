@@ -79,6 +79,10 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
       toast.error("Vertical is required");
       return;
     }
+    if (!form.lead_source) {
+      toast.error("Lead source is required");
+      return;
+    }
     setSaving(true);
     try {
       const res = await callAdmin("log_closed_deal", {
