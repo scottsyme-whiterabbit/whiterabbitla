@@ -773,7 +773,7 @@ serve(async (req) => {
       }
 
       case "log_closed_deal": {
-        const { contact_name, contact_email, company, event_type, event_date, deal_value, source, location } = payload;
+        const { contact_name, contact_email, company, event_type, event_date, deal_value, source, location, notes } = payload;
         if (!contact_name || !source) {
           return new Response(JSON.stringify({ error: "Name and source are required" }), {
             status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -788,6 +788,7 @@ serve(async (req) => {
           deal_value: deal_value ? Number(deal_value) : null,
           source: source as string,
           location: location as string || null,
+          notes: notes as string || null,
           stage: "completed",
         }).select().single();
         if (error) throw error;
