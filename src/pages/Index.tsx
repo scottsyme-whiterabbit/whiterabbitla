@@ -67,6 +67,8 @@ const clients = [
 { name: "Pistola", logo: pistolaLogo }];
 
 const heroReviews = [
+  { text: "That was well worth it.", name: "Don Cheadle", role: "Actor" },
+  { text: "Love it.", name: "Dolph Lundgren", role: "Actor" },
   { text: "He was everyone's favorite part of the night.", name: "Zara M." },
   { text: "The guests absolutely LOVED him.", name: "Jamie I." },
   { text: "He was the highlight of the entire evening.", name: "Meridith F." },
@@ -183,7 +185,7 @@ const Index = () => {
                   "{heroReviews[heroReviewIndex].text}"
                 </p>
                 <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-cream/40 whitespace-nowrap">
-                  — {heroReviews[heroReviewIndex].name}
+                  — {heroReviews[heroReviewIndex].name}{heroReviews[heroReviewIndex].role ? `, ${heroReviews[heroReviewIndex].role}` : ""}
                 </p>
               </motion.div>
             </AnimatePresence>
