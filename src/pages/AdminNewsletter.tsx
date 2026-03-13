@@ -539,7 +539,7 @@ const AdminNewsletter = () => {
     return (
       <div className="min-h-screen bg-[hsl(var(--forest-dark))] flex items-center justify-center px-6">
         <form onSubmit={handleLogin} className="w-full max-w-sm">
-          <h1 className="font-serif text-3xl text-cream mb-8 text-center">Newsletter Admin</h1>
+          <h1 className="font-serif text-3xl text-cream mb-8 text-center">White Rabbit Concierge</h1>
           <input
             type="password"
             value={password}
