@@ -67,11 +67,11 @@ const clients = [
 { name: "Pistola", logo: pistolaLogo }];
 
 const heroReviews = [
-  { text: "He elevated our party in ways I didn't expect. He was everyone's favorite part.", name: "Zara M." },
-  { text: "Scott performed at a 200-person event for us and the guests absolutely LOVED him.", name: "Jamie I." },
-  { text: "I can't tell you how many guests told me he was the highlight of the evening.", name: "Meridith F." },
-  { text: "He is incredible and had the whole room captivated.", name: "Grace G." },
-  { text: "Jaws were hitting the floor so hard the downstairs neighbors started wondering what was going down.", name: "Mohammad R." },
+  { text: "He was everyone's favorite part of the night.", name: "Zara M." },
+  { text: "The guests absolutely LOVED him.", name: "Jamie I." },
+  { text: "He was the highlight of the entire evening.", name: "Meridith F." },
+  { text: "He had the whole room captivated.", name: "Grace G." },
+  { text: "Jaws were hitting the floor all night.", name: "Mohammad R." },
 ];
 
 const Index = () => {
