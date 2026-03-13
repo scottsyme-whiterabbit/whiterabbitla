@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { toast } from "sonner";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line, Legend } from "recharts";
-import { TrendingUp, Users, Target, Filter } from "lucide-react";
+import { TrendingUp, Users, Target, Filter, Plus, X } from "lucide-react";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -21,13 +21,42 @@ const COLORS = [
   "hsl(180, 40%, 45%)",
 ];
 
+const CHANNEL_OPTIONS = [
+  "website",
+  "referral",
+  "cold_outreach",
+  "meta_ads",
+  "google_ads",
+  "instagram",
+  "word_of_mouth",
+  "repeat_client",
+  "venue_partner",
+  "planner_referral",
+  "other",
+];
+
+const emptyForm = {
+  contact_name: "",
+  contact_email: "",
+  company: "",
+  event_type: "",
+  event_date: "",
+  deal_value: "",
+  source: "",
+  location: "",
+};
+
 const LeadAttributionTab = ({ storedPassword }: Props) => {
   const [deals, setDeals] = useState<any[]>([]);
   const [inquiries, setInquiries] = useState<any[]>([]);
   const [consultations, setConsultations] = useState<any[]>([]);
   const [quizLeads, setQuizLeads] = useState<any[]>([]);
+  const [closedDeals, setClosedDeals] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState<"30" | "90" | "all">("90");
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState(emptyForm);
+  const [saving, setSaving] = useState(false);
 
   const callAdmin = useCallback(async (action: string, payload: Record<string, unknown> = {}) => {
     const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
@@ -47,6 +76,7 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
         setInquiries(res.inquiries || []);
         setConsultations(res.consultations || []);
         setQuizLeads(res.quizLeads || []);
+        setClosedDeals(res.closedDeals || []);
       } catch {
         toast.error("Failed to load attribution data");
       } finally {
@@ -55,6 +85,27 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
     };
     load();
   }, [callAdmin]);
+
+  const handleSaveDeal = async () => {
+    if (!form.contact_name.trim() || !form.source) {
+      toast.error("Name and channel are required");
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await callAdmin("log_closed_deal", form);
+      if (res.deal) {
+        setClosedDeals(prev => [res.deal, ...prev]);
+        setForm(emptyForm);
+        setShowForm(false);
+        toast.success("Closed deal logged");
+      }
+    } catch {
+      toast.error("Failed to save deal");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const filterByTime = useCallback((items: any[], dateField: string) => {
     if (timeRange === "all") return items;
@@ -160,6 +211,21 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
       .sort((a, b) => b.total - a.total);
   }, [deals, filterByTime]);
 
+  // Closed deals revenue by channel
+  const closedByChannel = useMemo(() => {
+    const map = new Map<string, { count: number; revenue: number }>();
+    closedDeals.forEach(d => {
+      const src = d.source || "unknown";
+      const existing = map.get(src) || { count: 0, revenue: 0 };
+      map.set(src, { count: existing.count + 1, revenue: existing.revenue + (d.deal_value || 0) });
+    });
+    return Array.from(map.entries())
+      .map(([name, { count, revenue }]) => ({ name, count, revenue }))
+      .sort((a, b) => b.revenue - a.revenue);
+  }, [closedDeals]);
+
+  const totalClosedRevenue = closedDeals.reduce((sum, d) => sum + (d.deal_value || 0), 0);
+
   if (loading) {
     return <p className="text-center text-muted-foreground py-12">Loading attribution data...</p>;
   }
@@ -177,19 +243,190 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
           <h2 className="font-serif text-2xl text-foreground">Lead Attribution</h2>
           <p className="font-sans text-xs text-muted-foreground mt-1">Where your leads and pipeline come from</p>
         </div>
-        <div className="flex items-center gap-1 bg-muted/20 p-1 rounded">
-          {(["30", "90", "all"] as const).map(r => (
-            <button
-              key={r}
-              onClick={() => setTimeRange(r)}
-              className={`px-3 py-1.5 font-sans text-xs tracking-wider uppercase transition-colors rounded ${
-                timeRange === r ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {r === "all" ? "All Time" : `${r}d`}
-            </button>
-          ))}
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1 bg-muted/20 p-1 rounded">
+            {(["30", "90", "all"] as const).map(r => (
+              <button
+                key={r}
+                onClick={() => setTimeRange(r)}
+                className={`px-3 py-1.5 font-sans text-xs tracking-wider uppercase transition-colors rounded ${
+                  timeRange === r ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {r === "all" ? "All Time" : `${r}d`}
+              </button>
+            ))}
+          </div>
         </div>
+      </div>
+
+      {/* ── Closed Deals Log ── */}
+      <div className="border border-border p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-accent">Closed Deals Log</h3>
+            <p className="font-sans text-[10px] text-muted-foreground mt-1">
+              {closedDeals.length} closed · ${totalClosedRevenue.toLocaleString()} total revenue
+            </p>
+          </div>
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-accent text-accent-foreground font-sans text-xs tracking-wider uppercase rounded hover:bg-accent/90 transition-colors"
+          >
+            {showForm ? <X size={14} /> : <Plus size={14} />}
+            {showForm ? "Cancel" : "Log Deal"}
+          </button>
+        </div>
+
+        {/* Entry Form */}
+        {showForm && (
+          <div className="bg-muted/10 border border-border p-4 space-y-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div>
+                <label className="block font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Client Name *</label>
+                <input
+                  value={form.contact_name}
+                  onChange={e => setForm(f => ({ ...f, contact_name: e.target.value }))}
+                  className="w-full bg-background border border-border px-3 py-2 text-sm text-foreground rounded focus:outline-none focus:border-accent"
+                  placeholder="Jane Smith"
+                />
+              </div>
+              <div>
+                <label className="block font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Email</label>
+                <input
+                  value={form.contact_email}
+                  onChange={e => setForm(f => ({ ...f, contact_email: e.target.value }))}
+                  className="w-full bg-background border border-border px-3 py-2 text-sm text-foreground rounded focus:outline-none focus:border-accent"
+                  placeholder="jane@company.com"
+                />
+              </div>
+              <div>
+                <label className="block font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Company</label>
+                <input
+                  value={form.company}
+                  onChange={e => setForm(f => ({ ...f, company: e.target.value }))}
+                  className="w-full bg-background border border-border px-3 py-2 text-sm text-foreground rounded focus:outline-none focus:border-accent"
+                  placeholder="Acme Corp"
+                />
+              </div>
+              <div>
+                <label className="block font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Channel / Source *</label>
+                <select
+                  value={form.source}
+                  onChange={e => setForm(f => ({ ...f, source: e.target.value }))}
+                  className="w-full bg-background border border-border px-3 py-2 text-sm text-foreground rounded focus:outline-none focus:border-accent"
+                >
+                  <option value="">Select channel…</option>
+                  {CHANNEL_OPTIONS.map(ch => (
+                    <option key={ch} value={ch}>{ch.replace(/_/g, " ")}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Event Type</label>
+                <input
+                  value={form.event_type}
+                  onChange={e => setForm(f => ({ ...f, event_type: e.target.value }))}
+                  className="w-full bg-background border border-border px-3 py-2 text-sm text-foreground rounded focus:outline-none focus:border-accent"
+                  placeholder="Corporate gala"
+                />
+              </div>
+              <div>
+                <label className="block font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Event Date</label>
+                <input
+                  type="date"
+                  value={form.event_date}
+                  onChange={e => setForm(f => ({ ...f, event_date: e.target.value }))}
+                  className="w-full bg-background border border-border px-3 py-2 text-sm text-foreground rounded focus:outline-none focus:border-accent"
+                />
+              </div>
+              <div>
+                <label className="block font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Deal Value ($)</label>
+                <input
+                  type="number"
+                  value={form.deal_value}
+                  onChange={e => setForm(f => ({ ...f, deal_value: e.target.value }))}
+                  className="w-full bg-background border border-border px-3 py-2 text-sm text-foreground rounded focus:outline-none focus:border-accent"
+                  placeholder="2500"
+                />
+              </div>
+              <div>
+                <label className="block font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Location</label>
+                <input
+                  value={form.location}
+                  onChange={e => setForm(f => ({ ...f, location: e.target.value }))}
+                  className="w-full bg-background border border-border px-3 py-2 text-sm text-foreground rounded focus:outline-none focus:border-accent"
+                  placeholder="Beverly Hills"
+                />
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <button
+                onClick={handleSaveDeal}
+                disabled={saving}
+                className="px-5 py-2 bg-accent text-accent-foreground font-sans text-xs tracking-wider uppercase rounded hover:bg-accent/90 transition-colors disabled:opacity-50"
+              >
+                {saving ? "Saving…" : "Save Closed Deal"}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Revenue by Channel Summary */}
+        {closedByChannel.length > 0 && (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {closedByChannel.slice(0, 4).map(({ name, count, revenue }, i) => (
+              <div key={name} className="bg-muted/10 px-3 py-2 rounded">
+                <div className="flex items-center gap-1.5 mb-1">
+                  <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
+                  <span className="text-[10px] text-muted-foreground uppercase tracking-wider truncate">{name.replace(/_/g, " ")}</span>
+                </div>
+                <p className="font-serif text-lg text-foreground">${revenue.toLocaleString()}</p>
+                <p className="text-[10px] text-muted-foreground">{count} deal{count !== 1 ? "s" : ""}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Closed Deals Table */}
+        {closedDeals.length > 0 && (
+          <div className="overflow-x-auto max-h-[320px] overflow-y-auto">
+            <table className="w-full text-sm">
+              <thead className="sticky top-0 bg-background">
+                <tr className="border-b border-border text-left">
+                  <th className="py-2 pr-3 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Client</th>
+                  <th className="py-2 pr-3 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Channel</th>
+                  <th className="py-2 pr-3 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Event</th>
+                  <th className="py-2 pr-3 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Date</th>
+                  <th className="py-2 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground text-right">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {closedDeals.map(d => (
+                  <tr key={d.id} className="border-b border-border/50 hover:bg-muted/10 transition-colors">
+                    <td className="py-2 pr-3">
+                      <p className="text-foreground">{d.contact_name || "—"}</p>
+                      {d.company && <p className="text-[10px] text-muted-foreground">{d.company}</p>}
+                    </td>
+                    <td className="py-2 pr-3">
+                      <span className="inline-block px-2 py-0.5 bg-accent/10 text-accent text-[10px] tracking-wider uppercase rounded">
+                        {(d.source || "unknown").replace(/_/g, " ")}
+                      </span>
+                    </td>
+                    <td className="py-2 pr-3 text-muted-foreground">{d.event_type || "—"}</td>
+                    <td className="py-2 pr-3 text-muted-foreground">{d.event_date || "—"}</td>
+                    <td className="py-2 text-right text-foreground font-medium">
+                      {d.deal_value ? `$${d.deal_value.toLocaleString()}` : "—"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {closedDeals.length === 0 && !showForm && (
+          <p className="text-xs text-muted-foreground text-center py-4">No closed deals logged yet. Click "Log Deal" to add one.</p>
+        )}
       </div>
 
       {/* Summary Cards */}
