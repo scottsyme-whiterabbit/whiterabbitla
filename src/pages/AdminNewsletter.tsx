@@ -661,7 +661,7 @@ const AdminNewsletter = () => {
 
         {/* Desktop Tabs — hidden on mobile */}
         <div className="hidden md:flex gap-1 mb-8 border-b border-border overflow-x-auto">
-          {(["dashboard", "pipeline", "actions", "revenue", "contacts", "cold", "compose", "campaigns", "calendar", "analytics", "email_analytics", "planner", "apartment", "thankyou"] as const).map(tab => (
+          {(["dashboard", "pipeline", "actions", "revenue", "contacts", "cold", "compose", "campaigns", "calendar", "analytics", "email_analytics", "lead_attribution", "planner", "apartment", "thankyou"] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -669,7 +669,7 @@ const AdminNewsletter = () => {
                 activeTab === tab ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              {tab === "actions" ? "ACTION LIST" : tab === "email_analytics" ? "📊 EMAIL ANALYTICS" : tab === "cold" ? "🎯 OUTREACH" : tab}
+              {tab === "actions" ? "ACTION LIST" : tab === "email_analytics" ? "📊 EMAIL ANALYTICS" : tab === "lead_attribution" ? "📈 ATTRIBUTION" : tab === "cold" ? "🎯 OUTREACH" : tab}
               {tab === "actions" && actionBadge > 0 && (
                 <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-[9px] font-sans min-w-[16px] h-4 flex items-center justify-center rounded-full px-1">{actionBadge}</span>
               )}
