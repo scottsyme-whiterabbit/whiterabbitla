@@ -185,7 +185,7 @@ const Index = () => {
                   "{heroReviews[heroReviewIndex].text}"
                 </p>
                 <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-cream/40 whitespace-nowrap">
-                  — {heroReviews[heroReviewIndex].name}
+                  — {heroReviews[heroReviewIndex].name}{heroReviews[heroReviewIndex].role ? `, ${heroReviews[heroReviewIndex].role}` : ""}
                 </p>
               </motion.div>
             </AnimatePresence>
