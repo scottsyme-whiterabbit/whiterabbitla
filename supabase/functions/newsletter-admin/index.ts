@@ -754,18 +754,44 @@ serve(async (req) => {
       }
 
       case "get_lead_attribution": {
-        const [dealsRes, inquiriesRes, consultationsRes, quizRes] = await Promise.all([
+        const [dealsRes, inquiriesRes, consultationsRes, quizRes, closedRes] = await Promise.all([
           supabase.from("deals").select("id, source, stage, deal_value, created_at").order("created_at", { ascending: false }).limit(1000),
           supabase.from("contact_inquiries").select("id, source, created_at").order("created_at", { ascending: false }).limit(1000),
           supabase.from("consultation_leads").select("id, source, created_at").order("created_at", { ascending: false }).limit(1000),
           supabase.from("discovery_quiz_leads").select("id, created_at").order("created_at", { ascending: false }).limit(1000),
+          supabase.from("deals").select("id, contact_name, contact_email, company, event_type, event_date, deal_value, source, location, created_at").eq("stage", "completed").order("event_date", { ascending: false }).limit(200),
         ]);
         return new Response(JSON.stringify({
           deals: dealsRes.data || [],
           inquiries: inquiriesRes.data || [],
           consultations: consultationsRes.data || [],
           quizLeads: quizRes.data || [],
+          closedDeals: closedRes.data || [],
         }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "log_closed_deal": {
+        const { contact_name, contact_email, company, event_type, event_date, deal_value, source, location } = payload;
+        if (!contact_name || !source) {
+          return new Response(JSON.stringify({ error: "Name and source are required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const { data, error } = await supabase.from("deals").insert({
+          contact_name: contact_name as string,
+          contact_email: (contact_email as string) || `${(contact_name as string).toLowerCase().replace(/\s+/g, '.')}@manual.entry`,
+          company: company as string || null,
+          event_type: event_type as string || null,
+          event_date: event_date as string || null,
+          deal_value: deal_value ? Number(deal_value) : null,
+          source: source as string,
+          location: location as string || null,
+          stage: "completed",
+        }).select().single();
+        if (error) throw error;
+        return new Response(JSON.stringify({ deal: data }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
