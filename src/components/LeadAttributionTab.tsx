@@ -21,11 +21,22 @@ const VERTICAL_OPTIONS = [
   "Other",
 ];
 
+const LEAD_SOURCE_OPTIONS = [
+  "Supabase Drip",
+  "Magic Castle",
+  "Referrals",
+  "Meta Ads",
+  "Apollo Outreach",
+  "Inbound Website",
+  "Other",
+];
+
 const emptyForm = {
   contact_name: "",
   event_date: "",
   event_type: "",
   vertical: "",
+  lead_source: "",
 };
 
 const LeadAttributionTab = ({ storedPassword }: Props) => {
@@ -68,13 +79,18 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
       toast.error("Vertical is required");
       return;
     }
+    if (!form.lead_source) {
+      toast.error("Lead source is required");
+      return;
+    }
     setSaving(true);
     try {
       const res = await callAdmin("log_closed_deal", {
         contact_name: form.contact_name,
         event_date: form.event_date || null,
         event_type: form.event_type || null,
-        source: form.vertical,
+        source: form.lead_source,
+        location: form.vertical,
       });
       if (res.deal) {
         setClosedDeals(prev => [res.deal, ...prev]);
@@ -154,6 +170,19 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
                   ))}
                 </select>
               </div>
+              <div>
+                <label className="block font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Lead Source *</label>
+                <select
+                  value={form.lead_source}
+                  onChange={e => setForm(f => ({ ...f, lead_source: e.target.value }))}
+                  className="w-full bg-background border border-border px-3 py-2 text-sm text-foreground rounded focus:outline-none focus:border-accent"
+                >
+                  <option value="">Select source…</option>
+                  {LEAD_SOURCE_OPTIONS.map(s => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
             </div>
             <div className="flex justify-end">
               <button
@@ -179,7 +208,8 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
                   <th className="py-2 pr-4 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Name</th>
                   <th className="py-2 pr-4 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Event Date</th>
                   <th className="py-2 pr-4 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Event Type</th>
-                  <th className="py-2 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Vertical</th>
+                  <th className="py-2 pr-4 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Vertical</th>
+                  <th className="py-2 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Lead Source</th>
                 </tr>
               </thead>
               <tbody>
@@ -188,8 +218,13 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
                     <td className="py-2.5 pr-4 text-foreground">{d.contact_name || "—"}</td>
                     <td className="py-2.5 pr-4 text-muted-foreground">{d.event_date || "—"}</td>
                     <td className="py-2.5 pr-4 text-muted-foreground">{d.event_type || "—"}</td>
-                    <td className="py-2.5">
+                    <td className="py-2.5 pr-4">
                       <span className="inline-block px-2 py-0.5 bg-accent/10 text-accent text-[10px] tracking-wider uppercase rounded">
+                        {d.location || "—"}
+                      </span>
+                    </td>
+                    <td className="py-2.5">
+                      <span className="inline-block px-2 py-0.5 bg-primary/10 text-primary text-[10px] tracking-wider uppercase rounded">
                         {d.source || "—"}
                       </span>
                     </td>
