@@ -14,6 +14,7 @@ import SubjectScorer from "@/components/SubjectScorer";
 // ColdCampaignsTab removed — consolidated into ColdDripCampaignTab with sub-selector
 import ColdDripCampaignTab from "@/components/ColdDripCampaignTab";
 import EmailAnalyticsTab from "@/components/EmailAnalyticsTab";
+import LeadAttributionTab from "@/components/LeadAttributionTab";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
