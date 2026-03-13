@@ -166,6 +166,19 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
                   ))}
                 </select>
               </div>
+              <div>
+                <label className="block font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Lead Source *</label>
+                <select
+                  value={form.lead_source}
+                  onChange={e => setForm(f => ({ ...f, lead_source: e.target.value }))}
+                  className="w-full bg-background border border-border px-3 py-2 text-sm text-foreground rounded focus:outline-none focus:border-accent"
+                >
+                  <option value="">Select source…</option>
+                  {LEAD_SOURCE_OPTIONS.map(s => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
             </div>
             <div className="flex justify-end">
               <button
