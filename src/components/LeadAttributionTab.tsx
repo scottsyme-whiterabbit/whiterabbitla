@@ -21,11 +21,22 @@ const VERTICAL_OPTIONS = [
   "Other",
 ];
 
+const LEAD_SOURCE_OPTIONS = [
+  "Supabase Drip",
+  "Magic Castle",
+  "Referrals",
+  "Meta Ads",
+  "Apollo Outreach",
+  "Inbound Website",
+  "Other",
+];
+
 const emptyForm = {
   contact_name: "",
   event_date: "",
   event_type: "",
   vertical: "",
+  lead_source: "",
 };
 
 const LeadAttributionTab = ({ storedPassword }: Props) => {
