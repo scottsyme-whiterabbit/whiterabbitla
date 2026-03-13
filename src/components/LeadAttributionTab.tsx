@@ -37,6 +37,8 @@ const emptyForm = {
   event_type: "",
   vertical: "",
   lead_source: "",
+  deal_value: "",
+  notes: "",
 };
 
 const LeadAttributionTab = ({ storedPassword }: Props) => {
@@ -91,6 +93,8 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
         event_type: form.event_type || null,
         source: form.lead_source,
         location: form.vertical,
+        deal_value: form.deal_value || null,
+        notes: form.notes || null,
       });
       if (res.deal) {
         setClosedDeals(prev => [res.deal, ...prev]);
@@ -183,6 +187,26 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
                   ))}
                 </select>
               </div>
+              <div>
+                <label className="block font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Show Value ($)</label>
+                <input
+                  type="number"
+                  value={form.deal_value}
+                  onChange={e => setForm(f => ({ ...f, deal_value: e.target.value }))}
+                  className="w-full bg-background border border-border px-3 py-2 text-sm text-foreground rounded focus:outline-none focus:border-accent"
+                  placeholder="2500"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="block font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Notes</label>
+              <textarea
+                value={form.notes}
+                onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
+                className="w-full bg-background border border-border px-3 py-2 text-sm text-foreground rounded focus:outline-none focus:border-accent resize-none"
+                rows={2}
+                placeholder="Optional notes about this booking…"
+              />
             </div>
             <div className="flex justify-end">
               <button
@@ -209,7 +233,9 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
                   <th className="py-2 pr-4 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Event Date</th>
                   <th className="py-2 pr-4 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Event Type</th>
                   <th className="py-2 pr-4 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Vertical</th>
-                  <th className="py-2 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Lead Source</th>
+                  <th className="py-2 pr-4 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Lead Source</th>
+                  <th className="py-2 pr-4 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground text-right">Value</th>
+                  <th className="py-2 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Notes</th>
                 </tr>
               </thead>
               <tbody>
@@ -223,10 +249,16 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
                         {d.location || "—"}
                       </span>
                     </td>
-                    <td className="py-2.5">
+                    <td className="py-2.5 pr-4">
                       <span className="inline-block px-2 py-0.5 bg-primary/10 text-primary text-[10px] tracking-wider uppercase rounded">
                         {d.source || "—"}
                       </span>
+                    </td>
+                    <td className="py-2.5 pr-4 text-foreground text-right font-medium">
+                      {d.deal_value ? `$${Number(d.deal_value).toLocaleString()}` : "—"}
+                    </td>
+                    <td className="py-2.5 text-muted-foreground text-xs max-w-[200px] truncate">
+                      {d.notes || "—"}
                     </td>
                   </tr>
                 ))}

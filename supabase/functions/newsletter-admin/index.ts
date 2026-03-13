@@ -759,7 +759,7 @@ serve(async (req) => {
           supabase.from("contact_inquiries").select("id, source, created_at").order("created_at", { ascending: false }).limit(1000),
           supabase.from("consultation_leads").select("id, source, created_at").order("created_at", { ascending: false }).limit(1000),
           supabase.from("discovery_quiz_leads").select("id, created_at").order("created_at", { ascending: false }).limit(1000),
-          supabase.from("deals").select("id, contact_name, contact_email, company, event_type, event_date, deal_value, source, location, created_at").eq("stage", "completed").order("event_date", { ascending: false }).limit(200),
+          supabase.from("deals").select("id, contact_name, contact_email, company, event_type, event_date, deal_value, source, location, notes, created_at").eq("stage", "completed").order("event_date", { ascending: false }).limit(200),
         ]);
         return new Response(JSON.stringify({
           deals: dealsRes.data || [],
@@ -773,7 +773,7 @@ serve(async (req) => {
       }
 
       case "log_closed_deal": {
-        const { contact_name, contact_email, company, event_type, event_date, deal_value, source, location } = payload;
+        const { contact_name, contact_email, company, event_type, event_date, deal_value, source, location, notes } = payload;
         if (!contact_name || !source) {
           return new Response(JSON.stringify({ error: "Name and source are required" }), {
             status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -788,6 +788,7 @@ serve(async (req) => {
           deal_value: deal_value ? Number(deal_value) : null,
           source: source as string,
           location: location as string || null,
+          notes: notes as string || null,
           stage: "completed",
         }).select().single();
         if (error) throw error;
