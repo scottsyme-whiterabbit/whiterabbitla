@@ -37,6 +37,8 @@ const emptyForm = {
   event_type: "",
   vertical: "",
   lead_source: "",
+  deal_value: "",
+  notes: "",
 };
 
 const LeadAttributionTab = ({ storedPassword }: Props) => {
