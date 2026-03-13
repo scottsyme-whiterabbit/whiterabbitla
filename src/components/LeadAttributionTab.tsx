@@ -13,7 +13,7 @@ const VERTICAL_OPTIONS = [
   "Wedding Planner",
   "Corporate Planner",
   "Country Club",
-  "Newsletter",
+  "Nonprofit",
   "Restaurant",
   "PR Agency",
   "Talent Management",
