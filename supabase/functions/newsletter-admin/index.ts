@@ -753,6 +753,23 @@ serve(async (req) => {
         });
       }
 
+      case "get_lead_attribution": {
+        const [dealsRes, inquiriesRes, consultationsRes, quizRes] = await Promise.all([
+          supabase.from("deals").select("id, source, stage, deal_value, created_at").order("created_at", { ascending: false }).limit(1000),
+          supabase.from("contact_inquiries").select("id, source, created_at").order("created_at", { ascending: false }).limit(1000),
+          supabase.from("consultation_leads").select("id, source, created_at").order("created_at", { ascending: false }).limit(1000),
+          supabase.from("discovery_quiz_leads").select("id, created_at").order("created_at", { ascending: false }).limit(1000),
+        ]);
+        return new Response(JSON.stringify({
+          deals: dealsRes.data || [],
+          inquiries: inquiriesRes.data || [],
+          consultations: consultationsRes.data || [],
+          quizLeads: quizRes.data || [],
+        }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       default:
         return new Response(JSON.stringify({ error: "Unknown action" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
