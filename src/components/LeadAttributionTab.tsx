@@ -208,7 +208,8 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
                   <th className="py-2 pr-4 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Name</th>
                   <th className="py-2 pr-4 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Event Date</th>
                   <th className="py-2 pr-4 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Event Type</th>
-                  <th className="py-2 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Vertical</th>
+                  <th className="py-2 pr-4 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Vertical</th>
+                  <th className="py-2 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Lead Source</th>
                 </tr>
               </thead>
               <tbody>
@@ -217,8 +218,13 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
                     <td className="py-2.5 pr-4 text-foreground">{d.contact_name || "—"}</td>
                     <td className="py-2.5 pr-4 text-muted-foreground">{d.event_date || "—"}</td>
                     <td className="py-2.5 pr-4 text-muted-foreground">{d.event_type || "—"}</td>
-                    <td className="py-2.5">
+                    <td className="py-2.5 pr-4">
                       <span className="inline-block px-2 py-0.5 bg-accent/10 text-accent text-[10px] tracking-wider uppercase rounded">
+                        {d.location || "—"}
+                      </span>
+                    </td>
+                    <td className="py-2.5">
+                      <span className="inline-block px-2 py-0.5 bg-primary/10 text-primary text-[10px] tracking-wider uppercase rounded">
                         {d.source || "—"}
                       </span>
                     </td>
