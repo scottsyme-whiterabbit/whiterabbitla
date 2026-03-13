@@ -1,7 +1,7 @@
 {
-  "name": "White Rabbit CRM",
-  "short_name": "WR CRM",
-  "description": "White Rabbit LA — Pipeline & Lead Management",
+  "name": "White Rabbit Concierge",
+  "short_name": "WR Concierge",
+  "description": "White Rabbit LA — Concierge Dashboard",
   "start_url": "/admin/newsletter",
   "display": "standalone",
   "background_color": "#1B3A2D",

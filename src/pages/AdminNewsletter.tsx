@@ -539,7 +539,7 @@ const AdminNewsletter = () => {
     return (
       <div className="min-h-screen bg-[hsl(var(--forest-dark))] flex items-center justify-center px-6">
         <form onSubmit={handleLogin} className="w-full max-w-sm">
-          <h1 className="font-serif text-3xl text-cream mb-8 text-center">Newsletter Admin</h1>
+          <h1 className="font-serif text-3xl text-cream mb-8 text-center">White Rabbit Concierge</h1>
           <input
             type="password"
             value={password}
@@ -597,7 +597,7 @@ const AdminNewsletter = () => {
       {/* Add bottom padding on mobile for the nav bar */}
       <div className={`max-w-6xl mx-auto px-4 md:px-6 ${isMobile ? 'pb-24' : ''}`}>
         <div className="flex items-center justify-between mb-4 md:mb-6">
-          <h1 className="font-serif text-2xl md:text-3xl text-foreground">Newsletter Admin</h1>
+          <h1 className="font-serif text-2xl md:text-3xl text-foreground">White Rabbit Concierge</h1>
           <button onClick={loadData} disabled={loading} className="text-muted-foreground hover:text-foreground transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
             <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
           </button>
