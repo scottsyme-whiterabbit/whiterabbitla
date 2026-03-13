@@ -133,7 +133,8 @@ const Index = () => {
         </div>
 
         {/* Text overlaid – single responsive block */}
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-10 md:pb-6 px-6 text-center">
+        {/* Text overlaid */}
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-24 md:pb-20 px-6 text-center">
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent md:from-forest-dark/70 md:via-forest-dark/30 md:to-forest-dark/10" />
           <motion.h1
             className="relative text-2xl md:text-4xl lg:text-5xl text-cream/90 tracking-wide font-bold font-serif drop-shadow-lg max-w-4xl"
@@ -155,48 +156,39 @@ const Index = () => {
               <span className="hidden md:inline">Book an Experience</span>
             </button>
           </motion.div>
-          {/* Scroll indicator – mobile only */}
-          <motion.div
-            className="relative mt-6 md:hidden"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1.5 }}>
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-              className="w-5 h-8 border border-cream/30 rounded-full flex items-start justify-center p-1">
-              <div className="w-1 h-2 bg-cream/50 rounded-full" />
-            </motion.div>
-          </motion.div>
         </div>
-      </section>
 
-      {/* Instant Social Proof Strip — rotating mini-reviews */}
-      <section className="bg-forest-dark py-6 border-b border-accent/10 overflow-hidden">
-        <div className="max-w-3xl mx-auto px-6">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={heroReviewIndex}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.4 }}
-              className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-6"
-            >
-              <div className="flex gap-0.5">
-                {[...Array(5)].map((_, i) =>
-                  <Star key={i} size={14} className="fill-accent text-accent" />
-                )}
-              </div>
-              <p className="font-serif text-sm md:text-base text-cream/80 text-center">
-                "{heroReviews[heroReviewIndex].text}"
-              </p>
-              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-cream/40 whitespace-nowrap">
-                — {heroReviews[heroReviewIndex].name}
-              </p>
-            </motion.div>
-          </AnimatePresence>
-        </div>
+        {/* Rolling reviews — pinned to bottom of hero, visible on landing */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 z-20 bg-forest-dark/80 backdrop-blur-sm py-4 border-t border-accent/10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1.5 }}>
+          <div className="max-w-3xl mx-auto px-6">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={heroReviewIndex}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.4 }}
+                className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-6"
+              >
+                <div className="flex gap-0.5">
+                  {[...Array(5)].map((_, i) =>
+                    <Star key={i} size={14} className="fill-accent text-accent" />
+                  )}
+                </div>
+                <p className="font-serif text-sm md:text-base text-cream/80 text-center">
+                  "{heroReviews[heroReviewIndex].text}"
+                </p>
+                <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-cream/40 whitespace-nowrap">
+                  — {heroReviews[heroReviewIndex].name}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </motion.div>
       </section>
 
       {/* Client Logos — static grid */}
