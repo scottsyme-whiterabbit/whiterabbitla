@@ -95,8 +95,8 @@ const ReviewGate = () => {
                   className="group flex flex-col items-center gap-4 p-8 border border-border bg-card hover:border-muted-foreground transition-all duration-300"
                 >
                   <MessageCircle size={40} className="text-muted-foreground group-hover:scale-110 transition-transform" />
-                  <span className="font-serif text-xl text-card-foreground">Could Be Better</span>
-                  <span className="font-sans text-xs text-muted-foreground">Tell us privately</span>
+                  <span className="font-serif text-xl text-card-foreground">Share Your Experience</span>
+                  <span className="font-sans text-xs text-muted-foreground">Write a quick note</span>
                 </button>
               </div>
             </AnimatedSection>
