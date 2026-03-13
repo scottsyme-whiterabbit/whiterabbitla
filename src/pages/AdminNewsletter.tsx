@@ -764,6 +764,11 @@ const AdminNewsletter = () => {
           <PipelineTab adminPassword={storedPassword} />
         )}
 
+        {/* Bookings Calendar */}
+        {activeTab === "bookings" && (
+          <BookingsTab adminPassword={storedPassword} onOpenDeal={(id) => { setActiveTab("pipeline"); }} />
+        )}
+
         {/* Action List */}
         {activeTab === "actions" && (
           <ActionListTab adminPassword={storedPassword} onBadgeCount={setActionBadge} />
