@@ -1316,7 +1316,11 @@ const AdminNewsletter = () => {
           <EmailAnalyticsTab />
         )}
 
-        {/* Planner Drip Campaign */}
+        {/* Lead Attribution */}
+        {activeTab === "lead_attribution" && (
+          <LeadAttributionTab storedPassword={storedPassword} />
+        )}
+
         {activeTab === "planner" && (
           <PlannerDripTab storedPassword={storedPassword} onNavigateToContacts={(filter) => { setContactsFilter(filter); setActiveTab("contacts"); }} />
         )}
