@@ -259,29 +259,9 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Featured Testimonial */}
+      {/* What Clients Are Saying — Testimonial Carousel */}
       <AnimatedSection>
-        <section className="bg-forest-dark py-24">
-          <div className="max-w-3xl mx-auto px-6 text-center">
-            <div className="flex justify-center gap-1 mb-8">
-              {[...Array(5)].map((_, i) =>
-              <Star key={i} size={20} className="fill-accent text-accent" />
-              )}
-            </div>
-            <blockquote className="font-serif text-2xl md:text-3xl text-cream/90 leading-relaxed mb-8">
-              "Scott performed at a 200-person event for us and the guests absolutely LOVED him and were 
-              amazed by his talents. I could not recommend him more! We can't wait to have him back."
-            </blockquote>
-            <p className="font-sans text-sm tracking-[0.2em] uppercase text-cream/50 mb-8">
-              Morgan Stanley, 200-Person Corporate Event
-            </p>
-            <Link
-              to="/reviews"
-              className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-8 py-3 hover:bg-accent hover:text-accent-foreground transition-colors">
-              Read More Reviews
-            </Link>
-          </div>
-        </section>
+        <TestimonialCarousel />
       </AnimatedSection>
 
       {/* Discovery Quiz CTA */}
