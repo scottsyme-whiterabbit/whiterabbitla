@@ -1,9 +1,15 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Star } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import GoogleReviewsBadge from "./GoogleReviewsBadge";
 
 const testimonials = [
+  {
+    text: "Scott performed at a 200-person event for us and the guests absolutely LOVED him and were amazed by his talents. I could not recommend him more! We can't wait to have him back.",
+    name: "Morgan Stanley",
+    role: "200-Person Corporate Event",
+  },
   {
     text: "Scott performed up close magic for small groups at my 40th birthday party and was OUTSTANDING. I can't tell you how many guests told me he was the highlight of the evening.",
     name: "Meridith F.",
@@ -86,8 +92,17 @@ const TestimonialCarousel = () => {
           ))}
         </div>
 
-        {/* Google badge */}
+        {/* Read More Reviews button */}
         <div className="mt-8 flex justify-center">
+          <Link
+            to="/reviews"
+            className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-8 py-3 hover:bg-accent hover:text-accent-foreground transition-colors">
+            Read More Reviews
+          </Link>
+        </div>
+
+        {/* Google badge */}
+        <div className="mt-6 flex justify-center">
           <GoogleReviewsBadge variant="dark" />
         </div>
       </div>
