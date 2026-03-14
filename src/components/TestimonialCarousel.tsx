@@ -5,6 +5,11 @@ import GoogleReviewsBadge from "./GoogleReviewsBadge";
 
 const testimonials = [
   {
+    text: "Scott performed at a 200-person event for us and the guests absolutely LOVED him and were amazed by his talents. I could not recommend him more! We can't wait to have him back.",
+    name: "Morgan Stanley",
+    role: "200-Person Corporate Event",
+  },
+  {
     text: "Scott performed up close magic for small groups at my 40th birthday party and was OUTSTANDING. I can't tell you how many guests told me he was the highlight of the evening.",
     name: "Meridith F.",
     role: "40th Birthday Party",

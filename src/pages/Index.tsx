@@ -321,11 +321,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Rotating Testimonials Carousel */}
-      <AnimatedSection>
-        <TestimonialCarousel />
-      </AnimatedSection>
-
       {/* Thin gold rule */}
       <div className="max-w-xs mx-auto border-t border-accent/20" />
 
