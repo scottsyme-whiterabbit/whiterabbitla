@@ -92,8 +92,17 @@ const TestimonialCarousel = () => {
           ))}
         </div>
 
-        {/* Google badge */}
+        {/* Read More Reviews button */}
         <div className="mt-8 flex justify-center">
+          <Link
+            to="/reviews"
+            className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-8 py-3 hover:bg-accent hover:text-accent-foreground transition-colors">
+            Read More Reviews
+          </Link>
+        </div>
+
+        {/* Google badge */}
+        <div className="mt-6 flex justify-center">
           <GoogleReviewsBadge variant="dark" />
         </div>
       </div>
