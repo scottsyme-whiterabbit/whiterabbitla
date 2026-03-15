@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ArrowRight, ArrowLeft, Check, Sparkles } from "lucide-react";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
