@@ -276,12 +276,18 @@ const Consultation = () => {
               of the world-famous Magic Castle® in Hollywood and consultant to performers on America's Got
               Talent and Disney Channel, Scott brings both elite craft and warm showmanship to every performance.
             </p>
-            <p className="font-sans text-base text-muted-foreground leading-relaxed">
+            <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8">
               Fortune 500 companies, charitable organizations, and the most discerning private clients
               — Netflix, Disney, Rolls Royce, Morgan Stanley — trust Scott with their most important events.
               When you hire White Rabbit, you're not just booking a magician. You're hiring someone who has
               dedicated his life to making people feel extraordinary.
             </p>
+            <button
+              onClick={() => { trackCTAClick("Book a Consultation", "consultation_bio"); openQuiz(); }}
+              className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors"
+            >
+              Book a Consultation
+            </button>
           </AnimatedSection>
         </div>
       </section>
