@@ -128,46 +128,7 @@ const Consultation = () => {
 
   const scrollToForm = () => openQuiz();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
-  };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.name.trim() || !form.email.trim() || !form.phone.trim()) return;
-    setLoading(true);
-    try {
-      await (supabase as any).from("consultation_leads").insert({
-        name: form.name.trim(),
-        email: form.email.trim(),
-        phone: form.phone.trim(),
-        event_type: form.event_type || null,
-        event_date: form.event_date || null,
-        description: form.description.trim() || null,
-        source: "meta_ads",
-      });
-      trackFormSubmit("consultation", "meta_ads");
-      if (typeof (window as any).fbq !== 'undefined') { (window as any).fbq('track', 'Lead'); }
-
-      // Send email notification to Scott (non-blocking)
-      supabase.functions.invoke("send-consultation-notification", {
-        body: {
-          name: form.name.trim(),
-          email: form.email.trim(),
-          phone: form.phone.trim(),
-          event_type: form.event_type || null,
-          event_date: form.event_date || null,
-          description: form.description.trim() || null,
-        },
-      }).catch((err) => console.error("Notification email error:", err));
-
-      setSubmitted(true);
-    } catch {
-      // silent fail — lead still likely saved
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
