@@ -19,12 +19,14 @@ export const useBookingQuiz = () => useContext(BookingQuizContext);
 
 export const BookingQuizProvider = ({ children }: { children: ReactNode }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [defaultSource, setDefaultSource] = useState("");
   return (
     <BookingQuizContext.Provider
       value={{
         isOpen,
-        openQuiz: () => { trackQuizStart("booking"); setIsOpen(true); },
-        closeQuiz: () => setIsOpen(false),
+        defaultSource,
+        openQuiz: (source?: string) => { if (source) setDefaultSource(source); trackQuizStart("booking"); setIsOpen(true); },
+        closeQuiz: () => { setIsOpen(false); setDefaultSource(""); },
       }}
     >
       {children}
