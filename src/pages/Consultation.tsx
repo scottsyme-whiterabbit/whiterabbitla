@@ -1,10 +1,11 @@
-import { useState, useRef } from "react";
-import { Star, ChevronDown } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from "react";
+import { Star, CalendarCheck } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
-import { trackFormSubmit } from "@/lib/analytics";
+import { trackCTAClick } from "@/lib/analytics";
 import AnimatedSection from "@/components/AnimatedSection";
 import FAQSection from "@/components/FAQSection";
+import { useBookingQuiz } from "@/contexts/BookingQuizContext";
+import BookingQuiz from "@/components/BookingQuiz";
 
 import wrLogo from "@/assets/wr-logo-stars-white.png";
 import heroImg from "@/assets/event-parlor-stage.jpg";
@@ -33,14 +34,6 @@ import sohohouseLogo from "@/assets/logos/sohohouse-new.png";
 import beverlyHiltonLogo from "@/assets/logos/beverlyhilton.png";
 import paramountLogo from "@/assets/logos/paramount.png";
 
-const EVENT_TYPES = [
-  "Corporate Event",
-  "Wedding",
-  "Private Party",
-  "Nonprofit Gala",
-  "Restaurant / Venue",
-  "Other",
-];
 
 const eventTypeCards = [
   { title: "Corporate Events & Team Building", desc: "Roaming close-up magic and parlor shows for holiday parties, client appreciation events, product launches, and team off-sites." },
@@ -114,63 +107,45 @@ const Consultation = () => {
     path: "/consultation",
   });
 
-  const formRef = useRef<HTMLDivElement>(null);
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    event_type: "",
-    event_date: "",
-    description: "",
-  });
+  const { openQuiz } = useBookingQuiz();
+  const [stickyVisible, setStickyVisible] = useState(false);
 
-  const scrollToForm = () => formRef.current?.scrollIntoView({ behavior: "smooth" });
+  useEffect(() => {
+    const handleScroll = () => setStickyVisible(window.scrollY > 400);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
-  };
+  const scrollToForm = () => openQuiz();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!form.name.trim() || !form.email.trim() || !form.phone.trim()) return;
-    setLoading(true);
-    try {
-      await (supabase as any).from("consultation_leads").insert({
-        name: form.name.trim(),
-        email: form.email.trim(),
-        phone: form.phone.trim(),
-        event_type: form.event_type || null,
-        event_date: form.event_date || null,
-        description: form.description.trim() || null,
-        source: "meta_ads",
-      });
-      trackFormSubmit("consultation", "meta_ads");
-      if (typeof (window as any).fbq !== 'undefined') { (window as any).fbq('track', 'Lead'); }
 
-      // Send email notification to Scott (non-blocking)
-      supabase.functions.invoke("send-consultation-notification", {
-        body: {
-          name: form.name.trim(),
-          email: form.email.trim(),
-          phone: form.phone.trim(),
-          event_type: form.event_type || null,
-          event_date: form.event_date || null,
-          description: form.description.trim() || null,
-        },
-      }).catch((err) => console.error("Notification email error:", err));
-
-      setSubmitted(true);
-    } catch {
-      // silent fail — lead still likely saved
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <BookingQuiz />
+
+      {/* Sticky CTA — mobile bottom bar + desktop floating pill */}
+      {stickyVisible && (
+        <>
+          <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-forest-dark/95 backdrop-blur-md border-t border-accent/20 p-3">
+            <button
+              onClick={() => { trackCTAClick("Book a Consultation", "consultation_sticky_mobile"); openQuiz(); }}
+              className="w-full font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground py-3.5 hover:bg-accent/80 transition-colors"
+            >
+              Book a Consultation
+            </button>
+          </div>
+          <button
+            onClick={() => { trackCTAClick("Book a Consultation", "consultation_sticky_desktop"); openQuiz(); }}
+            className="hidden md:flex fixed bottom-8 right-8 z-50 items-center gap-2.5 bg-accent text-accent-foreground font-sans text-xs tracking-[0.2em] uppercase px-6 py-3.5 shadow-lg hover:bg-accent/90 hover:shadow-xl hover:scale-105 transition-all duration-300"
+            aria-label="Book a Consultation"
+          >
+            <CalendarCheck size={16} strokeWidth={1.5} />
+            Book a Consultation
+          </button>
+        </>
+      )}
       {/* HERO — full-bleed photo */}
       <section className="relative h-[50vh] min-h-[400px]">
         <img
@@ -274,12 +249,18 @@ const Consultation = () => {
               of the world-famous Magic Castle® in Hollywood and consultant to performers on America's Got
               Talent and Disney Channel, Scott brings both elite craft and warm showmanship to every performance.
             </p>
-            <p className="font-sans text-base text-muted-foreground leading-relaxed">
+            <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8">
               Fortune 500 companies, charitable organizations, and the most discerning private clients
               — Netflix, Disney, Rolls Royce, Morgan Stanley — trust Scott with their most important events.
               When you hire White Rabbit, you're not just booking a magician. You're hiring someone who has
               dedicated his life to making people feel extraordinary.
             </p>
+            <button
+              onClick={() => { trackCTAClick("Book a Consultation", "consultation_bio"); openQuiz(); }}
+              className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors"
+            >
+              Book a Consultation
+            </button>
           </AnimatedSection>
         </div>
       </section>
@@ -421,100 +402,24 @@ const Consultation = () => {
         faqs={faqs}
       />
 
-      {/* CONSULTATION FORM */}
-      <section ref={formRef} className="py-16 md:py-24 px-6 bg-forest-dark">
-        <div className="max-w-xl mx-auto">
+      {/* CONSULTATION CTA */}
+      <section className="py-16 md:py-24 px-6 bg-forest-dark">
+        <div className="max-w-xl mx-auto text-center">
           <div className="flex justify-center mb-6">
             <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50" />
           </div>
-          <h2 className="font-serif text-2xl md:text-4xl text-center text-cream mb-4">
+          <h2 className="font-serif text-2xl md:text-4xl text-cream mb-4">
             Book Your <span className="text-accent">Free Consultation</span>
           </h2>
-          <p className="font-sans text-sm text-cream/60 text-center mb-10 max-w-md mx-auto">
+          <p className="font-sans text-sm text-cream/60 mb-10 max-w-md mx-auto">
             Tell us about your event and we'll be in touch within 24 hours with a custom recommendation.
           </p>
-
-          {submitted ? (
-            <div className="text-center py-16">
-              <div className="flex justify-center mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-accent text-accent" />
-                ))}
-              </div>
-              <h3 className="font-serif text-2xl text-cream mb-3">Thank You!</h3>
-              <p className="font-sans text-cream/70">We'll be in touch within 24 hours.</p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              <input
-                name="name"
-                type="text"
-                required
-                maxLength={100}
-                placeholder="Your Name"
-                value={form.name}
-                onChange={handleChange}
-                className="w-full bg-cream/5 border border-cream/15 text-cream placeholder:text-cream/40 font-sans text-sm px-5 py-4 focus:outline-none focus:border-accent/60 transition-colors"
-              />
-              <input
-                name="email"
-                type="email"
-                required
-                maxLength={255}
-                placeholder="Email Address"
-                value={form.email}
-                onChange={handleChange}
-                className="w-full bg-cream/5 border border-cream/15 text-cream placeholder:text-cream/40 font-sans text-sm px-5 py-4 focus:outline-none focus:border-accent/60 transition-colors"
-              />
-              <input
-                name="phone"
-                type="tel"
-                required
-                maxLength={20}
-                placeholder="Phone Number"
-                value={form.phone}
-                onChange={handleChange}
-                className="w-full bg-cream/5 border border-cream/15 text-cream placeholder:text-cream/40 font-sans text-sm px-5 py-4 focus:outline-none focus:border-accent/60 transition-colors"
-              />
-              <div className="relative">
-                <select
-                  name="event_type"
-                  value={form.event_type}
-                  onChange={handleChange}
-                  className="w-full bg-cream/5 border border-cream/15 text-cream font-sans text-sm px-5 py-4 appearance-none focus:outline-none focus:border-accent/60 transition-colors"
-                >
-                  <option value="" className="bg-forest-dark">Event Type</option>
-                  {EVENT_TYPES.map((t) => (
-                    <option key={t} value={t} className="bg-forest-dark">{t}</option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-cream/40 pointer-events-none" />
-              </div>
-              <input
-                name="event_date"
-                type="date"
-                value={form.event_date}
-                onChange={handleChange}
-                className="w-full bg-cream/5 border border-cream/15 text-cream font-sans text-sm px-5 py-4 focus:outline-none focus:border-accent/60 transition-colors [color-scheme:dark]"
-              />
-              <textarea
-                name="description"
-                maxLength={1000}
-                rows={4}
-                placeholder="Tell Us About Your Event"
-                value={form.description}
-                onChange={handleChange}
-                className="w-full bg-cream/5 border border-cream/15 text-cream placeholder:text-cream/40 font-sans text-sm px-5 py-4 focus:outline-none focus:border-accent/60 transition-colors resize-none"
-              />
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-accent text-accent-foreground font-sans text-sm tracking-[0.2em] uppercase py-4 hover:bg-accent/85 transition-colors disabled:opacity-60 mt-2"
-              >
-                {loading ? "Submitting..." : "Get My Free Consultation"}
-              </button>
-            </form>
-          )}
+          <button
+            onClick={() => { trackCTAClick("Book a Consultation", "consultation_form_section"); openQuiz(); }}
+            className="w-full sm:w-auto bg-accent text-accent-foreground font-sans text-sm tracking-[0.2em] uppercase px-10 py-4 hover:bg-accent/85 transition-colors"
+          >
+            Book a Consultation
+          </button>
         </div>
       </section>
 
