@@ -123,7 +123,12 @@ const BookingQuiz = () => {
     message: "",
   });
 
-  const stepIndex = STEPS.indexOf(step);
+  useEffect(() => {
+    if (defaultSource) {
+      setData(prev => ({ ...prev, referralSource: defaultSource }));
+    }
+  }, [defaultSource]);
+
   const progress = ((stepIndex + 1) / STEPS.length) * 100;
 
   const canAdvance = () => {
