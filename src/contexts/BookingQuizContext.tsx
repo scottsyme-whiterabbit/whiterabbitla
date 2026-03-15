@@ -3,7 +3,8 @@ import { trackQuizStart } from "@/lib/analytics";
 
 interface BookingQuizContextType {
   isOpen: boolean;
-  openQuiz: () => void;
+  defaultSource: string;
+  openQuiz: (source?: string) => void;
   closeQuiz: () => void;
 }
 
