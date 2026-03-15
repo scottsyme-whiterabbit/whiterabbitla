@@ -442,6 +442,7 @@ const BookingQuiz = () => {
                             <option value="" disabled>Select one...</option>
                             <option value="Google Search">Google Search</option>
                             <option value="Instagram">Instagram</option>
+                            <option value="Facebook / Meta Ad">Facebook / Meta Ad</option>
                             <option value="TikTok">TikTok</option>
                             <option value="Referral from a Friend">Referral from a Friend</option>
                             <option value="Event Planner Recommendation">Event Planner Recommendation</option>
