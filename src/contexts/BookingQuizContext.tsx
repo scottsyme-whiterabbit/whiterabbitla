@@ -25,7 +25,7 @@ export const BookingQuizProvider = ({ children }: { children: ReactNode }) => {
       value={{
         isOpen,
         defaultSource,
-        openQuiz: (source?: string) => { if (source) setDefaultSource(source); trackQuizStart("booking"); setIsOpen(true); },
+        openQuiz: (source?: string | unknown) => { if (typeof source === 'string') setDefaultSource(source); trackQuizStart("booking"); setIsOpen(true); },
         closeQuiz: () => { setIsOpen(false); setDefaultSource(""); },
       }}
     >
