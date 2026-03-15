@@ -10,6 +10,7 @@ interface BookingQuizContextType {
 
 const BookingQuizContext = createContext<BookingQuizContextType>({
   isOpen: false,
+  defaultSource: "",
   openQuiz: () => {},
   closeQuiz: () => {},
 });
