@@ -129,6 +129,7 @@ const BookingQuiz = () => {
     }
   }, [defaultSource]);
 
+  const stepIndex = STEPS.indexOf(step);
   const progress = ((stepIndex + 1) / STEPS.length) * 100;
 
   const canAdvance = () => {
