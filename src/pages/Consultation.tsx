@@ -116,19 +116,17 @@ const Consultation = () => {
     path: "/consultation",
   });
 
-  const formRef = useRef<HTMLDivElement>(null);
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    event_type: "",
-    event_date: "",
-    description: "",
-  });
+  const { openQuiz } = useBookingQuiz();
+  const [stickyVisible, setStickyVisible] = useState(false);
 
-  const scrollToForm = () => formRef.current?.scrollIntoView({ behavior: "smooth" });
+  useEffect(() => {
+    const handleScroll = () => setStickyVisible(window.scrollY > 400);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToForm = () => openQuiz();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
