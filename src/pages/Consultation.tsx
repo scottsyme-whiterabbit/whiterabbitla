@@ -415,7 +415,7 @@ const Consultation = () => {
             Tell us about your event and we'll be in touch within 24 hours with a custom recommendation.
           </p>
           <button
-            onClick={() => { trackCTAClick("Book a Consultation", "consultation_form_section"); openQuiz(); }}
+            onClick={() => { trackCTAClick("Book a Consultation", "consultation_form_section"); openQuiz("Facebook / Meta Ad"); }}
             className="w-full sm:w-auto bg-accent text-accent-foreground font-sans text-sm tracking-[0.2em] uppercase px-10 py-4 hover:bg-accent/85 transition-colors"
           >
             Book a Consultation
