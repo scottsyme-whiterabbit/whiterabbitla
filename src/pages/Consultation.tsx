@@ -388,100 +388,24 @@ const Consultation = () => {
         faqs={faqs}
       />
 
-      {/* CONSULTATION FORM */}
-      <section ref={formRef} className="py-16 md:py-24 px-6 bg-forest-dark">
-        <div className="max-w-xl mx-auto">
+      {/* CONSULTATION CTA */}
+      <section className="py-16 md:py-24 px-6 bg-forest-dark">
+        <div className="max-w-xl mx-auto text-center">
           <div className="flex justify-center mb-6">
             <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50" />
           </div>
-          <h2 className="font-serif text-2xl md:text-4xl text-center text-cream mb-4">
+          <h2 className="font-serif text-2xl md:text-4xl text-cream mb-4">
             Book Your <span className="text-accent">Free Consultation</span>
           </h2>
-          <p className="font-sans text-sm text-cream/60 text-center mb-10 max-w-md mx-auto">
+          <p className="font-sans text-sm text-cream/60 mb-10 max-w-md mx-auto">
             Tell us about your event and we'll be in touch within 24 hours with a custom recommendation.
           </p>
-
-          {submitted ? (
-            <div className="text-center py-16">
-              <div className="flex justify-center mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 fill-accent text-accent" />
-                ))}
-              </div>
-              <h3 className="font-serif text-2xl text-cream mb-3">Thank You!</h3>
-              <p className="font-sans text-cream/70">We'll be in touch within 24 hours.</p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              <input
-                name="name"
-                type="text"
-                required
-                maxLength={100}
-                placeholder="Your Name"
-                value={form.name}
-                onChange={handleChange}
-                className="w-full bg-cream/5 border border-cream/15 text-cream placeholder:text-cream/40 font-sans text-sm px-5 py-4 focus:outline-none focus:border-accent/60 transition-colors"
-              />
-              <input
-                name="email"
-                type="email"
-                required
-                maxLength={255}
-                placeholder="Email Address"
-                value={form.email}
-                onChange={handleChange}
-                className="w-full bg-cream/5 border border-cream/15 text-cream placeholder:text-cream/40 font-sans text-sm px-5 py-4 focus:outline-none focus:border-accent/60 transition-colors"
-              />
-              <input
-                name="phone"
-                type="tel"
-                required
-                maxLength={20}
-                placeholder="Phone Number"
-                value={form.phone}
-                onChange={handleChange}
-                className="w-full bg-cream/5 border border-cream/15 text-cream placeholder:text-cream/40 font-sans text-sm px-5 py-4 focus:outline-none focus:border-accent/60 transition-colors"
-              />
-              <div className="relative">
-                <select
-                  name="event_type"
-                  value={form.event_type}
-                  onChange={handleChange}
-                  className="w-full bg-cream/5 border border-cream/15 text-cream font-sans text-sm px-5 py-4 appearance-none focus:outline-none focus:border-accent/60 transition-colors"
-                >
-                  <option value="" className="bg-forest-dark">Event Type</option>
-                  {EVENT_TYPES.map((t) => (
-                    <option key={t} value={t} className="bg-forest-dark">{t}</option>
-                  ))}
-                </select>
-                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-cream/40 pointer-events-none" />
-              </div>
-              <input
-                name="event_date"
-                type="date"
-                value={form.event_date}
-                onChange={handleChange}
-                className="w-full bg-cream/5 border border-cream/15 text-cream font-sans text-sm px-5 py-4 focus:outline-none focus:border-accent/60 transition-colors [color-scheme:dark]"
-              />
-              <textarea
-                name="description"
-                maxLength={1000}
-                rows={4}
-                placeholder="Tell Us About Your Event"
-                value={form.description}
-                onChange={handleChange}
-                className="w-full bg-cream/5 border border-cream/15 text-cream placeholder:text-cream/40 font-sans text-sm px-5 py-4 focus:outline-none focus:border-accent/60 transition-colors resize-none"
-              />
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-accent text-accent-foreground font-sans text-sm tracking-[0.2em] uppercase py-4 hover:bg-accent/85 transition-colors disabled:opacity-60 mt-2"
-              >
-                {loading ? "Submitting..." : "Get My Free Consultation"}
-              </button>
-            </form>
-          )}
+          <button
+            onClick={() => { trackCTAClick("Book a Consultation", "consultation_form_section"); openQuiz(); }}
+            className="w-full sm:w-auto bg-accent text-accent-foreground font-sans text-sm tracking-[0.2em] uppercase px-10 py-4 hover:bg-accent/85 transition-colors"
+          >
+            Book a Consultation
+          </button>
         </div>
       </section>
 
