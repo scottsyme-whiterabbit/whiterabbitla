@@ -256,7 +256,7 @@ const Consultation = () => {
               dedicated his life to making people feel extraordinary.
             </p>
             <button
-              onClick={() => { trackCTAClick("Book a Consultation", "consultation_bio"); openQuiz(); }}
+              onClick={() => { trackCTAClick("Book a Consultation", "consultation_bio"); openQuiz("Facebook / Meta Ad"); }}
               className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors"
             >
               Book a Consultation
