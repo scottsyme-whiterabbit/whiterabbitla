@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ArrowRight, ArrowLeft, Check, Sparkles } from "lucide-react";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
@@ -100,7 +100,7 @@ const getRecommendation = (data: QuizData) => {
 const STEPS: Step[] = ["clientType", "event", "location", "guests", "date", "budget", "contact", "recommendation"];
 
 const BookingQuiz = () => {
-  const { isOpen, closeQuiz } = useBookingQuiz();
+  const { isOpen, closeQuiz, defaultSource } = useBookingQuiz();
   const { toast } = useToast();
   const [step, setStep] = useState<Step>("clientType");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -119,9 +119,15 @@ const BookingQuiz = () => {
     name: "",
     email: "",
     phone: "",
-    referralSource: "",
+    referralSource: defaultSource || "",
     message: "",
   });
+
+  useEffect(() => {
+    if (defaultSource) {
+      setData(prev => ({ ...prev, referralSource: defaultSource }));
+    }
+  }, [defaultSource]);
 
   const stepIndex = STEPS.indexOf(step);
   const progress = ((stepIndex + 1) / STEPS.length) * 100;
@@ -442,6 +448,7 @@ const BookingQuiz = () => {
                             <option value="" disabled>Select one...</option>
                             <option value="Google Search">Google Search</option>
                             <option value="Instagram">Instagram</option>
+                            <option value="Facebook / Meta Ad">Facebook / Meta Ad</option>
                             <option value="TikTok">TikTok</option>
                             <option value="Referral from a Friend">Referral from a Friend</option>
                             <option value="Event Planner Recommendation">Event Planner Recommendation</option>
