@@ -1,8 +1,7 @@
-import { useState, useRef, useEffect } from "react";
-import { Star, ChevronDown, CalendarCheck } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from "react";
+import { Star, CalendarCheck } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
-import { trackFormSubmit, trackCTAClick } from "@/lib/analytics";
+import { trackCTAClick } from "@/lib/analytics";
 import AnimatedSection from "@/components/AnimatedSection";
 import FAQSection from "@/components/FAQSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
