@@ -34,14 +34,6 @@ import sohohouseLogo from "@/assets/logos/sohohouse-new.png";
 import beverlyHiltonLogo from "@/assets/logos/beverlyhilton.png";
 import paramountLogo from "@/assets/logos/paramount.png";
 
-const EVENT_TYPES = [
-  "Corporate Event",
-  "Wedding",
-  "Private Party",
-  "Nonprofit Gala",
-  "Restaurant / Venue",
-  "Other",
-];
 
 const eventTypeCards = [
   { title: "Corporate Events & Team Building", desc: "Roaming close-up magic and parlor shows for holiday parties, client appreciation events, product launches, and team off-sites." },
