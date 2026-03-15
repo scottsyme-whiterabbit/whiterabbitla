@@ -100,7 +100,7 @@ const getRecommendation = (data: QuizData) => {
 const STEPS: Step[] = ["clientType", "event", "location", "guests", "date", "budget", "contact", "recommendation"];
 
 const BookingQuiz = () => {
-  const { isOpen, closeQuiz } = useBookingQuiz();
+  const { isOpen, closeQuiz, defaultSource } = useBookingQuiz();
   const { toast } = useToast();
   const [step, setStep] = useState<Step>("clientType");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -119,7 +119,7 @@ const BookingQuiz = () => {
     name: "",
     email: "",
     phone: "",
-    referralSource: "",
+    referralSource: defaultSource || "",
     message: "",
   });
 
