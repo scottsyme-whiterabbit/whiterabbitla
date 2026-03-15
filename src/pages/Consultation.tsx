@@ -1,10 +1,12 @@
-import { useState, useRef } from "react";
-import { Star, ChevronDown } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Star, ChevronDown, CalendarCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { usePageMeta } from "@/hooks/usePageMeta";
-import { trackFormSubmit } from "@/lib/analytics";
+import { trackFormSubmit, trackCTAClick } from "@/lib/analytics";
 import AnimatedSection from "@/components/AnimatedSection";
 import FAQSection from "@/components/FAQSection";
+import { useBookingQuiz } from "@/contexts/BookingQuizContext";
+import BookingQuiz from "@/components/BookingQuiz";
 
 import wrLogo from "@/assets/wr-logo-stars-white.png";
 import heroImg from "@/assets/event-parlor-stage.jpg";
