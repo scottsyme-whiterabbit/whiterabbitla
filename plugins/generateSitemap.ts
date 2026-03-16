@@ -105,6 +105,11 @@ const editorialArticles = [
   "beverly-hills-halloween-party-magician",
   "miami-resident-event-magician",
   "magic-for-spirits-brands-activations",
+  "san-francisco-private-party-magician",
+  "scottsdale-corporate-event-magician",
+  "the-hamptons-private-party-magician",
+  "chicago-corporate-event-magician",
+  "dallas-private-party-magician",
 ];
 
 const serviceAreaCities = [
