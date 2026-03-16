@@ -247,7 +247,7 @@ const BlogArticle = () => {
                         src={categoryInlineImages[0].src}
                         alt={categoryInlineImages[0].alt}
                         loading="lazy"
-                        className="w-full h-auto object-cover aspect-[16/9]"
+                        className="w-full h-auto"
                       />
                       <figcaption className="font-sans text-[11px] text-muted-foreground/50 tracking-wider mt-3 text-center uppercase">
                         White Rabbit · Private Event Entertainment
