@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useScrollDepth } from "@/hooks/useScrollDepth";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import QuizCTA from "@/components/QuizCTA";

@@ -1,4 +1,5 @@
 import AnimatedSection from "@/components/AnimatedSection";
+import { useScrollDepth } from "@/hooks/useScrollDepth";
 import QuizCTA from "@/components/QuizCTA";
 import QuizNudge from "@/components/QuizNudge";
 import scottPhoto from "@/assets/about-hero-desert.jpg";

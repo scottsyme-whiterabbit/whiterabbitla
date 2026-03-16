@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useScrollDepth } from "@/hooks/useScrollDepth";
 import { Star } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "react-router-dom";
