@@ -16,6 +16,14 @@ import corporateImg from "@/assets/event-penthouse-show.jpg";
 import scottCardsImg from "@/assets/event-scott-cards.jpg";
 import experienceImg from "@/assets/experience-closeup.jpg";
 import threeStars from "@/assets/three-stars-gold.png";
+import guestReactionImg from "@/assets/event-guest-reaction.jpg";
+import crowdReactionImg from "@/assets/event-crowd-reaction.jpg";
+import intimateImg from "@/assets/event-closeup-intimate.jpg";
+import mentalistImg from "@/assets/event-mentalism-closeup.jpg";
+import parlorAudienceImg from "@/assets/event-parlor-audience.jpg";
+import groupFinaleImg from "@/assets/event-group-finale.jpg";
+import scottPerformingImg from "@/assets/event-scott-performing.jpg";
+import restaurantImg from "@/assets/event-restaurant-magic.jpg";
 
 const categoryImages: Record<string, string> = {
   "For Planners": corporateImg,
@@ -25,6 +33,50 @@ const categoryImages: Record<string, string> = {
   "Behind the Craft": scottCardsImg,
   "Luxury Nightlife": closeupImg,
   "Resident Events": corporateImg,
+};
+
+// Two inline images per category for mid-article injection
+const inlineImages: Record<string, { src: string; alt: string }[]> = {
+  "For Planners": [
+    { src: guestReactionImg, alt: "Event guests reacting to close-up magic during a cocktail reception" },
+    { src: parlorAudienceImg, alt: "Seated audience watching a private parlor magic show" },
+  ],
+  "Magic Destinations": [
+    { src: scottPerformingImg, alt: "Scott Syme performing close-up magic at a luxury venue" },
+    { src: crowdReactionImg, alt: "Audience members reacting with amazement during a magic performance" },
+  ],
+  "Private Events": [
+    { src: intimateImg, alt: "Close-up magic performed for a small group at an intimate private event" },
+    { src: groupFinaleImg, alt: "Guests applauding after a private magic show finale" },
+  ],
+  "Corporate Events": [
+    { src: crowdReactionImg, alt: "Corporate event attendees reacting to a magic performance" },
+    { src: mentalistImg, alt: "Mentalism performance at a corporate dinner event" },
+  ],
+  "Corporate": [
+    { src: crowdReactionImg, alt: "Corporate event attendees reacting to a magic performance" },
+    { src: mentalistImg, alt: "Mentalism performance at a corporate dinner event" },
+  ],
+  "Behind the Craft": [
+    { src: scottPerformingImg, alt: "Scott Syme performing sleight of hand magic" },
+    { src: restaurantImg, alt: "Close-up magic performance at an upscale restaurant" },
+  ],
+  "Luxury Nightlife": [
+    { src: restaurantImg, alt: "Magic performance at an upscale cocktail lounge" },
+    { src: intimateImg, alt: "Close-up magic at an exclusive nightlife event" },
+  ],
+  "Resident Events": [
+    { src: parlorAudienceImg, alt: "Residents enjoying a private magic show in a luxury apartment community" },
+    { src: guestReactionImg, alt: "Community members reacting to close-up magic at a resident social" },
+  ],
+  "For Production Companies": [
+    { src: scottPerformingImg, alt: "Scott Syme performing at a studio event" },
+    { src: crowdReactionImg, alt: "Production crew reacting to a magic performance" },
+  ],
+  "For DMCs": [
+    { src: groupFinaleImg, alt: "Group of incentive trip attendees enjoying a magic show" },
+    { src: intimateImg, alt: "Close-up magic at a destination event reception" },
+  ],
 };
 
 const BlogArticle = () => {
@@ -166,6 +218,10 @@ const BlogArticle = () => {
         <div className="max-w-2xl mx-auto px-6">
           {(() => {
             const inlineSignupIndex = Math.floor(article.content.length * 0.6);
+            const categoryInlineImages = inlineImages[article.category] || inlineImages["For Planners"];
+            const imgIndex1 = Math.floor(article.content.length * 0.3);
+            const imgIndex2 = Math.floor(article.content.length * 0.75);
+
             return article.content.map((paragraph, i) => {
               const elements = [];
 
@@ -182,11 +238,49 @@ const BlogArticle = () => {
                 );
               }
 
+              // Insert first inline image at ~30%
+              if (i === imgIndex1 && article.content.length > 4 && categoryInlineImages[0]) {
+                elements.push(
+                  <AnimatedSection key="inline-img-1">
+                    <figure className="my-10 md:my-14 -mx-4 md:-mx-8">
+                      <img
+                        src={categoryInlineImages[0].src}
+                        alt={categoryInlineImages[0].alt}
+                        loading="lazy"
+                        className="w-full h-auto object-cover aspect-[16/9]"
+                      />
+                      <figcaption className="font-sans text-[11px] text-muted-foreground/50 tracking-wider mt-3 text-center uppercase">
+                        White Rabbit · Private Event Entertainment
+                      </figcaption>
+                    </figure>
+                  </AnimatedSection>
+                );
+              }
+
               // Insert inline newsletter signup at ~60% through the article
               if (i === inlineSignupIndex && article.content.length > 5) {
                 elements.push(
                   <AnimatedSection key="inline-signup">
                     <NewsletterSignup variant="inline" />
+                  </AnimatedSection>
+                );
+              }
+
+              // Insert second inline image at ~75%
+              if (i === imgIndex2 && article.content.length > 5 && categoryInlineImages[1] && imgIndex2 !== inlineSignupIndex) {
+                elements.push(
+                  <AnimatedSection key="inline-img-2">
+                    <figure className="my-10 md:my-14 -mx-4 md:-mx-8">
+                      <img
+                        src={categoryInlineImages[1].src}
+                        alt={categoryInlineImages[1].alt}
+                        loading="lazy"
+                        className="w-full h-auto object-cover aspect-[16/9]"
+                      />
+                      <figcaption className="font-sans text-[11px] text-muted-foreground/50 tracking-wider mt-3 text-center uppercase">
+                        White Rabbit · Los Angeles
+                      </figcaption>
+                    </figure>
                   </AnimatedSection>
                 );
               }
