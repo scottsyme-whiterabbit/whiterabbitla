@@ -100,6 +100,11 @@ const editorialArticles = [
   "easiest-vendor-decision-property-manager",
   "how-one-magic-show-changed-resident-engagement",
   "resident-event-ideas-that-actually-get-rsvps",
+  "new-york-christmas-party-magician",
+  "los-angeles-close-up-magician",
+  "beverly-hills-halloween-party-magician",
+  "miami-resident-event-magician",
+  "magic-for-spirits-brands-activations",
 ];
 
 const serviceAreaCities = [
