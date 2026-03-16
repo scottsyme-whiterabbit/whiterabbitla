@@ -16,6 +16,14 @@ import corporateImg from "@/assets/event-penthouse-show.jpg";
 import scottCardsImg from "@/assets/event-scott-cards.jpg";
 import experienceImg from "@/assets/experience-closeup.jpg";
 import threeStars from "@/assets/three-stars-gold.png";
+import guestReactionImg from "@/assets/event-guest-reaction.jpg";
+import crowdReactionImg from "@/assets/event-crowd-reaction.jpg";
+import intimateImg from "@/assets/event-closeup-intimate.jpg";
+import mentalistImg from "@/assets/event-mentalism-closeup.jpg";
+import parlorAudienceImg from "@/assets/event-parlor-audience.jpg";
+import groupFinaleImg from "@/assets/event-group-finale.jpg";
+import scottPerformingImg from "@/assets/event-scott-performing.jpg";
+import restaurantImg from "@/assets/event-restaurant-magic.jpg";
 
 const categoryImages: Record<string, string> = {
   "For Planners": corporateImg,
@@ -25,6 +33,50 @@ const categoryImages: Record<string, string> = {
   "Behind the Craft": scottCardsImg,
   "Luxury Nightlife": closeupImg,
   "Resident Events": corporateImg,
+};
+
+// Two inline images per category for mid-article injection
+const inlineImages: Record<string, { src: string; alt: string }[]> = {
+  "For Planners": [
+    { src: guestReactionImg, alt: "Event guests reacting to close-up magic during a cocktail reception" },
+    { src: parlorAudienceImg, alt: "Seated audience watching a private parlor magic show" },
+  ],
+  "Magic Destinations": [
+    { src: scottPerformingImg, alt: "Scott Syme performing close-up magic at a luxury venue" },
+    { src: crowdReactionImg, alt: "Audience members reacting with amazement during a magic performance" },
+  ],
+  "Private Events": [
+    { src: intimateImg, alt: "Close-up magic performed for a small group at an intimate private event" },
+    { src: groupFinaleImg, alt: "Guests applauding after a private magic show finale" },
+  ],
+  "Corporate Events": [
+    { src: crowdReactionImg, alt: "Corporate event attendees reacting to a magic performance" },
+    { src: mentalistImg, alt: "Mentalism performance at a corporate dinner event" },
+  ],
+  "Corporate": [
+    { src: crowdReactionImg, alt: "Corporate event attendees reacting to a magic performance" },
+    { src: mentalistImg, alt: "Mentalism performance at a corporate dinner event" },
+  ],
+  "Behind the Craft": [
+    { src: scottPerformingImg, alt: "Scott Syme performing sleight of hand magic" },
+    { src: restaurantImg, alt: "Close-up magic performance at an upscale restaurant" },
+  ],
+  "Luxury Nightlife": [
+    { src: restaurantImg, alt: "Magic performance at an upscale cocktail lounge" },
+    { src: intimateImg, alt: "Close-up magic at an exclusive nightlife event" },
+  ],
+  "Resident Events": [
+    { src: parlorAudienceImg, alt: "Residents enjoying a private magic show in a luxury apartment community" },
+    { src: guestReactionImg, alt: "Community members reacting to close-up magic at a resident social" },
+  ],
+  "For Production Companies": [
+    { src: scottPerformingImg, alt: "Scott Syme performing at a studio event" },
+    { src: crowdReactionImg, alt: "Production crew reacting to a magic performance" },
+  ],
+  "For DMCs": [
+    { src: groupFinaleImg, alt: "Group of incentive trip attendees enjoying a magic show" },
+    { src: intimateImg, alt: "Close-up magic at a destination event reception" },
+  ],
 };
 
 const BlogArticle = () => {
