@@ -110,6 +110,11 @@ const editorialArticles = [
   "the-hamptons-private-party-magician",
   "chicago-corporate-event-magician",
   "dallas-private-party-magician",
+  "boston-corporate-event-magician",
+  "washington-dc-charity-gala-magician",
+  "nashville-private-party-magician",
+  "palm-beach-resident-event-magician",
+  "las-vegas-corporate-event-magician",
 ];
 
 const serviceAreaCities = [
