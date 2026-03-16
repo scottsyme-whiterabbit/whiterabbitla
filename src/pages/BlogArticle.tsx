@@ -24,6 +24,11 @@ import parlorAudienceImg from "@/assets/event-parlor-audience.jpg";
 import groupFinaleImg from "@/assets/event-group-finale.jpg";
 import scottPerformingImg from "@/assets/event-scott-performing.jpg";
 import restaurantImg from "@/assets/event-restaurant-magic.jpg";
+import cardFloatQueenImg from "@/assets/event-card-float-queen.jpg";
+import scottDesertWalkingImg from "@/assets/scott-desert-walking.jpg";
+import scottBwWalkingImg from "@/assets/scott-bw-walking.jpg";
+import cardsShuffleGreenImg from "@/assets/event-cards-shuffle-green.jpg";
+import cardFloatBwImg from "@/assets/event-card-float-bw.jpg";
 
 const categoryImages: Record<string, string> = {
   "For Planners": corporateImg,
@@ -38,44 +43,44 @@ const categoryImages: Record<string, string> = {
 // Two inline images per category for mid-article injection
 const inlineImages: Record<string, { src: string; alt: string }[]> = {
   "For Planners": [
-    { src: guestReactionImg, alt: "Event guests reacting to close-up magic during a cocktail reception" },
+    { src: cardsShuffleGreenImg, alt: "Close-up of Scott Syme shuffling cards before a private event performance" },
     { src: parlorAudienceImg, alt: "Seated audience watching a private parlor magic show" },
   ],
   "Magic Destinations": [
-    { src: scottPerformingImg, alt: "Scott Syme performing close-up magic at a luxury venue" },
+    { src: scottDesertWalkingImg, alt: "Scott Syme walking through the desert in a suit" },
     { src: crowdReactionImg, alt: "Audience members reacting with amazement during a magic performance" },
   ],
   "Private Events": [
-    { src: intimateImg, alt: "Close-up magic performed for a small group at an intimate private event" },
+    { src: cardFloatQueenImg, alt: "Queen of hearts floating above Scott Syme's hand during a private event" },
     { src: groupFinaleImg, alt: "Guests applauding after a private magic show finale" },
   ],
   "Corporate Events": [
     { src: crowdReactionImg, alt: "Corporate event attendees reacting to a magic performance" },
-    { src: mentalistImg, alt: "Mentalism performance at a corporate dinner event" },
+    { src: cardFloatBwImg, alt: "Playing card suspended in mid-air during a corporate event performance" },
   ],
   "Corporate": [
     { src: crowdReactionImg, alt: "Corporate event attendees reacting to a magic performance" },
-    { src: mentalistImg, alt: "Mentalism performance at a corporate dinner event" },
+    { src: cardsShuffleGreenImg, alt: "Close-up card handling at a corporate entertainment event" },
   ],
   "Behind the Craft": [
-    { src: scottPerformingImg, alt: "Scott Syme performing sleight of hand magic" },
-    { src: restaurantImg, alt: "Close-up magic performance at an upscale restaurant" },
+    { src: scottBwWalkingImg, alt: "Scott Syme in black and white, walking with confidence" },
+    { src: cardFloatQueenImg, alt: "Queen of hearts floating above a magician's hand" },
   ],
   "Luxury Nightlife": [
-    { src: restaurantImg, alt: "Magic performance at an upscale cocktail lounge" },
+    { src: cardFloatBwImg, alt: "Card floating in dramatic black and white lighting at an exclusive event" },
     { src: intimateImg, alt: "Close-up magic at an exclusive nightlife event" },
   ],
   "Resident Events": [
     { src: parlorAudienceImg, alt: "Residents enjoying a private magic show in a luxury apartment community" },
-    { src: guestReactionImg, alt: "Community members reacting to close-up magic at a resident social" },
+    { src: cardsShuffleGreenImg, alt: "Card flourish performed at a resident social event" },
   ],
   "For Production Companies": [
-    { src: scottPerformingImg, alt: "Scott Syme performing at a studio event" },
+    { src: scottDesertWalkingImg, alt: "Scott Syme on location for a production shoot" },
     { src: crowdReactionImg, alt: "Production crew reacting to a magic performance" },
   ],
   "For DMCs": [
     { src: groupFinaleImg, alt: "Group of incentive trip attendees enjoying a magic show" },
-    { src: intimateImg, alt: "Close-up magic at a destination event reception" },
+    { src: cardFloatQueenImg, alt: "Close-up card magic at a destination event reception" },
   ],
 };
 
