@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 
 interface NewsletterSignupProps {
-  variant?: "footer" | "section";
+  variant?: "footer" | "section" | "inline";
 }
 
 const NewsletterSignup = ({ variant = "section" }: NewsletterSignupProps) => {
