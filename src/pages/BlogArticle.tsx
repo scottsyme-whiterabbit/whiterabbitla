@@ -8,6 +8,7 @@ import ShareButton from "@/components/ShareButton";
 import QuizNudge from "@/components/QuizNudge";
 import QuizCTA from "@/components/QuizCTA";
 import RelatedReads from "@/components/RelatedReads";
+import NewsletterSignup from "@/components/NewsletterSignup";
 
 import closeupImg from "@/assets/event-closeup-cocktail.jpg";
 import parlorImg from "@/assets/event-parlor-show.jpg";
@@ -163,39 +164,51 @@ const BlogArticle = () => {
       {/* Article Body */}
       <section className="py-16 md:py-20">
         <div className="max-w-2xl mx-auto px-6">
-          {article.content.map((paragraph, i) => {
-            const elements = [];
+          {(() => {
+            const inlineSignupIndex = Math.floor(article.content.length * 0.6);
+            return article.content.map((paragraph, i) => {
+              const elements = [];
 
-            // Insert pull quote before the middle paragraph
-            if (showPullQuote && i === midIndex) {
+              // Insert pull quote before the middle paragraph
+              if (showPullQuote && i === midIndex) {
+                elements.push(
+                  <AnimatedSection key={`pullquote-${i}`}>
+                    <blockquote className="border-l-2 border-accent pl-8 my-12 md:my-16">
+                      <p className="font-serif text-2xl md:text-3xl text-foreground/80 leading-snug" style={{ fontStyle: "normal" }}>
+                        {pullQuoteSentence}
+                      </p>
+                    </blockquote>
+                  </AnimatedSection>
+                );
+              }
+
+              // Insert inline newsletter signup at ~60% through the article
+              if (i === inlineSignupIndex && article.content.length > 5) {
+                elements.push(
+                  <AnimatedSection key="inline-signup">
+                    <NewsletterSignup variant="inline" />
+                  </AnimatedSection>
+                );
+              }
+
+              // Insert decorative break every ~4 paragraphs (not first)
+              if (i > 0 && i !== midIndex && i % 4 === 0) {
+                elements.push(
+                  <div key={`divider-${i}`} className="flex justify-center my-6 md:my-8">
+                    <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-60" />
+                  </div>
+                );
+              }
+
               elements.push(
-                <AnimatedSection key={`pullquote-${i}`}>
-                  <blockquote className="border-l-2 border-accent pl-8 my-12 md:my-16">
-                    <p className="font-serif text-2xl md:text-3xl text-foreground/80 leading-snug" style={{ fontStyle: "normal" }}>
-                      {pullQuoteSentence}
-                    </p>
-                  </blockquote>
+                <AnimatedSection key={i} delay={Math.min(i * 0.03, 0.15)}>
+                  {renderParagraph(paragraph, i)}
                 </AnimatedSection>
               );
-            }
 
-            // Insert decorative break every ~4 paragraphs (not first)
-            if (i > 0 && i !== midIndex && i % 4 === 0) {
-              elements.push(
-                <div key={`divider-${i}`} className="flex justify-center my-6 md:my-8">
-                  <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-60" />
-                </div>
-              );
-            }
-
-            elements.push(
-              <AnimatedSection key={i} delay={Math.min(i * 0.03, 0.15)}>
-                {renderParagraph(paragraph, i)}
-              </AnimatedSection>
-            );
-
-            return elements;
-          })}
+              return elements;
+            });
+          })()}
         </div>
       </section>
 
