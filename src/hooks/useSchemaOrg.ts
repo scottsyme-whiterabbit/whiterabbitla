@@ -155,6 +155,26 @@ export function useSpeakableSchema(page: {
   });
 }
 
+// FAQ schema for blog articles with inline FAQ content
+export function useFAQSchema(faqs: { question: string; answer: string }[]) {
+  useJsonLd(
+    "faq-schema",
+    faqs.length > 0
+      ? {
+          "@type": "FAQPage",
+          mainEntity: faqs.map((faq) => ({
+            "@type": "Question",
+            name: faq.question,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: faq.answer,
+            },
+          })),
+        }
+      : {}
+  );
+}
+
 // Breadcrumb helper
 function breadcrumb(items: { name: string; url: string }[]) {
   return {

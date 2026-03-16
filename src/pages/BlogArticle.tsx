@@ -109,6 +109,16 @@ const BlogArticle = () => {
   const schemaImage = article ? (schemaCategoryImages[article.category] || `${BASE_URL}/og/experience.jpg`) : undefined;
   useArticleSchema(article ? { ...article, image: schemaImage } : { title: "", metaDescription: "", slug: "", publishDate: "", category: "", content: [], image: undefined });
 
+  // Extract FAQ pairs from content: lines starting with <strong>question?</strong> answer
+  const faqPairs = (article?.content || []).reduce<{ question: string; answer: string }[]>((acc, p) => {
+    const match = p.match(/^<strong>(.+?\?)<\/strong>\s*(.+)/);
+    if (match && match[1] !== "Frequently Asked Questions") {
+      acc.push({ question: match[1], answer: match[2].replace(/<[^>]+>/g, "") });
+    }
+    return acc;
+  }, []);
+  useFAQSchema(faqPairs);
+
   if (!article) return null;
 
   const publishDate = new Date(article.publishDate).toLocaleDateString("en-US", {
