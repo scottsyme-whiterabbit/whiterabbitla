@@ -218,6 +218,10 @@ const BlogArticle = () => {
         <div className="max-w-2xl mx-auto px-6">
           {(() => {
             const inlineSignupIndex = Math.floor(article.content.length * 0.6);
+            const categoryInlineImages = inlineImages[article.category] || inlineImages["For Planners"];
+            const imgIndex1 = Math.floor(article.content.length * 0.3);
+            const imgIndex2 = Math.floor(article.content.length * 0.75);
+
             return article.content.map((paragraph, i) => {
               const elements = [];
 
@@ -234,11 +238,49 @@ const BlogArticle = () => {
                 );
               }
 
+              // Insert first inline image at ~30%
+              if (i === imgIndex1 && article.content.length > 4 && categoryInlineImages[0]) {
+                elements.push(
+                  <AnimatedSection key="inline-img-1">
+                    <figure className="my-10 md:my-14 -mx-4 md:-mx-8">
+                      <img
+                        src={categoryInlineImages[0].src}
+                        alt={categoryInlineImages[0].alt}
+                        loading="lazy"
+                        className="w-full h-auto object-cover aspect-[16/9]"
+                      />
+                      <figcaption className="font-sans text-[11px] text-muted-foreground/50 tracking-wider mt-3 text-center uppercase">
+                        White Rabbit · Private Event Entertainment
+                      </figcaption>
+                    </figure>
+                  </AnimatedSection>
+                );
+              }
+
               // Insert inline newsletter signup at ~60% through the article
               if (i === inlineSignupIndex && article.content.length > 5) {
                 elements.push(
                   <AnimatedSection key="inline-signup">
                     <NewsletterSignup variant="inline" />
+                  </AnimatedSection>
+                );
+              }
+
+              // Insert second inline image at ~75%
+              if (i === imgIndex2 && article.content.length > 5 && categoryInlineImages[1] && imgIndex2 !== inlineSignupIndex) {
+                elements.push(
+                  <AnimatedSection key="inline-img-2">
+                    <figure className="my-10 md:my-14 -mx-4 md:-mx-8">
+                      <img
+                        src={categoryInlineImages[1].src}
+                        alt={categoryInlineImages[1].alt}
+                        loading="lazy"
+                        className="w-full h-auto object-cover aspect-[16/9]"
+                      />
+                      <figcaption className="font-sans text-[11px] text-muted-foreground/50 tracking-wider mt-3 text-center uppercase">
+                        White Rabbit · Los Angeles
+                      </figcaption>
+                    </figure>
                   </AnimatedSection>
                 );
               }
