@@ -39,7 +39,7 @@ function AutoplayVideo({ src, className }: { src: string; className?: string }) 
       muted
       loop
       playsInline
-      preload="metadata"
+      preload="none"
       className={className}
     />
   );

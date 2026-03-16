@@ -275,47 +275,47 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-3 gap-4">
           <AnimatedSection>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={cuMagicReactionImg} alt="Guest reacting with amazement to close-up card magic at White Rabbit event" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={cuMagicReactionImg} alt="Guest reacting with amazement to close-up card magic at White Rabbit event" loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={penthouseImg} alt="Scott Syme performing private magic show in a luxury Los Angeles penthouse" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={penthouseImg} alt="Scott Syme performing private magic show in a luxury Los Angeles penthouse" loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={cardsBlueImg} alt="Close-up interactive magic with dramatic blue lighting" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={cardsBlueImg} alt="Close-up interactive magic with dramatic blue lighting" loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={rubikShowImg} alt="Scott Syme performing Rubik's cube magic at a live White Rabbit show" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={rubikShowImg} alt="Scott Syme performing Rubik's cube magic at a live White Rabbit show" loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={crowdReactionImg} alt="Audience reacting with excitement during a White Rabbit private magic show" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={crowdReactionImg} alt="Audience reacting with excitement during a White Rabbit private magic show" loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.2}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={parlorShowImg} alt="Scott Syme private magic show with emerald curtains and uplighting" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={parlorShowImg} alt="Scott Syme private magic show with emerald curtains and uplighting" loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={scottCardsImg} alt="Scott Syme performing card magic at a private luxury event" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={scottCardsImg} alt="Scott Syme performing card magic at a private luxury event" loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.2}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={groupFinaleImg} alt="Group photo after a White Rabbit magic experience in Los Angeles" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={groupFinaleImg} alt="Group photo after a White Rabbit magic experience in Los Angeles" loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.25}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={restaurantMagicImg} alt="Scott Syme performing close-up magic at a luxury restaurant event" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={restaurantMagicImg} alt="Scott Syme performing close-up magic at a luxury restaurant event" loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
         </div>
