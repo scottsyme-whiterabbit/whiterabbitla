@@ -59,6 +59,11 @@ const editorialArticles = [
   "easiest-vendor-decision-property-manager",
   "how-one-magic-show-changed-resident-engagement",
   "resident-event-ideas-that-actually-get-rsvps",
+  "san-francisco-private-party-magician",
+  "scottsdale-corporate-event-magician",
+  "the-hamptons-private-party-magician",
+  "chicago-corporate-event-magician",
+  "dallas-private-party-magician",
 ];
 
 // Service area city slugs for /areas/:city pages
