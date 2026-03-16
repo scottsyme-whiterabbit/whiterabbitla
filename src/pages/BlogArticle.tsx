@@ -8,6 +8,7 @@ import ShareButton from "@/components/ShareButton";
 import QuizNudge from "@/components/QuizNudge";
 import QuizCTA from "@/components/QuizCTA";
 import RelatedReads from "@/components/RelatedReads";
+import NewsletterSignup from "@/components/NewsletterSignup";
 
 import closeupImg from "@/assets/event-closeup-cocktail.jpg";
 import parlorImg from "@/assets/event-parlor-show.jpg";
