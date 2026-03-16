@@ -30,39 +30,58 @@
     <meta name="twitter:title" content="White Rabbit LA | Luxury Magic Entertainment" />
     <meta name="twitter:description" content="Bespoke magical experiences for the world's most discerning audiences." />
     <meta name="twitter:image" content="https://whiterabbitla.com/og-image.jpg" />
-    <!-- Google Analytics (GA4) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-65KMF8KK5P"></script>
+    <!-- Google Analytics (GA4) — deferred to not block LCP -->
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-65KMF8KK5P');
+      window.addEventListener('load', function() {
+        var s = document.createElement('script');
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-65KMF8KK5P';
+        s.async = true;
+        document.head.appendChild(s);
+        s.onload = function() {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          window.gtag = gtag;
+          gtag('js', new Date());
+          gtag('config', 'G-65KMF8KK5P');
+        };
+      });
     </script>
-    <!-- Meta Pixel -->
+    <!-- Meta Pixel — deferred -->
     <script>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '1634871114429693');
-      fbq('track', 'PageView');
+      window.addEventListener('load', function() {
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1634871114429693');
+        fbq('track', 'PageView');
+      });
     </script>
     <!-- End Meta Pixel -->
-    <!-- Microsoft Clarity -->
-    <script type="text/javascript">
-      (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-      })(window, document, "clarity", "script", "vhq70hjv8w");
+    <!-- Microsoft Clarity — deferred -->
+    <script>
+      window.addEventListener('load', function() {
+        (function(c,l,a,r,i,t,y){
+          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "vhq70hjv8w");
+      });
     </script>
     <!-- End Microsoft Clarity -->
-    <!-- Contentsquare -->
-    <script src="https://t.contentsquare.net/uxa/61d3fac571b97.js"></script>
+    <!-- Contentsquare — deferred -->
+    <script>
+      window.addEventListener('load', function() {
+        var s = document.createElement('script');
+        s.src = 'https://t.contentsquare.net/uxa/61d3fac571b97.js';
+        s.async = true;
+        document.head.appendChild(s);
+      });
+    </script>
     <!-- End Contentsquare -->
     <link rel="preload" as="font" href="/fonts/Ogg-Bold.ttf" type="font/ttf" crossorigin />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
