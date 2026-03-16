@@ -47,6 +47,7 @@ const services = [
 
 const Experience = () => {
   const { openQuiz } = useBookingQuiz();
+  useScrollDepth("experience");
 
   usePageMeta({
     title: "Our Services | White Rabbit Magic — Los Angeles",
