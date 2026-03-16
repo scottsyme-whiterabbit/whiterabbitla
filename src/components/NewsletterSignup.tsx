@@ -46,13 +46,45 @@ const NewsletterSignup = ({ variant = "section" }: NewsletterSignupProps) => {
 
   if (submitted) {
     return (
-      <div className={variant === "footer" ? "text-center" : "text-center py-4"}>
-        <p className={`font-serif text-lg ${variant === "footer" ? "text-cream" : "text-foreground"}`}>
+      <div className={variant === "footer" ? "text-center" : variant === "inline" ? "text-center py-4" : "text-center py-4"}>
+        <p className={`font-serif text-lg ${variant === "footer" || variant === "inline" ? "text-cream" : "text-foreground"}`}>
           You're in. ✨
         </p>
-        <p className={`font-sans text-sm mt-1 ${variant === "footer" ? "text-cream/60" : "text-muted-foreground"}`}>
+        <p className={`font-sans text-sm mt-1 ${variant === "footer" || variant === "inline" ? "text-cream/60" : "text-muted-foreground"}`}>
           Watch your inbox for something special.
         </p>
+      </div>
+    );
+  }
+
+  if (variant === "inline") {
+    return (
+      <div className="bg-forest-dark border border-accent/20 px-6 py-10 md:px-10 md:py-12 my-12 md:my-16 text-center">
+        <p className="font-sans text-[10px] tracking-[0.3em] uppercase text-accent mb-3">Insider Access</p>
+        <h3 className="font-serif text-2xl md:text-3xl text-cream mb-3" style={{ fontStyle: "normal" }}>
+          Enjoying this? There's more where it came from.
+        </h3>
+        <p className="font-sans text-sm text-cream/60 mb-6 max-w-md mx-auto leading-relaxed">
+          Get behind-the-scenes stories, event planning insights, and first access to upcoming shows. No spam, just magic.
+        </p>
+        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+          <input
+            type="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            placeholder="Your email"
+            required
+            className="flex-1 bg-cream/5 border border-cream/15 text-cream placeholder:text-cream/30 px-4 py-3 font-sans text-sm tracking-wider focus:outline-none focus:border-accent/50 transition-colors"
+          />
+          <button
+            type="submit"
+            disabled={submitting}
+            className="font-sans text-xs tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-3 hover:bg-accent/90 transition-colors disabled:opacity-50 whitespace-nowrap"
+          >
+            {submitting ? "..." : "Subscribe"}
+          </button>
+        </form>
+        <p className="font-sans text-[10px] text-cream/30 mt-3 tracking-wider">No spam. Unsubscribe anytime.</p>
       </div>
     );
   }
