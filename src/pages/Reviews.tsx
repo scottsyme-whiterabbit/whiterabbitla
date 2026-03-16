@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useScrollDepth } from "@/hooks/useScrollDepth";
 import { Star } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "react-router-dom";
@@ -174,6 +175,7 @@ const reviews = [
 
 
 const Reviews = () => {
+  useScrollDepth("reviews");
   usePageMeta({
     title: "Client Reviews | White Rabbit Magic — 5-Star Rated Los Angeles Magician",
     description: "Read 50+ five-star reviews from corporate planners, brides, and private event hosts. See why White Rabbit is LA's most trusted luxury magic entertainment.",

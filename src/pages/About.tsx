@@ -1,4 +1,5 @@
 import AnimatedSection from "@/components/AnimatedSection";
+import { useScrollDepth } from "@/hooks/useScrollDepth";
 import QuizCTA from "@/components/QuizCTA";
 import QuizNudge from "@/components/QuizNudge";
 import scottPhoto from "@/assets/about-hero-desert.jpg";
@@ -13,6 +14,7 @@ import { useWebPageSchema, useSpeakableSchema } from "@/hooks/useSchemaOrg";
 import threeStars from "@/assets/three-stars-gold.png";
 
 const About = () => {
+  useScrollDepth("about");
   usePageMeta({
     title: "About Scott Syme | White Rabbit Magic — Los Angeles Magician",
     description: "Meet Scott Syme, the magician behind White Rabbit. A Magic Castle® member and former America's Got Talent consultant who has performed for Netflix, Disney, and Morgan Stanley.",

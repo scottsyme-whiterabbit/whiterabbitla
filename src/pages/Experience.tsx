@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useScrollDepth } from "@/hooks/useScrollDepth";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import QuizCTA from "@/components/QuizCTA";
@@ -46,6 +47,7 @@ const services = [
 
 const Experience = () => {
   const { openQuiz } = useBookingQuiz();
+  useScrollDepth("experience");
 
   usePageMeta({
     title: "Our Services | White Rabbit Magic — Los Angeles",
