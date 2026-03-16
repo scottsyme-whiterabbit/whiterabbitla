@@ -12,32 +12,85 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-# AI / LLM Crawlers
+# AI / LLM Crawlers — OpenAI
 User-agent: GPTBot
 Allow: /
 
 User-agent: ChatGPT-User
 Allow: /
 
+User-agent: OAI-SearchBot
+Allow: /
+
+# AI / LLM Crawlers — Google
 User-agent: Google-Extended
 Allow: /
 
-User-agent: PerplexityBot
-Allow: /
-
+# AI / LLM Crawlers — Anthropic (Claude)
 User-agent: ClaudeBot
 Allow: /
 
 User-agent: anthropic-ai
 Allow: /
 
-User-agent: Bytespider
+# AI / LLM Crawlers — Perplexity
+User-agent: PerplexityBot
 Allow: /
 
+# AI / LLM Crawlers — xAI (Grok)
+User-agent: Grok
+Allow: /
+
+User-agent: xai-grok
+Allow: /
+
+# AI / LLM Crawlers — DeepSeek
+User-agent: Deepseek
+Allow: /
+
+User-agent: DeepSeekBot
+Allow: /
+
+# AI / LLM Crawlers — Apple Intelligence
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# AI / LLM Crawlers — Meta AI
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# AI / LLM Crawlers — Amazon
+User-agent: Amazonbot
+Allow: /
+
+# AI / LLM Crawlers — You.com
+User-agent: YouBot
+Allow: /
+
+# AI / LLM Crawlers — Cohere
 User-agent: cohere-ai
 Allow: /
 
-User-agent: meta-externalagent
+# AI / LLM Crawlers — ByteDance
+User-agent: Bytespider
+Allow: /
+
+# AI / LLM Crawlers — Common Crawl (training data for many models)
+User-agent: CCBot
+Allow: /
+
+# AI / LLM Crawlers — Mistral
+User-agent: MistralBot
+Allow: /
+
+# AI / LLM Crawlers — Microsoft Copilot
+User-agent: CopilotBot
 Allow: /
 
 # Default
