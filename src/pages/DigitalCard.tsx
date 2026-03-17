@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Instagram, Linkedin, Globe, Phone, Mail, MapPin, Download, ExternalLink, Sparkles } from "lucide-react";
+import { Instagram, Linkedin, Globe, Phone, Mail, MapPin, Download, ExternalLink, Sparkles, Star } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 import wrLogo from "@/assets/wr-logo-stars-white.png";
