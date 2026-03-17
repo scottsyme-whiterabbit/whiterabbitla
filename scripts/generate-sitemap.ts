@@ -69,6 +69,11 @@ const editorialArticles = [
   "nashville-private-party-magician",
   "palm-beach-resident-event-magician",
   "las-vegas-corporate-event-magician",
+  "malibu-private-party-magician",
+  "aspen-holiday-party-magician",
+  "napa-valley-wedding-magician",
+  "santa-monica-corporate-event-magician",
+  "greenwich-private-party-magician",
 ];
 
 // Service area city slugs for /areas/:city pages
