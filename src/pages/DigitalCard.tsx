@@ -113,9 +113,6 @@ const DigitalCard = () => {
 
           {/* Social Icons */}
           <div className="px-6 pb-5">
-            <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-3">
-              Connect
-            </p>
             <div className="flex items-center justify-center gap-4">
               {socialLinks.map((link) => (
                 <a
