@@ -120,6 +120,11 @@ const editorialArticles = [
   "napa-valley-wedding-magician",
   "santa-monica-corporate-event-magician",
   "greenwich-private-party-magician",
+  "marthas-vineyard-private-party-magician",
+  "montecito-private-party-magician",
+  "park-city-corporate-event-magician",
+  "atlanta-corporate-event-magician",
+  "seattle-corporate-event-magician",
 ];
 
 const serviceAreaCities = [
