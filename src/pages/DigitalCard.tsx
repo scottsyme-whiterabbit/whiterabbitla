@@ -135,6 +135,16 @@ const DigitalCard = () => {
           {/* Quick Links */}
           <div className="px-6 pb-6 space-y-2">
             <a
+              href="https://whiterabbitla.com/review"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg bg-muted hover:bg-muted/80 transition-colors group"
+            >
+              <Star size={18} className="text-accent" />
+              <span className="font-sans text-sm text-foreground flex-1">Leave a Review</span>
+              <ExternalLink size={14} className="text-muted-foreground group-hover:text-accent transition-colors" />
+            </a>
+            <a
               href="https://whiterabbitla.com"
               target="_blank"
               rel="noopener noreferrer"
@@ -168,16 +178,6 @@ const DigitalCard = () => {
             >
               <Sparkles size={18} className="text-accent" />
               <span className="font-sans text-sm text-foreground flex-1">What magic fits your event?</span>
-              <ExternalLink size={14} className="text-muted-foreground group-hover:text-accent transition-colors" />
-            </a>
-            <a
-              href="https://whiterabbitla.com/review"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 px-4 py-3 rounded-lg bg-muted hover:bg-muted/80 transition-colors group"
-            >
-              <Star size={18} className="text-accent" />
-              <span className="font-sans text-sm text-foreground flex-1">Share your experience</span>
               <ExternalLink size={14} className="text-muted-foreground group-hover:text-accent transition-colors" />
             </a>
           </div>
