@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Instagram, Linkedin, Globe, Phone, Mail, MapPin, Download, ExternalLink, Sparkles } from "lucide-react";
+import { Instagram, Linkedin, Globe, Phone, Mail, MapPin, Download, ExternalLink, Sparkles, Star } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 import wrLogo from "@/assets/wr-logo-stars-white.png";
@@ -95,6 +95,9 @@ const DigitalCard = () => {
             <p className="font-sans text-xs text-muted-foreground mt-1 flex items-center justify-center gap-1">
               <MapPin size={12} /> Los Angeles, CA
             </p>
+            <p className="font-sans text-xs text-muted-foreground/70 mt-3 italic leading-relaxed max-w-[260px] mx-auto">
+              Thank you for sharing the moment — it means more than you know.
+            </p>
           </div>
 
           {/* Save Contact Button */}
@@ -165,6 +168,16 @@ const DigitalCard = () => {
             >
               <Sparkles size={18} className="text-accent" />
               <span className="font-sans text-sm text-foreground flex-1">What magic fits your event?</span>
+              <ExternalLink size={14} className="text-muted-foreground group-hover:text-accent transition-colors" />
+            </a>
+            <a
+              href="https://whiterabbitla.com/review"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg bg-muted hover:bg-muted/80 transition-colors group"
+            >
+              <Star size={18} className="text-accent" />
+              <span className="font-sans text-sm text-foreground flex-1">Share your experience</span>
               <ExternalLink size={14} className="text-muted-foreground group-hover:text-accent transition-colors" />
             </a>
           </div>
