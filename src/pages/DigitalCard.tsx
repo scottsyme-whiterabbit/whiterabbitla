@@ -138,11 +138,10 @@ const DigitalCard = () => {
               href="https://whiterabbitla.com/review"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 px-4 py-3 rounded-lg bg-muted hover:bg-muted/80 transition-colors group"
+              className="flex items-center justify-center gap-2 w-full bg-accent text-forest-dark font-sans text-sm font-semibold tracking-wide uppercase py-3.5 rounded-lg hover:bg-accent/90 transition-colors"
             >
-              <Star size={18} className="text-accent" />
-              <span className="font-sans text-sm text-foreground flex-1">Leave a Review</span>
-              <ExternalLink size={14} className="text-muted-foreground group-hover:text-accent transition-colors" />
+              <Star size={18} />
+              Leave a Review
             </a>
             <a
               href="https://whiterabbitla.com"
