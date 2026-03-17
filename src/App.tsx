@@ -84,6 +84,7 @@ const AppContent = () => {
         <Route path="/unsubscribe" element={<Unsubscribe />} />
         <Route path="/event-magician" element={<Navigate to="/" replace />} />
         <Route path="/home" element={<Navigate to="/" replace />} />
+        <Route path="/blog/santa-barbara-halloween-party-magician" element={<Navigate to="/areas/santa-barbara" replace />} />
         <Route path="/post/*" element={<Navigate to="/blog" replace />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
