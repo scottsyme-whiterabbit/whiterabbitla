@@ -64,25 +64,9 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
         offers: { "@type": "Offer", url: `${BASE_URL}/contact`, availability: "https://schema.org/InStock", category: "Custom pricing based on event type and size" },
       },
       {
-        "@type": "LocalBusiness",
-        name: `White Rabbit LA — Magician in ${cityName}`,
-        description: `Luxury magic entertainment for corporate events, weddings, and private parties in ${cityName}`,
-        url: `${BASE_URL}/areas/${citySlug}`,
-        telephone: "+14243941850",
-        email: "scott.syme@whiterabbitla.com",
-        image: `${BASE_URL}/og-image.jpg`,
-        address: { "@type": "PostalAddress", addressLocality: cityName, addressRegion: state, addressCountry: "US" },
-        areaServed: { "@type": "City", name: cityName },
-        priceRange: "$$-$$$$",
-      },
-      {
-        "@type": "FAQPage",
-        mainEntity: buildFaqSchema(cityName, region),
-      },
-      {
         "@type": "Service",
         serviceType: "Magic Entertainment",
-        provider: { "@type": "LocalBusiness", name: "White Rabbit LA" },
+        provider: { "@type": "LocalBusiness", name: "White Rabbit LA", "@id": `${BASE_URL}/#business` },
         areaServed: { "@type": "City", name: cityName },
         description: `Close-up magic, parlor magic, and stage magic entertainment for private events in ${cityName}`,
       },
@@ -360,12 +344,5 @@ function buildFaqs(city: string, region: string) {
   ];
 }
 
-function buildFaqSchema(city: string, region: string) {
-  return buildFaqs(city, region).map((faq) => ({
-    "@type": "Question",
-    name: faq.question,
-    acceptedAnswer: { "@type": "Answer", text: faq.answer },
-  }));
-}
 
 export default CityPage;
