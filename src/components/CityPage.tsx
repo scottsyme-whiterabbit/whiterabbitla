@@ -70,11 +70,6 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
         areaServed: { "@type": "City", name: cityName },
         description: `Close-up magic, parlor magic, and stage magic entertainment for private events in ${cityName}`,
       },
-        serviceType: "Magic Entertainment",
-        provider: { "@type": "LocalBusiness", name: "White Rabbit LA" },
-        areaServed: { "@type": "City", name: cityName },
-        description: `Close-up magic, parlor magic, and stage magic entertainment for private events in ${cityName}`,
-      },
       {
         "@type": "BreadcrumbList",
         itemListElement: [
