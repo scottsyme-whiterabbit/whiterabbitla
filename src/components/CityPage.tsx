@@ -344,12 +344,5 @@ function buildFaqs(city: string, region: string) {
   ];
 }
 
-function buildFaqSchema(city: string, region: string) {
-  return buildFaqs(city, region).map((faq) => ({
-    "@type": "Question",
-    name: faq.question,
-    acceptedAnswer: { "@type": "Answer", text: faq.answer },
-  }));
-}
 
 export default CityPage;
