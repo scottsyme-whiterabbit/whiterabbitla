@@ -125,6 +125,9 @@ const editorialArticles = [
   "park-city-corporate-event-magician",
   "atlanta-corporate-event-magician",
   "seattle-corporate-event-magician",
+  "houston-corporate-event-magician",
+  "philadelphia-corporate-event-magician",
+  "san-diego-private-party-magician",
 ];
 
 const serviceAreaCities = [
