@@ -136,7 +136,7 @@ const Index = () => {
 
         {/* Text overlaid – single responsive block */}
         {/* Text overlaid */}
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-24 md:pb-20 px-6 text-center">
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-32 md:pb-20 px-6 text-center">
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent md:from-forest-dark/70 md:via-forest-dark/30 md:to-forest-dark/10" />
           <motion.h1
             className="relative text-2xl md:text-4xl lg:text-5xl text-cream/90 tracking-wide font-bold font-serif drop-shadow-lg max-w-4xl"
