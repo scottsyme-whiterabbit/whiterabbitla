@@ -130,6 +130,9 @@ const editorialArticles = [
   "san-diego-private-party-magician",
   "coral-gables-private-party-magician",
   "pacific-palisades-private-party-magician",
+  "west-hollywood-private-party-magician",
+  "telluride-private-party-magician",
+  "vail-corporate-event-magician",
 ];
 
 const serviceAreaCities = [
