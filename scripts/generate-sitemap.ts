@@ -82,6 +82,8 @@ const editorialArticles = [
   "houston-corporate-event-magician",
   "philadelphia-corporate-event-magician",
   "san-diego-private-party-magician",
+  "coral-gables-private-party-magician",
+  "pacific-palisades-private-party-magician",
 ];
 
 // Service area city slugs for /areas/:city pages
