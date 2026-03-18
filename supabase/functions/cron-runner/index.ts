@@ -72,6 +72,15 @@ serve(async (req) => {
       body: "{}",
     });
     results["cold-drip"] = { status: r3.status, body: await r3.json().catch(() => r3.statusText) };
+
+    // Run nurture-drip
+    const r4 = await fetch(`${FUNCTIONS_BASE}/nurture-drip`, {
+      method: "POST",
+      headers,
+      body: "{}",
+    });
+    results["nurture-drip"] = { status: r4.status, body: await r4.json().catch(() => r4.statusText) };
+
     return new Response(JSON.stringify({ success: true, results }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
