@@ -797,6 +797,34 @@ serve(async (req) => {
         });
       }
 
+      case "get_nurture_campaigns": {
+        const { category } = payload;
+        let query = supabase
+          .from("cold_email_campaigns")
+          .select("id, email, name, company, phone, campaign_category, status, nurture_step, nurture_status, nurture_started_at, nurture_last_sent_at, created_at")
+          .eq("status", "completed");
+        if (category) {
+          query = query.eq("campaign_category", category);
+        }
+        const { data, error } = await query.order("nurture_last_sent_at", { ascending: false, nullsFirst: false });
+        if (error) throw error;
+        return new Response(JSON.stringify({ campaigns: data || [] }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "update_nurture_status": {
+        const { campaignId, nurture_status } = payload;
+        const { error } = await supabase
+          .from("cold_email_campaigns")
+          .update({ nurture_status, updated_at: new Date().toISOString() })
+          .eq("id", campaignId);
+        if (error) throw error;
+        return new Response(JSON.stringify({ success: true }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       default:
         return new Response(JSON.stringify({ error: "Unknown action" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
