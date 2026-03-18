@@ -144,7 +144,11 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
   const [showContacts, setShowContacts] = useState(false);
   const [previewStep, setPreviewStep] = useState<number | null>(null);
   const [previewHtml, setPreviewHtml] = useState("");
-
+  const [nurtureCampaigns, setNurtureCampaigns] = useState<ColdCampaign[]>([]);
+  const [showNurture, setShowNurture] = useState(false);
+  const [nurturePreviewStep, setNurturePreviewStep] = useState<number | null>(null);
+  const [nurturePreviewHtml, setNurturePreviewHtml] = useState("");
+  const [nurturePreviewSubject, setNurturePreviewSubject] = useState("");
   const callAdmin = useCallback(async (action: string, payload: Record<string, unknown> = {}) => {
     const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
       method: "POST",
