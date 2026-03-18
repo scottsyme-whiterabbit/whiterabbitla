@@ -71,6 +71,8 @@ type LogoPosition = "top-left" | "center-top";
 type LogoStyle = "wordmark" | "rabbit";
 type LogoColor = "original" | "white";
 type ContentSource = "custom" | "article";
+type AudienceKey = "" | "corporate" | "wedding" | "private" | "brand";
+type MetaCTA = "Learn More" | "Book Now" | "Sign Up" | "Contact Us";
 
 const formatDimensions: Record<AdFormat, { w: number; h: number; label: string; aspect: string }> = {
   post: { w: 1080, h: 1080, label: "Instagram Post", aspect: "1/1" },
@@ -78,6 +80,80 @@ const formatDimensions: Record<AdFormat, { w: number; h: number; label: string; 
   "fb-ad": { w: 1200, h: 628, label: "Facebook Ad", aspect: "1200/628" },
   "google-display": { w: 1200, h: 628, label: "Google Display", aspect: "1200/628" },
 };
+
+// ── AUDIENCE PRESETS ──
+interface PresetVariant {
+  headline: string;
+  subheadline: string;
+  cta: string;
+  metaPrimary: string;
+  metaHeadline: string;
+  metaDescription: string;
+  metaCta: MetaCTA;
+}
+
+const AUDIENCE_PRESETS: Record<Exclude<AudienceKey, "">, { label: string; variants: PresetVariant[] }> = {
+  corporate: {
+    label: "Corporate Event Planners",
+    variants: [
+      { headline: "YOUR GUESTS WON'T PUT THEIR PHONES DOWN. GOOD.", subheadline: "Luxury close-up magic for corporate events", cta: "CHECK AVAILABILITY", metaPrimary: "The entertainment guests actually talk about the next day. Close-up magic for corporate dinners and galas.", metaHeadline: "Corporate Magic Entertainment", metaDescription: "Trusted by Fortune 500s", metaCta: "Learn More" },
+      { headline: "WHAT MORGAN STANLEY BOOKED FOR THEIR DINNER", subheadline: "The entertainment detail that changes everything", cta: "LEARN MORE", metaPrimary: "When Morgan Stanley needed unforgettable entertainment, they chose close-up magic. See why leading companies trust us.", metaHeadline: "Luxury Event Entertainment", metaDescription: "Fortune 500 approved", metaCta: "Learn More" },
+      { headline: "THE ENTERTAINMENT GUESTS ACTUALLY REMEMBER", subheadline: "Close-up magic trusted by Fortune 500 companies", cta: "BOOK A CALL", metaPrimary: "Skip the generic entertainment. Close-up magic creates the kind of moments your guests will bring up for years.", metaHeadline: "Unforgettable Event Magic", metaDescription: "Book your corporate event", metaCta: "Contact Us" },
+    ],
+  },
+  wedding: {
+    label: "Wedding Planners",
+    variants: [
+      { headline: "THE DETAIL YOUR WEDDING GUESTS WON'T STOP TALKING ABOUT", subheadline: "Close-up magic for cocktail hour", cta: "BOOK YOUR DATE", metaPrimary: "The one cocktail hour detail that turns strangers into friends and gets everyone talking. Close-up magic for weddings.", metaHeadline: "Wedding Cocktail Hour Magic", metaDescription: "Book your wedding date", metaCta: "Book Now" },
+      { headline: "COCKTAIL HOUR DOESN'T HAVE TO BE AWKWARD", subheadline: "Turn strangers into friends in 90 seconds", cta: "SEE HOW", metaPrimary: "No more awkward mingling. Close-up magic breaks the ice instantly and gets every table laughing together.", metaHeadline: "Ice-Breaking Wedding Magic", metaDescription: "See how it works", metaCta: "Learn More" },
+      { headline: "WHAT 200+ COUPLES WISH THEY KNEW SOONER", subheadline: "The wedding entertainment beyond the DJ", cta: "CHECK DATES", metaPrimary: "200+ couples say the same thing: 'We wish we'd booked the magician sooner.' Don't miss your date.", metaHeadline: "Wedding Entertainment Secret", metaDescription: "Check available dates", metaCta: "Book Now" },
+    ],
+  },
+  private: {
+    label: "Private Party Hosts",
+    variants: [
+      { headline: "MAKE YOUR NEXT PARTY LEGENDARY", subheadline: "Intimate magic for private celebrations", cta: "BOOK NOW", metaPrimary: "Elevate your next dinner party or celebration with intimate close-up magic that makes every guest feel like the star.", metaHeadline: "Private Party Magic", metaDescription: "Make it legendary", metaCta: "Book Now" },
+      { headline: "THE HOST'S SECRET WEAPON", subheadline: "Close-up magic that makes every guest feel special", cta: "GET THE GUIDE", metaPrimary: "The best hosts know: great entertainment is the secret to an unforgettable evening. Discover close-up magic.", metaHeadline: "Secret to Great Parties", metaDescription: "Get the host's guide", metaCta: "Learn More" },
+      { headline: "NOT YOUR AVERAGE ENTERTAINMENT", subheadline: "Luxury magic for discerning hosts", cta: "CHECK AVAILABILITY", metaPrimary: "Forget the photo booth. Luxury close-up magic creates genuine moments of wonder for your most important guests.", metaHeadline: "Luxury Private Entertainment", metaDescription: "Check availability now", metaCta: "Contact Us" },
+    ],
+  },
+  brand: {
+    label: "Brand / PR",
+    variants: [
+      { headline: "CREATE MOMENTS PEOPLE CAN'T HELP BUT SHARE", subheadline: "Experiential magic for brand activations", cta: "BOOK A CALL", metaPrimary: "Magic creates the kind of organic, shareable moments that no photo wall can match. Experiential entertainment for brands.", metaHeadline: "Brand Activation Magic", metaDescription: "Create shareable moments", metaCta: "Contact Us" },
+      { headline: "YOUR NEXT ACTIVATION NEEDS A PATTERN INTERRUPT", subheadline: "Magic that generates organic social content", cta: "LEARN MORE", metaPrimary: "Stop blending in at events. A pattern interrupt creates the organic social content your brand actually needs.", metaHeadline: "Experiential Brand Magic", metaDescription: "Stand out at events", metaCta: "Learn More" },
+      { headline: "WHAT YOUTUBE AND ROLLS ROYCE ALREADY KNOW", subheadline: "Entertainment that markets itself", cta: "SEE HOW", metaPrimary: "YouTube. Rolls Royce. Netflix. The world's best brands use magic to create moments that market themselves.", metaHeadline: "Entertainment That Sells", metaDescription: "See how top brands do it", metaCta: "Learn More" },
+    ],
+  },
+};
+
+// ── SAVED AD LIBRARY TYPE ──
+interface SavedAd {
+  id: string;
+  headline: string;
+  subheadline: string;
+  ctaText: string;
+  audience: AudienceKey;
+  format: AdFormat;
+  photoIndex: number;
+  logoStyle: LogoStyle;
+  logoColor: LogoColor;
+  logoPosition: LogoPosition;
+  overlayOpacity: number;
+  logoScale: number;
+  fontScale: number;
+  showCta: boolean;
+  thumbnail: string;
+  savedAt: string;
+}
+
+function loadLibrary(): SavedAd[] {
+  try {
+    return JSON.parse(localStorage.getItem("wr-ad-library") || "[]");
+  } catch {
+    return [];
+  }
+}
 
 const SocialGenerator = () => {
   const [password, setPassword] = useState("");
@@ -97,6 +173,17 @@ const SocialGenerator = () => {
   const [overlayOpacity, setOverlayOpacity] = useState(40);
   const [logoScale, setLogoScale] = useState(100);
   const [fontScale, setFontScale] = useState(100);
+
+  // New state
+  const [selectedAudience, setSelectedAudience] = useState<AudienceKey>("");
+  const [selectedVariant, setSelectedVariant] = useState(0);
+  const [metaPrimary, setMetaPrimary] = useState("");
+  const [metaHeadline, setMetaHeadline] = useState("");
+  const [metaDescription, setMetaDescription] = useState("");
+  const [metaCta, setMetaCta] = useState<MetaCTA>("Learn More");
+  const [savedAds, setSavedAds] = useState<SavedAd[]>(loadLibrary);
+  const [batchExporting, setBatchExporting] = useState(false);
+  const [generatingVariants, setGeneratingVariants] = useState(false);
 
   const [finalImage, setFinalImage] = useState<string | null>(null);
   const [compositing, setCompositing] = useState(false);
@@ -123,7 +210,6 @@ const SocialGenerator = () => {
     }
   };
 
-  // When article selected, populate fields
   const handleArticleSelect = (slug: string) => {
     setSelectedSlug(slug);
     const article = blogArticles.find((a) => a.slug === slug);
@@ -134,11 +220,54 @@ const SocialGenerator = () => {
     }
   };
 
+  // ── AUDIENCE PRESET HANDLER ──
+  const handleAudienceSelect = (key: AudienceKey) => {
+    setSelectedAudience(key);
+    setSelectedVariant(0);
+    if (key && AUDIENCE_PRESETS[key]) {
+      applyVariant(key, 0);
+    }
+  };
+
+  const applyVariant = (audience: Exclude<AudienceKey, "">, idx: number) => {
+    const v = AUDIENCE_PRESETS[audience].variants[idx];
+    setSelectedVariant(idx);
+    setHeadline(v.headline);
+    setSubheadline(v.subheadline);
+    setCtaText(v.cta);
+    setShowCta(true);
+    setMetaPrimary(v.metaPrimary);
+    setMetaHeadline(v.metaHeadline);
+    setMetaDescription(v.metaDescription);
+    setMetaCta(v.metaCta);
+  };
+
+  // ── COMPOSITE GENERATION ──
+  const generateForFormat = useCallback(async (fmt: AdFormat): Promise<string | null> => {
+    if (!canvasRef.current) return null;
+    const dim = formatDimensions[fmt];
+    // Temporarily update the canvas dimensions inline
+    const canvas = canvasRef.current;
+    const origW = canvas.style.width;
+    const origH = canvas.style.height;
+    canvas.style.width = dim.w + "px";
+    canvas.style.height = dim.h + "px";
+    await new Promise((r) => setTimeout(r, 400));
+    try {
+      const dataUrl = await toPng(canvas, { width: dim.w, height: dim.h, pixelRatio: 1, cacheBust: true });
+      return dataUrl;
+    } catch {
+      return null;
+    } finally {
+      canvas.style.width = origW;
+      canvas.style.height = origH;
+    }
+  }, []);
+
   const generateComposite = useCallback(async () => {
     if (!canvasRef.current) return;
     setCompositing(true);
     setFinalImage(null);
-    // Allow render
     await new Promise((r) => setTimeout(r, 600));
     try {
       const dim = formatDimensions[selectedFormat];
@@ -158,11 +287,112 @@ const SocialGenerator = () => {
     }
   }, [selectedFormat]);
 
-  const download = (dataUrl: string) => {
+  const download = (dataUrl: string, formatLabel?: string) => {
     const a = document.createElement("a");
     a.href = dataUrl;
-    a.download = `wr-${selectedFormat}-${Date.now()}.png`;
+    a.download = `wr-${formatLabel || selectedFormat}-${Date.now()}.png`;
     a.click();
+  };
+
+  // ── BATCH EXPORT ──
+  const handleBatchExport = useCallback(async () => {
+    if (!canvasRef.current) return;
+    setBatchExporting(true);
+    const formats: AdFormat[] = ["post", "story", "fb-ad", "google-display"];
+    for (const fmt of formats) {
+      const savedFmt = selectedFormat;
+      setSelectedFormat(fmt);
+      await new Promise((r) => setTimeout(r, 800));
+      try {
+        const dim = formatDimensions[fmt];
+        const dataUrl = await toPng(canvasRef.current, { width: dim.w, height: dim.h, pixelRatio: 1, cacheBust: true });
+        download(dataUrl, fmt);
+        await new Promise((r) => setTimeout(r, 500));
+      } catch (err) {
+        console.error(`Batch export ${fmt} failed:`, err);
+      }
+    }
+    setBatchExporting(false);
+    toast({ title: "Batch export complete", description: "All 4 formats downloaded." });
+  }, [selectedFormat]);
+
+  // ── GENERATE ALL 3 VARIANTS ──
+  const handleGenerateAllVariants = useCallback(async () => {
+    if (!selectedAudience || !canvasRef.current) return;
+    setGeneratingVariants(true);
+    const presets = AUDIENCE_PRESETS[selectedAudience];
+    for (let i = 0; i < presets.variants.length; i++) {
+      applyVariant(selectedAudience, i);
+      await new Promise((r) => setTimeout(r, 800));
+      try {
+        const dim = formatDimensions[selectedFormat];
+        const dataUrl = await toPng(canvasRef.current, { width: dim.w, height: dim.h, pixelRatio: 1, cacheBust: true });
+        download(dataUrl, `${selectedFormat}-v${i + 1}`);
+        await new Promise((r) => setTimeout(r, 500));
+      } catch (err) {
+        console.error(`Variant ${i + 1} failed:`, err);
+      }
+    }
+    setGeneratingVariants(false);
+    toast({ title: "All 3 variants exported" });
+  }, [selectedAudience, selectedFormat]);
+
+  // ── SAVE TO LIBRARY ──
+  const handleSaveToLibrary = () => {
+    const newAd: SavedAd = {
+      id: Date.now().toString(),
+      headline,
+      subheadline,
+      ctaText,
+      audience: selectedAudience,
+      format: selectedFormat,
+      photoIndex: selectedPhoto,
+      logoStyle,
+      logoColor,
+      logoPosition,
+      overlayOpacity,
+      logoScale,
+      fontScale,
+      showCta,
+      thumbnail: finalImage || "",
+      savedAt: new Date().toLocaleDateString(),
+    };
+    const updated = [newAd, ...savedAds];
+    setSavedAds(updated);
+    localStorage.setItem("wr-ad-library", JSON.stringify(updated));
+    toast({ title: "Saved to library" });
+  };
+
+  const handleLoadFromLibrary = (ad: SavedAd) => {
+    setHeadline(ad.headline);
+    setSubheadline(ad.subheadline);
+    setCtaText(ad.ctaText);
+    setSelectedAudience(ad.audience);
+    setSelectedFormat(ad.format);
+    setSelectedPhoto(ad.photoIndex);
+    setLogoStyle(ad.logoStyle);
+    setLogoColor(ad.logoColor);
+    setLogoPosition(ad.logoPosition);
+    setOverlayOpacity(ad.overlayOpacity);
+    setLogoScale(ad.logoScale);
+    setFontScale(ad.fontScale);
+    setShowCta(ad.showCta);
+    setFinalImage(null);
+    toast({ title: "Ad loaded from library" });
+  };
+
+  const handleDeleteFromLibrary = (id: string) => {
+    const updated = savedAds.filter((a) => a.id !== id);
+    setSavedAds(updated);
+    localStorage.setItem("wr-ad-library", JSON.stringify(updated));
+    toast({ title: "Removed from library" });
+  };
+
+  // ── COPY META CAPTION ──
+  const handleCopyMeta = () => {
+    const text = `Primary Text: ${metaPrimary}\nHeadline: ${metaHeadline}\nDescription: ${metaDescription}\nCTA: ${metaCta}`;
+    navigator.clipboard.writeText(text);
+    toast({ title: "Copied to clipboard" });
   };
 
   const dim = formatDimensions[selectedFormat];
@@ -173,6 +403,75 @@ const SocialGenerator = () => {
   const cream = "#F8F5F0";
   const gold = "#C8963E";
   const rose = "#C9A3A8";
+
+  // Shared render function for the ad canvas
+  const renderAdContent = (isExport: boolean) => (
+    <>
+      <img src={photo.src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }} {...(isExport ? { crossOrigin: "anonymous" } : {})} />
+      <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, ${forestDark}${Math.round(overlayOpacity * 2.55).toString(16).padStart(2, "0")} 0%, ${forestDark}${Math.round(Math.min(overlayOpacity + 20, 90) * 2.55).toString(16).padStart(2, "0")} 100%)` }} />
+      <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: selectedFormat === "story" ? "140px 60px 100px" : selectedFormat === "post" ? "60px" : "40px 50px" }}>
+        <div style={{ display: "flex", justifyContent: logoPosition === "center-top" ? "center" : "flex-start" }}>
+          <img
+            src={logoStyle === "rabbit" ? wrSymbol : wrSecondaryLogo}
+            alt="White Rabbit"
+            style={{
+              height: (logoStyle === "rabbit"
+                ? (selectedFormat === "story" ? 70 : selectedFormat === "post" ? 60 : 45)
+                : (selectedFormat === "story" ? 55 : selectedFormat === "post" ? 45 : 35)) * logoScale / 100,
+              objectFit: "contain",
+              ...(logoColor === "white" ? { filter: "brightness(0) invert(1)" } : {}),
+            }}
+            {...(isExport ? { crossOrigin: "anonymous" } : {})}
+          />
+        </div>
+        <div style={{ textAlign: "left" }}>
+          <h2 style={{
+            fontFamily: "'Ogg', Georgia, serif",
+            fontSize: (selectedFormat === "story" ? 64 : selectedFormat === "post" ? 56 : 42) * fontScale / 100,
+            fontWeight: 400,
+            lineHeight: 1.1,
+            color: cream,
+            margin: 0,
+            whiteSpace: "pre-line",
+            textTransform: "uppercase" as const,
+          }}>
+            {headline}
+          </h2>
+          {subheadline && (
+            <p style={{
+              fontFamily: "'Montserrat', sans-serif",
+              fontSize: (selectedFormat === "story" ? 18 : selectedFormat === "post" ? 16 : 14) * fontScale / 100,
+              fontWeight: 500,
+              letterSpacing: "0.15em",
+              color: cream,
+              marginTop: selectedFormat === "story" ? 24 : 16,
+              textTransform: "uppercase" as const,
+            }}>
+              {subheadline}
+            </p>
+          )}
+        </div>
+        <div>
+          {showCta && (
+            <div style={{
+              backgroundColor: gold,
+              color: forestDark,
+              fontFamily: "'Montserrat', sans-serif",
+              fontSize: (selectedFormat === "story" ? 18 : selectedFormat === "post" ? 16 : 13) * fontScale / 100,
+              fontWeight: 600,
+              letterSpacing: "0.2em",
+              textTransform: "uppercase" as const,
+              textAlign: "center",
+              padding: selectedFormat === "story" ? "22px 40px" : "16px 32px",
+              borderRadius: 2,
+            }}>
+              {ctaText}
+            </div>
+          )}
+        </div>
+      </div>
+    </>
+  );
 
   if (!authenticated) {
     return (
@@ -200,6 +499,8 @@ const SocialGenerator = () => {
       </main>
     );
   }
+
+  const activePreset = selectedAudience ? AUDIENCE_PRESETS[selectedAudience] : null;
 
   return (
     <main id="main-content" className="pt-20">
@@ -254,6 +555,49 @@ const SocialGenerator = () => {
                       <option key={a.slug} value={a.slug}>{a.title}</option>
                     ))}
                   </select>
+                </div>
+              )}
+
+              {/* ── 1. AUDIENCE PRESET TEMPLATES ── */}
+              <div>
+                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Audience Preset</label>
+                <select
+                  value={selectedAudience}
+                  onChange={(e) => handleAudienceSelect(e.target.value as AudienceKey)}
+                  className="w-full bg-background border border-border text-foreground font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent"
+                >
+                  <option value="">No preset (custom)</option>
+                  <option value="corporate">Corporate Event Planners</option>
+                  <option value="wedding">Wedding Planners</option>
+                  <option value="private">Private Party Hosts</option>
+                  <option value="brand">Brand / PR</option>
+                </select>
+              </div>
+
+              {/* ── 3. A/B COPY VARIANT CARDS ── */}
+              {activePreset && (
+                <div>
+                  <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Copy Variants</label>
+                  <div className="space-y-2">
+                    {activePreset.variants.map((v, i) => (
+                      <button
+                        key={i}
+                        onClick={() => applyVariant(selectedAudience as Exclude<AudienceKey, "">, i)}
+                        className={`w-full text-left p-4 border transition-colors ${selectedVariant === i ? "border-accent bg-accent/10" : "border-border hover:border-accent/50"}`}
+                      >
+                        <p className="font-serif text-sm text-foreground leading-tight mb-1">{v.headline}</p>
+                        <p className="font-sans text-xs text-muted-foreground">{v.subheadline}</p>
+                        <span className="inline-block mt-2 font-sans text-[10px] tracking-[0.15em] uppercase text-accent">{v.cta}</span>
+                      </button>
+                    ))}
+                  </div>
+                  <button
+                    onClick={handleGenerateAllVariants}
+                    disabled={generatingVariants}
+                    className="w-full mt-3 font-sans text-xs tracking-[0.2em] uppercase border border-accent text-accent px-6 py-3 hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50"
+                  >
+                    {generatingVariants ? "Generating..." : "Generate All 3 Variants"}
+                  </button>
                 </div>
               )}
 
@@ -431,6 +775,15 @@ const SocialGenerator = () => {
               >
                 {compositing ? "Compositing..." : "Generate Ad"}
               </button>
+
+              {/* ── 2. BATCH EXPORT ── */}
+              <button
+                onClick={handleBatchExport}
+                disabled={batchExporting}
+                className="w-full font-sans text-xs tracking-[0.2em] uppercase border border-accent text-accent px-8 py-3 hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50"
+              >
+                {batchExporting ? "Exporting..." : "Batch Export All Formats"}
+              </button>
             </div>
 
             {/* RIGHT: Preview + Download */}
@@ -459,74 +812,7 @@ const SocialGenerator = () => {
                     fontFamily: "'Ogg', Georgia, serif",
                   }}
                 >
-                  {/* Background photo */}
-                  <img src={photo.src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }} />
-                  {/* Forest green overlay */}
-                  <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, ${forestDark}${Math.round(overlayOpacity * 2.55).toString(16).padStart(2, "0")} 0%, ${forestDark}${Math.round(Math.min(overlayOpacity + 20, 90) * 2.55).toString(16).padStart(2, "0")} 100%)` }} />
-                  {/* Content layout */}
-                  <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: selectedFormat === "story" ? "140px 60px 100px" : selectedFormat === "post" ? "60px" : "40px 50px" }}>
-                    {/* Logo */}
-                    <div style={{ display: "flex", justifyContent: logoPosition === "center-top" ? "center" : "flex-start" }}>
-                      <img
-                        src={logoStyle === "rabbit" ? wrSymbol : wrSecondaryLogo}
-                        alt="White Rabbit"
-                        style={{
-                          height: (logoStyle === "rabbit"
-                            ? (selectedFormat === "story" ? 70 : selectedFormat === "post" ? 60 : 45)
-                            : (selectedFormat === "story" ? 55 : selectedFormat === "post" ? 45 : 35)) * logoScale / 100,
-                          objectFit: "contain",
-                          ...(logoColor === "white" ? { filter: "brightness(0) invert(1)" } : {}),
-                        }}
-                      />
-                    </div>
-                    {/* Text block */}
-                    <div style={{ textAlign: "left" }}>
-                      <h2 style={{
-                        fontFamily: "'Ogg', Georgia, serif",
-                        fontSize: (selectedFormat === "story" ? 64 : selectedFormat === "post" ? 56 : 42) * fontScale / 100,
-                        fontWeight: 400,
-                        lineHeight: 1.1,
-                        color: cream,
-                        margin: 0,
-                        whiteSpace: "pre-line",
-                        textTransform: "uppercase" as const,
-                      }}>
-                        {headline}
-                      </h2>
-                      {subheadline && (
-                        <p style={{
-                          fontFamily: "'Montserrat', sans-serif",
-                          fontSize: (selectedFormat === "story" ? 18 : selectedFormat === "post" ? 16 : 14) * fontScale / 100,
-                          fontWeight: 500,
-                          letterSpacing: "0.15em",
-                          color: cream,
-                          marginTop: selectedFormat === "story" ? 24 : 16,
-                          textTransform: "uppercase" as const,
-                        }}>
-                          {subheadline}
-                        </p>
-                      )}
-                    </div>
-                    {/* CTA */}
-                    <div>
-                      {showCta && (
-                        <div style={{
-                          backgroundColor: gold,
-                          color: forestDark,
-                          fontFamily: "'Montserrat', sans-serif",
-                          fontSize: (selectedFormat === "story" ? 18 : selectedFormat === "post" ? 16 : 13) * fontScale / 100,
-                          fontWeight: 600,
-                          letterSpacing: "0.2em",
-                          textTransform: "uppercase" as const,
-                          textAlign: "center",
-                          padding: selectedFormat === "story" ? "22px 40px" : "16px 32px",
-                          borderRadius: 2,
-                        }}>
-                          {ctaText}
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                  {renderAdContent(false)}
                 </div>
               </div>
 
@@ -542,12 +828,121 @@ const SocialGenerator = () => {
                   >
                     Download {dim.label} ↓
                   </button>
+                  {/* ── 5. SAVE TO LIBRARY ── */}
+                  <button
+                    onClick={handleSaveToLibrary}
+                    className="w-full font-sans text-xs tracking-[0.2em] uppercase border border-muted-foreground/30 text-muted-foreground px-8 py-3 hover:border-accent hover:text-accent transition-colors"
+                  >
+                    Save to Library
+                  </button>
                 </div>
               )}
+
+              {/* ── 4. META AD CAPTION GENERATOR ── */}
+              <div className="mt-10 border border-border p-6 space-y-4">
+                <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-1">Meta Ad Caption</p>
+                <div>
+                  <label className="block font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground mb-1">
+                    Primary Text <span className="text-muted-foreground/50">({metaPrimary.length}/125)</span>
+                  </label>
+                  <textarea
+                    value={metaPrimary}
+                    onChange={(e) => setMetaPrimary(e.target.value.slice(0, 125))}
+                    rows={2}
+                    maxLength={125}
+                    className="w-full bg-background border border-border text-foreground font-sans text-sm px-3 py-2 focus:outline-none focus:border-accent resize-none"
+                  />
+                </div>
+                <div>
+                  <label className="block font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground mb-1">
+                    Headline <span className="text-muted-foreground/50">({metaHeadline.length}/40)</span>
+                  </label>
+                  <input
+                    value={metaHeadline}
+                    onChange={(e) => setMetaHeadline(e.target.value.slice(0, 40))}
+                    maxLength={40}
+                    className="w-full bg-background border border-border text-foreground font-sans text-sm px-3 py-2 focus:outline-none focus:border-accent"
+                  />
+                </div>
+                <div>
+                  <label className="block font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground mb-1">
+                    Description <span className="text-muted-foreground/50">({metaDescription.length}/30)</span>
+                  </label>
+                  <input
+                    value={metaDescription}
+                    onChange={(e) => setMetaDescription(e.target.value.slice(0, 30))}
+                    maxLength={30}
+                    className="w-full bg-background border border-border text-foreground font-sans text-sm px-3 py-2 focus:outline-none focus:border-accent"
+                  />
+                </div>
+                <div>
+                  <label className="block font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground mb-1">CTA</label>
+                  <select
+                    value={metaCta}
+                    onChange={(e) => setMetaCta(e.target.value as MetaCTA)}
+                    className="w-full bg-background border border-border text-foreground font-sans text-sm px-3 py-2 focus:outline-none focus:border-accent"
+                  >
+                    <option>Learn More</option>
+                    <option>Book Now</option>
+                    <option>Sign Up</option>
+                    <option>Contact Us</option>
+                  </select>
+                </div>
+                <button
+                  onClick={handleCopyMeta}
+                  className="w-full font-sans text-xs tracking-[0.2em] uppercase border border-accent text-accent px-6 py-2.5 hover:bg-accent hover:text-accent-foreground transition-colors"
+                >
+                  Copy All
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* ── 5. SAVED AD LIBRARY ── */}
+      {savedAds.length > 0 && (
+        <section className="py-12 border-t border-border">
+          <div className="max-w-7xl mx-auto px-6">
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-6">Saved Ad Library ({savedAds.length})</p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {savedAds.map((ad) => (
+                <div key={ad.id} className="border border-border group hover:border-accent/50 transition-colors">
+                  {ad.thumbnail ? (
+                    <div className="aspect-square overflow-hidden bg-muted/20 cursor-pointer" onClick={() => handleLoadFromLibrary(ad)}>
+                      <img src={ad.thumbnail} alt={ad.headline} className="w-full h-full object-cover" />
+                    </div>
+                  ) : (
+                    <div className="aspect-square bg-muted/20 flex items-center justify-center cursor-pointer" onClick={() => handleLoadFromLibrary(ad)}>
+                      <span className="font-sans text-xs text-muted-foreground">No preview</span>
+                    </div>
+                  )}
+                  <div className="p-3">
+                    <p className="font-serif text-xs text-foreground leading-tight line-clamp-2 mb-1">{ad.headline}</p>
+                    <p className="font-sans text-[10px] text-muted-foreground">
+                      {ad.audience ? AUDIENCE_PRESETS[ad.audience]?.label || "Custom" : "Custom"} · {ad.savedAt}
+                    </p>
+                    <div className="flex gap-2 mt-2">
+                      <button
+                        onClick={() => handleLoadFromLibrary(ad)}
+                        className="font-sans text-[10px] tracking-[0.1em] uppercase text-accent hover:underline"
+                      >
+                        Load
+                      </button>
+                      <button
+                        onClick={() => handleDeleteFromLibrary(ad.id)}
+                        className="font-sans text-[10px] tracking-[0.1em] uppercase text-muted-foreground hover:text-destructive"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Hidden full-res compositing canvas */}
       <div style={{ position: "absolute", left: "-9999px", top: 0 }}>
@@ -561,69 +956,7 @@ const SocialGenerator = () => {
             fontFamily: "'Ogg', Georgia, serif",
           }}
         >
-          <img src={photo.src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }} crossOrigin="anonymous" />
-          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, ${forestDark}${Math.round(overlayOpacity * 2.55).toString(16).padStart(2, "0")} 0%, ${forestDark}${Math.round(Math.min(overlayOpacity + 20, 90) * 2.55).toString(16).padStart(2, "0")} 100%)` }} />
-          <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: selectedFormat === "story" ? "140px 60px 100px" : selectedFormat === "post" ? "60px" : "40px 50px" }}>
-            <div style={{ display: "flex", justifyContent: logoPosition === "center-top" ? "center" : "flex-start" }}>
-              <img
-                src={logoStyle === "rabbit" ? wrSymbol : wrSecondaryLogo}
-                alt="White Rabbit"
-                style={{
-                  height: (logoStyle === "rabbit"
-                    ? (selectedFormat === "story" ? 70 : selectedFormat === "post" ? 60 : 45)
-                    : (selectedFormat === "story" ? 55 : selectedFormat === "post" ? 45 : 35)) * logoScale / 100,
-                  objectFit: "contain",
-                  ...(logoColor === "white" ? { filter: "brightness(0) invert(1)" } : {}),
-                }}
-                crossOrigin="anonymous"
-              />
-            </div>
-            <div style={{ textAlign: "left" }}>
-              <h2 style={{
-                fontFamily: "'Ogg', Georgia, serif",
-                fontSize: (selectedFormat === "story" ? 64 : selectedFormat === "post" ? 56 : 42) * fontScale / 100,
-                fontWeight: 400,
-                lineHeight: 1.1,
-                color: cream,
-                margin: 0,
-                whiteSpace: "pre-line",
-                textTransform: "uppercase" as const,
-              }}>
-                {headline}
-              </h2>
-              {subheadline && (
-                <p style={{
-                  fontFamily: "'Montserrat', sans-serif",
-                  fontSize: (selectedFormat === "story" ? 18 : selectedFormat === "post" ? 16 : 14) * fontScale / 100,
-                  fontWeight: 500,
-                  letterSpacing: "0.15em",
-                  color: cream,
-                  marginTop: selectedFormat === "story" ? 24 : 16,
-                  textTransform: "uppercase" as const,
-                }}>
-                  {subheadline}
-                </p>
-              )}
-            </div>
-            <div>
-              {showCta && (
-                <div style={{
-                  backgroundColor: gold,
-                  color: forestDark,
-                  fontFamily: "'Montserrat', sans-serif",
-                  fontSize: (selectedFormat === "story" ? 18 : selectedFormat === "post" ? 16 : 13) * fontScale / 100,
-                  fontWeight: 600,
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase" as const,
-                  textAlign: "center",
-                  padding: selectedFormat === "story" ? "22px 40px" : "16px 32px",
-                  borderRadius: 2,
-                }}>
-                  {ctaText}
-                </div>
-              )}
-            </div>
-          </div>
+          {renderAdContent(true)}
         </div>
       </div>
     </main>
