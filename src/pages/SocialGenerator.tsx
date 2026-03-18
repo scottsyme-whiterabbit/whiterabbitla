@@ -563,7 +563,7 @@ const SocialGenerator = () => {
         >
           <img src={photo.src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }} crossOrigin="anonymous" />
           <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, ${forestDark}${Math.round(overlayOpacity * 2.55).toString(16).padStart(2, "0")} 0%, ${forestDark}${Math.round(Math.min(overlayOpacity + 20, 90) * 2.55).toString(16).padStart(2, "0")} 100%)` }} />
-          <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: selectedFormat === "story" ? "80px 60px 100px" : selectedFormat === "post" ? "60px" : "40px 50px" }}>
+          <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: selectedFormat === "story" ? "140px 60px 100px" : selectedFormat === "post" ? "60px" : "40px 50px" }}>
             <div style={{ display: "flex", justifyContent: logoPosition === "center-top" ? "center" : "flex-start" }}>
               <img
                 src={logoStyle === "rabbit" ? wrSymbol : wrSecondaryLogo}
