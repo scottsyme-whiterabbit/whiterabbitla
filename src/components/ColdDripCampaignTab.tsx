@@ -109,6 +109,10 @@ interface ColdCampaign {
   last_email_sent_at: string | null;
   status: string;
   created_at: string;
+  nurture_step?: number;
+  nurture_status?: string;
+  nurture_started_at?: string | null;
+  nurture_last_sent_at?: string | null;
 }
 
 interface ColdDripCampaignTabProps {
