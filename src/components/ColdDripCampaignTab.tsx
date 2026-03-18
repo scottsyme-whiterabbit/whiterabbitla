@@ -90,6 +90,17 @@ const CAMPAIGN_DATA: Record<string, { label: string; emoji: string; emails: Arra
   },
 };
 
+const NURTURE_DATA: Record<string, { emails: Array<{ subject: string; month: number; type: string }> }> = {
+  corporate_planner: {
+    emails: [
+      { subject: "400 phones went face-down", month: 1, type: "Story" },
+      { subject: "Your Q4 dates are going fast", month: 2, type: "Urgency" },
+      { subject: "3 entertainment mistakes smart planners avoid", month: 3, type: "Value" },
+      { subject: "Valet stand to Rolls-Royce", month: 4, type: "Origin" },
+    ],
+  },
+};
+
 const STATUS_COLORS: Record<string, string> = {
   active: "text-emerald-400 bg-emerald-500/20",
   paused: "text-yellow-400 bg-yellow-500/20",
