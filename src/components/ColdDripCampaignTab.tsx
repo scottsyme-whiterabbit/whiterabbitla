@@ -171,7 +171,16 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
     }
   }, [callAdmin, category]);
 
-  useEffect(() => { loadData(); }, [loadData]);
+  const loadNurture = useCallback(async () => {
+    try {
+      const res = await callAdmin("get_nurture_campaigns", { category });
+      setNurtureCampaigns(res.campaigns || []);
+    } catch (e) {
+      console.error("Failed to load nurture campaigns", e);
+    }
+  }, [callAdmin, category]);
+
+  useEffect(() => { loadData(); loadNurture(); }, [loadData, loadNurture]);
 
   // Stats
   const stats = useMemo(() => {
