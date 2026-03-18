@@ -99,6 +99,62 @@ const NURTURE_DATA: Record<string, { emails: Array<{ subject: string; month: num
       { subject: "Valet stand to Rolls-Royce", month: 4, type: "Origin" },
     ],
   },
+  wedding_planner: {
+    emails: [
+      { subject: "The cocktail hour save in Coral Gables", month: 1, type: "Story" },
+      { subject: "Your couples don't know this exists", month: 2, type: "Seasonal" },
+      { subject: "What guests actually remember (it's not the cake)", month: 3, type: "Value" },
+      { subject: "She said 'you made me belong'", month: 4, type: "Story" },
+    ],
+  },
+  country_club: {
+    emails: [
+      { subject: "What I noticed at the Jonathan Club", month: 1, type: "Story" },
+      { subject: "I just visited The Hand and The Eye", month: 2, type: "Trend" },
+      { subject: "The metric that predicts renewals", month: 3, type: "Value" },
+      { subject: "Why I only partner with a few clubs", month: 4, type: "Offer" },
+    ],
+  },
+  pr_agency: {
+    emails: [
+      { subject: "What YouTube booked me for", month: 1, type: "Story" },
+      { subject: "The content gap at brand events", month: 2, type: "Value" },
+      { subject: "What consulting for Olivia Rodrigo taught me", month: 3, type: "Proof" },
+      { subject: "From parking cars to performing for YouTube", month: 4, type: "Origin" },
+    ],
+  },
+  nonprofit: {
+    emails: [
+      { subject: "What happened at the Fosterall Gala", month: 1, type: "Story" },
+      { subject: "You're asking at the wrong time", month: 2, type: "Value" },
+      { subject: "Your donors know why they're there", month: 3, type: "Value" },
+      { subject: "Why I give nonprofits a different rate", month: 4, type: "Offer" },
+    ],
+  },
+  talent_management: {
+    emails: [
+      { subject: "Why Adam Ray called me", month: 1, type: "Story" },
+      { subject: "One booking, two entertainment needs", month: 2, type: "Value" },
+      { subject: "How to know if a magician is legit", month: 3, type: "Value" },
+      { subject: "Zero-maintenance talent", month: 4, type: "Proof" },
+    ],
+  },
+  spirits: {
+    emails: [
+      { subject: "What Rolls-Royce taught me about brands", month: 1, type: "Story" },
+      { subject: "Every brand has great liquid. Now what?", month: 2, type: "Value" },
+      { subject: "Your activation playbook is broken", month: 3, type: "Value" },
+      { subject: "A branded entertainment play", month: 4, type: "Offer" },
+    ],
+  },
+  restaurant: {
+    emails: [
+      { subject: "What Soho House gets right", month: 1, type: "Story" },
+      { subject: "Your private dining room is underbooked", month: 2, type: "Seasonal" },
+      { subject: "Entertainment as a revenue line", month: 3, type: "Value" },
+      { subject: "Why I keep the partner list small", month: 4, type: "Offer" },
+    ],
+  },
 };
 
 const STATUS_COLORS: Record<string, string> = {
