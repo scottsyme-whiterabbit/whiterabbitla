@@ -24,6 +24,10 @@ export type Database = {
           id: string
           last_email_sent_at: string | null
           name: string | null
+          nurture_last_sent_at: string | null
+          nurture_started_at: string | null
+          nurture_status: string
+          nurture_step: number
           phone: string | null
           started_at: string | null
           status: string
@@ -38,6 +42,10 @@ export type Database = {
           id?: string
           last_email_sent_at?: string | null
           name?: string | null
+          nurture_last_sent_at?: string | null
+          nurture_started_at?: string | null
+          nurture_status?: string
+          nurture_step?: number
           phone?: string | null
           started_at?: string | null
           status?: string
@@ -52,6 +60,10 @@ export type Database = {
           id?: string
           last_email_sent_at?: string | null
           name?: string | null
+          nurture_last_sent_at?: string | null
+          nurture_started_at?: string | null
+          nurture_status?: string
+          nurture_step?: number
           phone?: string | null
           started_at?: string | null
           status?: string

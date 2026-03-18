@@ -53,3 +53,6 @@ verify_jwt = false
 
 [functions.send-consultation-notification]
 verify_jwt = false
+
+[functions.nurture-drip]
+verify_jwt = false
