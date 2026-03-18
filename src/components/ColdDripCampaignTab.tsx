@@ -625,6 +625,174 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
           {loading ? "Enrolling..." : "Enroll Contacts"}
         </button>
       </div>
+      {/* ═══════════════════════════════════════════════ */}
+      {/* NURTURE DRIP SECTION */}
+      {/* ═══════════════════════════════════════════════ */}
+      {NURTURE_DATA[category] && (
+        <div className="border border-border">
+          <button
+            onClick={() => { setShowNurture(!showNurture); if (!showNurture && nurtureCampaigns.length === 0) loadNurture(); }}
+            className="w-full p-4 flex items-center justify-between hover:bg-accent/5 transition-colors"
+          >
+            <h3 className="font-sans text-sm tracking-[0.2em] uppercase text-muted-foreground flex items-center gap-2">
+              <Zap size={16} className="text-accent" />
+              Nurture Drip (Post-Cold)
+              {nurtureCampaigns.length > 0 && <span className="text-accent">({nurtureCampaigns.length})</span>}
+            </h3>
+            {showNurture ? <ChevronDown size={16} className="text-muted-foreground" /> : <ChevronRight size={16} className="text-muted-foreground" />}
+          </button>
+
+          {showNurture && (
+            <div className="p-4 space-y-4">
+              {/* Nurture Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="border border-border p-3 text-center">
+                  <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Pending</p>
+                  <p className="font-serif text-2xl text-foreground">{nurtureCampaigns.filter(c => c.nurture_status === "pending").length}</p>
+                </div>
+                <div className="border border-border p-3 text-center">
+                  <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Active</p>
+                  <p className="font-serif text-2xl text-foreground">{nurtureCampaigns.filter(c => c.nurture_status === "active").length}</p>
+                </div>
+                <div className="border border-border p-3 text-center">
+                  <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Completed</p>
+                  <p className="font-serif text-2xl text-foreground">{nurtureCampaigns.filter(c => c.nurture_status === "completed").length}</p>
+                </div>
+                <div className="border border-border p-3 text-center">
+                  <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Total</p>
+                  <p className="font-serif text-2xl text-foreground">{nurtureCampaigns.length}</p>
+                </div>
+              </div>
+
+              {/* Nurture Email Sequence */}
+              <div>
+                <h4 className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent mb-3">Monthly Nurture Sequence</h4>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                  {NURTURE_DATA[category].emails.map((email, i) => (
+                    <button
+                      key={i}
+                      onClick={async () => {
+                        if (nurturePreviewStep === i && nurturePreviewHtml) {
+                          setNurturePreviewStep(null);
+                          setNurturePreviewHtml("");
+                          setNurturePreviewSubject("");
+                          return;
+                        }
+                        setNurturePreviewStep(i);
+                        try {
+                          const res = await fetch(`${SUPABASE_URL}/functions/v1/nurture-drip`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json", Authorization: `Bearer ${SUPABASE_KEY}` },
+                            body: JSON.stringify({ action: "preview", category, step: i, previewName: "Kevin" }),
+                          });
+                          if (!res.ok) throw new Error("Preview failed");
+                          const data = await res.json();
+                          setNurturePreviewHtml(data.body_html);
+                          setNurturePreviewSubject(data.subject || "");
+                        } catch (e) {
+                          toast.error(e instanceof Error ? e.message : "Preview failed");
+                        }
+                      }}
+                      className={`border p-4 text-left transition-colors hover:border-accent ${nurturePreviewStep === i && nurturePreviewHtml ? "border-accent bg-accent/5" : "border-border"}`}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent/70">{email.type}</span>
+                        <span className="font-sans text-[10px] text-muted-foreground">Month {email.month}</span>
+                      </div>
+                      <p className="font-sans text-sm text-foreground leading-tight mb-2">"{email.subject}"</p>
+                      <div className="flex items-center gap-1">
+                        <Eye size={10} className="text-muted-foreground" />
+                        <span className="text-[10px] text-muted-foreground">Nurture {i + 1}/4</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+
+                {/* Nurture Preview */}
+                {nurturePreviewHtml && nurturePreviewStep !== null && (
+                  <div className="mt-4 border border-accent/30 bg-muted/10">
+                    <div className="px-4 py-3 border-b border-border space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="font-sans text-xs tracking-[0.15em] uppercase text-accent">
+                          Nurture Preview: {NURTURE_DATA[category].emails[nurturePreviewStep]?.type} (Email {nurturePreviewStep + 1}/4 · Month {NURTURE_DATA[category].emails[nurturePreviewStep]?.month})
+                        </span>
+                        <button onClick={() => { setNurturePreviewStep(null); setNurturePreviewHtml(""); setNurturePreviewSubject(""); }} className="text-muted-foreground hover:text-foreground">
+                          <X size={14} />
+                        </button>
+                      </div>
+                      {nurturePreviewSubject && (
+                        <p className="font-sans text-sm text-foreground">
+                          <span className="text-muted-foreground">Subject:</span> {nurturePreviewSubject}
+                        </p>
+                      )}
+                    </div>
+                    <div className="p-4 max-h-[600px] overflow-y-auto">
+                      <iframe
+                        srcDoc={nurturePreviewHtml}
+                        className="w-full min-h-[500px] border-0"
+                        title="Nurture email preview"
+                        sandbox=""
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Nurture Contacts Table */}
+              {nurtureCampaigns.filter(c => c.nurture_status === "active" || c.nurture_status === "completed").length > 0 && (
+                <div className="max-h-[400px] overflow-y-auto">
+                  <table className="w-full text-sm">
+                    <thead className="sticky top-0 bg-background border-b border-border">
+                      <tr>
+                        <th className="text-left px-4 py-2 font-sans text-xs tracking-wider uppercase text-muted-foreground">Contact</th>
+                        <th className="text-left px-4 py-2 font-sans text-xs tracking-wider uppercase text-muted-foreground hidden md:table-cell">Company</th>
+                        <th className="text-left px-4 py-2 font-sans text-xs tracking-wider uppercase text-muted-foreground">Nurture Step</th>
+                        <th className="text-left px-4 py-2 font-sans text-xs tracking-wider uppercase text-muted-foreground">Status</th>
+                        <th className="text-left px-4 py-2 font-sans text-xs tracking-wider uppercase text-muted-foreground hidden md:table-cell">Last Sent</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {nurtureCampaigns
+                        .filter(c => c.nurture_status === "active" || c.nurture_status === "completed")
+                        .map(c => (
+                        <tr key={c.id} className="border-b border-border/50 hover:bg-accent/5 transition-colors">
+                          <td className="px-4 py-2.5">
+                            <p className="text-foreground">{c.name || c.email.split("@")[0]}</p>
+                            <p className="text-xs text-muted-foreground">{c.email}</p>
+                          </td>
+                          <td className="px-4 py-2.5 text-muted-foreground hidden md:table-cell">{c.company || "—"}</td>
+                          <td className="px-4 py-2.5">
+                            <div className="flex gap-0.5 mb-1">
+                              {[0, 1, 2, 3].map(s => (
+                                <div key={s} className={`h-1.5 w-4 rounded-full ${s < (c.nurture_step || 0) ? "bg-accent" : "bg-muted/30"}`} />
+                              ))}
+                            </div>
+                            <span className="text-[10px] text-muted-foreground">
+                              {(c.nurture_step || 0) === 0 ? "Not started" : (c.nurture_step || 0) >= 4 ? "All sent" : `${c.nurture_step}/4 sent`}
+                            </span>
+                          </td>
+                          <td className="px-4 py-2.5">
+                            <span className={`text-[10px] px-2 py-0.5 rounded font-sans tracking-wider uppercase ${
+                              c.nurture_status === "active" ? "text-emerald-400 bg-emerald-500/20" :
+                              c.nurture_status === "completed" ? "text-muted-foreground bg-muted/20" :
+                              "text-muted-foreground bg-muted/10"
+                            }`}>
+                              {c.nurture_status}
+                            </span>
+                          </td>
+                          <td className="px-4 py-2.5 text-[11px] text-muted-foreground hidden md:table-cell">
+                            {c.nurture_last_sent_at ? new Date(c.nurture_last_sent_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "—"}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
