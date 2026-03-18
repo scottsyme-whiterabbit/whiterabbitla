@@ -464,7 +464,7 @@ const SocialGenerator = () => {
                   {/* Forest green overlay */}
                   <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, ${forestDark}${Math.round(overlayOpacity * 2.55).toString(16).padStart(2, "0")} 0%, ${forestDark}${Math.round(Math.min(overlayOpacity + 20, 90) * 2.55).toString(16).padStart(2, "0")} 100%)` }} />
                   {/* Content layout */}
-                  <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: selectedFormat === "story" ? "80px 60px 100px" : selectedFormat === "post" ? "60px" : "40px 50px" }}>
+                  <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: selectedFormat === "story" ? "140px 60px 100px" : selectedFormat === "post" ? "60px" : "40px 50px" }}>
                     {/* Logo */}
                     <div style={{ display: "flex", justifyContent: logoPosition === "center-top" ? "center" : "flex-start" }}>
                       <img
