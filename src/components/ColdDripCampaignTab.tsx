@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { toast } from "sonner";
-import { Target, Upload, Eye, RefreshCw, Users, Mail, Pause, Play, MessageSquare, ChevronDown, ChevronRight, Trash2, Plus, X } from "lucide-react";
+import { Target, Upload, Eye, RefreshCw, Users, Mail, Pause, Play, MessageSquare, ChevronDown, ChevronRight, Trash2, Plus, X, Zap } from "lucide-react";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
