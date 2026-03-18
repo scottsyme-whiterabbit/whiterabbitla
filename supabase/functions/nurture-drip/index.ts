@@ -207,8 +207,358 @@ ${signoffFull()}`),
     ],
 
     // ═══════════════════════════════════════════════
-    // PLACEHOLDER: Other categories (to be added in follow-up prompts)
+    // WEDDING PLANNER NURTURE
     // ═══════════════════════════════════════════════
+    wedding_planner: [
+      {
+        subject: "The cocktail hour save in Coral Gables",
+        preheader: "What happened when the couple disappeared for photos.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">I performed at a wedding in Coral Gables recently. The couple was worried about cocktail hour — they would be off doing photos for an hour, their guests barely knew each other, and the energy could easily flatline.</p>
+<p style="margin:0 0 18px;">I spent that hour doing close-up magic between groups of guests. Within minutes, strangers were laughing together, handing me their phones, trying to figure out how I knew what they were thinking. By the time the couple walked in for the reception, the room was electric.</p>
+<p style="margin:0 0 18px;">The bride told me later that guests mentioned the magic more than anything else in their thank-you notes. I have seen the same thing happen at a Monterey wedding, at private estates, and everywhere in between.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/wedding-entertainment-beyond-the-dj`, "Wedding Entertainment Beyond the DJ", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "Your couples don't know this exists",
+        preheader: "Engagement season is here — and couples care about entertainment.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Engagement season is here. Couples care about entertainment more than ever, but most default to the same playbook: DJ and photo booth.</p>
+<p style="margin:0 0 18px;">The reaction I get from every couple I meet is the same: "Wait — we can have THIS at our wedding?"</p>
+<p style="margin:0 0 18px;">Close-up magic during cocktail hour. A parlor show between courses. Mentalism at the tables. It is the kind of entertainment that makes guests stop what they are doing and lean in. From Coral Gables to Monterey to LA — every couple says the same thing: they wish they had known sooner.</p>
+${ctaGrab}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/why-cocktail-hour-entertainment-matters`, "Why Cocktail Hour Entertainment Changes Everything", contactId, step, `nurture-${category}`)}</p>
+${signoff()}`),
+      },
+      {
+        subject: "What guests actually remember (it's not the cake)",
+        preheader: "The moments that get mentioned at brunch the next day.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Guests forget the centerpieces. They forget the linens. They forget the cake flavor. What they remember are the unexpected moments — the stories they tell at brunch the next morning.</p>
+<p style="margin:0 0 18px;">Three things make wedding entertainment actually land:</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">1. Match the style to the venue.</strong> A garden wedding and a hotel ballroom need completely different energy.</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">2. Time it right.</strong> Cocktail hour and transitions are the sweet spots — not during the toasts, not during first dance.</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">3. Make it personal.</strong> The best moments happen when guests feel like the experience was made for them, not performed at them.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/how-to-vet-magician-high-end-event`, "How to Vet a Magician for a High-End Event", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "She said 'you made me belong'",
+        preheader: "A moment from a Monterey wedding.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">At a wedding in Monterey, a woman pulled me aside after cocktail hour. She had flown in from out of state and barely knew anyone.</p>
+<p style="margin:0 0 18px;">I had performed at her table — close-up magic, mind reading, the kind of thing that gets strangers talking to each other. By the time I moved on, the people around her were not strangers anymore. They became her dinner companions for the rest of the night.</p>
+<p style="margin:0 0 18px;">She said, "You made me feel like I belonged."</p>
+<p style="margin:0 0 18px;">Every couple worries about whether their people will mix. Entertainment does not just fill time — it solves for connection.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/why-event-planners-adding-magician-vendor-list`, "Why Event Planners Are Adding a Magician to Their Vendor List", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+    ],
+
+    // ═══════════════════════════════════════════════
+    // COUNTRY CLUB NURTURE
+    // ═══════════════════════════════════════════════
+    country_club: [
+      {
+        subject: "What I noticed at the Jonathan Club",
+        preheader: "Why members stay longer on entertainment nights.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">I have performed at the Jonathan Club and Soho House multiple times now. One thing I notice every time: members at entertainment nights are more engaged, they bring guests, and they stay later.</p>
+<p style="margin:0 0 18px;">Well-programmed entertainment gives members something they cannot get at home. That is the promise clubs make — and interactive magic delivers on it in a way that a wine dinner or speaker series cannot.</p>
+<p style="margin:0 0 18px;">If your programming calendar has room for something different, I would love to chat about what this looks like for your club.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/golf-tournament-entertainment-ideas`, "Golf Tournament Entertainment Ideas", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "I just visited The Hand and The Eye",
+        preheader: "The future of experiential entertainment is already here.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">I recently visited The Hand and The Eye in Chicago — a dedicated space for experiential entertainment. The demand for curated, intimate experiences is growing fast, and clubs are positioned perfectly to capitalize on it.</p>
+<p style="margin:0 0 18px;">Three formats that work especially well for clubs:</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Evening of Wonder</strong> — a 45-minute parlor show for 30 to 60 guests. Intimate, theatrical, unforgettable.</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Roaming Cocktail Magic</strong> — close-up magic during receptions and social hours. No setup, no stage.</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">NYE Mentalism</strong> — mind reading and predictions for your biggest night of the year.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/best-magic-experiences-los-angeles`, "Best Magic Experiences in Los Angeles", contactId, step, `nurture-${category}`)}</p>
+${signoff()}`),
+      },
+      {
+        subject: "The metric that predicts renewals",
+        preheader: "Guest introductions per event — the number that matters most.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">There is one metric I think about after every club event: guest introductions per event. It predicts F&B revenue, future attendance, and ultimately, renewals.</p>
+<p style="margin:0 0 18px;">Entertainment is the biggest driver of that number. Members do not invite friends to "another wine dinner." They invite friends to "you have to see this guy." From the Jonathan Club to Soho House, I see the same pattern: the events with interactive entertainment generate the most guest introductions by a wide margin.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/entertainment-gap-planners-dont-know`, "The Entertainment Gap Planners Don't Know They Have", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "Why I only partner with a few clubs",
+        preheader: "Recurring entertainment that belongs to your club.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Magic works best as a recurring element, not a one-off. The first visit, members are impressed. The return visit, they become evangelists — bringing friends, requesting dates, building it into their social calendar.</p>
+<p style="margin:0 0 18px;">That is why I keep the partner list small. Seasonal partnerships — three to four events per year — with priority booking, preferred pricing, and market exclusivity. Your club gets an experience that belongs to you.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/best-magic-experiences-los-angeles`, "Best Magic Experiences in Los Angeles", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+    ],
+
+    // ═══════════════════════════════════════════════
+    // PR AGENCY NURTURE
+    // ═══════════════════════════════════════════════
+    pr_agency: [
+      {
+        subject: "What YouTube booked me for",
+        preheader: "The brief wasn't entertain — it was create content.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">YouTube hired me for a Brittany Broski event. The brief was not "entertain the guests." It was "create organic social content."</p>
+<p style="margin:0 0 18px;">Roaming close-up magic is designed to be filmed. The reactions are genuine, the moments are shareable, and the organic content extended the reach of the event far beyond the room. Guests posted without being asked — because what they saw was too good not to share.</p>
+<p style="margin:0 0 18px;">Magic as a PR tool. Not as filler — as strategy.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/best-magic-experiences-los-angeles`, "Best Magic Experiences in Los Angeles", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "The content gap at brand events",
+        preheader: "Great food and speakers don't generate organic shares.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">The real audience at any brand event is not in the room — it is the people watching on social the next morning.</p>
+<p style="margin:0 0 18px;">Great food does not generate organic shares. Neither do great speakers. What generates shares are impossible moments that people cannot help but capture. Experiential entertainment fills a content gap that most event teams do not even know they have.</p>
+<p style="margin:0 0 18px;">I have seen this work at YouTube events, Rolls-Royce activations, and press dinners. The formula is the same: give people something they have never seen, and they do the marketing for you.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/surprise-clients-entertainment-they-didnt-know-they-wanted`, "Surprise Clients With Entertainment They Didn't Know They Wanted", contactId, step, `nurture-${category}`)}</p>
+${signoff()}`),
+      },
+      {
+        subject: "What consulting for Olivia Rodrigo taught me",
+        preheader: "Big names don't want competing entertainment — they want elevation.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">I consulted for Olivia Rodrigo's team on experiential elements for a project. What I learned: big names do not want competing entertainment. They want elevation. The magic has to feel like it belongs — an extension of the brand, not a distraction from it.</p>
+<p style="margin:0 0 18px;">Same principle at Rolls-Royce. The brief is never "do your thing." It is "understand our brand and create moments that say it without words."</p>
+<p style="margin:0 0 18px;">That is the difference between hiring a magician and hiring a creative partner.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/surprise-clients-entertainment-they-didnt-know-they-wanted`, "Surprise Clients With Entertainment They Didn't Know They Wanted", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "From parking cars to performing for YouTube",
+        preheader: "The unlikely path to White Rabbit LA.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Before White Rabbit LA — real estate. Before that — parking cars. Magic was always on the side.</p>
+<p style="margin:0 0 18px;">What I learned at the valet stand: you have three seconds to read the room and make someone feel seen. That skill transfers directly to brand events, press dinners, and activations. The audience changed. The approach did not.</p>
+<p style="margin:0 0 18px;">Now I perform for YouTube, Olivia Rodrigo, and Rolls-Royce. If you want to explore what this looks like for your clients, I am happy to do a free 20-minute creative consultation.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/not-kids-birthday-party-modern-magic`, "Not Your Kid's Birthday Party: Modern Magic", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+    ],
+
+    // ═══════════════════════════════════════════════
+    // NONPROFIT NURTURE
+    // ═══════════════════════════════════════════════
+    nonprofit: [
+      {
+        subject: "What happened at the Fosterall Gala",
+        preheader: "Entertainment before the fundraising ask isn't luxury — it's a primer.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">I performed at the Fosterall Gala recently. Thirty-minute parlor show between dinner and the paddle raise. The room shifted — wonder, laughter, surprise — and it unified everyone in a way that a speech alone cannot.</p>
+<p style="margin:0 0 18px;">The energy was different when the ask came. People were open, connected, present. The gala chair told me afterward that entertainment before the fundraising ask is not a luxury — it is a primer.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/why-cocktail-hour-entertainment-matters`, "Why Cocktail Hour Entertainment Changes Everything", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "You're asking at the wrong time",
+        preheader: "Most galas front-load the fun and back-load the ask.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Most galas front-load the fun and back-load the ask. By the time the paddle raise happens, people are full and tired. The energy has left the room.</p>
+<p style="margin:0 0 18px;">The fix is simple: put powerful entertainment right before the ask.</p>
+<p style="margin:0 0 18px;">The ideal timeline: cocktails with roaming close-up magic, dinner, a parlor show that brings the room together, then the paddle raise while the energy is at its peak, then dessert.</p>
+<p style="margin:0 0 18px;">I saw this work at Fosterall. The sequence matters more than the budget.</p>
+${ctaGrab}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/entertainment-gap-planners-dont-know`, "The Entertainment Gap Planners Don't Know They Have", contactId, step, `nurture-${category}`)}</p>
+${signoff()}`),
+      },
+      {
+        subject: "Your donors know why they're there",
+        preheader: "Make them feel valued, not like ATMs.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Your donors know why they are there. They do not need to be reminded. What they need is to feel valued — not like ATMs.</p>
+<p style="margin:0 0 18px;">Three principles that change gala energy:</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Lead with experience, not information.</strong> The emotional state of the room matters more than the slideshow.</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Make it intimate, even if it is big.</strong> Close-up magic at tables creates one-on-one moments in a room of 200.</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Give them a story to tell.</strong> "You won't believe what happened at the gala" is free marketing for next year's event.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/why-event-planners-adding-magician-vendor-list`, "Why Event Planners Are Adding a Magician to Their Vendor List", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "Why I give nonprofits a different rate",
+        preheader: "Entertainment is a fundraising tool, not a luxury.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">I offer special pricing for 501(c)(3) organizations. Fosterall proved to me that entertainment at a gala is not a luxury line item — it is a fundraising tool that directly impacts giving.</p>
+<p style="margin:0 0 18px;">What the nonprofit rate includes: a reduced performance fee, a complimentary pre-event consultation to design the ideal timeline, and a post-event debrief so you know exactly what worked.</p>
+<p style="margin:0 0 18px;">I would rather help you raise more at a lower rate than sit on the sideline.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/how-to-choose-entertainment-for-luxury-event`, "How to Choose Entertainment for a Luxury Event", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+    ],
+
+    // ═══════════════════════════════════════════════
+    // TALENT MANAGEMENT NURTURE
+    // ═══════════════════════════════════════════════
+    talent_management: [
+      {
+        subject: "Why Adam Ray called me",
+        preheader: "Even top entertainment wants participation, not just watching.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">I consulted for Adam Ray on experiential elements in live events. Even top-tier entertainment talent wants participation, not just watching. The audience has changed — they want to be part of the show.</p>
+<p style="margin:0 0 18px;">The opportunity for agents: close-up magic fills gaps in event programming, creates organic social content, scales from 10 to 500 guests, and differentiates your roster from every other talent agency offering the same DJ and photo booth.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/how-to-vet-magician-high-end-event`, "How to Vet a Magician for a High-End Event", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "One booking, two entertainment needs",
+        preheader: "Close-up during cocktails AND a parlor show during dinner.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Here is a format your clients might not know exists: a hybrid entertainer who does close-up magic during cocktails AND a parlor show during dinner. One booking covers two entertainment needs.</p>
+<p style="margin:0 0 18px;">I have done this at YouTube events, Morgan Stanley dinners, and Soho House. It works for galas, private parties, brand activations, and weddings. The transition from roaming to stage creates a natural arc through the evening.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/why-your-event-needs-mc-not-just-entertainment`, "Why Your Event Needs an MC, Not Just Entertainment", contactId, step, `nurture-${category}`)}</p>
+${signoff()}`),
+      },
+      {
+        subject: "How to know if a magician is legit",
+        preheader: "Agents ask me this all the time.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Agents ask me this all the time. Here is what separates a private event magician from a stage performer:</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Private event experience, not just stage.</strong> The skills are completely different. Reading a room of 30 VIPs requires a different toolkit than working a 2,000-seat theater.</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Real-time adaptability.</strong> I have performed for Don Cheadle and for Wall Street traders in the same month. The material changes. The read changes. The approach changes.</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Professional logistics.</strong> Insurance, on-time arrival, no rider, no AV needs. And unedited event footage — not just highlight reels.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/how-to-vet-magician-high-end-event`, "How to Vet a Magician for a High-End Event", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "Zero-maintenance talent",
+        preheader: "What agents say most about working with me.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">The thing agents tell me they appreciate most: zero maintenance. The performance is exceptional, the logistics are handled, and they get a thank-you call the next day.</p>
+<p style="margin:0 0 18px;">From YouTube to galas to Soho House — the experience is consistent. What I offer agents: priority availability, agent commission, custom marketing materials for your clients, and direct access to me for event coordination.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/why-event-planners-adding-magician-vendor-list`, "Why Event Planners Are Adding a Magician to Their Vendor List", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+    ],
+
+    // ═══════════════════════════════════════════════
+    // SPIRITS BRAND NURTURE
+    // ═══════════════════════════════════════════════
+    spirits: [
+      {
+        subject: "What Rolls-Royce taught me about brands",
+        preheader: "Precision, elegance, impossible made effortless.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">I performed at a Rolls-Royce event recently. The brief was simple: create moments that feel as crafted as our cars. Precision. Elegance. The impossible made effortless.</p>
+<p style="margin:0 0 18px;">The same principle applies to spirits. Your liquid has a story — the terroir, the distiller's hand, the years in the barrel. Entertainment can bring that story to life in a way that goes beyond a tasting card. When the experience matches the craft, guests feel it.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/magic-for-spirits-brands-activations`, "Magic for Spirits Brand Activations", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "Every brand has great liquid. Now what?",
+        preheader: "Cut through with experiential entertainment integrated into the brand.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Every brand has great liquid. Every brand has beautiful bottles and a compelling origin story. The question is how you cut through.</p>
+<p style="margin:0 0 18px;">Experiential entertainment — integrated into the brand, not bolted on — is the answer. A pour paired with a magic moment. Predictions that match tasting notes. A secret menu reveal that feels impossible. Integration, not interruption.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/magic-for-spirits-brands-activations`, "Magic for Spirits Brand Activations", contactId, step, `nurture-${category}`)}</p>
+${signoff()}`),
+      },
+      {
+        subject: "Your activation playbook is broken",
+        preheader: "Booth, samples, swag, hope. There's a better way.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">The standard activation playbook: booth, samples, swag, hope someone remembers your name. Here is what works instead:</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Create a moment that travels.</strong> A 15-second trick featuring your bottle becomes a video that reaches people who were never in the room.</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Turn passive into active.</strong> Guests stop sampling and start participating. They are involved, not observing.</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Make the bartender the hero.</strong> A magic moment at the bar that makes your brand ambassador the most interesting person at the event.</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Collect stories, not just leads.</strong> The ROI of "you won't believe what happened" travels further than any follow-up email.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/surprise-clients-entertainment-they-didnt-know-they-wanted`, "Surprise Clients With Entertainment They Didn't Know They Wanted", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "A branded entertainment play",
+        preheader: "When entertainment is as intentional as the label design, guests feel it.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Here is what I am building with select spirits partners: a signature performance designed around your brand story. Something you can deploy across multiple activations, designed for organic social with the product in frame, and exclusive — no competitors get the same experience.</p>
+<p style="margin:0 0 18px;">When the entertainment is as intentional as the label design, guests feel it. They do not just remember the event — they remember the brand that created it.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/magic-for-spirits-brands-activations`, "Magic for Spirits Brand Activations", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+    ],
+
+    // ═══════════════════════════════════════════════
+    // RESTAURANT NURTURE
+    // ═══════════════════════════════════════════════
+    restaurant: [
+      {
+        subject: "What Soho House gets right",
+        preheader: "Someone who came for dinner stays two extra hours.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">I have performed at Soho House multiple times. Here is what I notice every time: someone who came for dinner stays two extra hours. More time means more drinks, more desserts, more memories associated with your space.</p>
+<p style="margin:0 0 18px;">The entertainment fits the space — close-up magic at the tables, matching the energy of the room. Intimate and elevated. No stage, no microphone, no disruption to service. Just an experience that makes guests tell their friends to come next time.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/best-magic-experiences-los-angeles`, "Best Magic Experiences in Los Angeles", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "Your private dining room is underbooked",
+        preheader: "Holiday season is the biggest opportunity.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Holiday season is your biggest opportunity. Three packages that fill private dining rooms and drive revenue:</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Holiday Magic Dinner</strong> — prix fixe menu paired with table-side magic. A ticketed experience night that books out fast.</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Corporate Buyouts</strong> — companies looking for team dinner entertainment. One call, one vendor, done.</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Gift an Experience</strong> — certificates for a magic dinner night. Perfect for regulars looking for a unique gift.</p>
+<p style="margin:0 0 18px;">This is the format I have built at Soho House. Happy to walk you through how it works.</p>
+${ctaGrab}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/planning-private-party-los-angeles`, "Planning a Private Party in Los Angeles", contactId, step, `nurture-${category}`)}</p>
+${signoff()}`),
+      },
+      {
+        subject: "Entertainment as a revenue line",
+        preheader: "Not vibes — revenue.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">This is not about vibes — it is about revenue.</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Ticketed experience nights</strong> at $100 to $200 per head on slow nights. Turn your weakest night into your most profitable.</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">PDR upsells</strong> that increase the average check by adding entertainment to private dining packages.</p>
+<p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Social moments</strong> where guests tag your location. Organic marketing you cannot buy.</p>
+<p style="margin:0 0 18px;">I recently visited The Hand and The Eye in Chicago — a dedicated venue for experiential entertainment. The trend is real and it is accelerating.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/best-magic-experiences-los-angeles`, "Best Magic Experiences in Los Angeles", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+      {
+        subject: "Why I keep the partner list small",
+        preheader: "The experience belongs to your restaurant.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">I will not work with competing restaurants in the same market. The experience belongs to you.</p>
+<p style="margin:0 0 18px;">What a partnership looks like: monthly or bi-weekly magic nights, co-branded marketing, flexible pricing that scales with your covers, and market exclusivity. I built this at Soho House — the audience grows over time because the experience becomes part of your identity.</p>
+${cta}
+<p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/planning-private-party-los-angeles`, "Planning a Private Party in Los Angeles", contactId, step, `nurture-${category}`)}</p>
+${signoffFull()}`),
+      },
+    ],
   };
 
   const templates = TEMPLATES[category];
