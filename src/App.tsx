@@ -55,6 +55,7 @@ const AppContent = () => {
   usePageTracking();
   return (
     <>
+      <DynamicCanonical />
       <LocalBusinessSchema />
       <ScrollToTop />
       <Navbar />
