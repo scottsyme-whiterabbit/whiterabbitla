@@ -147,7 +147,7 @@ const About = () => {
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={scottCouchImg} alt="Scott Syme portrait seated on couch, White Rabbit magician Los Angeles" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={scottCouchImg} alt="Scott Syme portrait seated on couch, White Rabbit magician Los Angeles" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.2}>
