@@ -124,6 +124,13 @@ const Index = () => {
     sameAs: ["https://www.instagram.com/scottsyme_/"],
   });
 
+  useJsonLd("homepage-breadcrumb-schema", {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://whiterabbitla.com/" },
+    ],
+  });
+
   return (
     <main id="main-content">
       {/* Hero */}

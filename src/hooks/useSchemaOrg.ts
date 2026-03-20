@@ -28,6 +28,10 @@ export function useJsonLd(id: string, data: Record<string, unknown> | Record<str
     items.forEach((item, i) => {
       const scriptId = items.length === 1 ? id : `${id}-${i}`;
       document.getElementById(scriptId)?.remove();
+
+      // Skip empty objects (no @type) to avoid null/invalid JSON-LD
+      if (!item || Object.keys(item).length === 0) return;
+
       const script = document.createElement("script");
       script.type = "application/ld+json";
       script.id = scriptId;
