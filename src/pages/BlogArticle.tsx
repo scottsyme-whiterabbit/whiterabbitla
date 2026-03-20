@@ -261,6 +261,8 @@ const BlogArticle = () => {
                       <img
                         src={categoryInlineImages[0].src}
                         alt={categoryInlineImages[0].alt}
+                        width={800}
+                        height={533}
                         loading="lazy"
                         className="w-full h-auto"
                       />
