@@ -142,7 +142,7 @@ const About = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-4 gap-4">
           <AnimatedSection>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={cardsMotionImg} alt="Playing cards in motion against emerald curtain backdrop" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={cardsMotionImg} alt="Playing cards in motion against emerald curtain backdrop" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
