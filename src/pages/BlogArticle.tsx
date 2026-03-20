@@ -261,6 +261,8 @@ const BlogArticle = () => {
                       <img
                         src={categoryInlineImages[0].src}
                         alt={categoryInlineImages[0].alt}
+                        width={800}
+                        height={533}
                         loading="lazy"
                         className="w-full h-auto"
                       />
@@ -289,6 +291,8 @@ const BlogArticle = () => {
                       <img
                         src={categoryInlineImages[1].src}
                         alt={categoryInlineImages[1].alt}
+                        width={800}
+                        height={533}
                         loading="lazy"
                         className="w-full h-auto"
                       />
@@ -304,7 +308,7 @@ const BlogArticle = () => {
               if (i > 0 && i !== midIndex && i % 4 === 0) {
                 elements.push(
                   <div key={`divider-${i}`} className="flex justify-center my-6 md:my-8">
-                    <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-60" />
+                    <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-12 w-auto opacity-60" />
                   </div>
                 );
               }

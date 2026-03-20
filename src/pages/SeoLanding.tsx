@@ -210,6 +210,8 @@ const SeoLanding = () => {
           <img
             src={heroImage}
             alt={page.heroHeadline}
+            width={1200}
+            height={630}
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-forest-dark/80" />
@@ -247,6 +249,10 @@ const SeoLanding = () => {
                 key={client.name}
                 src={client.logo}
                 alt={client.name}
+                width={70}
+                height={28}
+                loading="lazy"
+                decoding="async"
                 className="h-5 md:h-7 w-auto object-contain opacity-50 brightness-0 invert"
               />
             ))}

@@ -75,6 +75,8 @@ const DigitalCard = () => {
             <img
               src={wrLogo}
               alt="White Rabbit Los Angeles logo"
+              width={96}
+              height={96}
               className="h-24 object-contain"
             />
           </div>
@@ -85,6 +87,8 @@ const DigitalCard = () => {
               <img
                 src={scottPhoto}
                 alt="Scott Syme"
+                width={96}
+                height={96}
                 className="w-full h-full object-cover"
               />
             </div>

@@ -156,6 +156,8 @@ const PersonaCard = ({ persona }: PersonaCardProps) => {
           <img
             src={wrSymbol}
             alt="White Rabbit"
+            width={40}
+            height={40}
             style={{ width: "40px", height: "auto", margin: "0 auto", opacity: 0.7 }}
             crossOrigin="anonymous"
           />

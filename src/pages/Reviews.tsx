@@ -223,7 +223,7 @@ const Reviews = () => {
       {/* Hero */}
       <section className="relative min-h-[50vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">
-          <img src={audienceImg} alt="Audience reacting to Scott Syme White Rabbit magic show at a luxury event in Los Angeles" className="w-full h-full object-cover" fetchPriority="high" decoding="async" />
+          <img src={audienceImg} alt="Audience reacting to Scott Syme White Rabbit magic show at a luxury event in Los Angeles" width={1200} height={630} className="w-full h-full object-cover" fetchPriority="high" decoding="async" />
           <div className="absolute inset-0 bg-forest-dark/70" />
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center pb-16 pt-32">
@@ -241,7 +241,7 @@ const Reviews = () => {
 
       {/* Branded divider */}
       <div className="flex justify-center py-8">
-        <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50" />
+        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-12 w-auto opacity-50" />
       </div>
 
       {/* Reviews Grid */}
@@ -270,7 +270,7 @@ const Reviews = () => {
 
           {/* Leave a Review CTA */}
           <div className="text-center mt-16 mb-4">
-            <img src={threeStars} alt="" aria-hidden="true" className="h-11 w-auto opacity-50 mx-auto mb-6" />
+            <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={110} height={44} className="h-11 w-auto opacity-50 mx-auto mb-6" />
             <p className="font-serif text-2xl text-foreground mb-3">Experienced the Magic?</p>
             <p className="font-sans text-sm text-muted-foreground mb-6 max-w-md mx-auto">
               Your words help others discover the wonder. We'd love to hear about your experience.

@@ -133,6 +133,8 @@ const PitchDeck = () => {
           <img
             src={heroImg}
             alt="White Rabbit private magic show with emerald curtains and cinematic lighting"
+            width={1200}
+            height={800}
             className="w-full h-full object-cover object-[center_30%]"
             fetchPriority="high"
             decoding="async"
@@ -180,6 +182,8 @@ const PitchDeck = () => {
               <img
                 src={scottImg}
                 alt="Scott Syme, luxury magician and founder of White Rabbit"
+                width={600}
+                height={750}
                 loading="lazy"
                 decoding="async"
                 className="w-full h-full object-cover"
@@ -234,6 +238,8 @@ const PitchDeck = () => {
                     <img
                       src={exp.image}
                       alt={exp.title}
+                      width={400}
+                      height={300}
                       loading="lazy"
                       decoding="async"
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -259,6 +265,8 @@ const PitchDeck = () => {
                 <img
                   src={img}
                   alt="White Rabbit magic experience"
+                  width={400}
+                  height={400}
                   loading="lazy"
                   decoding="async"
                   className="w-full h-full object-cover"
@@ -282,6 +290,8 @@ const PitchDeck = () => {
                   <img
                     src={client.logo}
                     alt={`${client.name} logo`}
+                    width={120}
+                    height={50}
                     loading="lazy"
                     decoding="async"
                     className="max-h-full max-w-full w-auto h-auto object-contain opacity-60 brightness-0 invert"

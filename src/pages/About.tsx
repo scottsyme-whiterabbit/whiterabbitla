@@ -28,7 +28,7 @@ const About = () => {
       {/* Hero with Scott's photo */}
       <section className="relative min-h-[85vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">
-          <img src={scottPhoto} alt="Scott Syme, luxury magician and entertainer for private events in Los Angeles, walking through a desert landscape in a tailored suit" className="w-full h-full object-cover object-center" fetchPriority="high" decoding="async" style={{ filter: 'contrast(1.1) saturate(0.85) brightness(0.95) sepia(0.15)' }} />
+          <img src={scottPhoto} alt="Scott Syme, luxury magician and entertainer for private events in Los Angeles, walking through a desert landscape in a tailored suit" width={1200} height={800} className="w-full h-full object-cover object-center" fetchPriority="high" decoding="async" style={{ filter: 'contrast(1.1) saturate(0.85) brightness(0.95) sepia(0.15)' }} />
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark via-forest-dark/30 to-forest-dark/10 hidden md:block" />
           <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-transparent md:hidden" />
         </div>
@@ -100,7 +100,7 @@ const About = () => {
 
       {/* Branded divider */}
       <div className="flex justify-center py-6">
-        <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50" />
+        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-12 w-auto opacity-50" />
       </div>
 
       {/* Featured In — Press & Authority */}
@@ -142,22 +142,22 @@ const About = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-4 gap-4">
           <AnimatedSection>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={cardsMotionImg} alt="Playing cards in motion against emerald curtain backdrop" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={cardsMotionImg} alt="Playing cards in motion against emerald curtain backdrop" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={scottCouchImg} alt="Scott Syme portrait seated on couch, White Rabbit magician Los Angeles" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={scottCouchImg} alt="Scott Syme portrait seated on couch, White Rabbit magician Los Angeles" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.2}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={cardsFanImg} alt="Close-up card fan sleight of hand by Scott Syme" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={cardsFanImg} alt="Close-up card fan sleight of hand by Scott Syme" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.3}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={cardsStackImg} alt="Card stack flourish with emerald curtain backdrop" loading="lazy" decoding="async" className="w-full h-full object-cover scale-x-[-1]" />
+              <img src={cardsStackImg} alt="Card stack flourish with emerald curtain backdrop" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover scale-x-[-1]" />
             </div>
           </AnimatedSection>
         </div>
@@ -205,7 +205,7 @@ const About = () => {
 
       {/* Branded divider */}
       <div className="flex justify-center py-6">
-        <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50" />
+        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-12 w-auto opacity-50" />
       </div>
 
       {/* What Scott Offers — links to Experience */}
@@ -267,7 +267,7 @@ const About = () => {
 
             </h2>
             <div className="overflow-hidden">
-              <img src={creditsPhoto} alt="White Rabbit magician client logos including Netflix, Disney, Rolls Royce, Morgan Stanley, and more" loading="lazy" decoding="async" className="w-full h-auto" />
+              <img src={creditsPhoto} alt="White Rabbit magician client logos including Netflix, Disney, Rolls Royce, Morgan Stanley, and more" width={1200} height={400} loading="lazy" decoding="async" className="w-full h-auto" />
             </div>
           </AnimatedSection>
         </div>
