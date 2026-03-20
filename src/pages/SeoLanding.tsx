@@ -210,6 +210,8 @@ const SeoLanding = () => {
           <img
             src={heroImage}
             alt={page.heroHeadline}
+            width={1200}
+            height={630}
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-forest-dark/80" />
