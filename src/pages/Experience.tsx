@@ -136,7 +136,7 @@ const Experience = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 md:grid-cols-3 gap-6">
           <AnimatedSection>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={cardsEmeraldImg} alt="Close-up magic with emerald green curtain backdrop at White Rabbit private magic show Los Angeles" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={cardsEmeraldImg} alt="Close-up magic with emerald green curtain backdrop at White Rabbit private magic show Los Angeles" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
