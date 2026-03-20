@@ -28,7 +28,7 @@ const About = () => {
       {/* Hero with Scott's photo */}
       <section className="relative min-h-[85vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">
-          <img src={scottPhoto} alt="Scott Syme, luxury magician and entertainer for private events in Los Angeles, walking through a desert landscape in a tailored suit" className="w-full h-full object-cover object-center" fetchPriority="high" decoding="async" style={{ filter: 'contrast(1.1) saturate(0.85) brightness(0.95) sepia(0.15)' }} />
+          <img src={scottPhoto} alt="Scott Syme, luxury magician and entertainer for private events in Los Angeles, walking through a desert landscape in a tailored suit" width={1200} height={800} className="w-full h-full object-cover object-center" fetchPriority="high" decoding="async" style={{ filter: 'contrast(1.1) saturate(0.85) brightness(0.95) sepia(0.15)' }} />
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark via-forest-dark/30 to-forest-dark/10 hidden md:block" />
           <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-transparent md:hidden" />
         </div>
