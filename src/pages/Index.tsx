@@ -351,7 +351,7 @@ const Index = () => {
             </AnimatedSection>
             <AnimatedSection delay={0.1}>
               <Link to="/about" className="group block relative aspect-[3/4] overflow-hidden">
-                <img src={scottDesertImg} alt="Scott Syme, magician and founder of White Rabbit" loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <img src={scottDesertImg} alt="Scott Syme, magician and founder of White Rabbit" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-8">
                   <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">About</p>
