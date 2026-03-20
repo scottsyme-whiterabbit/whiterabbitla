@@ -141,7 +141,7 @@ const Experience = () => {
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={mentalistImg} alt="Scott Syme performing mentalism close-up for guest at private event" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={mentalistImg} alt="Scott Syme performing mentalism close-up for guest at private event" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.3}>
