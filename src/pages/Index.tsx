@@ -205,6 +205,8 @@ const Index = () => {
                   <img
                     src={client.logo}
                     alt={`${client.name} logo, White Rabbit client`}
+                    width={90}
+                    height={32}
                     loading="lazy"
                     decoding="async"
                     className="max-h-full max-w-full w-auto h-auto object-contain opacity-60 hover:opacity-90 transition-opacity brightness-0"
