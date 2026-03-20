@@ -152,7 +152,7 @@ const About = () => {
           </AnimatedSection>
           <AnimatedSection delay={0.2}>
             <div className="aspect-[3/4] overflow-hidden">
-              <img src={cardsFanImg} alt="Close-up card fan sleight of hand by Scott Syme" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={cardsFanImg} alt="Close-up card fan sleight of hand by Scott Syme" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.3}>
