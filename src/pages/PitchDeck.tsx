@@ -265,6 +265,8 @@ const PitchDeck = () => {
                 <img
                   src={img}
                   alt="White Rabbit magic experience"
+                  width={400}
+                  height={400}
                   loading="lazy"
                   decoding="async"
                   className="w-full h-full object-cover"
