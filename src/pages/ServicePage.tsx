@@ -339,7 +339,7 @@ const ServicePage = () => {
           </p>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
             {trustLogos.map((client) => (
-              <img key={client.name} src={client.logo} alt={client.name} className="h-6 md:h-8 w-auto object-contain opacity-50 brightness-0 invert" />
+              <img key={client.name} src={client.logo} alt={client.name} width={80} height={32} loading="lazy" decoding="async" className="h-6 md:h-8 w-auto object-contain opacity-50 brightness-0 invert" />
             ))}
           </div>
         </div>

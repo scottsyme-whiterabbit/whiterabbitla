@@ -83,7 +83,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-8 pt-6 border-t border-cream/10 text-center space-y-3">
-          <img src={threeStars} alt="" aria-hidden="true" className="h-6 w-auto opacity-40 mx-auto mb-2" />
+          <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={60} height={24} className="h-6 w-auto opacity-40 mx-auto mb-2" />
           <div className="flex items-center justify-center gap-4">
             <Link to="/privacy" className="font-sans text-[10px] tracking-wider text-cream/40 hover:text-cream/60 transition-colors">Privacy Policy</Link>
             <span className="w-1 h-1 rounded-full bg-cream/20" />

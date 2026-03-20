@@ -267,7 +267,7 @@ const About = () => {
 
             </h2>
             <div className="overflow-hidden">
-              <img src={creditsPhoto} alt="White Rabbit magician client logos including Netflix, Disney, Rolls Royce, Morgan Stanley, and more" loading="lazy" decoding="async" className="w-full h-auto" />
+              <img src={creditsPhoto} alt="White Rabbit magician client logos including Netflix, Disney, Rolls Royce, Morgan Stanley, and more" width={1200} height={400} loading="lazy" decoding="async" className="w-full h-auto" />
             </div>
           </AnimatedSection>
         </div>
