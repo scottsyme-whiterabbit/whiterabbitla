@@ -157,6 +157,14 @@ export function useSpeakableSchema(page: {
 
 // FAQ schema for blog articles with inline FAQ content
 export function useFAQSchema(faqs: { question: string; answer: string }[]) {
+  useEffect(() => {
+    if (faqs.length === 0) {
+      // Remove any stale FAQ script if no FAQs
+      document.getElementById("faq-schema")?.remove();
+      return;
+    }
+  }, [faqs]);
+
   useJsonLd(
     "faq-schema",
     faqs.length > 0
@@ -171,7 +179,7 @@ export function useFAQSchema(faqs: { question: string; answer: string }[]) {
             },
           })),
         }
-      : {}
+      : []
   );
 }
 
