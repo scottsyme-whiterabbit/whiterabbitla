@@ -133,6 +133,8 @@ const PitchDeck = () => {
           <img
             src={heroImg}
             alt="White Rabbit private magic show with emerald curtains and cinematic lighting"
+            width={1200}
+            height={800}
             className="w-full h-full object-cover object-[center_30%]"
             fetchPriority="high"
             decoding="async"
