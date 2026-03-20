@@ -307,7 +307,7 @@ const ServicePage = () => {
       {/* Hero */}
       <section className="relative py-28 lg:py-36 overflow-hidden">
         <div className="absolute inset-0">
-          <img src={page.image} alt={page.heroHeadline} className="w-full h-full object-cover" />
+          <img src={page.image} alt={page.heroHeadline} width={1200} height={630} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-forest-dark/80" />
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
