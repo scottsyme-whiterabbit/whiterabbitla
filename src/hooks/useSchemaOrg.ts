@@ -28,6 +28,10 @@ export function useJsonLd(id: string, data: Record<string, unknown> | Record<str
     items.forEach((item, i) => {
       const scriptId = items.length === 1 ? id : `${id}-${i}`;
       document.getElementById(scriptId)?.remove();
+
+      // Skip empty objects (no @type) to avoid null/invalid JSON-LD
+      if (!item || Object.keys(item).length === 0) return;
+
       const script = document.createElement("script");
       script.type = "application/ld+json";
       script.id = scriptId;
@@ -157,6 +161,14 @@ export function useSpeakableSchema(page: {
 
 // FAQ schema for blog articles with inline FAQ content
 export function useFAQSchema(faqs: { question: string; answer: string }[]) {
+  useEffect(() => {
+    if (faqs.length === 0) {
+      // Remove any stale FAQ script if no FAQs
+      document.getElementById("faq-schema")?.remove();
+      return;
+    }
+  }, [faqs]);
+
   useJsonLd(
     "faq-schema",
     faqs.length > 0
@@ -171,7 +183,7 @@ export function useFAQSchema(faqs: { question: string; answer: string }[]) {
             },
           })),
         }
-      : {}
+      : []
   );
 }
 
