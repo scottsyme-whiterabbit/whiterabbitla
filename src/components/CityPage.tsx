@@ -288,7 +288,7 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
               {nearbyAreas.map((area, i) => (
                 <AnimatedSection key={area!.slug} delay={Math.min(i * 0.08, 0.3)}>
                   <Link to={`/areas/${area!.slug}`} className="group block relative overflow-hidden aspect-[3/2] rounded-sm">
-                    <img src={area!.photo} alt={`${area!.city} — magician for luxury events`} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+                    <img src={area!.photo} alt={`${area!.city} — magician for luxury events`} width={600} height={400} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-3">
                       <h3 className="font-serif text-sm text-cream leading-tight">{area!.city}</h3>

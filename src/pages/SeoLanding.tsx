@@ -249,6 +249,10 @@ const SeoLanding = () => {
                 key={client.name}
                 src={client.logo}
                 alt={client.name}
+                width={70}
+                height={28}
+                loading="lazy"
+                decoding="async"
                 className="h-5 md:h-7 w-auto object-contain opacity-50 brightness-0 invert"
               />
             ))}

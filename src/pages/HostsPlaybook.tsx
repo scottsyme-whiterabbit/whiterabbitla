@@ -109,6 +109,8 @@ const HostsPlaybook = () => {
                 <img
                   src={eventParlorShow}
                   alt="Parlor magic show"
+                  width={800}
+                  height={450}
                   className="w-full aspect-[16/9] object-cover my-8"
                   loading="lazy"
                 />
@@ -117,6 +119,8 @@ const HostsPlaybook = () => {
                 <img
                   src={eventCloseupCocktail}
                   alt="Close-up magic during cocktail hour"
+                  width={800}
+                  height={450}
                   className="w-full aspect-[16/9] object-cover my-8"
                   loading="lazy"
                 />

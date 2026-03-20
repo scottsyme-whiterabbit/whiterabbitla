@@ -290,6 +290,8 @@ const PitchDeck = () => {
                   <img
                     src={client.logo}
                     alt={`${client.name} logo`}
+                    width={120}
+                    height={50}
                     loading="lazy"
                     decoding="async"
                     className="max-h-full max-w-full w-auto h-auto object-contain opacity-60 brightness-0 invert"
