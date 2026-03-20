@@ -337,7 +337,7 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <AnimatedSection>
               <Link to="/experience" className="group block relative aspect-[3/4] overflow-hidden">
-                <img src={experienceHeroImg} alt="The White Rabbit experience" loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <img src={experienceHeroImg} alt="The White Rabbit experience" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-8">
                   <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Experience</p>
