@@ -100,6 +100,8 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
         <img
           src={areaPhoto.replace("w=600&h=400", "w=1600&h=900")}
           alt={`${cityName}, ${stateFullName} — luxury event entertainment destination`}
+          width={1600}
+          height={900}
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
