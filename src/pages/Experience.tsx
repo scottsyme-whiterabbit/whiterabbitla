@@ -119,7 +119,7 @@ const Experience = () => {
 
       {/* Branded divider */}
       <div className="flex justify-center py-10">
-        <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50" />
+        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-12 w-auto opacity-50" />
       </div>
 
       {/* Value Proposition — Hormozi-style offer */}
