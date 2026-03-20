@@ -318,7 +318,7 @@ const Index = () => {
           </AnimatedSection>
           <AnimatedSection delay={0.25}>
             <div className="aspect-[4/3] overflow-hidden">
-              <img src={restaurantMagicImg} alt="Scott Syme performing close-up magic at a luxury restaurant event" loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
+              <img src={restaurantMagicImg} alt="Scott Syme performing close-up magic at a luxury restaurant event" width={400} height={300} loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
         </div>
