@@ -252,6 +252,8 @@ const Index = () => {
               <img
                 src={eventCardsImg}
                 alt="Scott Syme performing close-up card magic at a luxury corporate event in Los Angeles"
+                width={600}
+                height={750}
                 loading="lazy"
                 decoding="async"
                 className="w-full h-full object-cover" />
