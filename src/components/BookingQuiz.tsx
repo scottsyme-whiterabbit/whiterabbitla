@@ -289,7 +289,7 @@ const BookingQuiz = () => {
                 >
                   {submitted ? (
                     <div className="text-center py-8">
-                      <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50 mx-auto mb-6" />
+                      <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={200} height={80} className="h-12 w-auto opacity-50 mx-auto mb-6" />
                       <h3 className="font-serif text-3xl text-foreground mb-4">You're All Set!</h3>
                       <p className="font-sans text-sm text-muted-foreground mb-4 max-w-sm mx-auto">
                         Scott will review your inquiry and get back to you within 24 hours with a personalized plan for your event.
