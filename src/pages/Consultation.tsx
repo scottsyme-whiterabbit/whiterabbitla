@@ -267,7 +267,7 @@ const Consultation = () => {
 
       {/* Branded divider */}
       <div className="flex justify-center py-4">
-        <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50" />
+        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={200} height={80} className="h-12 w-auto opacity-50" />
       </div>
 
       {/* MORE THAN MAGIC */}
