@@ -406,7 +406,7 @@ const Consultation = () => {
       <section className="py-16 md:py-24 px-6 bg-forest-dark">
         <div className="max-w-xl mx-auto text-center">
           <div className="flex justify-center mb-6">
-            <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50" />
+            <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={200} height={80} className="h-12 w-auto opacity-50" />
           </div>
           <h2 className="font-serif text-2xl md:text-4xl text-cream mb-4">
             Book Your <span className="text-accent">Free Consultation</span>

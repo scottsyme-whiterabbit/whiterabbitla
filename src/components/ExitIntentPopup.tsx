@@ -138,7 +138,7 @@ const ExitIntentPopup = () => {
 
         {mode === "choice" && (
           <div className="p-8 md:p-10 text-center">
-            <img src={threeStars} alt="" aria-hidden="true" className="h-8 w-auto opacity-50 mx-auto mb-4" />
+            <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={200} height={80} className="h-8 w-auto opacity-50 mx-auto mb-4" />
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">
               Wait — Take This With You
             </p>

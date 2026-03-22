@@ -510,7 +510,7 @@ const DiscoveryQuiz = () => {
                   </div>
                 ) : (
                   <div className="border-t border-cream/10 pt-8 text-center">
-                    <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50 mx-auto mb-4" />
+                    <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={200} height={80} className="h-12 w-auto opacity-50 mx-auto mb-4" />
                     <p className="font-serif text-xl text-cream mb-2">You're all set.</p>
                     <p className="font-sans text-sm text-cream/50 mb-6">
                       We'll be in touch shortly with a personalized overview.

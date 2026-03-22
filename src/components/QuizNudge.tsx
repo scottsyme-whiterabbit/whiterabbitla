@@ -7,7 +7,7 @@ const QuizNudge = () => (
     <div className="bg-card border-b border-border">
       <div className="max-w-5xl mx-auto px-6 py-6 flex items-center justify-between gap-5">
         <div className="flex items-center gap-3 min-w-0">
-          <img src={threeStars} alt="" aria-hidden="true" className="h-9 w-auto opacity-70 shrink-0 -my-2" />
+          <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={200} height={80} className="h-9 w-auto opacity-70 shrink-0 -my-2" />
           <p className="font-sans text-sm sm:text-base text-muted-foreground">
             <span className="hidden sm:inline">Not sure what fits your event? </span>
             <span className="text-foreground font-medium">Take the 35-second quiz</span>
