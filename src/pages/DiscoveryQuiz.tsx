@@ -329,7 +329,7 @@ const DiscoveryQuiz = () => {
                   transition={{ type: "spring", duration: 0.8, delay: 0.2 }}
                   className="flex justify-center mb-4"
                 >
-                  <img src={threeStars} alt="" aria-hidden="true" className="h-12 w-auto opacity-50" />
+                  <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={200} height={80} className="h-12 w-auto opacity-50" />
                 </motion.div>
                 <motion.p
                   initial={{ opacity: 0 }}
