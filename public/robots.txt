@@ -98,4 +98,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://whiterabbitla.com/sitemap.xml
-LLMs-Txt: https://whiterabbitla.com/llms.txt
+Llms-txt: https://whiterabbitla.com/llms.txt
