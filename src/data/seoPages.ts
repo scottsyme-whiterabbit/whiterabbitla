@@ -2416,6 +2416,71 @@ const citySpecificOverrides: Record<string, string[]> = {
     "San Francisco's luxury condo buildings and residential communities — Pacific Heights, Russian Hill, the waterfront high-rises — want resident events that feel different from the usual wine and cheese mixer. Scott's close-up magic gives residents something genuinely surprising and social. He moves through the room performing for small groups, and by the end of the evening, neighbors who ride the same elevator every day are actually talking to each other.",
     "The format requires no stage, no AV, no setup. It fits into lobby events, rooftop gatherings, and any community space. Property managers in San Francisco consistently report that White Rabbit events get stronger turnout and more genuine interaction than any other resident programming. Scott flies in from LA for these bookings.",
   ],
+  // ── Chicago ──────────────────────────────────────────────────────────
+  "chicago--corporate-event-magician": [
+    "Chicago is one of the best corporate event cities in the country — Fortune 500 headquarters, major law firms, financial institutions, and a business culture that actually invests in entertaining clients and employees. Events happen along the Magnificent Mile, in Loop hotel ballrooms, at private dining rooms in River North, and at rooftop venues overlooking the lakefront. Scott flies in from LA for Chicago corporate bookings regularly, and the city's event energy makes every performance hit harder.",
+    "The Chicago corporate crowd is warm, social, and competitive — Midwestern hospitality meets big-city sophistication. Close-up magic works at these events because it matches that energy: sharp, interactive, and built for a room where people actually want to talk to each other. Scott moves through the cocktail hour performing for small groups, and within minutes, VPs and clients who were making small talk are sharing a genuine moment of amazement.",
+  ],
+  "chicago--private-party-magician": [
+    "Private parties in Chicago happen at Gold Coast mansions, Lincoln Park townhouses, and lakefront condos with skyline views that stop you mid-sentence. The hosts care about the details — the food, the drinks, the guest list — and they want entertainment that matches the effort without feeling like a corporate booking. Scott's close-up magic fits perfectly. He moves through the party performing for small groups, and the reactions spread naturally from the living room to the kitchen to the rooftop.",
+    "Scott flies in from LA for Chicago private party bookings, and the city's social energy makes it one of his favorite travel markets. Birthday milestones, anniversary celebrations, holiday gatherings — Chicago hosts go big, and the audiences are warm, loud, and genuinely fun to perform for. The reactions here are some of the best Scott gets anywhere in the country.",
+  ],
+  "chicago--wedding-magician": [
+    "Chicago weddings are beautiful — lakefront venues, historic ballrooms, rooftop ceremonies with the skyline behind them, and cocktail hours where the architecture does half the work. Scott's cocktail hour magic fits the beauty of these settings. He performs for small groups while guests mingle, and by dinner, strangers from different sides of the aisle feel connected over something they can't explain.",
+    "Scott flies in from LA for Chicago wedding bookings and coordinates travel seamlessly. The Chicago wedding crowd is fun, social, and ready to have a good time — which means the reactions to close-up magic are loud and genuine. He's also available for rehearsal dinners, where the smaller group makes the magic even more personal. Chicago rehearsal dinners at neighborhood Italian restaurants are a combination that always works.",
+  ],
+  "chicago--close-up-magician": [
+    "Close-up magic in Chicago works because the event culture here is built around being social. Cocktail hours run long, people actually talk to each other, and the energy in the room is warm from the moment guests arrive. Scott moves through these settings performing for groups of four to eight — cards, borrowed objects, mentalism — and everything happens right in their hands. No stage, no AV, no setup.",
+    "The Chicago crowd reacts big. There's no playing it cool, no pretending they're not amazed. When something impossible happens in their hands, they shout, they grab their friend's arm, they call people over from across the room. That energy is contagious, and by the end of cocktail hour, most of the room has either experienced the magic or heard about it from someone who did. Scott flies in from LA regularly for Chicago close-up magic bookings.",
+  ],
+  "chicago--private-magic-show": [
+    "A Private Magic Show in a Gold Coast living room, a Lincoln Park townhouse, or a private event space overlooking Lake Michigan is an experience that fits Chicago's love of great entertainment. Scott brings professional lighting and a curated soundtrack, and for 30 to 45 minutes, your space becomes a private theater. The show is mentalism, storytelling, and audience interaction that gets standing ovations.",
+    "These shows work for milestone birthdays, investor dinners, team celebrations, and any evening where the host wants something their guests have never experienced. Scott flies in from LA for these bookings, and the intimate format travels perfectly — no bulky production, just world-class performance that fills whatever room you put it in.",
+  ],
+  "chicago--golf-tournament-magician": [
+    "Golf tournaments at Chicago-area courses — Medinah, Olympia Fields, Cog Hill — host their post-round receptions at the clubhouse. White Rabbit fills the gap between the last putt and the first toast with roaming close-up magic that keeps players and sponsors engaged. The 19th-hole magic consistently becomes the most talked-about part of the tournament day.",
+    "Scott flies in from LA for Chicago golf tournament bookings and also serves as MC for the awards dinner when needed. The Midwest golf crowd is there to have a good time, and close-up magic that's sharp and impossible to figure out fits that energy perfectly. Sponsors get genuine face time with their audience, and players get a story better than their scorecard.",
+  ],
+  "chicago--charity-gala-magician": [
+    "Chicago has one of the strongest charity gala scenes in the country — Gold Coast fundraisers, corporate-sponsored galas at downtown hotels, and nonprofit events that draw hundreds of the city's most generous donors. Scott's close-up magic during the cocktail hour gives guests something to bond over before the program begins. When people are energized and connected, they bid higher and give more freely.",
+    "The Chicago gala crowd is generous, well-dressed, and used to attending these events — which means the entertainment needs to offer something they haven't seen before. Scott's magic provides exactly that: personal, interactive, and genuinely surprising. He flies in from LA and coordinates with event teams on timing and format.",
+  ],
+  "chicago--holiday-party-magician": [
+    "Holiday parties in Chicago are a big deal — the city takes end-of-year celebrations seriously. Corporate dinners at downtown hotels, law firm parties in private dining rooms, and company-wide events at venues along the Magnificent Mile. Scott's close-up magic during the cocktail hour gives employees and clients something genuine to bond over. It breaks the ice and creates moments people are still talking about when they're back at their desks in January.",
+    "Scott flies in from LA for Chicago holiday party bookings — it's one of his busiest travel routes during Q4. Christmas parties, Hanukkah celebrations, New Year's Eve — the format works for seated dinners and standing cocktail parties equally well. Chicago holiday hosts go big, and White Rabbit matches that energy.",
+  ],
+  "chicago--trade-show-magician": [
+    "Chicago hosts some of the biggest trade shows in the country at McCormick Place — and the competition for booth traffic is fierce. White Rabbit brings people to your booth with close-up magic that stops attendees mid-aisle. Within minutes, a crowd forms, your sales team has warm leads, and your booth is the one people are telling their colleagues about at dinner.",
+    "Scott customizes routines to feature your product or messaging in the reveal, so the magic leads directly to your brand. The trade show crowd at McCormick Place is there to see everything, which means you need something that actually stops them. Impossible magic in their hands does it every time. Scott flies in from LA and coordinates with your team on timing, flow, and goals.",
+  ],
+  "chicago--mentalist": [
+    "Mentalism at a Chicago dinner party or corporate event is an experience that sticks. Scott reads thoughts, predicts decisions, and reveals details that shouldn't be possible — all without props or anything that looks like a magic show. The Chicago crowd is smart, social, and direct — when something genuinely unexplainable happens, they don't hide their reaction. They lose it.",
+    "That directness is what makes performing mentalism in Chicago so rewarding. There's no pretense, no playing it cool. When a managing partner or a Fortune 500 executive can't explain how Scott knew what they were thinking, the whole table hears about it. Scott flies in from LA for Chicago mentalism bookings, and the city is one of his favorite audiences in the country.",
+  ],
+  "chicago--rehearsal-dinner-magician": [
+    "Rehearsal dinners in Chicago are intimate — close family, the wedding party, maybe thirty people at a neighborhood restaurant in Lincoln Park or a private dining room downtown. Scott's close-up magic during cocktails gives the group something to bond over the night before the big day. He keeps it warm and personal, and creates moments that get referenced in toasts the next afternoon.",
+    "Scott flies in from LA for Chicago rehearsal dinner bookings. The smaller group makes the magic even more personal, and the celebratory pre-wedding energy means guests are open and ready to be surprised. Chicago rehearsal dinner crowds are warm and vocal, which makes every reaction contagious.",
+  ],
+  "chicago--halloween-party-magician": [
+    "Halloween in Chicago has serious energy — costume parties, themed dinners, and gatherings where the hosts go all-in on atmosphere. Scott's mentalism and close-up magic fit the Halloween mood perfectly — mind-reading, predictions, and impossible moments that feel a little eerie in the best way. A dark October evening in a Gold Coast brownstone with mentalism happening at the dinner table is a combination that works every time.",
+    "The format works for adult Halloween parties, themed corporate events, and any gathering where the host wants entertainment that matches the atmosphere. Scott flies in from LA for Chicago Halloween bookings.",
+  ],
+  "chicago--christmas-party-magician": [
+    "Christmas and New Year's Eve in Chicago are major events — the city does the holidays right. Company dinners at Michigan Avenue hotels, private celebrations in Gold Coast homes, and NYE parties overlooking the lakefront. Scott's close-up magic adds something to these evenings that guests remember long after the decorations come down.",
+    "Scott flies in from LA for Chicago holiday bookings — Q4 is his busiest travel season to the Midwest. For New Year's Eve, he brings higher energy — faster pace, bigger reveals, countdown-ready material. Whether it's a seated dinner for forty or a standing party for three hundred, White Rabbit makes your Chicago holiday event the one people talk about all year.",
+  ],
+  "chicago--premiere-red-carpet-magician": [
+    "Chicago hosts film festivals, media events, product launches, and industry parties where the guest list includes people who shape business and culture. Scott's close-up magic fits VIP receptions and launch events because it's personal and unexpected — no production, no disruption, just impossible moments during the cocktail hour that genuinely surprise a crowd that's seen plenty of entertainment.",
+    "White Rabbit has worked with Netflix, Disney, Paramount, and Rolls-Royce. Scott flies in from LA for Chicago industry events and fits into VIP settings naturally. The magic works because it's real and personal in a way that stage shows and DJs can't match.",
+  ],
+  "chicago--dmc-entertainment": [
+    "Destination management companies bringing groups to Chicago want entertainment that stands out from the architecture tour and deep-dish dinner. White Rabbit fits into curated Chicago itineraries: welcome reception magic at downtown hotels, dinner performances at private restaurants, and VIP experiences that give groups something personal and memorable between convention sessions at McCormick Place.",
+    "The magic works especially well during networking moments where attendees from different offices or regions are meeting for the first time. Close-up magic breaks the ice faster than any icebreaker exercise, and guests bond over shared amazement rather than awkward small talk. Scott flies in from LA and coordinates with DMC teams on timing and logistics.",
+  ],
+  "chicago--resident-event-magician": [
+    "Chicago's luxury high-rises and condo buildings — Gold Coast, Streeterville, Lincoln Park, the lakefront towers — want resident events that feel different from the usual lobby mixer. Scott's close-up magic gives residents something genuinely surprising and social. He moves through the room performing for small groups, and by the end of the evening, neighbors who ride the same elevator every day are actually connecting over something real.",
+    "The format requires no stage, no AV, no setup. It fits into lobby events, rooftop gatherings, party rooms, and any community space. Property managers in Chicago consistently report that White Rabbit events get stronger turnout and more genuine interaction than any other resident programming. Scott flies in from LA for these bookings.",
+  ],
 };
 
 function generatePage(location: string, service: typeof serviceTypes[number]): SeoPage {
