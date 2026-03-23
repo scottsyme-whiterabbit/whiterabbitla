@@ -2156,6 +2156,71 @@ const citySpecificOverrides: Record<string, string[]> = {
     "Los Feliz has a mix of apartment buildings, condo communities, and hillside neighborhoods where resident events bring people together. Scott's close-up magic gives residents something genuinely surprising and social. He moves through the room performing for small groups, and by the end of the evening, neighbors who've only waved at each other are laughing together over something impossible they just witnessed.",
     "The format requires no stage, no AV, no setup. It fits into community rooms, courtyard gatherings, rooftop events, and any space where people can stand and talk. For a neighborhood that values community and authenticity, White Rabbit resident events consistently get strong turnout and genuine enthusiasm.",
   ],
+  // ── Manhattan Beach ──────────────────────────────────────────────────
+  "manhattan-beach--corporate-event-magician": [
+    "Corporate events in Manhattan Beach have a different feel than what you'd find in Century City or Downtown — they happen at oceanfront restaurants like The Strand House, at company beach houses, or at rooftop venues where the Pacific is right there. The guest list is tech executives, startup founders, and South Bay professionals who work hard and want their events to match the lifestyle. Scott's close-up magic fits because it's social, casual, and sharp — no stage, no formality, just impossible things happening while people hold a drink and watch the sunset.",
+    "The Manhattan Beach corporate crowd doesn't want a stiff cocktail hour. They want energy, conversation, and something that makes the evening feel different from every other company dinner. Close-up magic and mentalism deliver that. Scott reads the room, matches the relaxed-but-affluent vibe, and gives people a reason to put their phones down and actually talk to each other.",
+  ],
+  "manhattan-beach--private-party-magician": [
+    "Private parties in Manhattan Beach happen at beach houses, backyard patios with ocean views, and rooftop decks where the breeze comes off the water. The hosts put effort into the food and the drinks, and the guest list is tight — neighbors, close friends, people who surf together on weekends. Scott's close-up magic fits the energy of these gatherings perfectly. He moves through the party performing for small groups, and the reactions spread naturally. No stage, no microphone, just something impossible happening while someone holds a borrowed ring.",
+    "Manhattan Beach parties are casual but the expectations are high. These are people who've traveled, who've been to great events, and who know the difference between generic entertainment and something genuinely surprising. Close-up magic and mentalism hit that mark every time. By the end of the night, the magic is what everyone's talking about on the walk home.",
+  ],
+  "manhattan-beach--wedding-magician": [
+    "Manhattan Beach weddings are beautiful — ocean ceremony backdrops, cocktail hours on patios with the sunset behind them, and receptions that feel like the best dinner party you've ever attended. Scott's cocktail hour magic fits the beauty of these events without competing with it. He performs for small groups while guests mingle, and by dinner, strangers from different sides of the aisle feel connected over something they can't explain.",
+    "The South Bay wedding crowd is young, fun, and social — which means the reactions to close-up magic are loud and genuine. Scott works with couples to tailor the experience to their guest list and timeline. He's also available for rehearsal dinners, where the smaller group makes the magic even more personal. Manhattan Beach weddings already have the setting — White Rabbit adds the moment.",
+  ],
+  "manhattan-beach--close-up-magician": [
+    "Close-up magic is a perfect match for Manhattan Beach events. Everything here is social and outdoors — patios, rooftops, beach house living rooms with the doors open. Scott moves through these spaces performing for groups of four to eight, using cards, borrowed objects, and mentalism that happens right in their hands. The casual energy of the South Bay makes people relaxed and open, which means the reactions are big and genuine.",
+    "The Manhattan Beach crowd is athletic, successful, and competitive — which makes close-up magic even more fun. When someone can't figure out how it happened, their friends won't let them live it down. Those moments become the stories people retell at the next neighborhood barbecue, and that's exactly why hosts in the South Bay keep booking White Rabbit.",
+  ],
+  "manhattan-beach--private-magic-show": [
+    "A Private Magic Show in a Manhattan Beach living room or backyard — ocean breeze, string lights, a group of forty friends sitting close — is one of the best settings for this format. Scott brings professional lighting and a curated soundtrack, and for 30 to 45 minutes, your beach house becomes a private theater. The show is mentalism, storytelling, and audience interaction that gets standing ovations in living rooms.",
+    "These shows work for milestone birthdays, anniversary celebrations, holiday gatherings, or any night where the host wants to give their guests something they've never experienced. The Manhattan Beach setting adds atmosphere that money can't buy — the sound of waves, the salt air, and something impossible happening right in front of you.",
+  ],
+  "manhattan-beach--golf-tournament-magician": [
+    "Golf tournaments at South Bay courses — Manhattan Beach, Palos Verdes, and nearby clubs — host their post-round receptions at the clubhouse. White Rabbit fills the gap between the last putt and the first toast with roaming close-up magic that keeps players and sponsors engaged. The 19th-hole magic consistently becomes the most talked-about part of the tournament day.",
+    "Scott also serves as MC for the awards dinner when needed, keeping the flow tight from cocktails through trophies. The South Bay golf crowd is competitive and social, and close-up magic that's sharp and impossible to figure out fits that energy perfectly. Sponsors get genuine face time with their audience, and players get a story better than their scorecard.",
+  ],
+  "manhattan-beach--charity-gala-magician": [
+    "Charity galas in Manhattan Beach are community events — school fundraisers, local nonprofit dinners, and beach community causes that bring the neighborhood together. Scott's close-up magic during the cocktail hour gives guests something to bond over before the program begins. When people are energized and connected, they bid higher and give more freely. That's not a theory — it's what hosts tell Scott after every gala.",
+    "The format is flexible: roaming magic during cocktails, a short stage set during dinner, or both. For the Manhattan Beach gala crowd — generous, social, and used to attending these events — the magic provides something unexpected that makes this year's event stand out from last year's.",
+  ],
+  "manhattan-beach--holiday-party-magician": [
+    "Holiday parties in Manhattan Beach are backyard affairs and beach house gatherings — lights on the patio, good food, and guests who live within walking distance. Scott's close-up magic adds something unexpected to these evenings without changing the relaxed South Bay vibe. He moves through the party, performs for small groups, and the reactions spread naturally.",
+    "The Manhattan Beach holiday crowd wants something memorable that fits the warmth of the evening. Mentalism and close-up magic are perfect — casual enough for a beach house, powerful enough that people are still texting the host about it the next morning. Christmas parties, Thanksgiving gatherings, New Year's Eve — the format works for all of it.",
+  ],
+  "manhattan-beach--trade-show-magician": [
+    "Manhattan Beach is home to tech companies, creative agencies, and startups that regularly exhibit at conferences across LA and beyond. White Rabbit brings foot traffic to your booth with close-up magic that stops people mid-aisle. Within minutes, a crowd forms, your sales team has warm leads, and your booth is the one people are talking about at the hotel bar that night.",
+    "Scott customizes routines to feature your product or messaging in the reveal, so the magic leads directly to your brand. The format works for any booth size and any industry. Scott coordinates with your team on timing, flow, and goals before the event.",
+  ],
+  "manhattan-beach--mentalist": [
+    "Mentalism at a Manhattan Beach dinner party or corporate event is an experience people don't forget. Scott reads thoughts, predicts decisions, and reveals details that shouldn't be possible — all without props or anything that looks like a magic show. In the relaxed South Bay setting, where people are open and social, the reactions to mentalism are some of the biggest Scott gets anywhere in LA.",
+    "The Manhattan Beach crowd is smart, successful, and used to being in control. Mentalism works on them because it challenges that control in a way that's thrilling and fun. When a tech CEO or a pro athlete can't explain how Scott knew what they were thinking, the room loses it. That's the kind of moment that makes a party legendary.",
+  ],
+  "manhattan-beach--rehearsal-dinner-magician": [
+    "Rehearsal dinners in Manhattan Beach are intimate and relaxed — close family and the wedding party at a local restaurant or someone's beach house. Scott's close-up magic during cocktails gives the group something to bond over the night before the big day. He keeps it warm and personal, and creates moments that get referenced in toasts the next afternoon.",
+    "The magic works especially well at rehearsal dinners because the audience is small and connected. Everyone knows each other, the mood is celebratory, and the South Bay setting keeps everyone relaxed and open. Scott tailors the experience to the couple and their crowd, making the rehearsal dinner feel like its own event.",
+  ],
+  "manhattan-beach--halloween-party-magician": [
+    "Halloween in Manhattan Beach means neighborhood parties, costume gatherings at beach houses, and themed dinners where the hosts go all-in. Scott's mentalism and close-up magic fit the Halloween mood perfectly — mind-reading, predictions, and impossible moments that feel a little eerie in the best way. It's not a haunted house. It's something real and unexplainable happening at the dinner table.",
+    "The South Bay Halloween crowd is fun and competitive about their parties, which means the entertainment needs to match. Scott brings the right energy — mysterious enough for the theme, social enough for the setting. The format works for costume parties, themed dinners, and any gathering where the host wants their party to be the one people talk about.",
+  ],
+  "manhattan-beach--christmas-party-magician": [
+    "Christmas and New Year's Eve in Manhattan Beach are beach house celebrations — string lights on the patio, good wine, and guests who live down the street. Scott's close-up magic adds a spark to these evenings without changing the relaxed tone. He performs for small groups during cocktails, and by dessert, the magic is what everyone's talking about.",
+    "For New Year's Eve, Scott brings higher energy — faster pace, bigger reveals, countdown-ready material. Whether it's a seated dinner for twenty or a standing party for eighty, the magic gives the evening its own identity. Manhattan Beach NYE hosts want something better than a DJ and a champagne toast — White Rabbit delivers.",
+  ],
+  "manhattan-beach--premiere-red-carpet-magician": [
+    "Manhattan Beach isn't Hollywood, but plenty of entertainment industry people live in the South Bay and host industry events at home — screening parties, wrap celebrations, and gatherings where the guest list includes people who make content for a living. Scott's close-up magic fits these events because it's personal and surprising. No production, no disruption, just impossible moments that genuinely fool an audience that understands entertainment.",
+    "White Rabbit has worked with Netflix, Disney, Paramount, and Rolls-Royce. Scott performs in the South Bay regularly for industry clients who want something their guests haven't seen before, and the beach house setting makes every reaction feel more genuine.",
+  ],
+  "manhattan-beach--dmc-entertainment": [
+    "Manhattan Beach isn't a typical DMC destination, but for groups doing a curated LA beach experience — South Bay tours, ocean-view dinners, team-building retreats — White Rabbit adds entertainment that makes the evening unforgettable. Scott performs during welcome receptions, private dinners, and group gatherings at local restaurants and beach venues.",
+    "The magic works especially well for incentive travel groups where attendees are relaxed from a day at the beach and open to something unexpected. Close-up magic and mentalism cut through the usual entertainment options and give people something genuinely surprising to talk about. Scott coordinates with DMC teams on timing and logistics.",
+  ],
+  "manhattan-beach--resident-event-magician": [
+    "Manhattan Beach's condo communities and residential buildings want events that bring neighbors together in a real way — not another mixer with a cheese plate. Scott's close-up magic gives residents something genuinely surprising and social. He moves through the room performing for small groups, and by the end of the evening, neighbors who've only nodded at each other in the elevator are laughing together over something impossible.",
+    "The format requires no stage, no AV, no setup. It fits into clubhouse events, pool deck gatherings, rooftop receptions, and any community space. Property managers in the South Bay consistently report that White Rabbit events get stronger turnout and more positive feedback than any other resident programming on the calendar.",
+  ],
 };
 
 function generatePage(location: string, service: typeof serviceTypes[number]): SeoPage {
