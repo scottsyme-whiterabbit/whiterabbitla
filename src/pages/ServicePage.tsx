@@ -180,6 +180,14 @@ const servicePages: Record<string, ServiceData> = {
         heading: "Perfect for Every Occasion",
         body: "Milestone birthdays (30th, 40th, 50th), engagement parties, holiday gatherings, dinner parties, housewarming celebrations, and any occasion that deserves to be extraordinary. Available for intimate groups of 6 to celebrations of 200+.",
       },
+      {
+        heading: "What a Private Party Performance Looks Like",
+        body: "Scott shows up early, meets whoever's hosting, and gets the lay of the land. Where are people gathering? Where's the bar? Is there a moment in the night where everyone comes together, or is it a cocktail-style flow? He figures out the rhythm of the party and works within it. For the first hour or so, he roams. Small clusters of guests get a few minutes of close-up magic — cards, coins, mentalism, borrowed objects that do impossible things in their hands. The reactions are genuine and they're contagious. Someone gasps, someone else comes over to see what happened, and suddenly there's energy in the room that wasn't there before. If the host wants a show component, Scott shifts into a 30- or 45-minute set that pulls volunteers up, reads minds, and builds toward a finish that people talk about in the Uber home.",
+      },
+      {
+        heading: "Private Parties Scott Has Worked",
+        body: "Birthday milestones — 40ths, 50ths, surprise parties where the guest of honor becomes part of the act. Dinner parties at private homes in the Hills, Malibu, Brentwood, Pacific Palisades. Engagement celebrations. Housewarming parties. Retirement dinners. Holiday gatherings where the host wanted something more memorable than a playlist. Intimate fundraisers at private residences. Watch parties and Super Bowl events. House concerts where Scott performed between musical acts. The common thread: these are hosts who care about the experience their guests have. They're not looking for a performer to stand in the corner. They want someone who makes the night feel different.",
+      },
     ],
     included: [
       "Pre-event consultation to tailor the experience to your guests",
@@ -192,6 +200,10 @@ const servicePages: Record<string, ServiceData> = {
       { question: "What size party works best?", answer: "White Rabbit performs for intimate gatherings of 6 guests up to celebrations of 200+. For smaller groups, the magic becomes intensely personal. For larger parties, Scott moves through the room creating pockets of wonder everywhere." },
       { question: "What occasions work well with a magician?", answer: "Milestone birthdays, anniversary dinners, engagement parties, holiday gatherings, dinner parties, housewarming celebrations, and bachelorette events. Any occasion where you want guests talking about your party for years." },
       { question: "Can you perform at my home?", answer: "Absolutely. Many of our most memorable performances happen in private homes. Scott transforms any space (living rooms, backyards, dining rooms) into an intimate performance venue." },
+      { question: "How many guests is ideal for a private party?", answer: "Sweet spot is 20 to 80. Under 20, the show format works best since there aren't enough clusters for roaming. Over 80, Scott can still cover the room during a 90-minute cocktail window. For 150-plus, consider adding the full show so everyone gets the experience." },
+      { question: "Is your magic appropriate for mixed-age groups?", answer: "Completely. Scott reads the room. At a party with grandparents and teenagers in the same space, the magic lands differently for each group but works for everyone. Nothing crude, nothing that requires explanation." },
+      { question: "What do you need from us as hosts?", answer: "Just the basics: date, time, rough guest count, and whether the party is indoors or outdoors. Scott handles everything else. No stage, no special equipment needed for roaming magic. If there's a show, he brings his own lighting and sound." },
+      { question: "Can Scott start as a 'secret' guest and then reveal he's the entertainment?", answer: "This is actually one of the most popular requests. Scott mingles as a guest, casually starts performing for a few people, and the surprise builds organically. Hosts love this because it creates a genuine 'wait, what just happened?' moment." },
       { question: "How far in advance should I book?", answer: "We recommend booking 4 to 8 weeks in advance. Holiday season and summer weekends fill especially fast." },
     ],
     testimonial: {
