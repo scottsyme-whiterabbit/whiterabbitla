@@ -15,6 +15,8 @@ export interface SeoPage {
   heroSubheadline: string;
   introParagraph: string;
   bodyParagraphs: string[];
+  /** Optional city-specific paragraphs that replace the generic template body when provided */
+  citySpecificContent?: string[];
   midCtaText: string;
   ctaText: string;
   socialProof: string;
