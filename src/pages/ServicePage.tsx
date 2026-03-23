@@ -286,6 +286,14 @@ const servicePages: Record<string, ServiceData> = {
         heading: "Full Production Support",
         body: "White Rabbit provides full production support in the greater Los Angeles area: professional lighting, sound design, and staging, turning your venue, living room, or conference room into a world-class performance space. Every show is tailored to your audience, your space, and the feeling you want to create.",
       },
+      {
+        heading: "Inside the Show",
+        body: "The Private Magic Show runs 30 to 45 minutes depending on the event. Scott opens with close-up magic projected on screen so the entire room can see the details — cards changing in real time, coins doing things coins shouldn't do. Then it shifts to mentalism and audience interaction. Volunteers come up and participate in effects they couldn't have predicted. Someone's thought-of word appears inside a sealed envelope. A prediction written hours earlier matches a series of random choices made live. The finale builds on everything that came before it and lands in a way that gets people out of their chairs. The whole show is designed to feel cinematic — there's a curated soundtrack, professional lighting, and a pace that keeps the energy building from start to finish. It's not a variety act. It's a theatrical experience that happens to be in your living room, your boardroom, or your event space.",
+      },
+      {
+        heading: "What Makes This Different from Hiring a Magician for a Stage Show",
+        body: "Most magicians who do stage shows are doing the same 45 minutes they do everywhere — big box illusions, audience plants, scripted patter. The Private Magic Show is built from scratch for your event. The material changes based on the audience size, the room, and what the host is going for. A 30-person dinner party in Bel Air gets a different show than a 200-person corporate gala at the Beverly Hilton. Scott has performed at the Magic Castle, consulted for America's Got Talent, and worked private events for Netflix, Disney, and Morgan Stanley. The show reflects that level of craft. Every effect is rehearsed, every transition is clean, and the audience never sees the work behind it.",
+      },
     ],
     included: [
       "Pre-event consultation to design the perfect show for your audience",
@@ -298,6 +306,10 @@ const servicePages: Record<string, ServiceData> = {
       { question: "How many guests can attend?", answer: "The Private Magic Show is designed for groups of 20 to 120 guests. This range ensures every person feels connected, close enough to see every detail, intimate enough to feel like they're part of something special." },
       { question: "What space do you need?", answer: "We can transform almost any space: living rooms, event venues, conference rooms, restaurants. In the LA area, we bring full production (curtains, lighting, sound). For events elsewhere, Scott works with your venue's existing setup." },
       { question: "Can the show be paired with close-up magic?", answer: "Yes, this is our most popular combination. Roaming close-up magic during cocktails, then the Private Magic Show as the evening's centerpiece. It's the complete White Rabbit experience." },
+      { question: "What technical setup does the show require?", answer: "Scott brings his own professional lighting and sound system. He needs about an 8-by-10-foot performance area with access to a standard power outlet. No stage is required, though elevated staging helps for groups over 75. Setup takes about 30 minutes and breakdown is 15." },
+      { question: "Can the show be paired with roaming magic?", answer: "Yes — this is the most popular booking. Scott does 60 to 90 minutes of roaming close-up magic during cocktail hour, then transitions into the seated show after dinner or during the main event. It gives your guests two completely different experiences in one night." },
+      { question: "What's the ideal audience size?", answer: "The show works for 20 to 300 people. The sweet spot is 40 to 150 — large enough to generate real energy, intimate enough that everyone feels like they're part of it. For groups over 200, Scott uses projection screens so nobody misses a detail." },
+      { question: "How far in advance should we book the show?", answer: "For peak season — October through January and May through June — book 8 to 12 weeks out. For the rest of the year, 4 to 6 weeks is usually fine. If you've got a date in mind, reach out early. Calendar holds are free and lock in your date." },
       { question: "Is the show appropriate for all audiences?", answer: "Absolutely. The show is sophisticated, elegant, and universally engaging. Perfect for corporate events, private celebrations, and mixed-age gatherings alike." },
     ],
     testimonial: {
