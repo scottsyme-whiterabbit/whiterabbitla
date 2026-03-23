@@ -2286,6 +2286,71 @@ const citySpecificOverrides: Record<string, string[]> = {
     "Encino's luxury condo buildings and gated communities want resident events that feel special — not another wine and cheese night with a folding table. Scott's close-up magic gives residents something genuinely surprising and social. He moves through the room performing for small groups, and by the end of the evening, neighbors who've lived on the same street for years are sharing a moment of real connection.",
     "The format requires no stage, no AV, no setup. It fits into clubhouse events, pool deck gatherings, and any community space. Property managers and HOA boards in Encino consistently report that White Rabbit events get the highest turnout and the most positive feedback of any resident programming on the calendar.",
   ],
+  // ── Pacific Palisades ────────────────────────────────────────────────
+  "pacific-palisades--corporate-event-magician": [
+    "Corporate events in Pacific Palisades are rare and intentional — executive dinners at canyon estates, partner retreats hosted at private homes, and client appreciation evenings where the guest list is small and the view is the Pacific. The Palisades crowd is senior-level, family-oriented, and unimpressed by anything that feels like a production. Scott's close-up magic fits because it's personal, conversational, and sharp enough to surprise people who've been to a thousand events.",
+    "The format works beautifully here: Scott moves through the gathering performing for small groups during cocktails or between courses, and the magic sparks exactly the kind of conversation the host was hoping for. No stage, no AV, no formality — just something impossible happening while the sun sets behind the ocean.",
+  ],
+  "pacific-palisades--private-party-magician": [
+    "Private parties in Pacific Palisades happen at canyon homes, oceanview estates, and backyards where the Pacific is the backdrop. Birthday milestones, anniversary celebrations, holiday gatherings — the hosts care about every detail and want entertainment that matches the setting without overwhelming it. Scott's close-up magic is perfect for this. He moves through the party performing for small groups, and the reactions spread naturally across the yard.",
+    "The Palisades community is tight-knit despite the wealth — neighbors know each other, families socialize together, and the parties have a warmth that's different from Beverly Hills or Brentwood. Close-up magic and mentalism fit that warmth because they're social by nature. One group reacts, the next group comes over, and suddenly the whole party has a pulse.",
+  ],
+  "pacific-palisades--wedding-magician": [
+    "Palisades weddings are stunning — canyon ceremony sites, cocktail hours overlooking the ocean, and receptions at homes where the setting does most of the work. Scott's cocktail hour magic fits the beauty of these events without competing with it. He performs for small groups while guests mingle, and by dinner, people who just met are already friends because they shared something they can't explain.",
+    "The wedding crowd in the Palisades is often a mix of local families and out-of-town guests who can't believe the setting. Scott works with couples to tailor the magic to their guest list — family-friendly for mixed-age crowds, more mentalism for groups that skew sophisticated. He's also available for rehearsal dinners, where the smaller group makes the experience even more intimate.",
+  ],
+  "pacific-palisades--close-up-magician": [
+    "Close-up magic is made for Pacific Palisades events. Everything here is intimate and outdoors — patios, gardens, canyon decks with ocean views. Scott moves through these spaces performing for groups of four to eight, using cards, borrowed objects, and mentalism that happens right in their hands. The relaxed, outdoorsy energy of the Palisades makes people open and present, which means the reactions are genuine and contagious.",
+    "The Palisades crowd is smart, well-traveled, and not easily impressed — which makes it even better when they are. When a venture capitalist or a studio head gets genuinely fooled six inches from their face, the reaction is real, and everyone around them feels it. Those moments become the story of the party.",
+  ],
+  "pacific-palisades--private-magic-show": [
+    "A Private Magic Show in a Palisades living room or backyard — ocean air, string lights, forty friends sitting close — is one of the most beautiful settings for this format. Scott brings professional lighting and a curated soundtrack, and for 30 to 45 minutes, your home becomes a private theater. The show is mentalism, storytelling, and audience interaction that earns standing ovations in living rooms.",
+    "These shows work for milestone birthdays, anniversary dinners, holiday gatherings, or any evening where the host wants to give their guests something unforgettable. The Palisades setting adds atmosphere you can't manufacture — the sound of the canyon, the ocean in the distance, and something impossible happening right in front of you.",
+  ],
+  "pacific-palisades--golf-tournament-magician": [
+    "Golf tournaments at Westside courses near the Palisades — Riviera Country Club, Brentwood Country Club — host their post-round receptions at the clubhouse. White Rabbit fills the gap between the last putt and the first toast with roaming close-up magic that keeps players and sponsors engaged. The 19th-hole magic consistently becomes the most talked-about part of the tournament.",
+    "Scott also serves as MC for the awards dinner when needed, keeping the flow tight from cocktails through trophies. The Palisades golf crowd is competitive and social, and close-up magic that's sharp and impossible to figure out fits that energy perfectly.",
+  ],
+  "pacific-palisades--charity-gala-magician": [
+    "Charity galas in the Palisades are community-driven — school fundraisers, environmental causes, neighborhood rebuilding efforts, and local nonprofit events that bring the community together. Scott's close-up magic during the cocktail hour gives guests something to bond over before the program begins. When people are energized and connected, they bid higher and give more freely.",
+    "The Palisades community came together after the 2025 fires, and that sense of resilience shows up at these events. People are generous, they're proud of their neighborhood, and they show up for each other. Scott's magic adds warmth and energy to evenings that already have heart.",
+  ],
+  "pacific-palisades--holiday-party-magician": [
+    "Holiday parties in the Palisades are home-hosted celebrations — Thanksgiving dinners that spill onto the patio, Christmas gatherings with ocean views, New Year's Eve parties where the guest count is manageable and the vibe is warm. Scott's close-up magic adds something unexpected to these evenings without changing the tone. He moves through the party, performs for small groups, and lets the reactions do the work.",
+    "The Palisades holiday crowd wants something memorable that fits the warmth of the evening. Mentalism and close-up magic are perfect — quiet enough for a living room, powerful enough that people are still texting the host about it the next morning.",
+  ],
+  "pacific-palisades--trade-show-magician": [
+    "Pacific Palisades is home to professionals and executives who regularly represent their companies at conventions and expos across LA and beyond. White Rabbit brings foot traffic to your booth with close-up magic that stops people mid-aisle. Within minutes, a crowd forms, your sales team has warm leads, and your booth is the one people remember.",
+    "Scott customizes routines to feature your product or messaging in the reveal, so the magic leads directly to your brand. The format works for any booth size and any industry. Scott coordinates with your team on timing, flow, and goals before the event.",
+  ],
+  "pacific-palisades--mentalist": [
+    "Mentalism at a Palisades dinner party is an experience people replay in their heads for weeks. Scott reads thoughts, predicts decisions, and reveals details that shouldn't be possible — all without props or anything that looks like a magic show. In the intimate Palisades setting, where the guest count is small and everyone is paying attention, the impact of real mentalism is staggering.",
+    "The Palisades crowd is sharp, successful, and used to being the smartest person in the room. Mentalism works on them because it challenges that in a way that's thrilling and fun. When Scott knows what someone was thinking — really knows — the room goes quiet for a beat before it erupts. That's the moment that makes a party legendary.",
+  ],
+  "pacific-palisades--rehearsal-dinner-magician": [
+    "Rehearsal dinners in the Palisades are intimate — close family, the wedding party, maybe thirty people at a local restaurant or someone's canyon home. Scott's close-up magic during cocktails gives the group something to bond over the night before the big day. He keeps it warm and personal, and creates moments that get referenced in toasts the next afternoon.",
+    "The magic works especially well at rehearsal dinners because the audience is small and connected. In a setting as beautiful as the Palisades, the evening already has character — Scott just adds a moment nobody saw coming.",
+  ],
+  "pacific-palisades--halloween-party-magician": [
+    "Halloween in the Palisades is a neighborhood event — families during the day, adult parties at night, and canyon homes that make the perfect backdrop for something mysterious. Scott's mentalism and close-up magic fit the Halloween mood perfectly — mind-reading, predictions, and impossible moments that feel a little eerie when you're sitting on a canyon deck after dark.",
+    "The format works for costume parties, themed dinners, and any gathering where the host wants entertainment that matches the atmosphere. The Palisades setting — dark canyons, ocean sounds, quiet streets — makes the mysterious elements of mentalism land even harder.",
+  ],
+  "pacific-palisades--christmas-party-magician": [
+    "Christmas and New Year's Eve in the Palisades are cozy, home-hosted celebrations — fireplaces, good wine, ocean views, and guests who are part of the community. Scott's close-up magic adds a spark to these evenings without changing the relaxed coastal tone. He performs for small groups during cocktails, and by dessert, the magic is what everyone's talking about.",
+    "For New Year's Eve, Scott brings higher energy — faster pace, bigger reveals, countdown-ready material. Whether it's a seated dinner for twenty or a standing party for eighty, the magic gives the evening a focal point. Palisades NYE hosts want something memorable, and White Rabbit delivers.",
+  ],
+  "pacific-palisades--premiere-red-carpet-magician": [
+    "Pacific Palisades is home to entertainment executives, producers, and A-list talent who host industry events at their canyon and oceanview estates. Screening parties, wrap celebrations, and intimate gatherings where the guest list is people who make entertainment for a living. Scott's close-up magic fits these events because it's personal and low-key — no production, no disruption, just impossible moments that surprise an audience that's genuinely hard to fool.",
+    "White Rabbit has worked with Netflix, Disney, Paramount, and Rolls-Royce. Scott performs on the Westside regularly for industry clients who want something their guests haven't seen before. The Palisades setting — beautiful, private, intimate — makes every reaction feel more genuine.",
+  ],
+  "pacific-palisades--dmc-entertainment": [
+    "Pacific Palisades isn't a typical DMC stop, but for groups doing a curated coastal LA experience — Malibu to Santa Monica itineraries, oceanview dinners, executive retreats at canyon estates — White Rabbit adds entertainment that makes the evening unforgettable. Scott performs during welcome receptions, private dinners, and intimate group gatherings.",
+    "The magic works especially well for incentive travel groups where the setting is already stunning and the attendees are senior-level. Close-up magic and mentalism give people something genuinely surprising that matches the beauty of the Palisades. Scott coordinates with DMC teams on timing and logistics.",
+  ],
+  "pacific-palisades--resident-event-magician": [
+    "Pacific Palisades residential communities and canyon neighborhoods want events that bring people together — especially as the community continues to rebuild and reconnect after the 2025 fires. Scott's close-up magic gives residents something genuinely surprising and social. He moves through the room performing for small groups, and by the end of the evening, neighbors are laughing together over something impossible they just witnessed.",
+    "The format requires no stage, no AV, no setup. It fits into community gatherings, block parties, clubhouse events, and any space where people can stand and talk. For a neighborhood that values community and connection, White Rabbit events consistently bring people together in a way that feels real.",
+  ],
 };
 
 function generatePage(location: string, service: typeof serviceTypes[number]): SeoPage {
