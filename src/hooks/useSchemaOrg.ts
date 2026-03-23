@@ -90,6 +90,7 @@ export function useServiceSchema(service: {
   slug: string;
   intro: string;
 }) {
+  const today = new Date().toISOString().slice(0, 10);
   useJsonLd("service-schema", [
     {
       "@type": "Service",
@@ -103,6 +104,8 @@ export function useServiceSchema(service: {
       url: `${BASE_URL}/services/${service.slug}`,
       areaServed: { "@type": "Country", name: "United States" },
       image: `${BASE_URL}/og-image.jpg`,
+      datePublished: today,
+      dateModified: today,
     },
     breadcrumb([
       { name: "Home", url: BASE_URL },
