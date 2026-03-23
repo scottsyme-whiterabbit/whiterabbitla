@@ -2026,6 +2026,71 @@ const citySpecificOverrides: Record<string, string[]> = {
     "Las Vegas's luxury residential communities — Summerlin, Henderson, and the high-rise condos on the Strip — want resident events that feel different from what's available outside the front door. The typical resident in a high-end Vegas building or community has access to every show and restaurant in the city, so the event entertainment needs to offer something they can't get at a casino. Scott's close-up magic is exactly that — personal, intimate, and happening in their hands.",
     "The format is simple: Scott arrives during the cocktail hour and moves through the room performing for small groups. No stage, no setup, no AV. Just polished entertainment that fits into whatever space your community has — a clubhouse, a pool deck, a residents' lounge. Property managers report stronger turnout and more genuine interaction when White Rabbit is on the calendar. Scott flies in from LA for Vegas residential bookings.",
   ],
+  // ── Brentwood ────────────────────────────────────────────────────────
+  "brentwood--corporate-event-magician": [
+    "Corporate events in Brentwood are rare — and that's the point. When they happen, they're intimate executive dinners, partner retreats, or client appreciation evenings hosted at private homes or members-only spots along San Vicente. The guest list is small and the expectations are high. Scott's close-up magic fits these settings because it's personal, quiet, and impossible to ignore when it's happening in your hands across the dinner table.",
+    "The Brentwood corporate crowd is senior-level — managing partners, C-suite executives, entertainment lawyers. These aren't people who want a show. They want something that sparks real conversation and gives the evening a moment everyone remembers. Scott reads the room, matches the energy, and delivers magic that feels like it belongs at the table, not on a stage.",
+  ],
+  "brentwood--private-party-magician": [
+    "Private parties in Brentwood happen at homes — birthday dinners on patios, anniversary celebrations in living rooms, holiday gatherings in backyards along San Vicente or in the Brentwood Park neighborhood. The hosts put effort into every detail: the flowers, the wine, the guest list. Scott's close-up magic fits that same energy. He moves through the party performing for small groups, and the reactions ripple through the room naturally.",
+    "Brentwood parties tend to be smaller and more intentional than what you'd see in Hollywood or WeHo. Twenty to fifty guests, people who know each other, and a host who wants the night to feel special without being over-the-top. That's exactly where close-up magic and mentalism work best — no stage, no microphone, just something impossible happening while guests hold a glass of wine.",
+  ],
+  "brentwood--wedding-magician": [
+    "Brentwood weddings are refined and personal — garden ceremonies at private estates, cocktail hours under old trees, and receptions that feel like a really good dinner party. Scott's cocktail hour magic fits beautifully here because it matches the intimacy of the setting. He performs for small groups while guests mingle, and by the time everyone sits for dinner, strangers feel like friends.",
+    "The Getty Center sits right at the edge of Brentwood, and weddings in the area carry that same sense of quiet beauty. Scott works with couples to tailor the magic to their crowd — family-friendly for mixed-age guest lists, more mind-reading and mentalism for groups that skew older and more sophisticated. He's also available for rehearsal dinners, where the smaller group makes the magic even more personal.",
+  ],
+  "brentwood--close-up-magician": [
+    "Close-up magic is made for Brentwood. The events here are intimate — small guest counts, beautiful homes, and people standing close together with drinks. Scott moves through these spaces performing for groups of four to eight, using cards, borrowed objects, and mentalism that happens right in their hands. No stage, no setup, no disruption to the evening's flow.",
+    "Brentwood guests are sharp and well-traveled, which makes the reactions even better. When someone who's seen everything gets genuinely fooled — really, visibly stunned — it changes the energy of the whole room. That's what close-up magic does in a setting like this. It gives people something real to react to, and those reactions become the highlight of the party.",
+  ],
+  "brentwood--private-magic-show": [
+    "A Private Magic Show in a Brentwood living room or garden is one of the best settings Scott performs in. The audience is close, the room is beautiful, and the intimacy makes every moment land harder. Scott brings professional lighting and a curated soundtrack, and for 30 to 45 minutes, your living room becomes a private theater. It's mentalism, storytelling, and audience interaction designed for people who appreciate something crafted.",
+    "These shows work for milestone birthdays, anniversary dinners, holiday gatherings, or any night where the host wants to give their guests something they've never experienced before. In Brentwood, the expectations are always high and the guest lists are always curated — which is exactly the audience this show is built for. Standing ovations in living rooms happen more often than you'd think.",
+  ],
+  "brentwood--golf-tournament-magician": [
+    "Golf tournaments near Brentwood — at Bel-Air Country Club, Riviera Country Club, and Brentwood Country Club — host their post-round receptions at the clubhouse. White Rabbit fills the gap between the last putt and the first toast with roaming close-up magic that keeps players and sponsors engaged. The 19th-hole magic consistently becomes the most talked-about part of the day.",
+    "Scott also serves as MC for the awards dinner when needed, keeping the flow tight from cocktails through trophies. The Brentwood golf crowd is there to enjoy themselves, and close-up magic that's sharp, social, and impossible to figure out fits that energy perfectly. Sponsors get genuine face time with their audience, and players get a story they'll retell at the next round.",
+  ],
+  "brentwood--charity-gala-magician": [
+    "Charity galas in Brentwood tend to be smaller and more personal than the big downtown or Beverly Hills fundraisers. They happen at private homes, at the Brentwood Country Club, or at venues along San Vicente. The crowd is generous and engaged, and they've attended enough galas to know when the entertainment is generic. Scott's close-up magic during the cocktail hour gives guests something genuine to bond over before the program begins.",
+    "The magic also serves the fundraising goals. When guests are energized and connected, they bid higher and give more freely. Scott works the room during cocktail hour, then transitions to a short stage set if the program calls for it. The format is flexible, and for Brentwood's intimate gala scene, that flexibility matters.",
+  ],
+  "brentwood--holiday-party-magician": [
+    "Holiday parties in Brentwood are home-hosted affairs — Thanksgiving dinners that spill onto the patio, Christmas gatherings around the fireplace, New Year's Eve parties where the guest count is fifty people who actually know each other. Scott's close-up magic adds something unexpected to these evenings without changing the vibe. He moves through the party, performs for small groups, and lets the reactions do the work.",
+    "The Brentwood holiday crowd doesn't want a production. They want something personal and memorable that fits the warmth of the evening. Mentalism and close-up magic are perfect for this — quiet enough for a living room, powerful enough that people are still texting the host about it the next morning.",
+  ],
+  "brentwood--trade-show-magician": [
+    "Trade shows aren't typical Brentwood events, but brands based in the neighborhood — production companies, talent agencies, wellness brands — regularly exhibit at conventions across LA and beyond. White Rabbit brings foot traffic to your booth with close-up magic that stops people mid-aisle. Within minutes, a crowd forms, and your sales team has a warm audience ready to hear the pitch.",
+    "Scott customizes routines to feature your product or messaging in the reveal, so the magic isn't just entertainment — it's a conversation starter that leads directly to your brand. The format works for any booth size, and Scott coordinates with your team on timing, flow, and goals before the event.",
+  ],
+  "brentwood--mentalist": [
+    "Mentalism in a Brentwood living room is an experience people don't forget. Scott reads thoughts, predicts decisions, and reveals details that shouldn't be possible — all without props, gimmicks, or anything that looks like a magic show. It's psychological, it's personal, and in an intimate Brentwood setting, it feels like something genuinely unexplainable is happening.",
+    "The Brentwood crowd is smart, successful, and used to being in control. Mentalism works on them because it challenges that control in a way that's thrilling, not threatening. When a managing partner or studio head can't explain how Scott knew what they were thinking, the room comes alive. It's the kind of moment that becomes the story of the party.",
+  ],
+  "brentwood--rehearsal-dinner-magician": [
+    "Rehearsal dinners in Brentwood are intimate by nature — close family, the wedding party, maybe thirty or forty people at a restaurant or private home. Scott's close-up magic during cocktails gives the group something to bond over the night before the big day. He reads the room, keeps it warm and personal, and creates moments that the wedding party will reference during toasts the next afternoon.",
+    "The magic works especially well at rehearsal dinners because the audience is small and connected. Everyone knows each other, the mood is celebratory, and people are relaxed enough to be genuinely surprised. Scott tailors the experience to the couple and their crowd, making the rehearsal dinner feel like its own event, not just a preview.",
+  ],
+  "brentwood--halloween-party-magician": [
+    "Halloween in Brentwood means neighborhood parties, costume dinners, and gatherings where the hosts go all-in on atmosphere. Scott's mentalism and close-up magic fit the Halloween mood perfectly — mind-reading, predictions, and impossible moments that feel a little bit eerie in the best way. It's not a haunted house. It's something real and unexplainable happening right in front of you.",
+    "The format works for adult Halloween parties, themed dinners, and any gathering where the host wants the entertainment to match the atmosphere. In Brentwood's quiet, leafy setting, the contrast between the beautiful home and something genuinely mysterious happening at the dinner table makes the experience hit even harder.",
+  ],
+  "brentwood--christmas-party-magician": [
+    "Christmas parties and New Year's Eve gatherings in Brentwood are warm, home-hosted celebrations — fireplaces, good wine, and guests who've known each other for years. Scott's close-up magic adds a spark to these evenings without changing the tone. He performs for small groups during cocktails, and the reactions spread naturally. By dessert, everyone's talking about what they saw.",
+    "For New Year's Eve, Scott brings higher energy — faster pace, bigger reveals, countdown-ready material. Whether it's a seated dinner for twenty or a standing party for eighty, the magic gives the evening a focal point that isn't the TV countdown. Brentwood NYE hosts want something memorable, and White Rabbit delivers exactly that.",
+  ],
+  "brentwood--premiere-red-carpet-magician": [
+    "Brentwood is home to some of the biggest names in entertainment, and industry events happen here in private — screening parties, wrap celebrations, and intimate gatherings where the guest list reads like end credits. Scott's close-up magic fits these events because it's personal and low-key. No production, no disruption, just impossible moments during the cocktail hour.",
+    "White Rabbit has worked with Netflix, Disney, Paramount, and Rolls-Royce. Scott performs regularly in Brentwood for entertainment industry clients who want something their guests haven't seen before. In a neighborhood full of people who make entertainment for a living, that's a high bar — and it's exactly where Scott operates best.",
+  ],
+  "brentwood--dmc-entertainment": [
+    "Brentwood isn't a typical DMC destination, but for groups doing a curated LA experience — visiting the Getty Center, dining along San Vicente, or attending a private event in the neighborhood — White Rabbit adds an entertainment layer that makes the itinerary unforgettable. Scott performs during welcome receptions, private dinners, and intimate group gatherings.",
+    "The magic works especially well for incentive travel groups and executive retreats where the attendees are high-level and hard to impress. Close-up magic and mentalism cut through the usual entertainment options and give people something genuinely surprising to talk about over dinner. Scott coordinates with DMC teams on timing and logistics.",
+  ],
+  "brentwood--resident-event-magician": [
+    "Brentwood's luxury residential communities and condo buildings want resident events that feel special — not another wine and cheese night. Scott's close-up magic gives residents something genuinely surprising and social. He moves through the room performing for small groups, and by the end of the evening, neighbors who've never spoken are laughing together over something impossible they just witnessed.",
+    "The format requires no stage, no AV, no setup beyond a place for people to stand and talk. It fits into clubhouse events, pool deck gatherings, and any community space. Property managers and HOA boards consistently report that White Rabbit nights get the highest turnout and the most positive feedback of any resident event on the calendar.",
+  ],
 };
 
 function generatePage(location: string, service: typeof serviceTypes[number]): SeoPage {
