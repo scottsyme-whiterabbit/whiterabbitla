@@ -1019,6 +1019,22 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
   return [...(serviceSpecific[serviceKey] || []), ...shared];
 }
 
+/**
+ * City-specific content overrides. Key format: "{city-slug}--{service-key}"
+ * When provided, these paragraphs are included as citySpecificContent on the page,
+ * allowing the renderer to supplement or replace generic template body text.
+ * 
+ * Example:
+ *   "beverly-hills--corporate-event-magician": [
+ *     "Beverly Hills corporate events demand a level of polish...",
+ *     "From Rodeo Drive product launches to private dinners at The Peninsula...",
+ *   ],
+ */
+const citySpecificOverrides: Record<string, string[]> = {
+  // Add city-specific content overrides here
+  // "beverly-hills--corporate-event-magician": ["Custom paragraph 1...", "Custom paragraph 2..."],
+};
+
 function generatePage(location: string, service: typeof serviceTypes[number]): SeoPage {
   const slug = `${slugify(location)}-${service.key}`;
 
