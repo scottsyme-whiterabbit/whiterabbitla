@@ -276,7 +276,8 @@ const SeoLanding = () => {
             </p>
           </AnimatedSection>
 
-          {page.bodyParagraphs.slice(0, 2).map((paragraph, i) => (
+          {/* City-specific content replaces first 2 generic paragraphs when available */}
+          {(page.citySpecificContent || page.bodyParagraphs.slice(0, 2)).map((paragraph, i) => (
             <AnimatedSection key={i} delay={i * 0.1}>
               <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8">
                 {paragraph}

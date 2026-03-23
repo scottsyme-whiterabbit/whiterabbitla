@@ -15,6 +15,8 @@ export interface SeoPage {
   heroSubheadline: string;
   introParagraph: string;
   bodyParagraphs: string[];
+  /** Optional city-specific paragraphs that replace the generic template body when provided */
+  citySpecificContent?: string[];
   midCtaText: string;
   ctaText: string;
   socialProof: string;
@@ -1017,6 +1019,22 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
   return [...(serviceSpecific[serviceKey] || []), ...shared];
 }
 
+/**
+ * City-specific content overrides. Key format: "{city-slug}--{service-key}"
+ * When provided, these paragraphs are included as citySpecificContent on the page,
+ * allowing the renderer to supplement or replace generic template body text.
+ * 
+ * Example:
+ *   "beverly-hills--corporate-event-magician": [
+ *     "Beverly Hills corporate events demand a level of polish...",
+ *     "From Rodeo Drive product launches to private dinners at The Peninsula...",
+ *   ],
+ */
+const citySpecificOverrides: Record<string, string[]> = {
+  // Add city-specific content overrides here
+  // "beverly-hills--corporate-event-magician": ["Custom paragraph 1...", "Custom paragraph 2..."],
+};
+
 function generatePage(location: string, service: typeof serviceTypes[number]): SeoPage {
   const slug = `${slugify(location)}-${service.key}`;
 
@@ -1257,6 +1275,10 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
 
   const faqs = generateFaqs(location, service.key);
 
+  // Check for city-specific content overrides
+  const overrideKey = `${slugify(location)}--${service.key}`;
+  const cityContent = citySpecificOverrides[overrideKey];
+
   return {
     slug,
     title: `${service.label} in ${location}`,
@@ -1269,6 +1291,7 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
     heroSubheadline: heroSub,
     introParagraph: intro,
     bodyParagraphs: body,
+    ...(cityContent ? { citySpecificContent: cityContent } : {}),
     midCtaText: midCta,
     ctaText: `Book White Rabbit for Your ${location} Event`,
     socialProof: testimonial.quote,
