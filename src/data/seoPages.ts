@@ -1259,6 +1259,10 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
 
   const faqs = generateFaqs(location, service.key);
 
+  // Check for city-specific content overrides
+  const overrideKey = `${slugify(location)}--${service.key}`;
+  const cityContent = citySpecificOverrides[overrideKey];
+
   return {
     slug,
     title: `${service.label} in ${location}`,
@@ -1271,6 +1275,7 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
     heroSubheadline: heroSub,
     introParagraph: intro,
     bodyParagraphs: body,
+    ...(cityContent ? { citySpecificContent: cityContent } : {}),
     midCtaText: midCta,
     ctaText: `Book White Rabbit for Your ${location} Event`,
     socialProof: testimonial.quote,
