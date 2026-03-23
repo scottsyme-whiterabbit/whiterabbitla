@@ -233,6 +233,14 @@ const servicePages: Record<string, ServiceData> = {
         heading: "Perfect for Any Setting",
         body: "Cocktail hours, dinner parties, VIP lounges, restaurant activations, hotel lobbies, brand activations, trade shows, and any event where you want guests mingling, laughing, and completely present in the moment.",
       },
+      {
+        heading: "Why Close-Up Magic Hits Different",
+        body: "Stage magic works from a distance. You watch a person do something impossible 50 feet away and you clap. Close-up magic happens six inches from your face, with your ring, your card, your phone — and you can't process what just happened. That's the difference. Scott doesn't perform at you. He performs with you. You're holding the deck when the card changes. Your signed dollar bill ends up inside a lemon you picked off the table. Your friend's phone shows a photo that shouldn't exist. The reactions aren't polite applause. They're real, involuntary, sometimes loud. People grab each other's arms. They replay it to their friends. They try to figure it out and they can't. That's what close-up magic does that no other form of entertainment can — it makes something impossible happen in your hands.",
+      },
+      {
+        heading: "Where Close-Up Magic Works Best",
+        body: "Cocktail hours and receptions where guests are standing and mingling. Seated dinners between courses, where Scott moves table to table. VIP lounges and greenrooms. Trade show booths where you need to stop foot traffic. Private dining rooms at restaurants. Gallery openings and launch events. Rooftop parties, garden parties, poolside events. Anywhere people are gathered in groups of three to ten with a drink in their hand and a few minutes to spare. The magic adapts to the space. Scott has performed in Michelin-starred restaurants, yacht decks, Soho House, backyard barbecues, and the Magic Castle itself. No stage, no setup, no tech requirements. Just Scott, a deck of cards, and whatever you happen to have in your pocket.",
+      },
     ],
     included: [
       "Pre-event consultation to understand your audience and goals",
@@ -245,6 +253,10 @@ const servicePages: Record<string, ServiceData> = {
       { question: "What is close-up magic?", answer: "Close-up magic happens right in your guests' hands: cards, coins, borrowed objects. Scott performs for small groups of 4 to 8 at a time, creating intimate, jaw-dropping moments. It's interactive, personal, and the most powerful form of live entertainment." },
       { question: "How long does a close-up performance last?", answer: "Most clients book 2–3 hours of roaming close-up magic. Each small group gets about 8–10 minutes of dedicated performance. Custom timing is always available." },
       { question: "Does close-up magic work for large events?", answer: "Absolutely. Scott moves through events of any size, creating intimate moments within larger gatherings. For 150+ guests, we recommend pairing close-up magic with a Private Magic Show." },
+      { question: "What's the difference between close-up magic and stage magic?", answer: "Close-up magic happens within arm's reach, using everyday objects. Stage magic uses bigger props and plays to a seated audience from a distance. Scott does both, but close-up is his specialty — it's more personal, more interactive, and the reactions are stronger because the magic is literally happening in your hands." },
+      { question: "How long does each group get with Scott?", answer: "Two to four minutes per group. That's enough for one or two effects that leave a real impression without overstaying. In a 60-minute cocktail hour, he'll reach 15 to 20 groups, covering 80 to 120 guests." },
+      { question: "Can close-up magic work at a seated dinner?", answer: "Yes — Scott moves table to table between courses. Each table gets a dedicated 5-minute set. It works especially well at events where guests are locked into their seats and you want to bring the entertainment to them." },
+      { question: "What objects does Scott use?", answer: "Playing cards, coins, borrowed rings, watches, phones, napkins, pens — whatever's available. Part of the appeal is that there's nothing hidden up a sleeve. Everything happens with ordinary objects, often ones the guests hand over themselves." },
       { question: "What do I need to provide?", answer: "Nothing. Scott brings everything. All you need is your guests and a great event. No stage, no setup, no special requirements." },
     ],
     testimonial: {
