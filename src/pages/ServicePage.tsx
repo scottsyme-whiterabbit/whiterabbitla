@@ -127,6 +127,14 @@ const servicePages: Record<string, ServiceData> = {
         heading: "Tailored to Your Vision",
         body: "Scott has performed at weddings across Southern California and beyond. From clifftop ceremonies to grand ballroom receptions. Each performance is tailored to your guest count, timeline, and vision. Cocktail hour roaming magic, a pre-dinner show, or both: whatever your celebration needs.",
       },
+      {
+        heading: "How It Works on Your Wedding Day",
+        body: "Scott arrives during your venue's flip — while the ceremony space converts to reception. He checks in with your coordinator, confirms timing, and positions himself where guests will naturally gather for cocktail hour. As people arrive with drinks in hand, he starts. No microphone, no announcement. Just small groups of four to six getting two to three minutes of close-up magic. Cards appear in impossible places. A borrowed wedding ring vanishes and reappears inside a sealed envelope that's been sitting on a table since before the ceremony. A guest thinks of their anniversary date and Scott writes it on a napkin before they say a word. The reactions carry across the patio. People pull their friends over. By the time dinner is called, your guests have stories to tell that have nothing to do with the centerpieces.",
+      },
+      {
+        heading: "Where Magic Fits in Your Timeline",
+        body: "Most couples book Scott for cocktail hour, and that's the sweet spot. It's the one part of the wedding where guests are standing, mingling, and waiting — which means they're the perfect audience. But he's worked plenty of other windows too. Rehearsal dinners where the families haven't met yet and need a reason to talk. Morning-after brunches where the energy is relaxed and people want something fun. VIP welcome receptions for destination weddings. Even the gap between ceremony and cocktail hour, if your venue has one. One thing that doesn't work: during dinner toasts or the first dance. Those moments belong to you. Scott knows when to be visible and when to disappear.",
+      },
     ],
     included: [
       "Pre-wedding consultation to understand your vision and guest dynamics",
@@ -139,6 +147,10 @@ const servicePages: Record<string, ServiceData> = {
       { question: "When during the wedding does the magician perform?", answer: "Cocktail hour is the most popular window. It's the perfect time to break the ice between guests. Scott can also perform during the reception or as a pre-dinner show. We work with your timeline to find the ideal moment." },
       { question: "Is the magic appropriate for all ages?", answer: "Yes. Every performance is elegant, sophisticated, and family-friendly. Just beautiful, intimate moments of wonder that feel right at home at a black-tie celebration." },
       { question: "How does booking work with our wedding planner?", answer: "Scott works directly with your planner or coordinator to ensure seamless integration. We handle timing, positioning, and flow so you don't have to think about it on your big day." },
+      { question: "Will the magic be appropriate for all ages?", answer: "Yes. Scott's material is clean, smart, and works for everyone from your flower girl's grandparents to your college friends. No gimmicks, no cringe." },
+      { question: "Do you need a table or stage for close-up magic?", answer: "No. Scott performs standing, using whatever's around — borrowed objects, napkins, someone's phone. He adapts to your space, indoors or out." },
+      { question: "How many guests can you cover during cocktail hour?", answer: "In a standard 60- to 90-minute cocktail hour, Scott reaches 80 to 120 guests. For larger weddings, he prioritizes the VIP tables or areas your coordinator flags." },
+      { question: "What if it rains and we move indoors?", answer: "Close-up magic works anywhere people are standing together. Scott has performed in wine caves, hotel lobbies, tented patios, and living rooms. The venue change won't affect the experience at all." },
       { question: "How far in advance should we book?", answer: "Peak wedding season (May through October) books months in advance. We recommend reaching out as soon as you have your date to secure availability." },
     ],
     testimonial: {
