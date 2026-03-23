@@ -2221,6 +2221,71 @@ const citySpecificOverrides: Record<string, string[]> = {
     "Manhattan Beach's condo communities and residential buildings want events that bring neighbors together in a real way — not another mixer with a cheese plate. Scott's close-up magic gives residents something genuinely surprising and social. He moves through the room performing for small groups, and by the end of the evening, neighbors who've only nodded at each other in the elevator are laughing together over something impossible.",
     "The format requires no stage, no AV, no setup. It fits into clubhouse events, pool deck gatherings, rooftop receptions, and any community space. Property managers in the South Bay consistently report that White Rabbit events get stronger turnout and more positive feedback than any other resident programming on the calendar.",
   ],
+  // ── Encino ───────────────────────────────────────────────────────────
+  "encino--corporate-event-magician": [
+    "Corporate events in Encino happen at restaurants along Ventura Boulevard, at private estates in the Encino Hills, and at Valley-based companies that want to host clients somewhere comfortable and impressive. The guest list tends to be senior professionals — entertainment executives, financial advisors, real estate developers — who live in the Valley because they want space without giving up access. Scott's close-up magic fits these events because it's polished and personal without being fussy.",
+    "The Encino corporate crowd is successful and well-traveled but doesn't want anything pretentious. They want entertainment that sparks real conversation and gives the evening a moment everyone remembers. Scott reads the room, keeps it sharp, and delivers magic that feels like it belongs at the dinner table, not on a stage somewhere.",
+  ],
+  "encino--private-party-magician": [
+    "Private parties in Encino happen at sprawling Valley estates — big backyards, pools, and enough space that the party spreads out naturally. Birthday milestones, anniversary celebrations, holiday gatherings, graduation parties — the hosts put effort into the details and want entertainment that matches without trying too hard. Scott's close-up magic fits perfectly. He moves through the party performing for small groups, and the reactions ripple through the yard naturally.",
+    "Encino parties are bigger than what you'd see in Bel Air or Brentwood — fifty to a hundred guests is common — but the vibe is warmer and more relaxed. People know each other, kids are running around, and the host wants something that works for everyone. Close-up magic and mentalism hit that mark because they adapt to whoever's watching. The reactions from teenagers are different from the reactions from grandparents, and both are genuine.",
+  ],
+  "encino--wedding-magician": [
+    "Encino weddings often happen at estates and private venues in the Hills — garden ceremonies, cocktail hours on the patio, and receptions under string lights in backyards that feel like private parks. Scott's cocktail hour magic fits the beauty of these settings. He performs for small groups while guests mingle, and by dinner, strangers from different sides of the aisle feel like old friends.",
+    "The Valley wedding crowd is mixed-age and family-oriented, which is exactly where close-up magic works best. Scott reads the room, adjusts his energy for different groups, and creates moments that work for everyone from the bride's grandmother to the groom's college roommates. He's also available for rehearsal dinners, where the smaller group makes the magic even more personal.",
+  ],
+  "encino--close-up-magician": [
+    "Close-up magic is a natural fit for Encino events. The gatherings are social, the spaces are big, and the guests are standing around with drinks in beautiful backyards. Scott moves through these settings performing for groups of four to eight — cards, borrowed objects, mentalism — and every piece happens right in their hands. No stage, no setup, no disruption to the party's flow.",
+    "The Encino crowd is sharp and successful but unpretentious, which makes the reactions even better. When someone who runs a production company or manages a hedge fund gets genuinely fooled — really can't figure it out — the reaction is loud, genuine, and contagious. Those moments become the highlight of the party.",
+  ],
+  "encino--private-magic-show": [
+    "A Private Magic Show in an Encino living room or backyard is one of Scott's favorite settings. The estates here have the space for it — high ceilings, beautiful outdoor areas, room for forty or fifty guests to sit comfortably. Scott brings professional lighting and a curated soundtrack, and for 30 to 45 minutes, your home becomes a private theater. The show is mentalism, storytelling, and audience interaction designed for people who appreciate something crafted.",
+    "These shows work for milestone birthdays, anniversary dinners, holiday gatherings, or any night where the host wants to give their guests something they've never experienced. In Encino, the big houses and big yards mean you can do this properly — and standing ovations in living rooms happen more often than you'd expect.",
+  ],
+  "encino--golf-tournament-magician": [
+    "Golf tournaments at Valley courses — Encino, Braemar, and nearby clubs — host their post-round receptions at the clubhouse. White Rabbit fills the gap between the last putt and the first toast with roaming close-up magic that keeps players and sponsors engaged. The 19th-hole magic consistently becomes the most talked-about part of the tournament day.",
+    "Scott also serves as MC for the awards dinner when needed, keeping the flow tight from cocktails through trophies. The Encino golf crowd is there to enjoy themselves, and close-up magic that's sharp and impossible to figure out fits that energy perfectly. Sponsors get genuine face time with their audience, and players get a story better than their scorecard.",
+  ],
+  "encino--charity-gala-magician": [
+    "Charity galas in Encino are community events — school fundraisers, synagogue galas, local nonprofit dinners, and neighborhood causes that bring the Valley's generous families together. Scott's close-up magic during the cocktail hour gives guests something to bond over before the program begins. When people are energized and connected, they bid higher and give more freely.",
+    "The format is flexible: roaming magic during cocktails, a short stage set during dinner, or both. For the Encino gala crowd — generous, family-oriented, and used to attending these events — the magic provides something unexpected that makes this year's event the one people remember.",
+  ],
+  "encino--holiday-party-magician": [
+    "Holiday parties in Encino are home-hosted celebrations on a bigger scale than most neighborhoods — big houses, big guest lists, and hosts who go all-in on making the evening special. Scott's close-up magic adds something unexpected without competing with the party. He moves through the room, performs for small groups, and the reactions become the soundtrack of the evening.",
+    "The Encino holiday crowd wants something memorable that fits the warmth of the evening. Mentalism and close-up magic are perfect — they work in living rooms, backyards, and poolside patios equally well. Christmas parties, Hanukkah celebrations, New Year's Eve — the format adapts to whatever the host has planned.",
+  ],
+  "encino--trade-show-magician": [
+    "Encino is home to production companies, financial firms, and businesses that regularly exhibit at conventions and expos across LA. White Rabbit brings foot traffic to your booth with close-up magic that stops people mid-aisle. Within minutes, a crowd forms, your sales team has warm leads, and your booth is the one people are telling their colleagues about.",
+    "Scott customizes routines to feature your product or messaging in the reveal, so the magic leads directly to your brand. The format works for any booth size and any industry. Scott coordinates with your team on timing, flow, and goals before the event.",
+  ],
+  "encino--mentalist": [
+    "Mentalism in an Encino living room — reading thoughts, predicting decisions, revealing details that shouldn't be possible — is an experience that stops a party cold in the best way. Scott does all of this without props, gimmicks, or anything that looks like a magic show. It's psychological, it's personal, and in a room full of smart, successful Valley professionals, it feels like encountering something that genuinely shouldn't be possible.",
+    "The Encino crowd is used to being in control — running companies, managing deals, making decisions. Mentalism works on them because it challenges that control in a way that's thrilling and fun. When a managing partner or studio executive can't explain how Scott knew what they were thinking, the room comes alive.",
+  ],
+  "encino--rehearsal-dinner-magician": [
+    "Rehearsal dinners in Encino are intimate family affairs — close relatives, the wedding party, maybe thirty or forty people at a restaurant on Ventura Boulevard or at someone's home in the Hills. Scott's close-up magic during cocktails gives the group something to bond over the night before the big day. He keeps it warm and personal, and creates moments that get referenced in toasts the next afternoon.",
+    "The magic works especially well at rehearsal dinners because the audience is small and connected. Everyone knows each other, the mood is celebratory, and people are relaxed enough to be genuinely surprised. Scott tailors the experience to the couple and their crowd, making the rehearsal dinner feel like its own event.",
+  ],
+  "encino--halloween-party-magician": [
+    "Halloween in Encino means big neighborhood parties, costume gatherings at Valley estates, and themed dinners where the hosts go all-in on atmosphere. Scott's mentalism and close-up magic fit the Halloween mood perfectly — mind-reading, predictions, and impossible moments that feel a little eerie in the best way. The big Encino backyards and dimly lit patios make the setting even better.",
+    "The format works for adult Halloween parties, family-friendly gatherings, and themed dinners. In a neighborhood where the houses and yards are big enough to create real atmosphere, the contrast between the beautiful setting and something genuinely mysterious happening in your hands makes the experience hit harder.",
+  ],
+  "encino--christmas-party-magician": [
+    "Christmas and New Year's Eve in Encino are big, warm celebrations — houses lit up, extended family, and guest lists that run deep. Scott's close-up magic adds a spark to these evenings without changing the tone. He performs for small groups during cocktails, and by dessert, the magic is what everyone's talking about.",
+    "For New Year's Eve, Scott brings higher energy — faster pace, bigger reveals, countdown-ready material. Whether it's a seated dinner for thirty or a standing party for a hundred, the magic gives the evening a focal point that isn't the TV countdown. Encino NYE hosts want something their guests will remember — White Rabbit delivers.",
+  ],
+  "encino--premiere-red-carpet-magician": [
+    "Encino is home to entertainment executives, producers, and industry professionals who host screenings, wrap parties, and celebrations at their Valley estates. Scott's close-up magic fits these events because it's personal and low-key — no production, no disruption, just impossible moments during the cocktail hour that genuinely surprise people who work in entertainment for a living.",
+    "White Rabbit has worked with Netflix, Disney, Paramount, and Rolls-Royce. Scott performs in the Valley regularly for industry clients who want something their guests haven't seen before. In a neighborhood full of people who know how hard it is to genuinely surprise an audience, that's a high bar — and it's exactly where Scott operates best.",
+  ],
+  "encino--dmc-entertainment": [
+    "Encino isn't a typical DMC destination, but for groups doing a curated Valley or greater LA experience, White Rabbit adds entertainment that makes the evening unforgettable. Scott performs during welcome receptions, private dinners, and group gatherings at local restaurants and private estates.",
+    "The magic works especially well for incentive travel groups and executive retreats where the attendees are senior-level and hard to impress. Close-up magic and mentalism give people something genuinely surprising to talk about over dinner. Scott coordinates with DMC teams on timing, venue, and logistics.",
+  ],
+  "encino--resident-event-magician": [
+    "Encino's luxury condo buildings and gated communities want resident events that feel special — not another wine and cheese night with a folding table. Scott's close-up magic gives residents something genuinely surprising and social. He moves through the room performing for small groups, and by the end of the evening, neighbors who've lived on the same street for years are sharing a moment of real connection.",
+    "The format requires no stage, no AV, no setup. It fits into clubhouse events, pool deck gatherings, and any community space. Property managers and HOA boards in Encino consistently report that White Rabbit events get the highest turnout and the most positive feedback of any resident programming on the calendar.",
+  ],
 };
 
 function generatePage(location: string, service: typeof serviceTypes[number]): SeoPage {
