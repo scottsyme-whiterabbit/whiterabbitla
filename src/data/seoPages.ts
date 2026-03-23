@@ -1277,7 +1277,7 @@ const citySpecificOverrides: Record<string, string[]> = {
   ],
   // ── Hollywood ───────────────────────────────────────────────────────
   "hollywood--corporate-event-magician": [
-    "Corporate events in Hollywood are industry events, whether they call themselves that or not. The guest list is talent agencies, production companies, studio marketing teams, and the people who greenlight what everyone else watches. Scott has performed at industry dinners and corporate receptions throughout Hollywood where the crowd was mostly people who create entertainment for a living — and they reacted the same way everyone does when close-up magic happens six inches from their face: total, unguarded amazement.",
+    "Corporate events in Hollywood are industry events, whether they call themselves that or not. The guest list is talent agencies, production companies, studio marketing teams, and the people who greenlight what everyone else watches. Scott has performed for Morgan Stanley at a private client event in the Hollywood Hills, and at industry dinners and corporate receptions throughout the neighborhood where the crowd was mostly people who create entertainment for a living — and they reacted the same way everyone does when close-up magic happens six inches from their face: total, unguarded amazement.",
     "Hollywood corporate events happen at venues like the Hollywood Roosevelt, NeueHouse, and private screening rooms throughout the neighborhood. The entertainment needs to match that setting — sharp, current, and zero cheese. Scott's close-up magic and mentalism are built for rooms where everyone thinks they've seen everything. They haven't seen this.",
   ],
   "hollywood--private-party-magician": [
