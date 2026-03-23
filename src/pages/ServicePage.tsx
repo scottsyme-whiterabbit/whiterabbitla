@@ -294,6 +294,10 @@ const servicePages: Record<string, ServiceData> = {
         heading: "What Makes This Different from Hiring a Magician for a Stage Show",
         body: "Most magicians who do stage shows are doing the same 45 minutes they do everywhere — big box illusions, audience plants, scripted patter. The Private Magic Show is built from scratch for your event. The material changes based on the audience size, the room, and what the host is going for. A 30-person dinner party in Bel Air gets a different show than a 200-person corporate gala at the Beverly Hilton. Scott has performed at the Magic Castle, consulted for America's Got Talent, and worked private events for Netflix, Disney, and Morgan Stanley. The show reflects that level of craft. Every effect is rehearsed, every transition is clean, and the audience never sees the work behind it.",
       },
+      {
+        heading: "Available Nationwide",
+        body: "The Private Magic Show is available nationwide. In Los Angeles, Scott handles all production — lighting, sound, setup. For events outside LA, production needs are coordinated with the host or their event team.",
+      },
     ],
     included: [
       "Pre-event consultation to design the perfect show for your audience",
