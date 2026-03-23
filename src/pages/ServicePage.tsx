@@ -75,6 +75,14 @@ const servicePages: Record<string, ServiceData> = {
         heading: "Full Show Experiences",
         body: "For events that call for a centerpiece moment, the Private Magic Show transforms your venue into an intimate theater. Professional lighting, a curated soundtrack, and 45 minutes of world-class magic that leaves your audience speechless. Available as a standalone show or paired with roaming magic for the complete White Rabbit experience.",
       },
+      {
+        heading: "What to Expect on the Night",
+        body: "Scott arrives 30 to 45 minutes before your event starts. He'll walk the room with your planner or coordinator, note the layout, identify the best spots for roaming magic, and confirm timing with your AV team if there's a show component. Once guests arrive, he starts working the room — no announcement needed. Small groups of four to eight people get two to three minutes of close-up magic each. Cards, coins, borrowed rings, a phone or two. The reactions are loud enough that other groups start drifting over. By the end of cocktail hour, most of the room has seen something. If there's a seated show, Scott transitions from roaming into a 30- or 45-minute performance that pulls volunteers from the audience, reads minds, and builds to a finale that gets a standing ovation more often than not.",
+      },
+      {
+        heading: "Types of Corporate Events We Work",
+        body: "Annual galas and awards dinners. Product launches where you need the crowd buzzing before the reveal. Holiday parties that need to feel special, not just another open bar. Client appreciation events where the goal is making people feel valued. Executive retreats where the team needs to actually bond, not just sit through another trust fall. Trade show booths where you need foot traffic and a reason for people to stop. Conference after-parties where the real relationships get built. Incentive trips where the entertainment has to match the venue. Scott has worked all of these, most of them multiple times. He reads the room, adjusts his energy to the crowd, and knows when to dial it up or pull back.",
+      },
     ],
     included: [
       "Pre-event consultation to tailor the performance to your audience and goals",
@@ -87,7 +95,10 @@ const servicePages: Record<string, ServiceData> = {
       { question: "What type of corporate events is White Rabbit best suited for?", answer: "Cocktail receptions, holiday parties, product launches, executive retreats, client appreciation events, trade shows, and galas. Scott's close-up magic is designed to break the ice and create genuine connections between guests." },
       { question: "How long does a corporate performance last?", answer: "Roaming close-up magic is typically booked for 2 to 3 hours. The Private Magic Show is a curated 45-minute theatrical experience. Many clients book both for a full-evening White Rabbit experience." },
       { question: "Can the performance be customized for our brand?", answer: "Absolutely. Every performance is tailored to your event's goals, audience, and tone, from incorporating brand messaging to matching the energy of your event theme." },
-      { question: "How far in advance should we book?", answer: "We recommend booking 4 to 8 weeks in advance, especially during peak event season. Contact us with your date and we'll confirm availability within 24 hours." },
+      { question: "How much space does the magic require?", answer: "For roaming close-up magic, none — Scott works in whatever space your guests are already standing. For the full show, he needs about an 8-by-10-foot area with access to power for lighting and sound. No stage required, though one helps for groups over 100." },
+      { question: "Can Scott customize the performance for our company or theme?", answer: "Yes. He's incorporated company products into tricks, used CEO names in mentalism routines, and tailored entire sets around event themes. The pre-event consultation is where all of this gets mapped out." },
+      { question: "How far in advance should we book?", answer: "Prime dates in Los Angeles — especially October through January — book out 8 to 12 weeks. If you have a specific date, reach out sooner rather than later. Last-minute bookings sometimes work if the calendar lines up." },
+      { question: "What happens if our event runs long or the timeline shifts?", answer: "Scott rolls with it. He has performed at enough corporate events to know that timelines are suggestions. He stays flexible and adjusts on the fly without any drama." },
     ],
     testimonial: {
       quote: "I've never seen a room full of executives laugh that hard. Every single person came up to me afterward asking where I found him.",
