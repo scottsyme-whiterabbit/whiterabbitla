@@ -260,8 +260,15 @@ const SeoLanding = () => {
         </div>
       </section>
 
+      {/* Author Byline */}
+      <div className="max-w-3xl mx-auto px-6 pt-10 pb-2 text-center">
+        <p className="font-sans text-[11px] tracking-[0.25em] uppercase text-accent/70">
+          By Scott Syme · Last Updated {new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}
+        </p>
+      </div>
+
       {/* Intro + Body */}
-      <section className="py-20 lg:py-28">
+      <section className="py-20 lg:py-28 pt-10">
         <div className="max-w-3xl mx-auto px-6">
           <AnimatedSection>
             <p className="font-sans text-lg text-foreground leading-relaxed mb-10 font-medium">
