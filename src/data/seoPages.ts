@@ -2091,6 +2091,71 @@ const citySpecificOverrides: Record<string, string[]> = {
     "Brentwood's luxury residential communities and condo buildings want resident events that feel special — not another wine and cheese night. Scott's close-up magic gives residents something genuinely surprising and social. He moves through the room performing for small groups, and by the end of the evening, neighbors who've never spoken are laughing together over something impossible they just witnessed.",
     "The format requires no stage, no AV, no setup beyond a place for people to stand and talk. It fits into clubhouse events, pool deck gatherings, and any community space. Property managers and HOA boards consistently report that White Rabbit nights get the highest turnout and the most positive feedback of any resident event on the calendar.",
   ],
+  // ── Los Feliz ────────────────────────────────────────────────────────
+  "los-feliz--corporate-event-magician": [
+    "Corporate events in Los Feliz don't look like corporate events anywhere else in LA. They happen at creative agencies, production offices, and restaurants along Vermont and Hillhurst — and the guest list is writers, designers, producers, and musicians who work in the neighborhood. Scott's close-up magic works in these settings because it feels organic, not corporate. He reads the room, matches the energy, and delivers something that surprises people who are hard to surprise.",
+    "The Los Feliz crowd is culturally tuned-in and skeptical of anything that feels too polished or packaged. That's exactly why mentalism and close-up magic land so well here. It's raw, it's personal, and it doesn't look like entertainment — it looks like something genuinely unexplainable happening at the cocktail hour. That's what gets this crowd talking.",
+  ],
+  "los-feliz--private-party-magician": [
+    "Private parties in Los Feliz happen at hillside homes with canyon views, bungalows near Griffith Park, and apartments where the living room doubles as the venue. The hosts care about the details — the playlist, the food, the guest list — and they want entertainment that feels like a discovery, not a booking. Scott's close-up magic fits that vibe. He shows up, moves through the party, and within minutes, people are pulling their friends over to see what just happened.",
+    "Los Feliz parties tend to be smaller and more curated than what you'd see on the Westside. Twenty to sixty guests, people who know each other, and a host who wants the evening to have a moment everyone remembers. Close-up magic and mentalism are perfect for that — no stage, no microphone, just something impossible happening while someone holds a borrowed coin.",
+  ],
+  "los-feliz--wedding-magician": [
+    "Los Feliz weddings have character — venues like The Ebell, Griffith Park event spaces, and hillside homes with old Hollywood architecture. The couples getting married here tend to want something personal and offbeat rather than a cookie-cutter reception. Scott's cocktail hour magic fits that sensibility. He performs for small groups while guests mingle, and by dinner, strangers feel connected over something they can't explain.",
+    "Scott works with couples to tailor the magic to their crowd. Mixed-age guest lists, creative industry friends, out-of-town family — the magic adapts to whoever's in the room. He's also available for rehearsal dinners, where the smaller group makes the experience even more intimate. Los Feliz weddings are about personality, and White Rabbit adds exactly that.",
+  ],
+  "los-feliz--close-up-magician": [
+    "Close-up magic is a natural fit for Los Feliz events. The gatherings here are intimate, the spaces are interesting, and the guests are curious by nature. Scott moves through the room performing for groups of four to eight — cards, borrowed objects, mentalism — and every piece happens right in their hands. No stage, no props, no production. Just something impossible happening six inches from someone's face.",
+    "The Los Feliz crowd appreciates things that feel authentic and unexpected. Close-up magic hits both marks. When an actor or a director or a musician gets genuinely fooled — really can't figure it out — the reaction is electric. Those moments become the highlight of the party, and they're the reason hosts in Los Feliz keep booking White Rabbit.",
+  ],
+  "los-feliz--private-magic-show": [
+    "A Private Magic Show in a Los Feliz living room or backyard is an experience that fits the neighborhood perfectly — intimate, artistic, and unlike anything your guests have seen before. Scott brings professional lighting and a curated soundtrack, and for 30 to 45 minutes, your space becomes a private theater. The show is mentalism, storytelling, and audience interaction designed for people who appreciate craft.",
+    "Los Feliz homes have great bones for these shows — high ceilings, character, interesting architecture. The audience sits close, the energy builds, and by the end, you're getting a standing ovation in your own living room. These shows work for milestone birthdays, anniversary dinners, holiday gatherings, or any night where the host wants to give their guests something unforgettable.",
+  ],
+  "los-feliz--golf-tournament-magician": [
+    "Golf tournaments near Los Feliz — at courses in Griffith Park and nearby clubs — host their post-round receptions at the clubhouse. White Rabbit fills the gap between the last putt and the first toast with roaming close-up magic that keeps players and sponsors engaged. The 19th-hole magic consistently becomes the most talked-about part of the tournament day.",
+    "Scott also serves as MC for the awards dinner when needed, keeping the flow tight from cocktails through trophies. The format is flexible: roaming magic during cocktails, a short stage set during dinner, or both. Sponsors get genuine face time with their audience, and players get a story that's better than any hole-in-one they didn't make.",
+  ],
+  "los-feliz--charity-gala-magician": [
+    "Charity galas in Los Feliz tend to be community-driven — arts organizations, neighborhood causes, school fundraisers — with guest lists full of people who live in the area and care about the mission. Scott's close-up magic during the cocktail hour gives guests something to bond over before the program begins. When people are energized and connected, they bid higher and give more freely.",
+    "The magic works as both entertainment and a social lubricant. Scott reads the room, keeps the energy warm, and creates moments that make guests feel like the evening is already special before the speeches start. For a Los Feliz gala crowd that values authenticity, that's exactly the right tone.",
+  ],
+  "los-feliz--holiday-party-magician": [
+    "Holiday parties in Los Feliz are home-hosted and personal — Thanksgiving dinners that run long, Christmas gatherings with the fireplace going, New Year's Eve parties where the guest count is manageable and everyone knows each other. Scott's close-up magic adds something unexpected to these evenings. He moves through the party, performs for small groups, and the reactions ripple through the room without disrupting the vibe.",
+    "The Los Feliz holiday crowd doesn't want a production. They want something genuine and memorable that fits the warmth of the evening. Mentalism and close-up magic are perfect for that — quiet enough for a living room, powerful enough that people are still texting the host about it the next morning.",
+  ],
+  "los-feliz--trade-show-magician": [
+    "Los Feliz is home to creative agencies, production companies, and brands that regularly exhibit at conventions and expos across LA and beyond. White Rabbit brings foot traffic to your booth with close-up magic that stops people mid-aisle. Within minutes, a crowd forms, your sales team has warm leads, and your booth is the one people are telling their colleagues about.",
+    "Scott customizes routines to feature your product or messaging in the reveal, so the magic isn't just a spectacle — it's a conversation starter that leads directly to your brand. The format works for any booth size and any industry. Scott coordinates with your team on timing, flow, and goals before the event.",
+  ],
+  "los-feliz--mentalist": [
+    "Mentalism in a Los Feliz living room is something special. Scott reads thoughts, predicts decisions, and reveals details that shouldn't be possible — all without props or anything that looks like a magic show. It's psychological, it's personal, and in an intimate Los Feliz setting with a smart, culturally aware audience, it feels like encountering something genuinely unexplainable.",
+    "The Los Feliz crowd — actors, writers, musicians, directors — is used to being entertained professionally. They know how stories work, they understand performance, and they're not easy to fool. Mentalism works on them because it operates on a different level. When Scott knows what someone was thinking, the room goes quiet for a second before it erupts. That moment is why people book White Rabbit.",
+  ],
+  "los-feliz--rehearsal-dinner-magician": [
+    "Rehearsal dinners in Los Feliz are intimate — close family, the wedding party, maybe thirty people at a neighborhood restaurant or someone's home. Scott's close-up magic during cocktails gives the group something to bond over the night before the big day. He keeps it warm and personal, and creates moments that the wedding party will reference during toasts the next afternoon.",
+    "The magic works especially well at rehearsal dinners because the audience is small and connected. Everyone knows each other, the mood is celebratory, and people are relaxed enough to be genuinely surprised. In a neighborhood as charming as Los Feliz, the evening already has character — Scott just adds a moment nobody saw coming.",
+  ],
+  "los-feliz--halloween-party-magician": [
+    "Halloween in Los Feliz is a neighborhood event — the streets come alive, the houses go all-out, and the house parties are some of the best in LA. Scott's mentalism and close-up magic fit the Halloween mood perfectly — mind-reading, predictions, and impossible moments that feel a little eerie in the best way. It's not a haunted house. It's something real and unexplainable happening at the dinner table.",
+    "The Los Feliz Halloween crowd goes hard on atmosphere, and Scott matches that energy. The format works for costume parties, themed dinners, and any gathering where the host wants entertainment that feels like it belongs in the neighborhood's spooky, artistic spirit.",
+  ],
+  "los-feliz--christmas-party-magician": [
+    "Christmas and New Year's Eve in Los Feliz are cozy, home-hosted celebrations — candles, good food, and guests who've known each other for years. Scott's close-up magic adds a spark to these evenings without changing the tone. He performs for small groups during cocktails, and by dessert, everyone's trading stories about what they saw.",
+    "For New Year's Eve, Scott brings higher energy — faster pace, bigger reveals, countdown-ready material. Whether it's a seated dinner for twenty or a standing party for sixty, the magic gives the evening a focal point that isn't the TV countdown. Los Feliz NYE hosts want something memorable, and White Rabbit delivers.",
+  ],
+  "los-feliz--premiere-red-carpet-magician": [
+    "Los Feliz is home to actors, directors, writers, and producers — and industry events happen here regularly. Screening parties, wrap celebrations, and intimate gatherings where the guest list is people who make entertainment for a living. Scott's close-up magic fits these events because it's personal and low-key. No production, no disruption, just impossible moments during the cocktail hour that genuinely surprise an audience that's seen it all.",
+    "White Rabbit has worked with Netflix, Disney, Paramount, and Rolls-Royce. In a neighborhood full of people who understand performance, Scott's magic stands out because it doesn't feel like a performance. It feels like something that shouldn't be possible, and that's what gets the Los Feliz crowd talking.",
+  ],
+  "los-feliz--dmc-entertainment": [
+    "Los Feliz isn't a typical DMC stop, but for groups doing a curated LA experience — visiting Griffith Observatory, exploring the neighborhood's old Hollywood architecture, dining along Hillhurst or Vermont — White Rabbit adds an entertainment layer that makes the evening unforgettable. Scott performs during welcome receptions, private dinners, and intimate group gatherings.",
+    "The magic works especially well for incentive travel groups and executive retreats where the attendees are culturally aware and hard to impress. Close-up magic and mentalism cut through the usual entertainment options and give people something genuinely surprising to talk about. Scott coordinates with DMC teams on timing, venue, and logistics.",
+  ],
+  "los-feliz--resident-event-magician": [
+    "Los Feliz has a mix of apartment buildings, condo communities, and hillside neighborhoods where resident events bring people together. Scott's close-up magic gives residents something genuinely surprising and social. He moves through the room performing for small groups, and by the end of the evening, neighbors who've only waved at each other are laughing together over something impossible they just witnessed.",
+    "The format requires no stage, no AV, no setup. It fits into community rooms, courtyard gatherings, rooftop events, and any space where people can stand and talk. For a neighborhood that values community and authenticity, White Rabbit resident events consistently get strong turnout and genuine enthusiasm.",
+  ],
 };
 
 function generatePage(location: string, service: typeof serviceTypes[number]): SeoPage {
