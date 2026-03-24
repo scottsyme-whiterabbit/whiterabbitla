@@ -964,6 +964,25 @@ const SocialGenerator = () => {
                   Copy All
                 </button>
               </div>
+
+              {/* ── INSTAGRAM CAPTION ── */}
+              <div className="mt-6 border border-border p-6 space-y-4">
+                <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-1">Instagram Caption</p>
+                <textarea
+                  value={instagramCaption}
+                  onChange={(e) => setInstagramCaption(e.target.value)}
+                  rows={4}
+                  placeholder="Generate AI copy to populate this field..."
+                  className="w-full bg-background border border-border text-foreground font-sans text-sm px-3 py-2 focus:outline-none focus:border-accent resize-none"
+                />
+                <button
+                  onClick={handleCopyCaption}
+                  disabled={!instagramCaption}
+                  className="w-full font-sans text-xs tracking-[0.2em] uppercase border border-accent text-accent px-6 py-2.5 hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50"
+                >
+                  Copy Caption
+                </button>
+              </div>
             </div>
           </div>
         </div>
