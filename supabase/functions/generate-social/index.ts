@@ -24,21 +24,31 @@ serve(async (req) => {
     const isStory = format === "story";
     const aspectDesc = isStory ? "9:16 vertical (1080x1920)" : "1:1 square (1080x1080)";
 
+    const categoryPrompts: Record<string, string> = {
+      corporate: "a sleek corporate ballroom or penthouse event space with floor-to-ceiling windows overlooking a city skyline at dusk, polished dark wood conference tables, crystal glassware catching ambient light, dramatic uplighting in warm amber tones",
+      wedding: "a romantic candlelit wedding reception setting with long wooden farm tables, hundreds of taper candles in brass holders, lush floral arrangements in deep burgundy and ivory, soft bokeh fairy lights strung overhead, vineyard or estate backdrop",
+      private: "an intimate luxury lounge or private club setting with deep velvet seating in emerald or midnight blue, a marble bar with craft cocktails, warm Edison bulbs, cigar-lounge atmosphere with rich leather and dark walnut accents",
+      brand: "a high-end brand activation space or gallery opening with sculptural lighting installations, sleek minimalist surfaces, dramatic shadows and spotlights, luxury product display aesthetics with clean lines and bold negative space",
+    };
+
+    const settingDescription = categoryPrompts[category?.toLowerCase()] || categoryPrompts[(excerpt || "").toLowerCase()] ||
+      "an intimate luxury event space with warm ambient lighting, rich dark surfaces, elegant glassware, and cinematic shadow play";
+
     const prompt = `Generate a luxurious, atmospheric background image for an Instagram ${isStory ? "story" : "post"}.
 
 The image should be ${aspectDesc} aspect ratio.
 
-Theme context: "${category}" - "${excerpt}"
-
 Requirements:
-- This is ONLY a background image. Do NOT include any text, words, letters, logos, or watermarks whatsoever.
-- Deep forest green (#2D4A3E) tones blended with warm cream, gold, and dusty rose (#c8a0a0) accents
-- Moody, cinematic, editorial atmosphere (luxury hotel lobby, candlelit lounge, velvet textures)
-- Subtle visual motifs: playing cards, golden light, silk, dramatic shadows, bokeh
-- Abstract and ambient, leaving clear space for text overlay (especially center area)
-- Photographic quality, ultra high resolution
-- Rich depth with gradients and layered tones
-- NO text, NO words, NO letters, NO logos anywhere in the image`;
+- This is ONLY a background image. Do NOT include any text, words, letters, logos, watermarks, or typography whatsoever.
+- Do NOT include any people, faces, silhouettes, or human figures.
+- Setting: ${settingDescription}
+- Color palette: deep forest greens, warm golds and amber, rich cream highlights, touches of dusty rose. Overall tone is dark and moody, not bright or airy.
+- Lighting: cinematic and editorial, inspired by Architectural Digest or Vanity Fair event photography. Warm candlelight, dramatic shadows, golden hour glow, subtle lens flare or bokeh.
+- Textures: dark polished wood, velvet, marble, brass, crystal, silk, leather.
+- Composition: abstract and ambient with clear negative space in the center for text overlay. Use depth of field to create layered foreground and background elements.
+- Style: ultra high resolution, photographic quality, editorial luxury, NOT digitally illustrated or AI-looking.
+- Mood: intimate, sophisticated, the hush before something extraordinary happens.
+- NO text, NO words, NO letters, NO logos, NO people, NO faces anywhere in the image.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
