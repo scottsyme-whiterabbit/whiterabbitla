@@ -397,6 +397,48 @@ const SocialGenerator = () => {
     toast({ title: "Copied to clipboard" });
   };
 
+  // ── GENERATE AI COPY ──
+  const handleGenerateAICopy = async () => {
+    setGeneratingAICopy(true);
+    try {
+      const audienceLabel = selectedAudience ? AUDIENCE_PRESETS[selectedAudience]?.label || selectedAudience : "";
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/generate-ad-copy`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${SUPABASE_KEY}` },
+        body: JSON.stringify({
+          audience: audienceLabel,
+          format: formatDimensions[selectedFormat].label,
+          articleTitle: selectedArticle?.title || "",
+          articleExcerpt: selectedArticle?.excerpt || "",
+          adminPassword: password,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: "Request failed" }));
+        toast({ title: err.error || "AI copy generation failed", variant: "destructive" });
+        return;
+      }
+      const data = await res.json();
+      if (data.headline) setHeadline(data.headline);
+      if (data.subheadline) setSubheadline(data.subheadline);
+      if (data.instagramCaption) setInstagramCaption(data.instagramCaption);
+      if (data.metaPrimary) setMetaPrimary(data.metaPrimary.slice(0, 125));
+      if (data.metaHeadline) setMetaHeadline(data.metaHeadline.slice(0, 40));
+      if (data.metaDescription) setMetaDescription(data.metaDescription.slice(0, 30));
+      toast({ title: "AI copy generated", description: "All fields populated." });
+    } catch (err) {
+      console.error("AI copy error:", err);
+      toast({ title: "Connection failed", variant: "destructive" });
+    } finally {
+      setGeneratingAICopy(false);
+    }
+  };
+
+  const handleCopyCaption = () => {
+    navigator.clipboard.writeText(instagramCaption);
+    toast({ title: "Caption copied" });
+  };
+
   const dim = formatDimensions[selectedFormat];
   const photo = brandPhotos[selectedPhoto];
 
