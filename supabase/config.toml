@@ -56,3 +56,6 @@ verify_jwt = false
 
 [functions.nurture-drip]
 verify_jwt = false
+
+[functions.generate-ad-copy]
+verify_jwt = false

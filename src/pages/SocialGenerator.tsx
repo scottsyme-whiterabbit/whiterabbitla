@@ -184,6 +184,8 @@ const SocialGenerator = () => {
   const [savedAds, setSavedAds] = useState<SavedAd[]>(loadLibrary);
   const [batchExporting, setBatchExporting] = useState(false);
   const [generatingVariants, setGeneratingVariants] = useState(false);
+  const [generatingAICopy, setGeneratingAICopy] = useState(false);
+  const [instagramCaption, setInstagramCaption] = useState("");
 
   const [finalImage, setFinalImage] = useState<string | null>(null);
   const [compositing, setCompositing] = useState(false);
