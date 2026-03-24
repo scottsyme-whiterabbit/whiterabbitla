@@ -2806,6 +2806,11 @@ const citySpecificOverrides: Record<string, string[]> = {
     "Nashville's luxury high-rises and condo buildings — downtown towers, Gulch complexes, Midtown residences — want resident events that feel different from the usual lobby happy hour. Scott's close-up magic gives residents something genuinely surprising and social. He moves through the room performing for small groups, and by the end of the evening, neighbors who've shared an elevator for months but never spoken are actually connecting over something real.",
     "The format requires no stage, no AV, no setup — it fits into lobbies, rooftop terraces, pool decks, and any common space. Property managers in Nashville consistently report that White Rabbit events get stronger turnout and more genuine interaction than any other resident programming. Scott flies in from LA for these bookings.",
   ],
+  // ── Scottsdale ───────────────────────────────────────────────────────
+  "scottsdale--corporate-event-magician": [
+    "Scottsdale's world-class resort properties — the Scottsdale Princess, The Phoenician, Sanctuary on Camelback — where companies host retreats, incentive trips, and high-level gatherings with budgets to match the setting. This is desert luxury at its finest, where golf culture and sophisticated hospitality intersect, and where corporate entertainment needs to maintain that same level of quality and polish. Scott Syme flies in from Los Angeles to perform at these events, bringing the same expertise he delivers for major corporations nationwide.",
+    "Scottsdale attracts business leaders who value experience over flash, who appreciate the finer details of how something is done. Scott's approach to magic resonates with this audience — genuine skill, authentic presence, entertainment that enhances rather than dominates the evening. Whether your event is at one of the major resort properties or a private estate in Gainey Ranch or Paradise Valley, his magic creates the kind of memorable moments that build business relationships and leave guests talking about your event long after they return home.",
+  ],
 };
 
 function generatePage(location: string, service: typeof serviceTypes[number]): SeoPage {
