@@ -184,6 +184,8 @@ const SocialGenerator = () => {
   const [savedAds, setSavedAds] = useState<SavedAd[]>(loadLibrary);
   const [batchExporting, setBatchExporting] = useState(false);
   const [generatingVariants, setGeneratingVariants] = useState(false);
+  const [generatingAICopy, setGeneratingAICopy] = useState(false);
+  const [instagramCaption, setInstagramCaption] = useState("");
 
   const [finalImage, setFinalImage] = useState<string | null>(null);
   const [compositing, setCompositing] = useState(false);
@@ -395,6 +397,48 @@ const SocialGenerator = () => {
     toast({ title: "Copied to clipboard" });
   };
 
+  // ── GENERATE AI COPY ──
+  const handleGenerateAICopy = async () => {
+    setGeneratingAICopy(true);
+    try {
+      const audienceLabel = selectedAudience ? AUDIENCE_PRESETS[selectedAudience]?.label || selectedAudience : "";
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/generate-ad-copy`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${SUPABASE_KEY}` },
+        body: JSON.stringify({
+          audience: audienceLabel,
+          format: formatDimensions[selectedFormat].label,
+          articleTitle: selectedArticle?.title || "",
+          articleExcerpt: selectedArticle?.excerpt || "",
+          adminPassword: password,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: "Request failed" }));
+        toast({ title: err.error || "AI copy generation failed", variant: "destructive" });
+        return;
+      }
+      const data = await res.json();
+      if (data.headline) setHeadline(data.headline);
+      if (data.subheadline) setSubheadline(data.subheadline);
+      if (data.instagramCaption) setInstagramCaption(data.instagramCaption);
+      if (data.metaPrimary) setMetaPrimary(data.metaPrimary.slice(0, 125));
+      if (data.metaHeadline) setMetaHeadline(data.metaHeadline.slice(0, 40));
+      if (data.metaDescription) setMetaDescription(data.metaDescription.slice(0, 30));
+      toast({ title: "AI copy generated", description: "All fields populated." });
+    } catch (err) {
+      console.error("AI copy error:", err);
+      toast({ title: "Connection failed", variant: "destructive" });
+    } finally {
+      setGeneratingAICopy(false);
+    }
+  };
+
+  const handleCopyCaption = () => {
+    navigator.clipboard.writeText(instagramCaption);
+    toast({ title: "Caption copied" });
+  };
+
   const dim = formatDimensions[selectedFormat];
   const photo = brandPhotos[selectedPhoto];
 
@@ -600,6 +644,31 @@ const SocialGenerator = () => {
                   </button>
                 </div>
               )}
+
+              {/* ── GENERATE AI COPY BUTTON ── */}
+              <div>
+                <button
+                  onClick={handleGenerateAICopy}
+                  disabled={generatingAICopy}
+                  className="w-full font-sans text-xs tracking-[0.2em] uppercase px-6 py-3 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  style={{ backgroundColor: "#C8963E", color: "#223D34", border: "1px solid #C8963E" }}
+                >
+                  {generatingAICopy ? (
+                    <>
+                      <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <span style={{ fontSize: "16px" }}>✦</span>
+                      Generate AI Copy
+                    </>
+                  )}
+                </button>
+              </div>
 
               {/* Headline */}
               <div>
@@ -893,6 +962,25 @@ const SocialGenerator = () => {
                   className="w-full font-sans text-xs tracking-[0.2em] uppercase border border-accent text-accent px-6 py-2.5 hover:bg-accent hover:text-accent-foreground transition-colors"
                 >
                   Copy All
+                </button>
+              </div>
+
+              {/* ── INSTAGRAM CAPTION ── */}
+              <div className="mt-6 border border-border p-6 space-y-4">
+                <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-1">Instagram Caption</p>
+                <textarea
+                  value={instagramCaption}
+                  onChange={(e) => setInstagramCaption(e.target.value)}
+                  rows={4}
+                  placeholder="Generate AI copy to populate this field..."
+                  className="w-full bg-background border border-border text-foreground font-sans text-sm px-3 py-2 focus:outline-none focus:border-accent resize-none"
+                />
+                <button
+                  onClick={handleCopyCaption}
+                  disabled={!instagramCaption}
+                  className="w-full font-sans text-xs tracking-[0.2em] uppercase border border-accent text-accent px-6 py-2.5 hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50"
+                >
+                  Copy Caption
                 </button>
               </div>
             </div>
