@@ -328,12 +328,10 @@ const ServicePage = () => {
   const { openQuiz } = useBookingQuiz();
   const page = serviceSlug ? servicePages[serviceSlug] : undefined;
 
-  usePageMeta({
-    title: page?.metaTitle || "White Rabbit LA",
-    description: page?.metaDescription || "",
-    path: serviceSlug ? `/services/${serviceSlug}` : "/experience",
-    image: page?.image,
-  });
+  const seoTitle = page?.metaTitle || "White Rabbit LA";
+  const seoDescription = page?.metaDescription || "";
+  const seoPath = serviceSlug ? `/services/${serviceSlug}` : "/experience";
+  const seoImage = page?.image;
 
   useServiceSchema(page ? { title: page.title, metaDescription: page.metaDescription, slug: page.slug, intro: page.intro } : { title: "", metaDescription: "", slug: "", intro: "" });
 
