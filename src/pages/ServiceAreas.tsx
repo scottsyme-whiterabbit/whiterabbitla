@@ -3,7 +3,7 @@ import AnimatedSection from "@/components/AnimatedSection";
 import QuizCTA from "@/components/QuizCTA";
 import threeStars from "@/assets/three-stars-gold.png";
 import { serviceAreas, getAreasByRegion, serviceAreaRegions } from "@/data/serviceAreas";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 
 const ServiceAreas = () => {
