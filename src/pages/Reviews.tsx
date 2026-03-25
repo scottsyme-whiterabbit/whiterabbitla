@@ -176,12 +176,8 @@ const reviews = [
 
 const Reviews = () => {
   useScrollDepth("reviews");
-  usePageMeta({
-    title: "Client Reviews | White Rabbit Magic — 5-Star Rated Los Angeles Magician",
-    description: "Read 50+ five-star reviews from corporate planners, brides, and private event hosts. See why White Rabbit is LA's most trusted luxury magic entertainment.",
-    path: "/reviews",
-    image: audienceImg,
-  });
+  const seoTitle = "Client Reviews | White Rabbit Magic — 5-Star Rated Los Angeles Magician";
+  const seoDescription = "Read 50+ five-star reviews from corporate planners, brides, and private event hosts. See why White Rabbit is LA's most trusted luxury magic entertainment.";
   useBreadcrumbSchema([{ name: "Home", path: "/" }, { name: "Reviews", path: "/reviews" }]);
   useSpeakableSchema({ name: "Client Reviews", path: "/reviews" });
 
