@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
-import { getBlogArticleBySlug } from "@/data/blogArticles";
+import { getBlogArticleBySlug, blogArticles } from "@/data/blogArticles";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import SEOHead from "@/components/SEOHead";
 import { useArticleSchema, useFAQSchema } from "@/hooks/useSchemaOrg";
@@ -8,6 +8,7 @@ import ShareButton from "@/components/ShareButton";
 import QuizNudge from "@/components/QuizNudge";
 import QuizCTA from "@/components/QuizCTA";
 import RelatedReads from "@/components/RelatedReads";
+import WhereWePerform from "@/components/WhereWePerform";
 import NewsletterSignup from "@/components/NewsletterSignup";
 
 import closeupImg from "@/assets/event-closeup-cocktail.jpg";
@@ -345,6 +346,9 @@ const BlogArticle = () => {
 
       {/* Quiz CTA */}
       <QuizCTA title="Not Sure What You Need? Take the Quiz" />
+
+      {/* Where We Perform */}
+      <WhereWePerform articleIndex={blogArticles.findIndex((a) => a.slug === slug)} />
 
       {/* Related Reads */}
       <RelatedReads currentSlug={slug || ""} category={article.category} />
