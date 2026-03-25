@@ -55,7 +55,7 @@ const AppContent = () => {
   usePageTracking();
   return (
     <>
-      <DynamicCanonical />
+      {/* DynamicCanonical removed — SEOHead handles canonical per page */}
       <LocalBusinessSchema />
       <ScrollToTop />
       <Navbar />
