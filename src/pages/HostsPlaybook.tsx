@@ -51,6 +51,7 @@ const HostsPlaybook = () => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title="The Host's Playbook | White Rabbit Magic" description="A free guide on how to choose, vet, and book luxury event entertainment for your next private party or corporate event." canonical="/guide" noIndex />
       {/* Hero */}
       <section className="bg-forest-dark py-24">
         <div className="max-w-3xl mx-auto px-6 text-center">

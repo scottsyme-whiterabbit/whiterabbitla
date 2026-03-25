@@ -42,6 +42,7 @@ const Unsubscribe = () => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title={seoTitle} description={seoDescription} canonical="/unsubscribe" noIndex />
       <section className="min-h-[60vh] flex items-center justify-center py-24">
         <div className="max-w-lg mx-auto px-6 text-center">
           <AnimatedSection>
