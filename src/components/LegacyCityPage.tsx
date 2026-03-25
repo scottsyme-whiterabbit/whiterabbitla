@@ -5,7 +5,7 @@ import QuizCTA from "@/components/QuizCTA";
 import QuizNudge from "@/components/QuizNudge";
 import { seoPages } from "@/data/seoPages";
 import { blogArticles } from "@/data/blogArticles";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 import type { ServiceArea } from "@/data/serviceAreas";
 
