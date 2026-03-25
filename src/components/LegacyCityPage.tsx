@@ -5,7 +5,7 @@ import QuizCTA from "@/components/QuizCTA";
 import QuizNudge from "@/components/QuizNudge";
 import { seoPages } from "@/data/seoPages";
 import { blogArticles } from "@/data/blogArticles";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 import type { ServiceArea } from "@/data/serviceAreas";
 
@@ -17,11 +17,8 @@ interface Props {
 const LegacyCityPage = ({ area, citySlug }: Props) => {
   const { openQuiz } = useBookingQuiz();
 
-  usePageMeta({
-    title: `${area.city} Magician | White Rabbit Magic — Luxury Event Entertainment`,
-    description: `Hire a world-class magician for luxury events in ${area.city}. Close-up magic, parlor shows, and bespoke entertainment by White Rabbit.`,
-    path: `/areas/${citySlug}`,
-  });
+  const seoTitle = `${area.city} Magician | White Rabbit Magic — Luxury Event Entertainment`;
+  const seoDescription = `Hire a world-class magician for luxury events in ${area.city}. Close-up magic, parlor shows, and bespoke entertainment by White Rabbit.`;
 
   useWebPageSchema({
     name: `Magician in ${area.city}`,
@@ -38,6 +35,7 @@ const LegacyCityPage = ({ area, citySlug }: Props) => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title={seoTitle} description={seoDescription} canonical={`/areas/${citySlug}`} />
       {/* Hero */}
       <section className="relative h-[50vh] min-h-[400px]">
         <img

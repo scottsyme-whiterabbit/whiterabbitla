@@ -3,7 +3,7 @@ import NotFound from "./NotFound";
 import { getSeoPageBySlug } from "@/data/seoPages";
 import { useEffect } from "react";
 import { Star, CheckCircle } from "lucide-react";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useServiceSchema } from "@/hooks/useSchemaOrg";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
@@ -328,12 +328,10 @@ const ServicePage = () => {
   const { openQuiz } = useBookingQuiz();
   const page = serviceSlug ? servicePages[serviceSlug] : undefined;
 
-  usePageMeta({
-    title: page?.metaTitle || "White Rabbit LA",
-    description: page?.metaDescription || "",
-    path: serviceSlug ? `/services/${serviceSlug}` : "/experience",
-    image: page?.image,
-  });
+  const seoTitle = page?.metaTitle || "White Rabbit LA";
+  const seoDescription = page?.metaDescription || "";
+  const seoPath = serviceSlug ? `/services/${serviceSlug}` : "/experience";
+  const seoImage = page?.image;
 
   useServiceSchema(page ? { title: page.title, metaDescription: page.metaDescription, slug: page.slug, intro: page.intro } : { title: "", metaDescription: "", slug: "", intro: "" });
 
@@ -367,6 +365,7 @@ const ServicePage = () => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title={seoTitle} description={seoDescription} canonical={seoPath} ogImage={seoImage} />
       {/* Hero */}
       <section className="relative py-28 lg:py-36 overflow-hidden">
         <div className="absolute inset-0">

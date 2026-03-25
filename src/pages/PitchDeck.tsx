@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Star, Copy, Check, ArrowRight, Users, Award, Sparkles } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useToast } from "@/hooks/use-toast";
 
 import heroImg from "@/assets/event-parlor-stage.jpg";
@@ -107,12 +107,8 @@ const PitchDeck = () => {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
 
-  usePageMeta({
-    title: "White Rabbit Lookbook | Luxury Magic Entertainment — Los Angeles",
-    description: "Explore White Rabbit's digital lookbook: credentials, photos, testimonials, and booking details for luxury magic entertainment by Scott Syme.",
-    path: "/deck",
-    image: heroImg,
-  });
+  const seoTitle = "White Rabbit Lookbook | Luxury Magic Entertainment — Los Angeles";
+  const seoDescription = "Explore White Rabbit's digital lookbook: credentials, photos, testimonials, and booking details for luxury magic entertainment by Scott Syme.";
 
   const handleCopyEmail = async () => {
     try {
@@ -127,6 +123,7 @@ const PitchDeck = () => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title={seoTitle} description={seoDescription} canonical="/deck" ogImage={heroImg} />
       {/* Hero */}
       <section className="relative min-h-[70vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">

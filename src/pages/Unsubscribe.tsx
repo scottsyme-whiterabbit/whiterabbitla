@@ -2,14 +2,11 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import AnimatedSection from "@/components/AnimatedSection";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 
 const Unsubscribe = () => {
-  usePageMeta({
-    title: "Unsubscribed | White Rabbit Magic",
-    description: "You have been unsubscribed from White Rabbit emails.",
-    path: "/unsubscribe",
-  });
+  const seoTitle = "Unsubscribed | White Rabbit Magic";
+  const seoDescription = "You have been unsubscribed from White Rabbit emails.";
 
   const [searchParams] = useSearchParams();
   const email = searchParams.get("email") || "";
@@ -45,6 +42,7 @@ const Unsubscribe = () => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title={seoTitle} description={seoDescription} canonical="/unsubscribe" noIndex />
       <section className="min-h-[60vh] flex items-center justify-center py-24">
         <div className="max-w-lg mx-auto px-6 text-center">
           <AnimatedSection>

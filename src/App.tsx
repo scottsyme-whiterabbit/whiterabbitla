@@ -8,7 +8,7 @@ import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import usePageTracking from "@/hooks/usePageTracking";
 import LocalBusinessSchema from "@/components/LocalBusinessSchema";
-import DynamicCanonical from "@/components/DynamicCanonical";
+// DynamicCanonical removed — SEOHead now manages canonical tags per page
 import { BookingQuizProvider } from "@/contexts/BookingQuizContext";
 import BookingQuiz from "@/components/BookingQuiz";
 import CookieConsent from "@/components/CookieConsent";
@@ -55,7 +55,7 @@ const AppContent = () => {
   usePageTracking();
   return (
     <>
-      <DynamicCanonical />
+      {/* DynamicCanonical removed — SEOHead handles canonical per page */}
       <LocalBusinessSchema />
       <ScrollToTop />
       <Navbar />
@@ -104,8 +104,8 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/card" element={<><DynamicCanonical /><DigitalCard /></>} />
-            <Route path="/consultation" element={<><DynamicCanonical /><Consultation /></>} />
+            <Route path="/card" element={<><DigitalCard /></>} />
+            <Route path="/consultation" element={<><Consultation /></>} />
             <Route path="/*" element={<AppContent />} />
           </Routes>
         </BrowserRouter>

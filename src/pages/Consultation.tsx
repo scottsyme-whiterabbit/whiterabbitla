@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Star, CalendarCheck } from "lucide-react";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { trackCTAClick } from "@/lib/analytics";
 import AnimatedSection from "@/components/AnimatedSection";
 import FAQSection from "@/components/FAQSection";
@@ -101,11 +101,8 @@ const faqs = [
 ];
 
 const Consultation = () => {
-  usePageMeta({
-    title: "Free Consultation | White Rabbit LA — Luxury Event Magician",
-    description: "Book a free consultation with America's premier close-up magician. Corporate events, weddings, private parties and galas — nationwide.",
-    path: "/consultation",
-  });
+  const seoTitle = "Free Consultation | White Rabbit LA — Luxury Event Magician";
+  const seoDescription = "Book a free consultation with America's premier close-up magician. Corporate events, weddings, private parties and galas — nationwide.";
 
   const { openQuiz } = useBookingQuiz();
   const [stickyVisible, setStickyVisible] = useState(false);
@@ -123,6 +120,7 @@ const Consultation = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead title={seoTitle} description={seoDescription} canonical="/consultation" />
       <BookingQuiz />
 
       {/* Sticky CTA — mobile bottom bar + desktop floating pill */}

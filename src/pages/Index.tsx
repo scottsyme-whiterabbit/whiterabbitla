@@ -11,7 +11,7 @@ import FAQSection from "@/components/FAQSection";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useJsonLd } from "@/hooks/useSchemaOrg";
 
 import heroImage from "@/assets/hero-magic-cinematic.jpg";
@@ -87,12 +87,8 @@ const Index = () => {
     return () => clearInterval(interval);
   }, []);
 
-  usePageMeta({
-    title: "White Rabbit LA | Luxury Magic Entertainment — Los Angeles",
-    description: "Bespoke magical experiences for Fortune 500 events, private celebrations, and luxury gatherings across Los Angeles and beyond. Magician Scott Syme.",
-    path: "/",
-    image: heroImage,
-  });
+  const seoTitle = "White Rabbit LA | Luxury Magic Entertainment — Los Angeles";
+  const seoDescription = "Bespoke magical experiences for Fortune 500 events, private celebrations, and luxury gatherings across Los Angeles and beyond. Magician Scott Syme.";
 
   // Homepage Event + Person schemas
   const now = new Date();
@@ -133,6 +129,7 @@ const Index = () => {
 
   return (
     <main id="main-content">
+      <SEOHead title={seoTitle} description={seoDescription} canonical="/" ogImage={heroImage} />
       {/* Hero */}
       <section className="relative h-screen overflow-hidden">
         {/* Image – full screen on all devices */}

@@ -3,16 +3,12 @@ import AnimatedSection from "@/components/AnimatedSection";
 import QuizCTA from "@/components/QuizCTA";
 import threeStars from "@/assets/three-stars-gold.png";
 import { serviceAreas, getAreasByRegion, serviceAreaRegions } from "@/data/serviceAreas";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 
 const ServiceAreas = () => {
-  usePageMeta({
-    title: "Service Areas | White Rabbit Magic — Luxury Entertainment Nationwide",
-    description:
-      "White Rabbit brings world-class close-up magic and parlor shows to luxury events across 70+ cities — from Los Angeles to New York, Aspen to Miami.",
-    path: "/areas",
-  });
+  const seoTitle = "Service Areas | White Rabbit Magic — Luxury Entertainment Nationwide";
+  const seoDescription = "White Rabbit brings world-class close-up magic and parlor shows to luxury events across 70+ cities — from Los Angeles to New York, Aspen to Miami.";
   useWebPageSchema({
     name: "Service Areas",
     description: "Luxury magic entertainment in 70+ cities nationwide.",
@@ -24,6 +20,7 @@ const ServiceAreas = () => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title={seoTitle} description={seoDescription} canonical="/areas" />
       {/* Hero */}
       <section className="bg-forest-dark py-24">
         <div className="max-w-4xl mx-auto px-6 text-center">

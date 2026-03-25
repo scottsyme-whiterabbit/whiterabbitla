@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Check, Gift } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -11,11 +11,8 @@ const Refer = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  usePageMeta({
-    title: "Refer a Friend | White Rabbit Los Angeles",
-    description: "Know someone planning an event in Los Angeles? Refer them to White Rabbit and earn a complimentary 30-minute close-up magic experience for your next LA event.",
-    path: "/refer",
-  });
+  const seoTitle = "Refer a Friend | White Rabbit Los Angeles";
+  const seoDescription = "Know someone planning an event in Los Angeles? Refer them to White Rabbit and earn a complimentary 30-minute close-up magic experience for your next LA event.";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,6 +48,7 @@ const Refer = () => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title={seoTitle} description={seoDescription} canonical="/refer" />
       {/* Hero */}
       <section className="bg-forest-dark py-24">
         <div className="max-w-3xl mx-auto px-6 text-center">

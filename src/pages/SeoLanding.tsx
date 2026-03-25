@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import NotFound from "./NotFound";
 import { useEffect, useState } from "react";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useServiceSchema } from "@/hooks/useSchemaOrg";
 import { Star, CheckCircle, Clock } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
@@ -139,12 +139,9 @@ const SeoLanding = () => {
   const page = slug ? getSeoPageBySlug(slug) : undefined;
   const { openQuiz } = useBookingQuiz();
 
-  usePageMeta({
-    title: page?.metaTitle || "White Rabbit LA",
-    description: page?.metaDescription || "",
-    path: slug ? `/blog/${slug}` : "/blog",
-    image: experienceImg,
-  });
+  const seoTitle = page?.metaTitle || "White Rabbit LA";
+  const seoDescription = page?.metaDescription || "";
+  const seoPath = slug ? `/blog/${slug}` : "/blog";
 
   useServiceSchema(page ? { title: page.title, metaDescription: page.metaDescription, slug: page.slug, intro: page.introParagraph } : { title: "", metaDescription: "", slug: "", intro: "" });
 
@@ -204,6 +201,7 @@ const SeoLanding = () => {
 
   return (
     <main id="main-content" className="pt-20 pb-16 md:pb-0">
+      <SEOHead title={seoTitle} description={seoDescription} canonical={seoPath} ogImage={experienceImg} />
       {/* Hero */}
       <section className="relative py-28 lg:py-36 overflow-hidden">
         <div className="absolute inset-0">

@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
 import { getBlogArticleBySlug } from "@/data/blogArticles";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useArticleSchema, useFAQSchema } from "@/hooks/useSchemaOrg";
 import ShareButton from "@/components/ShareButton";
 import QuizNudge from "@/components/QuizNudge";
@@ -89,13 +89,10 @@ const BlogArticle = () => {
   const article = slug ? getBlogArticleBySlug(slug) : undefined;
   const { openQuiz } = useBookingQuiz();
 
-  usePageMeta({
-    title: article?.metaTitle || "White Rabbit LA | Blog",
-    description: article?.metaDescription || "",
-    path: slug ? `/blog/${slug}` : "/blog",
-    type: "article",
-    image: article ? (categoryImages[article.category] || experienceImg) : undefined,
-  });
+  const seoTitle = article?.metaTitle || "White Rabbit LA | Blog";
+  const seoDescription = article?.metaDescription || "";
+  const seoPath = slug ? `/blog/${slug}` : "/blog";
+  const seoImage = article ? (categoryImages[article.category] || experienceImg) : undefined;
 
   const BASE_URL = "https://whiterabbitla.com";
   const schemaCategoryImages: Record<string, string> = {
@@ -190,6 +187,7 @@ const BlogArticle = () => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title={seoTitle} description={seoDescription} canonical={seoPath} ogImage={seoImage} type="article" />
       {/* Hero */}
       <section className="bg-forest-dark py-24 md:py-32">
         <div className="max-w-3xl mx-auto px-6 text-center">

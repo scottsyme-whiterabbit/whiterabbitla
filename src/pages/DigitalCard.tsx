@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Instagram, Linkedin, Globe, Phone, Mail, MapPin, Download, ExternalLink, Sparkles, Star } from "lucide-react";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 
 import wrLogo from "@/assets/wr-logo-stars-white.png";
 import scottPhoto from "@/assets/scott-couch.jpg";
@@ -51,11 +51,7 @@ const socialLinks = [
 ];
 
 const DigitalCard = () => {
-  usePageMeta({
-    title: "Scott Syme | White Rabbit Magic",
-    description: "Connect with Scott Syme — Founder & Magician at White Rabbit Entertainment, Los Angeles.",
-    path: "/card",
-  });
+  // SEOHead is rendered in the return JSX below
 
   useEffect(() => {
     const meta = document.createElement("meta");
@@ -67,6 +63,7 @@ const DigitalCard = () => {
 
   return (
     <main className="min-h-screen bg-forest-dark flex items-center justify-center p-4 pt-24 pb-12">
+      <SEOHead title="Scott Syme | Digital Business Card — White Rabbit Magic" description="Digital business card for Scott Syme, founder and magician at White Rabbit Entertainment in Los Angeles." canonical="/card" noIndex />
       <div className="w-full max-w-md">
         {/* Card Container */}
         <div className="bg-background rounded-2xl shadow-2xl overflow-hidden">

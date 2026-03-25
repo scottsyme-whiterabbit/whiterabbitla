@@ -1,16 +1,11 @@
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
+import SEOHead from "@/components/SEOHead";
 
 const PrivacyPolicy = () => {
-  useEffect(() => {
-    document.title = "Privacy Policy | White Rabbit Los Angeles";
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.setAttribute("content", "Privacy Policy for White Rabbit Los Angeles. Learn how we collect, use, and protect your personal information.");
-  }, []);
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title="Privacy Policy | White Rabbit Los Angeles" description="Privacy Policy for White Rabbit Los Angeles. Learn how we collect, use, and protect your personal information." canonical="/privacy" />
       <section className="bg-forest-dark py-24">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <AnimatedSection>

@@ -5,7 +5,7 @@ import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import QuizCTA from "@/components/QuizCTA";
 import QuizNudge from "@/components/QuizNudge";
 import FAQSection from "@/components/FAQSection";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useJsonLd } from "@/hooks/useSchemaOrg";
 import { getAreaBySlug } from "@/data/serviceAreas";
 import { seoPages } from "@/data/seoPages";
@@ -34,12 +34,8 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
   const { openQuiz } = useBookingQuiz();
   const { cityName, citySlug, state, stateFullName, region, venues, nearbyLinks, uniqueContent } = content;
 
-  // Page meta
-  usePageMeta({
-    title: `Magician in ${cityName} | Luxury Magic Entertainment — White Rabbit LA`,
-    description: `Book world-class close-up magic and mentalism for corporate events, weddings, and private parties in ${cityName}. Scott Syme — Magic Castle member, 5-star rated on Google.`,
-    path: `/areas/${citySlug}`,
-  });
+  const seoTitle = `Magician in ${cityName} | Luxury Magic Entertainment — White Rabbit LA`;
+  const seoDescription = `Book world-class close-up magic and mentalism for corporate events, weddings, and private parties in ${cityName}. Scott Syme — Magic Castle member, 5-star rated on Google.`;
 
   // Dynamic dates for Event schema
   const now = new Date();
@@ -95,6 +91,7 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title={seoTitle} description={seoDescription} canonical={`/areas/${citySlug}`} />
       {/* Hero */}
       <section className="relative h-[50vh] min-h-[400px]">
         <img

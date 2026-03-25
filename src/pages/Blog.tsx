@@ -4,15 +4,12 @@ import AnimatedSection from "@/components/AnimatedSection";
 import QuizCTA from "@/components/QuizCTA";
 import { seoPages, seoCategories, seoLocations } from "@/data/seoPages";
 import { blogArticles } from "@/data/blogArticles";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 
 const Blog = () => {
-  usePageMeta({
-    title: "Insights & Guides | White Rabbit Magic — Los Angeles",
-    description: "Explore guides on luxury magic entertainment, from corporate galas to intimate private celebrations across Southern California and beyond.",
-    path: "/blog",
-  });
+  const seoTitle = "Insights & Guides | White Rabbit Magic — Los Angeles";
+  const seoDescription = "Explore guides on luxury magic entertainment, from corporate galas to intimate private celebrations across Southern California and beyond.";
   useWebPageSchema({ name: "Insights & Guides", description: "Explore guides on luxury magic entertainment, from corporate galas to intimate private celebrations.", path: "/blog", type: "CollectionPage" });
   const [activeArticleCategory, setActiveArticleCategory] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -37,6 +34,7 @@ const Blog = () => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title={seoTitle} description={seoDescription} canonical="/blog" />
       {/* Hero */}
       <section className="bg-forest-dark py-24">
         <div className="max-w-4xl mx-auto px-6 text-center">

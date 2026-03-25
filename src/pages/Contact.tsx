@@ -9,18 +9,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 import { trackFormSubmit } from "@/lib/analytics";
 import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
 
 const Contact = () => {
-  usePageMeta({
-    title: "Contact & Booking | White Rabbit Magic — Los Angeles",
-    description: "Book Scott Syme for your next corporate event, wedding, or private celebration. Check availability and get a personalized quote within 24 hours.",
-    path: "/contact",
-    image: contactBg,
-  });
+  const seoTitle = "Contact & Booking | White Rabbit Magic — Los Angeles";
+  const seoDescription = "Book Scott Syme for your next corporate event, wedding, or private celebration. Check availability and get a personalized quote within 24 hours.";
   useWebPageSchema({ name: "Contact & Booking", description: "Book Scott Syme for your next corporate event, wedding, or private celebration.", path: "/contact", type: "ContactPage" });
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -74,6 +70,7 @@ const Contact = () => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title={seoTitle} description={seoDescription} canonical="/contact" ogImage={contactBg} />
       {/* Hero */}
       <section className="relative py-24 lg:py-32 overflow-hidden">
         <div className="absolute inset-0">

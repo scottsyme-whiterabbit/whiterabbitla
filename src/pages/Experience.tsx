@@ -14,7 +14,7 @@ import cardsEmeraldImg from "@/assets/event-cards-emerald.jpg";
 import intimateImg from "@/assets/event-closeup-intimate.jpg";
 import mentalistImg from "@/assets/event-mentalism-closeup.jpg";
 import guestLaughImg from "@/assets/event-guest-laughing.jpg";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema, useSpeakableSchema } from "@/hooks/useSchemaOrg";
 import threeStars from "@/assets/three-stars-gold.png";
 
@@ -49,17 +49,14 @@ const Experience = () => {
   const { openQuiz } = useBookingQuiz();
   useScrollDepth("experience");
 
-  usePageMeta({
-    title: "Our Services | White Rabbit Magic — Los Angeles",
-    description: "Explore White Rabbit's luxury magic experiences: close-up magic, parlor shows, corporate entertainment, wedding magic, and private party performances.",
-    path: "/experience",
-    image: heroDesertImg,
-  });
+  const seoTitle = "Our Services | White Rabbit Magic — Los Angeles";
+  const seoDescription = "Explore White Rabbit's luxury magic experiences: close-up magic, parlor shows, corporate entertainment, wedding magic, and private party performances.";
   useWebPageSchema({ name: "Our Services", description: "Explore White Rabbit's luxury magic experiences: close-up magic, parlor shows, corporate entertainment, and private party performances.", path: "/experience" });
   useSpeakableSchema({ name: "Our Services", path: "/experience" });
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title={seoTitle} description={seoDescription} canonical="/experience" ogImage={heroDesertImg} />
       {/* Hero */}
       <section className="relative min-h-[85vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import SEOHead from "@/components/SEOHead";
 import { Star, SmilePlus, MessageCircle, Send, ArrowRight } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { Button } from "@/components/ui/button";
@@ -65,6 +66,7 @@ const ReviewGate = () => {
 
   return (
     <main id="main-content" className="pt-20 min-h-screen bg-background">
+      <SEOHead title="Leave a Review | White Rabbit Magic" description="Share your experience with White Rabbit Magic by Scott Syme." canonical="/review" noIndex />
       <section className="py-24 lg:py-32">
         <div className="max-w-2xl mx-auto px-6 text-center">
           {/* Sentiment Step */}

@@ -5,7 +5,7 @@ import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "react-router-dom";
 import QuizCTA from "@/components/QuizCTA";
 import audienceImg from "@/assets/event-audience.jpg";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useBreadcrumbSchema, useSpeakableSchema } from "@/hooks/useSchemaOrg";
 import threeStars from "@/assets/three-stars-gold.png";
 
@@ -176,12 +176,8 @@ const reviews = [
 
 const Reviews = () => {
   useScrollDepth("reviews");
-  usePageMeta({
-    title: "Client Reviews | White Rabbit Magic — 5-Star Rated Los Angeles Magician",
-    description: "Read 50+ five-star reviews from corporate planners, brides, and private event hosts. See why White Rabbit is LA's most trusted luxury magic entertainment.",
-    path: "/reviews",
-    image: audienceImg,
-  });
+  const seoTitle = "Client Reviews | White Rabbit Magic — 5-Star Rated Los Angeles Magician";
+  const seoDescription = "Read 50+ five-star reviews from corporate planners, brides, and private event hosts. See why White Rabbit is LA's most trusted luxury magic entertainment.";
   useBreadcrumbSchema([{ name: "Home", path: "/" }, { name: "Reviews", path: "/reviews" }]);
   useSpeakableSchema({ name: "Client Reviews", path: "/reviews" });
 
@@ -220,6 +216,7 @@ const Reviews = () => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title={seoTitle} description={seoDescription} canonical="/reviews" ogImage={audienceImg} />
       {/* Hero */}
       <section className="relative min-h-[50vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">

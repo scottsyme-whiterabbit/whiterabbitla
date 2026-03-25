@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import SEOHead from "@/components/SEOHead";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import AnimatedSection from "@/components/AnimatedSection";
 import eventAudience from "@/assets/event-audience.jpg";
@@ -46,19 +47,11 @@ const HostsPlaybook = () => {
     },
   ];
 
-  useEffect(() => {
-    document.title = "The Host's Playbook | White Rabbit Magic";
-    const meta = document.querySelector('meta[name="robots"]');
-    if (!meta) {
-      const m = document.createElement("meta");
-      m.name = "robots";
-      m.content = "noindex, nofollow";
-      document.head.appendChild(m);
-    }
-  }, []);
+  // noindex is handled by SEOHead below
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title="The Host's Playbook | White Rabbit Magic" description="A free guide on how to choose, vet, and book luxury event entertainment for your next private party or corporate event." canonical="/guide" noIndex />
       {/* Hero */}
       <section className="bg-forest-dark py-24">
         <div className="max-w-3xl mx-auto px-6 text-center">
