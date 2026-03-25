@@ -89,13 +89,10 @@ const BlogArticle = () => {
   const article = slug ? getBlogArticleBySlug(slug) : undefined;
   const { openQuiz } = useBookingQuiz();
 
-  usePageMeta({
-    title: article?.metaTitle || "White Rabbit LA | Blog",
-    description: article?.metaDescription || "",
-    path: slug ? `/blog/${slug}` : "/blog",
-    type: "article",
-    image: article ? (categoryImages[article.category] || experienceImg) : undefined,
-  });
+  const seoTitle = article?.metaTitle || "White Rabbit LA | Blog";
+  const seoDescription = article?.metaDescription || "";
+  const seoPath = slug ? `/blog/${slug}` : "/blog";
+  const seoImage = article ? (categoryImages[article.category] || experienceImg) : undefined;
 
   const BASE_URL = "https://whiterabbitla.com";
   const schemaCategoryImages: Record<string, string> = {
