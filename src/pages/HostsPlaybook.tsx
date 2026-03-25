@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import SEOHead from "@/components/SEOHead";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import AnimatedSection from "@/components/AnimatedSection";
 import eventAudience from "@/assets/event-audience.jpg";
