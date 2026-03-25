@@ -5,6 +5,7 @@ const TermsOfService = () => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title="Terms of Service | White Rabbit Los Angeles" description="Terms of Service for White Rabbit Los Angeles. Please review our terms before using our website or booking services." canonical="/terms" />
       <section className="bg-forest-dark py-24">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <AnimatedSection>
