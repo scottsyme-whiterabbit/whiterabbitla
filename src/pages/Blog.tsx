@@ -4,7 +4,7 @@ import AnimatedSection from "@/components/AnimatedSection";
 import QuizCTA from "@/components/QuizCTA";
 import { seoPages, seoCategories, seoLocations } from "@/data/seoPages";
 import { blogArticles } from "@/data/blogArticles";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 
 const Blog = () => {
