@@ -1,4 +1,5 @@
 import { useState } from "react";
+import SEOHead from "@/components/SEOHead";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, Sparkles, Check } from "lucide-react";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";

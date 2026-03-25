@@ -51,11 +51,7 @@ const socialLinks = [
 ];
 
 const DigitalCard = () => {
-  usePageMeta({
-    title: "Scott Syme | White Rabbit Magic",
-    description: "Connect with Scott Syme — Founder & Magician at White Rabbit Entertainment, Los Angeles.",
-    path: "/card",
-  });
+  // SEOHead is rendered in the return JSX below
 
   useEffect(() => {
     const meta = document.createElement("meta");
