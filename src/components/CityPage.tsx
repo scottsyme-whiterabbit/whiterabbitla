@@ -9,7 +9,8 @@ import SEOHead from "@/components/SEOHead";
 import { useJsonLd } from "@/hooks/useSchemaOrg";
 import { getAreaBySlug } from "@/data/serviceAreas";
 import { seoPages } from "@/data/seoPages";
-import { blogArticles } from "@/data/blogArticles";
+import { blogArticles, getBlogArticleBySlug } from "@/data/blogArticles";
+import { getArticleSlugsForCity } from "@/data/cityArticleLinks";
 import type { CityContentData } from "@/data/cityContent";
 
 const BASE_URL = "https://whiterabbitla.com";
