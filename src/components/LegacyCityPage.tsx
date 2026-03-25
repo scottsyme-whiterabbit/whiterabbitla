@@ -35,6 +35,7 @@ const LegacyCityPage = ({ area, citySlug }: Props) => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title={seoTitle} description={seoDescription} canonical={`/areas/${citySlug}`} />
       {/* Hero */}
       <section className="relative h-[50vh] min-h-[400px]">
         <img
