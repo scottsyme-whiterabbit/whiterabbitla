@@ -5,7 +5,7 @@ import AnimatedSection from "@/components/AnimatedSection";
 import { Link } from "react-router-dom";
 import QuizCTA from "@/components/QuizCTA";
 import audienceImg from "@/assets/event-audience.jpg";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useBreadcrumbSchema, useSpeakableSchema } from "@/hooks/useSchemaOrg";
 import threeStars from "@/assets/three-stars-gold.png";
 
