@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
-import { getBlogArticleBySlug } from "@/data/blogArticles";
+import { getBlogArticleBySlug, blogArticles } from "@/data/blogArticles";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import SEOHead from "@/components/SEOHead";
 import { useArticleSchema, useFAQSchema } from "@/hooks/useSchemaOrg";
