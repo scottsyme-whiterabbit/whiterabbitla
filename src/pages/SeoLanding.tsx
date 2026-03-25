@@ -139,12 +139,9 @@ const SeoLanding = () => {
   const page = slug ? getSeoPageBySlug(slug) : undefined;
   const { openQuiz } = useBookingQuiz();
 
-  usePageMeta({
-    title: page?.metaTitle || "White Rabbit LA",
-    description: page?.metaDescription || "",
-    path: slug ? `/blog/${slug}` : "/blog",
-    image: experienceImg,
-  });
+  const seoTitle = page?.metaTitle || "White Rabbit LA";
+  const seoDescription = page?.metaDescription || "";
+  const seoPath = slug ? `/blog/${slug}` : "/blog";
 
   useServiceSchema(page ? { title: page.title, metaDescription: page.metaDescription, slug: page.slug, intro: page.introParagraph } : { title: "", metaDescription: "", slug: "", intro: "" });
 
