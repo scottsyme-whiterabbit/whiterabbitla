@@ -365,6 +365,7 @@ const ServicePage = () => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title={seoTitle} description={seoDescription} canonical={seoPath} ogImage={seoImage} />
       {/* Hero */}
       <section className="relative py-28 lg:py-36 overflow-hidden">
         <div className="absolute inset-0">

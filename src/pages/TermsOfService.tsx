@@ -1,12 +1,7 @@
-import { useEffect } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
+import SEOHead from "@/components/SEOHead";
 
 const TermsOfService = () => {
-  useEffect(() => {
-    document.title = "Terms of Service | White Rabbit Los Angeles";
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.setAttribute("content", "Terms of Service for White Rabbit Los Angeles. Please review our terms before using our website or booking services.");
-  }, []);
 
   return (
     <main id="main-content" className="pt-20">
