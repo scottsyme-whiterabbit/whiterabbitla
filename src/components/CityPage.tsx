@@ -34,12 +34,8 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
   const { openQuiz } = useBookingQuiz();
   const { cityName, citySlug, state, stateFullName, region, venues, nearbyLinks, uniqueContent } = content;
 
-  // Page meta
-  usePageMeta({
-    title: `Magician in ${cityName} | Luxury Magic Entertainment — White Rabbit LA`,
-    description: `Book world-class close-up magic and mentalism for corporate events, weddings, and private parties in ${cityName}. Scott Syme — Magic Castle member, 5-star rated on Google.`,
-    path: `/areas/${citySlug}`,
-  });
+  const seoTitle = `Magician in ${cityName} | Luxury Magic Entertainment — White Rabbit LA`;
+  const seoDescription = `Book world-class close-up magic and mentalism for corporate events, weddings, and private parties in ${cityName}. Scott Syme — Magic Castle member, 5-star rated on Google.`;
 
   // Dynamic dates for Event schema
   const now = new Date();
