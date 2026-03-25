@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Instagram, Linkedin, Globe, Phone, Mail, MapPin, Download, ExternalLink, Sparkles, Star } from "lucide-react";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 
 import wrLogo from "@/assets/wr-logo-stars-white.png";
 import scottPhoto from "@/assets/scott-couch.jpg";
