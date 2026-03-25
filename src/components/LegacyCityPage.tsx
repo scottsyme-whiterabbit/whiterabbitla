@@ -126,26 +126,36 @@ const LegacyCityPage = ({ area, citySlug }: Props) => {
         </section>
       )}
 
-      {/* Related Insights — editorial blog articles */}
-      <section className="py-16 border-t border-border">
-        <div className="max-w-5xl mx-auto px-6">
-          <AnimatedSection>
-            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Related Insights</p>
-            <h2 className="font-serif text-3xl text-foreground mb-8">From the Blog</h2>
-          </AnimatedSection>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {blogArticles.slice(0, 3).map((article, i) => (
-              <AnimatedSection key={article.slug} delay={Math.min(i * 0.1, 0.3)}>
-                <Link to={`/blog/${article.slug}`} className="group block border border-border p-6 hover:border-accent/40 transition-colors h-full">
-                  <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3">{article.category} · {article.readTime}</p>
-                  <h3 className="font-serif text-lg text-foreground mb-2 group-hover:text-accent transition-colors leading-snug">{article.title}</h3>
-                  <p className="font-sans text-sm text-muted-foreground leading-relaxed line-clamp-3">{article.excerpt}</p>
-                </Link>
+      {/* Insights & Guides — city-specific editorial articles */}
+      {(() => {
+        const insightArticles = getArticleSlugsForCity(citySlug)
+          .map((s) => getBlogArticleBySlug(s))
+          .filter(Boolean);
+        return insightArticles.length > 0 ? (
+          <section className="py-16 border-t border-border">
+            <div className="max-w-5xl mx-auto px-6">
+              <AnimatedSection>
+                <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Insights &amp; Guides</p>
+                <h2 className="font-serif text-3xl text-foreground mb-8">Recommended Reading</h2>
               </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </section>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {insightArticles.map((article, i) => (
+                  <AnimatedSection key={article!.slug} delay={Math.min(i * 0.1, 0.3)}>
+                    <div className="border border-border p-6 h-full flex flex-col">
+                      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3">{article!.category}</p>
+                      <h3 className="font-serif text-lg text-foreground mb-2 leading-snug">{article!.title}</h3>
+                      <p className="font-sans text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-4">{article!.excerpt}</p>
+                      <Link to={`/blog/${article!.slug}`} className="mt-auto font-sans text-sm text-accent hover:text-accent/80 transition-colors inline-flex items-center gap-1">
+                        Read <span aria-hidden="true">→</span>
+                      </Link>
+                    </div>
+                  </AnimatedSection>
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null;
+      })()}
 
       <QuizCTA title={`Planning an Event in ${area.city}?`} />
 
