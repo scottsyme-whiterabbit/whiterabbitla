@@ -3,7 +3,7 @@ import NotFound from "./NotFound";
 import { getSeoPageBySlug } from "@/data/seoPages";
 import { useEffect } from "react";
 import { Star, CheckCircle } from "lucide-react";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useServiceSchema } from "@/hooks/useSchemaOrg";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";

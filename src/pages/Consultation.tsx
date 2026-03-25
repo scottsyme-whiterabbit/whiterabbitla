@@ -120,6 +120,7 @@ const Consultation = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <SEOHead title={seoTitle} description={seoDescription} canonical="/consultation" />
       <BookingQuiz />
 
       {/* Sticky CTA — mobile bottom bar + desktop floating pill */}

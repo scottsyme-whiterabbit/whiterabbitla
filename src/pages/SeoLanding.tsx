@@ -201,6 +201,7 @@ const SeoLanding = () => {
 
   return (
     <main id="main-content" className="pt-20 pb-16 md:pb-0">
+      <SEOHead title={seoTitle} description={seoDescription} canonical={seoPath} ogImage={experienceImg} />
       {/* Hero */}
       <section className="relative py-28 lg:py-36 overflow-hidden">
         <div className="absolute inset-0">
