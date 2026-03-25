@@ -9,7 +9,7 @@ import cardsMotionImg from "@/assets/cards-motion-curtain.jpg";
 import cardsStackImg from "@/assets/cards-stack-curtain.jpg";
 import cardsFanImg from "@/assets/cards-fan-closeup.jpg";
 import { Link } from "react-router-dom";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema, useSpeakableSchema } from "@/hooks/useSchemaOrg";
 import threeStars from "@/assets/three-stars-gold.png";
 
