@@ -104,8 +104,8 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/card" element={<><DynamicCanonical /><DigitalCard /></>} />
-            <Route path="/consultation" element={<><DynamicCanonical /><Consultation /></>} />
+            <Route path="/card" element={<><DigitalCard /></>} />
+            <Route path="/consultation" element={<><Consultation /></>} />
             <Route path="/*" element={<AppContent />} />
           </Routes>
         </BrowserRouter>
