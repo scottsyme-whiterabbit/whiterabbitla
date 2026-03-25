@@ -67,6 +67,7 @@ const DigitalCard = () => {
 
   return (
     <main className="min-h-screen bg-forest-dark flex items-center justify-center p-4 pt-24 pb-12">
+      <SEOHead title="Scott Syme | Digital Business Card — White Rabbit Magic" description="Digital business card for Scott Syme, founder and magician at White Rabbit Entertainment in Los Angeles." canonical="/card" noIndex />
       <div className="w-full max-w-md">
         {/* Card Container */}
         <div className="bg-background rounded-2xl shadow-2xl overflow-hidden">

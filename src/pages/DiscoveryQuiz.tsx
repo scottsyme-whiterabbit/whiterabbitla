@@ -250,6 +250,7 @@ const DiscoveryQuiz = () => {
 
   return (
     <main className="min-h-screen bg-forest-dark text-cream pt-24 pb-16">
+      <SEOHead title="Discovery Quiz | White Rabbit Magic — Find Your Perfect Experience" description="Take our 60-second quiz to find the perfect magic experience for your event. Personalized recommendations for corporate events, weddings, and private parties." canonical="/quiz" />
       <div className="max-w-2xl mx-auto px-6">
         <AnimatePresence mode="wait">
           {!showResult ? (
