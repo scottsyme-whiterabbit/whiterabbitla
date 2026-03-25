@@ -101,11 +101,8 @@ const faqs = [
 ];
 
 const Consultation = () => {
-  usePageMeta({
-    title: "Free Consultation | White Rabbit LA — Luxury Event Magician",
-    description: "Book a free consultation with America's premier close-up magician. Corporate events, weddings, private parties and galas — nationwide.",
-    path: "/consultation",
-  });
+  const seoTitle = "Free Consultation | White Rabbit LA — Luxury Event Magician";
+  const seoDescription = "Book a free consultation with America's premier close-up magician. Corporate events, weddings, private parties and galas — nationwide.";
 
   const { openQuiz } = useBookingQuiz();
   const [stickyVisible, setStickyVisible] = useState(false);
