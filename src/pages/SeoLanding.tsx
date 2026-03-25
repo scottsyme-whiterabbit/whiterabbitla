@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import NotFound from "./NotFound";
 import { useEffect, useState } from "react";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useServiceSchema } from "@/hooks/useSchemaOrg";
 import { Star, CheckCircle, Clock } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
