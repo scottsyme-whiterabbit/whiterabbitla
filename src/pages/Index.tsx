@@ -87,12 +87,8 @@ const Index = () => {
     return () => clearInterval(interval);
   }, []);
 
-  usePageMeta({
-    title: "White Rabbit LA | Luxury Magic Entertainment — Los Angeles",
-    description: "Bespoke magical experiences for Fortune 500 events, private celebrations, and luxury gatherings across Los Angeles and beyond. Magician Scott Syme.",
-    path: "/",
-    image: heroImage,
-  });
+  const seoTitle = "White Rabbit LA | Luxury Magic Entertainment — Los Angeles";
+  const seoDescription = "Bespoke magical experiences for Fortune 500 events, private celebrations, and luxury gatherings across Los Angeles and beyond. Magician Scott Syme.";
 
   // Homepage Event + Person schemas
   const now = new Date();

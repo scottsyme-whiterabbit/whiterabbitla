@@ -49,12 +49,8 @@ const Experience = () => {
   const { openQuiz } = useBookingQuiz();
   useScrollDepth("experience");
 
-  usePageMeta({
-    title: "Our Services | White Rabbit Magic — Los Angeles",
-    description: "Explore White Rabbit's luxury magic experiences: close-up magic, parlor shows, corporate entertainment, wedding magic, and private party performances.",
-    path: "/experience",
-    image: heroDesertImg,
-  });
+  const seoTitle = "Our Services | White Rabbit Magic — Los Angeles";
+  const seoDescription = "Explore White Rabbit's luxury magic experiences: close-up magic, parlor shows, corporate entertainment, wedding magic, and private party performances.";
   useWebPageSchema({ name: "Our Services", description: "Explore White Rabbit's luxury magic experiences: close-up magic, parlor shows, corporate entertainment, and private party performances.", path: "/experience" });
   useSpeakableSchema({ name: "Our Services", path: "/experience" });
 

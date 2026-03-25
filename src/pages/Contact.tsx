@@ -15,12 +15,8 @@ import { trackFormSubmit } from "@/lib/analytics";
 import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
 
 const Contact = () => {
-  usePageMeta({
-    title: "Contact & Booking | White Rabbit Magic — Los Angeles",
-    description: "Book Scott Syme for your next corporate event, wedding, or private celebration. Check availability and get a personalized quote within 24 hours.",
-    path: "/contact",
-    image: contactBg,
-  });
+  const seoTitle = "Contact & Booking | White Rabbit Magic — Los Angeles";
+  const seoDescription = "Book Scott Syme for your next corporate event, wedding, or private celebration. Check availability and get a personalized quote within 24 hours.";
   useWebPageSchema({ name: "Contact & Booking", description: "Book Scott Syme for your next corporate event, wedding, or private celebration.", path: "/contact", type: "ContactPage" });
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
