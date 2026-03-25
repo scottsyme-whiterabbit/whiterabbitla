@@ -347,6 +347,9 @@ const BlogArticle = () => {
       {/* Quiz CTA */}
       <QuizCTA title="Not Sure What You Need? Take the Quiz" />
 
+      {/* Where We Perform */}
+      <WhereWePerform articleIndex={blogArticles.findIndex((a) => a.slug === slug)} />
+
       {/* Related Reads */}
       <RelatedReads currentSlug={slug || ""} category={article.category} />
 
