@@ -7,12 +7,8 @@ import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 
 const ServiceAreas = () => {
-  usePageMeta({
-    title: "Service Areas | White Rabbit Magic — Luxury Entertainment Nationwide",
-    description:
-      "White Rabbit brings world-class close-up magic and parlor shows to luxury events across 70+ cities — from Los Angeles to New York, Aspen to Miami.",
-    path: "/areas",
-  });
+  const seoTitle = "Service Areas | White Rabbit Magic — Luxury Entertainment Nationwide";
+  const seoDescription = "White Rabbit brings world-class close-up magic and parlor shows to luxury events across 70+ cities — from Los Angeles to New York, Aspen to Miami.";
   useWebPageSchema({
     name: "Service Areas",
     description: "Luxury magic entertainment in 70+ cities nationwide.",

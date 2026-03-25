@@ -17,11 +17,8 @@ interface Props {
 const LegacyCityPage = ({ area, citySlug }: Props) => {
   const { openQuiz } = useBookingQuiz();
 
-  usePageMeta({
-    title: `${area.city} Magician | White Rabbit Magic — Luxury Event Entertainment`,
-    description: `Hire a world-class magician for luxury events in ${area.city}. Close-up magic, parlor shows, and bespoke entertainment by White Rabbit.`,
-    path: `/areas/${citySlug}`,
-  });
+  const seoTitle = `${area.city} Magician | White Rabbit Magic — Luxury Event Entertainment`;
+  const seoDescription = `Hire a world-class magician for luxury events in ${area.city}. Close-up magic, parlor shows, and bespoke entertainment by White Rabbit.`;
 
   useWebPageSchema({
     name: `Magician in ${area.city}`,
