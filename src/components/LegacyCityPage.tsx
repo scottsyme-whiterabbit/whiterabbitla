@@ -125,6 +125,27 @@ const LegacyCityPage = ({ area, citySlug }: Props) => {
         </section>
       )}
 
+      {/* Related Insights — editorial blog articles */}
+      <section className="py-16 border-t border-border">
+        <div className="max-w-5xl mx-auto px-6">
+          <AnimatedSection>
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Related Insights</p>
+            <h2 className="font-serif text-3xl text-foreground mb-8">From the Blog</h2>
+          </AnimatedSection>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {blogArticles.slice(0, 3).map((article, i) => (
+              <AnimatedSection key={article.slug} delay={Math.min(i * 0.1, 0.3)}>
+                <Link to={`/blog/${article.slug}`} className="group block border border-border p-6 hover:border-accent/40 transition-colors h-full">
+                  <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3">{article.category} · {article.readTime}</p>
+                  <h3 className="font-serif text-lg text-foreground mb-2 group-hover:text-accent transition-colors leading-snug">{article.title}</h3>
+                  <p className="font-sans text-sm text-muted-foreground leading-relaxed line-clamp-3">{article.excerpt}</p>
+                </Link>
+              </AnimatedSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <QuizCTA title={`Planning an Event in ${area.city}?`} />
 
       <AnimatedSection>
