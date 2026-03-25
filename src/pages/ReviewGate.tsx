@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import SEOHead from "@/components/SEOHead";
 import { Star, SmilePlus, MessageCircle, Send, ArrowRight } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { Button } from "@/components/ui/button";
