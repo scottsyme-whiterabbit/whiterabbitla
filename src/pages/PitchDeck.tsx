@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Star, Copy, Check, ArrowRight, Users, Award, Sparkles } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
-import { usePageMeta } from "@/hooks/usePageMeta";
+import SEOHead from "@/components/SEOHead";
 import { useToast } from "@/hooks/use-toast";
 
 import heroImg from "@/assets/event-parlor-stage.jpg";
