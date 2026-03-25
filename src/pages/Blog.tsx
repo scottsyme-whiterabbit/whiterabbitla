@@ -34,6 +34,7 @@ const Blog = () => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title={seoTitle} description={seoDescription} canonical="/blog" />
       {/* Hero */}
       <section className="bg-forest-dark py-24">
         <div className="max-w-4xl mx-auto px-6 text-center">

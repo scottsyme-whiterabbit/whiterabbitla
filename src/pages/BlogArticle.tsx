@@ -187,6 +187,7 @@ const BlogArticle = () => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title={seoTitle} description={seoDescription} canonical={seoPath} ogImage={seoImage} type="article" />
       {/* Hero */}
       <section className="bg-forest-dark py-24 md:py-32">
         <div className="max-w-3xl mx-auto px-6 text-center">
