@@ -56,6 +56,7 @@ const Experience = () => {
 
   return (
     <main id="main-content" className="pt-20">
+      <SEOHead title={seoTitle} description={seoDescription} canonical="/experience" ogImage={heroDesertImg} />
       {/* Hero */}
       <section className="relative min-h-[85vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">

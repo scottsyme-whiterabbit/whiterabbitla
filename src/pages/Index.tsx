@@ -129,6 +129,7 @@ const Index = () => {
 
   return (
     <main id="main-content">
+      <SEOHead title={seoTitle} description={seoDescription} canonical="/" ogImage={heroImage} />
       {/* Hero */}
       <section className="relative h-screen overflow-hidden">
         {/* Image – full screen on all devices */}
