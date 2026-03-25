@@ -47,16 +47,7 @@ const HostsPlaybook = () => {
     },
   ];
 
-  useEffect(() => {
-    document.title = "The Host's Playbook | White Rabbit Magic";
-    const meta = document.querySelector('meta[name="robots"]');
-    if (!meta) {
-      const m = document.createElement("meta");
-      m.name = "robots";
-      m.content = "noindex, nofollow";
-      document.head.appendChild(m);
-    }
-  }, []);
+  // noindex is handled by SEOHead below
 
   return (
     <main id="main-content" className="pt-20">

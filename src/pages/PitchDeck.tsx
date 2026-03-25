@@ -107,12 +107,8 @@ const PitchDeck = () => {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
 
-  usePageMeta({
-    title: "White Rabbit Lookbook | Luxury Magic Entertainment — Los Angeles",
-    description: "Explore White Rabbit's digital lookbook: credentials, photos, testimonials, and booking details for luxury magic entertainment by Scott Syme.",
-    path: "/deck",
-    image: heroImg,
-  });
+  const seoTitle = "White Rabbit Lookbook | Luxury Magic Entertainment — Los Angeles";
+  const seoDescription = "Explore White Rabbit's digital lookbook: credentials, photos, testimonials, and booking details for luxury magic entertainment by Scott Syme.";
 
   const handleCopyEmail = async () => {
     try {

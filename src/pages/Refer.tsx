@@ -11,11 +11,8 @@ const Refer = () => {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  usePageMeta({
-    title: "Refer a Friend | White Rabbit Los Angeles",
-    description: "Know someone planning an event in Los Angeles? Refer them to White Rabbit and earn a complimentary 30-minute close-up magic experience for your next LA event.",
-    path: "/refer",
-  });
+  const seoTitle = "Refer a Friend | White Rabbit Los Angeles";
+  const seoDescription = "Know someone planning an event in Los Angeles? Refer them to White Rabbit and earn a complimentary 30-minute close-up magic experience for your next LA event.";
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

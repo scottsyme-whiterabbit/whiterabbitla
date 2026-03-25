@@ -5,11 +5,8 @@ import AnimatedSection from "@/components/AnimatedSection";
 import SEOHead from "@/components/SEOHead";
 
 const Unsubscribe = () => {
-  usePageMeta({
-    title: "Unsubscribed | White Rabbit Magic",
-    description: "You have been unsubscribed from White Rabbit emails.",
-    path: "/unsubscribe",
-  });
+  const seoTitle = "Unsubscribed | White Rabbit Magic";
+  const seoDescription = "You have been unsubscribed from White Rabbit emails.";
 
   const [searchParams] = useSearchParams();
   const email = searchParams.get("email") || "";
