@@ -207,14 +207,14 @@ const RevenueTab = ({ adminPassword }: Props) => {
     weekEnd.setDate(weekEnd.getDate() + 7);
     const weekEndStr = weekEnd.toISOString().slice(0, 10);
 
-    const active = deals.filter(d => !["completed", "lost"].includes(d.stage));
+    const active = cleanDeals.filter(d => !["completed", "lost"].includes(d.stage));
     const overdue = active.filter(d => d.next_follow_up && d.next_follow_up < today);
     const todayFollowUps = active.filter(d => d.next_follow_up === today);
     const thisWeek = active.filter(d => d.next_follow_up && d.next_follow_up > today && d.next_follow_up <= weekEndStr);
     const noFollowUp = active.filter(d => !d.next_follow_up);
 
     return { overdue, today: todayFollowUps, thisWeek, noFollowUp };
-  }, [deals]);
+  }, [cleanDeals]);
 
   // Post-Show Email Engagement
   const postShowEngagement = useMemo(() => {
