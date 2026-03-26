@@ -186,43 +186,43 @@ serve(async (req) => {
           }
         }
 
-        // Cold contact: pause campaign, create deal, notify
+        // Cold contact: tiered click handling based on link intent
         const coldContact = await getColdContactByEmail(recipientEmail);
         if (coldContact && coldContact.status === "active") {
-          // Pause the cold campaign
-          await supabase
-            .from("cold_email_campaigns")
-            .update({ status: "paused" })
-            .eq("id", coldContact.id);
-          console.log(`Cold contact ${recipientEmail} paused (clicked link)`);
+          const clickedLink = body.data?.click?.link || "";
+          const isHighIntent = /calendar\.app\.google|mailto:|\/book|\/consultation/i.test(clickedLink);
 
-          const clickedLink = body.data?.click?.link || "unknown";
+          if (isHighIntent) {
+            // TIER 1: High-intent click — pause drip, create deal, notify
+            await supabase
+              .from("cold_email_campaigns")
+              .update({ status: "paused" })
+              .eq("id", coldContact.id);
+            console.log(`Cold contact ${recipientEmail} paused (high-intent click: ${clickedLink})`);
 
-          // Create a deal
-          await supabase.from("deals").insert({
-            contact_name: coldContact.name,
-            contact_email: recipientEmail.toLowerCase(),
-            company: coldContact.company,
-            source: "cold_outreach",
-            stage: "new",
-            notes: `Cold contact clicked link in drip email step ${coldContact.current_step} campaign ${coldContact.campaign_category} — auto-created from click detection.`,
-          });
-          console.log(`Deal created for cold contact ${recipientEmail}`);
+            await supabase.from("deals").insert({
+              contact_name: coldContact.name,
+              contact_email: recipientEmail.toLowerCase(),
+              company: coldContact.company,
+              source: "cold_outreach",
+              stage: "new",
+              notes: `Cold contact clicked link in drip email step ${coldContact.current_step} campaign ${coldContact.campaign_category} — auto-created from click detection.`,
+            });
+            console.log(`Deal created for cold contact ${recipientEmail}`);
 
-          // Notify Scott
-          const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-          if (RESEND_API_KEY) {
-            await fetch("https://api.resend.com/emails", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${RESEND_API_KEY}`,
-              },
-              body: JSON.stringify({
-                from: "White Rabbit System <scott.syme@whiterabbitla.com>",
-                to: ["scott.syme@whiterabbitla.com"],
-                subject: `🎯 Cold Lead Clicked: ${recipientEmail}`,
-                html: `<p>A cold outreach contact clicked a link!</p>
+            const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+            if (RESEND_API_KEY) {
+              await fetch("https://api.resend.com/emails", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${RESEND_API_KEY}`,
+                },
+                body: JSON.stringify({
+                  from: "White Rabbit System <scott.syme@whiterabbitla.com>",
+                  to: ["scott.syme@whiterabbitla.com"],
+                  subject: `🎯 Cold Lead Clicked: ${recipientEmail}`,
+                  html: `<p>A cold outreach contact clicked a high-intent link!</p>
 <p><strong>Name:</strong> ${coldContact.name || "Unknown"}</p>
 <p><strong>Email:</strong> ${recipientEmail}</p>
 <p><strong>Company:</strong> ${coldContact.company || "Unknown"}</p>
@@ -230,8 +230,12 @@ serve(async (req) => {
 <p><strong>Step:</strong> ${coldContact.current_step}</p>
 <p><strong>Link Clicked:</strong> ${clickedLink}</p>
 <p><strong>Follow up immediately!</strong></p>`,
-              }),
-            });
+                }),
+              });
+            }
+          } else {
+            // TIER 2: Low-intent browse click — log only, drip continues
+            console.log(`Cold contact ${recipientEmail} clicked non-intent link: ${clickedLink} (campaign: ${coldContact.campaign_category}, step: ${coldContact.current_step}) — drip continues`);
           }
         }
       }
