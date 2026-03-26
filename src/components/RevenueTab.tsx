@@ -132,8 +132,8 @@ const RevenueTab = ({ adminPassword }: Props) => {
     const quarterStart = new Date(now.getFullYear(), Math.floor(now.getMonth() / 3) * 3, 1);
     const yearStart = new Date(now.getFullYear(), 0, 1);
 
-    const booked = deals.filter(d => d.stage === "booked" && (d.deal_value || 0) > 0);
-    const completed = deals.filter(d => d.stage === "completed" && (d.deal_value || 0) > 0);
+    const booked = cleanDeals.filter(d => d.stage === "booked" && (d.deal_value || 0) > 0);
+    const completed = cleanDeals.filter(d => d.stage === "completed" && (d.deal_value || 0) > 0);
     const all = [...booked, ...completed];
     const sum = (arr: Deal[]) => arr.reduce((s, d) => s + (d.deal_value || 0), 0);
     const inRange = (d: Deal, start: Date) => new Date(d.created_at) >= start;
@@ -150,7 +150,7 @@ const RevenueTab = ({ adminPassword }: Props) => {
       avgDeal: all.length ? sum(all) / all.length : 0,
       totalDeals: all.length,
     };
-  }, [deals]);
+  }, [cleanDeals]);
 
   // Monthly Show Tracker
   const monthlyShows = useMemo(() => {
