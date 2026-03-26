@@ -52,6 +52,7 @@ serve(async (req) => {
         email: email.toLowerCase().trim(),
         name: name || null,
         source: source || "quiz",
+        drip_campaign: "planner",
         subscribed: true,
         drip_step: 0,
         drip_started_at: new Date().toISOString(),
