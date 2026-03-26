@@ -47,7 +47,7 @@ serve(async (req) => {
         const { data, error } = await supabase
           .from("newsletter_contacts")
           .upsert(
-            unique.map((c: { email: string; name?: string; company?: string; city?: string; source?: string; phone?: string }) => ({
+            unique.map((c: { email: string; name?: string; company?: string; city?: string; source?: string; phone?: string; drip_campaign?: string }) => ({
               email: c.email.toLowerCase().trim(),
               name: c.name?.trim() || null,
               company: c.company?.trim() || null,
@@ -55,6 +55,7 @@ serve(async (req) => {
               source: c.source || "csv",
               phone: c.phone?.trim() || null,
               drip_campaign: c.drip_campaign || "welcome",
+              subscribed: true,
             })),
             { onConflict: "email" }
           )
