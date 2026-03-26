@@ -159,7 +159,7 @@ const RevenueTab = ({ adminPassword }: Props) => {
     for (let i = 11; i >= 0; i--) {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const key = d.toLocaleDateString("en-US", { month: "short", year: "2-digit" });
-      const count = deals.filter(deal => {
+      const count = cleanDeals.filter(deal => {
         if (!["booked", "completed"].includes(deal.stage)) return false;
         const ed = deal.event_date ? new Date(deal.event_date) : new Date(deal.created_at);
         return ed.getMonth() === d.getMonth() && ed.getFullYear() === d.getFullYear();
@@ -167,7 +167,7 @@ const RevenueTab = ({ adminPassword }: Props) => {
       months.push({ month: key, shows: count });
     }
     return months;
-  }, [deals]);
+  }, [cleanDeals]);
 
   // Pipeline Funnel
   const funnelData = useMemo(() => {
