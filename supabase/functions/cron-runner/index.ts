@@ -73,6 +73,22 @@ serve(async (req) => {
     });
     results["cold-drip"] = { status: r3.status, body: await r3.json().catch(() => r3.statusText) };
 
+    // Run planner-drip
+    const r5 = await fetch(`${FUNCTIONS_BASE}/planner-drip`, {
+      method: "POST",
+      headers,
+      body: "{}",
+    });
+    results["planner-drip"] = { status: r5.status, body: await r5.json().catch(() => r5.statusText) };
+
+    // Run resident-drip
+    const r6 = await fetch(`${FUNCTIONS_BASE}/resident-drip`, {
+      method: "POST",
+      headers,
+      body: "{}",
+    });
+    results["resident-drip"] = { status: r6.status, body: await r6.json().catch(() => r6.statusText) };
+
     // Run nurture-drip
     const r4 = await fetch(`${FUNCTIONS_BASE}/nurture-drip`, {
       method: "POST",
