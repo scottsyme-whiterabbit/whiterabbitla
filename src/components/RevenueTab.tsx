@@ -116,11 +116,14 @@ const RevenueTab = ({ adminPassword }: Props) => {
     load();
   }, [callAdmin]);
 
+  // Exclude legacy Square Import deals from all metrics
+  const cleanDeals = useMemo(() => deals.filter(d => d.source !== "Square Import"), [deals]);
+
   const filtered = useMemo(() => {
     const start = getDateRangeStart(dateRange);
-    if (!start) return deals;
-    return deals.filter(d => new Date(d.created_at) >= start);
-  }, [deals, dateRange]);
+    if (!start) return cleanDeals;
+    return cleanDeals.filter(d => new Date(d.created_at) >= start);
+  }, [cleanDeals, dateRange]);
 
   // Revenue Summary — split booked vs completed (exclude $0 deals from revenue calcs)
   const revenueSummary = useMemo(() => {
