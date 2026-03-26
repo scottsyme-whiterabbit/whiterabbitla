@@ -620,8 +620,16 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
                               <Play size={12} />
                             </button>
                           )}
-                          {c.status !== "replied" && c.status !== "completed" && (
-                            <button onClick={() => handleStatusChange(c.id, "replied")} className="p-1.5 border border-border text-accent hover:bg-accent/10" title="Replied">
+                          {c.status === "active" && (
+                            <button onClick={async () => {
+                              try {
+                                await callAdmin("mark_cold_reply", { email: c.email });
+                                toast.success("Contact marked as replied and deal created");
+                                loadData();
+                              } catch (e) {
+                                toast.error(e instanceof Error ? e.message : "Failed to mark reply");
+                              }
+                            }} className="p-1.5 border border-border text-accent hover:bg-accent/10" title="Mark as Replied + Create Deal">
                               <MessageSquare size={12} />
                             </button>
                           )}
