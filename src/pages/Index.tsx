@@ -87,8 +87,8 @@ const Index = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const seoTitle = "White Rabbit LA | Luxury Magic Entertainment — Los Angeles";
-  const seoDescription = "Bespoke magical experiences for Fortune 500 events, private celebrations, and luxury gatherings across Los Angeles and beyond. Magician Scott Syme.";
+  const seoTitle = "Los Angeles Magician for Hire | White Rabbit LA";
+  const seoDescription = "Hire a world-class close-up magician for corporate events, weddings, and private parties in LA. Magic Castle member. Trusted by Netflix, Disney & Morgan Stanley.";
 
   // Homepage Event + Person schemas
   const now = new Date();

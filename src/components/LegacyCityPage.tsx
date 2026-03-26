@@ -18,8 +18,8 @@ interface Props {
 const LegacyCityPage = ({ area, citySlug }: Props) => {
   const { openQuiz } = useBookingQuiz();
 
-  const seoTitle = `${area.city} Magician | White Rabbit Magic — Luxury Event Entertainment`;
-  const seoDescription = `Hire a world-class magician for luxury events in ${area.city}. Close-up magic, parlor shows, and bespoke entertainment by White Rabbit.`;
+  const seoTitle = `${area.city} Magician for Hire | White Rabbit LA`;
+  const seoDescription = `Hire a world-class close-up magician for corporate events, weddings, and private parties in ${area.city}. Magic Castle member. 5-star rated on Google.`;
 
   useWebPageSchema({
     name: `Magician in ${area.city}`,

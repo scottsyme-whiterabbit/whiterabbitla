@@ -35,8 +35,8 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
   const { openQuiz } = useBookingQuiz();
   const { cityName, citySlug, state, stateFullName, region, venues, nearbyLinks, uniqueContent } = content;
 
-  const seoTitle = `Magician in ${cityName} | Luxury Magic Entertainment — White Rabbit LA`;
-  const seoDescription = `Book world-class close-up magic and mentalism for corporate events, weddings, and private parties in ${cityName}. Scott Syme — Magic Castle member, 5-star rated on Google.`;
+  const seoTitle = `${cityName} Magician for Hire | White Rabbit LA`;
+  const seoDescription = `Hire a world-class close-up magician for corporate events, weddings, and private parties in ${cityName}. Magic Castle member. 5-star rated on Google.`;
 
   // Dynamic dates for Event schema
   const now = new Date();
