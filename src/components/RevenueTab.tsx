@@ -116,11 +116,14 @@ const RevenueTab = ({ adminPassword }: Props) => {
     load();
   }, [callAdmin]);
 
+  // Exclude legacy Square Import deals from all metrics
+  const cleanDeals = useMemo(() => deals.filter(d => d.source !== "Square Import"), [deals]);
+
   const filtered = useMemo(() => {
     const start = getDateRangeStart(dateRange);
-    if (!start) return deals;
-    return deals.filter(d => new Date(d.created_at) >= start);
-  }, [deals, dateRange]);
+    if (!start) return cleanDeals;
+    return cleanDeals.filter(d => new Date(d.created_at) >= start);
+  }, [cleanDeals, dateRange]);
 
   // Revenue Summary — split booked vs completed (exclude $0 deals from revenue calcs)
   const revenueSummary = useMemo(() => {
@@ -129,8 +132,8 @@ const RevenueTab = ({ adminPassword }: Props) => {
     const quarterStart = new Date(now.getFullYear(), Math.floor(now.getMonth() / 3) * 3, 1);
     const yearStart = new Date(now.getFullYear(), 0, 1);
 
-    const booked = deals.filter(d => d.stage === "booked" && (d.deal_value || 0) > 0);
-    const completed = deals.filter(d => d.stage === "completed" && (d.deal_value || 0) > 0);
+    const booked = cleanDeals.filter(d => d.stage === "booked" && (d.deal_value || 0) > 0);
+    const completed = cleanDeals.filter(d => d.stage === "completed" && (d.deal_value || 0) > 0);
     const all = [...booked, ...completed];
     const sum = (arr: Deal[]) => arr.reduce((s, d) => s + (d.deal_value || 0), 0);
     const inRange = (d: Deal, start: Date) => new Date(d.created_at) >= start;
@@ -147,7 +150,7 @@ const RevenueTab = ({ adminPassword }: Props) => {
       avgDeal: all.length ? sum(all) / all.length : 0,
       totalDeals: all.length,
     };
-  }, [deals]);
+  }, [cleanDeals]);
 
   // Monthly Show Tracker
   const monthlyShows = useMemo(() => {
@@ -156,7 +159,7 @@ const RevenueTab = ({ adminPassword }: Props) => {
     for (let i = 11; i >= 0; i--) {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const key = d.toLocaleDateString("en-US", { month: "short", year: "2-digit" });
-      const count = deals.filter(deal => {
+      const count = cleanDeals.filter(deal => {
         if (!["booked", "completed"].includes(deal.stage)) return false;
         const ed = deal.event_date ? new Date(deal.event_date) : new Date(deal.created_at);
         return ed.getMonth() === d.getMonth() && ed.getFullYear() === d.getFullYear();
@@ -164,7 +167,7 @@ const RevenueTab = ({ adminPassword }: Props) => {
       months.push({ month: key, shows: count });
     }
     return months;
-  }, [deals]);
+  }, [cleanDeals]);
 
   // Pipeline Funnel
   const funnelData = useMemo(() => {
@@ -204,18 +207,18 @@ const RevenueTab = ({ adminPassword }: Props) => {
     weekEnd.setDate(weekEnd.getDate() + 7);
     const weekEndStr = weekEnd.toISOString().slice(0, 10);
 
-    const active = deals.filter(d => !["completed", "lost"].includes(d.stage));
+    const active = cleanDeals.filter(d => !["completed", "lost"].includes(d.stage));
     const overdue = active.filter(d => d.next_follow_up && d.next_follow_up < today);
     const todayFollowUps = active.filter(d => d.next_follow_up === today);
     const thisWeek = active.filter(d => d.next_follow_up && d.next_follow_up > today && d.next_follow_up <= weekEndStr);
     const noFollowUp = active.filter(d => !d.next_follow_up);
 
     return { overdue, today: todayFollowUps, thisWeek, noFollowUp };
-  }, [deals]);
+  }, [cleanDeals]);
 
   // Post-Show Email Engagement
   const postShowEngagement = useMemo(() => {
-    const completedDealIds = new Set(deals.filter(d => d.stage === "completed").map(d => d.id));
+    const completedDealIds = new Set(cleanDeals.filter(d => d.stage === "completed").map(d => d.id));
 
     // Filter sends/opens/clicks to post-show campaigns
     const postSends = sendLog.filter(s => s.campaign_id.startsWith("post-show-"));
