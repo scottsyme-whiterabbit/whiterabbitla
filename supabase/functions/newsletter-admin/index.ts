@@ -814,6 +814,71 @@ serve(async (req) => {
         });
       }
 
+      case "mark_cold_reply": {
+        const { email: replyEmail } = payload;
+        if (!replyEmail) {
+          return new Response(JSON.stringify({ error: "email required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const { data: coldReplyContact } = await supabase
+          .from("cold_email_campaigns")
+          .select("id, email, name, company, campaign_category, status, current_step")
+          .eq("email", (replyEmail as string).toLowerCase())
+          .maybeSingle();
+
+        if (!coldReplyContact) {
+          return new Response(JSON.stringify({ error: "Cold contact not found" }), {
+            status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+
+        if (coldReplyContact.status === "active") {
+          await supabase
+            .from("cold_email_campaigns")
+            .update({ status: "replied", updated_at: new Date().toISOString() })
+            .eq("id", coldReplyContact.id);
+
+          await supabase.from("deals").insert({
+            contact_name: coldReplyContact.name,
+            contact_email: coldReplyContact.email,
+            company: coldReplyContact.company,
+            source: "cold_outreach",
+            stage: "new",
+            notes: `Cold contact replied to drip email step ${coldReplyContact.current_step} campaign ${coldReplyContact.campaign_category}.`,
+          });
+
+          const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+          if (RESEND_API_KEY) {
+            await fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
+              body: JSON.stringify({
+                from: "White Rabbit System <scott.syme@whiterabbitla.com>",
+                to: ["scott.syme@whiterabbitla.com"],
+                subject: `💬 Cold Lead Replied: ${coldReplyContact.email}`,
+                html: `<p>A cold outreach contact replied!</p>
+<p><strong>Name:</strong> ${coldReplyContact.name || "Unknown"}</p>
+<p><strong>Email:</strong> ${coldReplyContact.email}</p>
+<p><strong>Company:</strong> ${coldReplyContact.company || "Unknown"}</p>
+<p><strong>Campaign:</strong> ${coldReplyContact.campaign_category}</p>
+<p><strong>Step:</strong> ${coldReplyContact.current_step}</p>
+<p><strong>Follow up immediately!</strong></p>`,
+              }),
+            });
+          }
+        } else {
+          await supabase
+            .from("cold_email_campaigns")
+            .update({ status: "replied", updated_at: new Date().toISOString() })
+            .eq("id", coldReplyContact.id);
+        }
+
+        return new Response(JSON.stringify({ success: true }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       case "update_nurture_status": {
         const { campaignId, nurture_status } = payload;
         const { error } = await supabase
