@@ -218,7 +218,7 @@ const RevenueTab = ({ adminPassword }: Props) => {
 
   // Post-Show Email Engagement
   const postShowEngagement = useMemo(() => {
-    const completedDealIds = new Set(deals.filter(d => d.stage === "completed").map(d => d.id));
+    const completedDealIds = new Set(cleanDeals.filter(d => d.stage === "completed").map(d => d.id));
 
     // Filter sends/opens/clicks to post-show campaigns
     const postSends = sendLog.filter(s => s.campaign_id.startsWith("post-show-"));
