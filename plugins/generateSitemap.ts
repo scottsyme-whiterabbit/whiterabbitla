@@ -57,9 +57,23 @@ export function generateSitemap(): Plugin {
         lines.push(url(`/areas/${area.slug}`, latestBlogDate));
       }
 
+      const soft404Suffixes = [
+        "trade-show-magician",
+        "rehearsal-dinner-magician",
+        "halloween-party-magician",
+        "christmas-party-magician",
+        "premiere-red-carpet-magician",
+        "dmc-entertainment",
+        "resident-event-magician",
+      ];
+
+      const filteredSeoPages = seoPages.filter(
+        (page) => !soft404Suffixes.some((s) => page.slug.endsWith(s))
+      );
+
       lines.push("");
       lines.push('  <!-- SEO Landing Pages -->');
-      for (const page of seoPages) {
+      for (const page of filteredSeoPages) {
         lines.push(url(`/blog/${page.slug}`, TODAY));
       }
 
