@@ -7,11 +7,6 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-// Resend webhook handler for email event tracking
-// Set up in Resend dashboard: Webhooks → Add endpoint
-// Select events: email.bounced, email.complained, email.delivered, email.opened, email.clicked
-// URL: https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/email-webhook
-
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -28,11 +23,21 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Helper: look up contact by email
+    // Helper: look up newsletter contact by email
     async function getContactByEmail(email: string) {
       const { data } = await supabase
         .from("newsletter_contacts")
         .select("id, engagement_status")
+        .eq("email", email.toLowerCase())
+        .maybeSingle();
+      return data;
+    }
+
+    // Helper: look up cold campaign contact by email
+    async function getColdContactByEmail(email: string) {
+      const { data } = await supabase
+        .from("cold_email_campaigns")
+        .select("id, email, name, company, campaign_category, status, current_step")
         .eq("email", email.toLowerCase())
         .maybeSingle();
       return data;
@@ -60,6 +65,16 @@ serve(async (req) => {
           .eq("email", recipientEmail.toLowerCase());
         await logBounce(contact?.id || null, recipientEmail, "complained", body.data?.reason || body.data?.error || "Spam complaint");
         console.log(`Contact ${recipientEmail} unsubscribed + logged bounce (spam complaint)`);
+
+        // Cold contact: mark as unsubscribed
+        const coldContact = await getColdContactByEmail(recipientEmail);
+        if (coldContact) {
+          await supabase
+            .from("cold_email_campaigns")
+            .update({ status: "unsubscribed" })
+            .eq("id", coldContact.id);
+          console.log(`Cold contact ${recipientEmail} marked as unsubscribed (spam complaint)`);
+        }
       }
     }
 
@@ -87,6 +102,16 @@ serve(async (req) => {
           .eq("email", recipientEmail.toLowerCase());
         await logBounce(contact?.id || null, recipientEmail, bounceType, body.data?.reason || body.data?.error || null);
         console.log(`Contact ${recipientEmail} unsubscribed + logged bounce (${eventType})`);
+
+        // Cold contact: mark as bounced
+        const coldContact = await getColdContactByEmail(recipientEmail);
+        if (coldContact) {
+          await supabase
+            .from("cold_email_campaigns")
+            .update({ status: "bounced" })
+            .eq("id", coldContact.id);
+          console.log(`Cold contact ${recipientEmail} marked as bounced (${eventType})`);
+        }
       }
     }
 
@@ -97,7 +122,6 @@ serve(async (req) => {
         const contact = await getContactByEmail(recipientEmail);
 
         if (contact && (contact.engagement_status === "new" || contact.engagement_status === "warm")) {
-          // Count total opens for this contact
           const { count: openCount } = await supabase
             .from("newsletter_opens")
             .select("*", { count: "exact", head: true })
@@ -119,6 +143,12 @@ serve(async (req) => {
             console.log(`Contact ${recipientEmail} upgraded to warm (opened)`);
           }
         }
+
+        // Cold contact: log open
+        const coldContact = await getColdContactByEmail(recipientEmail);
+        if (coldContact) {
+          console.log(`Cold contact opened email: ${recipientEmail} (campaign: ${coldContact.campaign_category}, step: ${coldContact.current_step}, status: ${coldContact.status})`);
+        }
       }
     }
 
@@ -135,7 +165,6 @@ serve(async (req) => {
             .eq("id", contact.id);
           console.log(`Contact ${recipientEmail} marked as hot (clicked)`);
 
-          // Notify Scott about hot lead
           const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
           if (RESEND_API_KEY) {
             await fetch("https://api.resend.com/emails", {
@@ -152,6 +181,55 @@ serve(async (req) => {
 <p><strong>Email:</strong> ${recipientEmail}</p>
 <p><strong>Link:</strong> ${body.data?.click?.link || "unknown"}</p>
 <p>Follow up while they're engaged!</p>`,
+              }),
+            });
+          }
+        }
+
+        // Cold contact: pause campaign, create deal, notify
+        const coldContact = await getColdContactByEmail(recipientEmail);
+        if (coldContact && coldContact.status === "active") {
+          // Pause the cold campaign
+          await supabase
+            .from("cold_email_campaigns")
+            .update({ status: "paused" })
+            .eq("id", coldContact.id);
+          console.log(`Cold contact ${recipientEmail} paused (clicked link)`);
+
+          const clickedLink = body.data?.click?.link || "unknown";
+
+          // Create a deal
+          await supabase.from("deals").insert({
+            contact_name: coldContact.name,
+            contact_email: recipientEmail.toLowerCase(),
+            company: coldContact.company,
+            source: "cold_outreach",
+            stage: "new",
+            notes: `Cold contact clicked link in drip email step ${coldContact.current_step} campaign ${coldContact.campaign_category} — auto-created from click detection.`,
+          });
+          console.log(`Deal created for cold contact ${recipientEmail}`);
+
+          // Notify Scott
+          const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+          if (RESEND_API_KEY) {
+            await fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${RESEND_API_KEY}`,
+              },
+              body: JSON.stringify({
+                from: "White Rabbit System <scott.syme@whiterabbitla.com>",
+                to: ["scott.syme@whiterabbitla.com"],
+                subject: `🎯 Cold Lead Clicked: ${recipientEmail}`,
+                html: `<p>A cold outreach contact clicked a link!</p>
+<p><strong>Name:</strong> ${coldContact.name || "Unknown"}</p>
+<p><strong>Email:</strong> ${recipientEmail}</p>
+<p><strong>Company:</strong> ${coldContact.company || "Unknown"}</p>
+<p><strong>Campaign:</strong> ${coldContact.campaign_category}</p>
+<p><strong>Step:</strong> ${coldContact.current_step}</p>
+<p><strong>Link Clicked:</strong> ${clickedLink}</p>
+<p><strong>Follow up immediately!</strong></p>`,
               }),
             });
           }
