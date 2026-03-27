@@ -1,4 +1,3 @@
-import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -98,23 +97,21 @@ const AppContent = () => {
 };
 
 const App = () => (
-  <HelmetProvider>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <BookingQuizProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/card" element={<><DigitalCard /></>} />
-              <Route path="/consultation" element={<><Consultation /></>} />
-              <Route path="/*" element={<AppContent />} />
-            </Routes>
-          </BrowserRouter>
-        </BookingQuizProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </HelmetProvider>
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <BookingQuizProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/card" element={<><DigitalCard /></>} />
+            <Route path="/consultation" element={<><Consultation /></>} />
+            <Route path="/*" element={<AppContent />} />
+          </Routes>
+        </BrowserRouter>
+      </BookingQuizProvider>
+    </TooltipProvider>
+  </QueryClientProvider>
 );
 
 export default App;
