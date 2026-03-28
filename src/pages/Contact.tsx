@@ -199,7 +199,28 @@ const Contact = () => {
                     className="bg-background border-border"
                     placeholder="City, venue, or address"
                   />
-                </div>
+              </div>
+              <div>
+                <label className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 block">
+                  How Did You Find Us?
+                </label>
+                <select
+                  value={formData.referralSource}
+                  onChange={(e) => setFormData({ ...formData, referralSource: e.target.value })}
+                  className="flex h-10 w-full rounded-md border border-border bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  <option value="">How did you find us?</option>
+                  <option value="google_search">Google Search</option>
+                  <option value="referral">Referral from a Friend or Colleague</option>
+                  <option value="event_planner">Event Planner Recommendation</option>
+                  <option value="instagram">Instagram</option>
+                  <option value="linkedin">LinkedIn</option>
+                  <option value="saw_perform">Saw Scott Perform at an Event</option>
+                  <option value="the_bash">The Bash</option>
+                  <option value="blog_article">Blog Article</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
               </div>
               <div>
                 <label className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2 block">
