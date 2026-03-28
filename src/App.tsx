@@ -82,6 +82,7 @@ const AppContent = () => {
         <Route path="/deck" element={<PitchDeck />} />
         <Route path="/review" element={<ReviewGate />} />
         <Route path="/refer" element={<Refer />} />
+        <Route path="/planners" element={<Planners />} />
         <Route path="/areas" element={<ServiceAreas />} />
         <Route path="/areas/:citySlug" element={<ServiceAreaDetail />} />
         <Route path="/unsubscribe" element={<Unsubscribe />} />
