@@ -56,7 +56,7 @@ const Contact = () => {
         title: "Inquiry Sent!",
         description: "We'll get back to you within 24 hours.",
       });
-      setFormData({ name: "", email: "", phone: "", eventType: "", date: "", location: "", message: "", clientType: "" });
+      setFormData({ name: "", email: "", phone: "", eventType: "", date: "", location: "", message: "", clientType: "", referralSource: "" });
     } catch (err) {
       console.error("Send error:", err);
       toast({
