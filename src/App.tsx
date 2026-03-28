@@ -39,6 +39,7 @@ import ServiceAreas from "./pages/ServiceAreas";
 import ServiceAreaDetail from "./pages/ServiceAreaDetail";
 import DigitalCard from "./pages/DigitalCard";
 import Consultation from "./pages/Consultation";
+import Planners from "./pages/Planners";
 import { getBlogArticleBySlug } from "./data/blogArticles";
 import { useParams } from "react-router-dom";
 
@@ -81,6 +82,7 @@ const AppContent = () => {
         <Route path="/deck" element={<PitchDeck />} />
         <Route path="/review" element={<ReviewGate />} />
         <Route path="/refer" element={<Refer />} />
+        <Route path="/planners" element={<Planners />} />
         <Route path="/areas" element={<ServiceAreas />} />
         <Route path="/areas/:citySlug" element={<ServiceAreaDetail />} />
         <Route path="/unsubscribe" element={<Unsubscribe />} />
