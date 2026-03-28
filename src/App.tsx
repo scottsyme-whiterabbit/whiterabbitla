@@ -39,6 +39,7 @@ import ServiceAreas from "./pages/ServiceAreas";
 import ServiceAreaDetail from "./pages/ServiceAreaDetail";
 import DigitalCard from "./pages/DigitalCard";
 import Consultation from "./pages/Consultation";
+import Planners from "./pages/Planners";
 import { getBlogArticleBySlug } from "./data/blogArticles";
 import { useParams } from "react-router-dom";
 
