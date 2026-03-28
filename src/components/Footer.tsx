@@ -29,6 +29,9 @@ const Footer = () => {
               <Link to="/refer" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">
                 Refer a Friend
               </Link>
+              <Link to="/planners" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">
+                For Event Professionals
+              </Link>
             </div>
             <div className="flex flex-col items-center md:items-start gap-3">
               <h4 className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Services</h4>
