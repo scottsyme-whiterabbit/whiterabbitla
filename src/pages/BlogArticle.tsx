@@ -40,6 +40,7 @@ const categoryImages: Record<string, string> = {
   "Luxury Nightlife": closeupImg,
   "Resident Events": corporateImg,
   "Wedding Entertainment": closeupImg,
+  "For Event Planners": corporateImg,
 };
 
 // Two inline images per category for mid-article injection
@@ -87,6 +88,10 @@ const inlineImages: Record<string, { src: string; alt: string }[]> = {
   "Wedding Entertainment": [
     { src: intimateImg, alt: "Close-up magic during an elegant wedding cocktail hour" },
     { src: guestReactionImg, alt: "Wedding guests reacting with delight to close-up magic" },
+  ],
+  "For Event Planners": [
+    { src: scottPerformingImg, alt: "Scott Syme performing close-up magic at a corporate event" },
+    { src: parlorAudienceImg, alt: "Seated audience watching a private parlor magic show" },
   ],
 };
 
