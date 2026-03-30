@@ -39,6 +39,7 @@ const categoryImages: Record<string, string> = {
   "Behind the Craft": scottCardsImg,
   "Luxury Nightlife": closeupImg,
   "Resident Events": corporateImg,
+  "Wedding Entertainment": closeupImg,
 };
 
 // Two inline images per category for mid-article injection
@@ -82,6 +83,10 @@ const inlineImages: Record<string, { src: string; alt: string }[]> = {
   "For DMCs": [
     { src: groupFinaleImg, alt: "Group of incentive trip attendees enjoying a magic show" },
     { src: cardFloatQueenImg, alt: "Close-up card magic at a destination event reception" },
+  ],
+  "Wedding Entertainment": [
+    { src: intimateImg, alt: "Close-up magic during an elegant wedding cocktail hour" },
+    { src: guestReactionImg, alt: "Wedding guests reacting with delight to close-up magic" },
   ],
 };
 
