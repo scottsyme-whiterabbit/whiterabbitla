@@ -40,6 +40,7 @@ const categoryImages: Record<string, string> = {
   "Luxury Nightlife": closeupImg,
   "Resident Events": corporateImg,
   "Wedding Entertainment": closeupImg,
+  "For Event Planners": corporateImg,
 };
 
 // Two inline images per category for mid-article injection
