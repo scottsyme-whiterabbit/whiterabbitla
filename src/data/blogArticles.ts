@@ -1685,7 +1685,6 @@ export const blogArticles: BlogArticle[] = [
       "If you've got a show coming up and you want to talk about how this would work for your specific setup, <a href='/contact'>reach out</a>. I can also send you <a href='/experience'>video of this in action</a> at previous trade shows so you can see what it looks like on the floor.",
     ],
   },
-  },
   {
     slug: "fundraiser-gala-entertainment-energize-donors",
     title: "Fundraiser and Gala Entertainment: How to Energize Your Donors",
