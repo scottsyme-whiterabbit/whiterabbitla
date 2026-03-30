@@ -167,10 +167,34 @@ const reviews = [
   rating: 5
 },
 {
-  name: "Danielle G.",
-  role: "Private Party Host",
-  text: "Scott is incredible. He has everyone engaged and excited throughout his show and is so talented. Would absolutely recommend booking him for your next party!",
-  rating: 5
+    name: "Danielle G.",
+    role: "Private Party Host",
+    text: "Scott is incredible. He has everyone engaged and excited throughout his show and is so talented. Would absolutely recommend booking him for your next party!",
+    rating: 5
+},
+{
+    name: "Mineh Z.",
+    role: "Private Event Guest",
+    text: "Scott was incredible from start to finish! I love that he brings a whole production with him and changes the ambience to make the show even more magical. Our jaws were on the floor with each trick and he did such a great job making it interactive and so entertaining the entire time. Thank you Scott for such a memorable night!!",
+    rating: 5
+},
+{
+    name: "Vanneh B.",
+    role: "Bachelorette Party",
+    text: "Could not recommend enough!! My friends hired Scott as a surprise for my bachelorette party and it was unbelievable. 10/10 experience.",
+    rating: 5
+},
+{
+    name: "Hannah W.",
+    role: "Show Attendee",
+    text: "Such an incredible show! Can't recommend enough.",
+    rating: 5
+},
+{
+    name: "Ari",
+    role: "Event Guest",
+    text: "Amazing amazing amazing.",
+    rating: 5
 }];
 
 
