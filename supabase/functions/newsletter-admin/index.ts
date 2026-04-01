@@ -837,12 +837,13 @@ serve(async (req) => {
         }
 
         if (coldReplyContact.status === "active") {
-          await supabase
+          const { error: updateErr } = await supabase
             .from("cold_email_campaigns")
             .update({ status: "replied", updated_at: new Date().toISOString() })
             .eq("id", coldReplyContact.id);
+          if (updateErr) throw updateErr;
 
-          await supabase.from("deals").insert({
+          const { error: dealErr } = await supabase.from("deals").insert({
             contact_name: coldReplyContact.name,
             contact_email: coldReplyContact.email,
             company: coldReplyContact.company,
@@ -850,6 +851,7 @@ serve(async (req) => {
             stage: "new",
             notes: `Cold contact replied to drip email step ${coldReplyContact.current_step} campaign ${coldReplyContact.campaign_category}.`,
           });
+          if (dealErr) throw dealErr;
 
           const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
           if (RESEND_API_KEY) {
@@ -871,10 +873,11 @@ serve(async (req) => {
             });
           }
         } else {
-          await supabase
+          const { error: updateErr2 } = await supabase
             .from("cold_email_campaigns")
             .update({ status: "replied", updated_at: new Date().toISOString() })
             .eq("id", coldReplyContact.id);
+          if (updateErr2) throw updateErr2;
         }
 
         return new Response(JSON.stringify({ success: true }), {
