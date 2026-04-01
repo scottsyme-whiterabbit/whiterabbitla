@@ -161,6 +161,8 @@ serve(async (req) => {
 
       case "delete_campaign": {
         const { campaignId } = payload;
+        // Delete related opens that reference this campaign first
+        await supabase.from("newsletter_opens").delete().eq("campaign_id", campaignId);
         const { error } = await supabase
           .from("newsletter_campaigns")
           .delete()
