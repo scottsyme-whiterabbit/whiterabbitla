@@ -151,6 +151,7 @@ serve(async (req) => {
         await supabase.from("newsletter_clicks").delete().eq("contact_id", contactId);
         await supabase.from("newsletter_opens").delete().eq("contact_id", contactId);
         await supabase.from("newsletter_send_log").delete().eq("contact_id", contactId);
+        await supabase.from("email_bounces").delete().eq("contact_id", contactId);
         const { error: delErr } = await supabase.from("newsletter_contacts").delete().eq("id", contactId);
         if (delErr) throw delErr;
         return new Response(JSON.stringify({ success: true }), {
