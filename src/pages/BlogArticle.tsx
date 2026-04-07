@@ -344,6 +344,28 @@ const BlogArticle = () => {
                 </AnimatedSection>
               );
 
+              // Per-article inline image injection
+              {const artImg = slug ? articleInlineImages[slug] : undefined;
+              if (artImg && i === artImg.afterIndex) {
+                elements.push(
+                  <AnimatedSection key="article-inline-img">
+                    <figure className="my-10 md:my-14 -mx-4 md:-mx-8">
+                      <img
+                        src={artImg.src}
+                        alt={artImg.alt}
+                        width={800}
+                        height={1067}
+                        loading="lazy"
+                        className="w-full h-auto"
+                      />
+                      <figcaption className="font-sans text-[11px] text-muted-foreground/50 tracking-wider mt-3 text-center uppercase">
+                        White Rabbit · Event Setup
+                      </figcaption>
+                    </figure>
+                  </AnimatedSection>
+                );
+              }}
+
               return elements;
             });
           })()}
