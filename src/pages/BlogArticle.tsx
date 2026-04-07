@@ -30,6 +30,11 @@ import scottDesertWalkingImg from "@/assets/scott-desert-walking.jpg";
 import scottBwWalkingImg from "@/assets/scott-bw-walking.jpg";
 import cardsShuffleGreenImg from "@/assets/event-cards-shuffle-green.jpg";
 import cardFloatBwImg from "@/assets/event-card-float-bw.jpg";
+import heroWhiteRabbitEveningImg from "@/assets/hero-white-rabbit-evening.jpg";
+
+const articleHeroImages: Record<string, string> = {
+  "what-happens-when-you-hire-white-rabbit-la": heroWhiteRabbitEveningImg,
+};
 
 const categoryImages: Record<string, string> = {
   "For Planners": corporateImg,
