@@ -32,8 +32,13 @@ import cardsShuffleGreenImg from "@/assets/event-cards-shuffle-green.jpg";
 import cardFloatBwImg from "@/assets/event-card-float-bw.jpg";
 import heroWhiteRabbitEveningImg from "@/assets/hero-white-rabbit-evening.jpg";
 
-const articleHeroImages: Record<string, string> = {
-  "what-happens-when-you-hire-white-rabbit-la": heroWhiteRabbitEveningImg,
+// Per-article inline images: slug → { afterIndex, src, alt }
+const articleInlineImages: Record<string, { afterIndex: number; src: string; alt: string }> = {
+  "what-happens-when-you-hire-white-rabbit-la": {
+    afterIndex: 11, // after the last "Setup" paragraph
+    src: heroWhiteRabbitEveningImg,
+    alt: "White Rabbit LA event setup with emerald drapes and cinematic lighting",
+  },
 };
 
 const categoryImages: Record<string, string> = {
