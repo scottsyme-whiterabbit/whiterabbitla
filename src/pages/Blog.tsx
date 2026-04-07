@@ -86,7 +86,7 @@ const Blog = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Services</SelectItem>
-                {seoCategories.map((cat) => (
+                {[...seoCategories].sort((a, b) => a.localeCompare(b)).map((cat) => (
                   <SelectItem key={cat} value={cat}>{cat}</SelectItem>
                 ))}
               </SelectContent>
@@ -97,7 +97,7 @@ const Blog = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Locations</SelectItem>
-                {seoLocations.map((loc) => (
+                {[...seoLocations].sort((a, b) => a.localeCompare(b)).map((loc) => (
                   <SelectItem key={loc} value={loc}>{loc}</SelectItem>
                 ))}
               </SelectContent>
