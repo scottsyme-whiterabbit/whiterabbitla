@@ -1,21 +1,36 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
 import QuizCTA from "@/components/QuizCTA";
 import { seoPages, seoCategories, seoLocations } from "@/data/seoPages";
 import { blogArticles } from "@/data/blogArticles";
 import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema } from "@/hooks/useSchemaOrg";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const formatDate = (dateStr: string) => {
+  const d = new Date(dateStr + "T00:00:00");
+  return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+};
 
 const Blog = () => {
   const seoTitle = "Insights & Guides | White Rabbit Magic — Los Angeles";
   const seoDescription = "Explore guides on luxury magic entertainment, from corporate galas to intimate private celebrations across Southern California and beyond.";
   useWebPageSchema({ name: "Insights & Guides", description: "Explore guides on luxury magic entertainment, from corporate galas to intimate private celebrations.", path: "/blog", type: "CollectionPage" });
+
   const [activeArticleCategory, setActiveArticleCategory] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [activeLocation, setActiveLocation] = useState<string | null>(null);
 
-  // Editor's picks — handpicked top-performing articles
+  const articleGridRef = useRef<HTMLDivElement>(null);
+  const cityGuidesRef = useRef<HTMLDivElement>(null);
+
   const editorPickSlugs = [
     "why-cocktail-hour-entertainment-matters",
     "entertainment-gap-planners-dont-know",
@@ -32,9 +47,20 @@ const Blog = () => {
     return true;
   });
 
+  const handleServiceFilter = (value: string) => {
+    setActiveCategory(value === "all" ? null : value);
+    setTimeout(() => cityGuidesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
+  };
+
+  const handleLocationFilter = (value: string) => {
+    setActiveLocation(value === "all" ? null : value);
+    setTimeout(() => cityGuidesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 100);
+  };
+
   return (
     <main id="main-content" className="pt-20">
       <SEOHead title={seoTitle} description={seoDescription} canonical="/blog" />
+
       {/* Hero */}
       <section className="bg-forest-dark py-24">
         <div className="max-w-4xl mx-auto px-6 text-center">
@@ -50,64 +76,32 @@ const Blog = () => {
         </div>
       </section>
 
-      {/* Filters */}
-      <section className="py-12 border-b border-border">
+      {/* Compact Filter Bar */}
+      <section className="py-6 border-b border-border bg-card">
         <div className="max-w-5xl mx-auto px-6">
-          <div className="mb-6">
-            <p className="font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">By Service</p>
-            <div className="flex flex-wrap gap-2">
-              <button
-                onClick={() => setActiveCategory(null)}
-                className={`font-sans text-xs tracking-[0.15em] uppercase px-4 py-2 border transition-colors ${
-                  !activeCategory
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "border-border text-muted-foreground hover:text-foreground hover:border-foreground"
-                }`}
-              >
-                All
-              </button>
-              {seoCategories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
-                  className={`font-sans text-xs tracking-[0.15em] uppercase px-4 py-2 border transition-colors ${
-                    activeCategory === cat
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "border-border text-muted-foreground hover:text-foreground hover:border-foreground"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div>
-            <p className="font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">By Location</p>
-            <div className="flex flex-wrap gap-2">
-              <button
-                onClick={() => setActiveLocation(null)}
-                className={`font-sans text-xs tracking-[0.15em] uppercase px-4 py-2 border transition-colors ${
-                  !activeLocation
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "border-border text-muted-foreground hover:text-foreground hover:border-foreground"
-                }`}
-              >
-                All
-              </button>
-              {seoLocations.map((loc) => (
-                <button
-                  key={loc}
-                  onClick={() => setActiveLocation(activeLocation === loc ? null : loc)}
-                  className={`font-sans text-xs tracking-[0.15em] uppercase px-4 py-2 border transition-colors ${
-                    activeLocation === loc
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "border-border text-muted-foreground hover:text-foreground hover:border-foreground"
-                  }`}
-                >
-                  {loc}
-                </button>
-              ))}
-            </div>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Select value={activeCategory || "all"} onValueChange={handleServiceFilter}>
+              <SelectTrigger className="w-full sm:w-56 bg-background border-border text-sm">
+                <SelectValue placeholder="All Services" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Services</SelectItem>
+                {seoCategories.map((cat) => (
+                  <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={activeLocation || "all"} onValueChange={handleLocationFilter}>
+              <SelectTrigger className="w-full sm:w-56 bg-background border-border text-sm">
+                <SelectValue placeholder="All Locations" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Locations</SelectItem>
+                {seoLocations.map((loc) => (
+                  <SelectItem key={loc} value={loc}>{loc}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </section>
@@ -126,9 +120,12 @@ const Blog = () => {
                   <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3">
                     {article.category} · {article.readTime}
                   </p>
-                  <h3 className="font-serif text-xl text-foreground mb-3 group-hover:text-accent transition-colors">
+                  <h3 className="font-serif text-xl text-foreground mb-2 group-hover:text-accent transition-colors">
                     {article.title}
                   </h3>
+                  <p className="font-sans text-xs text-muted-foreground mb-3">
+                    {formatDate(article.publishDate)}
+                  </p>
                   <p className="font-sans text-sm text-muted-foreground leading-relaxed line-clamp-3">
                     {article.excerpt}
                   </p>
@@ -140,14 +137,14 @@ const Blog = () => {
       </section>
 
       {/* All Articles */}
-      <section className="py-16 border-b border-border">
+      <section className="py-16 border-b border-border" ref={articleGridRef}>
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">All Articles</p>
             <h2 className="font-serif text-3xl text-foreground mb-6">Insights on Luxury Entertainment</h2>
           </AnimatedSection>
           <div className="flex flex-wrap gap-2 mb-8">
-            {[null, "For Planners", "For DMCs", "For Production Companies", "Resident Events", "Luxury Nightlife", "Event Planning", "Corporate", "Private Events", "Weddings", "Magic Destinations"].map((cat) => {
+            {[null, "For Planners", "For DMCs", "For Production Companies", "Resident Events", "Luxury Nightlife", "Event Planning", "Corporate", "Private Events", "Weddings", "Magic Destinations", "The Experience"].map((cat) => {
               const hasArticles = cat === null || blogArticles.some(a => a.category === cat);
               if (!hasArticles) return null;
               return (
@@ -174,9 +171,12 @@ const Blog = () => {
                   <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3">
                     {article.category} · {article.readTime}
                   </p>
-                  <h3 className="font-serif text-xl text-foreground mb-3 group-hover:text-accent transition-colors">
+                  <h3 className="font-serif text-xl text-foreground mb-2 group-hover:text-accent transition-colors">
                     {article.title}
                   </h3>
+                  <p className="font-sans text-xs text-muted-foreground mb-3">
+                    {formatDate(article.publishDate)}
+                  </p>
                   <p className="font-sans text-sm text-muted-foreground leading-relaxed line-clamp-3">
                     {article.excerpt}
                   </p>
@@ -187,8 +187,8 @@ const Blog = () => {
         </div>
       </section>
 
-      {/* Pages Grid */}
-      <section className="py-20">
+      {/* City Guides */}
+      <section className="py-20" ref={cityGuidesRef}>
         <div className="max-w-5xl mx-auto px-6">
           <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">City Guides</p>
           <p className="font-sans text-sm text-muted-foreground mb-8">
@@ -223,10 +223,8 @@ const Blog = () => {
         </div>
       </section>
 
-      {/* Quiz CTA */}
       <QuizCTA title="Curious If Magic Is the Right Fit?" />
 
-      {/* CTA */}
       <AnimatedSection>
         <section className="bg-forest-dark py-24 text-center">
           <div className="max-w-2xl mx-auto px-6">
