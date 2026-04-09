@@ -295,12 +295,20 @@ serve(async (req) => {
           };
         };
 
-        // Cold campaign stats from cold_email_campaigns table
-        const { data: coldData } = await supabase
-          .from("cold_email_campaigns")
-          .select("campaign_category, status")
-          .range(0, 9999);
-        const coldContacts = coldData || [];
+        // Cold campaign stats from cold_email_campaigns table (paginated)
+        let allColdData: { campaign_category: string; status: string }[] = [];
+        page = 0;
+        while (true) {
+          const { data: batch } = await supabase
+            .from("cold_email_campaigns")
+            .select("campaign_category, status")
+            .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
+          if (!batch || batch.length === 0) break;
+          allColdData = allColdData.concat(batch);
+          if (batch.length < PAGE_SIZE) break;
+          page++;
+        }
+        const coldContacts = allColdData;
 
         const buildColdStats = (category: string) => {
           const cc = coldContacts.filter((c: { campaign_category: string }) => c.campaign_category === category);
