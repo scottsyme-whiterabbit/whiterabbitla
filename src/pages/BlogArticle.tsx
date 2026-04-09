@@ -142,9 +142,13 @@ const BlogArticle = () => {
   const seoTitle = article?.metaTitle || "White Rabbit LA | Blog";
   const seoDescription = article?.metaDescription || "";
   const seoPath = slug ? `/blog/${slug}` : "/blog";
-  const seoImage = article ? (categoryImages[article.category] || experienceImg) : undefined;
+  const articleHeroImg = slug ? articleHeroImages[slug] : undefined;
+  const seoImage = articleHeroImg || (article ? (categoryImages[article.category] || experienceImg) : undefined);
 
   const BASE_URL = "https://whiterabbitla.com";
+  const articleSchemaImages: Record<string, string> = {
+    "best-magic-venues-america": `${BASE_URL}/og/best-magic-venues-america.png`,
+  };
   const schemaCategoryImages: Record<string, string> = {
     "For Planners": `${BASE_URL}/og/corporate.jpg`,
     "Magic Destinations": `${BASE_URL}/og/magic-destinations.jpg`,
@@ -153,7 +157,7 @@ const BlogArticle = () => {
     "Behind the Craft": `${BASE_URL}/og/behind-the-craft.jpg`,
     "Resident Events": `${BASE_URL}/og/corporate.jpg`,
   };
-  const schemaImage = article ? (schemaCategoryImages[article.category] || `${BASE_URL}/og/experience.jpg`) : undefined;
+  const schemaImage = article ? (articleSchemaImages[article.slug] || schemaCategoryImages[article.category] || `${BASE_URL}/og/experience.jpg`) : undefined;
   useArticleSchema(article ? { ...article, image: schemaImage } : { title: "", metaDescription: "", slug: "", publishDate: "", category: "", content: [], image: undefined });
 
   // Extract FAQ pairs from content: lines starting with <strong>question?</strong> answer
