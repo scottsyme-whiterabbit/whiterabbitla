@@ -60,6 +60,11 @@ const articleInlineImages: Record<string, { afterIndex: number; src: string; alt
   ],
 };
 
+// Per-article hero images: slug → imported image
+const articleHeroImages: Record<string, string> = {
+  "best-magic-venues-america": venueHandAndEyeImg,
+};
+
 const categoryImages: Record<string, string> = {
   "For Planners": corporateImg,
   "Magic Destinations": parlorImg,
