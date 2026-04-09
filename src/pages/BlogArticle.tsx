@@ -55,7 +55,8 @@ const articleInlineImages: Record<string, { afterIndex: number; src: string; alt
     { afterIndex: 2, src: venueChicagoMagicLoungeImg, alt: "The Chicago Magic Lounge signature showroom with velvet seating and red curtain stage", caption: "Chicago Magic Lounge · Chicago, IL" },
     { afterIndex: 4, src: venueHandAndEyeImg, alt: "The Hand and The Eye venue rendering, a new immersive magic destination in Chicago", caption: "The Hand and The Eye · Chicago, IL (Coming Soon)" },
     { afterIndex: 6, src: venueMagicHideawayImg, alt: "Bill Abbott performing close-up magic at The Magic Hideaway inside Casa Monica resort", caption: "The Magic Hideaway · St. Augustine, FL" },
-    { afterIndex: 11, src: venueAlexRamonImg, alt: "Alex Ramon, magician and performer based in Lake Tahoe", caption: "Alex Ramon · Lake Tahoe, CA" },
+    { afterIndex: 9, src: venueJayAlexanderImg, alt: "Jay Alexander performing close-up magic for guests at the San Francisco Magic Theater", caption: "Jay Alexander · San Francisco Magic Theater" },
+    { afterIndex: 12, src: venueAlexRamonImg, alt: "Alex Ramon, magician and performer based in Lake Tahoe", caption: "Alex Ramon · Lake Tahoe, CA" },
   ],
 };
 
