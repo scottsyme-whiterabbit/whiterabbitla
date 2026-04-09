@@ -31,14 +31,31 @@ import scottBwWalkingImg from "@/assets/scott-bw-walking.jpg";
 import cardsShuffleGreenImg from "@/assets/event-cards-shuffle-green.jpg";
 import cardFloatBwImg from "@/assets/event-card-float-bw.jpg";
 import heroWhiteRabbitEveningImg from "@/assets/hero-white-rabbit-evening.jpg";
+import venueChicagoMagicLoungeImg from "@/assets/venue-chicago-magic-lounge.webp";
+import venueMagicCastleHallwayImg from "@/assets/venue-magic-castle-hallway.webp";
+import venueMagicCastleExteriorImg from "@/assets/venue-magic-castle-exterior.webp";
+import venueHandAndEyeImg from "@/assets/venue-hand-and-eye.png";
+import venueMagicHideawayImg from "@/assets/venue-magic-hideaway.jpg";
+import venueAlexRamonImg from "@/assets/venue-alex-ramon.webp";
 
-// Per-article inline images: slug → { afterIndex, src, alt }
-const articleInlineImages: Record<string, { afterIndex: number; src: string; alt: string }> = {
-  "what-happens-when-you-hire-white-rabbit-la": {
-    afterIndex: 11, // after the last "Setup" paragraph
-    src: heroWhiteRabbitEveningImg,
-    alt: "White Rabbit LA event setup with emerald drapes and cinematic lighting",
-  },
+// Per-article inline images: slug → array of { afterIndex, src, alt, caption }
+const articleInlineImages: Record<string, { afterIndex: number; src: string; alt: string; caption?: string }[]> = {
+  "what-happens-when-you-hire-white-rabbit-la": [
+    {
+      afterIndex: 11,
+      src: heroWhiteRabbitEveningImg,
+      alt: "White Rabbit LA event setup with emerald drapes and cinematic lighting",
+      caption: "White Rabbit · Event Setup",
+    },
+  ],
+  "best-magic-venues-america": [
+    { afterIndex: 1, src: venueMagicCastleExteriorImg, alt: "The Magic Castle exterior on Franklin Avenue in Hollywood, California", caption: "The Magic Castle® · Hollywood, CA" },
+    { afterIndex: 2, src: venueMagicCastleHallwayImg, alt: "The Magic Castle hallway lined with portraits and memorabilia of legendary magicians", caption: "The Magic Castle® · Inside the Hall of Fame" },
+    { afterIndex: 2, src: venueChicagoMagicLoungeImg, alt: "The Chicago Magic Lounge signature showroom with velvet seating and red curtain stage", caption: "Chicago Magic Lounge · Chicago, IL" },
+    { afterIndex: 4, src: venueHandAndEyeImg, alt: "The Hand and The Eye venue rendering, a new immersive magic destination in Chicago", caption: "The Hand and The Eye · Chicago, IL (Coming Soon)" },
+    { afterIndex: 6, src: venueMagicHideawayImg, alt: "Bill Abbott performing close-up magic at The Magic Hideaway inside Casa Monica resort", caption: "The Magic Hideaway · St. Augustine, FL" },
+    { afterIndex: 11, src: venueAlexRamonImg, alt: "Alex Ramon, magician and performer based in Lake Tahoe", caption: "Alex Ramon · Lake Tahoe, CA" },
+  ],
 };
 
 const categoryImages: Record<string, string> = {
@@ -344,26 +361,28 @@ const BlogArticle = () => {
                 </AnimatedSection>
               );
 
-              // Per-article inline image injection
-              {const artImg = slug ? articleInlineImages[slug] : undefined;
-              if (artImg && i === artImg.afterIndex) {
-                elements.push(
-                  <AnimatedSection key="article-inline-img">
-                    <figure className="my-10 md:my-14 -mx-4 md:-mx-8">
-                      <img
-                        src={artImg.src}
-                        alt={artImg.alt}
-                        width={800}
-                        height={1067}
-                        loading="lazy"
-                        className="w-full h-auto"
-                      />
-                      <figcaption className="font-sans text-[11px] text-muted-foreground/50 tracking-wider mt-3 text-center uppercase">
-                        White Rabbit · Event Setup
-                      </figcaption>
-                    </figure>
-                  </AnimatedSection>
-                );
+              // Per-article inline image injection (supports multiple images)
+              {const artImages = slug ? articleInlineImages[slug] : undefined;
+              if (artImages) {
+                artImages.filter(img => img.afterIndex === i).forEach((artImg, idx) => {
+                  elements.push(
+                    <AnimatedSection key={`article-inline-img-${i}-${idx}`}>
+                      <figure className="my-10 md:my-14 -mx-4 md:-mx-8">
+                        <img
+                          src={artImg.src}
+                          alt={artImg.alt}
+                          width={800}
+                          height={533}
+                          loading="lazy"
+                          className="w-full h-auto"
+                        />
+                        <figcaption className="font-sans text-[11px] text-muted-foreground/50 tracking-wider mt-3 text-center uppercase">
+                          {artImg.caption || "White Rabbit · Event Setup"}
+                        </figcaption>
+                      </figure>
+                    </AnimatedSection>
+                  );
+                });
               }}
 
               return elements;
