@@ -266,6 +266,14 @@ const BlogArticle = () => {
         </div>
       </section>
 
+      {/* Article Hero Image */}
+      {articleHeroImg && (
+        <section className="bg-background">
+          <div className="max-w-4xl mx-auto">
+            <img src={articleHeroImg} alt={article.title} className="w-full h-auto" loading="eager" />
+          </div>
+        </section>
+      )}
 
       {/* Quiz Nudge — above the fold */}
       <QuizNudge />
