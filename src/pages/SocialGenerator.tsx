@@ -162,6 +162,8 @@ const SocialGenerator = () => {
   const [contentSource, setContentSource] = useState<ContentSource>("custom");
   const [selectedSlug, setSelectedSlug] = useState("");
   const [selectedPhoto, setSelectedPhoto] = useState<number>(0);
+  const [customPhotos, setCustomPhotos] = useState<{ src: string; label: string }[]>([]);
+  const uploadInputRef = useRef<HTMLInputElement>(null);
   const [headline, setHeadline] = useState("EVER WONDER HOW\nEVENTS BECOME\nLEGENDARY?");
   const [subheadline, setSubheadline] = useState("DISCOVER CINEMATIC WONDER.");
   const [ctaText, setCtaText] = useState("BOOK LEGENDARY MAGIC");
