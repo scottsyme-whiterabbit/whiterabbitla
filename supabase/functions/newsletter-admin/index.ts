@@ -247,22 +247,41 @@ serve(async (req) => {
       }
 
       case "get_stats": {
-        const { data: contactData } = await supabase
-          .from("newsletter_contacts")
-          .select("drip_campaign, subscribed, engagement_status")
-          .range(0, 9999);
+        // Fetch all newsletter_contacts with pagination to bypass 1000-row default
+        let allContacts: { drip_campaign: string; subscribed: boolean; engagement_status: string }[] = [];
+        let page = 0;
+        const PAGE_SIZE = 1000;
+        while (true) {
+          const { data: batch } = await supabase
+            .from("newsletter_contacts")
+            .select("drip_campaign, subscribed, engagement_status")
+            .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
+          if (!batch || batch.length === 0) break;
+          allContacts = allContacts.concat(batch);
+          if (batch.length < PAGE_SIZE) break;
+          page++;
+        }
 
         const { count: campaignCount } = await supabase
           .from("newsletter_campaigns")
           .select("*", { count: "exact", head: true });
 
-        const { data: sendData } = await supabase
-          .from("newsletter_send_log")
-          .select("campaign_id")
-          .range(0, 9999);
+        // Fetch all send_log with pagination
+        let allSends: { campaign_id: string }[] = [];
+        page = 0;
+        while (true) {
+          const { data: batch } = await supabase
+            .from("newsletter_send_log")
+            .select("campaign_id")
+            .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
+          if (!batch || batch.length === 0) break;
+          allSends = allSends.concat(batch);
+          if (batch.length < PAGE_SIZE) break;
+          page++;
+        }
 
-        const contacts = contactData || [];
-        const sends = sendData || [];
+        const contacts = allContacts;
+        const sends = allSends;
 
         const buildCampaignStats = (prefix: string) => {
           const cc = contacts.filter((c: { drip_campaign: string }) => c.drip_campaign.startsWith(prefix));
