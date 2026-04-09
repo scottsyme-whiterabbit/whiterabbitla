@@ -249,7 +249,8 @@ serve(async (req) => {
       case "get_stats": {
         const { data: contactData } = await supabase
           .from("newsletter_contacts")
-          .select("drip_campaign, subscribed, engagement_status");
+          .select("drip_campaign, subscribed, engagement_status")
+          .range(0, 9999);
 
         const { count: campaignCount } = await supabase
           .from("newsletter_campaigns")
@@ -277,7 +278,8 @@ serve(async (req) => {
         // Cold campaign stats from cold_email_campaigns table
         const { data: coldData } = await supabase
           .from("cold_email_campaigns")
-          .select("campaign_category, status");
+          .select("campaign_category, status")
+          .range(0, 9999);
         const coldContacts = coldData || [];
 
         const buildColdStats = (category: string) => {
@@ -291,14 +293,27 @@ serve(async (req) => {
           };
         };
 
-        // Spirits: count from newsletter_contacts instead of cold_email_campaigns
-        const { count: spiritsCount } = await supabase
-          .from("newsletter_contacts")
-          .select("*", { count: "exact", head: true })
-          .eq("drip_campaign", "cold_spirits");
+        // Orphan lead table counts
+        const [
+          { count: consultationCount },
+          { count: quizCount },
+          { count: magnetCount },
+        ] = await Promise.all([
+          supabase.from("consultation_leads").select("*", { count: "exact", head: true }),
+          supabase.from("discovery_quiz_leads").select("*", { count: "exact", head: true }),
+          supabase.from("lead_magnet_signups").select("*", { count: "exact", head: true }),
+        ]);
+
+        const totalNewsletterContacts = contacts.length;
+        const totalSendable = contacts.filter(
+          (c: { subscribed: boolean; engagement_status: string }) =>
+            c.subscribed && c.engagement_status !== "bounced"
+        ).length;
 
         return new Response(JSON.stringify({
           subscribers: contacts.filter((c: { subscribed: boolean }) => c.subscribed).length,
+          totalNewsletterContacts,
+          totalSendable,
           campaigns: campaignCount || 0,
           emailsSent: sends.length,
           planner: buildCampaignStats("planner"),
@@ -309,7 +324,13 @@ serve(async (req) => {
           cold_pr: buildColdStats("pr_agency"),
           cold_nonprofit: buildColdStats("nonprofit"),
           cold_talent: buildColdStats("talent_management"),
-          cold_spirits: { total: spiritsCount || 0, active: spiritsCount || 0, paused: 0, replied: 0, completed: 0 },
+          cold_spirits: buildColdStats("spirits"),
+          cold_restaurant: buildColdStats("restaurant"),
+          orphan_leads: {
+            consultation_leads: consultationCount || 0,
+            discovery_quiz_leads: quizCount || 0,
+            lead_magnet_signups: magnetCount || 0,
+          },
         }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
