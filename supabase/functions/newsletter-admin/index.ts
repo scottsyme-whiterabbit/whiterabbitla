@@ -258,7 +258,8 @@ serve(async (req) => {
 
         const { data: sendData } = await supabase
           .from("newsletter_send_log")
-          .select("campaign_id");
+          .select("campaign_id")
+          .range(0, 9999);
 
         const contacts = contactData || [];
         const sends = sendData || [];
