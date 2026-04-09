@@ -37,6 +37,7 @@ import venueMagicCastleExteriorImg from "@/assets/venue-magic-castle-exterior.we
 import venueHandAndEyeImg from "@/assets/venue-hand-and-eye.png";
 import venueMagicHideawayImg from "@/assets/venue-magic-hideaway.jpg";
 import venueAlexRamonImg from "@/assets/venue-alex-ramon.webp";
+import venueJayAlexanderImg from "@/assets/venue-jay-alexander.webp";
 
 // Per-article inline images: slug → array of { afterIndex, src, alt, caption }
 const articleInlineImages: Record<string, { afterIndex: number; src: string; alt: string; caption?: string }[]> = {
