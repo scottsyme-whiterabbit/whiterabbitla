@@ -247,20 +247,41 @@ serve(async (req) => {
       }
 
       case "get_stats": {
-        const { data: contactData } = await supabase
-          .from("newsletter_contacts")
-          .select("drip_campaign, subscribed, engagement_status");
+        // Fetch all newsletter_contacts with pagination to bypass 1000-row default
+        let allContacts: { drip_campaign: string; subscribed: boolean; engagement_status: string }[] = [];
+        let page = 0;
+        const PAGE_SIZE = 1000;
+        while (true) {
+          const { data: batch } = await supabase
+            .from("newsletter_contacts")
+            .select("drip_campaign, subscribed, engagement_status")
+            .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
+          if (!batch || batch.length === 0) break;
+          allContacts = allContacts.concat(batch);
+          if (batch.length < PAGE_SIZE) break;
+          page++;
+        }
 
         const { count: campaignCount } = await supabase
           .from("newsletter_campaigns")
           .select("*", { count: "exact", head: true });
 
-        const { data: sendData } = await supabase
-          .from("newsletter_send_log")
-          .select("campaign_id");
+        // Fetch all send_log with pagination
+        let allSends: { campaign_id: string }[] = [];
+        page = 0;
+        while (true) {
+          const { data: batch } = await supabase
+            .from("newsletter_send_log")
+            .select("campaign_id")
+            .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
+          if (!batch || batch.length === 0) break;
+          allSends = allSends.concat(batch);
+          if (batch.length < PAGE_SIZE) break;
+          page++;
+        }
 
-        const contacts = contactData || [];
-        const sends = sendData || [];
+        const contacts = allContacts;
+        const sends = allSends;
 
         const buildCampaignStats = (prefix: string) => {
           const cc = contacts.filter((c: { drip_campaign: string }) => c.drip_campaign.startsWith(prefix));
@@ -274,11 +295,20 @@ serve(async (req) => {
           };
         };
 
-        // Cold campaign stats from cold_email_campaigns table
-        const { data: coldData } = await supabase
-          .from("cold_email_campaigns")
-          .select("campaign_category, status");
-        const coldContacts = coldData || [];
+        // Cold campaign stats from cold_email_campaigns table (paginated)
+        let allColdData: { campaign_category: string; status: string }[] = [];
+        page = 0;
+        while (true) {
+          const { data: batch } = await supabase
+            .from("cold_email_campaigns")
+            .select("campaign_category, status")
+            .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
+          if (!batch || batch.length === 0) break;
+          allColdData = allColdData.concat(batch);
+          if (batch.length < PAGE_SIZE) break;
+          page++;
+        }
+        const coldContacts = allColdData;
 
         const buildColdStats = (category: string) => {
           const cc = coldContacts.filter((c: { campaign_category: string }) => c.campaign_category === category);
@@ -291,14 +321,27 @@ serve(async (req) => {
           };
         };
 
-        // Spirits: count from newsletter_contacts instead of cold_email_campaigns
-        const { count: spiritsCount } = await supabase
-          .from("newsletter_contacts")
-          .select("*", { count: "exact", head: true })
-          .eq("drip_campaign", "cold_spirits");
+        // Orphan lead table counts
+        const [
+          { count: consultationCount },
+          { count: quizCount },
+          { count: magnetCount },
+        ] = await Promise.all([
+          supabase.from("consultation_leads").select("*", { count: "exact", head: true }),
+          supabase.from("discovery_quiz_leads").select("*", { count: "exact", head: true }),
+          supabase.from("lead_magnet_signups").select("*", { count: "exact", head: true }),
+        ]);
+
+        const totalNewsletterContacts = contacts.length;
+        const totalSendable = contacts.filter(
+          (c: { subscribed: boolean; engagement_status: string }) =>
+            c.subscribed && c.engagement_status !== "bounced"
+        ).length;
 
         return new Response(JSON.stringify({
           subscribers: contacts.filter((c: { subscribed: boolean }) => c.subscribed).length,
+          totalNewsletterContacts,
+          totalSendable,
           campaigns: campaignCount || 0,
           emailsSent: sends.length,
           planner: buildCampaignStats("planner"),
@@ -309,7 +352,13 @@ serve(async (req) => {
           cold_pr: buildColdStats("pr_agency"),
           cold_nonprofit: buildColdStats("nonprofit"),
           cold_talent: buildColdStats("talent_management"),
-          cold_spirits: { total: spiritsCount || 0, active: spiritsCount || 0, paused: 0, replied: 0, completed: 0 },
+          cold_spirits: buildColdStats("spirits"),
+          cold_restaurant: buildColdStats("restaurant"),
+          orphan_leads: {
+            consultation_leads: consultationCount || 0,
+            discovery_quiz_leads: quizCount || 0,
+            lead_magnet_signups: magnetCount || 0,
+          },
         }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
