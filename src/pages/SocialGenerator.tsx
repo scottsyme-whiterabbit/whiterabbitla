@@ -441,8 +441,9 @@ const SocialGenerator = () => {
     toast({ title: "Caption copied" });
   };
 
-  const dim = formatDimensions[selectedFormat];
-  const photo = brandPhotos[selectedPhoto];
+  const allPhotos = [...brandPhotos, ...customPhotos];
+  const photo = allPhotos[selectedPhoto] || brandPhotos[0];
+
 
   // Brand colors
   const forestDark = "#223D34";
@@ -826,7 +827,39 @@ const SocialGenerator = () => {
               <div>
                 <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Background Photo</label>
                 <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 max-h-[300px] overflow-y-auto pr-1">
-                  {brandPhotos.map((p, i) => (
+                  {/* Upload button */}
+                  <button
+                    onClick={() => uploadInputRef.current?.click()}
+                    className="aspect-square overflow-hidden border-2 border-dashed border-muted-foreground/30 hover:border-accent/60 transition-all flex flex-col items-center justify-center gap-1 text-muted-foreground/50 hover:text-accent"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
+                    <span className="text-[9px] tracking-wider uppercase">Upload</span>
+                  </button>
+                  <input
+                    ref={uploadInputRef}
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => {
+                      const files = e.target.files;
+                      if (!files) return;
+                      Array.from(files).forEach((file) => {
+                        const reader = new FileReader();
+                        reader.onload = (ev) => {
+                          const dataUrl = ev.target?.result as string;
+                          setCustomPhotos((prev) => {
+                            const next = [...prev, { src: dataUrl, label: file.name.replace(/\.[^.]+$/, "") }];
+                            setSelectedPhoto(brandPhotos.length + next.length - 1);
+                            return next;
+                          });
+                        };
+                        reader.readAsDataURL(file);
+                      });
+                      e.target.value = "";
+                    }}
+                  />
+                  {allPhotos.map((p, i) => (
                     <button
                       key={i}
                       onClick={() => setSelectedPhoto(i)}
