@@ -441,6 +441,7 @@ const SocialGenerator = () => {
     toast({ title: "Caption copied" });
   };
 
+  const dim = formatDimensions[selectedFormat];
   const allPhotos = [...brandPhotos, ...customPhotos];
   const photo = allPhotos[selectedPhoto] || brandPhotos[0];
 
