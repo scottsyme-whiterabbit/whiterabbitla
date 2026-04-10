@@ -151,7 +151,8 @@ const Index = () => {
             className="relative text-2xl md:text-4xl lg:text-5xl text-cream/90 tracking-wide font-bold font-serif drop-shadow-lg max-w-4xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}>
+            transition={{ duration: 1, delay: 0.5 }}
+            style={{ textShadow: "0 0 60px hsl(var(--accent) / 0.35), 0 0 120px hsl(var(--accent) / 0.15)" }}>
             Experience Magic<br />
             <span className="block mt-2 md:mt-3">That Makes You Feel Truly Alive</span>
           </motion.h1>
