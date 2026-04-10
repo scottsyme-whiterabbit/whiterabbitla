@@ -272,8 +272,9 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Thin gold rule */}
-      <div className="max-w-xs mx-auto border-t border-accent/20" />
+      <div className="flex justify-center py-2">
+        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-9 w-auto opacity-50" />
+      </div>
 
       {/* What Clients Are Saying — Testimonial Carousel */}
       <AnimatedSection>
@@ -287,8 +288,9 @@ const Index = () => {
       {/* Discovery Quiz CTA */}
       <QuizCTA title="Wondering If Magic Is Right for Your Event?" />
 
-      {/* Thin gold rule */}
-      <div className="max-w-xs mx-auto border-t border-accent/20" />
+      <div className="flex justify-center py-2">
+        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-9 w-auto opacity-50" />
+      </div>
 
       {/* Photo Gallery */}
       <section className="py-20">
@@ -341,8 +343,9 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Thin gold rule */}
-      <div className="max-w-xs mx-auto border-t border-accent/20" />
+      <div className="flex justify-center py-2">
+        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-9 w-auto opacity-50" />
+      </div>
 
       {/* Discover More */}
       <section className="py-28 lg:py-36">
