@@ -10,6 +10,7 @@ import QuizNudge from "@/components/QuizNudge";
 import FAQSection from "@/components/FAQSection";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
+import OrnamentalDivider from "@/components/OrnamentalDivider";
 
 import SEOHead from "@/components/SEOHead";
 import { useJsonLd } from "@/hooks/useSchemaOrg";
@@ -138,6 +139,8 @@ const Index = () => {
         <div className="absolute inset-0 bg-forest-dark">
           <img src={heroImage} alt="Scott Syme, White Rabbit luxury magician tossing cards in a cinematic desert landscape – private event entertainment in Los Angeles" width={1200} height={630} className="w-full h-full object-cover object-[center_40%] md:object-[center_55%]" fetchPriority="high" />
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/30 to-forest-dark/10 hidden md:block" />
+          {/* Ambient warm glow behind hero text */}
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[radial-gradient(ellipse_at_center,_hsl(var(--accent)/0.08)_0%,_transparent_70%)] pointer-events-none" />
         </div>
 
         {/* Text overlaid – single responsive block */}
@@ -269,16 +272,23 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Ornamental divider before testimonials */}
+      <OrnamentalDivider className="py-6" />
+
       {/* What Clients Are Saying — Testimonial Carousel */}
       <AnimatedSection>
-        <TestimonialCarousel />
+        <div className="relative">
+          {/* Ambient warm glow behind testimonials */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-[radial-gradient(ellipse_at_center,_hsl(var(--accent)/0.06)_0%,_transparent_70%)] pointer-events-none" />
+          <TestimonialCarousel />
+        </div>
       </AnimatedSection>
 
       {/* Discovery Quiz CTA */}
       <QuizCTA title="Wondering If Magic Is Right for Your Event?" />
 
-      {/* Thin gold rule */}
-      <div className="max-w-xs mx-auto border-t border-accent/20" />
+      {/* Ornamental divider */}
+      <OrnamentalDivider />
 
       {/* Photo Gallery */}
       <section className="py-20">
@@ -331,8 +341,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Thin gold rule */}
-      <div className="max-w-xs mx-auto border-t border-accent/20" />
+      {/* Ornamental divider */}
+      <OrnamentalDivider />
 
       {/* Discover More */}
       <section className="py-28 lg:py-36">
