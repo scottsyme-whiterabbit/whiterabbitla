@@ -272,8 +272,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Ornamental divider before testimonials */}
-      <OrnamentalDivider className="py-6" />
+      {/* Thin gold rule */}
+      <div className="max-w-xs mx-auto border-t border-accent/20" />
 
       {/* What Clients Are Saying — Testimonial Carousel */}
       <AnimatedSection>
@@ -287,8 +287,8 @@ const Index = () => {
       {/* Discovery Quiz CTA */}
       <QuizCTA title="Wondering If Magic Is Right for Your Event?" />
 
-      {/* Ornamental divider */}
-      <OrnamentalDivider />
+      {/* Thin gold rule */}
+      <div className="max-w-xs mx-auto border-t border-accent/20" />
 
       {/* Photo Gallery */}
       <section className="py-20">
@@ -341,8 +341,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Ornamental divider */}
-      <OrnamentalDivider />
+      {/* Thin gold rule */}
+      <div className="max-w-xs mx-auto border-t border-accent/20" />
 
       {/* Discover More */}
       <section className="py-28 lg:py-36">
@@ -353,9 +353,14 @@ const Index = () => {
           </AnimatedSection>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <AnimatedSection>
-              <Link to="/experience" className="group block relative aspect-[3/4] overflow-hidden">
+              <Link to="/experience" className="group block relative aspect-[3/4] overflow-hidden border border-accent/15 shadow-[0_0_20px_-5px_hsl(var(--accent)/0.1)]">
                 <img src={experienceHeroImg} alt="The White Rabbit experience" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
+                {/* Corner filigree */}
+                <div className="absolute top-3 left-3 w-5 h-5 border-t border-l border-accent/30" />
+                <div className="absolute top-3 right-3 w-5 h-5 border-t border-r border-accent/30" />
+                <div className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-accent/30" />
+                <div className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-accent/30" />
                 <div className="absolute bottom-0 left-0 right-0 p-8">
                   <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Experience</p>
                   <h3 className="font-serif text-2xl text-cream mb-3">See What Awaits</h3>
@@ -367,9 +372,13 @@ const Index = () => {
               </Link>
             </AnimatedSection>
             <AnimatedSection delay={0.1}>
-              <Link to="/about" className="group block relative aspect-[3/4] overflow-hidden">
+              <Link to="/about" className="group block relative aspect-[3/4] overflow-hidden border border-accent/15 shadow-[0_0_20px_-5px_hsl(var(--accent)/0.1)]">
                 <img src={scottDesertImg} alt="Scott Syme, magician and founder of White Rabbit" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
+                <div className="absolute top-3 left-3 w-5 h-5 border-t border-l border-accent/30" />
+                <div className="absolute top-3 right-3 w-5 h-5 border-t border-r border-accent/30" />
+                <div className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-accent/30" />
+                <div className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-accent/30" />
                 <div className="absolute bottom-0 left-0 right-0 p-8">
                   <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">About</p>
                   <h3 className="font-serif text-2xl text-cream mb-3">Meet Scott Syme</h3>
@@ -381,9 +390,13 @@ const Index = () => {
               </Link>
             </AnimatedSection>
             <AnimatedSection delay={0.2}>
-              <Link to="/blog" className="group block relative aspect-[3/4] overflow-hidden">
+              <Link to="/blog" className="group block relative aspect-[3/4] overflow-hidden border border-accent/15 shadow-[0_0_20px_-5px_hsl(var(--accent)/0.1)]">
                 <img src={cocktailImg} alt="Luxury event entertainment and magic" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
+                <div className="absolute top-3 left-3 w-5 h-5 border-t border-l border-accent/30" />
+                <div className="absolute top-3 right-3 w-5 h-5 border-t border-r border-accent/30" />
+                <div className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-accent/30" />
+                <div className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-accent/30" />
                 <div className="absolute bottom-0 left-0 right-0 p-8">
                   <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Blog</p>
                   <h3 className="font-serif text-2xl text-cream mb-3">Planning Your Event</h3>
