@@ -272,7 +272,7 @@ const Index = () => {
         </div>
       </section>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center pb-6">
         <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-14 w-auto opacity-50" />
       </div>
 
