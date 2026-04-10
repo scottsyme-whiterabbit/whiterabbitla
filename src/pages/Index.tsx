@@ -143,7 +143,14 @@ const Index = () => {
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[radial-gradient(ellipse_at_center,_hsl(var(--accent)/0.08)_0%,_transparent_70%)] pointer-events-none" />
         </div>
 
-        {/* Text overlaid – single responsive block */}
+        {/* Atmospheric wisps */}
+        <div className="absolute inset-0 z-[5] pointer-events-none overflow-hidden hero-wisps">
+          <div className="hero-wisp hero-wisp-1" />
+          <div className="hero-wisp hero-wisp-2" />
+          <div className="hero-wisp hero-wisp-3 hidden md:block" />
+          <div className="hero-wisp hero-wisp-4 hidden md:block" />
+        </div>
+
         {/* Text overlaid */}
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-32 md:pb-20 px-6 text-center">
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent md:from-forest-dark/70 md:via-forest-dark/30 md:to-forest-dark/10" />
