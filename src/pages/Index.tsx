@@ -272,8 +272,8 @@ const Index = () => {
         </div>
       </section>
 
-      <div className="flex justify-center py-2">
-        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-9 w-auto opacity-50" />
+      <div className="flex justify-center">
+        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-14 w-auto opacity-50" />
       </div>
 
       {/* What Clients Are Saying — Testimonial Carousel */}
@@ -288,8 +288,8 @@ const Index = () => {
       {/* Discovery Quiz CTA */}
       <QuizCTA title="Wondering If Magic Is Right for Your Event?" />
 
-      <div className="flex justify-center py-2">
-        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-9 w-auto opacity-50" />
+      <div className="flex justify-center">
+        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-14 w-auto opacity-50" />
       </div>
 
       {/* Photo Gallery */}
@@ -343,8 +343,8 @@ const Index = () => {
         </div>
       </section>
 
-      <div className="flex justify-center py-2">
-        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-9 w-auto opacity-50" />
+      <div className="flex justify-center">
+        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-14 w-auto opacity-50" />
       </div>
 
       {/* Discover More */}
