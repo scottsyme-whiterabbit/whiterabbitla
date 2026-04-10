@@ -259,7 +259,11 @@ const Index = () => {
           </AnimatedSection>
 
           <AnimatedSection delay={0.2}>
-            <div className="aspect-[4/5] overflow-hidden">
+            <div className="relative aspect-[4/5] overflow-hidden border border-accent/15">
+              <div className="absolute top-3 left-3 w-5 h-5 border-t border-l border-accent/30 z-10" />
+              <div className="absolute top-3 right-3 w-5 h-5 border-t border-r border-accent/30 z-10" />
+              <div className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-accent/30 z-10" />
+              <div className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-accent/30 z-10" />
               <img
                 src={eventCardsImg}
                 alt="Scott Syme performing close-up card magic at a luxury corporate event in Los Angeles"
@@ -297,47 +301,83 @@ const Index = () => {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-3 gap-4">
           <AnimatedSection>
-            <div className="aspect-[4/3] overflow-hidden">
+            <div className="relative aspect-[4/3] overflow-hidden border border-accent/15">
+              <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-accent/30 z-10" />
+              <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-accent/30 z-10" />
+              <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-accent/30 z-10" />
+              <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-accent/30 z-10" />
               <img src={cuMagicReactionImg} alt="Guest reacting with amazement to close-up card magic at White Rabbit event" width={400} height={300} loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
-            <div className="aspect-[4/3] overflow-hidden">
+            <div className="relative aspect-[4/3] overflow-hidden border border-accent/15">
+              <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-accent/30 z-10" />
+              <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-accent/30 z-10" />
+              <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-accent/30 z-10" />
+              <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-accent/30 z-10" />
               <img src={penthouseImg} alt="Scott Syme performing private magic show in a luxury Los Angeles penthouse" width={400} height={300} loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
-            <div className="aspect-[4/3] overflow-hidden">
+            <div className="relative aspect-[4/3] overflow-hidden border border-accent/15">
+              <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-accent/30 z-10" />
+              <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-accent/30 z-10" />
+              <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-accent/30 z-10" />
+              <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-accent/30 z-10" />
               <img src={cardsBlueImg} alt="Close-up interactive magic with dramatic blue lighting" width={400} height={300} loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
-            <div className="aspect-[4/3] overflow-hidden">
+            <div className="relative aspect-[4/3] overflow-hidden border border-accent/15">
+              <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-accent/30 z-10" />
+              <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-accent/30 z-10" />
+              <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-accent/30 z-10" />
+              <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-accent/30 z-10" />
               <img src={rubikShowImg} alt="Scott Syme performing Rubik's cube magic at a live White Rabbit show" width={400} height={300} loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
-            <div className="aspect-[4/3] overflow-hidden">
+            <div className="relative aspect-[4/3] overflow-hidden border border-accent/15">
+              <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-accent/30 z-10" />
+              <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-accent/30 z-10" />
+              <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-accent/30 z-10" />
+              <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-accent/30 z-10" />
               <img src={crowdReactionImg} alt="Audience reacting with excitement during a White Rabbit private magic show" width={400} height={300} loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.2}>
-            <div className="aspect-[4/3] overflow-hidden">
+            <div className="relative aspect-[4/3] overflow-hidden border border-accent/15">
+              <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-accent/30 z-10" />
+              <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-accent/30 z-10" />
+              <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-accent/30 z-10" />
+              <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-accent/30 z-10" />
               <img src={parlorShowImg} alt="Scott Syme private magic show with emerald curtains and uplighting" width={400} height={300} loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
-            <div className="aspect-[4/3] overflow-hidden">
+            <div className="relative aspect-[4/3] overflow-hidden border border-accent/15">
+              <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-accent/30 z-10" />
+              <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-accent/30 z-10" />
+              <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-accent/30 z-10" />
+              <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-accent/30 z-10" />
               <img src={scottCardsImg} alt="Scott Syme performing card magic at a private luxury event" width={400} height={300} loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.2}>
-            <div className="aspect-[4/3] overflow-hidden">
+            <div className="relative aspect-[4/3] overflow-hidden border border-accent/15">
+              <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-accent/30 z-10" />
+              <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-accent/30 z-10" />
+              <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-accent/30 z-10" />
+              <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-accent/30 z-10" />
               <img src={groupFinaleImg} alt="Group photo after a White Rabbit magic experience in Los Angeles" width={400} height={300} loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.25}>
-            <div className="aspect-[4/3] overflow-hidden">
+            <div className="relative aspect-[4/3] overflow-hidden border border-accent/15">
+              <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-accent/30 z-10" />
+              <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-accent/30 z-10" />
+              <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-accent/30 z-10" />
+              <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-accent/30 z-10" />
               <img src={restaurantMagicImg} alt="Scott Syme performing close-up magic at a luxury restaurant event" width={400} height={300} loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
