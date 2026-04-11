@@ -35,6 +35,14 @@ const DynamicCanonical = () => {
       ogUrl.setAttribute("content", url);
       document.head.appendChild(ogUrl);
     }
+
+    // Safety: remove any stale noindex robots tag.
+    // Pages that intentionally need noindex (NotFound, admin, etc.)
+    // will re-add it via their own SEOHead with noIndex={true}.
+    const robotsMeta = document.querySelector('meta[name="robots"]');
+    if (robotsMeta) {
+      robotsMeta.remove();
+    }
   }, [pathname]);
 
   return null;
