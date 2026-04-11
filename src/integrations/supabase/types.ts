@@ -17,12 +17,14 @@ export type Database = {
       cold_email_campaigns: {
         Row: {
           campaign_category: string
+          city: string | null
           company: string | null
           created_at: string
           current_step: number
           email: string
           id: string
           last_email_sent_at: string | null
+          linkedin_url: string | null
           name: string | null
           nurture_last_sent_at: string | null
           nurture_started_at: string | null
@@ -30,17 +32,21 @@ export type Database = {
           nurture_step: number
           phone: string | null
           started_at: string | null
+          state: string | null
           status: string
+          title: string | null
           updated_at: string
         }
         Insert: {
           campaign_category: string
+          city?: string | null
           company?: string | null
           created_at?: string
           current_step?: number
           email: string
           id?: string
           last_email_sent_at?: string | null
+          linkedin_url?: string | null
           name?: string | null
           nurture_last_sent_at?: string | null
           nurture_started_at?: string | null
@@ -48,17 +54,21 @@ export type Database = {
           nurture_step?: number
           phone?: string | null
           started_at?: string | null
+          state?: string | null
           status?: string
+          title?: string | null
           updated_at?: string
         }
         Update: {
           campaign_category?: string
+          city?: string | null
           company?: string | null
           created_at?: string
           current_step?: number
           email?: string
           id?: string
           last_email_sent_at?: string | null
+          linkedin_url?: string | null
           name?: string | null
           nurture_last_sent_at?: string | null
           nurture_started_at?: string | null
@@ -66,7 +76,9 @@ export type Database = {
           nurture_step?: number
           phone?: string | null
           started_at?: string | null
+          state?: string | null
           status?: string
+          title?: string | null
           updated_at?: string
         }
         Relationships: []
