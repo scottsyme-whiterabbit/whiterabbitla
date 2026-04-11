@@ -31,12 +31,29 @@ interface CityPageProps {
   areaTagline: string;
 }
 
+// Per-city SEO meta overrides for pages ranking on Google
+const cityMetaOverrides: Record<string, { title: string; description: string }> = {
+  "beverly-hills": {
+    title: "Beverly Hills Magician — Magic Castle Pro | White Rabbit LA",
+    description: "Hire White Rabbit LA for luxury close-up magic in Beverly Hills. Magic Castle member, trusted by Netflix, Disney & Morgan Stanley. Book your event today.",
+  },
+  "pasadena": {
+    title: "Pasadena Magician — Luxury Close-Up Magic | White Rabbit LA",
+    description: "Hire a luxury magician for your Pasadena wedding, corporate event, or private party. Magic Castle member trusted by Disney, Netflix, and Morgan Stanley.",
+  },
+  "denver": {
+    title: "Denver Magician — Magic Castle Pro for Luxury Events",
+    description: "Book White Rabbit LA for close-up magic at your Denver wedding, corporate event, or private celebration. Magic Castle member, 5-star Google rated.",
+  },
+};
+
 const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
   const { openQuiz } = useBookingQuiz();
   const { cityName, citySlug, state, stateFullName, region, venues, nearbyLinks, uniqueContent } = content;
 
-  const seoTitle = `${cityName} Magician for Hire | White Rabbit LA`;
-  const seoDescription = `Hire a world-class close-up magician for corporate events, weddings, and private parties in ${cityName}. Magic Castle member. 5-star rated on Google.`;
+  const metaOverride = cityMetaOverrides[citySlug];
+  const seoTitle = metaOverride?.title || `${cityName} Magician for Hire | White Rabbit LA`;
+  const seoDescription = metaOverride?.description || `Hire a world-class close-up magician for corporate events, weddings, and private parties in ${cityName}. Magic Castle member. 5-star rated on Google.`;
 
   // Dynamic dates for Event schema
   const now = new Date();

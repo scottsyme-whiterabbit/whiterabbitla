@@ -3057,11 +3057,32 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
   const overrideKey = `${slugify(location)}--${service.key}`;
   const cityContent = citySpecificOverrides[overrideKey];
 
+  // Per-page SEO meta overrides for pages ranking on Google
+  const metaOverrides: Record<string, { metaTitle: string; metaDescription: string }> = {
+    "napa-valley-resident-event-magician": {
+      metaTitle: "Napa Valley Resident Event Magician | White Rabbit LA",
+      metaDescription: "Bring close-up magic to your Napa Valley resident event, gathering, or private celebration. Magic Castle member with 10+ years performing for luxury hosts.",
+    },
+    "dallas-resident-event-magician": {
+      metaTitle: "Dallas Resident Event Magician | Magic Castle Pro",
+      metaDescription: "Hire a luxury close-up magician for your Dallas resident event. Scott Syme — Magic Castle member, trusted by Fortune 500 brands. Book today.",
+    },
+    "beverly-hills-premiere-red-carpet-magician": {
+      metaTitle: "Beverly Hills Premiere & Red Carpet Magician | White Rabbit",
+      metaDescription: "Book Scott Syme for your Beverly Hills film premiere or red carpet event. Magic Castle pro who has entertained Netflix, Disney, and CBS guests.",
+    },
+    "san-francisco-corporate-event-magician": {
+      metaTitle: "SF Corporate Event Magician — Trusted by Netflix & Disney",
+      metaDescription: "Hire a luxury corporate magician for your San Francisco event. Scott Syme is a Magic Castle pro with Fortune 500 client list including Netflix, Disney, Morgan Stanley.",
+    },
+  };
+  const metaOverride = metaOverrides[slug];
+
   return {
     slug,
     title: `${service.label} in ${location}`,
-    metaTitle: `${service.label} in ${location} | Hire White Rabbit Magic`,
-    metaDescription: `Hire the best ${service.label.toLowerCase()} in ${location}. White Rabbit delivers luxury magic entertainment trusted by Netflix, Disney & Morgan Stanley. Check availability now.`,
+    metaTitle: metaOverride?.metaTitle || `${service.label} in ${location} | Hire White Rabbit Magic`,
+    metaDescription: metaOverride?.metaDescription || `Hire the best ${service.label.toLowerCase()} in ${location}. White Rabbit delivers luxury magic entertainment trusted by Netflix, Disney & Morgan Stanley. Check availability now.`,
     category: service.category,
     location,
     serviceType: service.label,
