@@ -93,26 +93,7 @@ const Index = () => {
   const seoTitle = "Los Angeles Magician for Hire | White Rabbit LA";
   const seoDescription = "Hire a world-class close-up magician for corporate events, weddings, and private parties in LA. Magic Castle member. Trusted by Netflix, Disney & Morgan Stanley.";
 
-  // Homepage Event + Person schemas
-  const now = new Date();
-  const startDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
-  const endDate = `${now.getFullYear() + 1}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
-
-  useJsonLd("homepage-event-schema", {
-    "@type": "Event",
-    name: "White Rabbit Magic — Live Entertainment in Los Angeles",
-    description: "Luxury close-up magic and mentalism for private events in Los Angeles, California. Performed by Magic Castle member Scott Syme.",
-    startDate,
-    endDate,
-    eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-    eventStatus: "https://schema.org/EventScheduled",
-    location: { "@type": "Place", name: "Los Angeles, California", address: { "@type": "PostalAddress", addressLocality: "Los Angeles", addressRegion: "CA", addressCountry: "US" } },
-    image: "https://whiterabbitla.com/og-image.jpg",
-    performer: { "@type": "Person", name: "Scott Syme", description: "Magic Castle member, consultant to America's Got Talent and Disney Channel" },
-    organizer: { "@type": "Organization", name: "White Rabbit LA", url: "https://whiterabbitla.com" },
-    offers: { "@type": "Offer", url: "https://whiterabbitla.com/contact", availability: "https://schema.org/InStock", category: "Custom pricing based on event type and size" },
-  });
-
+  // Homepage Person schema
   useJsonLd("homepage-person-schema", {
     "@type": "Person",
     name: "Scott Syme",

@@ -238,68 +238,6 @@ const LocalBusinessSchema = () => {
           name: "Los Angeles",
         },
       },
-      performerIn: [
-        {
-          "@type": "Event",
-          name: "America's Got Talent",
-          startDate: "2023-06-06",
-          endDate: "2023-09-27",
-          eventStatus: "https://schema.org/EventCompleted",
-          description: "Scott Syme appeared as a featured performer on NBC's America's Got Talent.",
-          image: "https://whiterabbitla.com/og-image.jpg",
-          location: {
-            "@type": "Place",
-            name: "Pasadena Civic Auditorium",
-            address: {
-              "@type": "PostalAddress",
-              streetAddress: "300 E Green St",
-              addressLocality: "Pasadena",
-              addressRegion: "CA",
-              postalCode: "91101",
-              addressCountry: "US",
-            },
-          },
-          performer: {
-            "@type": "Person",
-            name: "Scott Syme",
-            url: "https://whiterabbitla.com/about",
-          },
-          organizer: {
-            "@type": "Organization",
-            name: "NBC",
-            url: "https://www.nbc.com",
-          },
-        },
-        {
-          "@type": "Event",
-          name: "Magic Mondays",
-          startDate: "2026-03-01",
-          eventStatus: "https://schema.org/EventScheduled",
-          eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-          description: "A high-energy bi-monthly magic show co-produced by Scott Syme and Katie Cazorla, featuring top comedians and 20+ elite magicians. A casual alternative to the Magic Castle®.",
-          image: "https://whiterabbitla.com/og-image.jpg",
-          performer: {
-            "@type": "Person",
-            name: "Scott Syme",
-            url: "https://whiterabbitla.com/about",
-          },
-          location: {
-            "@type": "Place",
-            name: "The Starlight Cabaret",
-            address: {
-              "@type": "PostalAddress",
-              addressLocality: "Studio City",
-              addressRegion: "CA",
-              addressCountry: "US",
-            },
-          },
-          organizer: {
-            "@type": "Organization",
-            name: "White Rabbit LA",
-            url: "https://whiterabbitla.com",
-          },
-        },
-      ],
       award: [
         "Featured Performer — America's Got Talent (NBC)",
         "Magic Consultant — Disney Channel (Bizaardvark)",
