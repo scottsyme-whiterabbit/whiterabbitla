@@ -3059,14 +3059,6 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
 
   // Per-page SEO meta overrides for pages ranking on Google
   const metaOverrides: Record<string, { metaTitle: string; metaDescription: string }> = {
-    "napa-valley-resident-event-magician": {
-      metaTitle: "Napa Valley Resident Event Magician | White Rabbit LA",
-      metaDescription: "Bring close-up magic to your Napa Valley resident event, gathering, or private celebration. Magic Castle member with 10+ years performing for luxury hosts.",
-    },
-    "dallas-resident-event-magician": {
-      metaTitle: "Dallas Resident Event Magician | Magic Castle Pro",
-      metaDescription: "Hire a luxury close-up magician for your Dallas resident event. Scott Syme — Magic Castle member, trusted by Fortune 500 brands. Book today.",
-    },
     "beverly-hills-premiere-red-carpet-magician": {
       metaTitle: "Beverly Hills Premiere & Red Carpet Magician | White Rabbit",
       metaDescription: "Book Scott Syme for your Beverly Hills film premiere or red carpet event. Magic Castle pro who has entertained Netflix, Disney, and CBS guests.",
