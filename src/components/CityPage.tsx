@@ -55,28 +55,9 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
   const seoTitle = metaOverride?.title || `${cityName} Magician for Hire | White Rabbit LA`;
   const seoDescription = metaOverride?.description || `Hire a world-class close-up magician for corporate events, weddings, and private parties in ${cityName}. Magic Castle member. 5-star rated on Google.`;
 
-  // Dynamic dates for Event schema
-  const now = new Date();
-  const startDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
-  const endDate = `${now.getFullYear() + 1}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
-
-  // JSON-LD @graph with all 5 schemas
+  // JSON-LD @graph with schemas
   useJsonLd(`city-schema-${citySlug}`, {
     "@graph": [
-      {
-        "@type": "Event",
-        name: `White Rabbit Magic — Live Entertainment in ${cityName}`,
-        description: `Luxury close-up magic and mentalism for private events in ${cityName}, ${stateFullName}. Performed by Magic Castle member Scott Syme.`,
-        startDate,
-        endDate,
-        eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-        eventStatus: "https://schema.org/EventScheduled",
-        location: { "@type": "Place", name: `${cityName}, ${stateFullName}`, address: { "@type": "PostalAddress", addressLocality: cityName, addressRegion: state, addressCountry: "US" } },
-        image: `${BASE_URL}/og-image.jpg`,
-        performer: { "@type": "Person", name: "Scott Syme", description: "Magic Castle member, consultant to America's Got Talent and Disney Channel" },
-        organizer: { "@type": "Organization", name: "White Rabbit LA", url: BASE_URL },
-        offers: { "@type": "Offer", url: `${BASE_URL}/contact`, availability: "https://schema.org/InStock", category: "Custom pricing based on event type and size" },
-      },
       {
         "@type": "Service",
         serviceType: "Magic Entertainment",
