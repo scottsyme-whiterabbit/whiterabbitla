@@ -789,8 +789,8 @@ export const blogArticles: BlogArticle[] = [
   {
     slug: "scottsdale-corporate-event-magician",
     title: "Scottsdale Corporate Event Magician: Desert Luxury Meets World-Class Entertainment",
-    metaTitle: "Scottsdale Corporate Event Magician | White Rabbit LA",
-    metaDescription: "Hire an elite corporate magician for Scottsdale events at The Phoenician, Fairmont Princess & Mountain Shadows. World-class close-up magic for desert retreats & galas.",
+    metaTitle: "Scottsdale Corporate Magician — Trusted by Netflix & Disney",
+    metaDescription: "Book a luxury corporate event magician for your Scottsdale event. Magic Castle pro Scott Syme has performed for Netflix, Disney, and Morgan Stanley.",
     category: "Corporate Events",
     publishDate: "2026-03-15",
     readTime: "8 min read",
