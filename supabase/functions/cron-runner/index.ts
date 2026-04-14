@@ -32,19 +32,14 @@ serve(async (req) => {
       });
     }
 
-    // ============================================================
-    // EMERGENCY KILL SWITCH — ALL CAMPAIGNS PAUSED
-    // Activated 2026-04-14 due to 62.9% bounce rate destroying
-    // domain reputation. Remove this block to resume sends.
-    // ============================================================
-    return new Response(JSON.stringify({
-      success: true,
-      skipped: true,
-      message: "EMERGENCY PAUSE: All cold email campaigns halted due to high bounce rate. Remove kill switch in cron-runner to resume.",
-    }), {
-      status: 200,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    // Send window guard: only send on Tue/Wed/Thu Pacific
+    const pacificDay = new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", weekday: "short" }).format(new Date());
+    if (!["Tue", "Wed", "Thu"].includes(pacificDay)) {
+      return new Response(JSON.stringify({ success: true, skipped: true, message: `Skipped: ${pacificDay} is outside the Tue-Thu send window` }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const anonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
     const headers = {

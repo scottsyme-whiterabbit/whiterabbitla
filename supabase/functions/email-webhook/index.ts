@@ -103,14 +103,18 @@ serve(async (req) => {
         await logBounce(contact?.id || null, recipientEmail, bounceType, body.data?.reason || body.data?.error || null);
         console.log(`Contact ${recipientEmail} unsubscribed + logged bounce (${eventType})`);
 
-        // Cold contact: mark as bounced
-        const coldContact = await getColdContactByEmail(recipientEmail);
-        if (coldContact) {
-          await supabase
-            .from("cold_email_campaigns")
-            .update({ status: "bounced" })
-            .eq("id", coldContact.id);
-          console.log(`Cold contact ${recipientEmail} marked as bounced (${eventType})`);
+        // Cold contact: only mark as bounced on HARD bounces, not delivery_delayed (soft)
+        if (bounceType === "bounced") {
+          const coldContact = await getColdContactByEmail(recipientEmail);
+          if (coldContact && coldContact.status === "active") {
+            await supabase
+              .from("cold_email_campaigns")
+              .update({ status: "bounced" })
+              .eq("id", coldContact.id);
+            console.log(`Cold contact ${recipientEmail} marked as bounced (hard bounce)`);
+          }
+        } else {
+          console.log(`Soft bounce (delivery_delayed) for ${recipientEmail} — cold campaign status unchanged`);
         }
       }
     }
