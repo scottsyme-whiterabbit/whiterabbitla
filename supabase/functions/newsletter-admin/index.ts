@@ -609,7 +609,16 @@ serve(async (req) => {
           .single();
         if (error) {
           if (error.code === "23505") {
-            return new Response(JSON.stringify({ error: "This email is already in a cold campaign" }), {
+            const { data: existing } = await supabase
+              .from("cold_email_campaigns")
+              .select("campaign_category, status, name, company")
+              .eq("email", campaign.email.toLowerCase().trim())
+              .limit(5);
+            const categories = (existing || []).map((e: { campaign_category: string; status: string }) => `${e.campaign_category} (${e.status})`).join(", ");
+            return new Response(JSON.stringify({
+              error: `Already in campaign: ${categories || "unknown"}`,
+              existing,
+            }), {
               status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
             });
           }
