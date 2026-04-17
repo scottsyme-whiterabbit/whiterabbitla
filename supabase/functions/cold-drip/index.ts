@@ -150,8 +150,30 @@ function bookCallCTA(contactId: string, step: number, campaign: string): string 
 </p>`;
 }
 
-function getCampaignEmail(category: CampaignCategory, step: number, name: string, contactId: string): { subject: string; preheader: string; innerHtml: string } {
+// Merge field helpers with graceful null fallbacks.
+// Use `mergeCompany` inline (e.g. "for {{company}} clients") and it gracefully
+// degrades when company is missing. `mergeCity` returns a phrase like " in Los Angeles"
+// or "" so it can be dropped into a sentence without leaving an awkward gap.
+function mergeCompany(company: string | null | undefined, fallback = "your team"): string {
+  const v = (company || "").trim();
+  return v ? v : fallback;
+}
+function mergeCityPhrase(city: string | null | undefined): string {
+  const v = (city || "").trim();
+  return v ? ` in ${v}` : "";
+}
+
+function getCampaignEmail(
+  category: CampaignCategory,
+  step: number,
+  name: string,
+  contactId: string,
+  company: string | null = null,
+  city: string | null = null,
+): { subject: string; preheader: string; innerHtml: string } {
   const firstName = extractFirstName(name);
+  const companyName = mergeCompany(company);
+  const cityPhrase = mergeCityPhrase(city);
   const link = trackedLink(`${SITE_URL}/experience`, "whiterabbitla.com/event-magician", contactId, step, category);
   const siteLink = trackedLink(SITE_URL, "whiterabbitla.com", contactId, step, category);
   const deckLink = trackedLink(`${SITE_URL}/deck`, "digital lookbook", contactId, step, category);
