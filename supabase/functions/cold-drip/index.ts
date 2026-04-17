@@ -30,6 +30,7 @@ interface ColdCampaign {
   email: string;
   name: string | null;
   company: string | null;
+  city: string | null;
   phone: string | null;
   campaign_category: CampaignCategory;
   current_step: number;
@@ -150,8 +151,30 @@ function bookCallCTA(contactId: string, step: number, campaign: string): string 
 </p>`;
 }
 
-function getCampaignEmail(category: CampaignCategory, step: number, name: string, contactId: string): { subject: string; preheader: string; innerHtml: string } {
+// Merge field helpers with graceful null fallbacks.
+// `mergeCompanyClause` returns " at {company}" when set, "" when null — so the
+// surrounding sentence reads naturally either way.
+// `mergeCityPhrase` returns " in {city}" when set, "" when null.
+function mergeCompanyClause(company: string | null | undefined): string {
+  const v = (company || "").trim();
+  return v ? ` at ${v}` : "";
+}
+function mergeCityPhrase(city: string | null | undefined): string {
+  const v = (city || "").trim();
+  return v ? ` in ${v}` : "";
+}
+
+function getCampaignEmail(
+  category: CampaignCategory,
+  step: number,
+  name: string,
+  contactId: string,
+  company: string | null = null,
+  city: string | null = null,
+): { subject: string; preheader: string; innerHtml: string } {
   const firstName = extractFirstName(name);
+  const companyClause = mergeCompanyClause(company);
+  const cityPhrase = mergeCityPhrase(city);
   const link = trackedLink(`${SITE_URL}/experience`, "whiterabbitla.com/event-magician", contactId, step, category);
   const siteLink = trackedLink(SITE_URL, "whiterabbitla.com", contactId, step, category);
   const deckLink = trackedLink(`${SITE_URL}/deck`, "digital lookbook", contactId, step, category);
@@ -252,8 +275,8 @@ ${signoffFull()}`),
         subject: "the cocktail hour gap",
         preheader: "the part of the day every planner can least control.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">Hi ${firstName},</p>
-<p style="margin:0 0 18px;">Most planners I work with say the same thing about cocktail hour: it's the part of the day they can least control. Couple is at photos, vendors are flipping the room, guests are standing around with a drink waiting for something to happen.</p>
-<p style="margin:0 0 18px;">That 45-minute gap is where I come in. Close-up magic and mind reading, no setup, no microphone, no stage. Guests get a story to take home instead of a wait.</p>
+<p style="margin:0 0 18px;">Most planners I work with${companyClause} say the same thing about cocktail hour: it's the part of the day they can least control. Couple is at photos, vendors are flipping the room, guests are standing around with a drink waiting for something to happen.</p>
+<p style="margin:0 0 18px;">That 45-minute gap is where I come in. Close-up magic and mind reading${cityPhrase}, no setup, no microphone, no stage. Guests get a story to take home instead of a wait.</p>
 <p style="margin:0 0 18px;">Worth a quick chat to see if it fits any 2026 couples?</p>
 ${cta}
 <p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
@@ -621,7 +644,9 @@ serve(async (req) => {
           });
         }
         const previewName = body.previewName || "Kevin";
-        const template = getCampaignEmail(category as CampaignCategory, step, previewName, "preview");
+        const previewCompany = body.previewCompany ?? null;
+        const previewCity = body.previewCity ?? null;
+        const template = getCampaignEmail(category as CampaignCategory, step, previewName, "preview", previewCompany, previewCity);
         if (!template.subject) {
           return new Response(JSON.stringify({ error: "No template found" }), {
             status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -719,7 +744,7 @@ serve(async (req) => {
 
       // Get email content
       const firstName = extractFirstName(campaign.name);
-      const template = getCampaignEmail(campaign.campaign_category as CampaignCategory, step, firstName, campaign.id);
+      const template = getCampaignEmail(campaign.campaign_category as CampaignCategory, step, firstName, campaign.id, campaign.company, campaign.city);
 
       if (!template.subject) { skipped++; continue; }
 
