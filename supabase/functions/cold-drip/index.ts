@@ -272,29 +272,13 @@ ${signoffFull()}`),
     // ═══════════════════════════════════════════════
     wedding_planner: [
       {
-        subject: "the cocktail hour gap",
-        preheader: "the part of the day every planner can least control.",
+        subject: `quick one re:${companyClause ? ` ${(company || "").trim()}` : " your couples"}`,
+        preheader: "a question about your couples' cocktail hour",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">Hi ${firstName},</p>
-<p style="margin:0 0 18px;">Most planners I work with${companyClause} say the same thing about cocktail hour: it's the part of the day they can least control. Couple is at photos, vendors are flipping the room, guests are standing around with a drink waiting for something to happen.</p>
-<p style="margin:0 0 18px;">That 45-minute gap is where I come in. Close-up magic and mind reading${cityPhrase}, no setup, no microphone, no stage. Guests get a story to take home instead of a wait.</p>
-<p style="margin:0 0 18px;">Worth a quick chat to see if it fits any 2026 couples?</p>
-${cta}
-<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
-Scott Syme<br/>
-<span style="font-size:13px; color:rgba(245,240,232,0.5);">White Rabbit LA</span><br/>
-<span style="font-size:12px; color:rgba(245,240,232,0.35);">Office (424) 394-1850 · Cell (650) 678-9428</span><br/>
-<span style="font-size:12px; color:rgba(245,240,232,0.35);">${siteLink}</span>
-</p>
-<p style="margin:18px 0 0; font-size:13px; font-style:italic; color:rgba(245,240,232,0.5);">P.S. Cipriani 25 Broadway last month with LK Signature Events. Travel-ready, COI on file.</p>`),
-      },
-      {
-        subject: "Cipriani 25 Broadway",
-        preheader: "A real story from a wedding last month.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">Hi ${firstName},</p>
-<p style="margin:0 0 18px;">Quick follow-up.</p>
-<p style="margin:0 0 18px;">Last month I flew to NYC for a wedding at Cipriani 25 Broadway, planned by LK Signature Events. 200 guests, marble columns, the kind of room that swallows a DJ.</p>
-<p style="margin:0 0 18px;">I worked the cocktail hour, about an hour and a half of close-up magic moving group to group. Guests kept coming up to me asking where the host and the planner found me. That's the kind of moment planners get remembered for.</p>
-<p style="margin:0 0 18px;">Worth grabbing a quick call?</p>
+<p style="margin:0 0 18px;">Quick question. Do your couples ever come out of cocktail hour wishing it lasted longer?</p>
+<p style="margin:0 0 18px;">I'm Scott. Close-up magic at the Magic Castle in Hollywood and SoCal weddings. Something the planners I work with keep saying about cocktail hour: around 20 minutes in, guests pull out phones and start texting friends about what just happened six inches from their face.</p>
+<p style="margin:0 0 18px;">Couples get one wedding. Your portfolio gets the Instagram moment the morning after.</p>
+<p style="margin:0 0 18px;">Worth 10 minutes to see if any of${companyClause ? ` ${(company || "").trim()}'s` : " your"} upcoming${cityPhrase} couples would fit?</p>
 ${cta}
 <p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
 Scott<br/>
@@ -302,30 +286,39 @@ Scott<br/>
 </p>`),
       },
       {
-        subject: "cocktail hour, speakeasy, or rehearsal dinner",
-        preheader: "Three ways planners use me on a wedding weekend.",
+        subject: "re: cocktail hour",
+        preheader: "what 'magic at a wedding' actually means",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">Hi ${firstName},</p>
-<p style="margin:0 0 18px;">Three ways couples have used me this year.</p>
-<p style="margin:0 0 18px;">Cocktail hour close-up magic while photos are happening. Standard package.</p>
-<p style="margin:0 0 18px;">Late in the night, hanging around the reception speakeasy or bar area doing close-up magic. Pairs well with a second cocktail round.</p>
-<p style="margin:0 0 18px;">A full 45-minute show the night before at the rehearsal dinner. Sets the energy for the whole weekend and gives close family and friends something the wedding guests don't get.</p>
-<p style="margin:0 0 18px;">Different price points depending on which one fits. Worth a quick call to walk through?</p>
+<p style="margin:0 0 18px;">Following up on the last one.</p>
+<p style="margin:0 0 18px;">"Magic at a wedding" means a hundred different things, so here's what I actually do. 60 to 90 minutes walking cocktail hour and standing reception. Close-up at arm's length. No stage, no mic, no "ladies and gentlemen." Guests cluster naturally after the first effect. By the time you're calling seating, half the room is texting friends.</p>
+<p style="margin:0 0 18px;">One planner told me last season it was the most-DM'd moment on her couple's wedding Instagram, ahead of the vows and the first dance.</p>
+<p style="margin:0 0 18px;">If any of${companyClause ? ` ${(company || "").trim()}'s` : " your"} upcoming couples might be a fit, want to grab 10 minutes this week or next?</p>
 ${cta}
 <p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
 Scott<br/>
 <span style="font-size:12px; color:rgba(245,240,232,0.35);">Office (424) 394-1850 · Cell (650) 678-9428</span>
-</p>
-<p style="margin:18px 0 0; font-size:13px; font-style:italic; color:rgba(245,240,232,0.5);">P.S. Wrote up the full entertainment gap piece here: ${arts.a1}. Same idea covers between courses at the seated dinner, not just cocktail hour.</p>`),
+</p>`),
       },
       {
-        subject: "the entertainment gap piece",
-        preheader: "One last drop before I quiet down.",
+        subject: "a weird offer",
+        preheader: "10 minutes, no pitch, no follow-up",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">Hi ${firstName},</p>
-<p style="margin:0 0 18px;">Before I slow down, one last thing.</p>
-<p style="margin:0 0 18px;">The entertainment gap piece from my last email is how I think about cocktail hours and dead moments at weddings. If it didn't land the first time, here it is again: ${arts.a1}. Share it with your team or save it for later.</p>
-<p style="margin:0 0 18px;">I'm moving you to a slower list. A few times a year I send updates with recent weddings and what's open on the calendar. No pressure, no asks.</p>
-<p style="margin:0 0 18px;">Want to talk before then, reply or call. Otherwise I'll see you in a couple months.</p>
-<p style="margin:0 0 18px;">Either way, thanks for the time.</p>
+<p style="margin:0 0 18px;">One more from me, then I'll get out of your inbox.</p>
+<p style="margin:0 0 18px;">I'm LA-based, performing weekly at the Magic Castle. If you're in town, I'll come to your office and do 10 minutes of close-up for you and your team. No pitch, no obligation, no follow-up unless you ask. You see what your couples would see.</p>
+<p style="margin:0 0 18px;">If you're outside LA, I have a 90-second clip from a recent wedding that does the same job. Want me to send it?</p>
+${cta}
+<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
+Scott<br/>
+<span style="font-size:12px; color:rgba(245,240,232,0.35);">Office (424) 394-1850 · Cell (650) 678-9428</span>
+</p>`),
+      },
+      {
+        subject: "quick check",
+        preheader: "a simple yes or no",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">Hi ${firstName},</p>
+<p style="margin:0 0 18px;">Before I close the loop, one question.</p>
+<p style="margin:0 0 18px;">Is this a "not now, circle back in a few months" or a "not a fit, remove me"?</p>
+<p style="margin:0 0 18px;">Either answer helps. Don't want to keep emailing a planner whose entertainment roster is locked.</p>
 <p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
 Scott<br/>
 <span style="font-size:12px; color:rgba(245,240,232,0.35);">Office (424) 394-1850 · Cell (650) 678-9428</span>
