@@ -274,8 +274,8 @@ ${signoffFull()}`),
         subject: "the cocktail hour gap",
         preheader: "the part of the day every planner can least control.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">Hi ${firstName},</p>
-<p style="margin:0 0 18px;">Most planners I work with say the same thing about cocktail hour: it's the part of the day they can least control. Couple is at photos, vendors are flipping the room, guests are standing around with a drink waiting for something to happen.</p>
-<p style="margin:0 0 18px;">That 45-minute gap is where I come in. Close-up magic and mind reading, no setup, no microphone, no stage. Guests get a story to take home instead of a wait.</p>
+<p style="margin:0 0 18px;">Most planners I work with at ${companyName} say the same thing about cocktail hour: it's the part of the day they can least control. Couple is at photos, vendors are flipping the room, guests are standing around with a drink waiting for something to happen.</p>
+<p style="margin:0 0 18px;">That 45-minute gap is where I come in. Close-up magic and mind reading${cityPhrase}, no setup, no microphone, no stage. Guests get a story to take home instead of a wait.</p>
 <p style="margin:0 0 18px;">Worth a quick chat to see if it fits any 2026 couples?</p>
 ${cta}
 <p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
