@@ -155,7 +155,7 @@ serve(async (req) => {
         apollo_id: c.apollo_id || null,
         notes: c.notes || null,
         campaign_category,
-        status: start_immediately ? "active" : "pending",
+        status: start_immediately ? "active" : "paused",
         current_step: 0,
         started_at: start_immediately ? new Date().toISOString() : null,
       });
@@ -188,7 +188,7 @@ serve(async (req) => {
         skipped_duplicates: skipped.length,
         skipped,
         insert_errors: insertErrors.length ? insertErrors : undefined,
-        status: start_immediately ? "active" : "pending",
+        status: start_immediately ? "active" : "paused",
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
