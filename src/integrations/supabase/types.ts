@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       cold_email_campaigns: {
         Row: {
+          apollo_id: string | null
           campaign_category: string
           city: string | null
           company: string | null
@@ -26,6 +27,7 @@ export type Database = {
           last_email_sent_at: string | null
           linkedin_url: string | null
           name: string | null
+          notes: string | null
           nurture_last_sent_at: string | null
           nurture_started_at: string | null
           nurture_status: string
@@ -38,6 +40,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          apollo_id?: string | null
           campaign_category: string
           city?: string | null
           company?: string | null
@@ -48,6 +51,7 @@ export type Database = {
           last_email_sent_at?: string | null
           linkedin_url?: string | null
           name?: string | null
+          notes?: string | null
           nurture_last_sent_at?: string | null
           nurture_started_at?: string | null
           nurture_status?: string
@@ -60,6 +64,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          apollo_id?: string | null
           campaign_category?: string
           city?: string | null
           company?: string | null
@@ -70,6 +75,7 @@ export type Database = {
           last_email_sent_at?: string | null
           linkedin_url?: string | null
           name?: string | null
+          notes?: string | null
           nurture_last_sent_at?: string | null
           nurture_started_at?: string | null
           nurture_status?: string

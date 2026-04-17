@@ -28,6 +28,8 @@ interface ContactInput {
   city?: string;
   state?: string;
   linkedin_url?: string;
+  apollo_id?: string;
+  notes?: string;
 }
 
 serve(async (req) => {
@@ -96,27 +98,49 @@ serve(async (req) => {
         return true;
       });
 
-    // Look up which emails already exist in cold_email_campaigns (any category)
+    // Look up which emails OR apollo_ids already exist
     const emails = cleaned.map((c) => c.email);
-    const { data: existingRows } = await supabase
+    const apolloIds = cleaned.map((c) => c.apollo_id).filter(Boolean) as string[];
+
+    const { data: existingByEmail } = await supabase
       .from("cold_email_campaigns")
-      .select("email, campaign_category")
+      .select("email, apollo_id, campaign_category")
       .in("email", emails);
 
-    const existingMap = new Map<string, string[]>();
-    (existingRows || []).forEach((row) => {
-      const arr = existingMap.get(row.email) || [];
+    const { data: existingByApollo } = apolloIds.length
+      ? await supabase
+          .from("cold_email_campaigns")
+          .select("email, apollo_id, campaign_category")
+          .in("apollo_id", apolloIds)
+      : { data: [] as any[] };
+
+    const existingEmails = new Map<string, string[]>();
+    const existingApollo = new Map<string, string[]>();
+    (existingByEmail || []).forEach((row) => {
+      const arr = existingEmails.get(row.email) || [];
       arr.push(row.campaign_category);
-      existingMap.set(row.email, arr);
+      existingEmails.set(row.email, arr);
+    });
+    (existingByApollo || []).forEach((row) => {
+      if (!row.apollo_id) return;
+      const arr = existingApollo.get(row.apollo_id) || [];
+      arr.push(row.campaign_category);
+      existingApollo.set(row.apollo_id, arr);
     });
 
     const toInsert: any[] = [];
-    const skipped: { email: string; reason: string; categories?: string[] }[] = [];
+    const skipped: { email: string; apollo_id?: string; reason: string; categories?: string[] }[] = [];
 
     for (const c of cleaned) {
-      const existingCats = existingMap.get(c.email);
-      if (existingCats) {
-        skipped.push({ email: c.email, reason: "already_exists", categories: existingCats });
+      const emailHit = existingEmails.get(c.email);
+      const apolloHit = c.apollo_id ? existingApollo.get(c.apollo_id) : undefined;
+      if (emailHit || apolloHit) {
+        skipped.push({
+          email: c.email,
+          apollo_id: c.apollo_id,
+          reason: apolloHit ? "apollo_id_exists" : "email_exists",
+          categories: apolloHit || emailHit,
+        });
         continue;
       }
       toInsert.push({
@@ -128,6 +152,8 @@ serve(async (req) => {
         city: c.city || null,
         state: c.state || null,
         linkedin_url: c.linkedin_url || null,
+        apollo_id: c.apollo_id || null,
+        notes: c.notes || null,
         campaign_category,
         status: start_immediately ? "active" : "pending",
         current_step: 0,
