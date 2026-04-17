@@ -349,6 +349,33 @@ export type Database = {
           },
         ]
       }
+      email_suppression_list: {
+        Row: {
+          email: string
+          id: string
+          notes: string | null
+          reason: string
+          source_campaign_category: string | null
+          suppressed_at: string
+        }
+        Insert: {
+          email: string
+          id?: string
+          notes?: string | null
+          reason: string
+          source_campaign_category?: string | null
+          suppressed_at?: string
+        }
+        Update: {
+          email?: string
+          id?: string
+          notes?: string | null
+          reason?: string
+          source_campaign_category?: string | null
+          suppressed_at?: string
+        }
+        Relationships: []
+      }
       lead_magnet_signups: {
         Row: {
           created_at: string
