@@ -30,6 +30,7 @@ interface ColdCampaign {
   email: string;
   name: string | null;
   company: string | null;
+  city: string | null;
   phone: string | null;
   campaign_category: CampaignCategory;
   current_step: number;
