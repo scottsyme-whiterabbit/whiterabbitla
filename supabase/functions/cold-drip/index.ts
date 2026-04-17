@@ -152,12 +152,12 @@ function bookCallCTA(contactId: string, step: number, campaign: string): string 
 }
 
 // Merge field helpers with graceful null fallbacks.
-// Use `mergeCompany` inline (e.g. "for {{company}} clients") and it gracefully
-// degrades when company is missing. `mergeCity` returns a phrase like " in Los Angeles"
-// or "" so it can be dropped into a sentence without leaving an awkward gap.
-function mergeCompany(company: string | null | undefined, fallback = "your team"): string {
+// `mergeCompanyClause` returns " at {company}" when set, "" when null — so the
+// surrounding sentence reads naturally either way.
+// `mergeCityPhrase` returns " in {city}" when set, "" when null.
+function mergeCompanyClause(company: string | null | undefined): string {
   const v = (company || "").trim();
-  return v ? v : fallback;
+  return v ? ` at ${v}` : "";
 }
 function mergeCityPhrase(city: string | null | undefined): string {
   const v = (city || "").trim();
