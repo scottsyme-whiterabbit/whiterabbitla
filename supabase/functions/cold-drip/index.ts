@@ -173,7 +173,7 @@ function getCampaignEmail(
   city: string | null = null,
 ): { subject: string; preheader: string; innerHtml: string } {
   const firstName = extractFirstName(name);
-  const companyName = mergeCompany(company);
+  const companyClause = mergeCompanyClause(company);
   const cityPhrase = mergeCityPhrase(city);
   const link = trackedLink(`${SITE_URL}/experience`, "whiterabbitla.com/event-magician", contactId, step, category);
   const siteLink = trackedLink(SITE_URL, "whiterabbitla.com", contactId, step, category);
@@ -275,7 +275,7 @@ ${signoffFull()}`),
         subject: "the cocktail hour gap",
         preheader: "the part of the day every planner can least control.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">Hi ${firstName},</p>
-<p style="margin:0 0 18px;">Most planners I work with at ${companyName} say the same thing about cocktail hour: it's the part of the day they can least control. Couple is at photos, vendors are flipping the room, guests are standing around with a drink waiting for something to happen.</p>
+<p style="margin:0 0 18px;">Most planners I work with${companyClause} say the same thing about cocktail hour: it's the part of the day they can least control. Couple is at photos, vendors are flipping the room, guests are standing around with a drink waiting for something to happen.</p>
 <p style="margin:0 0 18px;">That 45-minute gap is where I come in. Close-up magic and mind reading${cityPhrase}, no setup, no microphone, no stage. Guests get a story to take home instead of a wait.</p>
 <p style="margin:0 0 18px;">Worth a quick chat to see if it fits any 2026 couples?</p>
 ${cta}
