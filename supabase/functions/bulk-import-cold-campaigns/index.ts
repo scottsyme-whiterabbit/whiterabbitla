@@ -19,6 +19,29 @@ const VALID_CATEGORIES = [
   "golf_tournament",
 ];
 
+// Role-based local-parts that should never receive cold outreach.
+// Mailbox providers commonly block cold sends to these and they hurt sender reputation.
+const ROLE_BASED_PREFIXES = [
+  "info",
+  "hello",
+  "contact",
+  "events",
+  "admin",
+  "support",
+  "sales",
+  "team",
+  "office",
+  "help",
+  "marketing",
+  "no-reply",
+  "noreply",
+];
+
+function isRoleBasedEmail(email: string): boolean {
+  const localPart = email.split("@")[0]?.toLowerCase() ?? "";
+  return ROLE_BASED_PREFIXES.includes(localPart);
+}
+
 interface ContactInput {
   email: string;
   name?: string;
@@ -38,7 +61,6 @@ serve(async (req) => {
   }
 
   try {
-    // Token can be sent via header OR body for flexibility
     const headerToken = req.headers.get("x-bulk-import-token");
     const body = await req.json();
     const token = headerToken || body.bulkImportToken;
@@ -98,14 +120,84 @@ serve(async (req) => {
         return true;
       });
 
-    // Look up which emails OR apollo_ids already exist
-    const emails = cleaned.map((c) => c.email);
-    const apolloIds = cleaned.map((c) => c.apollo_id).filter(Boolean) as string[];
+    const skipped: {
+      email: string;
+      apollo_id?: string;
+      reason: string;
+      categories?: string[];
+    }[] = [];
 
-    const { data: existingByEmail } = await supabase
-      .from("cold_email_campaigns")
-      .select("email, apollo_id, campaign_category")
-      .in("email", emails);
+    // ============================================================
+    // STAGE 1: Auto-reject role-based addresses, add to suppression
+    // ============================================================
+    const roleBasedHits: { email: string; apollo_id?: string }[] = [];
+    const afterRoleFilter = cleaned.filter((c) => {
+      if (isRoleBasedEmail(c.email)) {
+        roleBasedHits.push({ email: c.email, apollo_id: c.apollo_id });
+        skipped.push({
+          email: c.email,
+          apollo_id: c.apollo_id,
+          reason: "role_based",
+        });
+        return false;
+      }
+      return true;
+    });
+
+    // Auto-add role-based hits to suppression list (idempotent via unique email)
+    if (roleBasedHits.length > 0) {
+      await supabase.from("email_suppression_list").upsert(
+        roleBasedHits.map((r) => ({
+          email: r.email,
+          reason: "role_based",
+          source_campaign_category: campaign_category,
+          notes: "Auto-rejected at import (role-based local-part)",
+        })),
+        { onConflict: "email", ignoreDuplicates: true }
+      );
+    }
+
+    // ============================================================
+    // STAGE 2: Check suppression list
+    // ============================================================
+    const remainingEmails = afterRoleFilter.map((c) => c.email);
+    const { data: suppressedRows } = remainingEmails.length
+      ? await supabase
+          .from("email_suppression_list")
+          .select("email, reason")
+          .in("email", remainingEmails)
+      : { data: [] as { email: string; reason: string }[] };
+
+    const suppressedMap = new Map<string, string>();
+    (suppressedRows || []).forEach((row) => {
+      suppressedMap.set(row.email, row.reason);
+    });
+
+    const afterSuppression = afterRoleFilter.filter((c) => {
+      const reason = suppressedMap.get(c.email);
+      if (reason) {
+        skipped.push({
+          email: c.email,
+          apollo_id: c.apollo_id,
+          reason: `suppressed:${reason}`,
+        });
+        return false;
+      }
+      return true;
+    });
+
+    // ============================================================
+    // STAGE 3: Dedup against existing cold_email_campaigns
+    // ============================================================
+    const emails = afterSuppression.map((c) => c.email);
+    const apolloIds = afterSuppression.map((c) => c.apollo_id).filter(Boolean) as string[];
+
+    const { data: existingByEmail } = emails.length
+      ? await supabase
+          .from("cold_email_campaigns")
+          .select("email, apollo_id, campaign_category")
+          .in("email", emails)
+      : { data: [] as any[] };
 
     const { data: existingByApollo } = apolloIds.length
       ? await supabase
@@ -129,9 +221,8 @@ serve(async (req) => {
     });
 
     const toInsert: any[] = [];
-    const skipped: { email: string; apollo_id?: string; reason: string; categories?: string[] }[] = [];
 
-    for (const c of cleaned) {
+    for (const c of afterSuppression) {
       const emailHit = existingEmails.get(c.email);
       const apolloHit = c.apollo_id ? existingApollo.get(c.apollo_id) : undefined;
       if (emailHit || apolloHit) {
@@ -185,7 +276,9 @@ serve(async (req) => {
         received: contacts.length,
         cleaned: cleaned.length,
         inserted: insertedCount,
-        skipped_duplicates: skipped.length,
+        skipped_role_based: roleBasedHits.length,
+        skipped_suppressed: (suppressedRows || []).length,
+        skipped_total: skipped.length,
         skipped,
         insert_errors: insertErrors.length ? insertErrors : undefined,
         status: start_immediately ? "active" : "paused",
