@@ -644,7 +644,9 @@ serve(async (req) => {
           });
         }
         const previewName = body.previewName || "Kevin";
-        const template = getCampaignEmail(category as CampaignCategory, step, previewName, "preview");
+        const previewCompany = body.previewCompany ?? null;
+        const previewCity = body.previewCity ?? null;
+        const template = getCampaignEmail(category as CampaignCategory, step, previewName, "preview", previewCompany, previewCity);
         if (!template.subject) {
           return new Response(JSON.stringify({ error: "No template found" }), {
             status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -742,7 +744,7 @@ serve(async (req) => {
 
       // Get email content
       const firstName = extractFirstName(campaign.name);
-      const template = getCampaignEmail(campaign.campaign_category as CampaignCategory, step, firstName, campaign.id);
+      const template = getCampaignEmail(campaign.campaign_category as CampaignCategory, step, firstName, campaign.id, campaign.company, campaign.city);
 
       if (!template.subject) { skipped++; continue; }
 
