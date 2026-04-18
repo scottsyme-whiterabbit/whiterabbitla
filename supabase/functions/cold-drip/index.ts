@@ -278,7 +278,7 @@ ${signoffFull()}`),
 <p style="margin:0 0 18px;">Quick question. Do your couples ever come out of cocktail hour wishing it lasted longer?</p>
 <p style="margin:0 0 18px;">I'm Scott. Close-up magic at the Magic Castle in Hollywood and SoCal weddings. Something the planners I work with keep saying about cocktail hour: around 20 minutes in, guests pull out phones and start texting friends about what just happened six inches from their face.</p>
 <p style="margin:0 0 18px;">Couples get one wedding. Your portfolio gets the Instagram moment the morning after.</p>
-<p style="margin:0 0 18px;">Worth 10 minutes to see if any of${companyClause ? ` ${(company || "").trim()}'s` : " your"} upcoming${cityPhrase} couples would fit?</p>
+<p style="margin:0 0 18px;">Worth 10 minutes to see if any of${companyClause ? ` ${(company || "").trim()}'s` : " your"} upcoming couples${cityPhrase} would fit?</p>
 ${cta}
 <p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
 Scott<br/>
