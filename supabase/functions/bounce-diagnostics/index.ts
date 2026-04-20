@@ -87,22 +87,58 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const start = Date.now();
+  const url = new URL(req.url);
+  const ip = getClientIp(req);
+  const path = url.pathname;
+  const querySummary = ""; // bounce-diagnostics has no query params
+
+  const finalize = (
+    res: Response,
+    authResult: "valid" | "missing_token" | "invalid_token" | "kill_switch"
+  ) => {
+    logRequest({
+      ip,
+      authResult,
+      statusCode: res.status,
+      path,
+      querySummary,
+      durationMs: Date.now() - start,
+    });
+    return res;
+  };
+
   // ---- Kill switch ----
   if ((Deno.env.get("EDGE_FUNCTIONS_DISABLED") || "").toLowerCase() === "true") {
-    return new Response(JSON.stringify({ error: "temporarily_disabled" }), {
-      status: 503,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return finalize(
+      new Response(JSON.stringify({ error: "temporarily_disabled" }), {
+        status: 503,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      }),
+      "kill_switch"
+    );
   }
 
   // ---- Auth: token-only (BULK_IMPORT_TOKEN) ----
   const importToken = req.headers.get("x-bulk-import-token") || "";
   const expectedImport = Deno.env.get("BULK_IMPORT_TOKEN") || "";
-  if (!importToken || !expectedImport || importToken !== expectedImport) {
-    return new Response(JSON.stringify({ error: "auth_failed" }), {
-      status: 401,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+  if (!importToken) {
+    return finalize(
+      new Response(JSON.stringify({ error: "auth_failed" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      }),
+      "missing_token"
+    );
+  }
+  if (!expectedImport || importToken !== expectedImport) {
+    return finalize(
+      new Response(JSON.stringify({ error: "auth_failed" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      }),
+      "invalid_token"
+    );
   }
 
   try {
