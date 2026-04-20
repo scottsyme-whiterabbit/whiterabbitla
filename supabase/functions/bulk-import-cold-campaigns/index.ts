@@ -108,12 +108,36 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const start = Date.now();
+  const url = new URL(req.url);
+  const ip = getClientIp(req);
+  const path = url.pathname;
+  let querySummary = ""; // populated after body parse with category only
+
+  const finalize = (
+    res: Response,
+    authResult: "valid" | "missing_token" | "invalid_token" | "kill_switch"
+  ) => {
+    logRequest({
+      ip,
+      authResult,
+      statusCode: res.status,
+      path,
+      querySummary,
+      durationMs: Date.now() - start,
+    });
+    return res;
+  };
+
   // ---- Kill switch ----
   if ((Deno.env.get("EDGE_FUNCTIONS_DISABLED") || "").toLowerCase() === "true") {
-    return new Response(JSON.stringify({ error: "temporarily_disabled" }), {
-      status: 503,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return finalize(
+      new Response(JSON.stringify({ error: "temporarily_disabled" }), {
+        status: 503,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      }),
+      "kill_switch"
+    );
   }
 
   try {
@@ -121,11 +145,23 @@ serve(async (req) => {
     const body = await req.json();
     const token = headerToken || body.bulkImportToken;
 
-    if (!token || token !== Deno.env.get("BULK_IMPORT_TOKEN")) {
-      return new Response(JSON.stringify({ error: "auth_failed" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    if (!token) {
+      return finalize(
+        new Response(JSON.stringify({ error: "auth_failed" }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }),
+        "missing_token"
+      );
+    }
+    if (token !== Deno.env.get("BULK_IMPORT_TOKEN")) {
+      return finalize(
+        new Response(JSON.stringify({ error: "auth_failed" }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }),
+        "invalid_token"
+      );
     }
 
     const { campaign_category, contacts, start_immediately } = body as {
@@ -134,26 +170,40 @@ serve(async (req) => {
       start_immediately?: boolean;
     };
 
+    // Capture safe metadata: category + count only (no PII)
+    querySummary = `category=${campaign_category || "none"}&count=${
+      Array.isArray(contacts) ? contacts.length : 0
+    }&start_immediately=${!!start_immediately}`;
+
     if (!campaign_category || !VALID_CATEGORIES.includes(campaign_category)) {
-      return new Response(
-        JSON.stringify({
-          error: `Invalid campaign_category. Must be one of: ${VALID_CATEGORIES.join(", ")}`,
-        }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      return finalize(
+        new Response(
+          JSON.stringify({
+            error: `Invalid campaign_category. Must be one of: ${VALID_CATEGORIES.join(", ")}`,
+          }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        ),
+        "valid"
       );
     }
 
     if (!Array.isArray(contacts) || contacts.length === 0) {
-      return new Response(JSON.stringify({ error: "contacts must be a non-empty array" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return finalize(
+        new Response(JSON.stringify({ error: "contacts must be a non-empty array" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }),
+        "valid"
+      );
     }
 
     if (contacts.length > 1000) {
-      return new Response(
-        JSON.stringify({ error: "Max 1000 contacts per request. Split into batches." }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      return finalize(
+        new Response(
+          JSON.stringify({ error: "Max 1000 contacts per request. Split into batches." }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        ),
+        "valid"
       );
     }
 
