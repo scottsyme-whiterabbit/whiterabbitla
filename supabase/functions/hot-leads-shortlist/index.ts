@@ -18,28 +18,20 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
+
+  // ---- Kill switch ----
+  if ((Deno.env.get("EDGE_FUNCTIONS_DISABLED") || "").toLowerCase() === "true") {
+    return json(503, { error: "temporarily_disabled" });
+  }
+
   if (req.method !== "GET") {
     return json(405, { error: "method_not_allowed" });
   }
 
-  // ---- Auth ----
-  const authHeader = req.headers.get("authorization") || "";
-  const bearer = authHeader.toLowerCase().startsWith("bearer ")
-    ? authHeader.slice(7).trim()
-    : "";
+  // ---- Auth: token-only ----
   const importToken = req.headers.get("x-bulk-import-token") || "";
-
-  const expectedAnon = Deno.env.get("SUPABASE_ANON_KEY") || "";
-  const expectedPublishable = Deno.env.get("SUPABASE_PUBLISHABLE_KEY") || "";
   const expectedImport = Deno.env.get("BULK_IMPORT_TOKEN") || "";
-
-  const bearerOk =
-    !!bearer &&
-    ((expectedAnon && bearer === expectedAnon) ||
-      (expectedPublishable && bearer === expectedPublishable));
-  const importOk = !!importToken && !!expectedImport && importToken === expectedImport;
-
-  if (!bearerOk || !importOk) {
+  if (!importToken || !expectedImport || importToken !== expectedImport) {
     return json(401, { error: "auth_failed" });
   }
 
