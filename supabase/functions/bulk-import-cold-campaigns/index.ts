@@ -1,11 +1,59 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+const FUNCTION_NAME = "bulk-import-cold-campaigns";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type, x-bulk-import-token, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
+
+// ---- Observability helpers (metadata only, no PII) ----
+async function hashIp(ip: string): Promise<string | null> {
+  if (!ip) return null;
+  const salt = Deno.env.get("IP_HASH_SALT") || "";
+  const data = new TextEncoder().encode(`${ip}:${salt}`);
+  const buf = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(buf))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function getClientIp(req: Request): string {
+  const xff = req.headers.get("x-forwarded-for") || "";
+  return xff.split(",")[0].trim() || req.headers.get("x-real-ip") || "";
+}
+
+function logRequest(params: {
+  ip: string;
+  authResult: "valid" | "missing_token" | "invalid_token" | "kill_switch";
+  statusCode: number;
+  path: string;
+  querySummary: string;
+  durationMs: number;
+}) {
+  (async () => {
+    try {
+      const supabase = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      );
+      const ip_hash = await hashIp(params.ip);
+      await supabase.from("edge_function_requests").insert({
+        function_name: FUNCTION_NAME,
+        ip_hash,
+        auth_result: params.authResult,
+        status_code: params.statusCode,
+        path: params.path,
+        query_summary: params.querySummary,
+        duration_ms: params.durationMs,
+      });
+    } catch (_e) {
+      // swallow
+    }
+  })();
+}
 
 const VALID_CATEGORIES = [
   "wedding_planner",
@@ -60,12 +108,36 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const start = Date.now();
+  const url = new URL(req.url);
+  const ip = getClientIp(req);
+  const path = url.pathname;
+  let querySummary = ""; // populated after body parse with category only
+
+  const finalize = (
+    res: Response,
+    authResult: "valid" | "missing_token" | "invalid_token" | "kill_switch"
+  ) => {
+    logRequest({
+      ip,
+      authResult,
+      statusCode: res.status,
+      path,
+      querySummary,
+      durationMs: Date.now() - start,
+    });
+    return res;
+  };
+
   // ---- Kill switch ----
   if ((Deno.env.get("EDGE_FUNCTIONS_DISABLED") || "").toLowerCase() === "true") {
-    return new Response(JSON.stringify({ error: "temporarily_disabled" }), {
-      status: 503,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return finalize(
+      new Response(JSON.stringify({ error: "temporarily_disabled" }), {
+        status: 503,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      }),
+      "kill_switch"
+    );
   }
 
   try {
@@ -73,11 +145,23 @@ serve(async (req) => {
     const body = await req.json();
     const token = headerToken || body.bulkImportToken;
 
-    if (!token || token !== Deno.env.get("BULK_IMPORT_TOKEN")) {
-      return new Response(JSON.stringify({ error: "auth_failed" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    if (!token) {
+      return finalize(
+        new Response(JSON.stringify({ error: "auth_failed" }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }),
+        "missing_token"
+      );
+    }
+    if (token !== Deno.env.get("BULK_IMPORT_TOKEN")) {
+      return finalize(
+        new Response(JSON.stringify({ error: "auth_failed" }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }),
+        "invalid_token"
+      );
     }
 
     const { campaign_category, contacts, start_immediately } = body as {
@@ -86,26 +170,40 @@ serve(async (req) => {
       start_immediately?: boolean;
     };
 
+    // Capture safe metadata: category + count only (no PII)
+    querySummary = `category=${campaign_category || "none"}&count=${
+      Array.isArray(contacts) ? contacts.length : 0
+    }&start_immediately=${!!start_immediately}`;
+
     if (!campaign_category || !VALID_CATEGORIES.includes(campaign_category)) {
-      return new Response(
-        JSON.stringify({
-          error: `Invalid campaign_category. Must be one of: ${VALID_CATEGORIES.join(", ")}`,
-        }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      return finalize(
+        new Response(
+          JSON.stringify({
+            error: `Invalid campaign_category. Must be one of: ${VALID_CATEGORIES.join(", ")}`,
+          }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        ),
+        "valid"
       );
     }
 
     if (!Array.isArray(contacts) || contacts.length === 0) {
-      return new Response(JSON.stringify({ error: "contacts must be a non-empty array" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return finalize(
+        new Response(JSON.stringify({ error: "contacts must be a non-empty array" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }),
+        "valid"
+      );
     }
 
     if (contacts.length > 1000) {
-      return new Response(
-        JSON.stringify({ error: "Max 1000 contacts per request. Split into batches." }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      return finalize(
+        new Response(
+          JSON.stringify({ error: "Max 1000 contacts per request. Split into batches." }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        ),
+        "valid"
       );
     }
 
@@ -277,27 +375,33 @@ serve(async (req) => {
       }
     }
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        campaign_category,
-        received: contacts.length,
-        cleaned: cleaned.length,
-        inserted: insertedCount,
-        skipped_role_based: roleBasedHits.length,
-        skipped_suppressed: (suppressedRows || []).length,
-        skipped_total: skipped.length,
-        skipped,
-        insert_errors: insertErrors.length ? insertErrors : undefined,
-        status: start_immediately ? "active" : "paused",
-      }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    return finalize(
+      new Response(
+        JSON.stringify({
+          success: true,
+          campaign_category,
+          received: contacts.length,
+          cleaned: cleaned.length,
+          inserted: insertedCount,
+          skipped_role_based: roleBasedHits.length,
+          skipped_suppressed: (suppressedRows || []).length,
+          skipped_total: skipped.length,
+          skipped,
+          insert_errors: insertErrors.length ? insertErrors : undefined,
+          status: start_immediately ? "active" : "paused",
+        }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      ),
+      "valid"
     );
   } catch (error) {
     console.error("bulk-import-cold-campaigns error:", error);
-    return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    return finalize(
+      new Response(
+        JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      ),
+      "valid"
     );
   }
 });

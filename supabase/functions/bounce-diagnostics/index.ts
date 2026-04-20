@@ -1,11 +1,59 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+const FUNCTION_NAME = "bounce-diagnostics";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type, x-bulk-import-token",
 };
+
+// ---- Observability helpers (metadata only, no PII) ----
+async function hashIp(ip: string): Promise<string | null> {
+  if (!ip) return null;
+  const salt = Deno.env.get("IP_HASH_SALT") || "";
+  const data = new TextEncoder().encode(`${ip}:${salt}`);
+  const buf = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(buf))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function getClientIp(req: Request): string {
+  const xff = req.headers.get("x-forwarded-for") || "";
+  return xff.split(",")[0].trim() || req.headers.get("x-real-ip") || "";
+}
+
+function logRequest(params: {
+  ip: string;
+  authResult: "valid" | "missing_token" | "invalid_token" | "kill_switch";
+  statusCode: number;
+  path: string;
+  querySummary: string;
+  durationMs: number;
+}) {
+  (async () => {
+    try {
+      const supabase = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      );
+      const ip_hash = await hashIp(params.ip);
+      await supabase.from("edge_function_requests").insert({
+        function_name: FUNCTION_NAME,
+        ip_hash,
+        auth_result: params.authResult,
+        status_code: params.statusCode,
+        path: params.path,
+        query_summary: params.querySummary,
+        duration_ms: params.durationMs,
+      });
+    } catch (_e) {
+      // swallow
+    }
+  })();
+}
 
 // Hard bounce reason patterns (Resend / SES style)
 const HARD_PATTERNS = [
@@ -39,22 +87,58 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const start = Date.now();
+  const url = new URL(req.url);
+  const ip = getClientIp(req);
+  const path = url.pathname;
+  const querySummary = ""; // bounce-diagnostics has no query params
+
+  const finalize = (
+    res: Response,
+    authResult: "valid" | "missing_token" | "invalid_token" | "kill_switch"
+  ) => {
+    logRequest({
+      ip,
+      authResult,
+      statusCode: res.status,
+      path,
+      querySummary,
+      durationMs: Date.now() - start,
+    });
+    return res;
+  };
+
   // ---- Kill switch ----
   if ((Deno.env.get("EDGE_FUNCTIONS_DISABLED") || "").toLowerCase() === "true") {
-    return new Response(JSON.stringify({ error: "temporarily_disabled" }), {
-      status: 503,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return finalize(
+      new Response(JSON.stringify({ error: "temporarily_disabled" }), {
+        status: 503,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      }),
+      "kill_switch"
+    );
   }
 
   // ---- Auth: token-only (BULK_IMPORT_TOKEN) ----
   const importToken = req.headers.get("x-bulk-import-token") || "";
   const expectedImport = Deno.env.get("BULK_IMPORT_TOKEN") || "";
-  if (!importToken || !expectedImport || importToken !== expectedImport) {
-    return new Response(JSON.stringify({ error: "auth_failed" }), {
-      status: 401,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+  if (!importToken) {
+    return finalize(
+      new Response(JSON.stringify({ error: "auth_failed" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      }),
+      "missing_token"
+    );
+  }
+  if (!expectedImport || importToken !== expectedImport) {
+    return finalize(
+      new Response(JSON.stringify({ error: "auth_failed" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      }),
+      "invalid_token"
+    );
   }
 
   try {
@@ -261,53 +345,59 @@ serve(async (req) => {
     const trendPctChange =
       prior30 > 0 ? Number((((last30 - prior30) / prior30) * 100).toFixed(2)) : null;
 
-    return new Response(
-      JSON.stringify(
-        {
-          generated_at: new Date().toISOString(),
-          notes: {
-            sends_methodology:
-              "newsletter_send_log row count + sum(current_step) across cold_email_campaigns",
-            bounce_classification:
-              "Hard/soft inferred from reason text patterns; 'delivery_delayed' tracked separately",
-            data_sources: ["email_bounces", "newsletter_send_log", "cold_email_campaigns", "newsletter_contacts"],
+    return finalize(
+      new Response(
+        JSON.stringify(
+          {
+            generated_at: new Date().toISOString(),
+            notes: {
+              sends_methodology:
+                "newsletter_send_log row count + sum(current_step) across cold_email_campaigns",
+              bounce_classification:
+                "Hard/soft inferred from reason text patterns; 'delivery_delayed' tracked separately",
+              data_sources: ["email_bounces", "newsletter_send_log", "cold_email_campaigns", "newsletter_contacts"],
+            },
+            total_sends_lifetime: totalSendsLifetime,
+            total_bounces_lifetime: {
+              total: totalBouncesLifetime,
+              hard,
+              soft,
+              complaints: complaint,
+              delivery_delayed: delayed,
+            },
+            current_bounce_rate_percent: currentBounceRatePercent,
+            bounces_by_campaign_category: bouncesByCampaignCategory,
+            bounces_by_contact_source: bouncesByContactSource,
+            top_10_bouncing_domains: topBouncingDomains,
+            trend_30d: {
+              bounces_last_30_days: last30,
+              bounces_prior_30_days: prior30,
+              change_percent: trendPctChange,
+              direction:
+                trendPctChange === null
+                  ? "n/a"
+                  : trendPctChange > 0
+                  ? "worsening"
+                  : trendPctChange < 0
+                  ? "improving"
+                  : "flat",
+            },
           },
-          total_sends_lifetime: totalSendsLifetime,
-          total_bounces_lifetime: {
-            total: totalBouncesLifetime,
-            hard,
-            soft,
-            complaints: complaint,
-            delivery_delayed: delayed,
-          },
-          current_bounce_rate_percent: currentBounceRatePercent,
-          bounces_by_campaign_category: bouncesByCampaignCategory,
-          bounces_by_contact_source: bouncesByContactSource,
-          top_10_bouncing_domains: topBouncingDomains,
-          trend_30d: {
-            bounces_last_30_days: last30,
-            bounces_prior_30_days: prior30,
-            change_percent: trendPctChange,
-            direction:
-              trendPctChange === null
-                ? "n/a"
-                : trendPctChange > 0
-                ? "worsening"
-                : trendPctChange < 0
-                ? "improving"
-                : "flat",
-          },
-        },
-        null,
-        2
+          null,
+          2
+        ),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       ),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      "valid"
     );
   } catch (error) {
     console.error("bounce-diagnostics error:", error);
-    return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    return finalize(
+      new Response(
+        JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      ),
+      "valid"
     );
   }
 });
