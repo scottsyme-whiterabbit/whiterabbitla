@@ -102,27 +102,38 @@ serve(async (req) => {
 
       const linkSlug = redirectUrl.replace(SITE_URL, "").replace(/^\//, "");
 
-      // Insert click record
+      // Detect contact source: newsletter vs cold-outreach
+      const { data: newsletterContact } = await supabase
+        .from("newsletter_contacts")
+        .select("drip_campaign, engagement_status, name, email")
+        .eq("id", contactId)
+        .maybeSingle();
+
+      const contactSource: "newsletter" | "cold" = newsletterContact ? "newsletter" : "cold";
+
+      // Insert click record (FK was dropped; works for both sources)
       await supabase.from("newsletter_clicks").insert({
         contact_id: contactId,
         drip_step: parseInt(step),
         link_slug: linkSlug,
+        contact_source: contactSource,
       });
 
-      // Count total clicks for this contact
+      // Cold-outreach engagement escalation is handled by the email-webhook
+      // (high-intent click → deal + pause). Skip newsletter escalation logic.
+      if (contactSource === "cold") {
+        return new Response(null, { status: 302, headers: { Location: redirectUrl } });
+      }
+
+      // Newsletter contact escalation
       const { count: clickCount } = await supabase
         .from("newsletter_clicks")
         .select("*", { count: "exact", head: true })
-        .eq("contact_id", contactId);
+        .eq("contact_id", contactId)
+        .eq("contact_source", "newsletter");
 
       const totalClicks = clickCount || 1;
-
-      // Fetch contact for all escalation paths
-      const { data: contact } = await supabase
-        .from("newsletter_contacts")
-        .select("drip_campaign, engagement_status, name, email")
-        .eq("id", contactId)
-        .single();
+      const contact = newsletterContact;
 
       if (contact) {
         if (totalClicks >= 3 && contact.engagement_status !== "hot") {
