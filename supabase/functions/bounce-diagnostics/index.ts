@@ -4,10 +4,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-diagnostics-token",
+    "authorization, x-client-info, apikey, content-type, x-bulk-import-token",
 };
-
-const DIAGNOSTICS_TOKEN = "wrm-bdx-9fK2pQ7nT4xL6vR8sJ3yH5mZ";
 
 // Hard bounce reason patterns (Resend / SES style)
 const HARD_PATTERNS = [
@@ -41,9 +39,19 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const token = req.headers.get("x-diagnostics-token");
-  if (token !== DIAGNOSTICS_TOKEN) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+  // ---- Kill switch ----
+  if ((Deno.env.get("EDGE_FUNCTIONS_DISABLED") || "").toLowerCase() === "true") {
+    return new Response(JSON.stringify({ error: "temporarily_disabled" }), {
+      status: 503,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  // ---- Auth: token-only (BULK_IMPORT_TOKEN) ----
+  const importToken = req.headers.get("x-bulk-import-token") || "";
+  const expectedImport = Deno.env.get("BULK_IMPORT_TOKEN") || "";
+  if (!importToken || !expectedImport || importToken !== expectedImport) {
+    return new Response(JSON.stringify({ error: "auth_failed" }), {
       status: 401,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
