@@ -375,27 +375,33 @@ serve(async (req) => {
       }
     }
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        campaign_category,
-        received: contacts.length,
-        cleaned: cleaned.length,
-        inserted: insertedCount,
-        skipped_role_based: roleBasedHits.length,
-        skipped_suppressed: (suppressedRows || []).length,
-        skipped_total: skipped.length,
-        skipped,
-        insert_errors: insertErrors.length ? insertErrors : undefined,
-        status: start_immediately ? "active" : "paused",
-      }),
-      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    return finalize(
+      new Response(
+        JSON.stringify({
+          success: true,
+          campaign_category,
+          received: contacts.length,
+          cleaned: cleaned.length,
+          inserted: insertedCount,
+          skipped_role_based: roleBasedHits.length,
+          skipped_suppressed: (suppressedRows || []).length,
+          skipped_total: skipped.length,
+          skipped,
+          insert_errors: insertErrors.length ? insertErrors : undefined,
+          status: start_immediately ? "active" : "paused",
+        }),
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      ),
+      "valid"
     );
   } catch (error) {
     console.error("bulk-import-cold-campaigns error:", error);
-    return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+    return finalize(
+      new Response(
+        JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      ),
+      "valid"
     );
   }
 });
