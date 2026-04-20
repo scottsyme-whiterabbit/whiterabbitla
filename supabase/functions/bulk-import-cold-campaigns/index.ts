@@ -60,13 +60,21 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // ---- Kill switch ----
+  if ((Deno.env.get("EDGE_FUNCTIONS_DISABLED") || "").toLowerCase() === "true") {
+    return new Response(JSON.stringify({ error: "temporarily_disabled" }), {
+      status: 503,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   try {
     const headerToken = req.headers.get("x-bulk-import-token");
     const body = await req.json();
     const token = headerToken || body.bulkImportToken;
 
     if (!token || token !== Deno.env.get("BULK_IMPORT_TOKEN")) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      return new Response(JSON.stringify({ error: "auth_failed" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
