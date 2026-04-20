@@ -25,37 +25,65 @@ serve(async (req) => {
         Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
       );
 
-      // Insert open record
+      // Detect contact source: newsletter vs cold-outreach
+      const { data: newsletterMatch } = await supabase
+        .from("newsletter_contacts")
+        .select("id, engagement_status")
+        .eq("id", contactId)
+        .maybeSingle();
+
+      let contactSource: "newsletter" | "cold" = "newsletter";
+      if (!newsletterMatch) {
+        const { data: coldMatch } = await supabase
+          .from("cold_email_campaigns")
+          .select("id")
+          .eq("id", contactId)
+          .maybeSingle();
+        if (coldMatch) contactSource = "cold";
+        else {
+          // Unknown UUID — still record nothing, but return pixel
+          return new Response(PIXEL, {
+            headers: {
+              "Content-Type": "image/gif",
+              "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+            },
+          });
+        }
+      }
+
+      // Insert open record (works for both sources now that FK was dropped)
       await supabase.from("newsletter_opens").insert({
         contact_id: contactId,
         drip_step: step,
         campaign_id: campaignId,
         user_agent: userAgent,
+        contact_source: contactSource,
       });
 
-      // Count total opens for this contact
-      const { count: openCount } = await supabase
-        .from("newsletter_opens")
-        .select("*", { count: "exact", head: true })
-        .eq("contact_id", contactId);
+      // Engagement escalation only applies to newsletter contacts.
+      // Cold-outreach engagement is handled separately (webhook + click intent).
+      if (contactSource === "newsletter") {
+        const { count: openCount } = await supabase
+          .from("newsletter_opens")
+          .select("*", { count: "exact", head: true })
+          .eq("contact_id", contactId)
+          .eq("contact_source", "newsletter");
 
-      const totalOpens = openCount || 1;
+        const totalOpens = openCount || 1;
 
-      // Status escalation based on opens
-      if (totalOpens >= 5) {
-        // 5+ opens: escalate to hot (from new or warm)
-        await supabase
-          .from("newsletter_contacts")
-          .update({ engagement_status: "hot" })
-          .eq("id", contactId)
-          .in("engagement_status", ["new", "warm"]);
-      } else if (totalOpens >= 3) {
-        // 3+ opens: escalate to warm (from new only)
-        await supabase
-          .from("newsletter_contacts")
-          .update({ engagement_status: "warm" })
-          .eq("id", contactId)
-          .in("engagement_status", ["new"]);
+        if (totalOpens >= 5) {
+          await supabase
+            .from("newsletter_contacts")
+            .update({ engagement_status: "hot" })
+            .eq("id", contactId)
+            .in("engagement_status", ["new", "warm"]);
+        } else if (totalOpens >= 3) {
+          await supabase
+            .from("newsletter_contacts")
+            .update({ engagement_status: "warm" })
+            .eq("id", contactId)
+            .in("engagement_status", ["new"]);
+        }
       }
     } catch (e) {
       console.error("track-open error:", e);

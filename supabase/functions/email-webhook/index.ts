@@ -119,17 +119,37 @@ serve(async (req) => {
       }
     }
 
-    // Handle opened events — bump engagement based on total opens
+    // Handle opened events — persist row + bump engagement based on total opens
     if (eventType === "email.opened") {
       const recipientEmail = body.data?.to?.[0] || body.data?.email;
       if (recipientEmail) {
         const contact = await getContactByEmail(recipientEmail);
+        const coldContact = !contact ? await getColdContactByEmail(recipientEmail) : null;
+
+        // Persist open row keyed by whichever source matched
+        if (contact) {
+          await supabase.from("newsletter_opens").insert({
+            contact_id: contact.id,
+            drip_step: 0,
+            user_agent: body.data?.user_agent || null,
+            contact_source: "newsletter",
+          });
+        } else if (coldContact) {
+          await supabase.from("newsletter_opens").insert({
+            contact_id: coldContact.id,
+            drip_step: coldContact.current_step ?? 0,
+            user_agent: body.data?.user_agent || null,
+            contact_source: "cold",
+          });
+          console.log(`Cold contact opened email: ${recipientEmail} (campaign: ${coldContact.campaign_category}, step: ${coldContact.current_step})`);
+        }
 
         if (contact && (contact.engagement_status === "new" || contact.engagement_status === "warm")) {
           const { count: openCount } = await supabase
             .from("newsletter_opens")
             .select("*", { count: "exact", head: true })
-            .eq("contact_id", contact.id);
+            .eq("contact_id", contact.id)
+            .eq("contact_source", "newsletter");
 
           const totalOpens = openCount || 1;
 
@@ -147,12 +167,6 @@ serve(async (req) => {
             console.log(`Contact ${recipientEmail} upgraded to warm (opened)`);
           }
         }
-
-        // Cold contact: log open
-        const coldContact = await getColdContactByEmail(recipientEmail);
-        if (coldContact) {
-          console.log(`Cold contact opened email: ${recipientEmail} (campaign: ${coldContact.campaign_category}, step: ${coldContact.current_step}, status: ${coldContact.status})`);
-        }
       }
     }
 
@@ -163,6 +177,14 @@ serve(async (req) => {
         const contact = await getContactByEmail(recipientEmail);
 
         if (contact) {
+          // Persist click row for newsletter contact
+          await supabase.from("newsletter_clicks").insert({
+            contact_id: contact.id,
+            drip_step: 0,
+            link_slug: (body.data?.click?.link || "").replace(/^https?:\/\/[^/]+/, "").replace(/^\//, ""),
+            contact_source: "newsletter",
+          });
+
           await supabase
             .from("newsletter_contacts")
             .update({ engagement_status: "hot" })
@@ -190,8 +212,17 @@ serve(async (req) => {
           }
         }
 
-        // Cold contact: tiered click handling based on link intent
+        // Cold contact: persist click row + tiered click handling based on link intent
         const coldContact = await getColdContactByEmail(recipientEmail);
+        if (coldContact) {
+          const _clickedLinkAll = body.data?.click?.link || "";
+          await supabase.from("newsletter_clicks").insert({
+            contact_id: coldContact.id,
+            drip_step: coldContact.current_step ?? 0,
+            link_slug: _clickedLinkAll.replace(/^https?:\/\/[^/]+/, "").replace(/^\//, ""),
+            contact_source: "cold",
+          });
+        }
         if (coldContact && coldContact.status === "active") {
           const clickedLink = body.data?.click?.link || "";
           const isHighIntent = /calendar\.app\.google|mailto:|\/book|\/consultation/i.test(clickedLink);

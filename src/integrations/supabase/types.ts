@@ -470,6 +470,7 @@ export type Database = {
         Row: {
           clicked_at: string
           contact_id: string
+          contact_source: string
           drip_step: number
           id: string
           link_slug: string
@@ -477,6 +478,7 @@ export type Database = {
         Insert: {
           clicked_at?: string
           contact_id: string
+          contact_source?: string
           drip_step: number
           id?: string
           link_slug: string
@@ -484,19 +486,12 @@ export type Database = {
         Update: {
           clicked_at?: string
           contact_id?: string
+          contact_source?: string
           drip_step?: number
           id?: string
           link_slug?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "newsletter_clicks_contact_id_fkey"
-            columns: ["contact_id"]
-            isOneToOne: false
-            referencedRelation: "newsletter_contacts"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       newsletter_contacts: {
         Row: {
@@ -562,6 +557,7 @@ export type Database = {
         Row: {
           campaign_id: string | null
           contact_id: string
+          contact_source: string
           drip_step: number
           id: string
           opened_at: string
@@ -570,6 +566,7 @@ export type Database = {
         Insert: {
           campaign_id?: string | null
           contact_id: string
+          contact_source?: string
           drip_step?: number
           id?: string
           opened_at?: string
@@ -578,6 +575,7 @@ export type Database = {
         Update: {
           campaign_id?: string | null
           contact_id?: string
+          contact_source?: string
           drip_step?: number
           id?: string
           opened_at?: string
@@ -589,13 +587,6 @@ export type Database = {
             columns: ["campaign_id"]
             isOneToOne: false
             referencedRelation: "newsletter_campaigns"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "newsletter_opens_contact_id_fkey"
-            columns: ["contact_id"]
-            isOneToOne: false
-            referencedRelation: "newsletter_contacts"
             referencedColumns: ["id"]
           },
         ]
