@@ -212,8 +212,17 @@ serve(async (req) => {
           }
         }
 
-        // Cold contact: tiered click handling based on link intent
+        // Cold contact: persist click row + tiered click handling based on link intent
         const coldContact = await getColdContactByEmail(recipientEmail);
+        if (coldContact) {
+          const _clickedLinkAll = body.data?.click?.link || "";
+          await supabase.from("newsletter_clicks").insert({
+            contact_id: coldContact.id,
+            drip_step: coldContact.current_step ?? 0,
+            link_slug: _clickedLinkAll.replace(/^https?:\/\/[^/]+/, "").replace(/^\//, ""),
+            contact_source: "cold",
+          });
+        }
         if (coldContact && coldContact.status === "active") {
           const clickedLink = body.data?.click?.link || "";
           const isHighIntent = /calendar\.app\.google|mailto:|\/book|\/consultation/i.test(clickedLink);
