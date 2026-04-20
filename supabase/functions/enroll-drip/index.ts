@@ -13,13 +13,29 @@ serve(async (req) => {
   }
 
   try {
-    const { name, email, source, persona, recommendation } = await req.json();
+    const { name, email: rawEmail, source, persona, recommendation } = await req.json();
 
-    if (!email) {
+    if (!rawEmail || typeof rawEmail !== "string") {
       return new Response(JSON.stringify({ error: "Email required" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
+    }
+
+    // Sanitize: strip angle brackets + all whitespace, lowercase
+    const email = rawEmail.replace(/[<>\s]/g, "").toLowerCase();
+
+    // Validate format + block reserved example domains
+    const EMAIL_RE = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+    const RESERVED_DOMAINS = ["example.com", "example.org", "example.net"];
+    if (
+      !EMAIL_RE.test(email) ||
+      RESERVED_DOMAINS.some((d) => email.endsWith(`@${d}`))
+    ) {
+      return new Response(
+        JSON.stringify({ error: "Invalid email format", email }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
