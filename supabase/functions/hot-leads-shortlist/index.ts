@@ -40,16 +40,6 @@ serve(async (req) => {
   const importOk = !!importToken && !!expectedImport && importToken === expectedImport;
 
   if (!bearerOk || !importOk) {
-    console.log("auth_failed debug", {
-      bearer_len: bearer.length,
-      bearer_prefix: bearer.slice(0, 12),
-      anon_len: expectedAnon.length,
-      anon_prefix: expectedAnon.slice(0, 12),
-      pub_len: expectedPublishable.length,
-      pub_prefix: expectedPublishable.slice(0, 12),
-      import_len: importToken.length,
-      import_ok: importOk,
-    });
     return json(401, { error: "auth_failed" });
   }
 
