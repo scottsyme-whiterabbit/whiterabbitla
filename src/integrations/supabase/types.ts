@@ -23,6 +23,9 @@ export type Database = {
           created_at: string
           current_step: number
           email: string
+          engagement_clicks: number | null
+          engagement_opens: number | null
+          hot_tag: boolean | null
           id: string
           last_email_sent_at: string | null
           linkedin_url: string | null
@@ -47,6 +50,9 @@ export type Database = {
           created_at?: string
           current_step?: number
           email: string
+          engagement_clicks?: number | null
+          engagement_opens?: number | null
+          hot_tag?: boolean | null
           id?: string
           last_email_sent_at?: string | null
           linkedin_url?: string | null
@@ -71,6 +77,9 @@ export type Database = {
           created_at?: string
           current_step?: number
           email?: string
+          engagement_clicks?: number | null
+          engagement_opens?: number | null
+          hot_tag?: boolean | null
           id?: string
           last_email_sent_at?: string | null
           linkedin_url?: string | null
@@ -424,6 +433,48 @@ export type Database = {
           id?: string
           name?: string | null
           source_page?: string | null
+        }
+        Relationships: []
+      }
+      manual_outreach_log: {
+        Row: {
+          castle_preview_booked: boolean | null
+          category: string
+          concept_call_booked: boolean | null
+          created_at: string | null
+          email: string
+          event_booked: boolean | null
+          id: string
+          notes: string | null
+          replied: boolean | null
+          revenue_dollars: number | null
+          sent_date: string
+        }
+        Insert: {
+          castle_preview_booked?: boolean | null
+          category: string
+          concept_call_booked?: boolean | null
+          created_at?: string | null
+          email: string
+          event_booked?: boolean | null
+          id?: string
+          notes?: string | null
+          replied?: boolean | null
+          revenue_dollars?: number | null
+          sent_date?: string
+        }
+        Update: {
+          castle_preview_booked?: boolean | null
+          category?: string
+          concept_call_booked?: boolean | null
+          created_at?: string | null
+          email?: string
+          event_booked?: boolean | null
+          id?: string
+          notes?: string | null
+          replied?: boolean | null
+          revenue_dollars?: number | null
+          sent_date?: string
         }
         Relationships: []
       }
