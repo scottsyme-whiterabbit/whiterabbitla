@@ -125,6 +125,33 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_cleanup_log: {
+        Row: {
+          cleaned_at: string
+          contact_id: string | null
+          id: string
+          original_email: string
+          reason: string
+          source_table: string
+        }
+        Insert: {
+          cleaned_at?: string
+          contact_id?: string | null
+          id?: string
+          original_email: string
+          reason: string
+          source_table?: string
+        }
+        Update: {
+          cleaned_at?: string
+          contact_id?: string | null
+          id?: string
+          original_email?: string
+          reason?: string
+          source_table?: string
+        }
+        Relationships: []
+      }
       contact_inquiries: {
         Row: {
           budget: string | null
