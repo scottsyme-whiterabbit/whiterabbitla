@@ -30,16 +30,16 @@ serve(async (req) => {
   const importToken = req.headers.get("x-bulk-import-token") || "";
 
   const expectedAnon = Deno.env.get("SUPABASE_ANON_KEY") || "";
+  const expectedPublishable = Deno.env.get("SUPABASE_PUBLISHABLE_KEY") || "";
   const expectedImport = Deno.env.get("BULK_IMPORT_TOKEN") || "";
 
-  if (
-    !bearer ||
-    !expectedAnon ||
-    bearer !== expectedAnon ||
-    !importToken ||
-    !expectedImport ||
-    importToken !== expectedImport
-  ) {
+  const bearerOk =
+    !!bearer &&
+    ((expectedAnon && bearer === expectedAnon) ||
+      (expectedPublishable && bearer === expectedPublishable));
+  const importOk = !!importToken && !!expectedImport && importToken === expectedImport;
+
+  if (!bearerOk || !importOk) {
     return json(401, { error: "auth_failed" });
   }
 
