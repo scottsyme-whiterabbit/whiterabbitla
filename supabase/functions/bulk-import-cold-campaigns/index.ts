@@ -1,11 +1,59 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+const FUNCTION_NAME = "bulk-import-cold-campaigns";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type, x-bulk-import-token, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
+
+// ---- Observability helpers (metadata only, no PII) ----
+async function hashIp(ip: string): Promise<string | null> {
+  if (!ip) return null;
+  const salt = Deno.env.get("IP_HASH_SALT") || "";
+  const data = new TextEncoder().encode(`${ip}:${salt}`);
+  const buf = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(buf))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function getClientIp(req: Request): string {
+  const xff = req.headers.get("x-forwarded-for") || "";
+  return xff.split(",")[0].trim() || req.headers.get("x-real-ip") || "";
+}
+
+function logRequest(params: {
+  ip: string;
+  authResult: "valid" | "missing_token" | "invalid_token" | "kill_switch";
+  statusCode: number;
+  path: string;
+  querySummary: string;
+  durationMs: number;
+}) {
+  (async () => {
+    try {
+      const supabase = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      );
+      const ip_hash = await hashIp(params.ip);
+      await supabase.from("edge_function_requests").insert({
+        function_name: FUNCTION_NAME,
+        ip_hash,
+        auth_result: params.authResult,
+        status_code: params.statusCode,
+        path: params.path,
+        query_summary: params.querySummary,
+        duration_ms: params.durationMs,
+      });
+    } catch (_e) {
+      // swallow
+    }
+  })();
+}
 
 const VALID_CATEGORIES = [
   "wedding_planner",
