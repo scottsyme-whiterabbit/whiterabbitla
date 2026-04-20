@@ -68,3 +68,6 @@ verify_jwt = false
 
 [functions.bounce-diagnostics]
 verify_jwt = false
+
+[functions.hot-leads-shortlist]
+verify_jwt = false
