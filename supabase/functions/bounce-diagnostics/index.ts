@@ -41,9 +41,19 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const token = req.headers.get("x-diagnostics-token");
-  if (token !== DIAGNOSTICS_TOKEN) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+  // ---- Kill switch ----
+  if ((Deno.env.get("EDGE_FUNCTIONS_DISABLED") || "").toLowerCase() === "true") {
+    return new Response(JSON.stringify({ error: "temporarily_disabled" }), {
+      status: 503,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
+  // ---- Auth: token-only (BULK_IMPORT_TOKEN) ----
+  const importToken = req.headers.get("x-bulk-import-token") || "";
+  const expectedImport = Deno.env.get("BULK_IMPORT_TOKEN") || "";
+  if (!importToken || !expectedImport || importToken !== expectedImport) {
+    return new Response(JSON.stringify({ error: "auth_failed" }), {
       status: 401,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
