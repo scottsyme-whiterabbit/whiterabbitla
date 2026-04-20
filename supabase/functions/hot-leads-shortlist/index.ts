@@ -1,6 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
+const FUNCTION_NAME = "hot-leads-shortlist";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, OPTIONS",
@@ -14,29 +16,110 @@ const json = (status: number, body: unknown) =>
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 
+// ---- Observability helpers (metadata only, no PII) ----
+async function hashIp(ip: string): Promise<string | null> {
+  if (!ip) return null;
+  const salt = Deno.env.get("IP_HASH_SALT") || "";
+  const data = new TextEncoder().encode(`${ip}:${salt}`);
+  const buf = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(buf))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+function getClientIp(req: Request): string {
+  const xff = req.headers.get("x-forwarded-for") || "";
+  return xff.split(",")[0].trim() || req.headers.get("x-real-ip") || "";
+}
+
+function summarizeQuery(url: URL): string {
+  // Keep only safe operational params; values are non-PII (tier/category/limit/flags)
+  const allow = ["tier", "category", "limit", "exclude_sent_manual"];
+  const parts: string[] = [];
+  for (const k of allow) {
+    const v = url.searchParams.get(k);
+    if (v !== null) parts.push(`${k}=${v}`);
+  }
+  return parts.join("&");
+}
+
+function logRequest(params: {
+  ip: string;
+  authResult: "valid" | "missing_token" | "invalid_token" | "kill_switch";
+  statusCode: number;
+  path: string;
+  querySummary: string;
+  durationMs: number;
+}) {
+  // Fire-and-forget; never block or throw
+  (async () => {
+    try {
+      const supabase = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      );
+      const ip_hash = await hashIp(params.ip);
+      await supabase.from("edge_function_requests").insert({
+        function_name: FUNCTION_NAME,
+        ip_hash,
+        auth_result: params.authResult,
+        status_code: params.statusCode,
+        path: params.path,
+        query_summary: params.querySummary,
+        duration_ms: params.durationMs,
+      });
+    } catch (_e) {
+      // swallow
+    }
+  })();
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const start = Date.now();
+  const url = new URL(req.url);
+  const ip = getClientIp(req);
+  const path = url.pathname;
+  const querySummary = summarizeQuery(url);
+
+  const finalize = (
+    res: Response,
+    authResult: "valid" | "missing_token" | "invalid_token" | "kill_switch"
+  ) => {
+    logRequest({
+      ip,
+      authResult,
+      statusCode: res.status,
+      path,
+      querySummary,
+      durationMs: Date.now() - start,
+    });
+    return res;
+  };
+
   // ---- Kill switch ----
   if ((Deno.env.get("EDGE_FUNCTIONS_DISABLED") || "").toLowerCase() === "true") {
-    return json(503, { error: "temporarily_disabled" });
+    return finalize(json(503, { error: "temporarily_disabled" }), "kill_switch");
   }
 
   if (req.method !== "GET") {
-    return json(405, { error: "method_not_allowed" });
+    return finalize(json(405, { error: "method_not_allowed" }), "valid");
   }
 
   // ---- Auth: token-only ----
   const importToken = req.headers.get("x-bulk-import-token") || "";
   const expectedImport = Deno.env.get("BULK_IMPORT_TOKEN") || "";
-  if (!importToken || !expectedImport || importToken !== expectedImport) {
-    return json(401, { error: "auth_failed" });
+  if (!importToken) {
+    return finalize(json(401, { error: "auth_failed" }), "missing_token");
+  }
+  if (!expectedImport || importToken !== expectedImport) {
+    return finalize(json(401, { error: "auth_failed" }), "invalid_token");
   }
 
   // ---- Parse params ----
-  const url = new URL(req.url);
   const tierRaw = url.searchParams.get("tier");
   const category = url.searchParams.get("category") || null;
   const limitRaw = url.searchParams.get("limit");
@@ -44,7 +127,10 @@ serve(async (req) => {
 
   const tier = tierRaw ? Number.parseInt(tierRaw, 10) : NaN;
   if (![1, 2, 3, 4].includes(tier)) {
-    return json(400, { error: "invalid_tier", message: "tier must be 1, 2, 3, or 4" });
+    return finalize(
+      json(400, { error: "invalid_tier", message: "tier must be 1, 2, 3, or 4" }),
+      "valid"
+    );
   }
 
   let limit = limitRaw ? Number.parseInt(limitRaw, 10) : 10;
@@ -60,8 +146,6 @@ serve(async (req) => {
   );
 
   try {
-    // ---- Build base query per tier ----
-    // We oversample by 3x to allow post-filter exclusion without extra round trips.
     const overFetch = Math.min(limit * 3, 200);
 
     let q = supabase
@@ -79,7 +163,6 @@ serve(async (req) => {
     } else if (tier === 4) {
       q = q.eq("hot_tag", true);
     }
-    // Tier 3 has no extra cold_email_campaigns filter; intersection done below.
 
     q = q
       .order("last_email_sent_at", { ascending: false, nullsFirst: false })
@@ -90,7 +173,6 @@ serve(async (req) => {
     if (error) throw error;
     let candidates = rows || [];
 
-    // ---- Tier 2: exclude suppression list ----
     if (tier === 2 && candidates.length) {
       const emails = candidates.map((r) => r.email.toLowerCase());
       const { data: suppressed } = await supabase
@@ -101,7 +183,6 @@ serve(async (req) => {
       candidates = candidates.filter((r) => !suppressedSet.has(r.email.toLowerCase()));
     }
 
-    // ---- Tier 3: intersect with newsletter_contacts (subscribed) ----
     if (tier === 3 && candidates.length) {
       const emails = candidates.map((r) => r.email.toLowerCase());
       const { data: subs } = await supabase
@@ -113,7 +194,6 @@ serve(async (req) => {
       candidates = candidates.filter((r) => subsSet.has(r.email.toLowerCase()));
     }
 
-    // ---- Exclude already-sent manual outreach ----
     if (excludeSentManual && candidates.length) {
       const emails = candidates.map((r) => r.email.toLowerCase());
       const { data: sent } = await supabase
@@ -124,7 +204,6 @@ serve(async (req) => {
       candidates = candidates.filter((r) => !sentSet.has(r.email.toLowerCase()));
     }
 
-    // ---- Final sort + trim ----
     candidates.sort((a, b) => {
       const ta = a.last_email_sent_at ? new Date(a.last_email_sent_at).getTime() : -Infinity;
       const tb = b.last_email_sent_at ? new Date(b.last_email_sent_at).getTime() : -Infinity;
@@ -147,17 +226,18 @@ serve(async (req) => {
       last_activity_at: r.last_email_sent_at,
     }));
 
-    return json(200, {
-      tier,
-      category,
-      count: contacts.length,
-      contacts,
-    });
+    return finalize(
+      json(200, { tier, category, count: contacts.length, contacts }),
+      "valid"
+    );
   } catch (err) {
     console.error("hot-leads-shortlist error:", err);
-    return json(500, {
-      error: "internal_error",
-      message: err instanceof Error ? err.message : "unknown",
-    });
+    return finalize(
+      json(500, {
+        error: "internal_error",
+        message: err instanceof Error ? err.message : "unknown",
+      }),
+      "valid"
+    );
   }
 });
