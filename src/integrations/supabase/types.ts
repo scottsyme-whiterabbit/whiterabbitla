@@ -347,6 +347,42 @@ export type Database = {
         }
         Relationships: []
       }
+      edge_function_requests: {
+        Row: {
+          auth_result: string
+          created_at: string | null
+          duration_ms: number | null
+          function_name: string
+          id: string
+          ip_hash: string | null
+          path: string | null
+          query_summary: string | null
+          status_code: number
+        }
+        Insert: {
+          auth_result: string
+          created_at?: string | null
+          duration_ms?: number | null
+          function_name: string
+          id?: string
+          ip_hash?: string | null
+          path?: string | null
+          query_summary?: string | null
+          status_code: number
+        }
+        Update: {
+          auth_result?: string
+          created_at?: string | null
+          duration_ms?: number | null
+          function_name?: string
+          id?: string
+          ip_hash?: string | null
+          path?: string | null
+          query_summary?: string | null
+          status_code?: number
+        }
+        Relationships: []
+      }
       email_bounces: {
         Row: {
           bounce_type: string
