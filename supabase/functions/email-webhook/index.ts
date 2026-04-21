@@ -105,7 +105,7 @@ serve(async (req) => {
         if (eventType === "email.delivery_delayed") {
           bounceType = "delivery_delayed";
         } else {
-          const resendSubtype = body.data?.bounce?.bounceType;
+          const resendSubtype = body.data?.bounce?.type;
           if (resendSubtype === "Permanent") bounceType = "hard_bounce";
           else if (resendSubtype === "Transient") bounceType = "soft_bounce";
           else bounceType = "bounced";
