@@ -26,7 +26,7 @@ const COLD_SCHEDULE = [0, 3, 10, 24];
 const DAILY_SEND_CAP = 56;
 const PER_CATEGORY_DAILY_CAP = 8;
 
-type CampaignCategory = "corporate_planner" | "wedding_planner" | "country_club" | "pr_agency" | "nonprofit" | "talent_management" | "talent" | "restaurant" | "spirits" | "nightlife";
+type CampaignCategory = "corporate_planner" | "wedding_planner" | "country_club" | "pr_agency" | "nonprofit" | "talent" | "restaurant" | "spirits" | "nightlife";
 
 interface ColdCampaign {
   id: string;
@@ -205,10 +205,6 @@ function getCampaignEmail(
     nonprofit: {
       a1: trackedLink(`${SITE_URL}/event-magician`, "See How White Rabbit Transforms Events", contactId, step, category),
       a2: trackedLink(`${SITE_URL}/event-magician`, "See How White Rabbit Transforms Events", contactId, step, category),
-    },
-    talent_management: {
-      a1: trackedLink(`${SITE_URL}/event-magician`, "See What a White Rabbit Experience Looks Like", contactId, step, category),
-      a2: trackedLink(`${SITE_URL}/event-magician`, "See What a White Rabbit Experience Looks Like", contactId, step, category),
     },
     restaurant: {
       a1: trackedLink(`${SITE_URL}/blog/best-magic-experiences-los-angeles`, "Why Restaurants Are Adding Table-Side Magic to Their Programming", contactId, step, category),
@@ -461,52 +457,6 @@ ${signoffFull()}`),
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
 <p style="margin:0 0 18px;">I know gala planning has a long lead time, so I just wanted to plant the seed for whenever your next event is on the horizon.</p>
 <p style="margin:0 0 18px;">If you ever need an interactive entertainment element that keeps donors present and engaged, or even someone who can double as an auctioneer, I am always happy to put together a custom proposal.</p>
-<p style="margin:0 0 18px;">${arts.a1}</p>
-${signoffFull()}`),
-      },
-    ],
-
-    // ═══════════════════════════════════════════════
-    // CAMPAIGN 6: CELEBRITY & TALENT MANAGEMENT
-    // ═══════════════════════════════════════════════
-    talent_management: [
-      {
-        subject: "Specialty talent for your clients private events",
-        preheader: "Close-up magic and mind reading for VIP events.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">I am a close-up magician and mind reader based in LA. I work private events and VIP receptions for clients like Netflix, Disney, and Rolls-Royce.</p>
-<p style="margin:0 0 18px;">If your agency ever books specialty talent for private parties, brand events, or client dinners, I would love to be on your roster. I am a Magic Castle member, AGT consultant, and I carry my own insurance.</p>
-<p style="margin:0 0 18px;">Happy to send my info or an avails check for any upcoming dates.</p>
-${cta}
-<p style="margin:0 0 18px;">${arts.a1}</p>
-${signoffFull()}`),
-      },
-      {
-        subject: "The talent your VIP clients do not expect",
-        preheader: "Mind reading three feet away.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Here is why close-up magic and mind reading works at private celebrity and VIP events: these guests have seen everything. Live bands, DJs, photo booths. What they have not seen is someone reading their mind three feet away, using their own phone to create something impossible, and making a prediction come true in their hands.</p>
-<p style="margin:0 0 18px;">I perform in small groups during cocktail receptions. No stage, no setup, no attention-grabbing announcements. Just quiet, jaw-dropping experiences that the room cannot stop talking about.</p>
-<p style="margin:0 0 18px;">I am comfortable in any environment. Private estates, hotel suites, yachts, you name it.</p>
-<p style="margin:0 0 18px;">${arts.a1}</p>
-${signoff()}`),
-      },
-      {
-        subject: "Why I get rebooked for VIP events",
-        preheader: "Discretion is standard.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">A client manager recently told me that after bringing me in for a private birthday event, three guests at the party independently asked for my contact info. That is the reaction that gets me rebooked.</p>
-<p style="margin:0 0 18px;">I understand discretion is paramount. No photos, no social posts, no name-dropping unless a client gives explicit permission. That is standard for me.</p>
-<p style="margin:0 0 18px;">Happy to chat about any upcoming events your clients are hosting.</p>
-${cta}
-${signoffFull()}`),
-      },
-      {
-        subject: "On your talent radar",
-        preheader: "Private parties, brand dinners, milestones.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Just wanted to make sure you have my info for when the right event comes up. Private parties, brand dinners, milestone celebrations. I work across all of them.</p>
-<p style="margin:0 0 18px;">My spring calendar is filling up, so if anything is coming down the pipeline, I am happy to check avails.</p>
 <p style="margin:0 0 18px;">${arts.a1}</p>
 ${signoffFull()}`),
       },

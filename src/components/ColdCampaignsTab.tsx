@@ -11,7 +11,8 @@ const CATEGORIES = [
   { value: "country_club", label: "Country Clubs", emoji: "⛳" },
   { value: "pr_agency", label: "PR & Marketing", emoji: "📱" },
   { value: "nonprofit", label: "Nonprofits", emoji: "❤️" },
-  { value: "talent_management", label: "Talent Mgmt", emoji: "⭐" },
+  { value: "talent", label: "Talent (Wrap)", emoji: "🎬" },
+  { value: "nightlife", label: "Nightlife", emoji: "🌙" },
   { value: "restaurant", label: "Restaurants", emoji: "🍽️" },
   { value: "spirits", label: "Spirits Brands", emoji: "🍸" },
 ] as const;

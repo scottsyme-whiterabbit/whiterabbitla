@@ -1050,7 +1050,8 @@ const AdminNewsletter = () => {
                 { key: "cold_club" as const, label: "Clubs", emoji: "⛳", category: "country_club" },
                 { key: "cold_pr" as const, label: "PR", emoji: "📱", category: "pr_agency" },
                 { key: "cold_nonprofit" as const, label: "Nonprofit", emoji: "❤️", category: "nonprofit" },
-                { key: "cold_talent" as const, label: "Talent", emoji: "⭐", category: "talent_management" },
+                { key: "cold_talent" as const, label: "Talent", emoji: "🎬", category: "talent" },
+                { key: "cold_nightlife" as const, label: "Nightlife", emoji: "🌙", category: "nightlife" },
                 { key: "cold_spirits" as const, label: "Spirits", emoji: "🍸", category: "spirits" },
               ]).map(cat => {
                 const s = stats[cat.key] || { total: 0, active: 0, paused: 0, replied: 0, completed: 0 };
@@ -1339,7 +1340,8 @@ const AdminNewsletter = () => {
                 { category: "country_club", label: "⛳ Clubs" },
                 { category: "pr_agency", label: "📱 PR" },
                 { category: "nonprofit", label: "❤️ Nonprofit" },
-                { category: "talent_management", label: "⭐ Talent" },
+                { category: "talent", label: "🎬 Talent" },
+                { category: "nightlife", label: "🌙 Nightlife" },
                 { category: "spirits", label: "🍸 Spirits" },
                 { category: "restaurant", label: "🍽️ Restaurant" },
               ]).map(cat => (

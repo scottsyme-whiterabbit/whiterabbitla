@@ -351,7 +351,8 @@ serve(async (req) => {
           cold_club: buildColdStats("country_club"),
           cold_pr: buildColdStats("pr_agency"),
           cold_nonprofit: buildColdStats("nonprofit"),
-          cold_talent: buildColdStats("talent_management"),
+          cold_talent: buildColdStats("talent"),
+          cold_nightlife: buildColdStats("nightlife"),
           cold_spirits: buildColdStats("spirits"),
           cold_restaurant: buildColdStats("restaurant"),
           orphan_leads: {

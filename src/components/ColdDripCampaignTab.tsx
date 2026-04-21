@@ -57,14 +57,24 @@ const CAMPAIGN_DATA: Record<string, { label: string; emoji: string; emails: Arra
       { subject: "For your next gala", day: 24, type: "Breakup" },
     ],
   },
-  talent_management: {
-    label: "Talent Mgmt",
-    emoji: "⭐",
+  talent: {
+    label: "Talent (Wrap)",
+    emoji: "🎬",
     emails: [
-      { subject: "Specialty talent for your clients private events", day: 0, type: "Cold Open" },
-      { subject: "The talent your VIP clients do not expect", day: 3, type: "Value Add" },
-      { subject: "Why I get rebooked for VIP events", day: 10, type: "Different Angle" },
-      { subject: "On your talent radar", day: 24, type: "Breakup" },
+      { subject: "A wrap-party moment your cast and crew will replay all year", day: 0, type: "Cold Open" },
+      { subject: "What I do at wrap parties (and why production teams rebook)", day: 3, type: "Value Add" },
+      { subject: "The post-production celebration guests still talk about", day: 10, type: "Different Angle" },
+      { subject: "Whenever the next wrap lands", day: 24, type: "Breakup" },
+    ],
+  },
+  nightlife: {
+    label: "Nightlife",
+    emoji: "🌙",
+    emails: [
+      { subject: "A table moment that becomes the night's story", day: 0, type: "Cold Open" },
+      { subject: "How VIP hosts use me to elevate the section", day: 3, type: "Value Add" },
+      { subject: "Why bottle service guests post about the magician", day: 10, type: "Different Angle" },
+      { subject: "Whenever you want the night to land differently", day: 24, type: "Breakup" },
     ],
   },
   restaurant: {
@@ -131,7 +141,15 @@ const NURTURE_DATA: Record<string, { emails: Array<{ subject: string; month: num
       { subject: "Why I give nonprofits a different rate", month: 4, type: "Offer" },
     ],
   },
-  talent_management: {
+  talent: {
+    emails: [
+      { subject: "Why Adam Ray called me", month: 1, type: "Story" },
+      { subject: "One booking, two entertainment needs", month: 2, type: "Value" },
+      { subject: "How to know if a magician is legit", month: 3, type: "Value" },
+      { subject: "Zero-maintenance talent", month: 4, type: "Proof" },
+    ],
+  },
+  nightlife: {
     emails: [
       { subject: "Why Adam Ray called me", month: 1, type: "Story" },
       { subject: "One booking, two entertainment needs", month: 2, type: "Value" },
