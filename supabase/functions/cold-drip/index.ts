@@ -564,12 +564,13 @@ ${signoffFull()}`),
       {
         subject: "A different kind of activation talent",
         preheader: "Interactive magic for premium brand events.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">I work with brands like Taittinger, Rolls-Royce, and Netflix as interactive entertainment for activations and VIP events. I perform close-up magic during cocktail receptions — moving between groups, creating impossible moments right in guests' hands.</p>
-<p style="margin:0 0 18px;">No stage, no AV, no disruption. Guests are participating, filming, and tagging your brand before you ask them to.</p>
-<p style="margin:0 0 18px;">Would it make sense to explore this for an upcoming activation?</p>
-${cta}
-${signoffFull()}`),
+        innerHtml: plainBody([
+          `${firstName},`,
+          `I work with brands like Taittinger, Rolls-Royce, and Netflix as interactive entertainment for activations and VIP events. I perform close-up magic during cocktail receptions — moving between groups, creating impossible moments right in guests' hands.`,
+          `No stage, no AV, no disruption. Guests are participating, filming, and tagging your brand before you ask them to.`,
+          `Would it make sense to explore this for an upcoming activation?`,
+          plainCalendarSentence(contactId, step, category),
+        ]) + plainSignature(),
       },
       {
         subject: "What happened at a recent brand tasting",
@@ -617,14 +618,14 @@ ${signoffFull()}`),
       {
         subject: `${firstName} — a table moment that becomes the night's story`,
         preheader: "Five minutes at a VIP table that guests retell.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Your VIP program sells the best tables in the city. What if the night at those tables could land even harder — not with more bottles, but with a moment the guests actually retell.</p>
-<p style="margin:0 0 18px;">I'm Scott. I run White Rabbit LA — close-up magic built for intimate, high-end rooms. At a VIP table during peak hour, five to ten minutes of close-up with me turns the bottle-service guest into the center of the evening. Your guests don't watch the show, they become the show. Their friends book the next table because they want the same moment.</p>
-<p style="margin:0 0 18px;">One qualifying question before I send anything else: is your Friday VIP program already running a hospitality element beyond the bar, or is the spend still concentrated on bottles and the room?</p>
-<p style="margin:0 0 18px;">Happy to walk you through what a rotation looks like. Phone or email, whichever is easier.</p>
-<p style="margin:0 0 18px;">If seeing what this looks like before we talk would help, I'm a member performer at the Magic Castle. I can get you in on a night I'm performing. Easiest way to watch close-up at a table without putting anything on your calendar.</p>
-${cta}
-${signoffFull()}`),
+        innerHtml: plainBody([
+          `${firstName},`,
+          `Your VIP program sells the best tables in the city. What if the night at those tables could land even harder — not with more bottles, but with a moment the guests actually retell.`,
+          `I'm Scott. I run White Rabbit LA — close-up magic built for intimate, high-end rooms. At a VIP table during peak hour, five to ten minutes of close-up with me turns the bottle-service guest into the center of the evening. Your guests don't watch the show, they become the show. Their friends book the next table because they want the same moment.`,
+          `One qualifying question before I send anything else: is your Friday VIP program already running a hospitality element beyond the bar, or is the spend still concentrated on bottles and the room?`,
+          `Happy to walk you through what a rotation looks like. Phone or email, whichever is easier.`,
+          plainCalendarSentence(contactId, step, category),
+        ]) + plainSignature(),
       },
       {
         subject: `${firstName} — the $10K bottle and what's missing`,
@@ -665,13 +666,13 @@ ${signoffFull()}`),
       {
         subject: `${firstName} — a quiet way to land a wrap party`,
         preheader: "Magic as hospitality at the cast-and-crew evening.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Every wrap party has the same transition point — crew finishes arriving, champagne is out, and the room has to shift from coworkers who shared a hard 12 weeks into people at an evening. That 20-minute stretch decides how the night feels all the way through.</p>
-<p style="margin:0 0 18px;">I'm Scott. I run White Rabbit LA — close-up magic built for intimate rooms. At a wrap party, five to ten minutes of close-up with a small group bridges that transition — the grip becomes the story of one trick, the DP becomes the story of another, and by the time dinner is called the room has already found its voice. Your guests don't watch the show, they become the show.</p>
-<p style="margin:0 0 18px;">One qualifying question before I say more: is there a specific wrap or premiere on your calendar in the next sixty days, or are you sourcing ahead of the Fall slate?</p>
-<p style="margin:0 0 18px;">Call or email, whichever suits. If seeing what this looks like before we talk would help, I'm a member performer at the Magic Castle. I can get you in on a night I'm performing. Easiest way to watch close-up at a table without putting anything on your calendar.</p>
-${cta}
-${signoffFull()}`),
+        innerHtml: plainBody([
+          `${firstName},`,
+          `Every wrap party has the same transition point — crew finishes arriving, champagne is out, and the room has to shift from coworkers who shared a hard 12 weeks into people at an evening. That 20-minute stretch decides how the night feels all the way through.`,
+          `I'm Scott. I run White Rabbit LA — close-up magic built for intimate rooms. At a wrap party, five to ten minutes of close-up with a small group bridges that transition — the grip becomes the story of one trick, the DP becomes the story of another, and by the time dinner is called the room has already found its voice.`,
+          `One qualifying question before I say more: is there a specific wrap or premiere on your calendar in the next sixty days, or are you sourcing ahead of the Fall slate?`,
+          plainCalendarSentence(contactId, step, category),
+        ]) + plainSignature(),
       },
       {
         subject: `${firstName} — one brief, many wraps`,
