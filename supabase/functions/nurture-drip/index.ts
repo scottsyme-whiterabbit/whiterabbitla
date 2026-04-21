@@ -24,7 +24,7 @@ const OPEN_TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/tr
 const NURTURE_INTERVAL_DAYS = 30;
 const DAILY_SEND_CAP = 50;
 
-type CampaignCategory = "corporate_planner" | "wedding_planner" | "country_club" | "pr_agency" | "nonprofit" | "talent_management" | "restaurant" | "spirits";
+type CampaignCategory = "corporate_planner" | "wedding_planner" | "country_club" | "pr_agency" | "nonprofit" | "talent" | "restaurant" | "spirits";
 
 interface NurtureCampaign {
   id: string;
@@ -412,9 +412,9 @@ ${signoffFull()}`),
     ],
 
     // ═══════════════════════════════════════════════
-    // TALENT MANAGEMENT NURTURE
+    // TALENT NURTURE
     // ═══════════════════════════════════════════════
-    talent_management: [
+    talent: [
       {
         subject: "Why Adam Ray called me",
         preheader: "Even top entertainment wants participation, not just watching.",
