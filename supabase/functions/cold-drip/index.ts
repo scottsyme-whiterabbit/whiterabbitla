@@ -276,13 +276,13 @@ function getCampaignEmail(
       {
         subject: "Quick question about your upcoming events",
         preheader: "Interactive cocktail hour entertainment for corporate events.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">I work with corporate teams at Netflix, Disney, and Morgan Stanley as their go-to for interactive cocktail hour entertainment. I perform close-up magic and mind reading, moving between groups of guests during receptions and networking portions.</p>
-<p style="margin:0 0 18px;">Most planners bring me in for the cocktail hour. Guests are mingling, and instead of awkward small talk, I am right there with them, using their phones, reading their minds, and making impossible things appear in their hands. It changes the energy of the room in minutes.</p>
-<p style="margin:0 0 18px;">Are you planning any client-facing events or team gatherings in the next few months where guest engagement matters?</p>
-${cta}
-<p style="margin:0 0 18px;">${arts.a2}</p>
-${signoffFull()}`),
+        innerHtml: plainBody([
+          `${firstName},`,
+          `I work with corporate teams at Netflix, Disney, and Morgan Stanley as their go-to for interactive cocktail hour entertainment. I perform close-up magic and mind reading, moving between groups of guests during receptions and networking portions.`,
+          `Most planners bring me in for the cocktail hour. Guests are mingling, and instead of awkward small talk, I am right there with them, using their phones, reading their minds, and making impossible things appear in their hands. It changes the energy of the room in minutes.`,
+          `Are you planning any client-facing events or team gatherings in the next few months where guest engagement matters?`,
+          plainCalendarSentence(contactId, step, category),
+        ]) + plainSignature(),
       },
       {
         subject: "What Netflix does differently at their events",
