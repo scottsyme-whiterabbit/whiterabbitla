@@ -612,7 +612,14 @@ ${signoffFull()}`),
     ],
   };
 
-  const templates = TEMPLATES[category];
+  // Alias categories with no bespoke copy yet to a safe default (corporate_planner).
+  // TODO: replace with category-specific templates for nightlife/talent.
+  const ALIAS_TO_DEFAULT: Record<string, CampaignCategory> = {
+    nightlife: "corporate_planner",
+    talent: "corporate_planner",
+  };
+  const lookupKey = (TEMPLATES[category] ? category : (ALIAS_TO_DEFAULT[category] ?? category)) as CampaignCategory;
+  const templates = TEMPLATES[lookupKey];
   if (!templates || step < 0 || step >= templates.length) {
     return { subject: "", preheader: "", innerHtml: "" };
   }
