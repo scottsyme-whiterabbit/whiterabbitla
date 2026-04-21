@@ -233,16 +233,52 @@ const AnalyticsTab = ({ storedPassword }: Props) => {
         <div className="border border-border p-6">
           <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-accent mb-4">Lead Sources</h3>
           {sourceData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart>
-                <Pie data={sourceData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
-                  {sourceData.map((_, i) => (
-                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", fontSize: 12 }} />
-              </PieChart>
-            </ResponsiveContainer>
+            <div className="flex flex-col sm:flex-row items-center gap-4">
+              <ResponsiveContainer width="100%" height={200} minWidth={140}>
+                <PieChart>
+                  <Pie
+                    data={sourceData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={45}
+                    outerRadius={75}
+                    paddingAngle={2}
+                  >
+                    {sourceData.map((_, i) => (
+                      <Cell key={i} fill={COLORS[i % COLORS.length]} stroke="hsl(var(--background))" strokeWidth={2} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", fontSize: 12 }}
+                    formatter={(value: number, name: string) => {
+                      const total = sourceData.reduce((s, d) => s + d.value, 0);
+                      const pct = total > 0 ? ((value / total) * 100).toFixed(0) : "0";
+                      return [`${value} (${pct}%)`, name];
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="flex-1 w-full space-y-1.5 min-w-0">
+                {(() => {
+                  const total = sourceData.reduce((s, d) => s + d.value, 0);
+                  return sourceData.map((entry, i) => {
+                    const pct = total > 0 ? ((entry.value / total) * 100).toFixed(0) : "0";
+                    return (
+                      <div key={entry.name} className="flex items-center gap-2 text-xs font-sans">
+                        <span
+                          className="inline-block w-2.5 h-2.5 rounded-sm shrink-0"
+                          style={{ background: COLORS[i % COLORS.length] }}
+                        />
+                        <span className="text-foreground truncate flex-1 capitalize">{entry.name}</span>
+                        <span className="text-muted-foreground tabular-nums">{pct}%</span>
+                      </div>
+                    );
+                  });
+                })()}
+              </div>
+            </div>
           ) : (
             <p className="text-muted-foreground text-xs">No source data yet</p>
           )}
