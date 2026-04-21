@@ -155,22 +155,20 @@ function plainCalendarSentence(contactId: string, step: number, campaign: string
   const sep = CALENDAR_PUBLIC_URL.includes("?") ? "&" : "?";
   const tagged = `${CALENDAR_PUBLIC_URL}${sep}utm_source=email&utm_medium=cold-drip&utm_campaign=${encodeURIComponent(campaign)}&utm_content=step-${step}`;
   const tracking = `${TRACK_URL}?cid=${contactId}&step=${step}&r=${encodeURIComponent(tagged)}`;
-  return `Happy to jump on a quick call — here's my calendar: <a href="${tracking}" style="color:#1a0dab; text-decoration:underline;">${CALENDAR_PUBLIC_URL}</a>`;
+  return `Happy to jump on a quick call — here's my calendar: <a href="${tracking}">${CALENDAR_PUBLIC_URL}</a>`;
 }
 
 function plainSignature(): string {
-  return `<p style="margin:24px 0 0; font-family:${PLAIN_FONT}; font-size:15px; line-height:1.5; color:#000000;">
+  return `<p class="sig">
 Scott Syme<br>
 White Rabbit LA<br>
-<a href="mailto:scott.syme@whiterabbitla.com" style="color:#000000; text-decoration:none;">scott.syme@whiterabbitla.com</a><br>
-<a href="https://whiterabbitla.com" style="color:#000000; text-decoration:none;">whiterabbitla.com</a>
+<a href="mailto:scott.syme@whiterabbitla.com" class="plain">scott.syme@whiterabbitla.com</a><br>
+<a href="https://whiterabbitla.com" class="plain">whiterabbitla.com</a>
 </p>`;
 }
 
 function plainBody(paragraphs: string[]): string {
-  return paragraphs
-    .map((p) => `<p style="margin:0 0 16px; font-family:${PLAIN_FONT}; font-size:15px; line-height:1.5; color:#000000;">${p}</p>`)
-    .join("\n");
+  return paragraphs.map((p) => `<p>${p}</p>`).join("\n");
 }
 
 function wrapPlainEmail(preheader: string, innerHtml: string, _email: string, contactId: string, step: number): string {
@@ -180,10 +178,19 @@ function wrapPlainEmail(preheader: string, innerHtml: string, _email: string, co
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{margin:0;padding:16px;background:#fff;font-family:${PLAIN_FONT};font-size:15px;line-height:1.5;color:#000}
+.wrap{max-width:600px;margin:0 auto}
+p{margin:0 0 16px}
+.sig{margin:24px 0 0}
+a{color:#1a0dab}
+a.plain{color:#000;text-decoration:none}
+.preheader{display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#fff}
+</style>
 </head>
-<body style="margin:0; padding:16px; background-color:#FFFFFF; font-family:${PLAIN_FONT}; font-size:15px; line-height:1.5; color:#000000;">
-<div style="display:none; max-height:0; overflow:hidden; font-size:1px; line-height:1px; color:#FFFFFF;">${preheader}</div>
-<div style="max-width:600px; margin:0 auto;">
+<body>
+<div class="preheader">${preheader}</div>
+<div class="wrap">
 ${innerHtml}
 </div>
 ${openPixel}
@@ -744,7 +751,9 @@ serve(async (req) => {
             status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }
-        const html = wrapEmail(template.preheader, template.innerHtml, "preview@example.com", "preview", step);
+        const html = step === 0
+          ? wrapPlainEmail(template.preheader, template.innerHtml, "preview@example.com", "preview", step)
+          : wrapEmail(template.preheader, template.innerHtml, "preview@example.com", "preview", step);
         return new Response(JSON.stringify({ subject: template.subject, body_html: html }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -869,7 +878,11 @@ serve(async (req) => {
 
         if (!template.subject) { skipped++; bumpSkip(cat, "other"); continue; }
 
-        const html = wrapEmail(template.preheader, template.innerHtml, campaign.email, campaign.id, step);
+        const html = step === 0
+          ? wrapPlainEmail(template.preheader, template.innerHtml, campaign.email, campaign.id, step)
+          : wrapEmail(template.preheader, template.innerHtml, campaign.email, campaign.id, step);
+
+        const oneClickUrl = `https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/unsubscribe-oneclick?email=${encodeURIComponent(campaign.email)}`;
 
         // Send via Resend
         const emailRes = await fetch("https://api.resend.com/emails", {
@@ -885,7 +898,7 @@ serve(async (req) => {
             subject: template.subject,
             html,
             headers: {
-              "List-Unsubscribe": `<${SITE_URL}/unsubscribe?email=${encodeURIComponent(campaign.email)}>`,
+              "List-Unsubscribe": `<mailto:unsubscribe@whiterabbitla.com?subject=unsubscribe>, <${oneClickUrl}>`,
               "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
             },
           }),
