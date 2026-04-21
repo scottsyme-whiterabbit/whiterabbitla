@@ -744,7 +744,9 @@ serve(async (req) => {
             status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }
-        const html = wrapEmail(template.preheader, template.innerHtml, "preview@example.com", "preview", step);
+        const html = step === 0
+          ? wrapPlainEmail(template.preheader, template.innerHtml, "preview@example.com", "preview", step)
+          : wrapEmail(template.preheader, template.innerHtml, "preview@example.com", "preview", step);
         return new Response(JSON.stringify({ subject: template.subject, body_html: html }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -869,7 +871,11 @@ serve(async (req) => {
 
         if (!template.subject) { skipped++; bumpSkip(cat, "other"); continue; }
 
-        const html = wrapEmail(template.preheader, template.innerHtml, campaign.email, campaign.id, step);
+        const html = step === 0
+          ? wrapPlainEmail(template.preheader, template.innerHtml, campaign.email, campaign.id, step)
+          : wrapEmail(template.preheader, template.innerHtml, campaign.email, campaign.id, step);
+
+        const oneClickUrl = `https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/unsubscribe-oneclick?email=${encodeURIComponent(campaign.email)}`;
 
         // Send via Resend
         const emailRes = await fetch("https://api.resend.com/emails", {
@@ -885,7 +891,7 @@ serve(async (req) => {
             subject: template.subject,
             html,
             headers: {
-              "List-Unsubscribe": `<${SITE_URL}/unsubscribe?email=${encodeURIComponent(campaign.email)}>`,
+              "List-Unsubscribe": `<mailto:unsubscribe@whiterabbitla.com?subject=unsubscribe>, <${oneClickUrl}>`,
               "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
             },
           }),

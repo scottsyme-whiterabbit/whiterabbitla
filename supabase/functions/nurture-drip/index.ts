@@ -710,6 +710,8 @@ serve(async (req) => {
 
       const html = wrapEmail(template.preheader, template.innerHtml, campaign.email, campaign.id, step);
 
+      const oneClickUrl = `https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/unsubscribe-oneclick?email=${encodeURIComponent(campaign.email)}`;
+
       // Send via Resend
       const emailRes = await fetch("https://api.resend.com/emails", {
         method: "POST",
@@ -724,7 +726,7 @@ serve(async (req) => {
           subject: template.subject,
           html,
           headers: {
-            "List-Unsubscribe": `<${SITE_URL}/unsubscribe?email=${encodeURIComponent(campaign.email)}>`,
+            "List-Unsubscribe": `<mailto:unsubscribe@whiterabbitla.com?subject=unsubscribe>, <${oneClickUrl}>`,
             "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
           },
         }),
