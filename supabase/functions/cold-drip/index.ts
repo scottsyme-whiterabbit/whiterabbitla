@@ -324,16 +324,14 @@ ${signoffFull()}`),
       {
         subject: `quick one re:${companyClause ? ` ${(company || "").trim()}` : " your couples"}`,
         preheader: "a question about your couples' cocktail hour",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">Hi ${firstName},</p>
-<p style="margin:0 0 18px;">Quick question. Do your couples ever come out of cocktail hour wishing it lasted longer?</p>
-<p style="margin:0 0 18px;">I'm Scott. Close-up magic at the Magic Castle in Hollywood and SoCal weddings. Something the planners I work with keep saying about cocktail hour: around 20 minutes in, guests pull out phones and start texting friends about what just happened six inches from their face.</p>
-<p style="margin:0 0 18px;">Couples get one wedding. Your portfolio gets the Instagram moment the morning after.</p>
-<p style="margin:0 0 18px;">Worth 10 minutes to see if any of${companyClause ? ` ${(company || "").trim()}'s` : " your"} upcoming couples${cityPhrase} would fit?</p>
-${cta}
-<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
-Scott<br/>
-<span style="font-size:12px; color:rgba(245,240,232,0.35);">Office (424) 394-1850 · Cell (650) 678-9428</span>
-</p>`),
+        innerHtml: plainBody([
+          `Hi ${firstName},`,
+          `Quick question. Do your couples ever come out of cocktail hour wishing it lasted longer?`,
+          `I'm Scott. Close-up magic at the Magic Castle in Hollywood and SoCal weddings. Something the planners I work with keep saying about cocktail hour: around 20 minutes in, guests pull out phones and start texting friends about what just happened six inches from their face.`,
+          `Couples get one wedding. Your portfolio gets the Instagram moment the morning after.`,
+          `Worth 10 minutes to see if any of${companyClause ? ` ${(company || "").trim()}'s` : " your"} upcoming couples${cityPhrase} would fit?`,
+          plainCalendarSentence(contactId, step, category),
+        ]) + plainSignature(),
       },
       {
         subject: "re: cocktail hour",
@@ -383,13 +381,13 @@ Scott<br/>
       {
         subject: "A member event idea your social calendar might be missing",
         preheader: "Interactive entertainment for private clubs.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">I work with private clubs in Southern California as an interactive entertainment option for member events. I perform close-up magic and mind reading during cocktail receptions, holiday galas, and themed dinner nights.</p>
-<p style="margin:0 0 18px;">It is the kind of programming that members talk about for weeks. Imagine a member handing you their phone and watching something impossible happen on the screen, or having me tell them the exact word they were thinking of. That kind of moment differentiates your social calendar from every other club in the area.</p>
-<p style="margin:0 0 18px;">Would it make sense to chat about adding something like this to an upcoming member event?</p>
-${cta}
-<p style="margin:0 0 18px;">${arts.a1}</p>
-${signoffFull()}`),
+        innerHtml: plainBody([
+          `${firstName},`,
+          `I work with private clubs in Southern California as an interactive entertainment option for member events. I perform close-up magic and mind reading during cocktail receptions, holiday galas, and themed dinner nights.`,
+          `It is the kind of programming that members talk about for weeks. Imagine a member handing you their phone and watching something impossible happen on the screen, or having me tell them the exact word they were thinking of. That kind of moment differentiates your social calendar from every other club in the area.`,
+          `Would it make sense to chat about adding something like this to an upcoming member event?`,
+          plainCalendarSentence(contactId, step, category),
+        ]) + plainSignature(),
       },
       {
         subject: "How private clubs use strolling entertainment",
@@ -429,13 +427,13 @@ ${signoffFull()}`),
       {
         subject: "Experiential talent for your next client activation",
         preheader: "Close-up magic for brand events and activations.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">I am a close-up magician and mind reader who works with brands like Netflix, Disney, and CBS for experiential events and activations.</p>
-<p style="margin:0 0 18px;">My work is designed for the cocktail hour of a launch party, the VIP lounge at a brand event, or the unexpected moment during a press dinner that guests post about before they leave. No stage, no AV, just real-time interaction that photographs well and creates shareable content. Guests hand me their phones, I read their minds, and things appear in their hands that should not be there. The reactions are genuine and they film themselves.</p>
-<p style="margin:0 0 18px;">If your agency ever sources talent for client events, I would love to be on your roster.</p>
-${cta}
-<p style="margin:0 0 18px;">${arts.a1}</p>
-${signoffFull()}`),
+        innerHtml: plainBody([
+          `${firstName},`,
+          `I am a close-up magician and mind reader who works with brands like Netflix, Disney, and CBS for experiential events and activations.`,
+          `My work is designed for the cocktail hour of a launch party, the VIP lounge at a brand event, or the unexpected moment during a press dinner that guests post about before they leave. No stage, no AV, just real-time interaction that photographs well and creates shareable content. Guests hand me their phones, I read their minds, and things appear in their hands that should not be there. The reactions are genuine and they film themselves.`,
+          `If your agency ever sources talent for client events, I would love to be on your roster.`,
+          plainCalendarSentence(contactId, step, category),
+        ]) + plainSignature(),
       },
       {
         subject: "The moment that makes your activation go viral",
@@ -474,13 +472,13 @@ ${signoffFull()}`),
       {
         subject: "Keeping donors engaged before the paddle raise",
         preheader: "Table-side magic for fundraising galas.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">I perform close-up magic and mind reading at fundraising galas as a table-side experience during cocktail hour and dinner.</p>
-<p style="margin:0 0 18px;">The goal is simple: keep your donors engaged, energized, and in the room before the paddle raise. Instead of guests checking phones or slipping out early, they are handing me their own phones, watching me read their minds, and seeing impossible things appear right in their hands. It creates a warmth and energy in the room that carries into the giving portion.</p>
-<p style="margin:0 0 18px;">Are you planning any galas or fundraising events in the next few months?</p>
-${cta}
-<p style="margin:0 0 18px;">${arts.a1}</p>
-${signoffFull()}`),
+        innerHtml: plainBody([
+          `${firstName},`,
+          `I perform close-up magic and mind reading at fundraising galas as a table-side experience during cocktail hour and dinner.`,
+          `The goal is simple: keep your donors engaged, energized, and in the room before the paddle raise. Instead of guests checking phones or slipping out early, they are handing me their own phones, watching me read their minds, and seeing impossible things appear right in their hands. It creates a warmth and energy in the room that carries into the giving portion.`,
+          `Are you planning any galas or fundraising events in the next few months?`,
+          plainCalendarSentence(contactId, step, category),
+        ]) + plainSignature(),
       },
       {
         subject: "Why table-side magic works at galas",
@@ -520,13 +518,13 @@ ${signoffFull()}`),
       {
         subject: "A guest experience idea for your slower nights",
         preheader: "Table-side magic that fills seats.",
-        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">I work with upscale restaurants in LA as a table-side entertainer. I perform close-up magic and mind reading right at the guest's table during dinner service. Guests hand me their phones and watch something impossible happen on the screen. I tell them the exact dish they were about to order. Things appear in their hands that were not there a second ago.</p>
-<p style="margin:0 0 18px;">Restaurants that bring me in for a weekly or biweekly night see two things: increased covers on that night and guests who come back specifically for the experience. It turns a slow Tuesday into a destination night.</p>
-<p style="margin:0 0 18px;">Would a quick conversation about trying this at your restaurant make sense?</p>
-${cta}
-<p style="margin:0 0 18px;">${arts.a1}</p>
-${signoffFull()}`),
+        innerHtml: plainBody([
+          `${firstName},`,
+          `I work with upscale restaurants in LA as a table-side entertainer. I perform close-up magic and mind reading right at the guest's table during dinner service. Guests hand me their phones and watch something impossible happen on the screen. I tell them the exact dish they were about to order. Things appear in their hands that were not there a second ago.`,
+          `Restaurants that bring me in for a weekly or biweekly night see two things: increased covers on that night and guests who come back specifically for the experience. It turns a slow Tuesday into a destination night.`,
+          `Would a quick conversation about trying this at your restaurant make sense?`,
+          plainCalendarSentence(contactId, step, category),
+        ]) + plainSignature(),
       },
       {
         subject: "How table-side magic increases your average check",
