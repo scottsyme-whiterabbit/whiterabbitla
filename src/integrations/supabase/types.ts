@@ -804,6 +804,45 @@ export type Database = {
         }
         Relationships: []
       }
+      unpause_audit_log: {
+        Row: {
+          action: string
+          bounce_rate: number | null
+          campaign_category: string
+          contacts_affected: number | null
+          created_at: string
+          details: Json | null
+          hard_bounce_rate: number | null
+          id: string
+          send_volume: number | null
+          threshold_fired: string | null
+        }
+        Insert: {
+          action: string
+          bounce_rate?: number | null
+          campaign_category: string
+          contacts_affected?: number | null
+          created_at?: string
+          details?: Json | null
+          hard_bounce_rate?: number | null
+          id?: string
+          send_volume?: number | null
+          threshold_fired?: string | null
+        }
+        Update: {
+          action?: string
+          bounce_rate?: number | null
+          campaign_category?: string
+          contacts_affected?: number | null
+          created_at?: string
+          details?: Json | null
+          hard_bounce_rate?: number | null
+          id?: string
+          send_volume?: number | null
+          threshold_fired?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

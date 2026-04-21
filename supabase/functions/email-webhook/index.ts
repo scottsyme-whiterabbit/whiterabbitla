@@ -95,26 +95,42 @@ serve(async (req) => {
       const recipientEmail = body.data?.to?.[0] || body.data?.email;
       if (recipientEmail) {
         const contact = await getContactByEmail(recipientEmail);
-        const bounceType = eventType === "email.bounced" ? "bounced" : "delivery_delayed";
+
+        // Determine bounce subtype:
+        //   delivery_delayed → 'delivery_delayed' (soft, transient)
+        //   bounced + Resend bounceType=Permanent → 'hard_bounce'
+        //   bounced + Resend bounceType=Transient → 'soft_bounce'
+        //   bounced + missing bounceType → 'bounced' (legacy/unknown)
+        let bounceType: string;
+        if (eventType === "email.delivery_delayed") {
+          bounceType = "delivery_delayed";
+        } else {
+          const resendSubtype = body.data?.bounce?.type;
+          if (resendSubtype === "Permanent") bounceType = "hard_bounce";
+          else if (resendSubtype === "Transient") bounceType = "soft_bounce";
+          else bounceType = "bounced";
+        }
+
         await supabase
           .from("newsletter_contacts")
           .update({ subscribed: false, engagement_status: "bounced" })
           .eq("email", recipientEmail.toLowerCase());
         await logBounce(contact?.id || null, recipientEmail, bounceType, body.data?.reason || body.data?.error || null);
-        console.log(`Contact ${recipientEmail} unsubscribed + logged bounce (${eventType})`);
+        console.log(`Contact ${recipientEmail} unsubscribed + logged bounce (${eventType} → ${bounceType})`);
 
-        // Cold contact: only mark as bounced on HARD bounces, not delivery_delayed (soft)
-        if (bounceType === "bounced") {
+        // Cold contact: only auto-suppress on HARD bounces. Soft bounces and
+        // delivery delays are recoverable — drip continues, watchdog handles repeats.
+        if (bounceType === "hard_bounce" || bounceType === "bounced") {
           const coldContact = await getColdContactByEmail(recipientEmail);
           if (coldContact && coldContact.status === "active") {
             await supabase
               .from("cold_email_campaigns")
               .update({ status: "bounced" })
               .eq("id", coldContact.id);
-            console.log(`Cold contact ${recipientEmail} marked as bounced (hard bounce)`);
+            console.log(`Cold contact ${recipientEmail} marked as bounced (${bounceType})`);
           }
         } else {
-          console.log(`Soft bounce (delivery_delayed) for ${recipientEmail} — cold campaign status unchanged`);
+          console.log(`Soft/delayed bounce (${bounceType}) for ${recipientEmail} — cold campaign status unchanged`);
         }
       }
     }
