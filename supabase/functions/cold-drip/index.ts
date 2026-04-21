@@ -21,9 +21,12 @@ const OPEN_TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/tr
 
 // Day offsets: Email 1 (0), Email 2 (3), Email 3 (10), Breakup (24)
 const COLD_SCHEDULE = [0, 3, 10, 24];
-const DAILY_SEND_CAP = 50;
+// Global cap = per-category cap × number of active categories (8 × 7 = 56).
+// Effective cap drops to ~40 while pr_agency + restaurant remain paused.
+const DAILY_SEND_CAP = 56;
+const PER_CATEGORY_DAILY_CAP = 8;
 
-type CampaignCategory = "corporate_planner" | "wedding_planner" | "country_club" | "pr_agency" | "nonprofit" | "talent_management" | "restaurant" | "spirits";
+type CampaignCategory = "corporate_planner" | "wedding_planner" | "country_club" | "pr_agency" | "nonprofit" | "talent_management" | "talent" | "restaurant" | "spirits" | "nightlife";
 
 interface ColdCampaign {
   id: string;
