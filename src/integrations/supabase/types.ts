@@ -40,6 +40,7 @@ export type Database = {
           state: string | null
           status: string
           title: string | null
+          unsubscribed_at: string | null
           updated_at: string
         }
         Insert: {
@@ -67,6 +68,7 @@ export type Database = {
           state?: string | null
           status?: string
           title?: string | null
+          unsubscribed_at?: string | null
           updated_at?: string
         }
         Update: {
@@ -94,6 +96,7 @@ export type Database = {
           state?: string | null
           status?: string
           title?: string | null
+          unsubscribed_at?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -445,6 +448,33 @@ export type Database = {
           reason?: string
           source_campaign_category?: string | null
           suppressed_at?: string
+        }
+        Relationships: []
+      }
+      email_unsubscribes: {
+        Row: {
+          email: string
+          id: string
+          ip_hash: string | null
+          source: string
+          unsubscribed_at: string
+          user_agent: string | null
+        }
+        Insert: {
+          email: string
+          id?: string
+          ip_hash?: string | null
+          source?: string
+          unsubscribed_at?: string
+          user_agent?: string | null
+        }
+        Update: {
+          email?: string
+          id?: string
+          ip_hash?: string | null
+          source?: string
+          unsubscribed_at?: string
+          user_agent?: string | null
         }
         Relationships: []
       }

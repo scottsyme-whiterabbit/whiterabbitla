@@ -74,3 +74,6 @@ verify_jwt = false
 
 [functions.campaign-stats]
 verify_jwt = false
+
+[functions.unsubscribe-oneclick]
+verify_jwt = false
