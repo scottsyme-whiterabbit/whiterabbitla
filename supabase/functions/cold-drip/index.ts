@@ -610,15 +610,104 @@ ${signoff()}`),
 ${signoffFull()}`),
       },
     ],
+
+    // ═══════════════════════════════════════════════
+    // CAMPAIGN 8: NIGHTLIFE (clubs, lounges, late-night venues)
+    // ═══════════════════════════════════════════════
+    nightlife: [
+      {
+        subject: `${firstName} — a table moment that becomes the night's story`,
+        preheader: "Five minutes at a VIP table that guests retell.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Your VIP program sells the best tables in the city. What if the night at those tables could land even harder — not with more bottles, but with a moment the guests actually retell.</p>
+<p style="margin:0 0 18px;">I'm Scott. I run White Rabbit LA — close-up magic built for intimate, high-end rooms. At a VIP table during peak hour, five to ten minutes of close-up with me turns the bottle-service guest into the center of the evening. Your guests don't watch the show, they become the show. Their friends book the next table because they want the same moment.</p>
+<p style="margin:0 0 18px;">One qualifying question before I send anything else: is your Friday VIP program already running a hospitality element beyond the bar, or is the spend still concentrated on bottles and the room?</p>
+<p style="margin:0 0 18px;">Happy to walk you through what a rotation looks like. Phone or email, whichever is easier.</p>
+<p style="margin:0 0 18px;">If seeing what this looks like before we talk would help, I'm a member performer at the Magic Castle. I can get you in on a night I'm performing. Easiest way to watch close-up at a table without putting anything on your calendar.</p>
+${cta}
+${signoffFull()}`),
+      },
+      {
+        subject: `${firstName} — the $10K bottle and what's missing`,
+        preheader: "What a bottle-service table doesn't deliver.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Three days on, wanted to make sure the first note landed.</p>
+<p style="margin:0 0 18px;">The angle I didn't fully explain: a $10,000 bottle-service table delivers three things — the bottles, the room, the status. What it doesn't deliver is a moment that belongs to the guest, not the room. Five minutes of close-up at their table is exactly that — the guest's own story to tell the next day. It's why the tables I work rebook. They don't come back for the room. They come back for what happened at their table.</p>
+<p style="margin:0 0 18px;">If peak Friday feels like too much to try first, I'd be glad to show you what this looks like at a soft opening, industry night, or private buyout where the stakes are lower.</p>
+${signoffFull()}`),
+      },
+      {
+        subject: `${firstName} — one more thought on the room`,
+        preheader: "Rebook rate is a hospitality metric.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">One more thought before I let this one rest.</p>
+<p style="margin:0 0 18px;">The most valuable Friday in nightlife isn't the busiest one. It's the one that makes Saturday's guest list. Which means the real question at a VIP table isn't "did they order another bottle" — it's "will they call Tuesday to rebook."</p>
+<p style="margin:0 0 18px;">Rebook rate is a hospitality metric, not a bar metric. The Ritz-Carlton figured that out a long time ago and became the #1 luxury brand in the world for it. Same principle is quietly true in every elevated club — the tables that retell the night are the ones that come back.</p>
+<p style="margin:0 0 18px;">I'm not trying to be precious about this. If it's not a fit, I understand. If there's a Friday or a soft opening where letting me work a few tables makes sense, I'd love to.</p>
+${cta}
+${signoffFull()}`),
+      },
+      {
+        subject: `${firstName} — last note from me`,
+        preheader: "One conversation. No pressure.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">This is the last one from me so I'm not crowding your inbox.</p>
+<p style="margin:0 0 18px;">If the timing's not right, that's genuinely fine. If it ever is — a private buyout, a new lounge opening, a night you want to hit differently — my number is below. One conversation. No pressure.</p>
+<p style="margin:0 0 18px;">If you're ever just curious, the Magic Castle stands. Any night I'm performing, I can get you in.</p>
+<p style="margin:0 0 18px;">Hope the room is full.</p>
+${signoffFull()}`),
+      },
+    ],
+
+    // ═══════════════════════════════════════════════
+    // CAMPAIGN 9: TALENT (agents, managers)
+    // ═══════════════════════════════════════════════
+    talent: [
+      {
+        subject: `${firstName} — a quiet way to land a wrap party`,
+        preheader: "Magic as hospitality at the cast-and-crew evening.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Every wrap party has the same transition point — crew finishes arriving, champagne is out, and the room has to shift from coworkers who shared a hard 12 weeks into people at an evening. That 20-minute stretch decides how the night feels all the way through.</p>
+<p style="margin:0 0 18px;">I'm Scott. I run White Rabbit LA — close-up magic built for intimate rooms. At a wrap party, five to ten minutes of close-up with a small group bridges that transition — the grip becomes the story of one trick, the DP becomes the story of another, and by the time dinner is called the room has already found its voice. Your guests don't watch the show, they become the show.</p>
+<p style="margin:0 0 18px;">One qualifying question before I say more: is there a specific wrap or premiere on your calendar in the next sixty days, or are you sourcing ahead of the Fall slate?</p>
+<p style="margin:0 0 18px;">Call or email, whichever suits. If seeing what this looks like before we talk would help, I'm a member performer at the Magic Castle. I can get you in on a night I'm performing. Easiest way to watch close-up at a table without putting anything on your calendar.</p>
+${cta}
+${signoffFull()}`),
+      },
+      {
+        subject: `${firstName} — one brief, many wraps`,
+        preheader: "One vendor conversation now saves you the next one.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">Three days on, wanted to make sure the first note landed.</p>
+<p style="margin:0 0 18px;">Here's the part I didn't put in the first email: most managers I talk with aren't sourcing for ONE wrap — they're sourcing for the rhythm of the year. Three, five, seven projects ending at different points. One vendor conversation now saves you from running the same brief in April and again in October.</p>
+<p style="margin:0 0 18px;">I've kept the show to forty minutes for a reason. It fits the pre-dinner slot, it doesn't interrupt speeches, and it wraps before the room thins out. Easy to slot into any cast-and-crew evening without redesigning the rest of the program.</p>
+<p style="margin:0 0 18px;">If it's easier to look at a project-by-project list, I can put together a short rundown for whichever wraps you have on your calendar through the Fall.</p>
+${signoffFull()}`),
+      },
+      {
+        subject: `${firstName} — the part most talent managers don't expect`,
+        preheader: "The client gets to enjoy their own party.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">The thing most managers don't expect about my show is that their client is never the center of it. The crew is. The producer is. The plus-one who came shy is.</p>
+<p style="margin:0 0 18px;">Which is paradoxically the part that lands with talent — most entertainment at these events puts the principal on the spot. Mine doesn't. The client gets to relax into the evening the way they rarely do at their own party. That's the job I took for myself. Magic as hospitality. The client gets to enjoy their own party.</p>
+<p style="margin:0 0 18px;">If any of that resonates, even loosely — I'd love to find the right evening for it. No pressure.</p>
+${cta}
+${signoffFull()}`),
+      },
+      {
+        subject: `${firstName} — last one from me`,
+        preheader: "If the right wrap or premiere comes up.",
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
+<p style="margin:0 0 18px;">This is the last note from me so I'm not adding to the noise.</p>
+<p style="margin:0 0 18px;">If the right wrap, premiere, or dinner comes up — even six months out — I'd be glad to hear about it. My number is below.</p>
+<p style="margin:0 0 18px;">If you're ever just curious, the Magic Castle stands. Any night I'm performing, I can get you in.</p>
+<p style="margin:0 0 18px;">Until then, hope your slate is a good one this season.</p>
+${signoffFull()}`),
+      },
+    ],
   };
 
-  // Alias categories with no bespoke copy yet to a safe default (corporate_planner).
-  // TODO: replace with category-specific templates for nightlife/talent.
-  const ALIAS_TO_DEFAULT: Record<string, CampaignCategory> = {
-    nightlife: "corporate_planner",
-    talent: "corporate_planner",
-  };
-  const lookupKey = (TEMPLATES[category] ? category : (ALIAS_TO_DEFAULT[category] ?? category)) as CampaignCategory;
+  const lookupKey = category as CampaignCategory;
   const templates = TEMPLATES[lookupKey];
   if (!templates || step < 0 || step >= templates.length) {
     return { subject: "", preheader: "", innerHtml: "" };
