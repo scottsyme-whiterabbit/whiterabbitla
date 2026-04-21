@@ -155,7 +155,7 @@ function plainCalendarSentence(contactId: string, step: number, campaign: string
   const sep = CALENDAR_PUBLIC_URL.includes("?") ? "&" : "?";
   const tagged = `${CALENDAR_PUBLIC_URL}${sep}utm_source=email&utm_medium=cold-drip&utm_campaign=${encodeURIComponent(campaign)}&utm_content=step-${step}`;
   const tracking = `${TRACK_URL}?cid=${contactId}&step=${step}&r=${encodeURIComponent(tagged)}`;
-  return `Happy to jump on a quick call — here's my calendar: <a href="${tracking}" style="color:#1a0dab; text-decoration:underline;">${CALENDAR_PUBLIC_URL}</a>`;
+  return `Happy to jump on a quick call — here's my calendar: <a href="${tracking}">${CALENDAR_PUBLIC_URL}</a>`;
 }
 
 function plainSignature(): string {
