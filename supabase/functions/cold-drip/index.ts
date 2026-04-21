@@ -692,12 +692,17 @@ serve(async (req) => {
       .gte("last_email_sent_at", todayStart);
     const sentToday = sentTodayCount ?? 0;
 
-    // Get all active campaigns
+    // Get all active campaigns. Order by started_at NULLS FIRST so step-0
+    // contacts (which have no started_at yet) drain first, oldest imports
+    // first within step-0 — preventing the in-flight tail from monopolizing
+    // the daily cap.
     const { data: campaigns, error: fetchErr } = await supabase
       .from("cold_email_campaigns")
       .select("*")
       .eq("status", "active")
-      .lt("current_step", 5);
+      .lt("current_step", 5)
+      .order("started_at", { ascending: true, nullsFirst: true })
+      .order("created_at", { ascending: true });
 
     if (fetchErr) throw fetchErr;
     if (!campaigns || campaigns.length === 0) {
@@ -706,101 +711,144 @@ serve(async (req) => {
       });
     }
 
-    for (const campaign of campaigns as ColdCampaign[]) {
-      const maxSteps = campaign.campaign_category === "spirits" ? 5 : 4;
-      const step = campaign.current_step;
-      const lastSent = campaign.last_email_sent_at ? new Date(campaign.last_email_sent_at) : null;
-      const started = campaign.started_at ? new Date(campaign.started_at) : null;
+    // Per-category counters (sends + skip reasons) for fairness + observability
+    const perCategorySent = new Map<string, number>();
+    const perCategorySkipped = new Map<string, { cap: number; timing: number; crash: number; other: number }>();
+    const bumpSkip = (cat: string, kind: "cap" | "timing" | "crash" | "other") => {
+      const cur = perCategorySkipped.get(cat) ?? { cap: 0, timing: 0, crash: 0, other: 0 };
+      cur[kind]++;
+      perCategorySkipped.set(cat, cur);
+    };
 
-      // Step 0: send immediately (if not already sent)
-      if (step === 0 && !started) {
-        // First email — send now
-      } else if (step >= maxSteps) {
-        // Completed
-        await supabase.from("cold_email_campaigns").update({ status: "completed" }).eq("id", campaign.id);
-        completed++;
-        continue;
-      } else {
-        // Check timing for next email
-        if (!lastSent) { skipped++; continue; }
-        const daysSinceLast = (now.getTime() - lastSent.getTime()) / (1000 * 60 * 60 * 24);
-        // Spirits:        0, 3, 7, 14, 21 → intervals 3, 4, 7, 7
-        // Wedding planner: 0, 3, 7, 14     → intervals 3, 4, 7
-        // Others:          0, 3, 10, 24    → intervals 3, 7, 14
-        let requiredDays: number;
-        if (campaign.campaign_category === "spirits") {
-          requiredDays = step === 1 ? 3 : step === 2 ? 4 : step === 3 ? 7 : step === 4 ? 7 : 999;
-        } else if (campaign.campaign_category === "wedding_planner") {
-          requiredDays = step === 1 ? 3 : step === 2 ? 4 : step === 3 ? 7 : 999;
+    for (const campaign of campaigns as ColdCampaign[]) {
+      const cat = campaign.campaign_category;
+      try {
+        const maxSteps = cat === "spirits" ? 5 : 4;
+        const step = campaign.current_step;
+        const lastSent = campaign.last_email_sent_at ? new Date(campaign.last_email_sent_at) : null;
+        const started = campaign.started_at ? new Date(campaign.started_at) : null;
+
+        // Step 0: send immediately (if not already sent)
+        if (step === 0 && !started) {
+          // First email — send now
+        } else if (step >= maxSteps) {
+          // Completed
+          await supabase.from("cold_email_campaigns").update({ status: "completed" }).eq("id", campaign.id);
+          completed++;
+          continue;
         } else {
-          requiredDays = step === 1 ? 3 : step === 2 ? 7 : step === 3 ? 14 : 999;
+          // Check timing for next email
+          if (!lastSent) { skipped++; bumpSkip(cat, "timing"); continue; }
+          const daysSinceLast = (now.getTime() - lastSent.getTime()) / (1000 * 60 * 60 * 24);
+          // Spirits:        0, 3, 7, 14, 21 → intervals 3, 4, 7, 7
+          // Wedding planner: 0, 3, 7, 14     → intervals 3, 4, 7
+          // Others:          0, 3, 10, 24    → intervals 3, 7, 14
+          let requiredDays: number;
+          if (cat === "spirits") {
+            requiredDays = step === 1 ? 3 : step === 2 ? 4 : step === 3 ? 7 : step === 4 ? 7 : 999;
+          } else if (cat === "wedding_planner") {
+            requiredDays = step === 1 ? 3 : step === 2 ? 4 : step === 3 ? 7 : 999;
+          } else {
+            requiredDays = step === 1 ? 3 : step === 2 ? 7 : step === 3 ? 14 : 999;
+          }
+          if (daysSinceLast < requiredDays) {
+            skipped++;
+            bumpSkip(cat, "timing");
+            continue;
+          }
         }
-        if (daysSinceLast < requiredDays) {
-          skipped++;
+
+        // Per-category daily cap (fairness across categories)
+        const catSentToday = perCategorySent.get(cat) ?? 0;
+        if (catSentToday >= PER_CATEGORY_DAILY_CAP) {
+          backlogged++;
+          bumpSkip(cat, "cap");
           continue;
         }
-      }
 
-      // Daily send cap check
-      if (sentToday + sent >= DAILY_SEND_CAP) {
-        dailyCapReached = true;
-        backlogged++;
-        continue;
-      }
+        // Global daily cap check
+        if (sentToday + sent >= DAILY_SEND_CAP) {
+          dailyCapReached = true;
+          backlogged++;
+          bumpSkip(cat, "cap");
+          continue;
+        }
 
-      // Get email content
-      const firstName = extractFirstName(campaign.name);
-      const template = getCampaignEmail(campaign.campaign_category as CampaignCategory, step, firstName, campaign.id, campaign.company, campaign.city);
+        // Get email content (wrapped — never let template lookup abort the loop)
+        const firstName = extractFirstName(campaign.name);
+        const template = getCampaignEmail(cat as CampaignCategory, step, firstName, campaign.id, campaign.company, campaign.city);
 
-      if (!template.subject) { skipped++; continue; }
+        if (!template.subject) { skipped++; bumpSkip(cat, "other"); continue; }
 
-      const html = wrapEmail(template.preheader, template.innerHtml, campaign.email, campaign.id, step);
+        const html = wrapEmail(template.preheader, template.innerHtml, campaign.email, campaign.id, step);
 
-      // Send via Resend
-      const emailRes = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${RESEND_KEY}`,
-        },
-        body: JSON.stringify({
-          from: "Scott Syme <scott.syme@whiterabbitla.com>",
-          reply_to: "scott.syme@whiterabbitla.com",
-          to: campaign.email,
-          subject: template.subject,
-          html,
+        // Send via Resend
+        const emailRes = await fetch("https://api.resend.com/emails", {
+          method: "POST",
           headers: {
-            "List-Unsubscribe": `<${SITE_URL}/unsubscribe?email=${encodeURIComponent(campaign.email)}>`,
-            "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${RESEND_KEY}`,
           },
-        }),
-      });
+          body: JSON.stringify({
+            from: "Scott Syme <scott.syme@whiterabbitla.com>",
+            reply_to: "scott.syme@whiterabbitla.com",
+            to: campaign.email,
+            subject: template.subject,
+            html,
+            headers: {
+              "List-Unsubscribe": `<${SITE_URL}/unsubscribe?email=${encodeURIComponent(campaign.email)}>`,
+              "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+            },
+          }),
+        });
 
-      if (emailRes.ok) {
-        const nextStep = step + 1;
-        const updates: Record<string, unknown> = {
-          current_step: nextStep,
-          last_email_sent_at: now.toISOString(),
-          updated_at: now.toISOString(),
-        };
-        if (step === 0) {
-          updates.started_at = now.toISOString();
+        if (emailRes.ok) {
+          const nextStep = step + 1;
+          const updates: Record<string, unknown> = {
+            current_step: nextStep,
+            last_email_sent_at: now.toISOString(),
+            updated_at: now.toISOString(),
+          };
+          if (step === 0) {
+            updates.started_at = now.toISOString();
+          }
+          if (nextStep >= maxSteps) {
+            updates.status = "completed";
+            completed++;
+          }
+          await supabase.from("cold_email_campaigns").update(updates).eq("id", campaign.id);
+          sent++;
+          perCategorySent.set(cat, catSentToday + 1);
+          console.log(`Cold drip: sent step ${step} to ${campaign.email} (${cat})`);
+        } else {
+          const errBody = await emailRes.text();
+          console.error(`Cold drip: failed to send to ${campaign.email}: ${errBody}`);
+          skipped++;
+          bumpSkip(cat, "other");
         }
-        if (nextStep >= maxSteps) {
-          updates.status = "completed";
-          completed++;
-        }
-        await supabase.from("cold_email_campaigns").update(updates).eq("id", campaign.id);
-        sent++;
-        console.log(`Cold drip: sent step ${step} to ${campaign.email} (${campaign.campaign_category})`);
-      } else {
-        const errBody = await emailRes.text();
-        console.error(`Cold drip: failed to send to ${campaign.email}: ${errBody}`);
+      } catch (rowErr) {
+        // One bad row must NEVER abort the loop. Log + count + continue.
+        console.error(`Cold drip: row crash id=${campaign.id} category=${cat} step=${campaign.current_step}:`, rowErr instanceof Error ? rowErr.message : rowErr);
         skipped++;
+        bumpSkip(cat, "crash");
+        continue;
       }
     }
 
-    return new Response(JSON.stringify({ sent, skipped, completed, backlogged, dailyCapReached, sentToday }), {
+    const perCategoryBreakdown: Record<string, { sent: number; skipped: { cap: number; timing: number; crash: number; other: number } }> = {};
+    const allCats = new Set<string>([...perCategorySent.keys(), ...perCategorySkipped.keys()]);
+    for (const c of allCats) {
+      perCategoryBreakdown[c] = {
+        sent: perCategorySent.get(c) ?? 0,
+        skipped: perCategorySkipped.get(c) ?? { cap: 0, timing: 0, crash: 0, other: 0 },
+      };
+    }
+
+    console.log(
+      `Cold drip summary: processed ${campaigns.length} rows, sent ${sent} emails, skipped ${skipped} (cap+timing+crash+other), completed ${completed}, backlogged ${backlogged}, sentTodayBefore ${sentToday}, dailyCapReached ${dailyCapReached}, per-category: ${JSON.stringify(perCategoryBreakdown)}`
+    );
+
+    return new Response(JSON.stringify({ sent, skipped, completed, backlogged, dailyCapReached, sentToday, processed: campaigns.length, perCategoryBreakdown }), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
