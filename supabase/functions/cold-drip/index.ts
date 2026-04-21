@@ -140,6 +140,57 @@ ${html}
 }
 
 // ═══════════════════════════════════════════════
+// PLAIN-TEXT-STYLED EMAIL (cold entry / Email 1 only)
+// ═══════════════════════════════════════════════
+// Strips brand chrome, dark green wrapper, logo, and styled CTA button so
+// Email 1 renders like a 1:1 personal Gmail message instead of a marketing
+// template. Improves text-to-HTML ratio and Inbox placement (vs Promotions).
+// Keeps the open-tracking pixel + List-Unsubscribe header (set in send call).
+
+const PLAIN_FONT = `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif`;
+const CALENDAR_PUBLIC_URL = "https://whiterabbitla.com/book";
+
+function plainCalendarSentence(contactId: string, step: number, campaign: string): string {
+  // Tracked link rendered as plain inline text — no button, no border, no color chrome.
+  const sep = CALENDAR_PUBLIC_URL.includes("?") ? "&" : "?";
+  const tagged = `${CALENDAR_PUBLIC_URL}${sep}utm_source=email&utm_medium=cold-drip&utm_campaign=${encodeURIComponent(campaign)}&utm_content=step-${step}`;
+  const tracking = `${TRACK_URL}?cid=${contactId}&step=${step}&r=${encodeURIComponent(tagged)}`;
+  return `Happy to jump on a quick call — here's my calendar: <a href="${tracking}" style="color:#1a0dab; text-decoration:underline;">${CALENDAR_PUBLIC_URL}</a>`;
+}
+
+function plainSignature(): string {
+  return `<p style="margin:24px 0 0; font-family:${PLAIN_FONT}; font-size:15px; line-height:1.5; color:#000000;">
+Scott Syme<br>
+White Rabbit LA<br>
+<a href="mailto:scott.syme@whiterabbitla.com" style="color:#000000; text-decoration:none;">scott.syme@whiterabbitla.com</a><br>
+<a href="https://whiterabbitla.com" style="color:#000000; text-decoration:none;">whiterabbitla.com</a>
+</p>`;
+}
+
+function plainBody(paragraphs: string[]): string {
+  return paragraphs
+    .map((p) => `<p style="margin:0 0 16px; font-family:${PLAIN_FONT}; font-size:15px; line-height:1.5; color:#000000;">${p}</p>`)
+    .join("\n");
+}
+
+function wrapPlainEmail(preheader: string, innerHtml: string, _email: string, contactId: string, step: number): string {
+  const openPixel = `<img src="${OPEN_TRACK_URL}?cid=${contactId}&step=${step}" width="1" height="1" style="display:block;width:1px;height:1px;border:0;" alt="" />`;
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0; padding:16px; background-color:#FFFFFF; font-family:${PLAIN_FONT}; font-size:15px; line-height:1.5; color:#000000;">
+<div style="display:none; max-height:0; overflow:hidden; font-size:1px; line-height:1px; color:#FFFFFF;">${preheader}</div>
+<div style="max-width:600px; margin:0 auto;">
+${innerHtml}
+</div>
+${openPixel}
+</body></html>`;
+}
+
+// ═══════════════════════════════════════════════
 // ALL 7 CAMPAIGN TEMPLATES (4 emails each)
 // ═══════════════════════════════════════════════
 
