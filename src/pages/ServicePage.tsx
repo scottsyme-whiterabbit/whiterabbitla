@@ -368,10 +368,17 @@ const servicePages: Record<string, ServiceData> = {
       { question: "Can a magician travel to our office or venue for a private holiday event?", answer: "Yes. White Rabbit LA performs at private offices, restaurants, ballrooms, members' clubs, and home venues across Los Angeles, Beverly Hills, Malibu, Santa Monica, Pasadena, Calabasas, and the broader LA metro area. Travel is included for venues within a 30-mile radius of Beverly Hills. For events outside that radius — Orange County, Santa Barbara, Palm Springs, Ojai — travel and lodging are added at flat rate." },
       { question: "Is the holiday magic show appropriate for international and mixed-language audiences?", answer: "Yes. Scott's performance is heavily visual — the moments that land hardest are objects appearing, vanishing, and transforming in the guest's own hands, rather than verbal punchlines. The performance has played to audiences in cities including London, Tokyo, Dubai, and Mexico City. For international corporate holiday parties in Los Angeles, the magic translates without modification." },
     ],
-    testimonial: {
-      quote: "Scott put on an amazing show at our Holiday Christmas Party, all the guests loved him and were blown away from his tricks and magic! 2nd year in a row hiring him and he knocks it out of the park both times!",
-      attribution: "Taylor R., Corporate Holiday Party",
-    },
+    testimonials: [
+      {
+        quote: "My company hosted a holiday dinner last Friday, and we had the pleasure of experiencing Scott's magic show. He is incredible and had the whole room captivated.",
+        attribution: "Grace G., Corporate Holiday Dinner",
+        datePublished: "2024-12-10",
+      },
+      {
+        quote: "Scott put on an amazing show at our Holiday Christmas Party, all the guests loved him and were blown away from his tricks and magic! 2nd year in a row hiring him and he knocks it out of the park both times!",
+        attribution: "Taylor R., Corporate Holiday Party",
+      },
+    ],
   },
   "charity-gala-magician": {
     slug: "charity-gala-magician",
