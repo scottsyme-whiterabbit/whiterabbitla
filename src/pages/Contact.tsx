@@ -289,6 +289,9 @@ const Contact = () => {
 
       {/* Quiz CTA */}
       <QuizCTA />
+
+      {/* Site-wide internal-link block: all 11 service pages */}
+      <ServicesFooterBlock />
     </main>
   );
 };
