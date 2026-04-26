@@ -49,7 +49,8 @@ interface ServiceData {
   sections: { heading: string; body: string }[];
   included: string[];
   faqs: { question: string; answer: string }[];
-  testimonial: { quote: string; attribution: string };
+  testimonial?: { quote: string; attribution: string; datePublished?: string };
+  testimonials?: { quote: string; attribution: string; datePublished?: string }[];
 }
 
 const servicePages: Record<string, ServiceData> = {
@@ -367,10 +368,17 @@ const servicePages: Record<string, ServiceData> = {
       { question: "Can a magician travel to our office or venue for a private holiday event?", answer: "Yes. White Rabbit LA performs at private offices, restaurants, ballrooms, members' clubs, and home venues across Los Angeles, Beverly Hills, Malibu, Santa Monica, Pasadena, Calabasas, and the broader LA metro area. Travel is included for venues within a 30-mile radius of Beverly Hills. For events outside that radius — Orange County, Santa Barbara, Palm Springs, Ojai — travel and lodging are added at flat rate." },
       { question: "Is the holiday magic show appropriate for international and mixed-language audiences?", answer: "Yes. Scott's performance is heavily visual — the moments that land hardest are objects appearing, vanishing, and transforming in the guest's own hands, rather than verbal punchlines. The performance has played to audiences in cities including London, Tokyo, Dubai, and Mexico City. For international corporate holiday parties in Los Angeles, the magic translates without modification." },
     ],
-    testimonial: {
-      quote: "Scott put on an amazing show at our Holiday Christmas Party, all the guests loved him and were blown away from his tricks and magic! 2nd year in a row hiring him and he knocks it out of the park both times!",
-      attribution: "Taylor R., Corporate Holiday Party",
-    },
+    testimonials: [
+      {
+        quote: "My company hosted a holiday dinner last Friday, and we had the pleasure of experiencing Scott's magic show. He is incredible and had the whole room captivated.",
+        attribution: "Grace G., Corporate Holiday Dinner",
+        datePublished: "2024-12-10",
+      },
+      {
+        quote: "Scott put on an amazing show at our Holiday Christmas Party, all the guests loved him and were blown away from his tricks and magic! 2nd year in a row hiring him and he knocks it out of the park both times!",
+        attribution: "Taylor R., Corporate Holiday Party",
+      },
+    ],
   },
   "charity-gala-magician": {
     slug: "charity-gala-magician",
@@ -418,10 +426,16 @@ const servicePages: Record<string, ServiceData> = {
       { question: "How far in advance should we book a charity gala magician?", answer: "Book four to six months in advance for spring and fall gala season (March through May, September through November). Holiday season galas (December) often book by August. White Rabbit LA accepts shorter-window bookings when calendar permits, but premiere gala dates — Saturday nights during peak season — book first and book early." },
       { question: "Can the magic be branded or themed to the nonprofit's mission?", answer: "Yes. Custom routines tied to the nonprofit's mission, anniversary year, or honoree have been built for past clients. Examples include a routine where the year of the organization's founding appeared inside a sealed envelope passed through the audience, and a routine where the honoree's signature appeared on an object they had never touched. Custom mission-tied routines require a planning call four to six weeks in advance." },
     ],
-    testimonial: {
-      quote: "We had Scott perform magic for a black tie event recently. Scott absolutely did an amazing job engaging with everyone.",
-      attribution: "Andres O., Black Tie Event",
-    },
+    testimonials: [
+      {
+        quote: "We had Scott perform magic for a black tie event recently. Scott absolutely did an amazing job engaging with everyone.",
+        attribution: "Andres O., Black Tie Event",
+      },
+      {
+        quote: "In one word: Elevated. We had an amazing experience with Scott! We hosted an event at our home and he's the absolute best. Skilled in magic, skilled with people, and creates a luxurious and magical environment that complements literally any event. Highly recommend!",
+        attribution: "Jacob S., Private Event Host",
+      },
+    ],
   },
   "trade-show-magician": {
     slug: "trade-show-magician",
@@ -469,10 +483,12 @@ const servicePages: Record<string, ServiceData> = {
       { question: "What are the technical and space requirements for a booth magician?", answer: "Minimal. A close-up trade show magician needs roughly a 4 ft × 4 ft footprint and any standard booth surface — a podium, a high-top table, or even a back-counter. No microphone is needed because crowds form naturally within speaking distance. The magician is fully self-contained: all props, materials, and quick-reset routines travel with Scott. White Rabbit LA provides a one-page integration brief covering booth flow, hand-off scripts, and lead-capture timing." },
       { question: "How many hours per day can a magician realistically perform on a trade show floor?", answer: "The standard performance day is six hours of active booth-side performance, broken into eight- to twelve-minute routines with brief reset breaks between sets. Stamina-managed correctly, this allows full coverage of peak floor hours without performance quality dropping in the afternoon. Multi-day bookings build in mandatory rest hours to maintain consistency across show days. White Rabbit LA delivers the same level of energy at hour six as hour one." },
     ],
-    testimonial: {
-      quote: "Scott was a phenomenal addition to have at our company's outing. He kept all of us engaged from start to finish and created such a fun, energetic atmosphere. His magic was impressive, but what really stood out was how interactive and personable he was with everyone. If you're looking for someone who can truly entertain a crowd and make an event memorable, Scott is the perfect choice.",
-      attribution: "Miguel V., Company Outing",
-    },
+    testimonials: [
+      {
+        quote: "Scott was a phenomenal addition to have at our company's outing. He kept all of us engaged from start to finish and created such a fun, energetic atmosphere. His magic was impressive, but what really stood out was how interactive and personable he was with everyone. Our team is still talking about some of the tricks he performed.",
+        attribution: "Miguel V., Corporate Company Event",
+      },
+    ],
   },
   "golf-tournament-magician": {
     slug: "golf-tournament-magician",
@@ -520,10 +536,6 @@ const servicePages: Record<string, ServiceData> = {
       { question: "Will the magic translate to a golf-and-business demographic?", answer: "Yes. The audience at a corporate or charity golf tournament is exactly the demographic White Rabbit LA performs for most often — adult, mixed-gender, professionally successful, often skeptical, and looking for intelligent entertainment rather than spectacle. Scott Syme's client list (Netflix, Disney, Morgan Stanley) and Magic Castle membership pre-qualify the booking for this audience. The performance reads as a private clubhouse experience that earns conversation, not a 'wedding magician' performance." },
       { question: "How far in advance should we book a tournament magician?", answer: "Book eight to twelve weeks in advance for charity tournaments and twelve to sixteen weeks for major corporate tournaments. Spring (April through June) and fall (September through October) are peak tournament season in California, and dates fill in the order they're requested. Late bookings are accepted when the calendar permits." },
     ],
-    testimonial: {
-      quote: "Scott performed at a 200-person event for us this week and the guests absolutely LOVED him and were amazed by his talents. I could not recommend him more! We can't wait to have him back.",
-      attribution: "Jamie I., Morgan Stanley — 200-Person Corporate Event",
-    },
   },
   "dmc-entertainment": {
     slug: "dmc-entertainment",
@@ -571,10 +583,6 @@ const servicePages: Record<string, ServiceData> = {
       { question: "Can performances be delivered in languages other than English?", answer: "The performance is heavily visual — the impact moments are objects appearing, vanishing, and transforming in the guest's own hands, which translate without language. For groups where verbal patter would benefit from a host or translator, White Rabbit LA can structure the routine for minimal verbal patter. Past international groups have included audiences from Japan, Korea, Germany, Mexico, and the UAE. For groups where a Spanish-speaking emcee is preferred, referrals are available." },
       { question: "Who is Scott Syme and why do DMCs book him specifically?", answer: "Scott Syme is the founder and lead performer of White Rabbit LA. He is a member of the Academy of Magical Arts (Magic Castle, Hollywood), magic consultant to America's Got Talent champion Dustin Tavella, a Disney Channel magic consultant on the show Bizaardvark, and a former Compass Beverly Hills luxury real estate professional — a background that translates directly into the white-glove hospitality DMC clients expect. His client roster includes Netflix, Disney, Morgan Stanley, and a long list of Fortune 500 companies. DMCs book him because the performance is consistent, the booking process is corporate-grade, and the LA-based authority signals (Magic Castle membership, Hollywood credentials) align with the city-themed experiences DMC programs are built around." },
     ],
-    testimonial: {
-      quote: "In one word: Elevated. We had an amazing experience with Scott! We hosted an event at our home and he's the absolute best. Skilled in magic, skilled with people, and creates a luxurious and magical environment that complements literally any event. Highly recommend!",
-      attribution: "Jacob S., Private Home Event",
-    },
   },
   "resident-event-magician": {
     slug: "resident-event-magician",
@@ -622,10 +630,6 @@ const servicePages: Record<string, ServiceData> = {
       { question: "Has White Rabbit LA performed at country clubs and residential communities before?", answer: "Yes. Past residential and club events have included country club member nights in Beverly Hills and Pasadena, gated-community holiday galas in Calabasas and the Hollywood Hills, and luxury residential building events in Beverly Hills and Santa Monica. References from past residential clients are available on request, and the public review page on whiterabbitla.com includes specific mention of repeat residential and club bookings." },
       { question: "Can the magic be customized for community traditions or seasonal themes?", answer: "Yes. Past examples include a custom routine built around the founding year of a residential community (revealed inside an envelope passed through the audience), a Halloween residential event with a custom themed mentalism set, and an HOA anniversary gala where the names of long-tenured residents appeared on a card chosen at random. Custom themed routines require a 4-week planning window." },
     ],
-    testimonial: {
-      quote: "He was fantastic to work with from the moment I reached out to him through to the night of the show when he stuck around and spoke with several members of our group well after his performance was over. Scott is warm, personable, funny, energetic and an EXCELLENT magician. I can't recommend him highly enough.",
-      attribution: "Josh T., Private Group Host",
-    },
   },
 };
 
@@ -661,29 +665,24 @@ const ServicePage = () => {
     return () => { script.remove(); };
   }, [page]);
 
-  // Review JSON-LD (per-page testimonial)
-  // Skipped for the 6 new vertical pages — those pages stay at exactly 6 JSON-LD blocks
-  // (3 global + 3 page: Service, BreadcrumbList, FAQPage) until real vertical-specific
-  // testimonials are supplied. Re-enable per-page Review schema in a follow-up commit.
-  const NEW_VERTICAL_SLUGS = new Set([
-    "holiday-party-magician",
-    "charity-gala-magician",
-    "trade-show-magician",
-    "golf-tournament-magician",
-    "dmc-entertainment",
-    "resident-event-magician",
-  ]);
+  // Review JSON-LD (per-page testimonials)
+  // Only emitted when real, vertical-relevant testimonials exist on the page.
+  // Pages without authentic testimonials (golf, dmc, resident) intentionally
+  // ship without Review schema until real reviews are sourced.
   useEffect(() => {
-    if (!page?.testimonial) return;
-    if (NEW_VERTICAL_SLUGS.has(page.slug)) return;
+    if (!page) return;
+    const list = page.testimonials ?? (page.testimonial ? [page.testimonial] : []);
+    if (list.length === 0) return;
+    const serviceId = `https://whiterabbitla.com/services/${page.slug}#service`;
     const script = document.createElement("script");
     script.type = "application/ld+json";
     script.id = "service-review-schema";
-    script.textContent = JSON.stringify({
+    const reviews = list.map((t) => ({
       "@context": "https://schema.org",
       "@type": "Review",
       itemReviewed: {
         "@type": "Service",
+        "@id": serviceId,
         name: page.title,
         provider: {
           "@type": "LocalBusiness",
@@ -696,13 +695,16 @@ const ServicePage = () => {
         ratingValue: "5",
         bestRating: "5",
       },
-      author: { "@type": "Person", name: page.testimonial.attribution },
-      reviewBody: page.testimonial.quote,
-    });
+      author: { "@type": "Person", name: t.attribution },
+      reviewBody: t.quote,
+      ...(t.datePublished ? { datePublished: t.datePublished } : {}),
+    }));
+    script.textContent = JSON.stringify(reviews.length === 1 ? reviews[0] : reviews);
     document.getElementById("service-review-schema")?.remove();
     document.head.appendChild(script);
     return () => { script.remove(); };
   }, [page]);
+
 
   if (!page) {
     // If this slug matches an SEO landing page, redirect to /blog/ canonical URL
@@ -840,24 +842,36 @@ const ServicePage = () => {
         </div>
       </section>
 
-      {/* Testimonial */}
-      <AnimatedSection>
-        <section className="bg-forest-dark py-20">
-          <div className="max-w-3xl mx-auto px-6 text-center">
-            <div className="flex justify-center gap-1 mb-6">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} size={18} className="fill-accent text-accent" />
-              ))}
-            </div>
-            <blockquote className="font-serif text-2xl md:text-3xl text-cream/90 leading-relaxed mb-6">
-              "{page.testimonial.quote}"
-            </blockquote>
-            <p className="font-sans text-sm tracking-[0.2em] uppercase text-cream/50">
-              {page.testimonial.attribution}
-            </p>
-          </div>
-        </section>
-      </AnimatedSection>
+      {/* Testimonials — only rendered when real reviews exist for this vertical */}
+      {(() => {
+        const list = page.testimonials ?? (page.testimonial ? [page.testimonial] : []);
+        if (list.length === 0) return null;
+        return (
+          <AnimatedSection>
+            <section className="bg-forest-dark py-20">
+              <div className={`mx-auto px-6 ${list.length > 1 ? "max-w-5xl" : "max-w-3xl"}`}>
+                <div className={list.length > 1 ? "grid md:grid-cols-2 gap-10" : ""}>
+                  {list.map((t, i) => (
+                    <div key={i} className="text-center">
+                      <div className="flex justify-center gap-1 mb-6">
+                        {[...Array(5)].map((_, s) => (
+                          <Star key={s} size={18} className="fill-accent text-accent" />
+                        ))}
+                      </div>
+                      <blockquote className="font-serif text-xl md:text-2xl text-cream/90 leading-relaxed mb-6">
+                        "{t.quote}"
+                      </blockquote>
+                      <p className="font-sans text-sm tracking-[0.2em] uppercase text-cream/50">
+                        {t.attribution}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          </AnimatedSection>
+        );
+      })()}
 
       {/* Related City Pages */}
       <section className="py-16 border-t border-border">
