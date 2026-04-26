@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema, useSpeakableSchema } from "@/hooks/useSchemaOrg";
 import threeStars from "@/assets/three-stars-gold.png";
+import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
 const About = () => {
   useScrollDepth("about");
