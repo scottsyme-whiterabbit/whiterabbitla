@@ -24,6 +24,7 @@ import Blog from "./pages/Blog";
 import BlogArticle from "./pages/BlogArticle";
 import SeoLanding from "./pages/SeoLanding";
 import ServicePage from "./pages/ServicePage";
+import ServicesHub from "./pages/Services";
 import NotFound from "./pages/NotFound";
 import DiscoveryQuiz from "./pages/DiscoveryQuiz";
 import HostsPlaybook from "./pages/HostsPlaybook";
