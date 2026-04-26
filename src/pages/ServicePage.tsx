@@ -27,6 +27,10 @@ import parlorImg from "@/assets/event-parlor-stage.jpg";
 import corporateImg from "@/assets/event-penthouse-show.jpg";
 import weddingImg from "@/assets/event-group-photo.jpg";
 import privateImg from "@/assets/experience-private.jpg";
+import residentEventHero from "@/assets/service-resident-event-hero.jpg";
+import dmcHero from "@/assets/service-dmc-hero.jpg";
+import holidayPartyAction from "@/assets/service-holiday-party-action.jpg";
+import charityGalaAction from "@/assets/service-charity-gala-action.jpg";
 
 const trustLogos = [
   { name: "Netflix", logo: netflixLogo },
@@ -329,7 +333,7 @@ const servicePages: Record<string, ServiceData> = {
     metaDescription: "The entertainment your team mentions in Monday's all-hands. Trusted by Netflix, Disney, and Morgan Stanley for company holiday parties across Los Angeles.",
     heroHeadline: "Holiday Party Magic",
     heroSub: "The entertainment your team will mention in Monday's all-hands — and remember next December.",
-    image: corporateImg,
+    image: holidayPartyAction,
     intro: "White Rabbit delivers close-up magic and mentalism for company holiday parties, end-of-year galas, and seasonal celebrations across Los Angeles. The kind of entertainment that earns a place on the calendar year over year — never awkward, always remembered.",
     sections: [
       {
@@ -387,7 +391,7 @@ const servicePages: Record<string, ServiceData> = {
     metaDescription: "Raises the room before the auction. Disney Channel consultant trusted by nonprofits across Los Angeles, Hollywood, Napa, and beyond. 5-star reviewed across 50+ events.",
     heroHeadline: "Charity Gala Magic",
     heroSub: "Raises the room before the auction — and gets remembered long after the last bid.",
-    image: parlorImg,
+    image: charityGalaAction,
     intro: "White Rabbit performs close-up magic and mentalism at charity galas and nonprofit fundraisers across Los Angeles, Hollywood, Napa Valley, and 80+ cities nationwide. The performance is engineered to elevate the room during cocktail hour, then step aside completely so the program, speakers, and live auction land at full force.",
     sections: [
       {
@@ -544,7 +548,7 @@ const servicePages: Record<string, ServiceData> = {
     metaDescription: "RFP-ready, insurance-loaded, performance consistent. The LA experience your incentive group remembers years later. Trusted by Netflix, Disney, and Morgan Stanley.",
     heroHeadline: "DMC Entertainment Partner",
     heroSub: "RFP-ready, insurance-loaded, performance consistent. The LA experience your incentive group remembers years later.",
-    image: privateImg,
+    image: dmcHero,
     intro: "White Rabbit partners with destination management companies sourcing close-up magic, parlor magic, and Magic Castle-themed evenings for incoming corporate incentive groups, executive offsites, and curated LA programs. RFP-ready, insurance-loaded, and built to perform consistently at the standard Fortune 500 incentive groups expect.",
     sections: [
       {
@@ -591,7 +595,7 @@ const servicePages: Record<string, ServiceData> = {
     metaDescription: "The entertainment residents request again next year. Multi-event partnerships for HOAs, country clubs, and luxury residential communities across LA. 5-star reviewed across 50+ events.",
     heroHeadline: "Resident Event Magic",
     heroSub: "The entertainment residents request again next year.",
-    image: weddingImg,
+    image: residentEventHero,
     intro: "White Rabbit performs close-up magic and parlor shows for HOA holiday parties, country club member nights, luxury residential building lobby events, gated-community summer socials, and seasonal celebrations across Los Angeles. One-off bookings and multi-event annual partnerships available.",
     sections: [
       {
