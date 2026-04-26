@@ -167,6 +167,8 @@ const Experience = () => {
           </div>
         </section>
       </AnimatedSection>
+
+      <ServicesFooterBlock variant="dark" />
     </main>
   );
 };
