@@ -332,7 +332,6 @@ const Reviews = () => {
           </div>
         </section>
       </AnimatedSection>
-      </AnimatedSection>
 
       {/* Site-wide internal-link block: all 11 service pages */}
       <ServicesFooterBlock />
