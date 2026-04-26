@@ -630,10 +630,6 @@ const servicePages: Record<string, ServiceData> = {
       { question: "Has White Rabbit LA performed at country clubs and residential communities before?", answer: "Yes. Past residential and club events have included country club member nights in Beverly Hills and Pasadena, gated-community holiday galas in Calabasas and the Hollywood Hills, and luxury residential building events in Beverly Hills and Santa Monica. References from past residential clients are available on request, and the public review page on whiterabbitla.com includes specific mention of repeat residential and club bookings." },
       { question: "Can the magic be customized for community traditions or seasonal themes?", answer: "Yes. Past examples include a custom routine built around the founding year of a residential community (revealed inside an envelope passed through the audience), a Halloween residential event with a custom themed mentalism set, and an HOA anniversary gala where the names of long-tenured residents appeared on a card chosen at random. Custom themed routines require a 4-week planning window." },
     ],
-    testimonial: {
-      quote: "He was fantastic to work with from the moment I reached out to him through to the night of the show when he stuck around and spoke with several members of our group well after his performance was over. Scott is warm, personable, funny, energetic and an EXCELLENT magician. I can't recommend him highly enough.",
-      attribution: "Josh T., Private Group Host",
-    },
   },
 };
 
