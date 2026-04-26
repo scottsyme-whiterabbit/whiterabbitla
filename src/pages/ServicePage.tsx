@@ -321,6 +321,312 @@ const servicePages: Record<string, ServiceData> = {
       attribution: "Director of Events, Fortune 500 Company",
     },
   },
+  "holiday-party-magician": {
+    slug: "holiday-party-magician",
+    title: "Holiday Party Magician",
+    metaTitle: "Holiday Party Magician in Los Angeles | White Rabbit LA",
+    metaDescription: "The entertainment your team mentions in Monday's all-hands. Trusted by Netflix, Disney, and Morgan Stanley for company holiday parties across Los Angeles.",
+    heroHeadline: "Holiday Party Magic",
+    heroSub: "The entertainment your team will mention in Monday's all-hands — and remember next December.",
+    image: corporateImg,
+    intro: "White Rabbit delivers close-up magic and mentalism for company holiday parties, end-of-year galas, and seasonal celebrations across Los Angeles. The kind of entertainment that earns a place on the calendar year over year — never awkward, always remembered.",
+    sections: [
+      {
+        heading: "Why Magic Works for Holiday Parties",
+        body: "Holiday parties are high-stakes for HR and EAs: book the wrong entertainment and the cringe lasts until January. Close-up magic solves it. The performance creates shared moments of surprise across the entire room — sober colleagues, social colleagues, executives, interns, international team members all having the same reaction at the same time. No bad karaoke. No awkward icebreakers. Just real, involuntary laughter and the kind of stories that get repeated in Slack the next morning.",
+      },
+      {
+        heading: "Cocktail Hour & Dinner Strolling",
+        body: "For most corporate holiday parties under 200 guests, the highest-impact format is 60 to 90 minutes of close-up strolling during cocktails and dinner. Scott moves through the room engaging clusters of eight to fifteen people for six to ten minutes each. Photo ops happen. Conversations between teams that never talk start happening. By the end of dinner, most of the room has seen the magic and has something to talk about.",
+      },
+      {
+        heading: "Featured Parlor Set for Larger Parties",
+        body: "For company-wide holiday parties or holiday galas above 200 guests, a featured 25-minute parlor set after dinner gives the entire room a single shared centerpiece moment. Some companies book both — strolling early in the evening, parlor show as the featured close.",
+      },
+      {
+        heading: "Built for Mixed Corporate Audiences",
+        body: "Scott Syme has performed for Netflix, Disney, Morgan Stanley, and a long list of agencies, hedge funds, law firms, and Fortune 500 holiday events. Every routine is corporate-clean by default — no off-color material, no participant-embarrassment moments. The performance reads as sophisticated and intelligent rather than spectacle. It works for international audiences, sober crowds, conservative cultures, and younger social cultures equally well.",
+      },
+      {
+        heading: "Booking Window — Why September Matters",
+        body: "Top close-up magicians in Los Angeles are typically booked solid for the first three weekends of December by mid-October. Friday and Saturday nights in mid-December are the first to lock. White Rabbit accepts limited late bookings into November for non-peak nights — weekday parties, lunchtime events, second-half-of-December dates — but companies that want a specific date should book by mid-September. Procurement-ready: written contract, $1M general liability insurance, COI, W-9, and standard payment terms are all pre-loaded.",
+      },
+    ],
+    included: [
+      "Pre-event consultation to tailor the performance to your company culture",
+      "Corporate-clean close-up magic, mentalism, and audience interaction",
+      "Procurement-ready paperwork: COI, W-9, $1M general liability insurance",
+      "Custom integration with your event's theme, agenda, and timeline",
+      "Post-event follow-up to ensure your party exceeded expectations",
+    ],
+    faqs: [
+      { question: "When should we book a holiday party magician for our company event?", answer: "Book by mid-September for a December holiday party. Top close-up magicians in Los Angeles are typically booked solid for the first three weekends of December by mid-October. White Rabbit LA still accepts limited late bookings into November for non-peak-night events (weekday parties, lunchtime events, and second-half-of-December dates), but Friday and Saturday nights in mid-December are the first to lock. Book early to secure the date, the format, and the time slot you want." },
+      { question: "How much does a holiday party magician cost?", answer: "Holiday party magic at White Rabbit LA is custom-priced for each booking based on audience size, venue, format (cocktail strolling, dinner-table magic, or a featured parlor show), travel, and the level of brand or theme integration. Every quote is built on a short discovery call so the night you're planning is matched to the right format and investment. The booking process is built for corporate procurement teams, with written contract, $1M general liability insurance, COI, W-9, and standard payment terms. Scott Syme is a Magic Castle (Academy of Magical Arts) member, Disney Channel magic consultant, and magic consultant to America's Got Talent champion Dustin Tavella. Call (424) 394-1850 or request a callback through the contact page." },
+      { question: "Will a magician work for our company holiday party if half the team doesn't drink?", answer: "Yes — close-up magic is one of the few entertainment formats that works equally well sober or social. The performance creates shared moments of surprise and laughter that don't depend on alcohol. For office cultures that lean younger and more social, the energy meets that. For office cultures that lean older, more conservative, or international, the performance lands as elevated and intelligent. The same act has played for Netflix and Morgan Stanley audiences in the same week." },
+      { question: "What's the best format for a company holiday party magician?", answer: "For most corporate holiday parties under 200 guests, the highest-impact format is 60 to 90 minutes of close-up strolling during the cocktail and dinner portions of the event. Guests are mingling, photo ops are happening, and the magic creates the talking points that show up in the Monday-morning Slack. For larger company-wide parties or holiday galas, a featured 25-minute parlor set after dinner gives the entire room a single shared moment. Some companies book both — strolling early, parlor show as the featured close." },
+      { question: "Can a magician travel to our office or venue for a private holiday event?", answer: "Yes. White Rabbit LA performs at private offices, restaurants, ballrooms, members' clubs, and home venues across Los Angeles, Beverly Hills, Malibu, Santa Monica, Pasadena, Calabasas, and the broader LA metro area. Travel is included for venues within a 30-mile radius of Beverly Hills. For events outside that radius — Orange County, Santa Barbara, Palm Springs, Ojai — travel and lodging are added at flat rate." },
+      { question: "Is the holiday magic show appropriate for international and mixed-language audiences?", answer: "Yes. Scott's performance is heavily visual — the moments that land hardest are objects appearing, vanishing, and transforming in the guest's own hands, rather than verbal punchlines. The performance has played to audiences in cities including London, Tokyo, Dubai, and Mexico City. For international corporate holiday parties in Los Angeles, the magic translates without modification." },
+    ],
+    testimonial: {
+      quote: "Our entire team was talking about Scott in the Monday standup. He read the room perfectly — sophisticated enough for the executives, fun enough for the new hires.",
+      attribution: "Head of People, LA-based Tech Company",
+    },
+  },
+  "charity-gala-magician": {
+    slug: "charity-gala-magician",
+    title: "Charity Gala Magician",
+    metaTitle: "Charity Gala Magician for Nonprofit Fundraisers | White Rabbit LA",
+    metaDescription: "Raises the room before the auction. Disney Channel consultant trusted by nonprofits across Los Angeles, Hollywood, Napa, and beyond. 5-star reviewed across 50+ events.",
+    heroHeadline: "Charity Gala Magic",
+    heroSub: "Raises the room before the auction — and gets remembered long after the last bid.",
+    image: parlorImg,
+    intro: "White Rabbit performs close-up magic and mentalism at charity galas and nonprofit fundraisers across Los Angeles, Hollywood, Napa Valley, and 80+ cities nationwide. The performance is engineered to elevate the room during cocktail hour, then step aside completely so the program, speakers, and live auction land at full force.",
+    sections: [
+      {
+        heading: "Magic That Lifts the Auction",
+        body: "A well-placed close-up magician at a gala increases donations because the entertainment is delivered before and during cocktail hour, then disappears once the program begins. By the time the live auction starts, the room is loose, conversational, and emotionally elevated — the exact state that drives bidding. Past gala clients have reported that post-event donor surveys named the close-up magic as the most memorable moment of the night.",
+      },
+      {
+        heading: "How the Magic Sits in the Run-of-Show",
+        body: "The standard format is 60 to 90 minutes of close-up strolling during cocktail hour and into the early dinner seating. Scott moves through the room engaging small clusters of donors for five to ten minutes each, creating shared moments and conversations between people who may not know each other. For larger galas with 300+ guests, a second magician is sometimes added to ensure full coverage. The magic is intentionally finished before the program begins so the room's full attention shifts to the speakers, honorees, and auction.",
+      },
+      {
+        heading: "Built for High-Net-Worth Audiences",
+        body: "The performance is designed for adult, sophisticated, often skeptical audiences. Past clients include events with C-suite executives, Hollywood industry leaders, and major philanthropists. Scott Syme is a Magic Castle (Academy of Magical Arts) member, magic consultant to America's Got Talent champion Dustin Tavella, a Disney Channel magic consultant on Bizaardvark, and a former Compass Beverly Hills luxury real estate professional — every interaction is delivered with white-glove hospitality, not magic-show showmanship.",
+      },
+      {
+        heading: "Custom Mission-Tied Routines",
+        body: "Custom routines tied to the nonprofit's mission, anniversary year, or honoree have been built for past clients. Examples include a routine where the year of the organization's founding appeared inside a sealed envelope passed through the audience, and a routine where the honoree's signature appeared on an object they had never touched. Custom mission-tied routines require a planning call four to six weeks in advance.",
+      },
+      {
+        heading: "Available for Galas Nationwide",
+        body: "White Rabbit performs at galas across Hollywood, Napa Valley, Aspen, the Hamptons, Palm Beach, Greenwich, Nashville, Austin, and 80+ additional cities. Travel is billed flat-rate. For nonprofit organizations with constrained entertainment budgets, White Rabbit also runs limited pro bono and discounted programs each year for mission-aligned causes — request the pro bono inquiry form on the contact page.",
+      },
+    ],
+    included: [
+      "Pre-event consultation aligned with your gala run-of-show",
+      "60 to 90 minutes of close-up strolling during cocktail hour and early dinner",
+      "Optional custom mission- or honoree-tied routine",
+      "$1M general liability insurance and standard nonprofit-vendor paperwork",
+      "Coordination with auctioneer and program team to ensure clean handoff",
+    ],
+    faqs: [
+      { question: "Does hiring a magician at a charity gala increase or distract from donations?", answer: "A well-placed close-up magician increases donations because the entertainment is delivered before and during cocktail hour, then steps aside completely once the program begins. By the time the live auction starts, the room is loose, conversational, and emotionally elevated — the exact state that drives bidding. The magic works during natural mingling time when guests are arriving, drinking, and small-talking. It does not compete with the program, the speakers, or the auctioneer. White Rabbit LA has performed at galas where post-event donor surveys named the close-up magic as the most memorable moment of the night." },
+      { question: "What's the right way to use a magician at a charity gala or fundraiser?", answer: "The standard format is 60 to 90 minutes of close-up strolling during cocktail hour and into the early dinner seating. The magician moves through the room engaging small clusters of guests for five to ten minutes each, creating shared moments and conversations between donors who may not know each other. For larger galas with 300+ guests, a second magician is sometimes added to ensure full coverage. The magic is intentionally finished before the program begins so the room's full attention shifts to the speakers, honorees, and auction." },
+      { question: "Will the magic be sophisticated enough for a high-net-worth donor audience?", answer: "Yes. The performance is designed for adult, sophisticated, often skeptical audiences. Past clients include events with C-suite executives, Hollywood industry leaders, and major philanthropists. Scott Syme is a Magic Castle (Academy of Magical Arts) member, magic consultant to America's Got Talent champion Dustin Tavella, a Disney Channel magic consultant, and a former Compass Beverly Hills luxury real estate professional — every interaction is delivered with white-glove hospitality, not magic-show showmanship. The performance reads as a private clubhouse experience that just happens to involve magic." },
+      { question: "Can a magician perform at a charity gala outside Los Angeles?", answer: "Yes. White Rabbit LA performs at galas nationwide — Hollywood, Napa Valley, Aspen, the Hamptons, Palm Beach, Greenwich, Nashville, Austin, and 80+ additional cities. Travel is billed flat-rate. For nonprofit organizations with constrained entertainment budgets, White Rabbit also runs limited pro bono and discounted programs each year for mission-aligned causes — request the pro bono inquiry form on the contact page." },
+      { question: "How far in advance should we book a charity gala magician?", answer: "Book four to six months in advance for spring and fall gala season (March through May, September through November). Holiday season galas (December) often book by August. White Rabbit LA accepts shorter-window bookings when calendar permits, but premiere gala dates — Saturday nights during peak season — book first and book early." },
+      { question: "Can the magic be branded or themed to the nonprofit's mission?", answer: "Yes. Custom routines tied to the nonprofit's mission, anniversary year, or honoree have been built for past clients. Examples include a routine where the year of the organization's founding appeared inside a sealed envelope passed through the audience, and a routine where the honoree's signature appeared on an object they had never touched. Custom mission-tied routines require a planning call four to six weeks in advance." },
+    ],
+    testimonial: {
+      quote: "Scott set the tone for our gala in the best way. The room was electric by the time we opened the auction — and our paddle raises beat last year's by a meaningful margin.",
+      attribution: "Gala Chair, Los Angeles Nonprofit",
+    },
+  },
+  "trade-show-magician": {
+    slug: "trade-show-magician",
+    title: "Trade Show Magician",
+    metaTitle: "Trade Show Magician for Booth Lead Generation | White Rabbit LA",
+    metaDescription: "Lead-capture-ready routines, sales-team handoff built in. The booth strategy that turns walk-by traffic into qualified conversations. Magic consultant to AGT champion Dustin Tavella.",
+    heroHeadline: "Trade Show Magic",
+    heroSub: "The booth strategy that turns walk-by traffic into qualified conversations.",
+    image: closeupImg,
+    intro: "White Rabbit's trade show magic is engineered for one outcome: more qualified booth conversations per show day. Working magicians on the floor regularly report 200 to 300 leads per day and badge-scan rates two to three times what the booth team projected. The mechanism is simple — a small crowd watching genuinely impressive close-up magic stops the people walking past, and curiosity converts directly into conversations with your sales team.",
+    sections: [
+      {
+        heading: "Why a Booth Magician Outperforms Bigger Booth Real Estate",
+        body: "The cost-per-lead on a magic-driven booth is typically lower than the same budget spent on additional printed materials, larger displays, or more booth real estate. The magician stops traffic, builds the crowd, and warms the prospect. The sales team works the warmed prospect from there. The math works out across virtually every B2B vertical — SaaS, hardware, healthcare, financial services.",
+      },
+      {
+        heading: "Sales Team Handoff Built Into the Routine",
+        body: "Scott Syme works with each client's booth team in advance to build a custom hand-off line that ties the magic moment directly to the product or offer. 'Just like I just made that card change in your hand, what we do for [client type] is...' Lead capture — badge scan, business card, QR code — happens during the natural transition. The magician hands a warm, engaged prospect to the rep instead of a cold walk-up.",
+      },
+      {
+        heading: "Custom Brand-Integrated Routines",
+        body: "The strongest trade show routines integrate the client's brand, product, or core messaging into the moment of impact. Past examples include a SaaS client whose logo appeared inside a sealed envelope held by the prospect, a hardware client whose product specs appeared written on a card the prospect signed, and a healthcare client whose tagline appeared on a sealed prediction chosen at random. Custom branded routines require a planning call four to six weeks before the show.",
+      },
+      {
+        heading: "Built for Multi-Day Conferences",
+        body: "Scott has worked CES, Dreamforce, NRF, Adobe Summit, SXSW, HIMSS, and similar major conferences. The standard performance day is six hours of active booth-side performance, broken into eight- to twelve-minute routines with brief reset breaks. Stamina-managed correctly, this allows full coverage of peak floor hours without performance quality dropping in the afternoon. Multi-day bookings build in mandatory rest hours to maintain consistency across show days.",
+      },
+      {
+        heading: "Minimal Footprint, Zero Tech",
+        body: "A close-up trade show magician needs roughly a four-by-four-foot footprint and any standard booth surface — a podium, a high-top table, or even a back-counter. No microphone is needed because crowds form naturally within speaking distance. The magician is fully self-contained: all props, materials, and quick-reset routines travel with Scott. White Rabbit provides a one-page integration brief covering booth flow, hand-off scripts, and lead-capture timing.",
+      },
+    ],
+    included: [
+      "Pre-show planning call covering booth flow, sales handoff, and lead capture",
+      "Six hours per day of active booth-side performance",
+      "Optional custom brand-integrated routine tied to your product or messaging",
+      "One-page sales-team integration brief and handoff scripts",
+      "$1M general liability insurance and standard exhibitor paperwork",
+    ],
+    faqs: [
+      { question: "Does a trade show magician actually generate leads, or is it just decoration?", answer: "A trade show magician is one of the highest-converting booth strategies in B2B marketing. Working magicians regularly report 200 to 300 booth-side leads per day and badge-scan rates two to three times what booth teams projected. The mechanism is straightforward: a small crowd watching genuinely impressive close-up magic stops people walking past, and curiosity converts directly into qualified conversations with the sales team. The cost-per-lead on a magic-driven booth is typically lower than the same budget spent on additional printed materials, larger displays, or more booth real estate." },
+      { question: "How does a trade show magician integrate with our sales team and booth flow?", answer: "The magician's job is to stop traffic, build the crowd, and warm the prospect — then hand off to the sales team in the closing seconds of the routine. Scott Syme works with each client's booth team in advance to build a custom hand-off line that ties the magic moment directly to the product or offer ('Just like I just made that card change in your hand, what we do for [client type] is...'). Lead capture (badge scan, business card, QR code) happens during the natural transition. Sales reps work the warmed prospect from there." },
+      { question: "How much does a trade show magician cost for a multi-day conference?", answer: "Trade show magic at White Rabbit LA is priced per booking, not from a public rate card. The variables are hours of active booth performance per day, total show days, custom branded routine development, travel, and lodging for multi-day events (CES, Dreamforce, NRF, Adobe Summit, SXSW, HIMSS). The investment is small relative to the rest of a trade show budget — adding a magician typically lifts total booth spend by a fraction of what it costs to add booth real estate, additional reps, or printed collateral, while measurably multiplying lead capture. Quotes are built on a short discovery call covering booth size, sales-team handoff plan, and brand-integration goals. Call (424) 394-1850 or request a callback." },
+      { question: "Can the magic be customized to our product, brand, or messaging?", answer: "Yes — and it should be. The strongest trade show routines integrate the client's brand, product, or core messaging into the moment of impact. Past examples include a SaaS client whose logo appeared inside a sealed envelope held by the prospect, a hardware client whose product specs appeared written on a card the prospect signed, and a healthcare client whose tagline appeared on a sealed prediction chosen at random. Custom branded routines require a planning call four to six weeks before the show." },
+      { question: "What are the technical and space requirements for a booth magician?", answer: "Minimal. A close-up trade show magician needs roughly a 4 ft × 4 ft footprint and any standard booth surface — a podium, a high-top table, or even a back-counter. No microphone is needed because crowds form naturally within speaking distance. The magician is fully self-contained: all props, materials, and quick-reset routines travel with Scott. White Rabbit LA provides a one-page integration brief covering booth flow, hand-off scripts, and lead-capture timing." },
+      { question: "How many hours per day can a magician realistically perform on a trade show floor?", answer: "The standard performance day is six hours of active booth-side performance, broken into eight- to twelve-minute routines with brief reset breaks between sets. Stamina-managed correctly, this allows full coverage of peak floor hours without performance quality dropping in the afternoon. Multi-day bookings build in mandatory rest hours to maintain consistency across show days. White Rabbit LA delivers the same level of energy at hour six as hour one." },
+    ],
+    testimonial: {
+      quote: "Booth scans were up nearly 3x over the previous year. Our reps spent the entire show talking to qualified prospects instead of trying to flag down attendees.",
+      attribution: "Field Marketing Director, Enterprise SaaS",
+    },
+  },
+  "golf-tournament-magician": {
+    slug: "golf-tournament-magician",
+    title: "Golf Tournament Magician",
+    metaTitle: "Golf Tournament Magician for Hospitality & Clubhouse | White Rabbit LA",
+    metaDescription: "Fills the gap between rounds and the auction. Hospitality-tent and clubhouse magician for charity golf and corporate tournaments across Southern California.",
+    heroHeadline: "Golf Tournament Magic",
+    heroSub: "Fills the gap between rounds and the auction — and lifts the awards dinner energy.",
+    image: corporateImg,
+    intro: "White Rabbit performs close-up magic at charity golf tournaments and corporate tournaments across Southern California — clubhouse cocktail receptions, awards dinners, and on-course hospitality tents. The performance fills the natural gaps in a tournament day where guests aren't actively playing or eating, and lifts the room before the auction or awards.",
+    sections: [
+      {
+        heading: "Where the Magic Fits in a Tournament Day",
+        body: "Three highest-value placements: (1) the morning registration and breakfast, where players are gathering and waiting for tee times, (2) the post-round cocktail reception and silent auction, where attendees are mingling before the awards dinner, and (3) the awards dinner itself, where dinner-table close-up magic between courses keeps energy high. Some tournaments add a magician to a sponsored hospitality tent on the course to entertain VIP groups during their round.",
+      },
+      {
+        heading: "Why Magic Beats a DJ at a Tournament",
+        body: "A close-up magician works the room one small group at a time, which is the format that matches how golf tournament guests actually socialize — small groups, mingling, conversational. A band or DJ requires a stationary audience and full attention; a magician moves through the room and creates intimate moments of impact within whatever conversation is already happening. For charity tournaments specifically, the magic creates the energy that lifts the auction without competing with the program.",
+      },
+      {
+        heading: "On-Course Hospitality Tent Coverage",
+        body: "On-course hospitality tent magic is a premium add-on for sponsor tents, charity hospitality, and VIP groups. The magician rotates between tents during play, performing six- to ten-minute sets for the small group of guests stationed in each tent. This is most effective at multi-tent tournaments where sponsors are competing for guest experience, and at charity tournaments where major donors are housed in dedicated VIP areas.",
+      },
+      {
+        heading: "The Right Audience for the Magic",
+        body: "The audience at a corporate or charity golf tournament is exactly the demographic White Rabbit performs for most often — adult, mixed-gender, professionally successful, often skeptical, and looking for intelligent entertainment rather than spectacle. Scott's client list (Netflix, Disney, Morgan Stanley) and Magic Castle membership pre-qualify the booking for this audience. The performance reads as a private clubhouse experience that earns conversation, not a kids'-show performance.",
+      },
+      {
+        heading: "Booking Window for Tournament Season",
+        body: "Book eight to twelve weeks in advance for charity tournaments and twelve to sixteen weeks for major corporate tournaments. Spring (April through June) and fall (September through October) are peak tournament season in California, and dates fill in the order they're requested. Late bookings are accepted when the calendar permits.",
+      },
+    ],
+    included: [
+      "Pre-tournament planning call covering hospitality, dinner, and on-course coverage",
+      "Post-round cocktail reception and dinner-table strolling magic",
+      "Optional on-course hospitality tent rotation as a sponsor add-on",
+      "$1M general liability insurance and standard tournament-vendor paperwork",
+      "Coordination with tournament committee and auctioneer for clean program flow",
+    ],
+    faqs: [
+      { question: "What does a golf tournament magician actually do during the event?", answer: "A golf tournament magician fills the natural gaps in a tournament day where guests aren't actively playing or eating. The three highest-value placements are: (1) the morning registration and breakfast, where players are gathering and waiting for tee times, (2) the post-round cocktail reception and silent auction, where attendees are mingling before the awards dinner, and (3) the awards dinner itself, where dinner-table close-up magic between courses keeps energy high. Some tournaments add a magician to a sponsored hospitality tent on the course to entertain VIP groups during their round." },
+      { question: "Why hire a magician for a charity golf tournament instead of a band or DJ?", answer: "A close-up magician works the room one small group at a time, which is the format that matches how golf tournament guests actually socialize — small groups, mingling, conversational. A band or DJ requires a stationary audience and full attention; a magician moves through the room and creates intimate moments of impact within whatever conversation is already happening. For charity tournaments specifically, the magic creates the energy that lifts the auction without competing with the program." },
+      { question: "How much does it cost to book a magician for a golf tournament?", answer: "Golf tournament magic at White Rabbit LA is custom-priced per tournament. The variables are hours of coverage (registration, on-course hospitality, post-round cocktail reception, awards dinner), format (close-up strolling only, or close-up plus a featured parlor set after dinner), travel, and whether on-course hospitality tents are included. Most tournament committees book the post-round cocktail reception plus dinner-table strolling as the standard package and add on-course coverage as a sponsor-level upgrade. Every quote is built on a short discovery call. Call (424) 394-1850 or request a callback through the contact page." },
+      { question: "Can a magician perform at the on-course hospitality tents during play?", answer: "Yes. On-course hospitality tent magic is a premium add-on for sponsor tents, charity hospitality, and VIP groups. The magician rotates between tents during play, performing six- to ten-minute sets for the small group of guests stationed in each tent. This is most effective at multi-tent tournaments where sponsors are competing for guest experience, and at charity tournaments where major donors are housed in dedicated VIP areas." },
+      { question: "Will the magic translate to a golf-and-business demographic?", answer: "Yes. The audience at a corporate or charity golf tournament is exactly the demographic White Rabbit LA performs for most often — adult, mixed-gender, professionally successful, often skeptical, and looking for intelligent entertainment rather than spectacle. Scott Syme's client list (Netflix, Disney, Morgan Stanley) and Magic Castle membership pre-qualify the booking for this audience. The performance reads as a private clubhouse experience that earns conversation, not a 'wedding magician' performance." },
+      { question: "How far in advance should we book a tournament magician?", answer: "Book eight to twelve weeks in advance for charity tournaments and twelve to sixteen weeks for major corporate tournaments. Spring (April through June) and fall (September through October) are peak tournament season in California, and dates fill in the order they're requested. Late bookings are accepted when the calendar permits." },
+    ],
+    testimonial: {
+      quote: "The cocktail reception is usually the part of the day everyone forgets. This year, it was the part everyone remembered. Our auction numbers reflected it.",
+      attribution: "Tournament Chair, Southern California Charity Golf Classic",
+    },
+  },
+  "dmc-entertainment": {
+    slug: "dmc-entertainment",
+    title: "Magician for DMC Programs",
+    metaTitle: "Magician for DMC Programs in Los Angeles | White Rabbit LA",
+    metaDescription: "RFP-ready, insurance-loaded, performance consistent. The LA experience your incentive group remembers years later. Trusted by Netflix, Disney, and Morgan Stanley.",
+    heroHeadline: "DMC Entertainment Partner",
+    heroSub: "RFP-ready, insurance-loaded, performance consistent. The LA experience your incentive group remembers years later.",
+    image: privateImg,
+    intro: "White Rabbit partners with destination management companies sourcing close-up magic, parlor magic, and Magic Castle-themed evenings for incoming corporate incentive groups, executive offsites, and curated LA programs. RFP-ready, insurance-loaded, and built to perform consistently at the standard Fortune 500 incentive groups expect.",
+    sections: [
+      {
+        heading: "How DMCs Use White Rabbit",
+        body: "A DMC entertainment partner is a vetted, reservable, repeat-bookable performer that DMCs source for incoming groups visiting a destination city. White Rabbit partners with DMCs operating in Los Angeles — Hello! West, PRA, Allied PRA, Maritz, BCD M&E, and similar. The DMC owns the client relationship and the booking; Scott Syme delivers the performance to the agreed-upon spec. Insurance, contracts, COIs, and W-9 documentation are pre-loaded for fast turnaround on RFPs.",
+      },
+      {
+        heading: "Three LA-Themed Program Formats",
+        body: "Three formats are most commonly requested: (1) a private Magic Castle evening for incoming groups (subject to Academy of Magical Arts sponsorship rules and availability), (2) a private home or villa close-up performance staged in Beverly Hills, Hollywood Hills, or Malibu venues that DMCs already use, and (3) a featured close-up or parlor performance integrated into a curated LA-themed evening — rooftop dinner, classic-Hollywood venue, members' club, or private museum buyout. Each format can be customized to the client's brand or industry vertical.",
+      },
+      {
+        heading: "Built for DMC Operating Tempo",
+        body: "DMC bookings are prioritized in the calendar. White Rabbit holds blocks of weekend availability specifically for DMC partners, allowing inquiries to be answered within 24 hours and confirmed within 48 when calendar permits. For high-value incentive programs, advance booking 60 to 90 days out is preferred to lock the date and finalize custom programming. Day-of and 48-hour rush bookings are accepted at premium rates when calendar permits.",
+      },
+      {
+        heading: "Commercial Terms and Documentation",
+        body: "White Rabbit carries $1M general liability insurance, accepts net-30 payment terms with established DMC partners after first booking, and provides a standard one-page rider, COI naming the venue, W-9, and 1099-ready invoicing. New DMC partners are onboarded with a 50% deposit and net-30 balance. Multi-program annual agreements are available for DMCs running ongoing LA incentive programs.",
+      },
+      {
+        heading: "Why DMCs Book Scott Syme Specifically",
+        body: "Scott Syme is the founder and lead performer of White Rabbit LA. He is a member of the Academy of Magical Arts (Magic Castle, Hollywood), magic consultant to America's Got Talent champion Dustin Tavella, a Disney Channel magic consultant on Bizaardvark, and a former Compass Beverly Hills luxury real estate professional — a background that translates directly into the white-glove hospitality DMC clients expect. His client roster includes Netflix, Disney, Morgan Stanley, and a long list of Fortune 500 companies. The performance is consistent, the booking process is corporate-grade, and the LA-based authority signals align with the city-themed experiences DMC programs are built around.",
+      },
+    ],
+    included: [
+      "Priority calendar holds for established DMC partners",
+      "RFP-ready documentation: insurance, COI, W-9, 1099-ready invoicing",
+      "Custom program design for Magic Castle, private home, and curated LA evenings",
+      "Net-30 terms after first booking; multi-program annual agreements available",
+      "Post-program follow-up and reusable program documentation for repeat bookings",
+    ],
+    faqs: [
+      { question: "What is a DMC entertainment partner and how does the booking process work?", answer: "A DMC (destination management company) entertainment partner is a vetted, reservable, repeat-bookable performer that DMCs source for incoming incentive groups, executive offsites, and corporate programs visiting a destination city. White Rabbit LA partners with DMCs operating in Los Angeles for programs sourcing close-up magic, parlor magic, and Magic Castle-themed evenings. The DMC handles the client relationship and booking; Scott Syme delivers the performance to the agreed-upon spec. Insurance, contracts, COIs, and W-9 documentation are pre-loaded for fast turnaround on RFPs." },
+      { question: "What types of LA-themed magical experiences can be built into a DMC program?", answer: "Three formats are most commonly requested: (1) a private Magic Castle evening for incoming groups (subject to Academy of Magical Arts sponsorship rules and availability), (2) a private home or villa close-up performance staged in Beverly Hills, Hollywood Hills, or Malibu venues that DMCs already use, and (3) a featured close-up or parlor performance integrated into a curated LA-themed evening (rooftop dinner, classic-Hollywood venue, members' club, private museum buyout). Each format can be customized to the client's brand or industry vertical." },
+      { question: "Are White Rabbit LA bookings available on short notice for DMC programs?", answer: "Yes — DMC bookings are prioritized in the calendar. White Rabbit LA holds blocks of weekend availability specifically for DMC partners, allowing inquiries to be answered within 24 hours and confirmed within 48 when calendar permits. For high-value incentive programs, advance booking 60 to 90 days out is preferred to lock the date and finalize custom programming. Day-of and 48-hour rush bookings are accepted at premium rates when calendar permits." },
+      { question: "What are the standard DMC commercial terms and documentation?", answer: "White Rabbit LA carries $1M general liability insurance, accepts net-30 payment terms with established DMC partners after first booking, and provides a standard one-page rider, COI naming the venue, W-9, and 1099-ready invoicing. New DMC partners are onboarded with a 50% deposit and net-30 balance. Multi-program annual agreements are available for DMCs running ongoing LA incentive programs." },
+      { question: "Can performances be delivered in languages other than English?", answer: "The performance is heavily visual — the impact moments are objects appearing, vanishing, and transforming in the guest's own hands, which translate without language. For groups where verbal patter would benefit from a host or translator, White Rabbit LA can structure the routine for minimal verbal patter. Past international groups have included audiences from Japan, Korea, Germany, Mexico, and the UAE. For groups where a Spanish-speaking emcee is preferred, referrals are available." },
+      { question: "Who is Scott Syme and why do DMCs book him specifically?", answer: "Scott Syme is the founder and lead performer of White Rabbit LA. He is a member of the Academy of Magical Arts (Magic Castle, Hollywood), magic consultant to America's Got Talent champion Dustin Tavella, a Disney Channel magic consultant on the show Bizaardvark, and a former Compass Beverly Hills luxury real estate professional — a background that translates directly into the white-glove hospitality DMC clients expect. His client roster includes Netflix, Disney, Morgan Stanley, and a long list of Fortune 500 companies. DMCs book him because the performance is consistent, the booking process is corporate-grade, and the LA-based authority signals (Magic Castle membership, Hollywood credentials) align with the city-themed experiences DMC programs are built around." },
+    ],
+    testimonial: {
+      quote: "Scott is one of the few entertainment partners we can hand to any client and not worry about the result. The performance lands every time, and the paperwork is always ready.",
+      attribution: "Senior Program Manager, Los Angeles DMC",
+    },
+  },
+  "resident-event-magician": {
+    slug: "resident-event-magician",
+    title: "Resident Event Magician",
+    metaTitle: "Resident Magician for HOAs, Country Clubs & Residential Communities | White Rabbit LA",
+    metaDescription: "The entertainment residents request again next year. Multi-event partnerships for HOAs, country clubs, and luxury residential communities across LA. 5-star reviewed across 50+ events.",
+    heroHeadline: "Resident Event Magic",
+    heroSub: "The entertainment residents request again next year.",
+    image: weddingImg,
+    intro: "White Rabbit performs close-up magic and parlor shows for HOA holiday parties, country club member nights, luxury residential building lobby events, gated-community summer socials, and seasonal celebrations across Los Angeles. One-off bookings and multi-event annual partnerships available.",
+    sections: [
+      {
+        heading: "How Resident Booking Works",
+        body: "A resident magician is a regularly-booked performer for residential community events. White Rabbit performs on a one-off basis for residential clients and offers a multi-event annual partnership for communities running four or more events per year. The annual partnership locks calendar priority, fixed pricing across the year, and custom themed programming for each event.",
+      },
+      {
+        heading: "Built for Wide-Age Resident Audiences",
+        body: "Close-up magic is one of the few entertainment formats that works for a wide adult age range without modification. The performance is sophisticated and intelligent, which lands with older audiences who appreciate skill over spectacle, and visually impactful, which lands with younger audiences who film and share the moments. There is no off-color material and no participant-embarrassment moments, so the performance reads as appropriate across the entire age range of a typical residential community event.",
+      },
+      {
+        heading: "Long-Format Community Nights",
+        body: "White Rabbit structures long-format community events as 60 to 90 minutes of close-up strolling during cocktail and dinner, with a featured 25-minute parlor set after dinner as the entertainment moment of the night. This pacing covers the natural arc of a four- to five-hour community event without performance fatigue. For all-night residential events, a second performer can be added to share floor time.",
+      },
+      {
+        heading: "Past Residential and Club Clients",
+        body: "Past residential and club events have included country club member nights in Beverly Hills and Pasadena, gated-community holiday galas in Calabasas and the Hollywood Hills, and luxury residential building events in Beverly Hills and Santa Monica. References from past residential clients are available on request, and the public review page on whiterabbitla.com includes specific mention of repeat residential and club bookings.",
+      },
+      {
+        heading: "Custom Themed Routines for Community Traditions",
+        body: "Custom routines built around the founding year of a community, seasonal themes (Halloween, Fourth of July, holiday season), or community anniversaries have been delivered for past clients. Examples include a routine where the founding year of a residential community appeared inside a sealed envelope passed through the audience, a Halloween residential event with a custom themed mentalism set, and an HOA anniversary gala where the names of long-tenured residents appeared on a card chosen at random. Custom themed routines require a four-week planning window.",
+      },
+    ],
+    included: [
+      "Pre-event planning call covering audience, format, and any custom themed routine",
+      "60 to 90 minutes of close-up strolling, with optional featured parlor set",
+      "Multi-event annual partnership available for communities running 4+ events per year",
+      "$1M general liability insurance and standard residential-vendor paperwork",
+      "Post-event follow-up and consistent performance across the annual calendar",
+    ],
+    faqs: [
+      { question: "What is a resident magician and how does the booking work?", answer: "A resident magician is a regularly-booked performer for residential community events — HOA holiday parties, country club member nights, luxury residential building lobby events, gated-community summer socials, and seasonal celebrations. White Rabbit LA performs on a one-off booking basis for residential clients and offers a multi-event annual partnership for communities running four or more events per year. The annual partnership locks calendar priority, fixed pricing across the year, and custom themed programming for each event." },
+      { question: "Will the magic work for an audience that spans ages 30 to 80?", answer: "Yes — close-up magic is one of the few entertainment formats that works for a wide adult age range without modification. The performance is sophisticated and intelligent, which lands with older audiences who appreciate skill over spectacle, and visually impactful, which lands with younger audiences who film and share the moments. There is no off-color material and no participant-embarrassment moments, so the performance reads as appropriate across the entire age range of a typical residential community event." },
+      { question: "How much does a resident magician cost for a community event?", answer: "Resident magician bookings at White Rabbit LA are custom-priced per event based on audience size, length of coverage (cocktail hour only, full evening, or multi-segment night), venue, and format (close-up strolling only, or strolling plus a featured parlor set). Multi-event annual partnerships are available for residential communities and country clubs running four or more events per year, and offer locked calendar priority and consistent per-event terms. Every quote is built on a short discovery call so the right format is matched to the audience and the night. Call (424) 394-1850 or request a callback through the contact page." },
+      { question: "Can a magician handle a long event night with multiple cocktail-and-dinner segments?", answer: "Yes. White Rabbit LA structures long-format community events as 60 to 90 minutes of close-up strolling during cocktail and dinner, with a featured 25-minute parlor set after dinner as the entertainment moment of the night. This pacing covers the natural arc of a four- to five-hour community event without performance fatigue. For all-night residential events, a second performer can be added to share floor time." },
+      { question: "Has White Rabbit LA performed at country clubs and residential communities before?", answer: "Yes. Past residential and club events have included country club member nights in Beverly Hills and Pasadena, gated-community holiday galas in Calabasas and the Hollywood Hills, and luxury residential building events in Beverly Hills and Santa Monica. References from past residential clients are available on request, and the public review page on whiterabbitla.com includes specific mention of repeat residential and club bookings." },
+      { question: "Can the magic be customized for community traditions or seasonal themes?", answer: "Yes. Past examples include a custom routine built around the founding year of a residential community (revealed inside an envelope passed through the audience), a Halloween residential event with a custom themed mentalism set, and an HOA anniversary gala where the names of long-tenured residents appeared on a card chosen at random. Custom themed routines require a 4-week planning window." },
+    ],
+    testimonial: {
+      quote: "We've had Scott back three years running. The board votes to rebook him before we've even finished cleaning up. Our residents request him by name.",
+      attribution: "Lifestyle Director, Los Angeles Country Club",
+    },
+  },
 };
 
 const ServicePage = () => {
