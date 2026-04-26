@@ -470,8 +470,8 @@ const servicePages: Record<string, ServiceData> = {
       { question: "How many hours per day can a magician realistically perform on a trade show floor?", answer: "The standard performance day is six hours of active booth-side performance, broken into eight- to twelve-minute routines with brief reset breaks between sets. Stamina-managed correctly, this allows full coverage of peak floor hours without performance quality dropping in the afternoon. Multi-day bookings build in mandatory rest hours to maintain consistency across show days. White Rabbit LA delivers the same level of energy at hour six as hour one." },
     ],
     testimonial: {
-      quote: "Booth scans were up nearly 3x over the previous year. Our reps spent the entire show talking to qualified prospects instead of trying to flag down attendees.",
-      attribution: "Field Marketing Director, Enterprise SaaS",
+      quote: "Scott was a phenomenal addition to have at our company's outing. He kept all of us engaged from start to finish and created such a fun, energetic atmosphere. His magic was impressive, but what really stood out was how interactive and personable he was with everyone. If you're looking for someone who can truly entertain a crowd and make an event memorable, Scott is the perfect choice.",
+      attribution: "Miguel V., Company Outing",
     },
   },
   "golf-tournament-magician": {
