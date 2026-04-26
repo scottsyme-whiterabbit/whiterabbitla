@@ -842,24 +842,36 @@ const ServicePage = () => {
         </div>
       </section>
 
-      {/* Testimonial */}
-      <AnimatedSection>
-        <section className="bg-forest-dark py-20">
-          <div className="max-w-3xl mx-auto px-6 text-center">
-            <div className="flex justify-center gap-1 mb-6">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} size={18} className="fill-accent text-accent" />
-              ))}
-            </div>
-            <blockquote className="font-serif text-2xl md:text-3xl text-cream/90 leading-relaxed mb-6">
-              "{page.testimonial.quote}"
-            </blockquote>
-            <p className="font-sans text-sm tracking-[0.2em] uppercase text-cream/50">
-              {page.testimonial.attribution}
-            </p>
-          </div>
-        </section>
-      </AnimatedSection>
+      {/* Testimonials — only rendered when real reviews exist for this vertical */}
+      {(() => {
+        const list = page.testimonials ?? (page.testimonial ? [page.testimonial] : []);
+        if (list.length === 0) return null;
+        return (
+          <AnimatedSection>
+            <section className="bg-forest-dark py-20">
+              <div className={`mx-auto px-6 ${list.length > 1 ? "max-w-5xl" : "max-w-3xl"}`}>
+                <div className={list.length > 1 ? "grid md:grid-cols-2 gap-10" : ""}>
+                  {list.map((t, i) => (
+                    <div key={i} className="text-center">
+                      <div className="flex justify-center gap-1 mb-6">
+                        {[...Array(5)].map((_, s) => (
+                          <Star key={s} size={18} className="fill-accent text-accent" />
+                        ))}
+                      </div>
+                      <blockquote className="font-serif text-xl md:text-2xl text-cream/90 leading-relaxed mb-6">
+                        "{t.quote}"
+                      </blockquote>
+                      <p className="font-sans text-sm tracking-[0.2em] uppercase text-cream/50">
+                        {t.attribution}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          </AnimatedSection>
+        );
+      })()}
 
       {/* Related City Pages */}
       <section className="py-16 border-t border-border">
