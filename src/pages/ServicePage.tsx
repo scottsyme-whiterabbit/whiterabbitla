@@ -521,8 +521,8 @@ const servicePages: Record<string, ServiceData> = {
       { question: "How far in advance should we book a tournament magician?", answer: "Book eight to twelve weeks in advance for charity tournaments and twelve to sixteen weeks for major corporate tournaments. Spring (April through June) and fall (September through October) are peak tournament season in California, and dates fill in the order they're requested. Late bookings are accepted when the calendar permits." },
     ],
     testimonial: {
-      quote: "The cocktail reception is usually the part of the day everyone forgets. This year, it was the part everyone remembered. Our auction numbers reflected it.",
-      attribution: "Tournament Chair, Southern California Charity Golf Classic",
+      quote: "Scott performed at a 200-person event for us this week and the guests absolutely LOVED him and were amazed by his talents. I could not recommend him more! We can't wait to have him back.",
+      attribution: "Jamie I., Morgan Stanley — 200-Person Corporate Event",
     },
   },
   "dmc-entertainment": {
