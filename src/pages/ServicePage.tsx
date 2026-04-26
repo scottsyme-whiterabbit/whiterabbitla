@@ -426,10 +426,16 @@ const servicePages: Record<string, ServiceData> = {
       { question: "How far in advance should we book a charity gala magician?", answer: "Book four to six months in advance for spring and fall gala season (March through May, September through November). Holiday season galas (December) often book by August. White Rabbit LA accepts shorter-window bookings when calendar permits, but premiere gala dates — Saturday nights during peak season — book first and book early." },
       { question: "Can the magic be branded or themed to the nonprofit's mission?", answer: "Yes. Custom routines tied to the nonprofit's mission, anniversary year, or honoree have been built for past clients. Examples include a routine where the year of the organization's founding appeared inside a sealed envelope passed through the audience, and a routine where the honoree's signature appeared on an object they had never touched. Custom mission-tied routines require a planning call four to six weeks in advance." },
     ],
-    testimonial: {
-      quote: "We had Scott perform magic for a black tie event recently. Scott absolutely did an amazing job engaging with everyone.",
-      attribution: "Andres O., Black Tie Event",
-    },
+    testimonials: [
+      {
+        quote: "We had Scott perform magic for a black tie event recently. Scott absolutely did an amazing job engaging with everyone.",
+        attribution: "Andres O., Black Tie Event",
+      },
+      {
+        quote: "In one word: Elevated. We had an amazing experience with Scott! We hosted an event at our home and he's the absolute best. Skilled in magic, skilled with people, and creates a luxurious and magical environment that complements literally any event. Highly recommend!",
+        attribution: "Jacob S., Private Event Host",
+      },
+    ],
   },
   "trade-show-magician": {
     slug: "trade-show-magician",
