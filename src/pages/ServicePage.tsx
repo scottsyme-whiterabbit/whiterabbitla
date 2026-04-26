@@ -536,10 +536,6 @@ const servicePages: Record<string, ServiceData> = {
       { question: "Will the magic translate to a golf-and-business demographic?", answer: "Yes. The audience at a corporate or charity golf tournament is exactly the demographic White Rabbit LA performs for most often — adult, mixed-gender, professionally successful, often skeptical, and looking for intelligent entertainment rather than spectacle. Scott Syme's client list (Netflix, Disney, Morgan Stanley) and Magic Castle membership pre-qualify the booking for this audience. The performance reads as a private clubhouse experience that earns conversation, not a 'wedding magician' performance." },
       { question: "How far in advance should we book a tournament magician?", answer: "Book eight to twelve weeks in advance for charity tournaments and twelve to sixteen weeks for major corporate tournaments. Spring (April through June) and fall (September through October) are peak tournament season in California, and dates fill in the order they're requested. Late bookings are accepted when the calendar permits." },
     ],
-    testimonial: {
-      quote: "Scott performed at a 200-person event for us this week and the guests absolutely LOVED him and were amazed by his talents. I could not recommend him more! We can't wait to have him back.",
-      attribution: "Jamie I., Morgan Stanley — 200-Person Corporate Event",
-    },
   },
   "dmc-entertainment": {
     slug: "dmc-entertainment",
