@@ -38,6 +38,12 @@ const Footer = () => {
               <Link to="/services/corporate-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Corporate Events</Link>
               <Link to="/services/wedding-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Weddings</Link>
               <Link to="/services/private-party-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Private Parties</Link>
+              <Link to="/services/holiday-party-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Holiday Parties</Link>
+              <Link to="/services/charity-gala-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Charity Galas</Link>
+              <Link to="/services/trade-show-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Trade Shows</Link>
+              <Link to="/services/golf-tournament-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Golf Tournaments</Link>
+              <Link to="/services/dmc-entertainment" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">DMC Programs</Link>
+              <Link to="/services/resident-event-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Resident Events</Link>
               <Link to="/services/close-up-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Close-Up Magic</Link>
               <Link to="/services/private-magic-show" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Private Magic Show</Link>
               <Link to="/quiz" className="font-sans text-sm tracking-wider text-accent hover:text-cream transition-colors mt-3">Not sure? Take our quiz →</Link>
