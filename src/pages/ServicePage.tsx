@@ -109,7 +109,7 @@ const servicePages: Record<string, ServiceData> = {
     slug: "wedding-magician",
     title: "Wedding Magician",
     metaTitle: "Wedding Magician | Cocktail Hour Entertainment | White Rabbit",
-    metaDescription: "Hire a wedding magician who transforms your cocktail hour into the highlight of the evening. Elegant, sophisticated, unforgettable. Check availability.",
+    metaDescription: "Wedding magician for cocktail hour, reception, and rehearsal dinners. Trusted by 5★ couples in LA, Aspen, the Hamptons, Napa, and 80+ luxury wedding destinations.",
     heroHeadline: "Wedding Magic",
     heroSub: "The cocktail hour entertainment that makes your wedding unforgettable, for all the right reasons.",
     image: weddingImg,
