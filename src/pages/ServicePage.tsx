@@ -483,10 +483,12 @@ const servicePages: Record<string, ServiceData> = {
       { question: "What are the technical and space requirements for a booth magician?", answer: "Minimal. A close-up trade show magician needs roughly a 4 ft × 4 ft footprint and any standard booth surface — a podium, a high-top table, or even a back-counter. No microphone is needed because crowds form naturally within speaking distance. The magician is fully self-contained: all props, materials, and quick-reset routines travel with Scott. White Rabbit LA provides a one-page integration brief covering booth flow, hand-off scripts, and lead-capture timing." },
       { question: "How many hours per day can a magician realistically perform on a trade show floor?", answer: "The standard performance day is six hours of active booth-side performance, broken into eight- to twelve-minute routines with brief reset breaks between sets. Stamina-managed correctly, this allows full coverage of peak floor hours without performance quality dropping in the afternoon. Multi-day bookings build in mandatory rest hours to maintain consistency across show days. White Rabbit LA delivers the same level of energy at hour six as hour one." },
     ],
-    testimonial: {
-      quote: "Scott was a phenomenal addition to have at our company's outing. He kept all of us engaged from start to finish and created such a fun, energetic atmosphere. His magic was impressive, but what really stood out was how interactive and personable he was with everyone. If you're looking for someone who can truly entertain a crowd and make an event memorable, Scott is the perfect choice.",
-      attribution: "Miguel V., Company Outing",
-    },
+    testimonials: [
+      {
+        quote: "Scott was a phenomenal addition to have at our company's outing. He kept all of us engaged from start to finish and created such a fun, energetic atmosphere. His magic was impressive, but what really stood out was how interactive and personable he was with everyone. Our team is still talking about some of the tricks he performed.",
+        attribution: "Miguel V., Corporate Company Event",
+      },
+    ],
   },
   "golf-tournament-magician": {
     slug: "golf-tournament-magician",
