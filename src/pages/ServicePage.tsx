@@ -57,7 +57,7 @@ const servicePages: Record<string, ServiceData> = {
     slug: "corporate-magician",
     title: "Corporate Event Magician",
     metaTitle: "Corporate Event Magician | White Rabbit Magic Entertainment",
-    metaDescription: "Hire a world-class corporate event magician for galas, product launches, and executive retreats. Trusted by Netflix, Disney & Morgan Stanley.",
+    metaDescription: "Corporate magician for galas, product launches, and offsites. Trusted by Netflix, Disney, Morgan Stanley in LA and 80+ Fortune 500 markets nationwide.",
     heroHeadline: "Corporate Event Magic",
     heroSub: "The entertainment your guests will actually remember, and your competitors will wish they'd booked first.",
     image: corporateImg,
