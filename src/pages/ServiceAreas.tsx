@@ -112,6 +112,8 @@ const ServiceAreas = () => {
           </div>
         </section>
       </AnimatedSection>
+
+      <ServicesFooterBlock variant="light" />
     </main>
   );
 };
