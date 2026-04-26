@@ -665,29 +665,24 @@ const ServicePage = () => {
     return () => { script.remove(); };
   }, [page]);
 
-  // Review JSON-LD (per-page testimonial)
-  // Skipped for the 6 new vertical pages — those pages stay at exactly 6 JSON-LD blocks
-  // (3 global + 3 page: Service, BreadcrumbList, FAQPage) until real vertical-specific
-  // testimonials are supplied. Re-enable per-page Review schema in a follow-up commit.
-  const NEW_VERTICAL_SLUGS = new Set([
-    "holiday-party-magician",
-    "charity-gala-magician",
-    "trade-show-magician",
-    "golf-tournament-magician",
-    "dmc-entertainment",
-    "resident-event-magician",
-  ]);
+  // Review JSON-LD (per-page testimonials)
+  // Only emitted when real, vertical-relevant testimonials exist on the page.
+  // Pages without authentic testimonials (golf, dmc, resident) intentionally
+  // ship without Review schema until real reviews are sourced.
   useEffect(() => {
-    if (!page?.testimonial) return;
-    if (NEW_VERTICAL_SLUGS.has(page.slug)) return;
+    if (!page) return;
+    const list = page.testimonials ?? (page.testimonial ? [page.testimonial] : []);
+    if (list.length === 0) return;
+    const serviceId = `https://whiterabbitla.com/services/${page.slug}#service`;
     const script = document.createElement("script");
     script.type = "application/ld+json";
     script.id = "service-review-schema";
-    script.textContent = JSON.stringify({
+    const reviews = list.map((t) => ({
       "@context": "https://schema.org",
       "@type": "Review",
       itemReviewed: {
         "@type": "Service",
+        "@id": serviceId,
         name: page.title,
         provider: {
           "@type": "LocalBusiness",
@@ -700,13 +695,16 @@ const ServicePage = () => {
         ratingValue: "5",
         bestRating: "5",
       },
-      author: { "@type": "Person", name: page.testimonial.attribution },
-      reviewBody: page.testimonial.quote,
-    });
+      author: { "@type": "Person", name: t.attribution },
+      reviewBody: t.quote,
+      ...(t.datePublished ? { datePublished: t.datePublished } : {}),
+    }));
+    script.textContent = JSON.stringify(reviews.length === 1 ? reviews[0] : reviews);
     document.getElementById("service-review-schema")?.remove();
     document.head.appendChild(script);
     return () => { script.remove(); };
   }, [page]);
+
 
   if (!page) {
     // If this slug matches an SEO landing page, redirect to /blog/ canonical URL
