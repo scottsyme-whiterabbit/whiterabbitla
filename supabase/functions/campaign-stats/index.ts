@@ -108,7 +108,7 @@ const pct = (num: number, denom: number) =>
 
 // ---- Aggregate stats for a single category (or all if category===null) ----
 async function computeCategoryStats(
-  supabase: ReturnType<typeof createClient>,
+  supabase: any,
   category: string,
   sinceISO: string
 ) {
@@ -118,7 +118,12 @@ async function computeCategoryStats(
     .select("email, status, current_step, last_email_sent_at")
     .eq("campaign_category", category);
   if (cErr) throw cErr;
-  const all = contacts || [];
+  const all = (contacts || []) as Array<{
+    email: string;
+    status: string;
+    current_step: number | null;
+    last_email_sent_at: string | null;
+  }>;
 
   const totals = {
     contacts: all.length,
