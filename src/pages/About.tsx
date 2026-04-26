@@ -17,7 +17,7 @@ import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 const About = () => {
   useScrollDepth("about");
   const seoTitle = "About Scott Syme | LA Magician & Magic Castle Member";
-  const seoDescription = "Meet Scott Syme — Magic Castle member, former America's Got Talent consultant, and the magician behind White Rabbit LA. Performing for Netflix, Disney & Morgan Stanley.";
+  const seoDescription = "Meet Scott Syme — Magic Castle member, Disney Channel magic consultant, and consultant to AGT champion Dustin Tavella. The magician behind White Rabbit LA, performing for Netflix, Disney & Morgan Stanley.";
   useWebPageSchema({ name: "About Scott Syme", description: "Meet Scott Syme, the magician behind White Rabbit. A Magic Castle® member who has performed for Netflix, Disney, and Morgan Stanley.", path: "/about", type: "ProfilePage" });
   useSpeakableSchema({ name: "About Scott Syme", path: "/about" });
   return (
