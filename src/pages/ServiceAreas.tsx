@@ -5,6 +5,7 @@ import threeStars from "@/assets/three-stars-gold.png";
 import { serviceAreas, getAreasByRegion, serviceAreaRegions } from "@/data/serviceAreas";
 import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema } from "@/hooks/useSchemaOrg";
+import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
 const ServiceAreas = () => {
   const seoTitle = "Service Areas | White Rabbit Magic — Luxury Entertainment Nationwide";
@@ -111,6 +112,8 @@ const ServiceAreas = () => {
           </div>
         </section>
       </AnimatedSection>
+
+      <ServicesFooterBlock variant="light" />
     </main>
   );
 };

@@ -17,6 +17,7 @@ import guestLaughImg from "@/assets/event-guest-laughing.jpg";
 import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema, useSpeakableSchema } from "@/hooks/useSchemaOrg";
 import threeStars from "@/assets/three-stars-gold.png";
+import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
 const services = [
   {
@@ -166,6 +167,8 @@ const Experience = () => {
           </div>
         </section>
       </AnimatedSection>
+
+      <ServicesFooterBlock variant="dark" />
     </main>
   );
 };
