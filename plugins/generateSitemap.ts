@@ -13,6 +13,12 @@ const validServiceSlugs = [
   "private-party-magician",
   "close-up-magician",
   "private-magic-show",
+  "holiday-party-magician",
+  "charity-gala-magician",
+  "trade-show-magician",
+  "golf-tournament-magician",
+  "dmc-entertainment",
+  "resident-event-magician",
 ];
 
 function url(path: string, lastmod: string): string {
@@ -58,13 +64,10 @@ export function generateSitemap(): Plugin {
       }
 
       const soft404Suffixes = [
-        "trade-show-magician",
         "rehearsal-dinner-magician",
         "halloween-party-magician",
         "christmas-party-magician",
         "premiere-red-carpet-magician",
-        "dmc-entertainment",
-        "resident-event-magician",
       ];
 
       const filteredSeoPages = seoPages.filter(
