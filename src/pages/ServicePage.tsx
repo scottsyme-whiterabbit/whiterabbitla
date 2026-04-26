@@ -583,10 +583,6 @@ const servicePages: Record<string, ServiceData> = {
       { question: "Can performances be delivered in languages other than English?", answer: "The performance is heavily visual — the impact moments are objects appearing, vanishing, and transforming in the guest's own hands, which translate without language. For groups where verbal patter would benefit from a host or translator, White Rabbit LA can structure the routine for minimal verbal patter. Past international groups have included audiences from Japan, Korea, Germany, Mexico, and the UAE. For groups where a Spanish-speaking emcee is preferred, referrals are available." },
       { question: "Who is Scott Syme and why do DMCs book him specifically?", answer: "Scott Syme is the founder and lead performer of White Rabbit LA. He is a member of the Academy of Magical Arts (Magic Castle, Hollywood), magic consultant to America's Got Talent champion Dustin Tavella, a Disney Channel magic consultant on the show Bizaardvark, and a former Compass Beverly Hills luxury real estate professional — a background that translates directly into the white-glove hospitality DMC clients expect. His client roster includes Netflix, Disney, Morgan Stanley, and a long list of Fortune 500 companies. DMCs book him because the performance is consistent, the booking process is corporate-grade, and the LA-based authority signals (Magic Castle membership, Hollywood credentials) align with the city-themed experiences DMC programs are built around." },
     ],
-    testimonial: {
-      quote: "In one word: Elevated. We had an amazing experience with Scott! We hosted an event at our home and he's the absolute best. Skilled in magic, skilled with people, and creates a luxurious and magical environment that complements literally any event. Highly recommend!",
-      attribution: "Jacob S., Private Home Event",
-    },
   },
   "resident-event-magician": {
     slug: "resident-event-magician",
