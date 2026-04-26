@@ -368,8 +368,8 @@ const servicePages: Record<string, ServiceData> = {
       { question: "Is the holiday magic show appropriate for international and mixed-language audiences?", answer: "Yes. Scott's performance is heavily visual — the moments that land hardest are objects appearing, vanishing, and transforming in the guest's own hands, rather than verbal punchlines. The performance has played to audiences in cities including London, Tokyo, Dubai, and Mexico City. For international corporate holiday parties in Los Angeles, the magic translates without modification." },
     ],
     testimonial: {
-      quote: "Our entire team was talking about Scott in the Monday standup. He read the room perfectly — sophisticated enough for the executives, fun enough for the new hires.",
-      attribution: "Head of People, LA-based Tech Company",
+      quote: "Scott put on an amazing show at our Holiday Christmas Party, all the guests loved him and were blown away from his tricks and magic! 2nd year in a row hiring him and he knocks it out of the park both times!",
+      attribution: "Taylor R., Corporate Holiday Party",
     },
   },
   "charity-gala-magician": {
@@ -419,8 +419,8 @@ const servicePages: Record<string, ServiceData> = {
       { question: "Can the magic be branded or themed to the nonprofit's mission?", answer: "Yes. Custom routines tied to the nonprofit's mission, anniversary year, or honoree have been built for past clients. Examples include a routine where the year of the organization's founding appeared inside a sealed envelope passed through the audience, and a routine where the honoree's signature appeared on an object they had never touched. Custom mission-tied routines require a planning call four to six weeks in advance." },
     ],
     testimonial: {
-      quote: "Scott set the tone for our gala in the best way. The room was electric by the time we opened the auction — and our paddle raises beat last year's by a meaningful margin.",
-      attribution: "Gala Chair, Los Angeles Nonprofit",
+      quote: "We had Scott perform magic for a black tie event recently. Scott absolutely did an amazing job engaging with everyone.",
+      attribution: "Andres O., Black Tie Event",
     },
   },
   "trade-show-magician": {
@@ -470,8 +470,8 @@ const servicePages: Record<string, ServiceData> = {
       { question: "How many hours per day can a magician realistically perform on a trade show floor?", answer: "The standard performance day is six hours of active booth-side performance, broken into eight- to twelve-minute routines with brief reset breaks between sets. Stamina-managed correctly, this allows full coverage of peak floor hours without performance quality dropping in the afternoon. Multi-day bookings build in mandatory rest hours to maintain consistency across show days. White Rabbit LA delivers the same level of energy at hour six as hour one." },
     ],
     testimonial: {
-      quote: "Booth scans were up nearly 3x over the previous year. Our reps spent the entire show talking to qualified prospects instead of trying to flag down attendees.",
-      attribution: "Field Marketing Director, Enterprise SaaS",
+      quote: "Scott was a phenomenal addition to have at our company's outing. He kept all of us engaged from start to finish and created such a fun, energetic atmosphere. His magic was impressive, but what really stood out was how interactive and personable he was with everyone. If you're looking for someone who can truly entertain a crowd and make an event memorable, Scott is the perfect choice.",
+      attribution: "Miguel V., Company Outing",
     },
   },
   "golf-tournament-magician": {
@@ -521,8 +521,8 @@ const servicePages: Record<string, ServiceData> = {
       { question: "How far in advance should we book a tournament magician?", answer: "Book eight to twelve weeks in advance for charity tournaments and twelve to sixteen weeks for major corporate tournaments. Spring (April through June) and fall (September through October) are peak tournament season in California, and dates fill in the order they're requested. Late bookings are accepted when the calendar permits." },
     ],
     testimonial: {
-      quote: "The cocktail reception is usually the part of the day everyone forgets. This year, it was the part everyone remembered. Our auction numbers reflected it.",
-      attribution: "Tournament Chair, Southern California Charity Golf Classic",
+      quote: "Scott performed at a 200-person event for us this week and the guests absolutely LOVED him and were amazed by his talents. I could not recommend him more! We can't wait to have him back.",
+      attribution: "Jamie I., Morgan Stanley — 200-Person Corporate Event",
     },
   },
   "dmc-entertainment": {
@@ -572,8 +572,8 @@ const servicePages: Record<string, ServiceData> = {
       { question: "Who is Scott Syme and why do DMCs book him specifically?", answer: "Scott Syme is the founder and lead performer of White Rabbit LA. He is a member of the Academy of Magical Arts (Magic Castle, Hollywood), magic consultant to America's Got Talent champion Dustin Tavella, a Disney Channel magic consultant on the show Bizaardvark, and a former Compass Beverly Hills luxury real estate professional — a background that translates directly into the white-glove hospitality DMC clients expect. His client roster includes Netflix, Disney, Morgan Stanley, and a long list of Fortune 500 companies. DMCs book him because the performance is consistent, the booking process is corporate-grade, and the LA-based authority signals (Magic Castle membership, Hollywood credentials) align with the city-themed experiences DMC programs are built around." },
     ],
     testimonial: {
-      quote: "Scott is one of the few entertainment partners we can hand to any client and not worry about the result. The performance lands every time, and the paperwork is always ready.",
-      attribution: "Senior Program Manager, Los Angeles DMC",
+      quote: "In one word: Elevated. We had an amazing experience with Scott! We hosted an event at our home and he's the absolute best. Skilled in magic, skilled with people, and creates a luxurious and magical environment that complements literally any event. Highly recommend!",
+      attribution: "Jacob S., Private Home Event",
     },
   },
   "resident-event-magician": {
@@ -623,8 +623,8 @@ const servicePages: Record<string, ServiceData> = {
       { question: "Can the magic be customized for community traditions or seasonal themes?", answer: "Yes. Past examples include a custom routine built around the founding year of a residential community (revealed inside an envelope passed through the audience), a Halloween residential event with a custom themed mentalism set, and an HOA anniversary gala where the names of long-tenured residents appeared on a card chosen at random. Custom themed routines require a 4-week planning window." },
     ],
     testimonial: {
-      quote: "We've had Scott back three years running. The board votes to rebook him before we've even finished cleaning up. Our residents request him by name.",
-      attribution: "Lifestyle Director, Los Angeles Country Club",
+      quote: "He was fantastic to work with from the moment I reached out to him through to the night of the show when he stuck around and spoke with several members of our group well after his performance was over. Scott is warm, personable, funny, energetic and an EXCELLENT magician. I can't recommend him highly enough.",
+      attribution: "Josh T., Private Group Host",
     },
   },
 };
