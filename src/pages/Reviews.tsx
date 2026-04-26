@@ -8,6 +8,7 @@ import audienceImg from "@/assets/event-audience.jpg";
 import SEOHead from "@/components/SEOHead";
 import { useBreadcrumbSchema, useSpeakableSchema } from "@/hooks/useSchemaOrg";
 import threeStars from "@/assets/three-stars-gold.png";
+import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
 const reviews = [
 {
