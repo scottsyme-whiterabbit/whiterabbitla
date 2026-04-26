@@ -48,6 +48,7 @@ const lines: string[] = [
   url("/areas", TODAY),
   url("/quiz", TODAY),
   url("/deck", TODAY),
+  url("/services", TODAY),
   "",
   '  <!-- Dedicated Service Pages -->',
 ];

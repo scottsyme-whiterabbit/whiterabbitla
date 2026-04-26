@@ -57,7 +57,7 @@ const servicePages: Record<string, ServiceData> = {
     slug: "corporate-magician",
     title: "Corporate Event Magician",
     metaTitle: "Corporate Event Magician | White Rabbit Magic Entertainment",
-    metaDescription: "Hire a world-class corporate event magician for galas, product launches, and executive retreats. Trusted by Netflix, Disney & Morgan Stanley.",
+    metaDescription: "Corporate magician for galas, product launches, and offsites. Trusted by Netflix, Disney, Morgan Stanley in LA and 80+ Fortune 500 markets nationwide.",
     heroHeadline: "Corporate Event Magic",
     heroSub: "The entertainment your guests will actually remember, and your competitors will wish they'd booked first.",
     image: corporateImg,
@@ -109,7 +109,7 @@ const servicePages: Record<string, ServiceData> = {
     slug: "wedding-magician",
     title: "Wedding Magician",
     metaTitle: "Wedding Magician | Cocktail Hour Entertainment | White Rabbit",
-    metaDescription: "Hire a wedding magician who transforms your cocktail hour into the highlight of the evening. Elegant, sophisticated, unforgettable. Check availability.",
+    metaDescription: "Wedding magician for cocktail hour, reception, and rehearsal dinners. Trusted by 5★ couples in LA, Aspen, the Hamptons, Napa, and 80+ luxury wedding destinations.",
     heroHeadline: "Wedding Magic",
     heroSub: "The cocktail hour entertainment that makes your wedding unforgettable, for all the right reasons.",
     image: weddingImg,
@@ -662,8 +662,20 @@ const ServicePage = () => {
   }, [page]);
 
   // Review JSON-LD (per-page testimonial)
+  // Skipped for the 6 new vertical pages — those pages stay at exactly 6 JSON-LD blocks
+  // (3 global + 3 page: Service, BreadcrumbList, FAQPage) until real vertical-specific
+  // testimonials are supplied. Re-enable per-page Review schema in a follow-up commit.
+  const NEW_VERTICAL_SLUGS = new Set([
+    "holiday-party-magician",
+    "charity-gala-magician",
+    "trade-show-magician",
+    "golf-tournament-magician",
+    "dmc-entertainment",
+    "resident-event-magician",
+  ]);
   useEffect(() => {
     if (!page?.testimonial) return;
+    if (NEW_VERTICAL_SLUGS.has(page.slug)) return;
     const script = document.createElement("script");
     script.type = "application/ld+json";
     script.id = "service-review-schema";

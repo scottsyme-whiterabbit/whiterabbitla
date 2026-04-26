@@ -13,6 +13,7 @@ import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 import { trackFormSubmit } from "@/lib/analytics";
 import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
+import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
 const Contact = () => {
   const seoTitle = "Contact & Booking | White Rabbit Magic — Los Angeles";
@@ -288,6 +289,9 @@ const Contact = () => {
 
       {/* Quiz CTA */}
       <QuizCTA />
+
+      {/* Site-wide internal-link block: all 11 service pages */}
+      <ServicesFooterBlock />
     </main>
   );
 };

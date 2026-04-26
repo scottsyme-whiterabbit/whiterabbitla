@@ -24,6 +24,7 @@ import Blog from "./pages/Blog";
 import BlogArticle from "./pages/BlogArticle";
 import SeoLanding from "./pages/SeoLanding";
 import ServicePage from "./pages/ServicePage";
+import ServicesHub from "./pages/Services";
 import NotFound from "./pages/NotFound";
 import DiscoveryQuiz from "./pages/DiscoveryQuiz";
 import HostsPlaybook from "./pages/HostsPlaybook";
@@ -72,6 +73,7 @@ const AppContent = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogArticleOrSeo />} />
+        <Route path="/services" element={<ServicesHub />} />
         <Route path="/services/:serviceSlug" element={<ServicePage />} />
         <Route path="/quiz" element={<DiscoveryQuiz />} />
         <Route path="/guide" element={<HostsPlaybook />} />
