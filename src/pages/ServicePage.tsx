@@ -661,6 +661,37 @@ const ServicePage = () => {
     return () => { script.remove(); };
   }, [page]);
 
+  // Review JSON-LD (per-page testimonial)
+  useEffect(() => {
+    if (!page?.testimonial) return;
+    const script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.id = "service-review-schema";
+    script.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Review",
+      itemReviewed: {
+        "@type": "Service",
+        name: page.title,
+        provider: {
+          "@type": "LocalBusiness",
+          "@id": "https://whiterabbitla.com/#business",
+          name: "White Rabbit LA",
+        },
+      },
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: "5",
+        bestRating: "5",
+      },
+      author: { "@type": "Person", name: page.testimonial.attribution },
+      reviewBody: page.testimonial.quote,
+    });
+    document.getElementById("service-review-schema")?.remove();
+    document.head.appendChild(script);
+    return () => { script.remove(); };
+  }, [page]);
+
   if (!page) {
     // If this slug matches an SEO landing page, redirect to /blog/ canonical URL
     if (serviceSlug && getSeoPageBySlug(serviceSlug)) {
