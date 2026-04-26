@@ -31,6 +31,7 @@ import residentEventHero from "@/assets/service-resident-event-hero.jpg";
 import dmcHero from "@/assets/service-dmc-hero.jpg";
 import holidayPartyAction from "@/assets/service-holiday-party-action.jpg";
 import charityGalaAction from "@/assets/service-charity-gala-action.jpg";
+import weddingHero from "@/assets/service-wedding-hero.jpg";
 
 const trustLogos = [
   { name: "Netflix", logo: netflixLogo },
@@ -117,7 +118,7 @@ const servicePages: Record<string, ServiceData> = {
     metaDescription: "Wedding magician for cocktail hour, reception, and rehearsal dinners. Trusted by 5★ couples in LA, Aspen, the Hamptons, Napa, and 80+ luxury wedding destinations.",
     heroHeadline: "Wedding Magic",
     heroSub: "The cocktail hour entertainment that makes your wedding unforgettable, for all the right reasons.",
-    image: weddingImg,
+    image: weddingHero,
     intro: "White Rabbit's cocktail hour magic is the secret weapon couples wish they'd known about sooner. While your guests mingle and the champagne flows, Scott creates moments of pure, joyful astonishment that turn strangers into friends before they even find their seats.",
     sections: [
       {
