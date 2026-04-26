@@ -671,12 +671,13 @@ const ServicePage = () => {
   }, [page]);
 
   // Review JSON-LD (per-page testimonials)
-  // Only emitted when real, vertical-relevant testimonials exist on the page.
-  // Pages without authentic testimonials (golf, dmc, resident) intentionally
-  // ship without Review schema until real reviews are sourced.
+  // ONLY emitted when verified, named testimonials from /reviews exist
+  // (the `testimonials` array). The single `testimonial` field is reserved
+  // for generic/paraphrased pull-quotes and intentionally does NOT get
+  // Review schema — protecting structured-data trustworthiness.
   useEffect(() => {
     if (!page) return;
-    const list = page.testimonials ?? (page.testimonial ? [page.testimonial] : []);
+    const list = page.testimonials ?? [];
     if (list.length === 0) return;
     const serviceId = `https://whiterabbitla.com/services/${page.slug}#service`;
     const script = document.createElement("script");
