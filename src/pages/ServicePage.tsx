@@ -662,8 +662,20 @@ const ServicePage = () => {
   }, [page]);
 
   // Review JSON-LD (per-page testimonial)
+  // Skipped for the 6 new vertical pages — those pages stay at exactly 6 JSON-LD blocks
+  // (3 global + 3 page: Service, BreadcrumbList, FAQPage) until real vertical-specific
+  // testimonials are supplied. Re-enable per-page Review schema in a follow-up commit.
+  const NEW_VERTICAL_SLUGS = new Set([
+    "holiday-party-magician",
+    "charity-gala-magician",
+    "trade-show-magician",
+    "golf-tournament-magician",
+    "dmc-entertainment",
+    "resident-event-magician",
+  ]);
   useEffect(() => {
     if (!page?.testimonial) return;
+    if (NEW_VERTICAL_SLUGS.has(page.slug)) return;
     const script = document.createElement("script");
     script.type = "application/ld+json";
     script.id = "service-review-schema";
