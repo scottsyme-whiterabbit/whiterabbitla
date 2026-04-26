@@ -419,8 +419,8 @@ const servicePages: Record<string, ServiceData> = {
       { question: "Can the magic be branded or themed to the nonprofit's mission?", answer: "Yes. Custom routines tied to the nonprofit's mission, anniversary year, or honoree have been built for past clients. Examples include a routine where the year of the organization's founding appeared inside a sealed envelope passed through the audience, and a routine where the honoree's signature appeared on an object they had never touched. Custom mission-tied routines require a planning call four to six weeks in advance." },
     ],
     testimonial: {
-      quote: "Scott set the tone for our gala in the best way. The room was electric by the time we opened the auction — and our paddle raises beat last year's by a meaningful margin.",
-      attribution: "Gala Chair, Los Angeles Nonprofit",
+      quote: "We had Scott perform magic for a black tie event recently. Scott absolutely did an amazing job engaging with everyone.",
+      attribution: "Andres O., Black Tie Event",
     },
   },
   "trade-show-magician": {
