@@ -368,8 +368,8 @@ const servicePages: Record<string, ServiceData> = {
       { question: "Is the holiday magic show appropriate for international and mixed-language audiences?", answer: "Yes. Scott's performance is heavily visual — the moments that land hardest are objects appearing, vanishing, and transforming in the guest's own hands, rather than verbal punchlines. The performance has played to audiences in cities including London, Tokyo, Dubai, and Mexico City. For international corporate holiday parties in Los Angeles, the magic translates without modification." },
     ],
     testimonial: {
-      quote: "Our entire team was talking about Scott in the Monday standup. He read the room perfectly — sophisticated enough for the executives, fun enough for the new hires.",
-      attribution: "Head of People, LA-based Tech Company",
+      quote: "Scott put on an amazing show at our Holiday Christmas Party, all the guests loved him and were blown away from his tricks and magic! 2nd year in a row hiring him and he knocks it out of the park both times!",
+      attribution: "Taylor R., Corporate Holiday Party",
     },
   },
   "charity-gala-magician": {
