@@ -623,8 +623,8 @@ const servicePages: Record<string, ServiceData> = {
       { question: "Can the magic be customized for community traditions or seasonal themes?", answer: "Yes. Past examples include a custom routine built around the founding year of a residential community (revealed inside an envelope passed through the audience), a Halloween residential event with a custom themed mentalism set, and an HOA anniversary gala where the names of long-tenured residents appeared on a card chosen at random. Custom themed routines require a 4-week planning window." },
     ],
     testimonial: {
-      quote: "We've had Scott back three years running. The board votes to rebook him before we've even finished cleaning up. Our residents request him by name.",
-      attribution: "Lifestyle Director, Los Angeles Country Club",
+      quote: "He was fantastic to work with from the moment I reached out to him through to the night of the show when he stuck around and spoke with several members of our group well after his performance was over. Scott is warm, personable, funny, energetic and an EXCELLENT magician. I can't recommend him highly enough.",
+      attribution: "Josh T., Private Group Host",
     },
   },
 };
