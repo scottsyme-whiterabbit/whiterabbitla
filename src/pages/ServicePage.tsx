@@ -49,7 +49,8 @@ interface ServiceData {
   sections: { heading: string; body: string }[];
   included: string[];
   faqs: { question: string; answer: string }[];
-  testimonial: { quote: string; attribution: string };
+  testimonial?: { quote: string; attribution: string; datePublished?: string };
+  testimonials?: { quote: string; attribution: string; datePublished?: string }[];
 }
 
 const servicePages: Record<string, ServiceData> = {
