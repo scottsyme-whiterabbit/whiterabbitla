@@ -830,6 +830,12 @@ const ServicePage = () => {
                 page.slug === "wedding-magician" ? "Weddings" :
                 page.slug === "private-party-magician" ? "Private Events" :
                 page.slug === "close-up-magician" ? "Close-Up Magic" :
+                page.slug === "holiday-party-magician" ? "Holiday Parties" :
+                page.slug === "charity-gala-magician" ? "Charity Galas" :
+                page.slug === "trade-show-magician" ? "Trade Shows" :
+                page.slug === "golf-tournament-magician" ? "Golf Tournaments" :
+                page.slug === "dmc-entertainment" ? "DMC & Incentive Travel" :
+                page.slug === "resident-event-magician" ? "Resident Events" :
                 "Private Magic Shows"
               )
                 .slice(0, 10)
