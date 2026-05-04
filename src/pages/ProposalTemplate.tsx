@@ -20,37 +20,7 @@ import heroParlor from "@/assets/experience-parlor.jpg";
 import heroCocktail from "@/assets/event-closeup-cocktail.jpg";
 import heroEvening from "@/assets/hero-white-rabbit-evening.jpg";
 
-// Inline SVG flourish (rendered below) — replaces previous PNG which rasterized poorly.
-const FlourishCornerSVG = ({ className = "" }: { className?: string }) => (
-  <svg
-    viewBox="0 0 120 120"
-    xmlns="http://www.w3.org/2000/svg"
-    aria-hidden
-    className={className}
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.25"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    {/* Outer arcing line */}
-    <path d="M2 60 C 2 28, 28 2, 60 2" />
-    {/* Inner companion line */}
-    <path d="M10 60 C 10 32, 32 10, 60 10" opacity="0.55" />
-    {/* Top sweeping curl */}
-    <path d="M60 2 C 70 14, 78 22, 92 26 C 100 28, 104 22, 100 16 C 96 11, 88 14, 90 22" />
-    {/* Left sweeping curl */}
-    <path d="M2 60 C 14 70, 22 78, 26 92 C 28 100, 22 104, 16 100 C 11 96, 14 88, 22 90" />
-    {/* Center diagonal flourish */}
-    <path d="M22 22 C 34 30, 46 36, 58 40 C 64 42, 68 46, 66 52 C 64 58, 56 56, 54 50 C 52 44, 58 40, 64 42" />
-    {/* Inner curl accent */}
-    <path d="M30 30 C 38 38, 46 44, 54 48" opacity="0.6" />
-    {/* Tiny ornament dots */}
-    <circle cx="92" cy="22" r="1.4" fill="currentColor" stroke="none" />
-    <circle cx="22" cy="92" r="1.4" fill="currentColor" stroke="none" />
-    <circle cx="66" cy="52" r="1.2" fill="currentColor" stroke="none" />
-  </svg>
-);
+import flourishCorner from "@/assets/proposal-flourish-corner.png";
 import photoReaction from "@/assets/event-closeup-reaction.jpg";
 import photoCardsDetail from "@/assets/event-cards-detail.jpg";
 import photoParlorAudience from "@/assets/event-parlor-audience.jpg";
@@ -199,17 +169,17 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
   const heroSrc = HERO_MAP[data.hero_image] || HERO_MAP.wedding;
   const fullName = `${data.first_name} ${data.last_name}`.trim();
 
-  // Corner flourish set — inline SVG gold filigree in all four corners
+  // Corner flourish set — gold filigree PNG in all four corners
   const Flourishes = ({ tone = "gold", size = "md" }: { tone?: "gold" | "cream"; size?: "sm" | "md" | "lg" }) => {
     const w = size === "lg" ? "w-28 md:w-40" : size === "sm" ? "w-14 md:w-20" : "w-20 md:w-28";
-    const colorClass = tone === "cream" ? "text-cream/40" : "text-gold/70";
-    const base = `pointer-events-none absolute ${w} ${colorClass}`;
+    const opacity = tone === "cream" ? "opacity-40" : "opacity-70";
+    const base = `pointer-events-none absolute ${w} ${opacity} select-none`;
     return (
       <>
-        <FlourishCornerSVG className={`${base} top-0 left-0`} />
-        <FlourishCornerSVG className={`${base} top-0 right-0 -scale-x-100`} />
-        <FlourishCornerSVG className={`${base} bottom-0 left-0 -scale-y-100`} />
-        <FlourishCornerSVG className={`${base} bottom-0 right-0 -scale-x-100 -scale-y-100`} />
+        <img src={flourishCorner} alt="" aria-hidden loading="lazy" width={1024} height={1024} className={`${base} top-0 left-0`} />
+        <img src={flourishCorner} alt="" aria-hidden loading="lazy" width={1024} height={1024} className={`${base} top-0 right-0 -scale-x-100`} />
+        <img src={flourishCorner} alt="" aria-hidden loading="lazy" width={1024} height={1024} className={`${base} bottom-0 left-0 -scale-y-100`} />
+        <img src={flourishCorner} alt="" aria-hidden loading="lazy" width={1024} height={1024} className={`${base} bottom-0 right-0 -scale-x-100 -scale-y-100`} />
       </>
     );
   };
