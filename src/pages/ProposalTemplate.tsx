@@ -169,35 +169,55 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
   const heroSrc = HERO_MAP[data.hero_image] || HERO_MAP.wedding;
   const fullName = `${data.first_name} ${data.last_name}`.trim();
 
+  // Corner flourish set — gold filigree in all four corners
+  const Flourishes = ({ tone = "gold", size = "md" }: { tone?: "gold" | "cream"; size?: "sm" | "md" | "lg" }) => {
+    const w = size === "lg" ? "w-28 md:w-40" : size === "sm" ? "w-14 md:w-20" : "w-20 md:w-28";
+    const opacity = tone === "cream" ? "opacity-40" : "opacity-60";
+    return (
+      <>
+        <img src={flourishCorner} alt="" aria-hidden className={`pointer-events-none absolute top-0 left-0 ${w} ${opacity}`} />
+        <img src={flourishCorner} alt="" aria-hidden className={`pointer-events-none absolute top-0 right-0 ${w} ${opacity} -scale-x-100`} />
+        <img src={flourishCorner} alt="" aria-hidden className={`pointer-events-none absolute bottom-0 left-0 ${w} ${opacity} -scale-y-100`} />
+        <img src={flourishCorner} alt="" aria-hidden className={`pointer-events-none absolute bottom-0 right-0 ${w} ${opacity} -scale-100`} />
+      </>
+    );
+  };
+
   return (
     <div className="bg-cream text-forest-dark font-sans">
       {/* HERO */}
       <section className="relative bg-forest-dark text-cream overflow-hidden">
         <div className="absolute inset-0">
           <img src={heroSrc} alt="" className="w-full h-full object-cover opacity-30" />
-          <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/80 via-forest-dark/70 to-forest-dark" />
+          <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/85 via-forest-dark/75 to-forest-dark" />
         </div>
-        <div className="relative max-w-4xl mx-auto px-6 py-32 md:py-40 text-center flex flex-col items-center">
-          <img src={threeStars} alt="" className="w-12 md:w-14 mb-10 opacity-90" />
-          <p className="text-xs md:text-sm tracking-[0.3em] uppercase text-gold mb-8">A Proposal Prepared For</p>
+        <Flourishes size="lg" />
+        <div className="relative max-w-4xl mx-auto px-6 py-24 md:py-32 text-center flex flex-col items-center">
+          <img src={threeStars} alt="" className="w-12 md:w-14 mb-6 opacity-90" />
+          <p className="text-[11px] md:text-xs tracking-[0.4em] uppercase text-gold mb-6">A Proposal Prepared For</p>
           <h1 className="font-serif font-light text-5xl md:text-7xl leading-tight tracking-tight">{fullName}</h1>
-          <div className="mt-10 w-20 h-px bg-gold/60" />
-          <p className="font-sans text-base md:text-lg tracking-[0.15em] uppercase text-cream/80 mt-10">
+          <div className="flex items-center gap-3 mt-6">
+            <span className="w-10 h-px bg-gold/60" />
+            <span className="text-gold text-xs">✦</span>
+            <span className="w-10 h-px bg-gold/60" />
+          </div>
+          <p className="font-sans text-sm md:text-base tracking-[0.2em] uppercase text-cream/80 mt-6">
             {data.event_type}{data.event_date ? ` · ${data.event_date}` : ""}
           </p>
           {data.venue && (
-            <p className="font-sans text-sm md:text-base text-cream/60 mt-3">{data.venue}</p>
+            <p className="font-sans text-sm text-cream/60 mt-2">{data.venue}</p>
           )}
-          <p className="absolute bottom-8 left-0 right-0 text-[11px] tracking-[0.4em] uppercase text-cream/50">White Rabbit LA</p>
+          <p className="mt-10 text-[11px] tracking-[0.4em] uppercase text-cream/50">White Rabbit LA</p>
         </div>
       </section>
 
       {/* LETTER */}
-      <section className="bg-cream py-24 md:py-32 px-6">
+      <section className="relative bg-cream py-16 md:py-20 px-6">
+        <Flourishes size="sm" />
         <div className="max-w-2xl mx-auto">
           <OrnamentalDivider />
-          <div className="font-sans text-base md:text-lg leading-loose text-forest-dark space-y-6 mt-10">
-            <p className="font-serif text-lg md:text-xl">{data.first_name},</p>
+          <div className="font-sans text-base md:text-lg leading-relaxed text-forest-dark space-y-5 mt-8">
+            <p className="font-serif text-xl md:text-2xl text-forest">{data.first_name},</p>
             <p>Thank you for the time on the phone — I enjoyed it more than you know.</p>
             <p>
               What follows isn't a price sheet. It's a proposal for the night you described, written specifically for you.
@@ -210,64 +230,102 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
               We'll work it out.
             </p>
             <p>Looking forward to it.</p>
-            <p className="font-serif text-xl pl-2 mb-0">Scott</p>
+            <p className="font-serif text-2xl pl-2 mb-0 text-forest">— Scott</p>
           </div>
         </div>
       </section>
 
+      {/* PHOTO BREAK 1 */}
+      <section className="relative h-64 md:h-96 overflow-hidden bg-forest-dark">
+        <img src={photoReaction} alt="" className="w-full h-full object-cover opacity-90" />
+        <div className="absolute inset-0 bg-gradient-to-t from-forest-dark via-transparent to-forest-dark/30" />
+        <div className="absolute inset-x-0 bottom-6 text-center">
+          <span className="text-gold text-lg">✦</span>
+        </div>
+      </section>
+
       {/* YOUR NIGHT */}
-      <section className="bg-cream pb-24 md:pb-32 px-6">
-        <div className="max-w-2xl mx-auto">
+      <section className="relative bg-cream py-16 md:py-24 px-6">
+        <div className="max-w-2xl mx-auto text-center">
+          <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">Your Night</p>
           <OrnamentalDivider />
-          <h2 className="font-serif font-light text-4xl md:text-5xl text-forest-dark mt-10 mb-10 text-center">Your Night</h2>
-          <p className="font-sans text-base md:text-lg leading-loose text-forest-dark/90 whitespace-pre-wrap">{data.intro_paragraph}</p>
+          <h2 className="font-serif font-light text-4xl md:text-5xl text-forest-dark mt-6 mb-8">An Evening, Composed</h2>
+          <p className="font-sans text-base md:text-lg leading-relaxed text-forest-dark/85 whitespace-pre-wrap text-left">{data.intro_paragraph}</p>
         </div>
       </section>
 
       {/* TIMELINE */}
       {data.timeline.length > 0 && (
-        <section className="bg-cream pb-24 md:pb-32 px-6">
+        <section className="relative bg-cream pb-16 md:pb-24 px-6">
           <div className="max-w-2xl mx-auto">
-            <OrnamentalDivider />
-            <h2 className="font-serif font-light text-4xl md:text-5xl text-forest-dark mt-10 mb-12 text-center">Your Evening</h2>
+            <div className="text-center mb-10">
+              <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-3">The Shape of It</p>
+              <h2 className="font-serif font-light text-3xl md:text-4xl text-forest-dark">Your Evening, Hour by Hour</h2>
+            </div>
             <div className="relative pl-8 border-l border-gold/40">
               {data.timeline.map((t, i) => (
-                <div key={i} className={i === data.timeline.length - 1 ? "" : "mb-12"}>
-                  <div className="absolute -left-[5px] w-2.5 h-2.5 rounded-full bg-gold mt-2" />
-                  <div className="font-serif text-2xl md:text-3xl text-forest-dark mb-2">{t.time}</div>
-                  <div className="text-base md:text-lg text-forest-dark/75 leading-relaxed">{t.desc}</div>
+                <div key={i} className={i === data.timeline.length - 1 ? "" : "mb-8"}>
+                  <div className="absolute -left-[6px] w-3 h-3 rounded-full bg-gold mt-2 ring-4 ring-cream" />
+                  <div className="font-serif text-2xl md:text-3xl text-forest-dark mb-1">{t.time}</div>
+                  <div className="text-base text-forest-dark/75 leading-relaxed">{t.desc}</div>
                 </div>
               ))}
             </div>
-            <p className="font-sans text-center text-forest-dark/60 mt-12 text-sm tracking-wide">Times shift to fit your night — this is the shape of it.</p>
+            <p className="font-sans text-center text-forest-dark/55 mt-8 text-xs tracking-[0.2em] uppercase">Times shift to fit your night</p>
           </div>
         </section>
       )}
 
+      {/* PHOTO BREAK 2 — split */}
+      <section className="grid grid-cols-2 bg-forest-dark">
+        <div className="aspect-[4/5] md:aspect-[5/4] overflow-hidden">
+          <img src={photoCardsDetail} alt="" className="w-full h-full object-cover" />
+        </div>
+        <div className="aspect-[4/5] md:aspect-[5/4] overflow-hidden">
+          <img src={photoParlorAudience} alt="" className="w-full h-full object-cover" />
+        </div>
+      </section>
+
       {/* TIERS */}
-      <section className="bg-forest-dark text-cream py-24 md:py-32 px-6">
-        <div className="max-w-6xl mx-auto">
-          <p className="text-xs tracking-[0.3em] uppercase text-gold text-center mb-4">Three Options</p>
-          <h2 className="font-serif font-light text-4xl md:text-5xl text-cream text-center mb-16">Choose Your Evening</h2>
-          <div className="grid md:grid-cols-3 gap-6 md:gap-8 items-stretch">
+      <section className="relative bg-forest-dark text-cream py-16 md:py-24 px-6 overflow-hidden">
+        <Flourishes tone="cream" size="md" />
+        <div className="max-w-6xl mx-auto relative">
+          <div className="text-center mb-12">
+            <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">Three Options</p>
+            <h2 className="font-serif font-light text-4xl md:text-5xl text-cream mb-3">Choose Your Evening</h2>
+            <div className="flex items-center justify-center gap-3 mt-4">
+              <span className="w-8 h-px bg-gold/50" />
+              <span className="text-gold text-xs">✦</span>
+              <span className="w-8 h-px bg-gold/50" />
+            </div>
+          </div>
+          <div className="grid md:grid-cols-3 gap-5 md:gap-6 items-stretch">
             {data.tiers.map((tier, i) => {
               const rec = tier.recommended;
               return (
-                <div key={i} className={`flex flex-col p-8 md:p-10 transition-all ${rec ? "bg-cream/[0.04] border border-gold md:-translate-y-4" : "border border-cream/10"}`}>
-                  {rec && <div className="text-[10px] tracking-[0.25em] uppercase text-gold mb-6">Recommended for your night</div>}
-                  <h3 className="font-serif font-light text-2xl md:text-3xl leading-tight mb-3">{tier.name}</h3>
-                  <p className="font-sans text-cream/70 mb-8 text-sm md:text-base">{tier.tagline}</p>
-                  <div className="w-10 h-px bg-gold/60 mb-8" />
-                  <ul className="space-y-3 flex-1 mb-8 text-sm md:text-base text-cream/85 leading-relaxed">
+                <div key={i} className={`relative flex flex-col p-7 md:p-8 transition-all ${rec ? "bg-cream/[0.05] border border-gold md:-translate-y-3 shadow-xl shadow-black/30" : "border border-cream/15"}`}>
+                  <span className="absolute top-0 left-0 w-4 h-px bg-gold/70" />
+                  <span className="absolute top-0 left-0 w-px h-4 bg-gold/70" />
+                  <span className="absolute top-0 right-0 w-4 h-px bg-gold/70" />
+                  <span className="absolute top-0 right-0 w-px h-4 bg-gold/70" />
+                  <span className="absolute bottom-0 left-0 w-4 h-px bg-gold/70" />
+                  <span className="absolute bottom-0 left-0 w-px h-4 bg-gold/70" />
+                  <span className="absolute bottom-0 right-0 w-4 h-px bg-gold/70" />
+                  <span className="absolute bottom-0 right-0 w-px h-4 bg-gold/70" />
+                  {rec && <div className="text-[10px] tracking-[0.3em] uppercase text-gold mb-4">✦ Recommended ✦</div>}
+                  <h3 className="font-serif font-light text-2xl md:text-3xl leading-tight mb-2">{tier.name}</h3>
+                  <p className="font-sans text-cream/65 mb-5 text-sm">{tier.tagline}</p>
+                  <div className="w-10 h-px bg-gold/60 mb-5" />
+                  <ul className="space-y-2.5 flex-1 mb-6 text-sm text-cream/85 leading-relaxed">
                     {tier.items.map((it, j) => (
-                      <li key={j} className="flex gap-3"><span className="text-gold mt-1.5 text-xs">✦</span><span>{it}</span></li>
+                      <li key={j} className="flex gap-2.5"><span className="text-gold mt-1 text-[10px]">✦</span><span>{it}</span></li>
                     ))}
                   </ul>
-                  <div className="font-serif text-4xl md:text-5xl font-light mb-6">{tier.price}</div>
+                  <div className="font-serif text-4xl md:text-5xl font-light mb-5">{tier.price}</div>
                   {tier.href ? (
-                    <a href={tier.href} target="_blank" rel="noopener noreferrer" className={`block text-center py-4 px-6 text-sm tracking-[0.15em] uppercase font-medium transition-opacity hover:opacity-85 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream"}`}>Reserve</a>
+                    <a href={tier.href} target="_blank" rel="noopener noreferrer" className={`block text-center py-3.5 px-6 text-xs tracking-[0.2em] uppercase font-medium transition-all hover:opacity-85 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream hover:border-gold hover:text-gold"}`}>Reserve</a>
                   ) : (
-                    <div className={`block text-center py-4 px-6 text-sm tracking-[0.15em] uppercase font-medium opacity-50 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream"}`}>Reserve</div>
+                    <div className={`block text-center py-3.5 px-6 text-xs tracking-[0.2em] uppercase font-medium opacity-50 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream"}`}>Reserve</div>
                   )}
                 </div>
               );
@@ -277,36 +335,45 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       </section>
 
       {/* PROOF */}
-      <section className="bg-cream py-24 md:py-32 px-6">
+      <section className="relative bg-cream py-16 md:py-20 px-6">
         <div className="max-w-5xl mx-auto text-center">
+          <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">In Good Company</p>
           <OrnamentalDivider />
-          <p className="font-sans text-base md:text-lg text-forest-dark/70 mt-10 mb-12 tracking-wide">A few of the rooms we've worked.</p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-10 gap-y-12 items-center">
+          <p className="font-sans text-sm md:text-base text-forest-dark/65 mt-6 mb-10">A few of the rooms we've worked.</p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-8 items-center">
             {logos.map((logo) => (
               <div key={logo.name} className="flex items-center justify-center">
-                <img src={logo.src} alt={logo.name} loading="lazy" className="max-h-10 md:max-h-12 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity" style={{ filter: "grayscale(100%)" }} />
+                <img src={logo.src} alt={logo.name} loading="lazy" className="max-h-9 md:max-h-11 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity" style={{ filter: "grayscale(100%)" }} />
               </div>
             ))}
           </div>
         </div>
       </section>
 
+      {/* PHOTO BREAK 3 */}
+      <section className="relative h-56 md:h-80 overflow-hidden bg-forest-dark">
+        <img src={photoScottBw} alt="" className="w-full h-full object-cover opacity-80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/40 via-transparent to-forest-dark" />
+      </section>
+
       {/* FAQ */}
       {data.faqs.length > 0 && (
-        <section className="bg-cream pb-24 md:pb-32 px-6">
+        <section className="relative bg-cream py-16 md:py-20 px-6">
           <div className="max-w-3xl mx-auto">
-            <OrnamentalDivider />
-            <h2 className="font-serif font-light text-4xl md:text-5xl text-forest-dark text-center mt-10 mb-14">A Few Questions Before You Decide</h2>
+            <div className="text-center mb-10">
+              <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-3">Before You Decide</p>
+              <h2 className="font-serif font-light text-3xl md:text-4xl text-forest-dark">A Few Questions</h2>
+            </div>
             <div className="divide-y divide-gold/25 border-t border-b border-gold/25">
               {data.faqs.map((f, i) => {
                 const open = openFaq === i;
                 return (
                   <div key={i}>
-                    <button onClick={() => setOpenFaq(open ? null : i)} className="w-full flex justify-between items-center text-left py-6 gap-6 group">
+                    <button onClick={() => setOpenFaq(open ? null : i)} className="w-full flex justify-between items-center text-left py-5 gap-6 group">
                       <span className="font-serif text-lg md:text-xl text-forest-dark group-hover:text-forest transition-colors">{f.q}</span>
                       <Plus className={`w-5 h-5 text-gold flex-shrink-0 transition-transform duration-300 ${open ? "rotate-45" : ""}`} />
                     </button>
-                    {open && <div className="text-base md:text-lg text-forest-dark/75 leading-relaxed pb-6 pr-10">{f.a}</div>}
+                    {open && <div className="text-base text-forest-dark/75 leading-relaxed pb-5 pr-10">{f.a}</div>}
                   </div>
                 );
               })}
@@ -316,26 +383,32 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       )}
 
       {/* RESERVE */}
-      <section className="bg-forest-dark text-cream py-24 md:py-32 px-6 text-center">
-        <div className="max-w-3xl mx-auto">
-          <p className="text-xs tracking-[0.3em] uppercase text-gold mb-6">Reserving the Date</p>
-          <h2 className="font-serif font-light text-4xl md:text-5xl mb-10">When You're Ready</h2>
-          <div className="font-sans text-base md:text-lg leading-loose text-cream/80 max-w-2xl mx-auto space-y-5">
-            <p>A 50% deposit holds your date and locks the booking. The remaining 50% is due the day before the event.</p>
-            <p>This proposal — and the date — is held for 14 days from today. After that, the date returns to the calendar.</p>
+      <section className="relative bg-forest-dark text-cream py-16 md:py-24 px-6 text-center overflow-hidden">
+        <Flourishes tone="cream" size="md" />
+        <div className="max-w-3xl mx-auto relative">
+          <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">Reserving the Date</p>
+          <h2 className="font-serif font-light text-4xl md:text-5xl mb-3">When You're Ready</h2>
+          <div className="flex items-center justify-center gap-3 mt-4 mb-8">
+            <span className="w-10 h-px bg-gold/60" />
+            <span className="text-gold text-xs">✦</span>
+            <span className="w-10 h-px bg-gold/60" />
           </div>
-          <div className="grid md:grid-cols-3 gap-4 mt-14 max-w-4xl mx-auto">
+          <div className="font-sans text-base leading-relaxed text-cream/80 max-w-2xl mx-auto space-y-4">
+            <p>A 50% deposit holds your date and locks the booking. The remaining 50% is due the day before the event.</p>
+            <p>This proposal — and the date — is held for 14 days from today.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-3 mt-10 max-w-4xl mx-auto">
             {data.tiers.map((tier, i) => {
               const rec = tier.recommended;
               if (!tier.href) return null;
               return (
-                <a key={i} href={tier.href} target="_blank" rel="noopener noreferrer" className={`block py-5 px-6 text-sm tracking-[0.1em] uppercase font-medium transition-opacity hover:opacity-85 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream"}`}>
+                <a key={i} href={tier.href} target="_blank" rel="noopener noreferrer" className={`block py-4 px-5 text-xs tracking-[0.15em] uppercase font-medium transition-opacity hover:opacity-85 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream hover:border-gold hover:text-gold"}`}>
                   {tier.cta} — {tier.price}
                 </a>
               );
             })}
           </div>
-          <div className="mt-16 flex items-center justify-center gap-2 text-cream/70">
+          <div className="mt-12 flex items-center justify-center gap-2 text-cream/70">
             <Phone className="w-4 h-4 text-gold" />
             <span className="text-sm">Prefer to talk it through?</span>
             <a href="tel:+14243941850" className="text-cream hover:text-gold transition-colors text-sm font-medium">(424) 394-1850</a>
@@ -344,18 +417,23 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       </section>
 
       {/* CLOSING */}
-      <section className="bg-cream text-center py-32 px-6">
-        <img src={threeStars} alt="" className="w-10 mx-auto mb-10 opacity-70" />
+      <section className="relative bg-cream text-center py-20 px-6">
+        <Flourishes size="sm" />
+        <img src={threeStars} alt="" className="w-10 mx-auto mb-6 opacity-70" />
         {data.closing_quote && (
           <p className="font-serif text-2xl md:text-3xl text-forest-dark max-w-2xl mx-auto leading-relaxed">{data.closing_quote}</p>
         )}
         {data.closing_attribution && (
-          <p className="text-xs tracking-[0.3em] uppercase text-forest-dark/50 mt-4">{data.closing_attribution}</p>
+          <p className="text-xs tracking-[0.3em] uppercase text-forest-dark/50 mt-3">{data.closing_attribution}</p>
         )}
-        <div className="h-20" />
+        <div className="flex items-center justify-center gap-3 mt-10 mb-6">
+          <span className="w-10 h-px bg-gold/60" />
+          <span className="text-gold">✦</span>
+          <span className="w-10 h-px bg-gold/60" />
+        </div>
         <p className="font-serif text-2xl text-forest-dark">Scott Syme</p>
-        <p className="font-sans text-sm text-forest-dark/60 mt-1 tracking-wide">Magician</p>
-        <div className="mt-6 space-y-1 text-sm text-forest-dark">
+        <p className="font-sans text-xs text-forest-dark/60 mt-1 tracking-[0.25em] uppercase">Magician</p>
+        <div className="mt-5 space-y-1 text-sm text-forest-dark">
           <p><a href="tel:+14243941850" className="hover:text-forest transition-colors">(424) 394-1850</a></p>
           <p><a href="https://whiterabbitla.com" className="hover:text-forest transition-colors">whiterabbitla.com</a></p>
         </div>
