@@ -199,16 +199,17 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
   const heroSrc = HERO_MAP[data.hero_image] || HERO_MAP.wedding;
   const fullName = `${data.first_name} ${data.last_name}`.trim();
 
-  // Corner flourish set — gold filigree in all four corners
+  // Corner flourish set — inline SVG gold filigree in all four corners
   const Flourishes = ({ tone = "gold", size = "md" }: { tone?: "gold" | "cream"; size?: "sm" | "md" | "lg" }) => {
     const w = size === "lg" ? "w-28 md:w-40" : size === "sm" ? "w-14 md:w-20" : "w-20 md:w-28";
-    const opacity = tone === "cream" ? "opacity-40" : "opacity-60";
+    const colorClass = tone === "cream" ? "text-cream/40" : "text-gold/70";
+    const base = `pointer-events-none absolute ${w} ${colorClass}`;
     return (
       <>
-        <img src={flourishCorner} alt="" aria-hidden className={`pointer-events-none absolute top-0 left-0 ${w} ${opacity}`} />
-        <img src={flourishCorner} alt="" aria-hidden className={`pointer-events-none absolute top-0 right-0 ${w} ${opacity} -scale-x-100`} />
-        <img src={flourishCorner} alt="" aria-hidden className={`pointer-events-none absolute bottom-0 left-0 ${w} ${opacity} -scale-y-100`} />
-        <img src={flourishCorner} alt="" aria-hidden className={`pointer-events-none absolute bottom-0 right-0 ${w} ${opacity} -scale-x-100 -scale-y-100`} />
+        <FlourishCornerSVG className={`${base} top-0 left-0`} />
+        <FlourishCornerSVG className={`${base} top-0 right-0 -scale-x-100`} />
+        <FlourishCornerSVG className={`${base} bottom-0 left-0 -scale-y-100`} />
+        <FlourishCornerSVG className={`${base} bottom-0 right-0 -scale-x-100 -scale-y-100`} />
       </>
     );
   };
