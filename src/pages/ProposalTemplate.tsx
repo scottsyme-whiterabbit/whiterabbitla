@@ -20,7 +20,37 @@ import heroParlor from "@/assets/experience-parlor.jpg";
 import heroCocktail from "@/assets/event-closeup-cocktail.jpg";
 import heroEvening from "@/assets/hero-white-rabbit-evening.jpg";
 
-import flourishCorner from "@/assets/proposal-flourish-corner.png";
+// Inline SVG flourish (rendered below) — replaces previous PNG which rasterized poorly.
+const FlourishCornerSVG = ({ className = "" }: { className?: string }) => (
+  <svg
+    viewBox="0 0 120 120"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.25"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    {/* Outer arcing line */}
+    <path d="M2 60 C 2 28, 28 2, 60 2" />
+    {/* Inner companion line */}
+    <path d="M10 60 C 10 32, 32 10, 60 10" opacity="0.55" />
+    {/* Top sweeping curl */}
+    <path d="M60 2 C 70 14, 78 22, 92 26 C 100 28, 104 22, 100 16 C 96 11, 88 14, 90 22" />
+    {/* Left sweeping curl */}
+    <path d="M2 60 C 14 70, 22 78, 26 92 C 28 100, 22 104, 16 100 C 11 96, 14 88, 22 90" />
+    {/* Center diagonal flourish */}
+    <path d="M22 22 C 34 30, 46 36, 58 40 C 64 42, 68 46, 66 52 C 64 58, 56 56, 54 50 C 52 44, 58 40, 64 42" />
+    {/* Inner curl accent */}
+    <path d="M30 30 C 38 38, 46 44, 54 48" opacity="0.6" />
+    {/* Tiny ornament dots */}
+    <circle cx="92" cy="22" r="1.4" fill="currentColor" stroke="none" />
+    <circle cx="22" cy="92" r="1.4" fill="currentColor" stroke="none" />
+    <circle cx="66" cy="52" r="1.2" fill="currentColor" stroke="none" />
+  </svg>
+);
 import photoReaction from "@/assets/event-closeup-reaction.jpg";
 import photoCardsDetail from "@/assets/event-cards-detail.jpg";
 import photoParlorAudience from "@/assets/event-parlor-audience.jpg";
