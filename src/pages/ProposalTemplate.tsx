@@ -178,7 +178,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         <img src={flourishCorner} alt="" aria-hidden className={`pointer-events-none absolute top-0 left-0 ${w} ${opacity}`} />
         <img src={flourishCorner} alt="" aria-hidden className={`pointer-events-none absolute top-0 right-0 ${w} ${opacity} -scale-x-100`} />
         <img src={flourishCorner} alt="" aria-hidden className={`pointer-events-none absolute bottom-0 left-0 ${w} ${opacity} -scale-y-100`} />
-        <img src={flourishCorner} alt="" aria-hidden className={`pointer-events-none absolute bottom-0 right-0 ${w} ${opacity} -scale-100`} />
+        <img src={flourishCorner} alt="" aria-hidden className={`pointer-events-none absolute bottom-0 right-0 ${w} ${opacity} -scale-x-100 -scale-y-100`} />
       </>
     );
   };
@@ -237,7 +237,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
 
       {/* PHOTO BREAK 1 */}
       <section className="relative h-64 md:h-96 overflow-hidden bg-forest-dark">
-        <img src={photoReaction} alt="" className="w-full h-full object-cover opacity-90" />
+        <img src={photoReaction} alt="" className="w-full h-full object-cover object-top opacity-90" />
         <div className="absolute inset-0 bg-gradient-to-t from-forest-dark via-transparent to-forest-dark/30" />
         <div className="absolute inset-x-0 bottom-6 text-center">
           <span className="text-gold text-lg">✦</span>
@@ -279,10 +279,10 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       {/* PHOTO BREAK 2 — split */}
       <section className="grid grid-cols-2 bg-forest-dark">
         <div className="aspect-[4/5] md:aspect-[5/4] overflow-hidden">
-          <img src={photoCardsDetail} alt="" className="w-full h-full object-cover" />
+          <img src={photoCardsDetail} alt="" className="w-full h-full object-cover object-center" />
         </div>
         <div className="aspect-[4/5] md:aspect-[5/4] overflow-hidden">
-          <img src={photoParlorAudience} alt="" className="w-full h-full object-cover" />
+          <img src={photoParlorAudience} alt="" className="w-full h-full object-cover object-top" />
         </div>
       </section>
 
@@ -352,7 +352,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
 
       {/* PHOTO BREAK 3 */}
       <section className="relative h-56 md:h-80 overflow-hidden bg-forest-dark">
-        <img src={photoScottBw} alt="" className="w-full h-full object-cover opacity-80" />
+        <img src={photoScottBw} alt="" className="w-full h-full object-cover object-top opacity-80" />
         <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/40 via-transparent to-forest-dark" />
       </section>
 
