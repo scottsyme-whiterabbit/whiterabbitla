@@ -765,6 +765,69 @@ export type Database = {
         }
         Relationships: []
       }
+      proposals: {
+        Row: {
+          closing_attribution: string | null
+          closing_quote: string | null
+          created_at: string
+          event_date: string
+          event_type: string
+          faqs: Json
+          first_name: string
+          hero_image: string
+          id: string
+          intro_paragraph: string
+          last_name: string
+          recipient_email: string | null
+          sent_at: string | null
+          slug: string
+          tiers: Json
+          timeline: Json
+          updated_at: string
+          venue: string | null
+        }
+        Insert: {
+          closing_attribution?: string | null
+          closing_quote?: string | null
+          created_at?: string
+          event_date?: string
+          event_type?: string
+          faqs?: Json
+          first_name?: string
+          hero_image?: string
+          id?: string
+          intro_paragraph?: string
+          last_name?: string
+          recipient_email?: string | null
+          sent_at?: string | null
+          slug: string
+          tiers?: Json
+          timeline?: Json
+          updated_at?: string
+          venue?: string | null
+        }
+        Update: {
+          closing_attribution?: string | null
+          closing_quote?: string | null
+          created_at?: string
+          event_date?: string
+          event_type?: string
+          faqs?: Json
+          first_name?: string
+          hero_image?: string
+          id?: string
+          intro_paragraph?: string
+          last_name?: string
+          recipient_email?: string | null
+          sent_at?: string | null
+          slug?: string
+          tiers?: Json
+          timeline?: Json
+          updated_at?: string
+          venue?: string | null
+        }
+        Relationships: []
+      }
       referrals: {
         Row: {
           created_at: string
