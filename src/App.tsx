@@ -41,6 +41,7 @@ import ServiceAreaDetail from "./pages/ServiceAreaDetail";
 import DigitalCard from "./pages/DigitalCard";
 import Consultation from "./pages/Consultation";
 import Planners from "./pages/Planners";
+import ProposalTemplate from "./pages/ProposalTemplate";
 import { getBlogArticleBySlug } from "./data/blogArticles";
 import { useParams } from "react-router-dom";
 
@@ -112,6 +113,7 @@ const App = () => (
           <Routes>
             <Route path="/card" element={<><DigitalCard /></>} />
             <Route path="/consultation" element={<><Consultation /></>} />
+            <Route path="/proposals/template" element={<ProposalTemplate />} />
             <Route path="/*" element={<AppContent />} />
           </Routes>
         </BrowserRouter>
