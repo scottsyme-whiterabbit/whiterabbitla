@@ -20,6 +20,12 @@ import heroParlor from "@/assets/experience-parlor.jpg";
 import heroCocktail from "@/assets/event-closeup-cocktail.jpg";
 import heroEvening from "@/assets/hero-white-rabbit-evening.jpg";
 
+import flourishCorner from "@/assets/proposal-flourish-corner.png";
+import photoReaction from "@/assets/event-closeup-reaction.jpg";
+import photoCardsDetail from "@/assets/event-cards-detail.jpg";
+import photoParlorAudience from "@/assets/event-parlor-audience.jpg";
+import photoScottBw from "@/assets/event-scott-bw-stage.jpg";
+
 const HERO_MAP: Record<string, string> = {
   wedding: heroWedding,
   corporate: heroCorporate,
