@@ -20,7 +20,7 @@ import heroParlor from "@/assets/experience-parlor.jpg";
 import heroCocktail from "@/assets/event-closeup-cocktail.jpg";
 import heroEvening from "@/assets/hero-white-rabbit-evening.jpg";
 
-import borderFrame from "@/assets/proposal-border-frame.png";
+import flourishCorner from "@/assets/proposal-flourish-corner.png";
 import photoReaction from "@/assets/event-closeup-reaction.jpg";
 import photoCardsDetail from "@/assets/event-cards-detail.jpg";
 import photoParlorAudience from "@/assets/event-parlor-audience.jpg";
@@ -169,19 +169,18 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
   const heroSrc = HERO_MAP[data.hero_image] || HERO_MAP.wedding;
   const fullName = `${data.first_name} ${data.last_name}`.trim();
 
-  // Ornate full-frame border overlay — inspired by the car design
+  // Corner flourish set — gold filigree PNG in all four corners
   const Flourishes = ({ tone = "gold", size = "md" }: { tone?: "gold" | "cream"; size?: "sm" | "md" | "lg" }) => {
-    const inset = size === "lg" ? "inset-3 md:inset-6" : size === "sm" ? "inset-2 md:inset-3" : "inset-2 md:inset-4";
+    const w = size === "lg" ? "w-28 md:w-40" : size === "sm" ? "w-14 md:w-20" : "w-20 md:w-28";
     const opacity = tone === "cream" ? "opacity-40" : "opacity-70";
+    const base = `pointer-events-none absolute ${w} ${opacity} select-none`;
     return (
-      <img
-        src={borderFrame}
-        alt=""
-        aria-hidden
-        loading="lazy"
-        className={`pointer-events-none absolute ${inset} w-auto h-auto max-w-none select-none ${opacity}`}
-        style={{ width: `calc(100% - 1rem)`, height: `calc(100% - 1rem)`, objectFit: "fill" }}
-      />
+      <>
+        <img src={flourishCorner} alt="" aria-hidden loading="lazy" width={1024} height={1024} className={`${base} top-0 left-0`} />
+        <img src={flourishCorner} alt="" aria-hidden loading="lazy" width={1024} height={1024} className={`${base} top-0 right-0 -scale-x-100`} />
+        <img src={flourishCorner} alt="" aria-hidden loading="lazy" width={1024} height={1024} className={`${base} bottom-0 left-0 -scale-y-100`} />
+        <img src={flourishCorner} alt="" aria-hidden loading="lazy" width={1024} height={1024} className={`${base} bottom-0 right-0 -scale-x-100 -scale-y-100`} />
+      </>
     );
   };
 
