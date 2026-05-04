@@ -196,6 +196,12 @@ const reviews = [
     role: "Event Guest",
     text: "Amazing amazing amazing.",
     rating: 5
+},
+{
+    name: "Dustin A.",
+    role: "After-Wedding Celebration",
+    text: "Consummate professional, strong communication regarding preferences, amazing show, incredible crowd work. Basically perfect to work with. I would recommend Scott highly for your event. Thank you!",
+    rating: 5
 }];
 
 
