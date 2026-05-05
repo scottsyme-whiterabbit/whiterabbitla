@@ -34,7 +34,7 @@ import luncheon1539 from "@/assets/events/ladies-luncheon-1539.jpg";
 import luncheon1549 from "@/assets/events/ladies-luncheon-1549.jpg";
 import luncheon1559 from "@/assets/events/ladies-luncheon-1559.jpg";
 
-const galleryPhotos = [luncheon1520, luncheon1512, luncheon1515, luncheon1535, luncheon1539, luncheon1549, luncheon1559];
+const galleryPhotos = [luncheon1520, luncheon1535, luncheon1549, luncheon1559];
 
 const HERO_MAP: Record<string, string> = {
   wedding: heroWedding,
