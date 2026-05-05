@@ -37,7 +37,7 @@ import luncheon1559 from "@/assets/events/ladies-luncheon-1559.jpg";
 import proposalHeroLuncheon from "@/assets/events/proposal-hero-luncheon.jpg";
 import heroMain from "@/assets/hero-magic-cinematic.jpg";
 
-const galleryPhotos = [luncheon1535, luncheon1549, luncheon1559, luncheon1512];
+const galleryPhotos = [luncheon1549, photoReaction, photoParlorAudience, photoCardsDetail];
 
 const HERO_MAP: Record<string, string> = {
   wedding: heroMain,
