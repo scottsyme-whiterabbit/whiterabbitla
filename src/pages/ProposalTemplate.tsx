@@ -194,7 +194,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/70 via-forest-dark/55 to-forest-dark/90" />
         </div>
         <Flourishes size="lg" />
-        <div className="relative max-w-4xl mx-auto px-6 py-24 md:py-32 text-center flex flex-col items-center opacity-60">
+        <div className="relative max-w-4xl mx-auto px-6 py-24 md:py-32 text-center flex flex-col items-center opacity-100">
           <img src={threeStars} alt="" className="w-12 md:w-14 mb-6 opacity-90" />
           <p className="text-[11px] md:text-xs tracking-[0.4em] uppercase text-gold mb-6">A Proposal Prepared For</p>
           <h1 className="font-serif font-light text-5xl md:text-7xl leading-tight tracking-tight">{fullName}</h1>
