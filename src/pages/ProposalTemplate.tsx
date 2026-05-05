@@ -187,8 +187,8 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       {/* HERO */}
       <section className="relative bg-forest-dark text-cream overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroSrc} alt="" className="w-full h-full object-cover opacity-30" />
-          <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/85 via-forest-dark/75 to-forest-dark" />
+          <img src={heroSrc} alt="" className="w-full h-full object-cover opacity-70" />
+          <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/40 via-forest-dark/30 to-forest-dark/80" />
         </div>
         <Flourishes size="lg" />
         <div className="relative max-w-4xl mx-auto px-6 py-24 md:py-32 text-center flex flex-col items-center">
