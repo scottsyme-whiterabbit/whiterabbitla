@@ -239,14 +239,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
 
       {/* PHOTO BREAK 1 */}
       <section className="relative bg-forest-dark py-12 md:py-16 px-4">
-        <div className="max-w-4xl mx-auto">
-          <img
-            src={photoReaction}
-            alt="A guest reacts to a moment of magic"
-            className="w-full h-auto max-h-[80vh] object-contain mx-auto"
-          />
-        </div>
-        <div className="text-center mt-8">
+        <div className="text-center mb-8">
           <span className="text-gold text-lg">✦</span>
         </div>
 
