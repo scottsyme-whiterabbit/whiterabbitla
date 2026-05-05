@@ -35,16 +35,17 @@ import luncheon1549 from "@/assets/events/ladies-luncheon-1549.jpg";
 import luncheon1559 from "@/assets/events/ladies-luncheon-1559.jpg";
 
 import proposalHeroLuncheon from "@/assets/events/proposal-hero-luncheon.jpg";
+import heroMain from "@/assets/hero-magic-cinematic.jpg";
 
 const galleryPhotos = [luncheon1535, luncheon1549, luncheon1559, luncheon1512];
 
 const HERO_MAP: Record<string, string> = {
-  wedding: proposalHeroLuncheon,
-  corporate: proposalHeroLuncheon,
-  private: proposalHeroLuncheon,
-  parlor: proposalHeroLuncheon,
-  cocktail: proposalHeroLuncheon,
-  evening: proposalHeroLuncheon,
+  wedding: heroMain,
+  corporate: heroMain,
+  private: heroMain,
+  parlor: heroMain,
+  cocktail: heroMain,
+  evening: heroMain,
 };
 
 export const HERO_OPTIONS = [
@@ -189,8 +190,8 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       {/* HERO */}
       <section className="relative bg-forest-dark text-cream overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroSrc} alt="" className="w-full h-full object-cover opacity-70" />
-          <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/40 via-forest-dark/30 to-forest-dark/80 opacity-40" />
+          <img src={heroSrc} alt="" className="w-full h-full object-cover opacity-90" />
+          <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/70 via-forest-dark/55 to-forest-dark/90" />
         </div>
         <Flourishes size="lg" />
         <div className="relative max-w-4xl mx-auto px-6 py-24 md:py-32 text-center flex flex-col items-center opacity-60">
