@@ -169,20 +169,8 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
   const heroSrc = HERO_MAP[data.hero_image] || HERO_MAP.wedding;
   const fullName = `${data.first_name} ${data.last_name}`.trim();
 
-  // Corner flourish set — gold filigree PNG in all four corners
-  const Flourishes = ({ tone = "gold", size = "md" }: { tone?: "gold" | "cream"; size?: "sm" | "md" | "lg" }) => {
-    const w = size === "lg" ? "w-28 md:w-40" : size === "sm" ? "w-14 md:w-20" : "w-20 md:w-28";
-    const opacity = tone === "cream" ? "opacity-40" : "opacity-70";
-    const base = `pointer-events-none absolute ${w} ${opacity} select-none`;
-    return (
-      <>
-        <img src={flourishCorner} alt="" aria-hidden loading="lazy" width={1024} height={1024} className={`${base} top-0 left-0`} />
-        <img src={flourishCorner} alt="" aria-hidden loading="lazy" width={1024} height={1024} className={`${base} top-0 right-0 -scale-x-100`} />
-        <img src={flourishCorner} alt="" aria-hidden loading="lazy" width={1024} height={1024} className={`${base} bottom-0 left-0 -scale-y-100`} />
-        <img src={flourishCorner} alt="" aria-hidden loading="lazy" width={1024} height={1024} className={`${base} bottom-0 right-0 -scale-x-100 -scale-y-100`} />
-      </>
-    );
-  };
+  // Corner flourishes — currently disabled
+  const Flourishes = (_: { tone?: "gold" | "cream"; size?: "sm" | "md" | "lg" }) => null;
 
   return (
     <div className="bg-cream text-forest-dark font-sans">
