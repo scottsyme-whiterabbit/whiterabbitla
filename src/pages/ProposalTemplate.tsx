@@ -37,7 +37,7 @@ import luncheon1559 from "@/assets/events/ladies-luncheon-1559.jpg";
 import proposalHeroLuncheon from "@/assets/events/proposal-hero-luncheon.jpg";
 import heroMain from "@/assets/hero-magic-cinematic.jpg";
 
-const galleryPhotos = [luncheon1549, photoReaction, photoParlorAudience, photoCardsDetail];
+const galleryPhotos = [luncheon1549, photoParlorAudience, photoCardsDetail];
 
 const HERO_MAP: Record<string, string> = {
   wedding: heroMain,
@@ -244,7 +244,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         </div>
 
         {/* Gallery grid */}
-        <div className="max-w-5xl mx-auto mt-10 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+        <div className="max-w-5xl mx-auto mt-10 grid grid-cols-3 gap-3 md:gap-4">
           {galleryPhotos.map((src, i) => (
             <div key={i} className="aspect-[3/4] overflow-hidden bg-forest-dark/60">
               <img
