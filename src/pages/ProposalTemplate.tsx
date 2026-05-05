@@ -21,7 +21,7 @@ import heroCocktail from "@/assets/event-closeup-cocktail.jpg";
 import heroEvening from "@/assets/hero-white-rabbit-evening.jpg";
 
 import flourishCorner from "@/assets/proposal-flourish-corner.png";
-import photoReaction from "@/assets/event-closeup-reaction.jpg";
+import photoReaction from "@/assets/events/proposal-closeup-action.jpg";
 import photoCardsDetail from "@/assets/event-cards-detail.jpg";
 import photoParlorAudience from "@/assets/event-parlor-audience.jpg";
 import photoScottBw from "@/assets/event-scott-bw-stage.jpg";
