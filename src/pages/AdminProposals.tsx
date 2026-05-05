@@ -102,8 +102,15 @@ const AdminProposals = () => {
   const save = async () => {
     if (!editing) return;
     try {
-      const payload = { ...editing };
+      const payload: any = { ...editing };
+      // Strip server-managed fields and any empty id/slug to avoid invalid uuid syntax
+      delete payload.created_at;
+      delete payload.updated_at;
       const action = editing.id ? "update" : "create";
+      if (!editing.id) {
+        delete payload.id;
+        if (!payload.slug) delete payload.slug;
+      }
       const j = await apiCall(action, "POST", payload);
       toast.success(editing.id ? "Saved" : "Created");
       setEditing(j.proposal);
