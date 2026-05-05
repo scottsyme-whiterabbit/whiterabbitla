@@ -22,7 +22,7 @@ import heroEvening from "@/assets/hero-white-rabbit-evening.jpg";
 
 import flourishCorner from "@/assets/proposal-flourish-corner.png";
 import photoReaction from "@/assets/events/proposal-closeup-action.jpg";
-import photoCardsDetail from "@/assets/event-cards-detail.jpg";
+import photoCardsDetail from "@/assets/events/proposal-cards-detail-new.jpg";
 import photoParlorAudience from "@/assets/event-parlor-audience.jpg";
 import photoScottBw from "@/assets/event-scott-bw-stage.jpg";
 
