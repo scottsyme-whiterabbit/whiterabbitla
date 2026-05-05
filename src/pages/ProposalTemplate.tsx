@@ -225,8 +225,8 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       </section>
 
       {/* PHOTO BREAK 1 */}
-      <section className="relative h-64 md:h-96 overflow-hidden bg-forest-dark">
-        <img src={photoReaction} alt="" className="w-full h-full object-cover object-top opacity-90" />
+      <section className="relative h-80 md:h-[32rem] overflow-hidden bg-forest-dark">
+        <img src={photoReaction} alt="" className="w-full h-full object-cover object-center opacity-90" style={{ objectPosition: '50% 35%' }} />
         <div className="absolute inset-0 bg-gradient-to-t from-forest-dark via-transparent to-forest-dark/30" />
         <div className="absolute inset-x-0 bottom-6 text-center">
           <span className="text-gold text-lg">✦</span>
