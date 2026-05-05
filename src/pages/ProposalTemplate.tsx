@@ -34,15 +34,17 @@ import luncheon1539 from "@/assets/events/ladies-luncheon-1539.jpg";
 import luncheon1549 from "@/assets/events/ladies-luncheon-1549.jpg";
 import luncheon1559 from "@/assets/events/ladies-luncheon-1559.jpg";
 
-const galleryPhotos = [luncheon1520, luncheon1535, luncheon1549, luncheon1559];
+import proposalHeroLuncheon from "@/assets/events/proposal-hero-luncheon.jpg";
+
+const galleryPhotos = [luncheon1535, luncheon1549, luncheon1559, luncheon1512];
 
 const HERO_MAP: Record<string, string> = {
-  wedding: heroWedding,
-  corporate: heroCorporate,
-  private: heroPrivate,
-  parlor: heroParlor,
-  cocktail: heroCocktail,
-  evening: heroEvening,
+  wedding: proposalHeroLuncheon,
+  corporate: proposalHeroLuncheon,
+  private: proposalHeroLuncheon,
+  parlor: proposalHeroLuncheon,
+  cocktail: proposalHeroLuncheon,
+  evening: proposalHeroLuncheon,
 };
 
 export const HERO_OPTIONS = [
