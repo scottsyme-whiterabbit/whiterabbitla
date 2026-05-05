@@ -26,6 +26,16 @@ import photoCardsDetail from "@/assets/event-cards-detail.jpg";
 import photoParlorAudience from "@/assets/event-parlor-audience.jpg";
 import photoScottBw from "@/assets/event-scott-bw-stage.jpg";
 
+import luncheon1512 from "@/assets/events/ladies-luncheon-1512.jpg";
+import luncheon1515 from "@/assets/events/ladies-luncheon-1515.jpg";
+import luncheon1520 from "@/assets/events/ladies-luncheon-1520.jpg";
+import luncheon1535 from "@/assets/events/ladies-luncheon-1535.jpg";
+import luncheon1539 from "@/assets/events/ladies-luncheon-1539.jpg";
+import luncheon1549 from "@/assets/events/ladies-luncheon-1549.jpg";
+import luncheon1559 from "@/assets/events/ladies-luncheon-1559.jpg";
+
+const galleryPhotos = [luncheon1520, luncheon1512, luncheon1515, luncheon1535, luncheon1539, luncheon1549, luncheon1559];
+
 const HERO_MAP: Record<string, string> = {
   wedding: heroWedding,
   corporate: heroCorporate,
@@ -225,11 +235,30 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       </section>
 
       {/* PHOTO BREAK 1 */}
-      <section className="relative h-80 md:h-[32rem] overflow-hidden bg-forest-dark">
-        <img src={photoReaction} alt="" className="w-full h-full object-cover object-center opacity-90" style={{ objectPosition: '50% 35%' }} />
-        <div className="absolute inset-0 bg-gradient-to-t from-forest-dark via-transparent to-forest-dark/30" />
-        <div className="absolute inset-x-0 bottom-6 text-center">
+      <section className="relative bg-forest-dark py-12 md:py-16 px-4">
+        <div className="max-w-4xl mx-auto">
+          <img
+            src={photoReaction}
+            alt="A guest reacts to a moment of magic"
+            className="w-full h-auto max-h-[80vh] object-contain mx-auto"
+          />
+        </div>
+        <div className="text-center mt-8">
           <span className="text-gold text-lg">✦</span>
+        </div>
+
+        {/* Gallery grid */}
+        <div className="max-w-5xl mx-auto mt-10 grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+          {galleryPhotos.map((src, i) => (
+            <div key={i} className="aspect-[3/4] overflow-hidden bg-forest-dark/60">
+              <img
+                src={src}
+                alt=""
+                loading="lazy"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+              />
+            </div>
+          ))}
         </div>
       </section>
 
