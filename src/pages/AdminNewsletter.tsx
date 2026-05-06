@@ -72,6 +72,7 @@ interface Stats {
   cold_nonprofit?: ColdCampaignStats;
   cold_talent?: ColdCampaignStats;
   cold_spirits?: ColdCampaignStats;
+  cold_charity_golf?: ColdCampaignStats;
 }
 
 const AdminNewsletter = () => {
