@@ -147,14 +147,14 @@ White Rabbit LA · 7393 W. Manchester Ave #209, Los Angeles, CA 90045`;
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          from: "Scott Syme <scott@whiterabbitla.com>",
+          from: "Scott Syme <scott.syme@whiterabbitla.com>",
           to: [to],
           subject: subject || "Your White Rabbit LA Proposal",
           html,
           text,
-          reply_to: "scott@whiterabbitla.com",
+          reply_to: "scott.syme@whiterabbitla.com",
           headers: {
-            "List-Unsubscribe": "<mailto:scott@whiterabbitla.com?subject=unsubscribe>",
+            "List-Unsubscribe": "<mailto:scott.syme@whiterabbitla.com?subject=unsubscribe>",
             "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
           },
         }),
