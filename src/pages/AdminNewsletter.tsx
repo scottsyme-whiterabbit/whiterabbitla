@@ -1054,6 +1054,7 @@ const AdminNewsletter = () => {
                 { key: "cold_talent" as const, label: "Talent", emoji: "🎬", category: "talent" },
                 { key: "cold_nightlife" as const, label: "Nightlife", emoji: "🌙", category: "nightlife" },
                 { key: "cold_spirits" as const, label: "Spirits", emoji: "🍸", category: "spirits" },
+                { key: "cold_charity_golf" as const, label: "Charity Golf", emoji: "🏌️", category: "charity_golf" },
               ]).map(cat => {
                 const s = stats[cat.key] || { total: 0, active: 0, paused: 0, replied: 0, completed: 0 };
                 return (
