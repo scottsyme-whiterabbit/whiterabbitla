@@ -789,7 +789,8 @@ serve(async (req) => {
         const previewName = body.previewName || "Kevin";
         const previewCompany = body.previewCompany ?? null;
         const previewCity = body.previewCity ?? null;
-        const template = getCampaignEmail(category as CampaignCategory, step, previewName, "preview", previewCompany, previewCity);
+        const previewTournament = body.previewTournament ?? null;
+        const template = getCampaignEmail(category as CampaignCategory, step, previewName, "preview", previewCompany, previewCity, previewTournament, null, null);
         if (!template.subject) {
           return new Response(JSON.stringify({ error: "No template found" }), {
             status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
