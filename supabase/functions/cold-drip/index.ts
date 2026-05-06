@@ -720,6 +720,42 @@ ${signoffFull()}`),
 ${signoffFull()}`),
       },
     ],
+
+    // ═══════════════════════════════════════════════
+    // CAMPAIGN 10: CHARITY GOLF TOURNAMENTS (3 emails over 9 days)
+    // ═══════════════════════════════════════════════
+    charity_golf: [
+      {
+        subject: `What your players do between the 18th hole and dinner`,
+        preheader: `The 2-hour dead zone at ${tournamentLabel}.`,
+        innerHtml: plainBody([
+          `Hi ${firstName},`,
+          `Most charity golf tournaments have a long gap between the last putt and the awards dinner — players drift to the bar, energy drops before the auction asks, and committees scramble to fill the time. Same problem at the hospitality tents during play.`,
+          `I'm a Magic Castle magician who fills both gaps. Close-up magic at the on-course hospitality tents while players move through, and strolling magic at the post-round reception. No dead time, and a more generous room for the auction.`,
+          `Worth 15 minutes? (424) 394-1850 or hit reply.`,
+          `More at ${tournamentsLink}`,
+        ]) + plainSignature(),
+      },
+      {
+        subject: `Did the ${tournamentLabel} dead-zone note land?`,
+        preheader: `Quick follow-up on filling the gap before the awards dinner.`,
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">Hi ${firstName},</p>
+<p style="margin:0 0 18px;">Quick follow-up. If filling the gap between the last putt and the awards dinner is something you're actively solving for ${tournamentLabel}, my number is (424) 394-1850.</p>
+<p style="margin:0 0 18px;">If it's already covered, no problem — happy to circle back for 2027.</p>
+<p style="margin:0 0 18px;">${tournamentsLink}</p>
+${cta}
+${signoffFull()}`),
+      },
+      {
+        subject: `Last note on ${tournamentLabel}`,
+        preheader: `Closing the loop.`,
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">Hi ${firstName},</p>
+<p style="margin:0 0 18px;">Closing the loop. If close-up magic for the hospitality tents or post-round reception fits ${tournamentLabel}, the door's open: (424) 394-1850.</p>
+<p style="margin:0 0 18px;">If not the right year, want me to circle back January 2027 when planning starts? Just say the word.</p>
+<p style="margin:0 0 18px;">${tournamentsLink}</p>
+${signoffFull()}`),
+      },
+    ],
   };
 
   const lookupKey = category as CampaignCategory;
