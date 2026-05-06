@@ -235,14 +235,19 @@ function getCampaignEmail(
   contactId: string,
   company: string | null = null,
   city: string | null = null,
+  tournamentName: string | null = null,
+  tournamentDate: string | null = null,
+  tournamentCourse: string | null = null,
 ): { subject: string; preheader: string; innerHtml: string } {
   const firstName = extractFirstName(name);
   const companyClause = mergeCompanyClause(company);
   const cityPhrase = mergeCityPhrase(city);
+  const tournamentLabel = (tournamentName && tournamentName.trim()) || "your tournament";
   const link = trackedLink(`${SITE_URL}/experience`, "whiterabbitla.com/event-magician", contactId, step, category);
   const siteLink = trackedLink(SITE_URL, "whiterabbitla.com", contactId, step, category);
   const deckLink = trackedLink(`${SITE_URL}/deck`, "digital lookbook", contactId, step, category);
   const quizLink = trackedLink(`${SITE_URL}/quiz`, "35-second quiz", contactId, step, category);
+  const tournamentsLink = trackedLink(`${SITE_URL}/services/golf-tournament-magician`, "whiterabbitla.com/services/golf-tournament-magician", contactId, step, category);
   const cta = bookCallCTA(contactId, step, category);
 
   // Category-specific article links
