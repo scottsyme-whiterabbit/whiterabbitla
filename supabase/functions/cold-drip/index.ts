@@ -922,7 +922,7 @@ serve(async (req) => {
 
         // Get email content (wrapped — never let template lookup abort the loop)
         const firstName = extractFirstName(campaign.name);
-        const template = getCampaignEmail(cat as CampaignCategory, step, firstName, campaign.id, campaign.company, campaign.city);
+        const template = getCampaignEmail(cat as CampaignCategory, step, firstName, campaign.id, campaign.company, campaign.city, campaign.tournament_name, campaign.tournament_date, campaign.tournament_course);
 
         if (!template.subject) { skipped++; bumpSkip(cat, "other"); continue; }
 
