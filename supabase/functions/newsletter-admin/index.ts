@@ -355,6 +355,7 @@ serve(async (req) => {
           cold_nightlife: buildColdStats("nightlife"),
           cold_spirits: buildColdStats("spirits"),
           cold_restaurant: buildColdStats("restaurant"),
+          cold_charity_golf: buildColdStats("charity_golf"),
           orphan_leads: {
             consultation_leads: consultationCount || 0,
             discovery_quiz_leads: quizCount || 0,

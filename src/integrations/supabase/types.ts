@@ -40,6 +40,9 @@ export type Database = {
           state: string | null
           status: string
           title: string | null
+          tournament_course: string | null
+          tournament_date: string | null
+          tournament_name: string | null
           unsubscribed_at: string | null
           updated_at: string
         }
@@ -68,6 +71,9 @@ export type Database = {
           state?: string | null
           status?: string
           title?: string | null
+          tournament_course?: string | null
+          tournament_date?: string | null
+          tournament_name?: string | null
           unsubscribed_at?: string | null
           updated_at?: string
         }
@@ -96,6 +102,9 @@ export type Database = {
           state?: string | null
           status?: string
           title?: string | null
+          tournament_course?: string | null
+          tournament_date?: string | null
+          tournament_name?: string | null
           unsubscribed_at?: string | null
           updated_at?: string
         }

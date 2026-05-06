@@ -26,7 +26,7 @@ const COLD_SCHEDULE = [0, 3, 10, 24];
 const DAILY_SEND_CAP = 56;
 const PER_CATEGORY_DAILY_CAP = 8;
 
-type CampaignCategory = "corporate_planner" | "wedding_planner" | "country_club" | "pr_agency" | "nonprofit" | "talent" | "restaurant" | "spirits" | "nightlife";
+type CampaignCategory = "corporate_planner" | "wedding_planner" | "country_club" | "pr_agency" | "nonprofit" | "talent" | "restaurant" | "spirits" | "nightlife" | "charity_golf";
 
 interface ColdCampaign {
   id: string;
@@ -40,6 +40,9 @@ interface ColdCampaign {
   started_at: string | null;
   last_email_sent_at: string | null;
   status: string;
+  tournament_name: string | null;
+  tournament_date: string | null;
+  tournament_course: string | null;
 }
 
 // ═══════════════════════════════════════════════
@@ -232,14 +235,19 @@ function getCampaignEmail(
   contactId: string,
   company: string | null = null,
   city: string | null = null,
+  tournamentName: string | null = null,
+  tournamentDate: string | null = null,
+  tournamentCourse: string | null = null,
 ): { subject: string; preheader: string; innerHtml: string } {
   const firstName = extractFirstName(name);
   const companyClause = mergeCompanyClause(company);
   const cityPhrase = mergeCityPhrase(city);
+  const tournamentLabel = (tournamentName && tournamentName.trim()) || "your tournament";
   const link = trackedLink(`${SITE_URL}/experience`, "whiterabbitla.com/event-magician", contactId, step, category);
   const siteLink = trackedLink(SITE_URL, "whiterabbitla.com", contactId, step, category);
   const deckLink = trackedLink(`${SITE_URL}/deck`, "digital lookbook", contactId, step, category);
   const quizLink = trackedLink(`${SITE_URL}/quiz`, "35-second quiz", contactId, step, category);
+  const tournamentsLink = trackedLink(`${SITE_URL}/services/golf-tournament-magician`, "whiterabbitla.com/services/golf-tournament-magician", contactId, step, category);
   const cta = bookCallCTA(contactId, step, category);
 
   // Category-specific article links
@@ -712,6 +720,42 @@ ${signoffFull()}`),
 ${signoffFull()}`),
       },
     ],
+
+    // ═══════════════════════════════════════════════
+    // CAMPAIGN 10: CHARITY GOLF TOURNAMENTS (3 emails over 9 days)
+    // ═══════════════════════════════════════════════
+    charity_golf: [
+      {
+        subject: `What your players do between the 18th hole and dinner`,
+        preheader: `The 2-hour dead zone at ${tournamentLabel}.`,
+        innerHtml: plainBody([
+          `Hi ${firstName},`,
+          `Most charity golf tournaments have a long gap between the last putt and the awards dinner — players drift to the bar, energy drops before the auction asks, and committees scramble to fill the time. Same problem at the hospitality tents during play.`,
+          `I'm a Magic Castle magician who fills both gaps. Close-up magic at the on-course hospitality tents while players move through, and strolling magic at the post-round reception. No dead time, and a more generous room for the auction.`,
+          `Worth 15 minutes? (424) 394-1850 or hit reply.`,
+          `More at ${tournamentsLink}`,
+        ]) + plainSignature(),
+      },
+      {
+        subject: `Did the ${tournamentLabel} dead-zone note land?`,
+        preheader: `Quick follow-up on filling the gap before the awards dinner.`,
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">Hi ${firstName},</p>
+<p style="margin:0 0 18px;">Quick follow-up. If filling the gap between the last putt and the awards dinner is something you're actively solving for ${tournamentLabel}, my number is (424) 394-1850.</p>
+<p style="margin:0 0 18px;">If it's already covered, no problem — happy to circle back for 2027.</p>
+<p style="margin:0 0 18px;">${tournamentsLink}</p>
+${cta}
+${signoffFull()}`),
+      },
+      {
+        subject: `Last note on ${tournamentLabel}`,
+        preheader: `Closing the loop.`,
+        innerHtml: bodyCell(`<p style="margin:0 0 18px;">Hi ${firstName},</p>
+<p style="margin:0 0 18px;">Closing the loop. If close-up magic for the hospitality tents or post-round reception fits ${tournamentLabel}, the door's open: (424) 394-1850.</p>
+<p style="margin:0 0 18px;">If not the right year, want me to circle back January 2027 when planning starts? Just say the word.</p>
+<p style="margin:0 0 18px;">${tournamentsLink}</p>
+${signoffFull()}`),
+      },
+    ],
   };
 
   const lookupKey = category as CampaignCategory;
@@ -745,7 +789,8 @@ serve(async (req) => {
         const previewName = body.previewName || "Kevin";
         const previewCompany = body.previewCompany ?? null;
         const previewCity = body.previewCity ?? null;
-        const template = getCampaignEmail(category as CampaignCategory, step, previewName, "preview", previewCompany, previewCity);
+        const previewTournament = body.previewTournament ?? null;
+        const template = getCampaignEmail(category as CampaignCategory, step, previewName, "preview", previewCompany, previewCity, previewTournament, null, null);
         if (!template.subject) {
           return new Response(JSON.stringify({ error: "No template found" }), {
             status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -821,7 +866,7 @@ serve(async (req) => {
     for (const campaign of campaigns as ColdCampaign[]) {
       const cat = campaign.campaign_category;
       try {
-        const maxSteps = cat === "spirits" ? 5 : 4;
+        const maxSteps = cat === "spirits" ? 5 : cat === "charity_golf" ? 3 : 4;
         const step = campaign.current_step;
         const lastSent = campaign.last_email_sent_at ? new Date(campaign.last_email_sent_at) : null;
         const started = campaign.started_at ? new Date(campaign.started_at) : null;
@@ -838,14 +883,17 @@ serve(async (req) => {
           // Check timing for next email
           if (!lastSent) { skipped++; bumpSkip(cat, "timing"); continue; }
           const daysSinceLast = (now.getTime() - lastSent.getTime()) / (1000 * 60 * 60 * 24);
-          // Spirits:        0, 3, 7, 14, 21 → intervals 3, 4, 7, 7
+          // Spirits:         0, 3, 7, 14, 21 → intervals 3, 4, 7, 7
           // Wedding planner: 0, 3, 7, 14     → intervals 3, 4, 7
+          // Charity golf:    0, 4, 9         → intervals 4, 5
           // Others:          0, 3, 10, 24    → intervals 3, 7, 14
           let requiredDays: number;
           if (cat === "spirits") {
             requiredDays = step === 1 ? 3 : step === 2 ? 4 : step === 3 ? 7 : step === 4 ? 7 : 999;
           } else if (cat === "wedding_planner") {
             requiredDays = step === 1 ? 3 : step === 2 ? 4 : step === 3 ? 7 : 999;
+          } else if (cat === "charity_golf") {
+            requiredDays = step === 1 ? 4 : step === 2 ? 5 : 999;
           } else {
             requiredDays = step === 1 ? 3 : step === 2 ? 7 : step === 3 ? 14 : 999;
           }
@@ -874,7 +922,7 @@ serve(async (req) => {
 
         // Get email content (wrapped — never let template lookup abort the loop)
         const firstName = extractFirstName(campaign.name);
-        const template = getCampaignEmail(cat as CampaignCategory, step, firstName, campaign.id, campaign.company, campaign.city);
+        const template = getCampaignEmail(cat as CampaignCategory, step, firstName, campaign.id, campaign.company, campaign.city, campaign.tournament_name, campaign.tournament_date, campaign.tournament_course);
 
         if (!template.subject) { skipped++; bumpSkip(cat, "other"); continue; }
 
