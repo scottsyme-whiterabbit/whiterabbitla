@@ -98,6 +98,15 @@ const CAMPAIGN_DATA: Record<string, { label: string; emoji: string; emails: Arra
       { subject: "For whenever the right activation comes up", day: 21, type: "Breakup" },
     ],
   },
+  charity_golf: {
+    label: "Charity Golf",
+    emoji: "🏌️",
+    emails: [
+      { subject: "What your players do between the 18th hole and dinner", day: 0, type: "Cold Open" },
+      { subject: "Did the dead-zone note land?", day: 4, type: "Follow-up" },
+      { subject: "Last note", day: 9, type: "Breakup" },
+    ],
+  },
 };
 
 const NURTURE_DATA: Record<string, { emails: Array<{ subject: string; month: number; type: string }> }> = {
