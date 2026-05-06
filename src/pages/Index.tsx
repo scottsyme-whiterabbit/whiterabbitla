@@ -90,8 +90,8 @@ const Index = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const seoTitle = "Los Angeles Magician for Hire | White Rabbit LA";
-  const seoDescription = "Hire a world-class close-up magician for corporate events, weddings, and private parties in LA. Magic Castle member. Trusted by Netflix, Disney & Morgan Stanley.";
+  const seoTitle = "White Rabbit LA";
+  const seoDescription = "Luxury magic entertainment for corporate events, weddings, and private celebrations. Led by Scott Syme — Magic Castle member.";
 
   // Homepage Person schema
   useJsonLd("homepage-person-schema", {
