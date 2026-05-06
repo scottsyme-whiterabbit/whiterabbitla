@@ -26,7 +26,7 @@ const COLD_SCHEDULE = [0, 3, 10, 24];
 const DAILY_SEND_CAP = 56;
 const PER_CATEGORY_DAILY_CAP = 8;
 
-type CampaignCategory = "corporate_planner" | "wedding_planner" | "country_club" | "pr_agency" | "nonprofit" | "talent" | "restaurant" | "spirits" | "nightlife";
+type CampaignCategory = "corporate_planner" | "wedding_planner" | "country_club" | "pr_agency" | "nonprofit" | "talent" | "restaurant" | "spirits" | "nightlife" | "charity_golf";
 
 interface ColdCampaign {
   id: string;
@@ -40,6 +40,9 @@ interface ColdCampaign {
   started_at: string | null;
   last_email_sent_at: string | null;
   status: string;
+  tournament_name: string | null;
+  tournament_date: string | null;
+  tournament_course: string | null;
 }
 
 // ═══════════════════════════════════════════════
