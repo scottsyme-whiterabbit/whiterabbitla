@@ -115,7 +115,7 @@ Deno.serve(async (req) => {
             Warmly,<br/>
             <strong style="color:#223D34;">Scott Syme</strong><br/>
             White Rabbit LA — Luxury Magic & Entertainment<br/>
-            <a href="tel:+14243941850" style="color:#223D34;text-decoration:none;">(424) 394-1850</a> · <a href="mailto:scott@whiterabbitla.com" style="color:#223D34;text-decoration:none;">scott@whiterabbitla.com</a><br/>
+            <a href="tel:+14243941850" style="color:#223D34;text-decoration:none;">(424) 394-1850</a> · <a href="mailto:scott.syme@whiterabbitla.com" style="color:#223D34;text-decoration:none;">scott.syme@whiterabbitla.com</a><br/>
             <a href="https://whiterabbitla.com" style="color:#223D34;text-decoration:none;">whiterabbitla.com</a>
           </p>
           <p style="font-size:11px;color:#999;margin:28px 0 0;text-align:center;">
@@ -134,7 +134,7 @@ View your proposal: ${link}
 Warmly,
 Scott Syme
 White Rabbit LA — Luxury Magic & Entertainment
-(424) 394-1850 · scott@whiterabbitla.com
+(424) 394-1850 · scott.syme@whiterabbitla.com
 https://whiterabbitla.com
 
 —
