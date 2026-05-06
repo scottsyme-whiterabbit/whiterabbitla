@@ -15,6 +15,7 @@ const CATEGORIES = [
   { value: "nightlife", label: "Nightlife", emoji: "🌙" },
   { value: "restaurant", label: "Restaurants", emoji: "🍽️" },
   { value: "spirits", label: "Spirits Brands", emoji: "🍸" },
+  { value: "charity_golf", label: "Charity Golf", emoji: "🏌️" },
 ] as const;
 
 const STEP_LABELS = ["Not Started", "Email 1 ✓", "Email 2 ✓", "Email 3 ✓", "Breakup ✓"];
