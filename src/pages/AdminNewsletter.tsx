@@ -1346,6 +1346,7 @@ const AdminNewsletter = () => {
                 { category: "nightlife", label: "🌙 Nightlife" },
                 { category: "spirits", label: "🍸 Spirits" },
                 { category: "restaurant", label: "🍽️ Restaurant" },
+                { category: "charity_golf", label: "🏌️ Charity Golf" },
               ]).map(cat => (
                 <button
                   key={cat.category}
