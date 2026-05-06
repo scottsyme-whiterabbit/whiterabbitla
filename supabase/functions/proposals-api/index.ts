@@ -95,16 +95,50 @@ Deno.serve(async (req) => {
     if (action === "send" && req.method === "POST") {
       const { id, to, subject, message, link } = await req.json();
       if (!to || !link) return json({ error: "Missing fields" }, 400);
-      const html = `<!DOCTYPE html><html><body style="font-family:Georgia,serif;background:#F8F5F0;padding:40px 20px;color:#223D34;">
+
+      const safeSubject = (subject || "Your Proposal").replace(/</g, "&lt;");
+      const safeMessage = (message || "").replace(/</g, "&lt;");
+      const messageText = (message || "").trim() ||
+        "Thank you for considering White Rabbit LA for your event. I've put together a proposal tailored to what you're planning — please take a look at the link below and let me know if you have any questions. I'm happy to jump on a quick call to walk through it.";
+      const safeMessageRender = messageText.replace(/</g, "&lt;");
+
+      const html = `<!DOCTYPE html><html><body style="font-family:Georgia,serif;background:#F8F5F0;padding:40px 20px;color:#223D34;margin:0;">
         <div style="max-width:560px;margin:0 auto;background:#fff;padding:48px 40px;border:1px solid #D4A843;">
-          <h1 style="font-family:Georgia,serif;font-weight:300;font-size:28px;margin:0 0 24px;color:#223D34;">${(subject || "Your Proposal").replace(/</g, "&lt;")}</h1>
-          <div style="font-size:16px;line-height:1.7;white-space:pre-wrap;">${(message || "").replace(/</g, "&lt;")}</div>
-          <div style="margin:36px 0;text-align:center;">
+          <h1 style="font-family:Georgia,serif;font-weight:300;font-size:26px;margin:0 0 20px;color:#223D34;">${safeSubject}</h1>
+          <p style="font-size:16px;line-height:1.7;margin:0 0 20px;">Hi there,</p>
+          <div style="font-size:16px;line-height:1.7;white-space:pre-wrap;margin:0 0 28px;">${safeMessageRender}</div>
+          <div style="margin:32px 0;text-align:center;">
             <a href="${link}" style="display:inline-block;background:#223D34;color:#F8F5F0;text-decoration:none;padding:16px 36px;letter-spacing:2px;text-transform:uppercase;font-size:13px;font-family:Arial,sans-serif;">View Your Proposal</a>
           </div>
-          <p style="font-size:14px;color:#6B6B6B;margin-top:40px;">— Scott Syme<br/>White Rabbit LA<br/><a href="tel:+14243941850" style="color:#223D34;">(424) 394-1850</a></p>
+          <p style="font-size:13px;color:#6B6B6B;margin:8px 0 32px;text-align:center;">Or copy and paste this link into your browser:<br/><a href="${link}" style="color:#223D34;word-break:break-all;">${link}</a></p>
+          <p style="font-size:14px;color:#444;line-height:1.6;margin:32px 0 0;border-top:1px solid #eee;padding-top:24px;">
+            Warmly,<br/>
+            <strong style="color:#223D34;">Scott Syme</strong><br/>
+            White Rabbit LA — Luxury Magic & Entertainment<br/>
+            <a href="tel:+14243941850" style="color:#223D34;text-decoration:none;">(424) 394-1850</a> · <a href="mailto:scott@whiterabbitla.com" style="color:#223D34;text-decoration:none;">scott@whiterabbitla.com</a><br/>
+            <a href="https://whiterabbitla.com" style="color:#223D34;text-decoration:none;">whiterabbitla.com</a>
+          </p>
+          <p style="font-size:11px;color:#999;margin:28px 0 0;text-align:center;">
+            White Rabbit LA · 7393 W. Manchester Ave #209, Los Angeles, CA 90045<br/>
+            You're receiving this because you requested a proposal. <a href="${link}" style="color:#999;">View proposal</a>
+          </p>
         </div>
       </body></html>`;
+
+      const text = `Hi there,
+
+${messageText}
+
+View your proposal: ${link}
+
+Warmly,
+Scott Syme
+White Rabbit LA — Luxury Magic & Entertainment
+(424) 394-1850 · scott@whiterabbitla.com
+https://whiterabbitla.com
+
+—
+White Rabbit LA · 7393 W. Manchester Ave #209, Los Angeles, CA 90045`;
 
       const r = await fetch("https://api.resend.com/emails", {
         method: "POST",
@@ -117,7 +151,12 @@ Deno.serve(async (req) => {
           to: [to],
           subject: subject || "Your White Rabbit LA Proposal",
           html,
+          text,
           reply_to: "scott@whiterabbitla.com",
+          headers: {
+            "List-Unsubscribe": "<mailto:scott@whiterabbitla.com?subject=unsubscribe>",
+            "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+          },
         }),
       });
       if (!r.ok) {
