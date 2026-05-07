@@ -65,6 +65,7 @@ const VALID_CATEGORIES = [
   "fundraiser",
   "trade_show",
   "golf_tournament",
+  "charity_golf",
 ];
 
 // Role-based local-parts that should never receive cold outreach.
