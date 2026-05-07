@@ -226,7 +226,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         <Flourishes size="sm" />
         <div className="max-w-2xl mx-auto">
           <OrnamentalDivider />
-      <div className="font-sans text-base md:text-lg leading-relaxed text-forest-dark space-y-5 mt-8">
+          <div className="font-sans text-base md:text-lg leading-relaxed text-forest-dark space-y-5 mt-8">
             <p className="font-serif text-xl md:text-2xl text-forest">{data.first_name},</p>
             {data.letter_intro && <p className="whitespace-pre-wrap">{data.letter_intro}</p>}
             <p className="font-serif text-2xl pl-2 mb-0 text-forest">— Scott</p>
