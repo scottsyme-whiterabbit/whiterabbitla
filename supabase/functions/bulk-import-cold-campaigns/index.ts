@@ -65,6 +65,7 @@ const VALID_CATEGORIES = [
   "fundraiser",
   "trade_show",
   "golf_tournament",
+  "charity_golf",
 ];
 
 // Role-based local-parts that should never receive cold outreach.
@@ -101,6 +102,9 @@ interface ContactInput {
   linkedin_url?: string;
   apollo_id?: string;
   notes?: string;
+  tournament_name?: string;
+  tournament_date?: string;
+  tournament_course?: string;
 }
 
 serve(async (req) => {
@@ -351,6 +355,9 @@ serve(async (req) => {
         linkedin_url: c.linkedin_url || null,
         apollo_id: c.apollo_id || null,
         notes: c.notes || null,
+        tournament_name: c.tournament_name || null,
+        tournament_date: c.tournament_date || null,
+        tournament_course: c.tournament_course || null,
         campaign_category,
         status: start_immediately ? "active" : "paused",
         current_step: 0,
