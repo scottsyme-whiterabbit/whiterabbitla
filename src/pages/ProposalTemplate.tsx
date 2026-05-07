@@ -196,7 +196,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       {/* HERO */}
       <section className="relative bg-forest-dark text-cream overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroSrc} alt="" className="w-full h-full object-cover opacity-90" />
+          <img src={heroSrc} alt="" fetchPriority="high" decoding="async" className="w-full h-full object-cover opacity-90" />
           <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/70 via-forest-dark/55 to-forest-dark/90" />
         </div>
         <Flourishes size="lg" />
@@ -299,10 +299,10 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       {/* PHOTO BREAK 2 — split */}
       <section className="grid grid-cols-2 bg-forest-dark">
         <div className="aspect-[4/5] md:aspect-[5/4] overflow-hidden">
-          <img src={photoCardsDetail} alt="" className="w-full h-full object-cover object-center" />
+          <img src={photoCardsDetail} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover object-center" />
         </div>
         <div className="aspect-[4/5] md:aspect-[5/4] overflow-hidden">
-          <img src={photoParlorAudience} alt="" className="w-full h-full object-cover object-top" />
+          <img src={photoParlorAudience} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover object-top" />
         </div>
       </section>
 
@@ -372,7 +372,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
 
       {/* PHOTO BREAK 3 */}
       <section className="relative h-56 md:h-80 overflow-hidden bg-forest-dark">
-        <img src={photoScottBw} alt="" className="w-full h-full object-cover object-top opacity-80" />
+        <img src={photoScottBw} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover object-top opacity-80" />
         <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/40 via-transparent to-forest-dark" />
       </section>
 
