@@ -230,9 +230,9 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
             <p className="font-serif text-xl md:text-2xl text-forest">{data.first_name},</p>
             {data.letter_intro && <p className="whitespace-pre-wrap">{data.letter_intro}</p>}
             <p>
-              What follows isn't a price sheet. It's a proposal for the night you described, written specifically for you.
-              Three options, each one designed around what you told me you're building. The middle option is the one I'd
-              recommend — it's the right shape for your evening — but the others are real, and the choice is yours.
+              If anything here doesn't sit right, call me.{" "}
+              <a href="tel:+14243941850" className="text-forest underline-offset-4 hover:underline">(424) 394-1850</a>.
+              We'll work it out.
             </p>
             <p>
               If anything here doesn't sit right, call me.{" "}
