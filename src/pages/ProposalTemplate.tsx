@@ -299,10 +299,10 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       {/* PHOTO BREAK 2 — split */}
       <section className="grid grid-cols-2 bg-forest-dark">
         <div className="aspect-[4/5] md:aspect-[5/4] overflow-hidden">
-          <img src={photoCardsDetail} alt="" className="w-full h-full object-cover object-center" />
+          <img src={photoCardsDetail} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover object-center" />
         </div>
         <div className="aspect-[4/5] md:aspect-[5/4] overflow-hidden">
-          <img src={photoParlorAudience} alt="" className="w-full h-full object-cover object-top" />
+          <img src={photoParlorAudience} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover object-top" />
         </div>
       </section>
 
