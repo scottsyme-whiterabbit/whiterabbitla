@@ -372,7 +372,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
 
       {/* PHOTO BREAK 3 */}
       <section className="relative h-56 md:h-80 overflow-hidden bg-forest-dark">
-        <img src={photoScottBw} alt="" className="w-full h-full object-cover object-top opacity-80" />
+        <img src={photoScottBw} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover object-top opacity-80" />
         <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/40 via-transparent to-forest-dark" />
       </section>
 
