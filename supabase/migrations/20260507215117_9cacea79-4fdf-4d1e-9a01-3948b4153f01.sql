@@ -1,0 +1,1 @@
+ALTER TABLE public.proposals ADD COLUMN IF NOT EXISTS letter_intro text NOT NULL DEFAULT 'Thank you for the time on the phone — I enjoyed it more than you know.';

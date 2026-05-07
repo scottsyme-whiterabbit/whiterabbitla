@@ -787,6 +787,7 @@ export type Database = {
           id: string
           intro_paragraph: string
           last_name: string
+          letter_intro: string
           recipient_email: string | null
           sent_at: string | null
           slug: string
@@ -807,6 +808,7 @@ export type Database = {
           id?: string
           intro_paragraph?: string
           last_name?: string
+          letter_intro?: string
           recipient_email?: string | null
           sent_at?: string | null
           slug: string
@@ -827,6 +829,7 @@ export type Database = {
           id?: string
           intro_paragraph?: string
           last_name?: string
+          letter_intro?: string
           recipient_email?: string | null
           sent_at?: string | null
           slug?: string
