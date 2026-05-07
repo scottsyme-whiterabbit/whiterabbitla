@@ -102,6 +102,9 @@ interface ContactInput {
   linkedin_url?: string;
   apollo_id?: string;
   notes?: string;
+  tournament_name?: string;
+  tournament_date?: string;
+  tournament_course?: string;
 }
 
 serve(async (req) => {
