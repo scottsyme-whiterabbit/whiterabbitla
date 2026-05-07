@@ -117,7 +117,7 @@ export const DEFAULT_PROPOSAL: ProposalData = {
   event_type: "Wedding",
   event_date: "",
   venue: "",
-  letter_intro: "Thank you for the time on the phone — I enjoyed it more than you know.",
+  letter_intro: "",
   intro_paragraph:
     "What you described isn't a magic act dropped into your evening — it's an entire texture woven through the night. Quiet conversation that turns into wide-eyed silence, then laughter, then the kind of story your guests will still be telling on Monday.",
   hero_image: "wedding",
