@@ -312,10 +312,9 @@ const ProposalEditor = ({
           </div>
         </div>
 
-        {/* Letter intro */}
         <div className={sectionCls}>
           <h2 className="font-serif text-xl text-forest-dark mb-2">Opening Letter Line</h2>
-          <p className="text-xs text-forest-dark/60 mb-3">First line after their name. Default mentions a phone call — edit if you haven't spoken yet.</p>
+          <p className="text-xs text-forest-dark/60 mb-3">Optional opening line after their name. Leave blank to skip.</p>
           <textarea
             className={inputCls + " min-h-[80px]"}
             placeholder="Thank you for the time on the phone — I enjoyed it more than you know."

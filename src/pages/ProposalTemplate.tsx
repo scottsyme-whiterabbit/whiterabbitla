@@ -228,7 +228,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           <OrnamentalDivider />
           <div className="font-sans text-base md:text-lg leading-relaxed text-forest-dark space-y-5 mt-8">
             <p className="font-serif text-xl md:text-2xl text-forest">{data.first_name},</p>
-            <p className="whitespace-pre-wrap">{data.letter_intro || "Thank you for the time on the phone — I enjoyed it more than you know."}</p>
+            {data.letter_intro && <p className="whitespace-pre-wrap">{data.letter_intro}</p>}
             <p>
               What follows isn't a price sheet. It's a proposal for the night you described, written specifically for you.
               Three options, each one designed around what you told me you're building. The middle option is the one I'd
