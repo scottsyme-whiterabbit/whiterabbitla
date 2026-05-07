@@ -36,8 +36,14 @@ import luncheon1559 from "@/assets/events/ladies-luncheon-1559.jpg";
 
 import proposalHeroLuncheon from "@/assets/events/proposal-hero-luncheon.jpg";
 import heroMain from "@/assets/hero-magic-cinematic.jpg";
+import proposalCardsBw from "@/assets/proposal-cards-bw.jpg";
+import proposalDesert from "@/assets/proposal-desert.jpg";
 
-const galleryPhotos = [luncheon1549, photoParlorAudience, photoCardsDetail];
+const galleryPhotos: { src: string; mirror?: boolean }[] = [
+  { src: proposalCardsBw },
+  { src: proposalDesert },
+  { src: proposalCardsBw, mirror: true },
+];
 
 const HERO_MAP: Record<string, string> = {
   wedding: heroMain,
@@ -245,13 +251,13 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
 
         {/* Gallery grid */}
         <div className="max-w-5xl mx-auto mt-10 grid grid-cols-3 gap-3 md:gap-4">
-          {galleryPhotos.map((src, i) => (
+          {galleryPhotos.map((photo, i) => (
             <div key={i} className="aspect-[3/4] overflow-hidden bg-forest-dark/60">
               <img
-                src={src}
+                src={photo.src}
                 alt=""
                 loading="lazy"
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+                className={`w-full h-full object-cover hover:scale-105 transition-transform duration-700 ${photo.mirror ? "scale-x-[-1]" : ""}`}
               />
             </div>
           ))}
