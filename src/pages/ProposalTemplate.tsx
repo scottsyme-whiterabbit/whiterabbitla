@@ -196,7 +196,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       {/* HERO */}
       <section className="relative bg-forest-dark text-cream overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroSrc} alt="" className="w-full h-full object-cover opacity-90" />
+          <img src={heroSrc} alt="" fetchPriority="high" decoding="async" className="w-full h-full object-cover opacity-90" />
           <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/70 via-forest-dark/55 to-forest-dark/90" />
         </div>
         <Flourishes size="lg" />
