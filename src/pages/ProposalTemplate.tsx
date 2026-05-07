@@ -234,11 +234,6 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
               <a href="tel:+14243941850" className="text-forest underline-offset-4 hover:underline">(424) 394-1850</a>.
               We'll work it out.
             </p>
-            <p>
-              If anything here doesn't sit right, call me.{" "}
-              <a href="tel:+14243941850" className="text-forest underline-offset-4 hover:underline">(424) 394-1850</a>.
-              We'll work it out.
-            </p>
             <p>Looking forward to it.</p>
             <p className="font-serif text-2xl pl-2 mb-0 text-forest">— Scott</p>
           </div>
