@@ -1,0 +1,2 @@
+ALTER TABLE public.cold_email_campaigns DROP CONSTRAINT IF EXISTS cold_email_campaigns_campaign_category_check;
+ALTER TABLE public.cold_email_campaigns ADD CONSTRAINT cold_email_campaigns_campaign_category_check CHECK (campaign_category IN ('wedding_planner','corporate_planner','spirits','resident','dmc','venue','fundraiser','trade_show','golf_tournament','charity_golf','country_club','nonprofit','pr_agency','restaurant','talent'));
