@@ -310,7 +310,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
             { src: galleryPhoto7, position: "object-center" },
             { src: galleryCrowdMirror, position: "object-center" },
             { src: gallerySetup, position: "object-center" },
-            { src: galleryPhoto3, position: "object-center" },
+            { src: galleryCurtainGreeting, position: "object-center scale-125" },
             { src: galleryPhoto6, position: "object-center" },
             { src: galleryPhoto5, position: "object-center" },
           ].map((p, i) => (
