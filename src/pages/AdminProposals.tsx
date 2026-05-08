@@ -397,6 +397,68 @@ const ProposalEditor = ({
           {proposal.slug && <span className="ml-3 text-sm text-forest-dark/50 font-sans">/proposal/{proposal.slug}</span>}
         </h1>
 
+        {/* QUICK START — only on new proposals */}
+        {isNew && (
+          <div className="bg-forest-dark/5 border border-forest-dark/15 p-6 mb-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Sparkles className="w-4 h-4 text-gold" />
+              <h2 className="font-serif text-xl text-forest-dark">Quick Start</h2>
+              <span className="text-xs text-forest-dark/50">— pick one to skip the blank page</span>
+            </div>
+
+            {/* AI auto-draft */}
+            <div className="mb-5">
+              <label className={labelCls}>Auto-draft from inquiry text</label>
+              <textarea
+                className={inputCls + " min-h-[100px]"}
+                placeholder="Paste their inquiry email or your call notes here. AI will pull out name, date, venue, event type, and write a personalized opening in your voice."
+                value={inquiryText}
+                onChange={(e) => setInquiryText(e.target.value)}
+              />
+              <button
+                onClick={aiDraft}
+                disabled={aiLoading || !inquiryText.trim()}
+                className="mt-2 px-4 py-2 bg-forest-dark text-cream text-sm hover:opacity-90 disabled:opacity-40 flex items-center gap-2"
+              >
+                {aiLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+                {aiLoading ? "Drafting…" : "Auto-draft proposal"}
+              </button>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4 pt-4 border-t border-forest-dark/10">
+              {/* Event-type templates */}
+              <div>
+                <label className={labelCls}>Start from event-type template</label>
+                <div className="flex flex-wrap gap-2">
+                  {Object.keys(PROPOSAL_TEMPLATES).map((t) => (
+                    <button key={t} onClick={() => applyTemplate(t)} className="px-3 py-1.5 text-xs border border-forest-dark/25 hover:bg-forest-dark hover:text-cream transition-colors">
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Duplicate from previous */}
+              <div>
+                <label className={labelCls}>Or duplicate from a previous proposal</label>
+                <div className="flex gap-2">
+                  <select className={inputCls} value={duplicateSlug} onChange={(e) => setDuplicateSlug(e.target.value)}>
+                    <option value="">— pick a proposal —</option>
+                    {list.map((p) => (
+                      <option key={p.id} value={p.slug}>
+                        {p.first_name} {p.last_name} · {p.event_type}
+                      </option>
+                    ))}
+                  </select>
+                  <button onClick={duplicateFrom} disabled={!duplicateSlug} className="px-4 py-2 bg-forest-dark text-cream text-sm whitespace-nowrap hover:opacity-90 disabled:opacity-40">
+                    Clone
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Recipient */}
         <div className={sectionCls}>
           <h2 className="font-serif text-xl text-forest-dark mb-4">Recipient & Event</h2>
@@ -418,6 +480,41 @@ const ProposalEditor = ({
                 {HERO_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
             </div>
+          </div>
+        </div>
+
+        {/* GALLERY PHOTOS picker */}
+        <div className={sectionCls}>
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-serif text-xl text-forest-dark">Gallery Photos</h2>
+            <button onClick={resetGallery} className="text-xs text-forest-dark/60 hover:text-forest-dark underline">Reset to defaults</button>
+          </div>
+          <p className="text-xs text-forest-dark/60 mb-4">
+            {proposal.gallery_photos && proposal.gallery_photos.length > 0
+              ? `Custom selection — ${proposal.gallery_photos.length} photo${proposal.gallery_photos.length === 1 ? "" : "s"} chosen.`
+              : "Using the default gallery. Click any photo to start a custom selection for this proposal."}
+          </p>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 max-h-[420px] overflow-y-auto pr-1">
+            {BRAND_PHOTOS.map((p) => {
+              const selected = galleryKeys.includes(p.key);
+              const order = selected ? galleryKeys.indexOf(p.key) + 1 : null;
+              return (
+                <button
+                  key={p.key}
+                  type="button"
+                  onClick={() => togglePhoto(p.key)}
+                  title={p.label}
+                  className={`relative aspect-square overflow-hidden border-2 transition-all ${selected ? "border-gold ring-2 ring-gold/30" : "border-transparent hover:border-forest-dark/40"}`}
+                >
+                  <img src={p.src} alt={p.label} loading="lazy" className="w-full h-full object-cover" />
+                  {selected && (
+                    <div className="absolute top-1 right-1 bg-gold text-forest-dark w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold">
+                      {order}
+                    </div>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
 
