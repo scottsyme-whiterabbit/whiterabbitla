@@ -17,6 +17,8 @@ interface ProposalRow {
   venue: string | null;
   sent_at: string | null;
   created_at: string;
+  view_count?: number;
+  last_viewed_at?: string | null;
 }
 
 interface FullProposal extends ProposalData {
@@ -26,6 +28,18 @@ interface FullProposal extends ProposalData {
 }
 
 const EVENT_TYPES = ["Wedding", "Corporate Event", "Private Event", "Fundraiser", "Birthday", "Holiday Party"];
+
+const formatRelative = (iso: string) => {
+  const diff = Date.now() - new Date(iso).getTime();
+  const m = Math.floor(diff / 60000);
+  if (m < 1) return "just now";
+  if (m < 60) return `${m}m ago`;
+  const h = Math.floor(m / 60);
+  if (h < 24) return `${h}h ago`;
+  const d = Math.floor(h / 24);
+  if (d < 30) return `${d}d ago`;
+  return new Date(iso).toLocaleDateString();
+};
 
 const AdminProposals = () => {
   const [password, setPassword] = useState(() => localStorage.getItem("wr_admin_session_pw") || "");
@@ -215,9 +229,16 @@ const AdminProposals = () => {
                   <div className="text-sm text-forest-dark/60">
                     {p.event_type} {p.event_date && `· ${p.event_date}`} {p.venue && `· ${p.venue}`}
                   </div>
-                  <div className="text-xs text-forest-dark/40 mt-1">
-                    /proposal/{p.slug}
-                    {p.sent_at && <span className="ml-2 text-emerald-700">· Sent {new Date(p.sent_at).toLocaleDateString()}</span>}
+                  <div className="text-xs text-forest-dark/40 mt-1 flex flex-wrap gap-x-3 gap-y-1">
+                    <span>/proposal/{p.slug}</span>
+                    {p.sent_at && <span className="text-emerald-700">· Sent {new Date(p.sent_at).toLocaleDateString()}</span>}
+                    {p.view_count ? (
+                      <span className="text-gold font-medium">
+                        · 👁 Viewed {p.view_count}× {p.last_viewed_at && `· last ${formatRelative(p.last_viewed_at)}`}
+                      </span>
+                    ) : p.sent_at ? (
+                      <span className="text-forest-dark/40">· Not yet opened</span>
+                    ) : null}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">

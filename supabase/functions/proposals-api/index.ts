@@ -43,9 +43,22 @@ Deno.serve(async (req) => {
       const { data, error } = await supabase.from("proposals").select("*").eq("slug", slug).maybeSingle();
       if (error) return json({ error: error.message }, 500);
       if (!data) return json({ error: "Not found" }, 404);
+
+      // Log view (skip if admin preview header present)
+      if (!isAdmin(req)) {
+        const ua = req.headers.get("user-agent") || "";
+        const ref = req.headers.get("referer") || "";
+        // fire-and-forget
+        supabase.from("proposal_views").insert({
+          proposal_id: data.id,
+          user_agent: ua.slice(0, 500),
+          referrer: ref.slice(0, 500),
+        }).then(() => {});
+      }
       return json({ proposal: data });
     }
 
+    // PUBLIC: views for a single proposal (no PII) — used by admin list too
     // ADMIN actions below
     if (!isAdmin(req)) return json({ error: "Unauthorized" }, 401);
 
@@ -55,7 +68,41 @@ Deno.serve(async (req) => {
         .select("id, slug, first_name, last_name, recipient_email, event_type, event_date, venue, sent_at, created_at")
         .order("created_at", { ascending: false });
       if (error) return json({ error: error.message }, 500);
-      return json({ proposals: data });
+
+      // Attach view stats
+      const ids = (data || []).map((p: any) => p.id);
+      let stats: Record<string, { count: number; last: string | null }> = {};
+      if (ids.length) {
+        const { data: views } = await supabase
+          .from("proposal_views")
+          .select("proposal_id, viewed_at")
+          .in("proposal_id", ids)
+          .order("viewed_at", { ascending: false });
+        for (const v of views || []) {
+          const s = stats[v.proposal_id] ||= { count: 0, last: null };
+          s.count++;
+          if (!s.last) s.last = v.viewed_at;
+        }
+      }
+      const enriched = (data || []).map((p: any) => ({
+        ...p,
+        view_count: stats[p.id]?.count || 0,
+        last_viewed_at: stats[p.id]?.last || null,
+      }));
+      return json({ proposals: enriched });
+    }
+
+    if (action === "views" && req.method === "GET") {
+      const id = url.searchParams.get("id");
+      if (!id) return json({ error: "Missing id" }, 400);
+      const { data, error } = await supabase
+        .from("proposal_views")
+        .select("viewed_at, user_agent, referrer")
+        .eq("proposal_id", id)
+        .order("viewed_at", { ascending: false })
+        .limit(100);
+      if (error) return json({ error: error.message }, 500);
+      return json({ views: data });
     }
 
     if (action === "create" && req.method === "POST") {
