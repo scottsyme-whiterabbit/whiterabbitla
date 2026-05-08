@@ -248,7 +248,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
                 src={photo.src}
                 alt=""
                 loading="lazy"
-                className={`w-full h-full object-cover hover:scale-105 transition-transform duration-700 ${photo.mirror ? "scale-x-[-1]" : ""}`}
+                className={`w-full h-full object-cover ${photo.mirror ? "scale-x-[-1]" : ""}`}
               />
             </div>
           ))}
