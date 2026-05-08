@@ -82,7 +82,7 @@ const logos = [
   { name: "Rivian", src: rivianLogo },
   { name: "Rolls-Royce", src: rollsroyceLogo },
   { name: "Paramount", src: paramountLogo },
-  { name: "Soho House", src: sohohouseLogo },
+  { name: "Soho House", src: sohohouseLogo, sizeClass: "max-h-14 md:max-h-[68px]" },
   { name: "The Beverly Hilton", src: beverlyHiltonLogo },
 ];
 
@@ -378,7 +378,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-8 items-center">
             {logos.map((logo) => (
               <div key={logo.name} className="flex items-center justify-center">
-                <img src={logo.src} alt={logo.name} loading="lazy" className="max-h-9 md:max-h-11 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity" style={{ filter: "grayscale(100%)" }} />
+                <img src={logo.src} alt={logo.name} loading="lazy" className={`${(logo as any).sizeClass ?? "max-h-9 md:max-h-11"} w-auto object-contain opacity-60 hover:opacity-100 transition-opacity`} style={{ filter: "grayscale(100%)" }} />
               </div>
             ))}
           </div>
