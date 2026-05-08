@@ -260,7 +260,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
                 src={photo.src}
                 alt=""
                 loading="lazy"
-                className={`w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 ${photo.mirror ? "scale-x-[-1]" : ""}`}
+                className={`w-full h-full object-cover transition-transform duration-700 ease-out ${photo.mirror ? "scale-x-[-1] group-hover:scale-x-[-1.1] group-hover:scale-y-110" : "group-hover:scale-110"}`}
               />
             </div>
           ))}
