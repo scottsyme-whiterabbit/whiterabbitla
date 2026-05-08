@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Phone, Plus, Instagram, Linkedin } from "lucide-react";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
 import threeStars from "@/assets/three-stars-gold.png";
-const wrScriptLogo = "/og-image.jpg";
+import wrScriptLogo from "@/assets/wr-wordmark-cream.png";
 import { DEFAULT_GALLERY_KEYS, photoKeyToSrc } from "@/data/proposalAssets";
 
 import netflixLogo from "@/assets/logos/netflix.png";
