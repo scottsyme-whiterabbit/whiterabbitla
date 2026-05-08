@@ -17,6 +17,8 @@ interface ProposalRow {
   venue: string | null;
   sent_at: string | null;
   created_at: string;
+  view_count?: number;
+  last_viewed_at?: string | null;
 }
 
 interface FullProposal extends ProposalData {
