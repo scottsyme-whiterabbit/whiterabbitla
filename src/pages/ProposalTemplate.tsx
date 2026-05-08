@@ -38,10 +38,11 @@ import proposalHeroLuncheon from "@/assets/events/proposal-hero-luncheon.jpg";
 import heroMain from "@/assets/hero-magic-cinematic.jpg";
 import proposalCardsBw from "@/assets/proposal-cards-bw.jpg";
 import proposalDesert from "@/assets/proposal-desert.jpg";
+import proposalCenterCards from "@/assets/proposal-center-cards.jpg";
 
 const galleryPhotos: { src: string; mirror?: boolean }[] = [
   { src: proposalCardsBw },
-  { src: proposalDesert },
+  { src: proposalCenterCards },
   { src: proposalCardsBw, mirror: true },
 ];
 
