@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Phone, Plus } from "lucide-react";
+import { Phone, Instagram, Linkedin } from "lucide-react";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
 import threeStars from "@/assets/three-stars-gold.png";
 
