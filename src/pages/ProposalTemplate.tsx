@@ -452,7 +452,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         </div>
 
         {/* WR damask wordmark — matches link-preview brand mark */}
-        <div className="mt-14 -mx-6 md:-mx-12 overflow-hidden rounded-lg">
+        <div className="mt-14 flex justify-center">
           <img
             src={wrScriptLogo}
             alt="White Rabbit Los Angeles"
@@ -460,7 +460,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
             height={760}
             loading="lazy"
             decoding="async"
-            className="w-full h-auto"
+            className="w-56 md:w-72 h-auto rounded-md shadow-md"
           />
         </div>
       </section>
