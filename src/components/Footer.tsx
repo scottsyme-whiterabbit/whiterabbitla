@@ -72,7 +72,7 @@ const Footer = () => {
           <div className="flex flex-col items-center gap-5">
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent">Follow the Magic</p>
             <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-6">
-              <a href="https://www.instagram.com/scottsyme_/" target="_blank" rel="noopener noreferrer"
+              <a href="https://www.instagram.com/scottsyme_?igsh=NTc4MTIwNjQ2YQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer"
                 className="group flex items-center gap-2.5 px-5 py-3 border border-cream/20 rounded-full hover:border-accent/60 hover:bg-accent/5 transition-all duration-300">
                 <Instagram size={20} className="text-cream/60 group-hover:text-accent transition-colors" />
                 <span className="font-sans text-sm tracking-wider text-cream/70 group-hover:text-cream transition-colors">@scottsyme_</span>
