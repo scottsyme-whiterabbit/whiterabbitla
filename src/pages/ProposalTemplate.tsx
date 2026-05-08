@@ -255,12 +255,12 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         {/* Gallery grid */}
         <div className="max-w-5xl mx-auto mt-10 grid grid-cols-3 gap-3 md:gap-4">
           {galleryPhotos.map((photo, i) => (
-            <div key={i} className="aspect-[3/4] overflow-hidden bg-forest-dark/60">
+            <div key={i} className="aspect-[3/4] overflow-hidden bg-forest-dark/60 group">
               <img
                 src={photo.src}
                 alt=""
                 loading="lazy"
-                className={`w-full h-full object-cover ${photo.mirror ? "scale-x-[-1]" : ""}`}
+                className={`w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 ${photo.mirror ? "scale-x-[-1]" : ""}`}
               />
             </div>
           ))}
@@ -310,12 +310,12 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
             { src: galleryPhoto7, position: "object-center" },
             { src: galleryCrowdMirror, position: "object-center" },
             { src: gallerySetup, position: "object-center" },
-            { src: galleryCurtainGreeting, position: "object-center scale-125" },
+            { src: galleryCurtainGreeting, position: "object-center scale-125 group-hover:scale-[1.4]" },
             { src: galleryPhoto6, position: "object-center" },
             { src: galleryPhoto5, position: "object-center" },
           ].map((p, i) => (
-            <div key={i} className="aspect-square overflow-hidden">
-              <img src={p.src} alt="" loading="lazy" decoding="async" className={`w-full h-full object-cover ${p.position}`} />
+            <div key={i} className="aspect-square overflow-hidden group">
+              <img src={p.src} alt="" loading="lazy" decoding="async" className={`w-full h-full object-cover transition-transform duration-700 ease-out ${p.position} ${p.position.includes("scale-") ? "" : "group-hover:scale-110"}`} />
             </div>
           ))}
         </div>
