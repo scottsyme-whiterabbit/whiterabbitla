@@ -82,7 +82,7 @@ const logos = [
   { name: "Rivian", src: rivianLogo },
   { name: "Rolls-Royce", src: rollsroyceLogo },
   { name: "Paramount", src: paramountLogo },
-  { name: "Soho House", src: sohohouseLogo },
+  { name: "Soho House", src: sohohouseLogo, sizeClass: "max-h-14 md:max-h-[68px]" },
   { name: "The Beverly Hilton", src: beverlyHiltonLogo },
 ];
 
