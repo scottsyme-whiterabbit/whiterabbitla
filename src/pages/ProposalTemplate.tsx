@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Phone, Plus } from "lucide-react";
+import { Phone, Plus, Instagram, Linkedin } from "lucide-react";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
 import threeStars from "@/assets/three-stars-gold.png";
 
@@ -447,6 +447,14 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         <div className="mt-5 space-y-1 text-sm text-forest-dark">
           <p><a href="tel:+14243941850" className="hover:text-forest transition-colors">(424) 394-1850</a></p>
           <p><a href="https://whiterabbitla.com" className="hover:text-forest transition-colors">whiterabbitla.com</a></p>
+        </div>
+        <div className="mt-6 flex items-center justify-center gap-4">
+          <a href="https://www.instagram.com/scottsyme_/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-forest-dark/50 hover:text-gold transition-colors">
+            <Instagram className="w-5 h-5" />
+          </a>
+          <a href="https://www.linkedin.com/in/scottsymejr/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-forest-dark/50 hover:text-gold transition-colors">
+            <Linkedin className="w-5 h-5" />
+          </a>
         </div>
       </section>
     </div>
