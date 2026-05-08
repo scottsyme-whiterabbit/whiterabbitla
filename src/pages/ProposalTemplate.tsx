@@ -82,6 +82,7 @@ export interface ProposalData {
   faqs: FaqItem[];
   closing_quote?: string | null;
   closing_attribution?: string | null;
+  gallery_photos?: string[]; // optional: brand-photo keys to override default gallery grid
 }
 
 interface Props {
@@ -268,27 +269,27 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         </section>
       )}
 
-      {/* PHOTO BREAK 2 — gallery */}
-      <section className="bg-forest-dark py-6 md:py-10 px-4">
-        <div className="max-w-6xl mx-auto grid grid-cols-3 md:grid-cols-5 gap-1">
-          {[
-            { src: photoCardsDetail, position: "object-center" },
-            { src: galleryPhoto1, position: "object-center" },
-            { src: photoParlorAudience, position: "object-top" },
-            { src: galleryPhoto2, position: "object-center" },
-            { src: galleryPhoto7, position: "object-center" },
-            { src: galleryCrowdMirror, position: "object-center" },
-            { src: gallerySetup, position: "object-center" },
-            { src: galleryCurtainGreeting, position: "object-center scale-125 group-hover:scale-[1.4]" },
-            { src: galleryPhoto6, position: "object-center" },
-            { src: galleryPhoto5, position: "object-center" },
-          ].map((p, i) => (
-            <div key={i} className="aspect-square overflow-hidden group">
-              <img src={p.src} alt="" loading="lazy" decoding="async" className={`w-full h-full object-cover transition-transform duration-700 ease-out ${p.position} ${p.position.includes("scale-") ? "" : "group-hover:scale-110"}`} />
+      {/* PHOTO BREAK 2 — gallery (overridable per-proposal) */}
+      {(() => {
+        const keys = (data.gallery_photos && data.gallery_photos.length > 0)
+          ? data.gallery_photos
+          : DEFAULT_GALLERY_KEYS;
+        const items = keys
+          .map((k) => photoKeyToSrc(k))
+          .filter((s): s is string => !!s);
+        if (items.length === 0) return null;
+        return (
+          <section className="bg-forest-dark py-6 md:py-10 px-4">
+            <div className="max-w-6xl mx-auto grid grid-cols-3 md:grid-cols-5 gap-1">
+              {items.map((src, i) => (
+                <div key={i} className="aspect-square overflow-hidden group">
+                  <img src={src} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110" />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </section>
+          </section>
+        );
+      })()}
 
       {/* TIERS */}
       <section className="relative bg-forest-dark text-cream py-16 md:py-24 px-6 overflow-hidden">
@@ -448,6 +449,19 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           <a href="https://www.linkedin.com/in/scottsymejr/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-forest-dark/50 hover:text-gold transition-colors">
             <Linkedin className="w-5 h-5" />
           </a>
+        </div>
+
+        {/* WR script logo — matches site footer mark */}
+        <div className="mt-14 flex justify-center">
+          <img
+            src={wrScriptLogo}
+            alt="White Rabbit Los Angeles"
+            width={140}
+            height={140}
+            loading="lazy"
+            decoding="async"
+            className="h-28 md:h-32 w-auto opacity-80"
+          />
         </div>
       </section>
     </div>
