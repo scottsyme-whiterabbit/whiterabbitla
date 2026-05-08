@@ -180,6 +180,7 @@ const DiscoveryQuiz = () => {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [exactGuestCount, setExactGuestCount] = useState("");
   const { openQuiz } = useBookingQuiz();
 
   const currentQuestion = questions[step];
@@ -299,19 +300,38 @@ const DiscoveryQuiz = () => {
               <div className="flex flex-col gap-3">
                 {currentQuestion.options.map((option) => {
                   const isSelected = answers[currentQuestion.id as keyof QuizAnswer] === option.value;
+                  const isUnder30 = currentQuestion.id === "guestCount" && option.value === "intimate";
                   return (
-                    <button
-                      key={option.value}
-                      onClick={() => handleSelect(option.value)}
-                      className={`text-left p-5 border rounded transition-all duration-200 group ${
-                        isSelected
-                          ? "border-accent bg-accent/10"
-                          : "border-cream/15 hover:border-cream/30 hover:bg-cream/5"
-                      }`}
-                    >
-                      <p className="font-sans text-base text-cream font-medium mb-1">{option.label}</p>
-                      <p className="font-sans text-sm text-cream/50">{option.desc}</p>
-                    </button>
+                    <div key={option.value}>
+                      <button
+                        onClick={() => handleSelect(option.value)}
+                        className={`w-full text-left p-5 border rounded transition-all duration-200 group ${
+                          isSelected
+                            ? "border-accent bg-accent/10"
+                            : "border-cream/15 hover:border-cream/30 hover:bg-cream/5"
+                        }`}
+                      >
+                        <p className="font-sans text-base text-cream font-medium mb-1">{option.label}</p>
+                        <p className="font-sans text-sm text-cream/50">{option.desc}</p>
+                      </button>
+                      {isUnder30 && isSelected && (
+                        <div className="mt-3 ml-1">
+                          <label className="font-sans text-xs tracking-[0.15em] uppercase text-cream/50 mb-2 block">
+                            Optional — exact guest count
+                          </label>
+                          <input
+                            type="number"
+                            min={1}
+                            max={29}
+                            value={exactGuestCount}
+                            onChange={(e) => setExactGuestCount(e.target.value)}
+                            onClick={(e) => e.stopPropagation()}
+                            placeholder="e.g. 12"
+                            className="w-full sm:w-48 bg-forest-dark/50 border border-cream/15 rounded px-4 py-3 font-sans text-cream placeholder:text-cream/30 focus:outline-none focus:border-accent transition-colors"
+                          />
+                        </div>
+                      )}
+                    </div>
                   );
                 })}
               </div>
