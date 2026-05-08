@@ -31,6 +31,7 @@ import galleryPhoto4 from "@/assets/events/proposal-gallery-4.jpg";
 import galleryPhoto5 from "@/assets/events/proposal-gallery-5.avif";
 import galleryPhoto6 from "@/assets/events/proposal-gallery-6.jpg";
 import galleryPhoto7 from "@/assets/events/proposal-gallery-7.avif";
+import gallerySetup from "@/assets/events/proposal-gallery-setup.jpg";
 import photoScottBw from "@/assets/event-scott-bw-stage.jpg";
 
 import luncheon1512 from "@/assets/events/ladies-luncheon-1512.jpg";
@@ -296,8 +297,8 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       )}
 
       {/* PHOTO BREAK 2 — gallery */}
-      <section className="bg-forest-dark">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
+      <section className="bg-forest-dark py-6 md:py-10 px-4">
+        <div className="max-w-4xl mx-auto grid grid-cols-3 md:grid-cols-5 gap-1">
           {[
             { src: photoCardsDetail, position: "object-center" },
             { src: galleryPhoto1, position: "object-center" },
@@ -306,6 +307,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
             { src: galleryPhoto7, position: "object-center" },
             { src: galleryPhoto6, position: "object-center" },
             { src: galleryPhoto4, position: "object-top" },
+            { src: gallerySetup, position: "object-center" },
             { src: galleryPhoto3, position: "object-center" },
             { src: galleryPhoto5, position: "object-center" },
           ].map((p, i) => (
