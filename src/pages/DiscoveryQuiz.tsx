@@ -191,10 +191,22 @@ const DiscoveryQuiz = () => {
     const newAnswers = { ...answers, [key]: value };
     setAnswers(newAnswers);
 
+    // Don't auto-advance when "Under 30" is picked — wait so they can fill optional exact count
+    const isUnder30Pick = currentQuestion.id === "guestCount" && value === "intimate";
+    if (isUnder30Pick) return;
+
     if (step < questions.length - 1) {
       setTimeout(() => setStep(step + 1), 300);
     } else {
       setTimeout(() => setShowResult(true), 300);
+    }
+  };
+
+  const advance = () => {
+    if (step < questions.length - 1) {
+      setStep(step + 1);
+    } else {
+      setShowResult(true);
     }
   };
 
@@ -208,17 +220,21 @@ const DiscoveryQuiz = () => {
     if (!name.trim() || !email.trim()) return;
     setSubmitting(true);
     try {
-      // Save to quiz leads table
+      // Save to quiz leads table — append exact count to guest_count if Under 30 + provided
+      const guestCountValue = answers.guestCount === "intimate" && exactGuestCount.trim()
+        ? `Under 30 (${exactGuestCount.trim()} guests)`
+        : answers.guestCount || null;
+
       await supabase.from("discovery_quiz_leads").insert({
         name: name.trim(),
         email: email.trim(),
         event_type: answers.eventType || null,
-        guest_count: answers.guestCount || null,
+        guest_count: guestCountValue,
         biggest_concern: answers.concern || null,
         experience_priority: answers.priority || null,
         client_type: answers.clientType || null,
         recommendation: recommendation.title,
-        quiz_answers: answers,
+        quiz_answers: { ...answers, exact_guest_count: exactGuestCount.trim() || null },
       });
 
       // Auto-enroll into drip sequence (fire and forget)
