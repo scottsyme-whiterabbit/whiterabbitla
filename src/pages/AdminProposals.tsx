@@ -217,9 +217,16 @@ const AdminProposals = () => {
                   <div className="text-sm text-forest-dark/60">
                     {p.event_type} {p.event_date && `· ${p.event_date}`} {p.venue && `· ${p.venue}`}
                   </div>
-                  <div className="text-xs text-forest-dark/40 mt-1">
-                    /proposal/{p.slug}
-                    {p.sent_at && <span className="ml-2 text-emerald-700">· Sent {new Date(p.sent_at).toLocaleDateString()}</span>}
+                  <div className="text-xs text-forest-dark/40 mt-1 flex flex-wrap gap-x-3 gap-y-1">
+                    <span>/proposal/{p.slug}</span>
+                    {p.sent_at && <span className="text-emerald-700">· Sent {new Date(p.sent_at).toLocaleDateString()}</span>}
+                    {p.view_count ? (
+                      <span className="text-gold font-medium">
+                        · 👁 Viewed {p.view_count}× {p.last_viewed_at && `· last ${formatRelative(p.last_viewed_at)}`}
+                      </span>
+                    ) : p.sent_at ? (
+                      <span className="text-forest-dark/40">· Not yet opened</span>
+                    ) : null}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
