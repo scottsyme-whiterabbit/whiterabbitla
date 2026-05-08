@@ -188,6 +188,8 @@ export type Database = {
           location: string | null
           message: string | null
           name: string
+          nurture_started_at: string | null
+          nurture_step: number
           phone: string | null
           recommendation: string | null
           source: string
@@ -206,6 +208,8 @@ export type Database = {
           location?: string | null
           message?: string | null
           name: string
+          nurture_started_at?: string | null
+          nurture_step?: number
           phone?: string | null
           recommendation?: string | null
           source?: string
@@ -224,6 +228,8 @@ export type Database = {
           location?: string | null
           message?: string | null
           name?: string
+          nurture_started_at?: string | null
+          nurture_step?: number
           phone?: string | null
           recommendation?: string | null
           source?: string
