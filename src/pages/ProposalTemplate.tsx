@@ -255,12 +255,12 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         {/* Gallery grid */}
         <div className="max-w-5xl mx-auto mt-10 grid grid-cols-3 gap-3 md:gap-4">
           {galleryPhotos.map((photo, i) => (
-            <div key={i} className="aspect-[3/4] overflow-hidden bg-forest-dark/60">
+            <div key={i} className="aspect-[3/4] overflow-hidden bg-forest-dark/60 group">
               <img
                 src={photo.src}
                 alt=""
                 loading="lazy"
-                className={`w-full h-full object-cover ${photo.mirror ? "scale-x-[-1]" : ""}`}
+                className={`w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110 ${photo.mirror ? "scale-x-[-1]" : ""}`}
               />
             </div>
           ))}
