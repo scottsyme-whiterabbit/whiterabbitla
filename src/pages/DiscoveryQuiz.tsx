@@ -331,20 +331,28 @@ const DiscoveryQuiz = () => {
                         <p className="font-sans text-sm text-cream/50">{option.desc}</p>
                       </button>
                       {isUnder30 && isSelected && (
-                        <div className="mt-3 ml-1">
-                          <label className="font-sans text-xs tracking-[0.15em] uppercase text-cream/50 mb-2 block">
-                            Optional — exact guest count
-                          </label>
-                          <input
-                            type="number"
-                            min={1}
-                            max={29}
-                            value={exactGuestCount}
-                            onChange={(e) => setExactGuestCount(e.target.value)}
-                            onClick={(e) => e.stopPropagation()}
-                            placeholder="e.g. 12"
-                            className="w-full sm:w-48 bg-forest-dark/50 border border-cream/15 rounded px-4 py-3 font-sans text-cream placeholder:text-cream/30 focus:outline-none focus:border-accent transition-colors"
-                          />
+                        <div className="mt-3 ml-1 flex flex-col sm:flex-row sm:items-end gap-3">
+                          <div className="flex-1">
+                            <label className="font-sans text-xs tracking-[0.15em] uppercase text-cream/50 mb-2 block">
+                              Optional — exact guest count
+                            </label>
+                            <input
+                              type="number"
+                              min={1}
+                              max={29}
+                              value={exactGuestCount}
+                              onChange={(e) => setExactGuestCount(e.target.value)}
+                              onClick={(e) => e.stopPropagation()}
+                              placeholder="e.g. 12"
+                              className="w-full sm:w-48 bg-forest-dark/50 border border-cream/15 rounded px-4 py-3 font-sans text-cream placeholder:text-cream/30 focus:outline-none focus:border-accent transition-colors"
+                            />
+                          </div>
+                          <button
+                            onClick={advance}
+                            className="font-sans text-xs tracking-[0.2em] uppercase bg-accent text-accent-foreground px-6 py-3 hover:bg-accent/80 transition-colors flex items-center gap-2"
+                          >
+                            Continue <ArrowRight size={14} />
+                          </button>
                         </div>
                       )}
                     </div>
