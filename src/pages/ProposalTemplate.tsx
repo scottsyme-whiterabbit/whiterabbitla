@@ -24,6 +24,13 @@ import flourishCorner from "@/assets/proposal-flourish-corner.png";
 import photoReaction from "@/assets/events/proposal-closeup-action.jpg";
 import photoCardsDetail from "@/assets/events/proposal-cards-detail-new.jpg";
 import photoParlorAudience from "@/assets/event-parlor-audience.jpg";
+import galleryPhoto1 from "@/assets/events/proposal-gallery-1.jpg";
+import galleryPhoto2 from "@/assets/events/proposal-gallery-2.jpg";
+import galleryPhoto3 from "@/assets/events/proposal-gallery-3.jpg";
+import galleryPhoto4 from "@/assets/events/proposal-gallery-4.jpg";
+import galleryPhoto5 from "@/assets/events/proposal-gallery-5.avif";
+import galleryPhoto6 from "@/assets/events/proposal-gallery-6.jpg";
+import galleryPhoto7 from "@/assets/events/proposal-gallery-7.avif";
 import photoScottBw from "@/assets/event-scott-bw-stage.jpg";
 
 import luncheon1512 from "@/assets/events/ladies-luncheon-1512.jpg";
@@ -288,13 +295,24 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         </section>
       )}
 
-      {/* PHOTO BREAK 2 — split */}
-      <section className="grid grid-cols-2 bg-forest-dark">
-        <div className="aspect-[4/5] md:aspect-[5/4] overflow-hidden">
-          <img src={photoCardsDetail} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover object-center" />
-        </div>
-        <div className="aspect-[4/5] md:aspect-[5/4] overflow-hidden">
-          <img src={photoParlorAudience} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover object-top" />
+      {/* PHOTO BREAK 2 — gallery */}
+      <section className="bg-forest-dark">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-1">
+          {[
+            { src: photoCardsDetail, position: "object-center" },
+            { src: galleryPhoto1, position: "object-center" },
+            { src: photoParlorAudience, position: "object-top" },
+            { src: galleryPhoto2, position: "object-center" },
+            { src: galleryPhoto7, position: "object-center" },
+            { src: galleryPhoto6, position: "object-center" },
+            { src: galleryPhoto4, position: "object-top" },
+            { src: galleryPhoto3, position: "object-center" },
+            { src: galleryPhoto5, position: "object-center" },
+          ].map((p, i) => (
+            <div key={i} className="aspect-square overflow-hidden">
+              <img src={p.src} alt="" loading="lazy" decoding="async" className={`w-full h-full object-cover ${p.position}`} />
+            </div>
+          ))}
         </div>
       </section>
 
