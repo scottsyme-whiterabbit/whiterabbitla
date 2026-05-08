@@ -34,6 +34,7 @@ import galleryPhoto7 from "@/assets/events/proposal-gallery-7.avif";
 import gallerySetup from "@/assets/events/proposal-gallery-setup.jpg";
 import galleryLuncheonRoom from "@/assets/events/proposal-gallery-luncheon-room.jpg";
 import galleryCrowdMirror from "@/assets/events/proposal-gallery-crowd-reaction-mirror.jpg";
+import galleryCurtainGreeting from "@/assets/events/proposal-gallery-curtain-greeting.jpg";
 import photoScottBw from "@/assets/event-scott-bw-stage.jpg";
 
 import luncheon1512 from "@/assets/events/ladies-luncheon-1512.jpg";
@@ -309,7 +310,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
             { src: galleryPhoto7, position: "object-center" },
             { src: galleryCrowdMirror, position: "object-center" },
             { src: gallerySetup, position: "object-center" },
-            { src: galleryPhoto3, position: "object-center" },
+            { src: galleryCurtainGreeting, position: "object-center scale-125" },
             { src: galleryPhoto6, position: "object-center" },
             { src: galleryPhoto5, position: "object-center" },
           ].map((p, i) => (
