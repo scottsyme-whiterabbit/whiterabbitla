@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { Phone, Plus, Instagram, Linkedin } from "lucide-react";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
 import threeStars from "@/assets/three-stars-gold.png";
+import wrScriptLogo from "@/assets/wr-logo-stars-gold.png";
+import { DEFAULT_GALLERY_KEYS, photoKeyToSrc } from "@/data/proposalAssets";
 
 import netflixLogo from "@/assets/logos/netflix.png";
 import disneyLogo from "@/assets/logos/disney.png";
@@ -13,43 +15,10 @@ import paramountLogo from "@/assets/logos/paramount.png";
 import sohohouseLogo from "@/assets/logos/sohohouse-new.png";
 import beverlyHiltonLogo from "@/assets/logos/beverlyhilton.png";
 
-import heroWedding from "@/assets/service-wedding-hero.jpg";
-import heroCorporate from "@/assets/experience-corporate.jpg";
-import heroPrivate from "@/assets/experience-private.jpg";
-import heroParlor from "@/assets/experience-parlor.jpg";
-import heroCocktail from "@/assets/event-closeup-cocktail.jpg";
-import heroEvening from "@/assets/hero-white-rabbit-evening.jpg";
-
-import flourishCorner from "@/assets/proposal-flourish-corner.png";
-import photoReaction from "@/assets/events/proposal-closeup-action.jpg";
-import photoCardsDetail from "@/assets/events/proposal-cards-detail-new.jpg";
-import photoParlorAudience from "@/assets/event-parlor-audience.jpg";
-import galleryPhoto1 from "@/assets/events/proposal-gallery-1.jpg";
-import galleryPhoto2 from "@/assets/events/proposal-gallery-2.jpg";
-import galleryPhoto3 from "@/assets/events/proposal-gallery-3.jpg";
-import galleryPhoto4 from "@/assets/events/proposal-gallery-4.jpg";
-import galleryPhoto5 from "@/assets/events/proposal-gallery-5.avif";
-import galleryPhoto6 from "@/assets/events/proposal-gallery-6.jpg";
-import galleryPhoto7 from "@/assets/events/proposal-gallery-7.avif";
-import gallerySetup from "@/assets/events/proposal-gallery-setup.jpg";
-import galleryLuncheonRoom from "@/assets/events/proposal-gallery-luncheon-room.jpg";
-import galleryCrowdMirror from "@/assets/events/proposal-gallery-crowd-reaction-mirror.jpg";
-import galleryCurtainGreeting from "@/assets/events/proposal-gallery-curtain-greeting.jpg";
-import photoScottBw from "@/assets/event-scott-bw-stage.jpg";
-
-import luncheon1512 from "@/assets/events/ladies-luncheon-1512.jpg";
-import luncheon1515 from "@/assets/events/ladies-luncheon-1515.jpg";
-import luncheon1520 from "@/assets/events/ladies-luncheon-1520.jpg";
-import luncheon1535 from "@/assets/events/ladies-luncheon-1535.jpg";
-import luncheon1539 from "@/assets/events/ladies-luncheon-1539.jpg";
-import luncheon1549 from "@/assets/events/ladies-luncheon-1549.jpg";
-import luncheon1559 from "@/assets/events/ladies-luncheon-1559.jpg";
-
-import proposalHeroLuncheon from "@/assets/events/proposal-hero-luncheon.jpg";
 import heroMain from "@/assets/hero-magic-cinematic.jpg";
 import proposalCardsBw from "@/assets/proposal-cards-bw.jpg";
-import proposalDesert from "@/assets/proposal-desert.jpg";
 import proposalCenterCards from "@/assets/proposal-center-cards.jpg";
+import photoScottBw from "@/assets/event-scott-bw-stage.jpg";
 
 const galleryPhotos: { src: string; mirror?: boolean }[] = [
   { src: proposalCardsBw },
