@@ -422,7 +422,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       </section>
 
       {/* CLOSING */}
-      <section className="relative bg-cream text-center py-20 px-6">
+      <section className="relative bg-cream text-center py-14 px-6">
         <Flourishes size="sm" />
         <img src={threeStars} alt="" className="w-10 mx-auto mb-6 opacity-70" />
         {data.closing_quote && (
@@ -431,18 +431,19 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         {data.closing_attribution && (
           <p className="text-xs tracking-[0.3em] uppercase text-forest-dark/50 mt-3">{data.closing_attribution}</p>
         )}
-        <div className="flex items-center justify-center gap-3 mt-10 mb-6">
+        <div className="flex items-center justify-center gap-3 mt-8 mb-5">
           <span className="w-10 h-px bg-gold/60" />
           <span className="text-gold">✦</span>
           <span className="w-10 h-px bg-gold/60" />
         </div>
         <p className="font-serif text-2xl text-forest-dark">Scott Syme</p>
         <p className="font-sans text-xs text-forest-dark/60 mt-1 tracking-[0.25em] uppercase">Magician</p>
-        <div className="mt-5 space-y-1 text-sm text-forest-dark">
+        <div className="mt-4 space-y-1 text-sm text-forest-dark">
           <p><a href="tel:+14243941850" className="hover:text-forest transition-colors">(424) 394-1850</a></p>
+          <p><a href="mailto:scott.syme@whiterabbitla.com" className="hover:text-forest transition-colors">scott.syme@whiterabbitla.com</a></p>
           <p><a href="https://whiterabbitla.com" className="hover:text-forest transition-colors">whiterabbitla.com</a></p>
         </div>
-        <div className="mt-6 flex items-center justify-center gap-4">
+        <div className="mt-4 flex items-center justify-center gap-4">
           <a href="https://www.instagram.com/scottsyme_?igsh=NTc4MTIwNjQ2YQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-forest-dark/50 hover:text-gold transition-colors">
             <Instagram className="w-5 h-5" />
           </a>
@@ -452,7 +453,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         </div>
 
         {/* WR wordmark */}
-        <div className="mt-14 flex justify-center">
+        <div className="mt-8 flex justify-center">
           <img
             src={wrScriptLogo}
             alt="White Rabbit Los Angeles"
@@ -460,7 +461,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
             height={675}
             loading="lazy"
             decoding="async"
-            className="w-56 md:w-72 h-auto"
+            className="w-48 md:w-60 h-auto"
           />
         </div>
       </section>
