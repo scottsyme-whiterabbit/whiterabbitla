@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Phone, Plus, Instagram, Linkedin } from "lucide-react";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
 import threeStars from "@/assets/three-stars-gold.png";
-const wrScriptLogo = "/og-image.jpg";
+import wrScriptLogo from "@/assets/wr-logo-stars-black.png";
 import { DEFAULT_GALLERY_KEYS, photoKeyToSrc } from "@/data/proposalAssets";
 
 import netflixLogo from "@/assets/logos/netflix.png";
@@ -451,16 +451,16 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           </a>
         </div>
 
-        {/* WR damask wordmark — matches link-preview brand mark */}
+        {/* WR wordmark — black lettering, gold stars, transparent */}
         <div className="mt-14 flex justify-center">
           <img
             src={wrScriptLogo}
             alt="White Rabbit Los Angeles"
-            width={1328}
-            height={760}
+            width={1024}
+            height={1024}
             loading="lazy"
             decoding="async"
-            className="w-56 md:w-72 h-auto rounded-md shadow-md"
+            className="w-56 md:w-72 h-auto"
           />
         </div>
       </section>
