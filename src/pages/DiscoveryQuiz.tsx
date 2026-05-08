@@ -180,6 +180,7 @@ const DiscoveryQuiz = () => {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [exactGuestCount, setExactGuestCount] = useState("");
   const { openQuiz } = useBookingQuiz();
 
   const currentQuestion = questions[step];
@@ -190,10 +191,22 @@ const DiscoveryQuiz = () => {
     const newAnswers = { ...answers, [key]: value };
     setAnswers(newAnswers);
 
+    // Don't auto-advance when "Under 30" is picked — wait so they can fill optional exact count
+    const isUnder30Pick = currentQuestion.id === "guestCount" && value === "intimate";
+    if (isUnder30Pick) return;
+
     if (step < questions.length - 1) {
       setTimeout(() => setStep(step + 1), 300);
     } else {
       setTimeout(() => setShowResult(true), 300);
+    }
+  };
+
+  const advance = () => {
+    if (step < questions.length - 1) {
+      setStep(step + 1);
+    } else {
+      setShowResult(true);
     }
   };
 
@@ -207,17 +220,21 @@ const DiscoveryQuiz = () => {
     if (!name.trim() || !email.trim()) return;
     setSubmitting(true);
     try {
-      // Save to quiz leads table
+      // Save to quiz leads table — append exact count to guest_count if Under 30 + provided
+      const guestCountValue = answers.guestCount === "intimate" && exactGuestCount.trim()
+        ? `Under 30 (${exactGuestCount.trim()} guests)`
+        : answers.guestCount || null;
+
       await supabase.from("discovery_quiz_leads").insert({
         name: name.trim(),
         email: email.trim(),
         event_type: answers.eventType || null,
-        guest_count: answers.guestCount || null,
+        guest_count: guestCountValue,
         biggest_concern: answers.concern || null,
         experience_priority: answers.priority || null,
         client_type: answers.clientType || null,
         recommendation: recommendation.title,
-        quiz_answers: answers,
+        quiz_answers: { ...answers, exact_guest_count: exactGuestCount.trim() || null },
       });
 
       // Auto-enroll into drip sequence (fire and forget)
@@ -299,19 +316,46 @@ const DiscoveryQuiz = () => {
               <div className="flex flex-col gap-3">
                 {currentQuestion.options.map((option) => {
                   const isSelected = answers[currentQuestion.id as keyof QuizAnswer] === option.value;
+                  const isUnder30 = currentQuestion.id === "guestCount" && option.value === "intimate";
                   return (
-                    <button
-                      key={option.value}
-                      onClick={() => handleSelect(option.value)}
-                      className={`text-left p-5 border rounded transition-all duration-200 group ${
-                        isSelected
-                          ? "border-accent bg-accent/10"
-                          : "border-cream/15 hover:border-cream/30 hover:bg-cream/5"
-                      }`}
-                    >
-                      <p className="font-sans text-base text-cream font-medium mb-1">{option.label}</p>
-                      <p className="font-sans text-sm text-cream/50">{option.desc}</p>
-                    </button>
+                    <div key={option.value}>
+                      <button
+                        onClick={() => handleSelect(option.value)}
+                        className={`w-full text-left p-5 border rounded transition-all duration-200 group ${
+                          isSelected
+                            ? "border-accent bg-accent/10"
+                            : "border-cream/15 hover:border-cream/30 hover:bg-cream/5"
+                        }`}
+                      >
+                        <p className="font-sans text-base text-cream font-medium mb-1">{option.label}</p>
+                        <p className="font-sans text-sm text-cream/50">{option.desc}</p>
+                      </button>
+                      {isUnder30 && isSelected && (
+                        <div className="mt-3 ml-1 flex flex-col sm:flex-row sm:items-end gap-3">
+                          <div className="flex-1">
+                            <label className="font-sans text-xs tracking-[0.15em] uppercase text-cream/50 mb-2 block">
+                              Optional — exact guest count
+                            </label>
+                            <input
+                              type="number"
+                              min={1}
+                              max={29}
+                              value={exactGuestCount}
+                              onChange={(e) => setExactGuestCount(e.target.value)}
+                              onClick={(e) => e.stopPropagation()}
+                              placeholder="e.g. 12"
+                              className="w-full sm:w-48 bg-forest-dark/50 border border-cream/15 rounded px-4 py-3 font-sans text-cream placeholder:text-cream/30 focus:outline-none focus:border-accent transition-colors"
+                            />
+                          </div>
+                          <button
+                            onClick={advance}
+                            className="font-sans text-xs tracking-[0.2em] uppercase bg-accent text-accent-foreground px-6 py-3 hover:bg-accent/80 transition-colors flex items-center gap-2"
+                          >
+                            Continue <ArrowRight size={14} />
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   );
                 })}
               </div>

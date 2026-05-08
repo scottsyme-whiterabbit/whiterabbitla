@@ -97,6 +97,14 @@ serve(async (req) => {
     });
     results["nurture-drip"] = { status: r4.status, body: await r4.json().catch(() => r4.statusText) };
 
+    // Run inquiry-nurture (general "stay in the loop" sequence after inquiry-followup completes)
+    const r7 = await fetch(`${FUNCTIONS_BASE}/inquiry-nurture`, {
+      method: "POST",
+      headers,
+      body: "{}",
+    });
+    results["inquiry-nurture"] = { status: r7.status, body: await r7.json().catch(() => r7.statusText) };
+
     return new Response(JSON.stringify({ success: true, results }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
