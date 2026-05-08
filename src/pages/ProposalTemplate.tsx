@@ -298,7 +298,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
 
       {/* PHOTO BREAK 2 — gallery */}
       <section className="bg-forest-dark py-6 md:py-10 px-4">
-        <div className="max-w-4xl mx-auto grid grid-cols-3 md:grid-cols-5 gap-1">
+        <div className="max-w-6xl mx-auto grid grid-cols-3 md:grid-cols-5 gap-1">
           {[
             { src: photoCardsDetail, position: "object-center" },
             { src: galleryPhoto1, position: "object-center" },
@@ -307,8 +307,8 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
             { src: galleryPhoto7, position: "object-center" },
             { src: galleryPhoto6, position: "object-center" },
             { src: gallerySetup, position: "object-center" },
-            { src: galleryPhoto4, position: "object-top" },
             { src: galleryPhoto3, position: "object-center" },
+            { src: galleryPhoto4, position: "object-top" },
             { src: galleryPhoto5, position: "object-center" },
           ].map((p, i) => (
             <div key={i} className="aspect-square overflow-hidden">
