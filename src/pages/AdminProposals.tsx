@@ -199,7 +199,7 @@ const AdminProposals = () => {
   }
 
   if (editing) {
-    return <ProposalEditor proposal={editing} onChange={setEditing} onSave={save} onCancel={() => setEditing(null)} onPreview={() => setShowPreview(true)} />;
+    return <ProposalEditor proposal={editing} onChange={setEditing} onSave={save} onCancel={() => setEditing(null)} onPreview={() => setShowPreview(true)} list={list} password={password} loadFullProposal={async (slug) => { const res = await fetch(`${FN}?action=get&slug=${slug}`); const j = await res.json(); if (!res.ok) throw new Error(j.error); return j.proposal; }} />;
   }
 
   return (
@@ -260,15 +260,102 @@ const AdminProposals = () => {
 
 /* ===================== EDITOR ===================== */
 const ProposalEditor = ({
-  proposal, onChange, onSave, onCancel, onPreview,
+  proposal, onChange, onSave, onCancel, onPreview, list, password, loadFullProposal,
 }: {
   proposal: FullProposal;
   onChange: (p: FullProposal) => void;
   onSave: () => void;
   onCancel: () => void;
   onPreview: () => void;
+  list: ProposalRow[];
+  password: string;
+  loadFullProposal: (slug: string) => Promise<FullProposal>;
 }) => {
   const update = (patch: Partial<FullProposal>) => onChange({ ...proposal, ...patch });
+  const isNew = !proposal.id;
+  const [inquiryText, setInquiryText] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const [duplicateSlug, setDuplicateSlug] = useState("");
+
+  const applyTemplate = (eventType: string) => {
+    const tpl = PROPOSAL_TEMPLATES[eventType];
+    if (!tpl) return;
+    update({
+      event_type: eventType,
+      letter_intro: tpl.letter_intro,
+      intro_paragraph: tpl.intro_paragraph,
+      hero_image: tpl.hero_image,
+      timeline: tpl.timeline,
+      tiers: tpl.tiers,
+      faqs: tpl.faqs,
+      closing_quote: tpl.closing_quote || "",
+      closing_attribution: tpl.closing_attribution || "",
+    });
+    toast.success(`${eventType} template applied`);
+  };
+
+  const duplicateFrom = async () => {
+    if (!duplicateSlug) return;
+    try {
+      const src = await loadFullProposal(duplicateSlug);
+      // Clone everything except identity fields
+      const { id, slug, sent_at, created_at, ...rest } = src as any;
+      onChange({ ...proposal, ...rest });
+      toast.success("Cloned — update name, date, and venue");
+    } catch (e) { toast.error((e as Error).message); }
+  };
+
+  const aiDraft = async () => {
+    if (!inquiryText.trim()) { toast.error("Paste the inquiry text first"); return; }
+    setAiLoading(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/proposal-ai-draft`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-password": password },
+        body: JSON.stringify({ inquiry_text: inquiryText }),
+      });
+      const j = await res.json();
+      if (!res.ok) throw new Error(j.error || "AI draft failed");
+      const d = j.draft;
+      // Apply event-type template first (if recognized) then overlay AI-extracted fields
+      const tpl = PROPOSAL_TEMPLATES[d.event_type];
+      onChange({
+        ...proposal,
+        first_name: d.first_name || proposal.first_name,
+        last_name: d.last_name || proposal.last_name,
+        recipient_email: d.recipient_email || proposal.recipient_email,
+        event_type: d.event_type || proposal.event_type,
+        event_date: d.event_date || proposal.event_date,
+        venue: d.venue || proposal.venue,
+        letter_intro: d.letter_intro || proposal.letter_intro,
+        intro_paragraph: d.intro_paragraph || proposal.intro_paragraph,
+        hero_image: tpl?.hero_image || proposal.hero_image,
+        timeline: tpl?.timeline || proposal.timeline,
+        tiers: tpl?.tiers || proposal.tiers,
+        faqs: tpl?.faqs || proposal.faqs,
+        closing_quote: tpl?.closing_quote ?? proposal.closing_quote,
+      });
+      toast.success("Draft ready — review and tweak");
+      setInquiryText("");
+    } catch (e) { toast.error((e as Error).message); }
+    setAiLoading(false);
+  };
+
+  const galleryKeys: string[] = (proposal.gallery_photos && proposal.gallery_photos.length > 0)
+    ? proposal.gallery_photos
+    : DEFAULT_GALLERY_KEYS;
+
+  const togglePhoto = (key: string) => {
+    const current = [...galleryKeys];
+    const idx = current.indexOf(key);
+    if (idx >= 0) {
+      current.splice(idx, 1);
+    } else {
+      current.push(key);
+    }
+    update({ gallery_photos: current });
+  };
+  const resetGallery = () => update({ gallery_photos: [] });
 
   const updateTier = (i: number, patch: Partial<Tier>) => {
     const tiers = [...proposal.tiers];
