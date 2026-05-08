@@ -306,8 +306,8 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
             { src: galleryPhoto2, position: "object-center" },
             { src: galleryPhoto7, position: "object-center" },
             { src: galleryPhoto6, position: "object-center" },
-            { src: galleryPhoto4, position: "object-top" },
             { src: gallerySetup, position: "object-center" },
+            { src: galleryPhoto4, position: "object-top" },
             { src: galleryPhoto3, position: "object-center" },
             { src: galleryPhoto5, position: "object-center" },
           ].map((p, i) => (
