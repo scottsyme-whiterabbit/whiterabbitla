@@ -378,7 +378,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-8 items-center">
             {logos.map((logo) => (
               <div key={logo.name} className="flex items-center justify-center">
-                <img src={logo.src} alt={logo.name} loading="lazy" className="max-h-9 md:max-h-11 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity" style={{ filter: "grayscale(100%)" }} />
+                <img src={logo.src} alt={logo.name} loading="lazy" className={`${(logo as any).sizeClass ?? "max-h-9 md:max-h-11"} w-auto object-contain opacity-60 hover:opacity-100 transition-opacity`} style={{ filter: "grayscale(100%)" }} />)
               </div>
             ))}
           </div>
