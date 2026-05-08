@@ -451,16 +451,16 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           </a>
         </div>
 
-        {/* WR damask wordmark — matches link-preview brand mark */}
+        {/* WR wordmark */}
         <div className="mt-14 flex justify-center">
           <img
             src={wrScriptLogo}
             alt="White Rabbit Los Angeles"
-            width={1328}
-            height={760}
+            width={1080}
+            height={675}
             loading="lazy"
             decoding="async"
-            className="w-56 md:w-72 h-auto rounded-md shadow-md"
+            className="w-56 md:w-72 h-auto"
           />
         </div>
       </section>
