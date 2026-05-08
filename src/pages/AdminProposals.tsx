@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X } from "lucide-react";
+import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2 } from "lucide-react";
 import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type Tier, type TimelineItem, type FaqItem } from "./ProposalTemplate";
+import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, PROPOSAL_TEMPLATES } from "@/data/proposalAssets";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const FN = `${SUPABASE_URL}/functions/v1/proposals-api`;
@@ -198,7 +199,7 @@ const AdminProposals = () => {
   }
 
   if (editing) {
-    return <ProposalEditor proposal={editing} onChange={setEditing} onSave={save} onCancel={() => setEditing(null)} onPreview={() => setShowPreview(true)} />;
+    return <ProposalEditor proposal={editing} onChange={setEditing} onSave={save} onCancel={() => setEditing(null)} onPreview={() => setShowPreview(true)} list={list} password={password} loadFullProposal={async (slug) => { const res = await fetch(`${FN}?action=get&slug=${slug}`); const j = await res.json(); if (!res.ok) throw new Error(j.error); return j.proposal; }} />;
   }
 
   return (
@@ -259,15 +260,102 @@ const AdminProposals = () => {
 
 /* ===================== EDITOR ===================== */
 const ProposalEditor = ({
-  proposal, onChange, onSave, onCancel, onPreview,
+  proposal, onChange, onSave, onCancel, onPreview, list, password, loadFullProposal,
 }: {
   proposal: FullProposal;
   onChange: (p: FullProposal) => void;
   onSave: () => void;
   onCancel: () => void;
   onPreview: () => void;
+  list: ProposalRow[];
+  password: string;
+  loadFullProposal: (slug: string) => Promise<FullProposal>;
 }) => {
   const update = (patch: Partial<FullProposal>) => onChange({ ...proposal, ...patch });
+  const isNew = !proposal.id;
+  const [inquiryText, setInquiryText] = useState("");
+  const [aiLoading, setAiLoading] = useState(false);
+  const [duplicateSlug, setDuplicateSlug] = useState("");
+
+  const applyTemplate = (eventType: string) => {
+    const tpl = PROPOSAL_TEMPLATES[eventType];
+    if (!tpl) return;
+    update({
+      event_type: eventType,
+      letter_intro: tpl.letter_intro,
+      intro_paragraph: tpl.intro_paragraph,
+      hero_image: tpl.hero_image,
+      timeline: tpl.timeline,
+      tiers: tpl.tiers,
+      faqs: tpl.faqs,
+      closing_quote: tpl.closing_quote || "",
+      closing_attribution: tpl.closing_attribution || "",
+    });
+    toast.success(`${eventType} template applied`);
+  };
+
+  const duplicateFrom = async () => {
+    if (!duplicateSlug) return;
+    try {
+      const src = await loadFullProposal(duplicateSlug);
+      // Clone everything except identity fields
+      const { id, slug, sent_at, created_at, ...rest } = src as any;
+      onChange({ ...proposal, ...rest });
+      toast.success("Cloned — update name, date, and venue");
+    } catch (e) { toast.error((e as Error).message); }
+  };
+
+  const aiDraft = async () => {
+    if (!inquiryText.trim()) { toast.error("Paste the inquiry text first"); return; }
+    setAiLoading(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/proposal-ai-draft`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-password": password },
+        body: JSON.stringify({ inquiry_text: inquiryText }),
+      });
+      const j = await res.json();
+      if (!res.ok) throw new Error(j.error || "AI draft failed");
+      const d = j.draft;
+      // Apply event-type template first (if recognized) then overlay AI-extracted fields
+      const tpl = PROPOSAL_TEMPLATES[d.event_type];
+      onChange({
+        ...proposal,
+        first_name: d.first_name || proposal.first_name,
+        last_name: d.last_name || proposal.last_name,
+        recipient_email: d.recipient_email || proposal.recipient_email,
+        event_type: d.event_type || proposal.event_type,
+        event_date: d.event_date || proposal.event_date,
+        venue: d.venue || proposal.venue,
+        letter_intro: d.letter_intro || proposal.letter_intro,
+        intro_paragraph: d.intro_paragraph || proposal.intro_paragraph,
+        hero_image: tpl?.hero_image || proposal.hero_image,
+        timeline: tpl?.timeline || proposal.timeline,
+        tiers: tpl?.tiers || proposal.tiers,
+        faqs: tpl?.faqs || proposal.faqs,
+        closing_quote: tpl?.closing_quote ?? proposal.closing_quote,
+      });
+      toast.success("Draft ready — review and tweak");
+      setInquiryText("");
+    } catch (e) { toast.error((e as Error).message); }
+    setAiLoading(false);
+  };
+
+  const galleryKeys: string[] = (proposal.gallery_photos && proposal.gallery_photos.length > 0)
+    ? proposal.gallery_photos
+    : DEFAULT_GALLERY_KEYS;
+
+  const togglePhoto = (key: string) => {
+    const current = [...galleryKeys];
+    const idx = current.indexOf(key);
+    if (idx >= 0) {
+      current.splice(idx, 1);
+    } else {
+      current.push(key);
+    }
+    update({ gallery_photos: current });
+  };
+  const resetGallery = () => update({ gallery_photos: [] });
 
   const updateTier = (i: number, patch: Partial<Tier>) => {
     const tiers = [...proposal.tiers];
@@ -309,6 +397,68 @@ const ProposalEditor = ({
           {proposal.slug && <span className="ml-3 text-sm text-forest-dark/50 font-sans">/proposal/{proposal.slug}</span>}
         </h1>
 
+        {/* QUICK START — only on new proposals */}
+        {isNew && (
+          <div className="bg-forest-dark/5 border border-forest-dark/15 p-6 mb-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Sparkles className="w-4 h-4 text-gold" />
+              <h2 className="font-serif text-xl text-forest-dark">Quick Start</h2>
+              <span className="text-xs text-forest-dark/50">— pick one to skip the blank page</span>
+            </div>
+
+            {/* AI auto-draft */}
+            <div className="mb-5">
+              <label className={labelCls}>Auto-draft from inquiry text</label>
+              <textarea
+                className={inputCls + " min-h-[100px]"}
+                placeholder="Paste their inquiry email or your call notes here. AI will pull out name, date, venue, event type, and write a personalized opening in your voice."
+                value={inquiryText}
+                onChange={(e) => setInquiryText(e.target.value)}
+              />
+              <button
+                onClick={aiDraft}
+                disabled={aiLoading || !inquiryText.trim()}
+                className="mt-2 px-4 py-2 bg-forest-dark text-cream text-sm hover:opacity-90 disabled:opacity-40 flex items-center gap-2"
+              >
+                {aiLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+                {aiLoading ? "Drafting…" : "Auto-draft proposal"}
+              </button>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4 pt-4 border-t border-forest-dark/10">
+              {/* Event-type templates */}
+              <div>
+                <label className={labelCls}>Start from event-type template</label>
+                <div className="flex flex-wrap gap-2">
+                  {Object.keys(PROPOSAL_TEMPLATES).map((t) => (
+                    <button key={t} onClick={() => applyTemplate(t)} className="px-3 py-1.5 text-xs border border-forest-dark/25 hover:bg-forest-dark hover:text-cream transition-colors">
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Duplicate from previous */}
+              <div>
+                <label className={labelCls}>Or duplicate from a previous proposal</label>
+                <div className="flex gap-2">
+                  <select className={inputCls} value={duplicateSlug} onChange={(e) => setDuplicateSlug(e.target.value)}>
+                    <option value="">— pick a proposal —</option>
+                    {list.map((p) => (
+                      <option key={p.id} value={p.slug}>
+                        {p.first_name} {p.last_name} · {p.event_type}
+                      </option>
+                    ))}
+                  </select>
+                  <button onClick={duplicateFrom} disabled={!duplicateSlug} className="px-4 py-2 bg-forest-dark text-cream text-sm whitespace-nowrap hover:opacity-90 disabled:opacity-40">
+                    Clone
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Recipient */}
         <div className={sectionCls}>
           <h2 className="font-serif text-xl text-forest-dark mb-4">Recipient & Event</h2>
@@ -330,6 +480,41 @@ const ProposalEditor = ({
                 {HERO_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
             </div>
+          </div>
+        </div>
+
+        {/* GALLERY PHOTOS picker */}
+        <div className={sectionCls}>
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="font-serif text-xl text-forest-dark">Gallery Photos</h2>
+            <button onClick={resetGallery} className="text-xs text-forest-dark/60 hover:text-forest-dark underline">Reset to defaults</button>
+          </div>
+          <p className="text-xs text-forest-dark/60 mb-4">
+            {proposal.gallery_photos && proposal.gallery_photos.length > 0
+              ? `Custom selection — ${proposal.gallery_photos.length} photo${proposal.gallery_photos.length === 1 ? "" : "s"} chosen.`
+              : "Using the default gallery. Click any photo to start a custom selection for this proposal."}
+          </p>
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 max-h-[420px] overflow-y-auto pr-1">
+            {BRAND_PHOTOS.map((p) => {
+              const selected = galleryKeys.includes(p.key);
+              const order = selected ? galleryKeys.indexOf(p.key) + 1 : null;
+              return (
+                <button
+                  key={p.key}
+                  type="button"
+                  onClick={() => togglePhoto(p.key)}
+                  title={p.label}
+                  className={`relative aspect-square overflow-hidden border-2 transition-all ${selected ? "border-gold ring-2 ring-gold/30" : "border-transparent hover:border-forest-dark/40"}`}
+                >
+                  <img src={p.src} alt={p.label} loading="lazy" className="w-full h-full object-cover" />
+                  {selected && (
+                    <div className="absolute top-1 right-1 bg-gold text-forest-dark w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold">
+                      {order}
+                    </div>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </div>
 

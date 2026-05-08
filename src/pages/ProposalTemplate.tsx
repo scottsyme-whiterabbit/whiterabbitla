@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import { Phone, Plus, Instagram, Linkedin } from "lucide-react";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
 import threeStars from "@/assets/three-stars-gold.png";
+import wrScriptLogo from "@/assets/wr-logo-stars-gold.png";
+import { DEFAULT_GALLERY_KEYS, photoKeyToSrc } from "@/data/proposalAssets";
 
 import netflixLogo from "@/assets/logos/netflix.png";
 import disneyLogo from "@/assets/logos/disney.png";
@@ -13,43 +15,10 @@ import paramountLogo from "@/assets/logos/paramount.png";
 import sohohouseLogo from "@/assets/logos/sohohouse-new.png";
 import beverlyHiltonLogo from "@/assets/logos/beverlyhilton.png";
 
-import heroWedding from "@/assets/service-wedding-hero.jpg";
-import heroCorporate from "@/assets/experience-corporate.jpg";
-import heroPrivate from "@/assets/experience-private.jpg";
-import heroParlor from "@/assets/experience-parlor.jpg";
-import heroCocktail from "@/assets/event-closeup-cocktail.jpg";
-import heroEvening from "@/assets/hero-white-rabbit-evening.jpg";
-
-import flourishCorner from "@/assets/proposal-flourish-corner.png";
-import photoReaction from "@/assets/events/proposal-closeup-action.jpg";
-import photoCardsDetail from "@/assets/events/proposal-cards-detail-new.jpg";
-import photoParlorAudience from "@/assets/event-parlor-audience.jpg";
-import galleryPhoto1 from "@/assets/events/proposal-gallery-1.jpg";
-import galleryPhoto2 from "@/assets/events/proposal-gallery-2.jpg";
-import galleryPhoto3 from "@/assets/events/proposal-gallery-3.jpg";
-import galleryPhoto4 from "@/assets/events/proposal-gallery-4.jpg";
-import galleryPhoto5 from "@/assets/events/proposal-gallery-5.avif";
-import galleryPhoto6 from "@/assets/events/proposal-gallery-6.jpg";
-import galleryPhoto7 from "@/assets/events/proposal-gallery-7.avif";
-import gallerySetup from "@/assets/events/proposal-gallery-setup.jpg";
-import galleryLuncheonRoom from "@/assets/events/proposal-gallery-luncheon-room.jpg";
-import galleryCrowdMirror from "@/assets/events/proposal-gallery-crowd-reaction-mirror.jpg";
-import galleryCurtainGreeting from "@/assets/events/proposal-gallery-curtain-greeting.jpg";
-import photoScottBw from "@/assets/event-scott-bw-stage.jpg";
-
-import luncheon1512 from "@/assets/events/ladies-luncheon-1512.jpg";
-import luncheon1515 from "@/assets/events/ladies-luncheon-1515.jpg";
-import luncheon1520 from "@/assets/events/ladies-luncheon-1520.jpg";
-import luncheon1535 from "@/assets/events/ladies-luncheon-1535.jpg";
-import luncheon1539 from "@/assets/events/ladies-luncheon-1539.jpg";
-import luncheon1549 from "@/assets/events/ladies-luncheon-1549.jpg";
-import luncheon1559 from "@/assets/events/ladies-luncheon-1559.jpg";
-
-import proposalHeroLuncheon from "@/assets/events/proposal-hero-luncheon.jpg";
 import heroMain from "@/assets/hero-magic-cinematic.jpg";
 import proposalCardsBw from "@/assets/proposal-cards-bw.jpg";
-import proposalDesert from "@/assets/proposal-desert.jpg";
 import proposalCenterCards from "@/assets/proposal-center-cards.jpg";
+import photoScottBw from "@/assets/event-scott-bw-stage.jpg";
 
 const galleryPhotos: { src: string; mirror?: boolean }[] = [
   { src: proposalCardsBw },
@@ -113,6 +82,7 @@ export interface ProposalData {
   faqs: FaqItem[];
   closing_quote?: string | null;
   closing_attribution?: string | null;
+  gallery_photos?: string[]; // optional: brand-photo keys to override default gallery grid
 }
 
 interface Props {
@@ -299,27 +269,27 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         </section>
       )}
 
-      {/* PHOTO BREAK 2 — gallery */}
-      <section className="bg-forest-dark py-6 md:py-10 px-4">
-        <div className="max-w-6xl mx-auto grid grid-cols-3 md:grid-cols-5 gap-1">
-          {[
-            { src: photoCardsDetail, position: "object-center" },
-            { src: galleryPhoto1, position: "object-center" },
-            { src: photoParlorAudience, position: "object-top" },
-            { src: galleryPhoto2, position: "object-center" },
-            { src: galleryPhoto7, position: "object-center" },
-            { src: galleryCrowdMirror, position: "object-center" },
-            { src: gallerySetup, position: "object-center" },
-            { src: galleryCurtainGreeting, position: "object-center scale-125 group-hover:scale-[1.4]" },
-            { src: galleryPhoto6, position: "object-center" },
-            { src: galleryPhoto5, position: "object-center" },
-          ].map((p, i) => (
-            <div key={i} className="aspect-square overflow-hidden group">
-              <img src={p.src} alt="" loading="lazy" decoding="async" className={`w-full h-full object-cover transition-transform duration-700 ease-out ${p.position} ${p.position.includes("scale-") ? "" : "group-hover:scale-110"}`} />
+      {/* PHOTO BREAK 2 — gallery (overridable per-proposal) */}
+      {(() => {
+        const keys = (data.gallery_photos && data.gallery_photos.length > 0)
+          ? data.gallery_photos
+          : DEFAULT_GALLERY_KEYS;
+        const items = keys
+          .map((k) => photoKeyToSrc(k))
+          .filter((s): s is string => !!s);
+        if (items.length === 0) return null;
+        return (
+          <section className="bg-forest-dark py-6 md:py-10 px-4">
+            <div className="max-w-6xl mx-auto grid grid-cols-3 md:grid-cols-5 gap-1">
+              {items.map((src, i) => (
+                <div key={i} className="aspect-square overflow-hidden group">
+                  <img src={src} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110" />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </section>
+          </section>
+        );
+      })()}
 
       {/* TIERS */}
       <section className="relative bg-forest-dark text-cream py-16 md:py-24 px-6 overflow-hidden">
@@ -479,6 +449,19 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           <a href="https://www.linkedin.com/in/scottsymejr/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-forest-dark/50 hover:text-gold transition-colors">
             <Linkedin className="w-5 h-5" />
           </a>
+        </div>
+
+        {/* WR script logo — matches site footer mark */}
+        <div className="mt-14 flex justify-center">
+          <img
+            src={wrScriptLogo}
+            alt="White Rabbit Los Angeles"
+            width={140}
+            height={140}
+            loading="lazy"
+            decoding="async"
+            className="h-28 md:h-32 w-auto opacity-80"
+          />
         </div>
       </section>
     </div>

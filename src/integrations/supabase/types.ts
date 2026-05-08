@@ -815,6 +815,7 @@ export type Database = {
           event_type: string
           faqs: Json
           first_name: string
+          gallery_photos: Json
           hero_image: string
           id: string
           intro_paragraph: string
@@ -836,6 +837,7 @@ export type Database = {
           event_type?: string
           faqs?: Json
           first_name?: string
+          gallery_photos?: Json
           hero_image?: string
           id?: string
           intro_paragraph?: string
@@ -857,6 +859,7 @@ export type Database = {
           event_type?: string
           faqs?: Json
           first_name?: string
+          gallery_photos?: Json
           hero_image?: string
           id?: string
           intro_paragraph?: string

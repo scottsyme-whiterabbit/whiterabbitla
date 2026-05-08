@@ -77,3 +77,6 @@ verify_jwt = false
 
 [functions.unsubscribe-oneclick]
 verify_jwt = false
+
+[functions.proposal-ai-draft]
+verify_jwt = false
