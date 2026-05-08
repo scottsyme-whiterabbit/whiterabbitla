@@ -32,6 +32,7 @@ import galleryPhoto5 from "@/assets/events/proposal-gallery-5.avif";
 import galleryPhoto6 from "@/assets/events/proposal-gallery-6.jpg";
 import galleryPhoto7 from "@/assets/events/proposal-gallery-7.avif";
 import gallerySetup from "@/assets/events/proposal-gallery-setup.jpg";
+import galleryLuncheonRoom from "@/assets/events/proposal-gallery-luncheon-room.jpg";
 import photoScottBw from "@/assets/event-scott-bw-stage.jpg";
 
 import luncheon1512 from "@/assets/events/ladies-luncheon-1512.jpg";
@@ -308,7 +309,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
             { src: galleryPhoto6, position: "object-center" },
             { src: gallerySetup, position: "object-center" },
             { src: galleryPhoto3, position: "object-center" },
-            { src: galleryPhoto4, position: "object-top" },
+            { src: galleryLuncheonRoom, position: "object-center" },
             { src: galleryPhoto5, position: "object-center" },
           ].map((p, i) => (
             <div key={i} className="aspect-square overflow-hidden">
