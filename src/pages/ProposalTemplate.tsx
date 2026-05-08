@@ -307,10 +307,10 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
             { src: photoParlorAudience, position: "object-top" },
             { src: galleryPhoto2, position: "object-center" },
             { src: galleryPhoto7, position: "object-center" },
-            { src: galleryPhoto6, position: "object-center" },
+            { src: galleryCrowdMirror, position: "object-center" },
             { src: gallerySetup, position: "object-center" },
             { src: galleryPhoto3, position: "object-center" },
-            { src: galleryLuncheonRoom, position: "object-center" },
+            { src: galleryPhoto6, position: "object-center" },
             { src: galleryPhoto5, position: "object-center" },
           ].map((p, i) => (
             <div key={i} className="aspect-square overflow-hidden">
