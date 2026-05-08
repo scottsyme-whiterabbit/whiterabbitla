@@ -314,8 +314,8 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
             { src: galleryPhoto6, position: "object-center" },
             { src: galleryPhoto5, position: "object-center" },
           ].map((p, i) => (
-            <div key={i} className="aspect-square overflow-hidden">
-              <img src={p.src} alt="" loading="lazy" decoding="async" className={`w-full h-full object-cover ${p.position}`} />
+            <div key={i} className="aspect-square overflow-hidden group">
+              <img src={p.src} alt="" loading="lazy" decoding="async" className={`w-full h-full object-cover transition-transform duration-700 ease-out ${p.position} ${p.position.includes("scale-") ? "" : "group-hover:scale-110"}`} />
             </div>
           ))}
         </div>
