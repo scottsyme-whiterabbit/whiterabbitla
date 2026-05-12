@@ -49,6 +49,7 @@ interface QuizData {
   location: string;
   guestCount: string;
   guestLabel: string;
+  exactGuestCount: string;
   date: string;
   budget: string;
   budgetLabel: string;
@@ -113,6 +114,7 @@ const BookingQuiz = () => {
     location: "",
     guestCount: "",
     guestLabel: "",
+    exactGuestCount: "",
     date: "",
     budget: "",
     budgetLabel: "",
