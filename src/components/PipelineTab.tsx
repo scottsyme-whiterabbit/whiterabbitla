@@ -45,6 +45,18 @@ const STAGES = [
 const COLLAPSIBLE_STAGES = ["completed", "lost"];
 const PREVIEW_COUNT = 3;
 
+const LOST_REASONS = [
+  "Pricing / budget",
+  "Date conflict",
+  "Went with another vendor",
+  "Event cancelled / postponed",
+  "Ghosted / no response",
+  "Wrong fit (entertainment style)",
+  "Venue restriction",
+  "Decision delayed",
+  "Other",
+];
+
 const EVENT_EMOJIS: Record<string, string> = {
   corporate: "🏢", Corporate: "🏢",
   wedding: "💍", Wedding: "💍",
@@ -258,6 +270,32 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
     ? activeDeals.reduce((s, d) => s + (d.deal_value || 0), 0) / activeDeals.length
     : 0;
 
+  // Lost reasons breakdown — bucket free-text into known categories where possible
+  const lostDeals = deals.filter(d => d.stage === "lost");
+  const bucketReason = (raw: string | null): string => {
+    if (!raw) return "Unspecified";
+    const r = raw.toLowerCase();
+    if (LOST_REASONS.includes(raw)) return raw;
+    if (/(price|pricing|budget|cost|expensive|too much|afford)/.test(r)) return "Pricing / budget";
+    if (/(date|conflict|not available|unavailable|schedul)/.test(r)) return "Date conflict";
+    if (/(another|other vendor|different|hired|went with|chose)/.test(r)) return "Went with another vendor";
+    if (/(cancel|postpon|pulled|fell through)/.test(r)) return "Event cancelled / postponed";
+    if (/(ghost|no response|never responded|never replied|silent|stopped)/.test(r)) return "Ghosted / no response";
+    if (/(fit|style|wrong)/.test(r)) return "Wrong fit (entertainment style)";
+    if (/(venue|restriction|not allowed)/.test(r)) return "Venue restriction";
+    if (/(delay|later|next year|2027)/.test(r)) return "Decision delayed";
+    return "Other";
+  };
+  const lostBuckets = lostDeals.reduce<Record<string, { count: number; value: number }>>((acc, d) => {
+    const b = bucketReason(d.lost_reason);
+    if (!acc[b]) acc[b] = { count: 0, value: 0 };
+    acc[b].count++;
+    acc[b].value += d.deal_value || 0;
+    return acc;
+  }, {});
+  const lostBucketEntries = Object.entries(lostBuckets).sort((a, b) => b[1].count - a[1].count);
+  const lostTotalValue = lostDeals.reduce((s, d) => s + (d.deal_value || 0), 0);
+
   // Revenue meter calculations
   const ANNUAL_TARGET = 50000000; // $500,000 in cents
   const MONTHLY_TARGET = Math.round(ANNUAL_TARGET / 12);
@@ -367,7 +405,42 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
         </button>
       </div>
 
-      {/* Kanban Board */}
+      {/* Lost Reasons Tracker */}
+      {lostDeals.length > 0 && (
+        <div className="border border-border p-5 space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="font-serif text-lg text-foreground">Lost Reasons</h3>
+            <span className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">
+              {lostDeals.length} lost · {formatCurrency(lostTotalValue)} value
+            </span>
+          </div>
+          <div className="space-y-2">
+            {lostBucketEntries.map(([reason, { count, value }]) => {
+              const pct = Math.round((count / lostDeals.length) * 100);
+              return (
+                <div key={reason}>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="font-sans text-xs text-foreground">{reason}</span>
+                    <span className="font-sans text-[10px] text-muted-foreground">
+                      {count} ({pct}%) {value > 0 && <span className="text-accent">· {formatCurrency(value)}</span>}
+                    </span>
+                  </div>
+                  <div className="w-full h-1.5 bg-muted/30">
+                    <div
+                      className="h-full bg-red-500/50 transition-all duration-500"
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <p className="font-sans text-[10px] text-muted-foreground italic pt-2 border-t border-border">
+            Tip: tag every lost deal with a reason so this stays accurate.
+          </p>
+        </div>
+      )}
+
       <div className="overflow-x-auto">
         <div className="flex gap-3 min-w-[1200px] pb-4">
           {STAGES.map(stage => {
@@ -550,7 +623,22 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
             {form.stage === "lost" && (
               <div>
                 <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Lost Reason</label>
-                <input value={form.lost_reason} onChange={e => setForm(f => ({ ...f, lost_reason: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+                <select
+                  value={LOST_REASONS.includes(form.lost_reason) ? form.lost_reason : (form.lost_reason ? "Other" : "")}
+                  onChange={e => setForm(f => ({ ...f, lost_reason: e.target.value === "Other" ? (LOST_REASONS.includes(f.lost_reason) ? "" : f.lost_reason) : e.target.value }))}
+                  className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent"
+                >
+                  <option value="">— Select reason —</option>
+                  {LOST_REASONS.map(r => <option key={r} value={r}>{r}</option>)}
+                </select>
+                {(!LOST_REASONS.includes(form.lost_reason) || form.lost_reason === "Other") && (
+                  <input
+                    value={form.lost_reason === "Other" ? "" : form.lost_reason}
+                    onChange={e => setForm(f => ({ ...f, lost_reason: e.target.value }))}
+                    placeholder="Add detail (optional)"
+                    className="w-full mt-1 bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent"
+                  />
+                )}
               </div>
             )}
             {form.stage === "completed" && (
