@@ -405,7 +405,42 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
         </button>
       </div>
 
-      {/* Kanban Board */}
+      {/* Lost Reasons Tracker */}
+      {lostDeals.length > 0 && (
+        <div className="border border-border p-5 space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="font-serif text-lg text-foreground">Lost Reasons</h3>
+            <span className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">
+              {lostDeals.length} lost · {formatCurrency(lostTotalValue)} value
+            </span>
+          </div>
+          <div className="space-y-2">
+            {lostBucketEntries.map(([reason, { count, value }]) => {
+              const pct = Math.round((count / lostDeals.length) * 100);
+              return (
+                <div key={reason}>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="font-sans text-xs text-foreground">{reason}</span>
+                    <span className="font-sans text-[10px] text-muted-foreground">
+                      {count} ({pct}%) {value > 0 && <span className="text-accent">· {formatCurrency(value)}</span>}
+                    </span>
+                  </div>
+                  <div className="w-full h-1.5 bg-muted/30">
+                    <div
+                      className="h-full bg-red-500/50 transition-all duration-500"
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <p className="font-sans text-[10px] text-muted-foreground italic pt-2 border-t border-border">
+            Tip: tag every lost deal with a reason so this stays accurate.
+          </p>
+        </div>
+      )}
+
       <div className="overflow-x-auto">
         <div className="flex gap-3 min-w-[1200px] pb-4">
           {STAGES.map(stage => {
