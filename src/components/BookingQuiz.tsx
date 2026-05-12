@@ -49,6 +49,7 @@ interface QuizData {
   location: string;
   guestCount: string;
   guestLabel: string;
+  exactGuestCount: string;
   date: string;
   budget: string;
   budgetLabel: string;
@@ -113,6 +114,7 @@ const BookingQuiz = () => {
     location: "",
     guestCount: "",
     guestLabel: "",
+    exactGuestCount: "",
     date: "",
     budget: "",
     budgetLabel: "",
@@ -156,39 +158,42 @@ const BookingQuiz = () => {
   };
 
   const handleSubmit = async () => {
+    const quizData = data;
     setIsSubmitting(true);
-    const rec = getRecommendation(data);
+    const rec = getRecommendation(quizData);
     try {
       // Send email + save inquiry + create deal (all handled by edge function)
 
       // Send email notification
-      const { error } = await supabase.functions.invoke("send-inquiry", {
+      const result = await supabase.functions.invoke("send-inquiry", {
         body: {
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          eventType: `${data.eventLabel} (${rec.format})`,
-          date: data.date,
-          location: data.location || "TBD",
-          message: `Client Type: ${data.clientTypeLabel}\nGuest Count: ${data.guestLabel}\nBudget: ${data.budgetLabel}\nHow They Found Us: ${data.referralSource}\nRecommended: ${rec.title}\n\n${data.message || "No additional message."}`,
-          clientType: data.clientType || null,
-          guestCount: data.guestLabel || null,
-          budget: data.budgetLabel || null,
+          name: quizData.name,
+          email: quizData.email,
+          phone: quizData.phone,
+          eventType: `${quizData.eventLabel} (${rec.format})`,
+          date: quizData.date,
+          location: quizData.location || "TBD",
+          message: `Client Type: ${quizData.clientTypeLabel}\nGuest Count: ${quizData.guestLabel}\nBudget: ${quizData.budgetLabel}\nHow They Found Us: ${quizData.referralSource}\nRecommended: ${rec.title}\n\n${quizData.message || "No additional message."}`,
+          clientType: quizData.clientType || null,
+          guestCount: (quizData.guestCount === "intimate" && quizData.exactGuestCount.trim()
+            ? `Under 30 (${quizData.exactGuestCount.trim()} guests)`
+            : quizData.guestLabel) || null,
+          budget: quizData.budgetLabel || null,
           recommendation: rec.title,
           source: "booking_quiz",
         },
       });
-      if (error) throw error;
+      if (result.error) throw result.error;
       // Meta Pixel: track booking quiz lead
       if (typeof window !== 'undefined' && (window as any).fbq) {
         (window as any).fbq('track', 'Lead', {
           content_name: 'Booking Quiz',
-          content_category: data.eventLabel || 'Event Inquiry',
+          content_category: quizData.eventLabel || 'Event Inquiry',
         });
       }
       // GA4: track booking quiz completion
-      trackQuizComplete("booking", data.eventLabel);
-      trackFormSubmit("Booking Quiz", data.eventLabel);
+      trackQuizComplete("booking", quizData.eventLabel);
+      trackFormSubmit("Booking Quiz", quizData.eventLabel);
       setSubmitted(true);
     } catch {
       toast({
@@ -206,7 +211,7 @@ const BookingQuiz = () => {
     setTimeout(() => {
       setStep("clientType");
       setSubmitted(false);
-      setData({ clientType: "", clientTypeLabel: "", eventType: "", eventLabel: "", location: "", guestCount: "", guestLabel: "", date: "", budget: "", budgetLabel: "", name: "", email: "", phone: "", referralSource: "", message: "" });
+      setData({ clientType: "", clientTypeLabel: "", eventType: "", eventLabel: "", location: "", guestCount: "", guestLabel: "", exactGuestCount: "", date: "", budget: "", budgetLabel: "", name: "", email: "", phone: "", referralSource: "", message: "" });
     }, 300);
   };
 
@@ -356,13 +361,37 @@ const BookingQuiz = () => {
                       <p className="font-sans text-sm text-muted-foreground mb-6">This helps us recommend the right format.</p>
                       <div className="space-y-3">
                         {GUEST_COUNTS.map((g) => (
-                          <OptionCard
-                            key={g.id}
-                            selected={data.guestCount === g.id}
-                            label={g.label}
-                            description={g.description}
-                            onClick={() => setData({ ...data, guestCount: g.id, guestLabel: g.label })}
-                          />
+                          <div key={g.id}>
+                            <OptionCard
+                              selected={data.guestCount === g.id}
+                              label={g.label}
+                              description={g.description}
+                              onClick={() => setData({ ...data, guestCount: g.id, guestLabel: g.label, exactGuestCount: g.id === "intimate" ? data.exactGuestCount : "" })}
+                            />
+                            {g.id === "intimate" && (
+                              <div className={`mt-3 ml-1 transition-all duration-300 overflow-hidden ${data.guestCount === "intimate" ? "max-h-40 opacity-100" : "max-h-0 opacity-0"}`}>
+                                <label className="font-sans text-xs tracking-[0.15em] uppercase text-muted-foreground mb-2 block">
+                                  Optional — exact guest count
+                                </label>
+                                <Input
+                                  type="number"
+                                  min={1}
+                                  max={29}
+                                  value={data.exactGuestCount}
+                                  onChange={(e) => {
+                                    const val = e.target.value;
+                                    setData(prev => ({
+                                      ...prev,
+                                      exactGuestCount: val,
+                                      guestLabel: val.trim() ? `Under 30 (${val.trim()} guests)` : "Under 30",
+                                    }));
+                                  }}
+                                  placeholder="e.g. 12"
+                                  className="bg-background border-border w-48"
+                                />
+                              </div>
+                            )}
+                          </div>
                         ))}
                       </div>
                     </div>
