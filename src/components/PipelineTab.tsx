@@ -270,6 +270,32 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
     ? activeDeals.reduce((s, d) => s + (d.deal_value || 0), 0) / activeDeals.length
     : 0;
 
+  // Lost reasons breakdown — bucket free-text into known categories where possible
+  const lostDeals = deals.filter(d => d.stage === "lost");
+  const bucketReason = (raw: string | null): string => {
+    if (!raw) return "Unspecified";
+    const r = raw.toLowerCase();
+    if (LOST_REASONS.includes(raw)) return raw;
+    if (/(price|pricing|budget|cost|expensive|too much|afford)/.test(r)) return "Pricing / budget";
+    if (/(date|conflict|not available|unavailable|schedul)/.test(r)) return "Date conflict";
+    if (/(another|other vendor|different|hired|went with|chose)/.test(r)) return "Went with another vendor";
+    if (/(cancel|postpon|pulled|fell through)/.test(r)) return "Event cancelled / postponed";
+    if (/(ghost|no response|never responded|never replied|silent|stopped)/.test(r)) return "Ghosted / no response";
+    if (/(fit|style|wrong)/.test(r)) return "Wrong fit (entertainment style)";
+    if (/(venue|restriction|not allowed)/.test(r)) return "Venue restriction";
+    if (/(delay|later|next year|2027)/.test(r)) return "Decision delayed";
+    return "Other";
+  };
+  const lostBuckets = lostDeals.reduce<Record<string, { count: number; value: number }>>((acc, d) => {
+    const b = bucketReason(d.lost_reason);
+    if (!acc[b]) acc[b] = { count: 0, value: 0 };
+    acc[b].count++;
+    acc[b].value += d.deal_value || 0;
+    return acc;
+  }, {});
+  const lostBucketEntries = Object.entries(lostBuckets).sort((a, b) => b[1].count - a[1].count);
+  const lostTotalValue = lostDeals.reduce((s, d) => s + (d.deal_value || 0), 0);
+
   // Revenue meter calculations
   const ANNUAL_TARGET = 50000000; // $500,000 in cents
   const MONTHLY_TARGET = Math.round(ANNUAL_TARGET / 12);
