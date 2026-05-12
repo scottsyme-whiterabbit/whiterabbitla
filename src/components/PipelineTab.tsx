@@ -45,6 +45,18 @@ const STAGES = [
 const COLLAPSIBLE_STAGES = ["completed", "lost"];
 const PREVIEW_COUNT = 3;
 
+const LOST_REASONS = [
+  "Pricing / budget",
+  "Date conflict",
+  "Went with another vendor",
+  "Event cancelled / postponed",
+  "Ghosted / no response",
+  "Wrong fit (entertainment style)",
+  "Venue restriction",
+  "Decision delayed",
+  "Other",
+];
+
 const EVENT_EMOJIS: Record<string, string> = {
   corporate: "🏢", Corporate: "🏢",
   wedding: "💍", Wedding: "💍",
