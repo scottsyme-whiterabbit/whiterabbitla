@@ -174,7 +174,9 @@ const BookingQuiz = () => {
           location: data.location || "TBD",
           message: `Client Type: ${data.clientTypeLabel}\nGuest Count: ${data.guestLabel}\nBudget: ${data.budgetLabel}\nHow They Found Us: ${data.referralSource}\nRecommended: ${rec.title}\n\n${data.message || "No additional message."}`,
           clientType: data.clientType || null,
-          guestCount: data.guestLabel || null,
+          guestCount: (data.guestCount === "intimate" && data.exactGuestCount.trim()
+            ? `Under 30 (${data.exactGuestCount.trim()} guests)`
+            : data.guestLabel) || null,
           budget: data.budgetLabel || null,
           recommendation: rec.title,
           source: "booking_quiz",
@@ -358,13 +360,37 @@ const BookingQuiz = () => {
                       <p className="font-sans text-sm text-muted-foreground mb-6">This helps us recommend the right format.</p>
                       <div className="space-y-3">
                         {GUEST_COUNTS.map((g) => (
-                          <OptionCard
-                            key={g.id}
-                            selected={data.guestCount === g.id}
-                            label={g.label}
-                            description={g.description}
-                            onClick={() => setData({ ...data, guestCount: g.id, guestLabel: g.label })}
-                          />
+                          <div key={g.id}>
+                            <OptionCard
+                              selected={data.guestCount === g.id}
+                              label={g.label}
+                              description={g.description}
+                              onClick={() => setData({ ...data, guestCount: g.id, guestLabel: g.label, exactGuestCount: g.id === "intimate" ? data.exactGuestCount : "" })}
+                            />
+                            {g.id === "intimate" && data.guestCount === "intimate" && (
+                              <div className="mt-3 ml-1">
+                                <label className="font-sans text-xs tracking-[0.15em] uppercase text-muted-foreground mb-2 block">
+                                  Optional — exact guest count
+                                </label>
+                                <Input
+                                  type="number"
+                                  min={1}
+                                  max={29}
+                                  value={data.exactGuestCount}
+                                  onChange={(e) => {
+                                    const val = e.target.value;
+                                    setData(prev => ({
+                                      ...prev,
+                                      exactGuestCount: val,
+                                      guestLabel: val.trim() ? `Under 30 (${val.trim()} guests)` : "Under 30",
+                                    }));
+                                  }}
+                                  placeholder="e.g. 12"
+                                  className="bg-background border-border w-48"
+                                />
+                              </div>
+                            )}
+                          </div>
                         ))}
                       </div>
                     </div>
