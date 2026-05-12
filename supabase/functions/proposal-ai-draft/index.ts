@@ -58,7 +58,7 @@ Respond ONLY with valid JSON, no prose, matching exactly:
   "event_type": one of ["Wedding", "Corporate Event", "Private Event", "Fundraiser", "Birthday", "Holiday Party"],
   "event_date": string (human readable like "June 14, 2026" — empty if unknown),
   "venue": string (empty if unknown),
-  "letter_intro": string (1–3 sentences, warm opening referencing something specific from their inquiry — e.g. "Thank you for the kind note — what you described for your daughter's wedding sounds beautiful." DO NOT include their name as a salutation, that comes separately. You may gently nod to the craft of the hand and the eye when it fits.),
+  "letter_intro": string (1–3 sentences, warm opening referencing something specific from their inquiry — e.g. "Thank you for the kind note — what you described for your daughter's wedding sounds beautiful." DO NOT include their name as a salutation, that comes separately. Do NOT use the phrase "the hand and the eye" or any slogan.),
   "intro_paragraph": string (3–5 sentences describing the night you'd build for them — written for OUTCOME and memory per the guidance above. Specific to their event. Sensory, hosted, never generic, never a list of services.)
 }
 
