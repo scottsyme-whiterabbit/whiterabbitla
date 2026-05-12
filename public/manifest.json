@@ -3,20 +3,27 @@
   "short_name": "WR Concierge",
   "description": "White Rabbit LA — Concierge Dashboard",
   "start_url": "/admin/newsletter",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#1B3A2D",
   "theme_color": "#1B3A2D",
   "orientation": "portrait",
   "icons": [
+    { "src": "/favicon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/favicon-512.png", "sizes": "512x512", "type": "image/png" }
+  ],
+  "shortcuts": [
     {
-      "src": "/favicon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "url": "/admin/newsletter",
+      "icons": [{ "src": "/favicon-192.png", "sizes": "192x192" }]
     },
     {
-      "src": "/favicon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "name": "Proposals",
+      "short_name": "Proposals",
+      "url": "/admin/proposals",
+      "icons": [{ "src": "/favicon-192.png", "sizes": "192x192" }]
     }
   ]
 }
