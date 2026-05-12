@@ -838,16 +838,26 @@ serve(async (req) => {
     // Get all active campaigns. Order by started_at NULLS FIRST so step-0
     // contacts (which have no started_at yet) drain first, oldest imports
     // first within step-0 — preventing the in-flight tail from monopolizing
-    // the daily cap. charity_golf gets first crack within step-0 because it's
-    // the smallest, most time-sensitive list.
-    const { data: campaigns, error: fetchErr } = await supabase
+    // the daily cap.
+    const { data: campaignsRaw, error: fetchErr } = await supabase
       .from("cold_email_campaigns")
       .select("*")
       .eq("status", "active")
       .lt("current_step", 5)
-      .order("campaign_category", { ascending: false }) // charity_golf < corporate_planner alphabetically; desc puts wedding_planner first, but pushes charity_golf later. We want charity_golf FIRST: handled below.
       .order("started_at", { ascending: true, nullsFirst: true })
       .order("created_at", { ascending: true });
+
+    // Priority categories drain first within their order group (small,
+    // time-sensitive lists like charity_golf shouldn't get crowded out by
+    // larger backlogs).
+    const PRIORITY_CATEGORIES = new Set(["charity_golf"]);
+    const campaigns = campaignsRaw
+      ? [...campaignsRaw].sort((a, b) => {
+          const ap = PRIORITY_CATEGORIES.has(a.campaign_category) ? 0 : 1;
+          const bp = PRIORITY_CATEGORIES.has(b.campaign_category) ? 0 : 1;
+          return ap - bp;
+        })
+      : campaignsRaw;
 
     if (fetchErr) throw fetchErr;
     if (!campaigns || campaigns.length === 0) {
