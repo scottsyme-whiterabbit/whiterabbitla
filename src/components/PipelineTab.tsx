@@ -562,7 +562,22 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
             {form.stage === "lost" && (
               <div>
                 <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Lost Reason</label>
-                <input value={form.lost_reason} onChange={e => setForm(f => ({ ...f, lost_reason: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+                <select
+                  value={LOST_REASONS.includes(form.lost_reason) ? form.lost_reason : (form.lost_reason ? "Other" : "")}
+                  onChange={e => setForm(f => ({ ...f, lost_reason: e.target.value === "Other" ? (LOST_REASONS.includes(f.lost_reason) ? "" : f.lost_reason) : e.target.value }))}
+                  className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent"
+                >
+                  <option value="">— Select reason —</option>
+                  {LOST_REASONS.map(r => <option key={r} value={r}>{r}</option>)}
+                </select>
+                {(!LOST_REASONS.includes(form.lost_reason) || form.lost_reason === "Other") && (
+                  <input
+                    value={form.lost_reason === "Other" ? "" : form.lost_reason}
+                    onChange={e => setForm(f => ({ ...f, lost_reason: e.target.value }))}
+                    placeholder="Add detail (optional)"
+                    className="w-full mt-1 bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent"
+                  />
+                )}
               </div>
             )}
             {form.stage === "completed" && (
