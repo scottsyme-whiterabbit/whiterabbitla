@@ -599,9 +599,18 @@ const AdminNewsletter = () => {
       <div className={`max-w-6xl mx-auto px-4 md:px-6 ${isMobile ? 'pb-24' : ''}`}>
         <div className="flex items-center justify-between mb-4 md:mb-6">
           <h1 className="font-serif text-2xl md:text-3xl text-foreground">White Rabbit Concierge</h1>
-          <button onClick={loadData} disabled={loading} className="text-muted-foreground hover:text-foreground transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
-            <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
-          </button>
+          <div className="flex items-center gap-2">
+            <a
+              href="/admin/proposals"
+              className="inline-flex items-center gap-1.5 px-3 py-2 border border-border text-foreground hover:border-accent hover:text-accent transition-colors font-sans text-xs tracking-[0.15em] uppercase min-h-[44px]"
+              title="Proposals"
+            >
+              <FileText size={14} /> Proposals
+            </a>
+            <button onClick={loadData} disabled={loading} className="text-muted-foreground hover:text-foreground transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
+              <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
+            </button>
+          </div>
         </div>
 
         {/* Global Search Bar */}
