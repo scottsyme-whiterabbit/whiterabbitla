@@ -838,12 +838,14 @@ serve(async (req) => {
     // Get all active campaigns. Order by started_at NULLS FIRST so step-0
     // contacts (which have no started_at yet) drain first, oldest imports
     // first within step-0 — preventing the in-flight tail from monopolizing
-    // the daily cap.
+    // the daily cap. charity_golf gets first crack within step-0 because it's
+    // the smallest, most time-sensitive list.
     const { data: campaigns, error: fetchErr } = await supabase
       .from("cold_email_campaigns")
       .select("*")
       .eq("status", "active")
       .lt("current_step", 5)
+      .order("campaign_category", { ascending: false }) // charity_golf < corporate_planner alphabetically; desc puts wedding_planner first, but pushes charity_golf later. We want charity_golf FIRST: handled below.
       .order("started_at", { ascending: true, nullsFirst: true })
       .order("created_at", { ascending: true });
 
