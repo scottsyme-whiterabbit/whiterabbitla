@@ -158,41 +158,42 @@ const BookingQuiz = () => {
   };
 
   const handleSubmit = async () => {
+    const quizData = data;
     setIsSubmitting(true);
-    const rec = getRecommendation(data);
+    const rec = getRecommendation(quizData);
     try {
       // Send email + save inquiry + create deal (all handled by edge function)
 
       // Send email notification
-      const { error } = await supabase.functions.invoke("send-inquiry", {
+      const result = await supabase.functions.invoke("send-inquiry", {
         body: {
-          name: data.name,
-          email: data.email,
-          phone: data.phone,
-          eventType: `${data.eventLabel} (${rec.format})`,
-          date: data.date,
-          location: data.location || "TBD",
-          message: `Client Type: ${data.clientTypeLabel}\nGuest Count: ${data.guestLabel}\nBudget: ${data.budgetLabel}\nHow They Found Us: ${data.referralSource}\nRecommended: ${rec.title}\n\n${data.message || "No additional message."}`,
-          clientType: data.clientType || null,
-          guestCount: (data.guestCount === "intimate" && data.exactGuestCount.trim()
-            ? `Under 30 (${data.exactGuestCount.trim()} guests)`
-            : data.guestLabel) || null,
-          budget: data.budgetLabel || null,
+          name: quizData.name,
+          email: quizData.email,
+          phone: quizData.phone,
+          eventType: `${quizData.eventLabel} (${rec.format})`,
+          date: quizData.date,
+          location: quizData.location || "TBD",
+          message: `Client Type: ${quizData.clientTypeLabel}\nGuest Count: ${quizData.guestLabel}\nBudget: ${quizData.budgetLabel}\nHow They Found Us: ${quizData.referralSource}\nRecommended: ${rec.title}\n\n${quizData.message || "No additional message."}`,
+          clientType: quizData.clientType || null,
+          guestCount: (quizData.guestCount === "intimate" && quizData.exactGuestCount.trim()
+            ? `Under 30 (${quizData.exactGuestCount.trim()} guests)`
+            : quizData.guestLabel) || null,
+          budget: quizData.budgetLabel || null,
           recommendation: rec.title,
           source: "booking_quiz",
         },
       });
-      if (error) throw error;
+      if (result.error) throw result.error;
       // Meta Pixel: track booking quiz lead
       if (typeof window !== 'undefined' && (window as any).fbq) {
         (window as any).fbq('track', 'Lead', {
           content_name: 'Booking Quiz',
-          content_category: data.eventLabel || 'Event Inquiry',
+          content_category: quizData.eventLabel || 'Event Inquiry',
         });
       }
       // GA4: track booking quiz completion
-      trackQuizComplete("booking", data.eventLabel);
-      trackFormSubmit("Booking Quiz", data.eventLabel);
+      trackQuizComplete("booking", quizData.eventLabel);
+      trackFormSubmit("Booking Quiz", quizData.eventLabel);
       setSubmitted(true);
     } catch {
       toast({
