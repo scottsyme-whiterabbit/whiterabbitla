@@ -178,10 +178,10 @@ const Index = () => {
                     <Star key={i} size={14} className="fill-accent text-accent" />
                   )}
                 </div>
-                <p className="font-serif text-sm md:text-base text-cream/80 text-center">
+                <p className="font-serif text-sm md:text-base text-cream/90 text-center">
                   "{heroReviews[heroReviewIndex].text}"
                 </p>
-                <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-cream/40 whitespace-nowrap">
+                <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-cream/60 whitespace-nowrap">
                   — {heroReviews[heroReviewIndex].name}{heroReviews[heroReviewIndex].role ? `, ${heroReviews[heroReviewIndex].role}` : ""}
                 </p>
               </motion.div>
