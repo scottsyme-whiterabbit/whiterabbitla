@@ -226,6 +226,16 @@ const Index = () => {
         </section>
       </AnimatedSection>
 
+      {/* Destination Clock Wall */}
+      <AnimatedSection>
+        <DestinationClockWall />
+      </AnimatedSection>
+
+      {/* From the Guestbook */}
+      <AnimatedSection>
+        <Guestbook />
+      </AnimatedSection>
+
       {/* Quiz Nudge — after social proof */}
       <QuizNudge />
 
