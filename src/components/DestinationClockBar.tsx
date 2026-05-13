@@ -5,7 +5,7 @@ const cities = [
   { name: "Aspen", tz: "America/Denver" },
   { name: "Jackson Hole", tz: "America/Denver" },
   { name: "The Hamptons", tz: "America/New_York" },
-  { name: "Montecito", tz: "America/Los_Angeles" },
+  { name: "Miami", tz: "America/New_York" },
 ];
 
 const formatTime = (tz: string, now: Date) =>
