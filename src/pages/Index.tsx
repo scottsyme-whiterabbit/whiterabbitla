@@ -92,8 +92,8 @@ const Index = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const seoTitle = "White Rabbit LA — Luxury Magic Entertainment";
-  const seoDescription = "Luxury magic entertainment for corporate events, weddings, and private celebrations. Led by Scott Syme — Magic Castle member.";
+  const seoTitle = "White Rabbit LA — Private Magic, by Appointment";
+  const seoDescription = "Close-up magic and mentalism for private events in Los Angeles, Aspen, Jackson Hole, the Hamptons, and select destinations. By appointment. Member, The Magic Castle®. Trusted by Netflix, Disney, and Morgan Stanley.";
 
   // Homepage Person schema
   useJsonLd("homepage-person-schema", {
