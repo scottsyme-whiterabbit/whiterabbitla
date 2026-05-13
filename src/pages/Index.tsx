@@ -116,7 +116,7 @@ const Index = () => {
     <main id="main-content">
       <SEOHead title={seoTitle} description={seoDescription} canonical="/" ogImage={heroImage} />
       {/* Hero */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden md:h-screen">
         {/* Image container */}
         <div className="relative w-full aspect-[3/4] md:h-screen md:absolute md:inset-0 bg-forest-dark">
           <img src={heroImage} alt="Scott Syme, White Rabbit luxury magician tossing cards in a cinematic desert landscape – private event entertainment in Los Angeles" width={1200} height={630} className="w-full h-full object-cover object-[center_45%] md:object-[center_60%] scale-110" fetchPriority="high" />
