@@ -28,7 +28,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav aria-label="Main navigation" className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+    <nav aria-label="Main navigation" className={`fixed top-14 md:top-10 left-0 right-0 z-50 transition-all duration-300 ${
       scrolled || !isHome
         ? "bg-forest-dark/90 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.4)]"
         : "bg-transparent"
