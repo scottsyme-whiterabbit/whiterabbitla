@@ -44,6 +44,16 @@ import ladiesDeckRibbon from "@/assets/events/ladies-luncheon-deck-ribbon.jpg";
 import ladiesRibbonCurtain from "@/assets/events/ladies-luncheon-ribbon-curtain.jpg";
 import ladiesRibbonReveal from "@/assets/events/ladies-luncheon-ribbon-reveal.jpg";
 import ladiesScottPointing from "@/assets/events/ladies-luncheon-scott-pointing.jpg";
+import ladies1566 from "@/assets/events/ladies-luncheon-1566.jpg";
+import ladies1568 from "@/assets/events/ladies-luncheon-1568.jpg";
+import ladies1570 from "@/assets/events/ladies-luncheon-1570.jpg";
+import ladies1573 from "@/assets/events/ladies-luncheon-1573.jpg";
+import ladies1576 from "@/assets/events/ladies-luncheon-1576.jpg";
+import ladies1581 from "@/assets/events/ladies-luncheon-1581.jpg";
+import ladies1607 from "@/assets/events/ladies-luncheon-1607.jpg";
+import ladies1608 from "@/assets/events/ladies-luncheon-1608.jpg";
+import ladies1628 from "@/assets/events/ladies-luncheon-1628.jpg";
+import ladies1647 from "@/assets/events/ladies-luncheon-1647.jpg";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -84,6 +94,16 @@ const brandPhotos = [
   { src: ladiesDeckRibbon, label: "Luncheon Deck on Ribbon" },
   { src: ladiesCardRibbon, label: "Luncheon Card & Ribbon" },
   { src: ladiesScottPointing, label: "Luncheon Scott Performing" },
+  { src: ladies1566, label: "Luncheon Table Address" },
+  { src: ladies1568, label: "Luncheon Hosts Group" },
+  { src: ladies1570, label: "Luncheon Hosts Welcome" },
+  { src: ladies1573, label: "Luncheon Hosts Smiling" },
+  { src: ladies1576, label: "Luncheon Hosts Lineup" },
+  { src: ladies1581, label: "Luncheon Hosts Closeup" },
+  { src: ladies1607, label: "Luncheon Room Tables" },
+  { src: ladies1608, label: "Luncheon Scott Stage" },
+  { src: ladies1628, label: "Luncheon Scott Notepad" },
+  { src: ladies1647, label: "Luncheon Sharpie Reveal" },
 ];
 
 type AdFormat = "post" | "story" | "fb-ad" | "google-display";
