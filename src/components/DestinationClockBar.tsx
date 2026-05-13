@@ -40,33 +40,39 @@ const DestinationClockBar = () => {
           Checked In At
         </span>
 
-        {/* Desktop + Tablet: single row */}
-        <div className="hidden md:flex items-center gap-0">
-          {cities.map((c, i) => (
-            <div key={c.name} className="flex items-center">
-              <span className="font-sans text-[11px] tracking-[0.15em] uppercase text-cream/50 whitespace-nowrap">
-                {c.name} <span className="tabular-nums text-cream/70">{formatTime(c.tz, now)}</span>
-              </span>
-              {i < cities.length - 1 && (
-                <span className="mx-3 lg:mx-4 text-cream/20" aria-hidden="true">·</span>
-              )}
-            </div>
-          ))}
-        </div>
+      {/* Desktop + Tablet: single row */}
+      <div className="hidden md:flex items-center">
+        {cities.map((c, i) => (
+          <div key={c.name} className="flex items-center">
+            <span className="font-sans text-[11px] tracking-[0.15em] uppercase text-cream/50 whitespace-nowrap">
+              {c.name} <span className="tabular-nums text-cream/70">{formatTime(c.tz, now)}</span>
+            </span>
+            {i < cities.length - 1 && (
+              <span className="mx-3 lg:mx-4 text-cream/20" aria-hidden="true">·</span>
+            )}
+          </div>
+        ))}
+      </div>
 
-        {/* Mobile: compact 2-row grid */}
-        <div className="md:hidden grid grid-cols-2 gap-x-4 gap-y-0.5 w-full sm:w-auto px-2 sm:px-0">
-          {cities.slice(0, 2).map((c) => (
-            <span key={c.name} className="font-sans text-[10px] sm:text-[11px] tracking-[0.15em] uppercase text-cream/50 whitespace-nowrap text-center">
+      {/* Mobile: 2-row stack */}
+      <div className="md:hidden flex flex-col items-center justify-center gap-y-0.5 w-full">
+        <div className="flex items-center justify-center gap-x-3">
+          {cities.slice(0, 2).map((c, i) => (
+            <span key={c.name} className="font-sans text-[10px] tracking-[0.15em] uppercase text-cream/50 whitespace-nowrap">
               {c.name} <span className="tabular-nums text-cream/70">{formatTime(c.tz, now)}</span>
-            </span>
-          ))}
-          {cities.slice(2).map((c) => (
-            <span key={c.name} className="font-sans text-[10px] sm:text-[11px] tracking-[0.15em] uppercase text-cream/50 whitespace-nowrap text-center col-span-1">
-              {c.name} <span className="tabular-nums text-cream/70">{formatTime(c.tz, now)}</span>
+              {i === 0 && <span className="ml-3 text-cream/20" aria-hidden="true">·</span>}
             </span>
           ))}
         </div>
+        <div className="flex items-center justify-center gap-x-3">
+          {cities.slice(2).map((c, i) => (
+            <span key={c.name} className="font-sans text-[10px] tracking-[0.15em] uppercase text-cream/50 whitespace-nowrap">
+              {c.name} <span className="tabular-nums text-cream/70">{formatTime(c.tz, now)}</span>
+              {i < 2 && <span className="ml-3 text-cream/20" aria-hidden="true">·</span>}
+            </span>
+          ))}
+        </div>
+      </div>
       </div>
     </div>
   );
