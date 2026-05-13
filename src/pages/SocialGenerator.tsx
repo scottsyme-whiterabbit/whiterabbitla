@@ -912,6 +912,32 @@ const SocialGenerator = () => {
                 </div>
               </div>
 
+              {/* Google Drive photo bank */}
+              <div>
+                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">From Google Drive</label>
+                <DrivePhotoBank
+                  password={password}
+                  showManager
+                  selectedFileIds={customPhotos
+                    .filter((p) => p.src.includes("/drive-photos?action=image&fileId="))
+                    .map((p) => decodeURIComponent(p.src.split("fileId=")[1] || ""))}
+                  onPick={(fileId, name) => {
+                    const src = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/drive-photos?action=image&fileId=${encodeURIComponent(fileId)}`;
+                    setCustomPhotos((prev) => {
+                      // toggle: remove if already present
+                      const existingIdx = prev.findIndex((p) => p.src === src);
+                      if (existingIdx >= 0) {
+                        const next = prev.filter((_, i) => i !== existingIdx);
+                        return next;
+                      }
+                      const next = [...prev, { src, label: name }];
+                      setSelectedPhoto(brandPhotos.length + next.length - 1);
+                      return next;
+                    });
+                  }}
+                />
+              </div>
+
               {/* Generate */}
               <button
                 onClick={generateComposite}
