@@ -33,7 +33,7 @@ const DestinationClockBar = () => {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-[60] bg-forest-dark border-b border-white/5 h-10 md:h-10">
+    <div className="fixed top-0 left-0 right-0 z-[60] bg-forest-dark border-b border-white/5 h-14 md:h-10">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 h-full flex items-center justify-center md:justify-center relative">
         {/* Label — hidden on very small screens, visible on larger mobile */}
         <span className="hidden sm:inline font-sans text-[11px] tracking-[0.2em] uppercase text-cream/40 mr-4 md:mr-6 shrink-0">
