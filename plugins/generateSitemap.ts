@@ -69,6 +69,13 @@ export function generateSitemap(): Plugin {
         "halloween-party-magician",
         "christmas-party-magician",
         "premiere-red-carpet-magician",
+        "red-carpet-magician",
+        "dmc-entertainment",
+        "resident-event-magician",
+        "trade-show-magician",
+        "holiday-party-magician",
+        "charity-gala-magician",
+        "golf-tournament-magician",
       ];
 
       const filteredSeoPages = seoPages.filter(
