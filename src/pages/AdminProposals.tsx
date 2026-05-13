@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2 } from "lucide-react";
+import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2, ArrowLeft } from "lucide-react";
 import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type Tier, type TimelineItem, type FaqItem } from "./ProposalTemplate";
 import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, PROPOSAL_TEMPLATES } from "@/data/proposalAssets";
 
