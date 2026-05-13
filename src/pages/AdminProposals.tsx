@@ -351,6 +351,8 @@ const ProposalEditor = ({
     setAiLoading(false);
   };
 
+  const [photoSource, setPhotoSource] = useState<"brand" | "drive">("brand");
+
   const galleryKeys: string[] = (proposal.gallery_photos && proposal.gallery_photos.length > 0)
     ? proposal.gallery_photos
     : DEFAULT_GALLERY_KEYS;
