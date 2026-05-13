@@ -56,19 +56,19 @@ const DestinationClockBar = () => {
 
       {/* Mobile: 2-row stack */}
       <div className="md:hidden flex flex-col items-center justify-center gap-y-0.5 w-full">
-        <div className="flex items-center justify-center gap-x-3">
+        <div className="flex items-center justify-center">
           {cities.slice(0, 2).map((c, i) => (
             <span key={c.name} className="font-sans text-[10px] tracking-[0.15em] uppercase text-cream/50 whitespace-nowrap">
+              <span className="mx-2 text-cream/20" aria-hidden="true">{i > 0 ? "·" : ""}</span>
               {c.name} <span className="tabular-nums text-cream/70">{formatTime(c.tz, now)}</span>
-              {i === 0 && <span className="ml-3 text-cream/20" aria-hidden="true">·</span>}
             </span>
           ))}
         </div>
-        <div className="flex items-center justify-center gap-x-3">
+        <div className="flex items-center justify-center">
           {cities.slice(2).map((c, i) => (
             <span key={c.name} className="font-sans text-[10px] tracking-[0.15em] uppercase text-cream/50 whitespace-nowrap">
+              <span className="mx-2 text-cream/20" aria-hidden="true">{i > 0 ? "·" : ""}</span>
               {c.name} <span className="tabular-nums text-cream/70">{formatTime(c.tz, now)}</span>
-              {i < 2 && <span className="ml-3 text-cream/20" aria-hidden="true">·</span>}
             </span>
           ))}
         </div>
