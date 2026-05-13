@@ -63,6 +63,52 @@ export const cityArticleLinks: Record<string, [string, string, string]> = {
     "entertainment-for-wrap-parties-studio-events",
     "best-magic-experiences-los-angeles",
   ],
+  // ─── Tier A destination resort markets — paired blog posts feed each /areas/ page ───
+  aspen: [
+    "aspen-holiday-party-magician",
+    "how-to-choose-entertainment-for-luxury-event",
+    "why-cocktail-hour-entertainment-matters",
+  ],
+  telluride: [
+    "telluride-private-party-magician",
+    "how-to-choose-entertainment-for-luxury-event",
+    "best-magic-venues-america",
+  ],
+  "park-city": [
+    "park-city-corporate-event-magician",
+    "corporate-entertainment-trends-2026",
+    "how-to-choose-entertainment-for-corporate-event",
+  ],
+  vail: [
+    "vail-corporate-event-magician",
+    "corporate-entertainment-trends-2026",
+    "why-cocktail-hour-entertainment-matters",
+  ],
+  "jackson-hole": [
+    "jackson-hole-private-party-magician",
+    "how-to-choose-entertainment-for-luxury-event",
+    "best-magic-venues-america",
+  ],
+  "sun-valley": [
+    "sun-valley-private-party-magician",
+    "how-to-choose-entertainment-for-luxury-event",
+    "how-to-vet-magician-high-end-event",
+  ],
+  nantucket: [
+    "marthas-vineyard-private-party-magician",
+    "wedding-entertainment-beyond-the-dj",
+    "why-cocktail-hour-entertainment-matters",
+  ],
+  "marthas-vineyard": [
+    "marthas-vineyard-private-party-magician",
+    "wedding-entertainment-beyond-the-dj",
+    "how-to-choose-entertainment-for-luxury-event",
+  ],
+  "napa-valley": [
+    "napa-valley-wedding-magician",
+    "wedding-entertainment-beyond-the-dj",
+    "why-cocktail-hour-entertainment-matters",
+  ],
   default: [
     "why-event-planners-adding-magician-vendor-list",
     "how-to-choose-entertainment-for-luxury-event",
