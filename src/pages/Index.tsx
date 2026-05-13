@@ -226,16 +226,6 @@ const Index = () => {
         </section>
       </AnimatedSection>
 
-      {/* Destination Clock Wall */}
-      <AnimatedSection>
-        <DestinationClockWall />
-      </AnimatedSection>
-
-      {/* From the Guestbook */}
-      <AnimatedSection>
-        <Guestbook />
-      </AnimatedSection>
-
       {/* Quiz Nudge — after social proof */}
       <QuizNudge />
 
@@ -296,6 +286,16 @@ const Index = () => {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-[radial-gradient(ellipse_at_center,_hsl(var(--accent)/0.06)_0%,_transparent_70%)] pointer-events-none" />
           <TestimonialCarousel />
         </div>
+      </AnimatedSection>
+
+      {/* Destination Clock Wall */}
+      <AnimatedSection>
+        <DestinationClockWall />
+      </AnimatedSection>
+
+      {/* From the Guestbook */}
+      <AnimatedSection>
+        <Guestbook />
       </AnimatedSection>
 
       {/* Discovery Quiz CTA */}
