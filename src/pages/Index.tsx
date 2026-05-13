@@ -202,7 +202,7 @@ const Index = () => {
 
       {/* Mobile text section */}
       <section className="md:hidden bg-cream py-8 px-6">
-        <motion.h1
+        <motion.h2
           className="text-center text-2xl text-foreground tracking-wide font-bold font-serif max-w-lg mx-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -210,7 +210,7 @@ const Index = () => {
         >
           Experience Magic<br />
           <span className="block mt-2">That Makes You Feel Truly Alive</span>
-        </motion.h1>
+        </motion.h2>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
