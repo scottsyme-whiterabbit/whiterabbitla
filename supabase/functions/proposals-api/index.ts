@@ -212,6 +212,51 @@ White Rabbit LA · 7393 W. Manchester Ave #209, Los Angeles, CA 90045`;
       }
       if (id) {
         await supabase.from("proposals").update({ sent_at: new Date().toISOString() }).eq("id", id);
+
+        // Auto-create / update CRM deal in "proposal_sent" stage
+        try {
+          const { data: prop } = await supabase
+            .from("proposals")
+            .select("id, first_name, last_name, recipient_email, event_type, event_date, venue")
+            .eq("id", id)
+            .maybeSingle();
+          if (prop?.recipient_email) {
+            const contactName = `${prop.first_name || ""} ${prop.last_name || ""}`.trim() || null;
+            // Parse event_date (free-text) to a real date if possible
+            let eventDate: string | null = null;
+            if (prop.event_date) {
+              const d = new Date(prop.event_date);
+              if (!isNaN(d.getTime())) eventDate = d.toISOString().slice(0, 10);
+            }
+            const { data: existing } = await supabase
+              .from("deals")
+              .select("id, stage")
+              .eq("contact_email", prop.recipient_email.toLowerCase())
+              .maybeSingle();
+            if (existing) {
+              const updates: any = { stage: "proposal_sent", source_id: prop.id, source: "proposal" };
+              if (eventDate) updates.event_date = eventDate;
+              if (prop.venue) updates.location = prop.venue;
+              if (prop.event_type) updates.event_type = prop.event_type;
+              if (contactName) updates.contact_name = contactName;
+              await supabase.from("deals").update(updates).eq("id", existing.id);
+            } else {
+              await supabase.from("deals").insert({
+                contact_email: prop.recipient_email.toLowerCase(),
+                contact_name: contactName,
+                event_type: prop.event_type || null,
+                event_date: eventDate,
+                location: prop.venue || null,
+                stage: "proposal_sent",
+                source: "proposal",
+                source_id: prop.id,
+                notes: `Auto-created when proposal sent on ${new Date().toLocaleDateString()}`,
+              });
+            }
+          }
+        } catch (e) {
+          console.error("Deal auto-create failed:", (e as Error).message);
+        }
       }
       return json({ ok: true });
     }
