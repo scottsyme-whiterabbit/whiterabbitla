@@ -41,6 +41,17 @@ import gallerySetup from "@/assets/events/proposal-gallery-setup.jpg";
 import galleryCrowdMirror from "@/assets/events/proposal-gallery-crowd-reaction-mirror.jpg";
 import galleryCurtainGreeting from "@/assets/events/proposal-gallery-curtain-greeting.jpg";
 
+import ladiesGreeting from "@/assets/events/ladies-luncheon-greeting.jpg";
+import ladiesCardRibbon from "@/assets/events/ladies-luncheon-card-ribbon.jpg";
+import ladiesCurtainHosts from "@/assets/events/ladies-luncheon-curtain-hosts.jpg";
+import ladiesRoomWide from "@/assets/events/ladies-luncheon-room-wide.jpg";
+import ladiesReaction from "@/assets/events/ladies-luncheon-reaction.jpg";
+import ladiesLaughter from "@/assets/events/ladies-luncheon-laughter.jpg";
+import ladiesDeckRibbon from "@/assets/events/ladies-luncheon-deck-ribbon.jpg";
+import ladiesRibbonCurtain from "@/assets/events/ladies-luncheon-ribbon-curtain.jpg";
+import ladiesRibbonReveal from "@/assets/events/ladies-luncheon-ribbon-reveal.jpg";
+import ladiesScottPointing from "@/assets/events/ladies-luncheon-scott-pointing.jpg";
+
 export interface BrandPhoto {
   key: string;
   src: string;
@@ -86,6 +97,16 @@ export const BRAND_PHOTOS: BrandPhoto[] = [
   { key: "experience-parlor", src: experienceParlor, label: "Experience Parlor" },
   { key: "about-hero", src: aboutHero, label: "About Hero" },
   { key: "experience-hero", src: experienceHero, label: "Experience Hero" },
+  { key: "ladies-room-wide", src: ladiesRoomWide, label: "Luncheon Room Wide" },
+  { key: "ladies-greeting", src: ladiesGreeting, label: "Luncheon Greeting" },
+  { key: "ladies-curtain-hosts", src: ladiesCurtainHosts, label: "Luncheon Curtain Hosts" },
+  { key: "ladies-reaction", src: ladiesReaction, label: "Luncheon Reaction" },
+  { key: "ladies-laughter", src: ladiesLaughter, label: "Luncheon Laughter" },
+  { key: "ladies-ribbon-reveal", src: ladiesRibbonReveal, label: "Luncheon Ribbon Reveal" },
+  { key: "ladies-ribbon-curtain", src: ladiesRibbonCurtain, label: "Luncheon Ribbon Curtain" },
+  { key: "ladies-deck-ribbon", src: ladiesDeckRibbon, label: "Luncheon Deck on Ribbon" },
+  { key: "ladies-card-ribbon", src: ladiesCardRibbon, label: "Luncheon Card & Ribbon" },
+  { key: "ladies-scott-pointing", src: ladiesScottPointing, label: "Luncheon Scott Performing" },
 ];
 
 export const photoKeyToSrc = (key: string): string | null => {

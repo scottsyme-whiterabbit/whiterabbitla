@@ -34,6 +34,16 @@ import experienceCloseup from "@/assets/experience-closeup.jpg";
 import experienceCorporate from "@/assets/experience-corporate.jpg";
 import experiencePrivate from "@/assets/experience-private.jpg";
 import experienceParlor from "@/assets/experience-parlor.jpg";
+import ladiesGreeting from "@/assets/events/ladies-luncheon-greeting.jpg";
+import ladiesCardRibbon from "@/assets/events/ladies-luncheon-card-ribbon.jpg";
+import ladiesCurtainHosts from "@/assets/events/ladies-luncheon-curtain-hosts.jpg";
+import ladiesRoomWide from "@/assets/events/ladies-luncheon-room-wide.jpg";
+import ladiesReaction from "@/assets/events/ladies-luncheon-reaction.jpg";
+import ladiesLaughter from "@/assets/events/ladies-luncheon-laughter.jpg";
+import ladiesDeckRibbon from "@/assets/events/ladies-luncheon-deck-ribbon.jpg";
+import ladiesRibbonCurtain from "@/assets/events/ladies-luncheon-ribbon-curtain.jpg";
+import ladiesRibbonReveal from "@/assets/events/ladies-luncheon-ribbon-reveal.jpg";
+import ladiesScottPointing from "@/assets/events/ladies-luncheon-scott-pointing.jpg";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -64,6 +74,16 @@ const brandPhotos = [
   { src: experienceCorporate, label: "Experience Corporate" },
   { src: experiencePrivate, label: "Experience Private" },
   { src: experienceParlor, label: "Experience Parlor" },
+  { src: ladiesRoomWide, label: "Luncheon Room Wide" },
+  { src: ladiesGreeting, label: "Luncheon Greeting" },
+  { src: ladiesCurtainHosts, label: "Luncheon Curtain Hosts" },
+  { src: ladiesReaction, label: "Luncheon Reaction" },
+  { src: ladiesLaughter, label: "Luncheon Laughter" },
+  { src: ladiesRibbonReveal, label: "Luncheon Ribbon Reveal" },
+  { src: ladiesRibbonCurtain, label: "Luncheon Ribbon Curtain" },
+  { src: ladiesDeckRibbon, label: "Luncheon Deck on Ribbon" },
+  { src: ladiesCardRibbon, label: "Luncheon Card & Ribbon" },
+  { src: ladiesScottPointing, label: "Luncheon Scott Performing" },
 ];
 
 type AdFormat = "post" | "story" | "fb-ad" | "google-display";
