@@ -120,7 +120,7 @@ const Index = () => {
       <section className="relative h-screen overflow-hidden">
         {/* Image – full screen on all devices */}
         <div className="absolute inset-0 bg-forest-dark">
-          <img src={heroImage} alt="Scott Syme, White Rabbit luxury magician tossing cards in a cinematic desert landscape – private event entertainment in Los Angeles" width={1200} height={630} className="w-full h-full object-cover object-[center_40%] md:object-[center_55%]" fetchPriority="high" />
+          <img src={heroImage} alt="Scott Syme, White Rabbit luxury magician tossing cards in a cinematic desert landscape – private event entertainment in Los Angeles" width={1200} height={630} className="w-full h-full object-cover object-[center_45%] md:object-[center_60%] scale-110" fetchPriority="high" />
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/30 to-forest-dark/10 hidden md:block" />
           {/* Ambient warm glow behind hero text */}
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[radial-gradient(ellipse_at_center,_hsl(var(--accent)/0.08)_0%,_transparent_70%)] pointer-events-none" />
