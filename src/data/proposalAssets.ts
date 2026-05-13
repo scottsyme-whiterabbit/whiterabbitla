@@ -132,7 +132,7 @@ export const BRAND_PHOTOS: BrandPhoto[] = [
 // Drive-backed photo keys use the format `drive:<fileId>` and are streamed
 // through the drive-photos edge function. The /image endpoint is public so
 // <img src> tags can resolve them without an admin token.
-const DRIVE_IMAGE_BASE = `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.functions.supabase.co/drive-photos?action=image&fileId=`;
+const DRIVE_IMAGE_BASE = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/drive-photos?action=image&fileId=`;
 
 export const photoKeyToSrc = (key: string): string | null => {
   if (key.startsWith("drive:")) return DRIVE_IMAGE_BASE + encodeURIComponent(key.slice(6));
