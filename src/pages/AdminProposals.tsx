@@ -158,7 +158,7 @@ const AdminProposals = () => {
     if (message === null) return;
     const link = `${window.location.origin}/proposal/${proposal.slug}`;
     try {
-      await apiCall("send", "POST", { id: proposal.id, to, subject, message, link });
+      await apiCall("send", "POST", { id: proposal.id, to, subject, message, link, firstName: proposal.first_name });
       toast.success("Email sent");
       loadList();
     } catch (e) { toast.error((e as Error).message); }
