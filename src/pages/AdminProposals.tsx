@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2, ArrowLeft } from "lucide-react";
 import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type Tier, type TimelineItem, type FaqItem } from "./ProposalTemplate";
 import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, PROPOSAL_TEMPLATES } from "@/data/proposalAssets";
+import { DrivePhotoBank } from "@/components/DrivePhotoBank";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const FN = `${SUPABASE_URL}/functions/v1/proposals-api`;
@@ -350,6 +351,8 @@ const ProposalEditor = ({
     setAiLoading(false);
   };
 
+  const [photoSource, setPhotoSource] = useState<"brand" | "drive">("brand");
+
   const galleryKeys: string[] = (proposal.gallery_photos && proposal.gallery_photos.length > 0)
     ? proposal.gallery_photos
     : DEFAULT_GALLERY_KEYS;
@@ -503,28 +506,58 @@ const ProposalEditor = ({
               ? `Custom selection — ${proposal.gallery_photos.length} photo${proposal.gallery_photos.length === 1 ? "" : "s"} chosen.`
               : "Using the default gallery. Click any photo to start a custom selection for this proposal."}
           </p>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 max-h-[420px] overflow-y-auto pr-1">
-            {BRAND_PHOTOS.map((p) => {
-              const selected = galleryKeys.includes(p.key);
-              const order = selected ? galleryKeys.indexOf(p.key) + 1 : null;
-              return (
-                <button
-                  key={p.key}
-                  type="button"
-                  onClick={() => togglePhoto(p.key)}
-                  title={p.label}
-                  className={`relative aspect-square overflow-hidden border-2 transition-all ${selected ? "border-gold ring-2 ring-gold/30" : "border-transparent hover:border-forest-dark/40"}`}
-                >
-                  <img src={p.src} alt={p.label} loading="lazy" className="w-full h-full object-cover" />
-                  {selected && (
-                    <div className="absolute top-1 right-1 bg-gold text-forest-dark w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold">
-                      {order}
-                    </div>
-                  )}
-                </button>
-              );
-            })}
+
+          {/* Source tabs */}
+          <div className="flex gap-1 mb-3 border-b border-forest-dark/10">
+            {(["brand", "drive"] as const).map((src) => (
+              <button
+                key={src}
+                type="button"
+                onClick={() => setPhotoSource(src)}
+                className={`text-xs uppercase tracking-wider px-3 py-2 -mb-px border-b-2 transition-colors ${
+                  photoSource === src
+                    ? "border-forest-dark text-forest-dark"
+                    : "border-transparent text-forest-dark/50 hover:text-forest-dark"
+                }`}
+              >
+                {src === "brand" ? "Brand Library" : "Google Drive"}
+              </button>
+            ))}
           </div>
+
+          {photoSource === "brand" ? (
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 max-h-[420px] overflow-y-auto pr-1">
+              {BRAND_PHOTOS.map((p) => {
+                const selected = galleryKeys.includes(p.key);
+                const order = selected ? galleryKeys.indexOf(p.key) + 1 : null;
+                return (
+                  <button
+                    key={p.key}
+                    type="button"
+                    onClick={() => togglePhoto(p.key)}
+                    title={p.label}
+                    className={`relative aspect-square overflow-hidden border-2 transition-all ${selected ? "border-gold ring-2 ring-gold/30" : "border-transparent hover:border-forest-dark/40"}`}
+                  >
+                    <img src={p.src} alt={p.label} loading="lazy" className="w-full h-full object-cover" />
+                    {selected && (
+                      <div className="absolute top-1 right-1 bg-gold text-forest-dark w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold">
+                        {order}
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <DrivePhotoBank
+              password={password}
+              showManager
+              selectedFileIds={galleryKeys
+                .filter((k) => k.startsWith("drive:"))
+                .map((k) => k.slice(6))}
+              onPick={(fileId) => togglePhoto(`drive:${fileId}`)}
+            />
+          )}
         </div>
 
         <div className={sectionCls}>
