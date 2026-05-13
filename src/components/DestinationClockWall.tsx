@@ -20,18 +20,15 @@ const DestinationClockWall = () => {
   const [now, setNow] = useState<Date>(() => new Date());
 
   useEffect(() => {
-    // Align to next minute, then tick every 60s
+    let interval: ReturnType<typeof setInterval> | undefined;
     const msToNextMinute = 60000 - (Date.now() % 60000);
     const timeout = setTimeout(() => {
       setNow(new Date());
-      const interval = setInterval(() => setNow(new Date()), 60000);
-      // Store on window to clear in cleanup
-      (timeout as unknown as { _i?: number })._i = interval as unknown as number;
+      interval = setInterval(() => setNow(new Date()), 60000);
     }, msToNextMinute);
     return () => {
-      const i = (timeout as unknown as { _i?: number })._i;
-      if (i) clearInterval(i as unknown as NodeJS.Timeout);
       clearTimeout(timeout);
+      if (interval) clearInterval(interval);
     };
   }, []);
 
