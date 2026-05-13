@@ -116,15 +116,15 @@ const Index = () => {
     <main id="main-content">
       <SEOHead title={seoTitle} description={seoDescription} canonical="/" ogImage={heroImage} />
       {/* Hero */}
-      <section className="relative h-screen overflow-hidden">
-        {/* Image – full screen on all devices */}
-        <div className="absolute inset-0 bg-forest-dark">
+      <section className="relative overflow-hidden">
+        {/* Image container */}
+        <div className="relative w-full aspect-[3/4] md:h-screen md:absolute md:inset-0 bg-forest-dark">
           <img src={heroImage} alt="Scott Syme, White Rabbit luxury magician tossing cards in a cinematic desert landscape – private event entertainment in Los Angeles" width={1200} height={630} className="w-full h-full object-cover object-[center_45%] md:object-[center_60%] scale-110" fetchPriority="high" />
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/30 to-forest-dark/10 hidden md:block" />
           {/* Bottom 40% gradient for text contrast */}
-          <div className="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-t from-black/45 via-black/15 to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-t from-black/45 via-black/15 to-transparent hidden md:block" />
           {/* Ambient warm glow behind hero text */}
-          <div className="absolute bottom-0 left-[10vw] w-[500px] h-[300px] bg-[radial-gradient(ellipse_at_center,_hsl(var(--accent)/0.08)_0%,_transparent_70%)] pointer-events-none" />
+          <div className="absolute bottom-0 left-[10vw] w-[500px] h-[300px] bg-[radial-gradient(ellipse_at_center,_hsl(var(--accent)/0.08)_0%,_transparent_70%)] pointer-events-none hidden md:block" />
         </div>
 
         {/* Atmospheric wisps */}
@@ -135,8 +135,8 @@ const Index = () => {
           <div className="hero-wisp hero-wisp-4 hidden md:block" />
         </div>
 
-        {/* Text overlaid — bottom-left aligned */}
-        <div className="absolute inset-0 z-10 flex flex-col items-start justify-end pb-28 md:pb-24 pl-6 md:pl-[10vw] pr-6 text-left">
+        {/* Text overlaid — bottom-left aligned (desktop only) */}
+        <div className="hidden md:flex absolute inset-0 z-10 flex-col items-start justify-end pb-28 md:pb-24 pl-6 md:pl-[10vw] pr-6 text-left">
           <motion.h1
             className="relative text-2xl md:text-[1.875rem] lg:text-[2.5rem] text-cream/90 tracking-wide font-bold font-serif drop-shadow-lg max-w-4xl"
             initial={{ opacity: 0, y: 20 }}
@@ -167,9 +167,9 @@ const Index = () => {
           </motion.div>
         </div>
 
-        {/* Rolling reviews — pinned to bottom of hero, visible on landing */}
+        {/* Rolling reviews — pinned to bottom of hero (desktop only) */}
         <motion.div
-          className="absolute bottom-0 left-0 right-0 z-20 bg-forest-dark/80 backdrop-blur-sm py-4 border-t border-accent/10"
+          className="hidden md:block absolute bottom-0 left-0 right-0 z-20 bg-forest-dark/80 backdrop-blur-sm py-4 border-t border-accent/10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.5 }}>
@@ -199,6 +199,70 @@ const Index = () => {
           </div>
         </motion.div>
       </section>
+
+      {/* Mobile text section */}
+      <section className="md:hidden bg-cream py-8 px-6">
+        <motion.h1
+          className="text-center text-2xl text-foreground tracking-wide font-bold font-serif max-w-lg mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.3 }}
+        >
+          Experience Magic<br />
+          <span className="block mt-2">That Makes You Feel Truly Alive</span>
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.6 }}
+          className="text-center mt-5 max-w-md mx-auto font-sans text-sm text-muted-foreground italic"
+        >
+          On call for private events across America's most considered destinations.
+        </motion.p>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.9 }}
+          className="flex justify-center mt-6">
+          <button
+            onClick={openQuiz}
+            className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-accent px-8 py-3 hover:bg-accent hover:text-accent-foreground transition-colors max-w-[280px] w-full text-center">
+            Book an Experience
+          </button>
+        </motion.div>
+      </section>
+
+      {/* Rolling reviews — mobile placement after text section */}
+      <motion.div
+        className="md:hidden bg-forest-dark/80 backdrop-blur-sm py-4 border-t border-accent/10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1.2 }}>
+        <div className="max-w-3xl mx-auto px-6">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={heroReviewIndex}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.4 }}
+              className="flex flex-col items-center justify-center gap-3"
+            >
+              <div className="flex gap-0.5">
+                {[...Array(5)].map((_, i) =>
+                  <Star key={i} size={14} className="fill-accent text-accent" />
+                )}
+              </div>
+              <p className="font-serif text-sm text-cream/90 text-center">
+                "{heroReviews[heroReviewIndex].text}"
+              </p>
+              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-cream/60 whitespace-nowrap">
+                — {heroReviews[heroReviewIndex].name}{heroReviews[heroReviewIndex].role ? `, ${heroReviews[heroReviewIndex].role}` : ""}
+              </p>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </motion.div>
 
       {/* Client Logos — static grid */}
       <AnimatedSection>
