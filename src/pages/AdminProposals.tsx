@@ -154,7 +154,7 @@ const AdminProposals = () => {
     if (!to) return;
     const subject = prompt("Subject:", `Your White Rabbit LA Proposal — ${proposal.first_name}`);
     if (!subject) return;
-    const message = prompt("Personal message:", `${proposal.first_name},\n\nHere's the proposal we discussed. Take your time with it — call me anytime.\n\n— Scott`);
+    const message = prompt("Personal message (greeting and signature are added automatically):", `Here's the proposal we discussed. Take your time with it — call me anytime.\n\nBest,\n-Scott`);
     if (message === null) return;
     const link = `${window.location.origin}/proposal/${proposal.slug}`;
     try {
