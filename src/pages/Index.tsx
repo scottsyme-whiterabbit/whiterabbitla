@@ -90,7 +90,7 @@ const Index = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const seoTitle = "White Rabbit LA";
+  const seoTitle = "White Rabbit LA — Luxury Magic Entertainment";
   const seoDescription = "Luxury magic entertainment for corporate events, weddings, and private celebrations. Led by Scott Syme — Magic Castle member.";
 
   // Homepage Person schema

@@ -34,16 +34,18 @@ Primary: Los Angeles, Beverly Hills, Hollywood, Santa Monica, Malibu, West Holly
 
 Also serving: New York, Miami, Las Vegas, San Francisco, Chicago, Dallas, Austin, Nashville, Scottsdale, Aspen, The Hamptons, Greenwich, Palm Beach, Nantucket, Martha's Vineyard, and 80+ additional cities nationwide.
 
-## Key Pages
+## Pages
 
-- Homepage: https://whiterabbitla.com/
-- Experience (What to Expect): https://whiterabbitla.com/experience
-- About Scott Syme: https://whiterabbitla.com/about
-- Client Reviews: https://whiterabbitla.com/reviews
-- Service Areas: https://whiterabbitla.com/areas
-- Blog and Guides: https://whiterabbitla.com/blog
-- Contact / Booking: https://whiterabbitla.com/contact
-- Event Quiz (find your fit): https://whiterabbitla.com/quiz
+- [Homepage](/): Luxury magic entertainment for corporate events, weddings, and private celebrations.
+- [Experience](/experience): What to expect when you book White Rabbit.
+- [About Scott Syme](/about): Magician, Magic Castle member, and former luxury real estate professional.
+- [Services](/services): Full list of magic services and event types.
+- [Service Areas](/areas): Cities and regions served nationwide.
+- [Client Reviews](/reviews): 5-star reviews from corporate planners, brides, and private hosts.
+- [Blog and Guides](/blog): Editorial articles on luxury event entertainment.
+- [Contact / Booking](/contact): Check availability and request a personalized quote.
+- [Event Quiz](/quiz): Find your fit in under a minute.
+- [For Planners](/planners): Resources for event planners and DMCs.
 
 ## Contact
 
