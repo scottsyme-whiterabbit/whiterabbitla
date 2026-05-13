@@ -205,10 +205,19 @@ const AdminProposals = () => {
   return (
     <div className="min-h-screen bg-cream p-6 md:p-10">
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="font-serif text-3xl md:text-4xl text-forest-dark">Proposals</h1>
-            <p className="text-sm text-forest-dark/60 mt-1">Build, preview, and send personalized proposals.</p>
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+          <div className="flex items-center gap-3">
+            <a
+              href="/admin/newsletter"
+              className="inline-flex items-center justify-center w-10 h-10 border border-forest-dark/20 text-forest-dark hover:bg-white transition-colors"
+              title="Back to Dashboard"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </a>
+            <div>
+              <h1 className="font-serif text-3xl md:text-4xl text-forest-dark">Proposals</h1>
+              <p className="text-sm text-forest-dark/60 mt-1">Build, preview, and send personalized proposals.</p>
+            </div>
           </div>
           <button onClick={startNew} className="bg-forest-dark text-cream px-5 py-3 flex items-center gap-2 hover:opacity-90">
             <Plus className="w-4 h-4" /> New Proposal
