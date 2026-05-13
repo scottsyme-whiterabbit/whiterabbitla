@@ -122,8 +122,10 @@ const Index = () => {
         <div className="absolute inset-0 bg-forest-dark">
           <img src={heroImage} alt="Scott Syme, White Rabbit luxury magician tossing cards in a cinematic desert landscape – private event entertainment in Los Angeles" width={1200} height={630} className="w-full h-full object-cover object-[center_45%] md:object-[center_60%] scale-110" fetchPriority="high" />
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/30 to-forest-dark/10 hidden md:block" />
+          {/* Bottom 40% gradient for text contrast */}
+          <div className="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-t from-black/45 via-black/15 to-transparent" />
           {/* Ambient warm glow behind hero text */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[radial-gradient(ellipse_at_center,_hsl(var(--accent)/0.08)_0%,_transparent_70%)] pointer-events-none" />
+          <div className="absolute bottom-0 left-[10vw] w-[500px] h-[300px] bg-[radial-gradient(ellipse_at_center,_hsl(var(--accent)/0.08)_0%,_transparent_70%)] pointer-events-none" />
         </div>
 
         {/* Atmospheric wisps */}
@@ -134,11 +136,10 @@ const Index = () => {
           <div className="hero-wisp hero-wisp-4 hidden md:block" />
         </div>
 
-        {/* Text overlaid */}
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-end pb-32 md:pb-20 px-6 text-center">
-          <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent md:from-forest-dark/70 md:via-forest-dark/30 md:to-forest-dark/10" />
+        {/* Text overlaid — bottom-left aligned */}
+        <div className="absolute inset-0 z-10 flex flex-col items-start justify-end pb-28 md:pb-24 pl-6 md:pl-[10vw] pr-6 text-left">
           <motion.h1
-            className="relative text-2xl md:text-4xl lg:text-5xl text-cream/90 tracking-wide font-bold font-serif drop-shadow-lg max-w-4xl"
+            className="relative text-2xl md:text-[1.875rem] lg:text-[2.5rem] text-cream/90 tracking-wide font-bold font-serif drop-shadow-lg max-w-4xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
