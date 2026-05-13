@@ -51,6 +51,16 @@ import ladiesDeckRibbon from "@/assets/events/ladies-luncheon-deck-ribbon.jpg";
 import ladiesRibbonCurtain from "@/assets/events/ladies-luncheon-ribbon-curtain.jpg";
 import ladiesRibbonReveal from "@/assets/events/ladies-luncheon-ribbon-reveal.jpg";
 import ladiesScottPointing from "@/assets/events/ladies-luncheon-scott-pointing.jpg";
+import ladies1566 from "@/assets/events/ladies-luncheon-1566.jpg";
+import ladies1568 from "@/assets/events/ladies-luncheon-1568.jpg";
+import ladies1570 from "@/assets/events/ladies-luncheon-1570.jpg";
+import ladies1573 from "@/assets/events/ladies-luncheon-1573.jpg";
+import ladies1576 from "@/assets/events/ladies-luncheon-1576.jpg";
+import ladies1581 from "@/assets/events/ladies-luncheon-1581.jpg";
+import ladies1607 from "@/assets/events/ladies-luncheon-1607.jpg";
+import ladies1608 from "@/assets/events/ladies-luncheon-1608.jpg";
+import ladies1628 from "@/assets/events/ladies-luncheon-1628.jpg";
+import ladies1647 from "@/assets/events/ladies-luncheon-1647.jpg";
 
 export interface BrandPhoto {
   key: string;
@@ -107,6 +117,16 @@ export const BRAND_PHOTOS: BrandPhoto[] = [
   { key: "ladies-deck-ribbon", src: ladiesDeckRibbon, label: "Luncheon Deck on Ribbon" },
   { key: "ladies-card-ribbon", src: ladiesCardRibbon, label: "Luncheon Card & Ribbon" },
   { key: "ladies-scott-pointing", src: ladiesScottPointing, label: "Luncheon Scott Performing" },
+  { key: "ladies-1566", src: ladies1566, label: "Luncheon Table Address" },
+  { key: "ladies-1568", src: ladies1568, label: "Luncheon Hosts Group" },
+  { key: "ladies-1570", src: ladies1570, label: "Luncheon Hosts Welcome" },
+  { key: "ladies-1573", src: ladies1573, label: "Luncheon Hosts Smiling" },
+  { key: "ladies-1576", src: ladies1576, label: "Luncheon Hosts Lineup" },
+  { key: "ladies-1581", src: ladies1581, label: "Luncheon Hosts Closeup" },
+  { key: "ladies-1607", src: ladies1607, label: "Luncheon Room Tables" },
+  { key: "ladies-1608", src: ladies1608, label: "Luncheon Scott Stage" },
+  { key: "ladies-1628", src: ladies1628, label: "Luncheon Scott Notepad" },
+  { key: "ladies-1647", src: ladies1647, label: "Luncheon Sharpie Reveal" },
 ];
 
 export const photoKeyToSrc = (key: string): string | null => {
