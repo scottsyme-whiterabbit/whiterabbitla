@@ -199,9 +199,19 @@ const SeoLanding = () => {
         "A follow-up to make sure your event exceeded expectations",
       ];
 
+  // Thin/duplicate suffix patterns: keep page live but tell Google not to index.
+  // Avoids "Discovered – not submitted" and "Duplicate without canonical" reports.
+  const noIndexSuffixes = [
+    "rehearsal-dinner-magician",
+    "halloween-party-magician",
+    "christmas-party-magician",
+    "premiere-red-carpet-magician",
+  ];
+  const shouldNoIndex = noIndexSuffixes.some((s) => page.slug.endsWith(s));
+
   return (
     <main id="main-content" className="pt-20 pb-16 md:pb-0">
-      <SEOHead title={seoTitle} description={seoDescription} canonical={seoPath} ogImage={experienceImg} />
+      <SEOHead title={seoTitle} description={seoDescription} canonical={seoPath} ogImage={experienceImg} noIndex={shouldNoIndex} />
       {/* Hero */}
       <section className="relative py-28 lg:py-36 overflow-hidden">
         <div className="absolute inset-0">
