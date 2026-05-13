@@ -33,7 +33,7 @@ function gwHeaders(extra: Record<string, string> = {}) {
 }
 
 function isAdmin(req: Request) {
-  const t = req.headers.get("x-admin-token") ?? "";
+  const t = req.headers.get("x-admin-password") ?? "";
   return ADMIN_PASSWORD.length > 0 && t === ADMIN_PASSWORD;
 }
 
