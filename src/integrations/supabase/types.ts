@@ -365,6 +365,30 @@ export type Database = {
         }
         Relationships: []
       }
+      drive_photo_folders: {
+        Row: {
+          created_at: string
+          folder_id: string
+          id: string
+          label: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          folder_id: string
+          id?: string
+          label: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          folder_id?: string
+          id?: string
+          label?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       edge_function_requests: {
         Row: {
           auth_result: string
