@@ -11,6 +11,8 @@ import FAQSection from "@/components/FAQSection";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
+import DestinationClockWall from "@/components/DestinationClockWall";
+import Guestbook from "@/components/Guestbook";
 
 import SEOHead from "@/components/SEOHead";
 import { useJsonLd } from "@/hooks/useSchemaOrg";
@@ -90,8 +92,8 @@ const Index = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const seoTitle = "White Rabbit LA — Luxury Magic Entertainment";
-  const seoDescription = "Luxury magic entertainment for corporate events, weddings, and private celebrations. Led by Scott Syme — Magic Castle member.";
+  const seoTitle = "White Rabbit LA — Private Magic, by Appointment";
+  const seoDescription = "Close-up magic and mentalism for private events in Los Angeles, Aspen, Jackson Hole, the Hamptons, and select destinations. By appointment. Member, The Magic Castle®. Trusted by Netflix, Disney, and Morgan Stanley.";
 
   // Homepage Person schema
   useJsonLd("homepage-person-schema", {
@@ -144,11 +146,19 @@ const Index = () => {
             Experience Magic<br />
             <span className="block mt-2 md:mt-3">That Makes You Feel Truly Alive</span>
           </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.85 }}
+            className="relative mt-5 md:mt-7 max-w-xl font-sans text-sm md:text-base text-cream/75 italic"
+          >
+            On call for private events across America's most considered destinations.
+          </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1 }}
-            className="relative mt-6 md:mt-12">
+            className="relative mt-6 md:mt-8">
             <button
               onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-10 py-4 hover:bg-accent hover:text-accent-foreground transition-colors">
@@ -214,6 +224,16 @@ const Index = () => {
             </div>
           </div>
         </section>
+      </AnimatedSection>
+
+      {/* Destination Clock Wall */}
+      <AnimatedSection>
+        <DestinationClockWall />
+      </AnimatedSection>
+
+      {/* From the Guestbook */}
+      <AnimatedSection>
+        <Guestbook />
       </AnimatedSection>
 
       {/* Quiz Nudge — after social proof */}
