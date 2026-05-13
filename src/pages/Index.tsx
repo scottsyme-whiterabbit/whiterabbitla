@@ -11,6 +11,8 @@ import FAQSection from "@/components/FAQSection";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
+import DestinationClockWall from "@/components/DestinationClockWall";
+import Guestbook from "@/components/Guestbook";
 
 import SEOHead from "@/components/SEOHead";
 import { useJsonLd } from "@/hooks/useSchemaOrg";
