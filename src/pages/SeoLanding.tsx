@@ -201,11 +201,21 @@ const SeoLanding = () => {
 
   // Thin/duplicate suffix patterns: keep page live but tell Google not to index.
   // Avoids "Discovered – not submitted" and "Duplicate without canonical" reports.
+  // Thin city × service combos GSC flags as "Duplicate without canonical".
+  // Kept live for direct/social traffic, but noindexed so Google stops
+  // diluting the canonical /areas/[city] and /services/[service] pages.
   const noIndexSuffixes = [
     "rehearsal-dinner-magician",
     "halloween-party-magician",
     "christmas-party-magician",
     "premiere-red-carpet-magician",
+    "red-carpet-magician",
+    "dmc-entertainment",
+    "resident-event-magician",
+    "trade-show-magician",
+    "holiday-party-magician",
+    "charity-gala-magician",
+    "golf-tournament-magician",
   ];
   const shouldNoIndex = noIndexSuffixes.some((s) => page.slug.endsWith(s));
 
