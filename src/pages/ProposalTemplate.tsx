@@ -292,7 +292,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       })()}
 
       {/* TIERS */}
-      <section className="relative bg-forest-dark text-cream py-16 md:py-24 px-6 overflow-hidden">
+      <section className="relative bg-forest-dark text-cream py-20 md:py-32 px-6 overflow-hidden">
         <Flourishes tone="cream" size="md" />
         <div className="max-w-6xl mx-auto relative">
           <div className="text-center mb-12">
