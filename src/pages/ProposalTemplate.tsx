@@ -338,19 +338,8 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         </div>
       </section>
 
-      {/* THANK YOU — quiet, hosted */}
-      <section className="relative bg-cream pt-20 md:pt-28 pb-8 md:pb-10 px-6 text-center">
-        <div className="max-w-xl mx-auto">
-          <span className="text-gold text-sm">✦</span>
-          <p className="font-serif text-2xl md:text-3xl text-forest-dark leading-relaxed mt-6">
-            Thank you for trusting me with your evening.
-          </p>
-          <p className="font-serif text-xl text-forest-dark/70 mt-4">— Scott</p>
-        </div>
-      </section>
-
       {/* PROOF */}
-      <section className="relative bg-cream pt-8 md:pt-10 pb-16 md:pb-20 px-6">
+      <section className="relative bg-cream py-16 md:py-20 px-6">
         <div className="max-w-5xl mx-auto text-center">
           <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">In Good Company</p>
           <OrnamentalDivider />
@@ -427,6 +416,15 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
             <Phone className="w-4 h-4 text-gold" />
             <span className="text-sm">Prefer to talk it through?</span>
             <a href="tel:+14243941850" className="text-cream hover:text-gold transition-colors text-sm font-medium">(424) 394-1850</a>
+          </div>
+
+          {/* Quiet thank-you — hosted closing note */}
+          <div className="mt-14 pt-10 border-t border-gold/20 max-w-xl mx-auto">
+            <span className="text-gold text-sm">✦</span>
+            <p className="font-serif text-2xl md:text-3xl text-cream leading-relaxed mt-5">
+              Thank you for trusting me with your evening.
+            </p>
+            <p className="font-serif text-xl text-cream/70 mt-4">— Scott</p>
           </div>
         </div>
       </section>
