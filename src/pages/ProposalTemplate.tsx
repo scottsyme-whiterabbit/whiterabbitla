@@ -411,9 +411,10 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           <div className="grid md:grid-cols-3 gap-3 mt-10 max-w-4xl mx-auto">
             {data.tiers.map((tier, i) => {
               const rec = tier.recommended;
-              if (!tier.href) return null;
+              const linkHref = resolveTierHref(tier);
+              if (!linkHref) return null;
               return (
-                <a key={i} href={tier.href} target="_blank" rel="noopener noreferrer" className={`block py-4 px-5 text-xs tracking-[0.15em] uppercase font-medium transition-opacity hover:opacity-85 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream hover:border-gold hover:text-gold"}`}>
+                <a key={i} href={linkHref} target="_blank" rel="noopener noreferrer" className={`block py-4 px-5 text-xs tracking-[0.15em] uppercase font-medium transition-opacity hover:opacity-85 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream hover:border-gold hover:text-gold"}`}>
                   {tier.cta} — {tier.price}
                 </a>
               );
