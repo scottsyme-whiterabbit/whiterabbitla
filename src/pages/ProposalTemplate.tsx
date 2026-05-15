@@ -338,6 +338,17 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         </div>
       </section>
 
+      {/* THANK YOU — quiet, hosted */}
+      <section className="relative bg-cream py-20 md:py-28 px-6 text-center">
+        <div className="max-w-xl mx-auto">
+          <span className="text-gold text-sm">✦</span>
+          <p className="font-serif text-2xl md:text-3xl text-forest-dark leading-relaxed mt-6">
+            Thank you for trusting me with your evening.
+          </p>
+          <p className="font-serif text-xl text-forest-dark/70 mt-4">— Scott</p>
+        </div>
+      </section>
+
       {/* PROOF */}
       <section className="relative bg-cream py-16 md:py-20 px-6">
         <div className="max-w-5xl mx-auto text-center">
