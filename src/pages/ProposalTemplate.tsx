@@ -417,15 +417,6 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
             <span className="text-sm">Prefer to talk it through?</span>
             <a href="tel:+14243941850" className="text-cream hover:text-gold transition-colors text-sm font-medium">(424) 394-1850</a>
           </div>
-
-          {/* Quiet thank-you — hosted closing note */}
-          <div className="mt-14 pt-10 border-t border-gold/20 max-w-xl mx-auto">
-            <span className="text-gold text-sm">✦</span>
-            <p className="font-serif text-2xl md:text-3xl text-cream leading-relaxed mt-5">
-              Thank you for trusting me with your evening.
-            </p>
-            <p className="font-serif text-xl text-cream/70 mt-4">— Scott</p>
-          </div>
         </div>
       </section>
 
