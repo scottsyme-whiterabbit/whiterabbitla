@@ -204,7 +204,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       </section>
 
       {/* LETTER */}
-      <section className="relative bg-cream py-16 md:py-20 px-6">
+      <section className="relative bg-cream py-20 md:py-28 px-6">
         <Flourishes size="sm" />
         <div className="max-w-2xl mx-auto">
           <OrnamentalDivider />
@@ -238,7 +238,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       </section>
 
       {/* YOUR NIGHT */}
-      <section className="relative bg-cream py-16 md:py-24 px-6">
+      <section className="relative bg-cream py-20 md:py-28 px-6">
         <div className="max-w-2xl mx-auto text-center">
           <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">Your Night</p>
           <OrnamentalDivider />
@@ -292,7 +292,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       })()}
 
       {/* TIERS */}
-      <section className="relative bg-forest-dark text-cream py-16 md:py-24 px-6 overflow-hidden">
+      <section className="relative bg-forest-dark text-cream py-20 md:py-32 px-6 overflow-hidden">
         <Flourishes tone="cream" size="md" />
         <div className="max-w-6xl mx-auto relative">
           <div className="text-center mb-12">
@@ -317,7 +317,6 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
                   <span className="absolute bottom-0 left-0 w-px h-4 bg-gold/70" />
                   <span className="absolute bottom-0 right-0 w-4 h-px bg-gold/70" />
                   <span className="absolute bottom-0 right-0 w-px h-4 bg-gold/70" />
-                  {rec && <div className="text-[10px] tracking-[0.3em] uppercase text-gold mb-4">✦ Recommended ✦</div>}
                   <h3 className="font-serif font-light text-2xl md:text-3xl leading-tight mb-2">{tier.name}</h3>
                   <p className="font-sans text-cream/65 mb-5 text-sm">{tier.tagline}</p>
                   <div className="w-10 h-px bg-gold/60 mb-5" />
@@ -336,6 +335,17 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* THANK YOU — quiet, hosted */}
+      <section className="relative bg-cream py-20 md:py-28 px-6 text-center">
+        <div className="max-w-xl mx-auto">
+          <span className="text-gold text-sm">✦</span>
+          <p className="font-serif text-2xl md:text-3xl text-forest-dark leading-relaxed mt-6">
+            Thank you for trusting me with your evening.
+          </p>
+          <p className="font-serif text-xl text-forest-dark/70 mt-4">— Scott</p>
         </div>
       </section>
 

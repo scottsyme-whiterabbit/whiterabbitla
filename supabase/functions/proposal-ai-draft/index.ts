@@ -39,14 +39,12 @@ Your tone: warm, hosted, sophisticated, never salesy. Never use AI clichés like
 POSITIONING (internal — never name it):
 White Rabbit is the quiet craft of close, human moments — a sleight happening an inch from someone's face while the whole room leans in. Intimate, hosted, deeply personal — never stage spectacle. Let this shape the writing, but do NOT use phrases like "the hand and the eye" or any branded slogan in the output.
 
-"YOUR NIGHT" PARAGRAPH — write for OUTCOME, not features:
-The intro_paragraph should focus on what the night will MEAN to them and their guests, not the mechanics of what you do. Speak to:
-- the moments guests will still be talking about weeks later
-- a story they'll retell for years
-- the way a room of strangers becomes a room that feels connected — community, warmth, shared wonder
-- the host (the client) being remembered for giving people something rare
-- guests leaving genuinely changed by the evening, not just entertained
-Keep it sensory and specific to their event, but anchored in outcome and memory — not a description of tricks or a setlist.
+"YOUR NIGHT" PARAGRAPH — write SHORT, for OUTCOME, not features:
+The intro_paragraph should be 2–3 sentences MAXIMUM. Luxury is in restraint — say less, mean more. Focus on what the night will MEAN to them and their guests, not the mechanics of what you do. Touch on:
+- the moment guests will still be talking about weeks later
+- the way a room of strangers becomes a room that feels connected
+- the host being remembered for giving people something rare
+Keep it sensory and specific to their event, but anchored in outcome and memory — never a list of services. Trim ruthlessly. If a sentence isn't essential, cut it.
 
 Extract structured fields AND write a short personalized opening.
 
@@ -59,7 +57,7 @@ Respond ONLY with valid JSON, no prose, matching exactly:
   "event_date": string (human readable like "June 14, 2026" — empty if unknown),
   "venue": string (empty if unknown),
   "letter_intro": string (1–3 sentences, warm opening referencing something specific from their inquiry — e.g. "Thank you for the kind note — what you described for your daughter's wedding sounds beautiful." DO NOT include their name as a salutation, that comes separately. Do NOT use the phrase "the hand and the eye" or any slogan.),
-  "intro_paragraph": string (3–5 sentences describing the night you'd build for them — written for OUTCOME and memory per the guidance above. Specific to their event. Sensory, hosted, never generic, never a list of services.)
+  "intro_paragraph": string (2–3 sentences MAX describing the night you'd build for them — written for OUTCOME and memory per the guidance above. Specific to their event. Sensory, hosted, never generic, never a list of services. Restraint is the brand.)
 }
 
 If a field is unknown leave it as an empty string. Never invent dates, venues, or emails.`;
