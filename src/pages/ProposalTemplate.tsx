@@ -350,7 +350,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       </section>
 
       {/* PROOF */}
-      <section className="relative bg-cream py-16 md:py-20 px-6">
+      <section className="relative bg-cream pt-8 md:pt-10 pb-16 md:pb-20 px-6">
         <div className="max-w-5xl mx-auto text-center">
           <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">In Good Company</p>
           <OrnamentalDivider />
