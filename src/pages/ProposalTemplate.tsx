@@ -428,8 +428,8 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           Thank you for trusting me with your evening.
         </p>
         <p
-          className="text-5xl md:text-6xl text-forest-dark/85 mt-6 leading-none"
-          style={{ fontFamily: "'Pinyon Script', cursive" }}
+          className="text-3xl md:text-4xl text-forest-dark/85 mt-8 leading-tight -rotate-2 inline-block"
+          style={{ fontFamily: "'Homemade Apple', cursive" }}
         >
           Scott Syme
         </p>
