@@ -204,7 +204,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       </section>
 
       {/* LETTER */}
-      <section className="relative bg-cream py-16 md:py-20 px-6">
+      <section className="relative bg-cream py-20 md:py-28 px-6">
         <Flourishes size="sm" />
         <div className="max-w-2xl mx-auto">
           <OrnamentalDivider />
