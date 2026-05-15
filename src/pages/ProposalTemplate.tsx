@@ -317,7 +317,6 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
                   <span className="absolute bottom-0 left-0 w-px h-4 bg-gold/70" />
                   <span className="absolute bottom-0 right-0 w-4 h-px bg-gold/70" />
                   <span className="absolute bottom-0 right-0 w-px h-4 bg-gold/70" />
-                  {rec && <div className="text-[10px] tracking-[0.3em] uppercase text-gold mb-4">✦ Recommended ✦</div>}
                   <h3 className="font-serif font-light text-2xl md:text-3xl leading-tight mb-2">{tier.name}</h3>
                   <p className="font-sans text-cream/65 mb-5 text-sm">{tier.tagline}</p>
                   <div className="w-10 h-px bg-gold/60 mb-5" />
