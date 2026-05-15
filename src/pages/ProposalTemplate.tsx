@@ -417,15 +417,6 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
             <span className="text-sm">Prefer to talk it through?</span>
             <a href="tel:+14243941850" className="text-cream hover:text-gold transition-colors text-sm font-medium">(424) 394-1850</a>
           </div>
-
-          {/* Quiet thank-you — hosted closing note */}
-          <div className="mt-14 pt-10 border-t border-gold/20 max-w-xl mx-auto">
-            <span className="text-gold text-sm">✦</span>
-            <p className="font-serif text-2xl md:text-3xl text-cream leading-relaxed mt-5">
-              Thank you for trusting me with your evening.
-            </p>
-            <p className="font-serif text-xl text-cream/70 mt-4">— Scott</p>
-          </div>
         </div>
       </section>
 
@@ -433,12 +424,15 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       <section className="relative bg-cream text-center py-14 px-6">
         <Flourishes size="sm" />
         <img src={threeStars} alt="" className="w-10 mx-auto mb-6 opacity-70" />
-        {data.closing_quote && (
-          <p className="font-serif text-2xl md:text-3xl text-forest-dark max-w-2xl mx-auto leading-relaxed">{data.closing_quote}</p>
-        )}
-        {data.closing_attribution && (
-          <p className="text-xs tracking-[0.3em] uppercase text-forest-dark/50 mt-3">{data.closing_attribution}</p>
-        )}
+        <p className="font-serif text-2xl md:text-3xl text-forest-dark max-w-2xl mx-auto leading-relaxed">
+          Thank you for trusting me with your evening.
+        </p>
+        <p
+          className="text-5xl md:text-6xl text-forest-dark/85 mt-6 leading-none"
+          style={{ fontFamily: "'Pinyon Script', cursive" }}
+        >
+          Scott Syme
+        </p>
         <div className="flex items-center justify-center gap-3 mt-8 mb-5">
           <span className="w-10 h-px bg-gold/60" />
           <span className="text-gold">✦</span>
