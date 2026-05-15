@@ -238,7 +238,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       </section>
 
       {/* YOUR NIGHT */}
-      <section className="relative bg-cream py-16 md:py-24 px-6">
+      <section className="relative bg-cream py-20 md:py-28 px-6">
         <div className="max-w-2xl mx-auto text-center">
           <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">Your Night</p>
           <OrnamentalDivider />
