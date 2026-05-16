@@ -854,6 +854,7 @@ export type Database = {
           recipient_email: string | null
           sent_at: string | null
           slug: string
+          square_invoice_url: string | null
           tiers: Json
           timeline: Json
           updated_at: string
@@ -876,6 +877,7 @@ export type Database = {
           recipient_email?: string | null
           sent_at?: string | null
           slug: string
+          square_invoice_url?: string | null
           tiers?: Json
           timeline?: Json
           updated_at?: string
@@ -898,6 +900,7 @@ export type Database = {
           recipient_email?: string | null
           sent_at?: string | null
           slug?: string
+          square_invoice_url?: string | null
           tiers?: Json
           timeline?: Json
           updated_at?: string

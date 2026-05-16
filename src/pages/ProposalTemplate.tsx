@@ -83,6 +83,7 @@ export interface ProposalData {
   closing_quote?: string | null;
   closing_attribution?: string | null;
   gallery_photos?: string[]; // optional: brand-photo keys to override default gallery grid
+  square_invoice_url?: string | null; // single Square invoice URL — fills every Reserve button if set
 }
 
 interface Props {
@@ -171,6 +172,9 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const heroSrc = HERO_MAP[data.hero_image] || HERO_MAP.wedding;
   const fullName = `${data.first_name} ${data.last_name}`.trim();
+  const payUrl = (data.square_invoice_url || "").trim() || null;
+  const resolveTierHref = (t: Tier) => (t.href && t.href.trim()) || payUrl;
+  const reserveLabel = payUrl ? "Pay Deposit & Reserve" : "Reserve";
 
   // Corner flourishes — currently disabled
   const Flourishes = (_: { tone?: "gold" | "cream"; size?: "sm" | "md" | "lg" }) => null;
@@ -326,11 +330,14 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
                     ))}
                   </ul>
                   <div className="font-serif text-4xl md:text-5xl font-light mb-5">{tier.price}</div>
-                  {tier.href ? (
-                    <a href={tier.href} target="_blank" rel="noopener noreferrer" className={`block text-center py-3.5 px-6 text-xs tracking-[0.2em] uppercase font-medium transition-all hover:opacity-85 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream hover:border-gold hover:text-gold"}`}>Reserve</a>
-                  ) : (
-                    <div className={`block text-center py-3.5 px-6 text-xs tracking-[0.2em] uppercase font-medium opacity-50 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream"}`}>Reserve</div>
-                  )}
+                  {(() => {
+                    const linkHref = resolveTierHref(tier);
+                    return linkHref ? (
+                      <a href={linkHref} target="_blank" rel="noopener noreferrer" className={`block text-center py-3.5 px-6 text-xs tracking-[0.2em] uppercase font-medium transition-all hover:opacity-85 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream hover:border-gold hover:text-gold"}`}>{reserveLabel}</a>
+                    ) : (
+                      <div className={`block text-center py-3.5 px-6 text-xs tracking-[0.2em] uppercase font-medium opacity-50 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream"}`}>{reserveLabel}</div>
+                    );
+                  })()}
                 </div>
               );
             })}
@@ -404,9 +411,10 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           <div className="grid md:grid-cols-3 gap-3 mt-10 max-w-4xl mx-auto">
             {data.tiers.map((tier, i) => {
               const rec = tier.recommended;
-              if (!tier.href) return null;
+              const linkHref = resolveTierHref(tier);
+              if (!linkHref) return null;
               return (
-                <a key={i} href={tier.href} target="_blank" rel="noopener noreferrer" className={`block py-4 px-5 text-xs tracking-[0.15em] uppercase font-medium transition-opacity hover:opacity-85 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream hover:border-gold hover:text-gold"}`}>
+                <a key={i} href={linkHref} target="_blank" rel="noopener noreferrer" className={`block py-4 px-5 text-xs tracking-[0.15em] uppercase font-medium transition-opacity hover:opacity-85 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream hover:border-gold hover:text-gold"}`}>
                   {tier.cta} — {tier.price}
                 </a>
               );

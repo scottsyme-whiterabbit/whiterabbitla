@@ -592,6 +592,22 @@ const ProposalEditor = ({
           ))}
         </div>
 
+        {/* Square Invoice URL (proposal-level) */}
+        <div className={sectionCls}>
+          <h2 className="font-serif text-xl text-forest-dark mb-2">Square Invoice URL</h2>
+          <p className="text-xs text-forest-dark/60 mb-3">
+            Paste the public payment link from the Square invoice you prepared for this client (looks like <code>https://squareup.com/pay-invoice/...</code>).
+            When set, every <strong>Reserve</strong> button on the proposal opens this invoice so they can pay the 50% deposit right there. Button text becomes "Pay Deposit &amp; Reserve."
+            Leave blank to keep the per-tier links below.
+          </p>
+          <input
+            className={inputCls}
+            placeholder="https://squareup.com/pay-invoice/..."
+            value={proposal.square_invoice_url || ""}
+            onChange={(e) => update({ square_invoice_url: e.target.value })}
+          />
+        </div>
+
         {/* Tiers */}
         <div className={sectionCls}>
           <div className="flex items-center justify-between mb-4">
