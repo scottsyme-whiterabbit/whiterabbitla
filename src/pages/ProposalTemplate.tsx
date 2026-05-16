@@ -420,6 +420,11 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
               );
             })}
           </div>
+          <p className="mt-8 font-sans text-sm text-cream/70 max-w-2xl mx-auto">
+            To reserve, simply reply to my email or write to{" "}
+            <a href={`mailto:scott.syme@whiterabbitla.com?subject=${encodeURIComponent(`Reserving ${data.first_name ? data.first_name + "'s" : "our"} date`)}`} className="text-gold hover:opacity-80 transition-opacity">scott.syme@whiterabbitla.com</a>
+            {" "}letting me know which experience you'd like. I'll send the invoice and confirm the date the same day.
+          </p>
           <div className="mt-12 flex items-center justify-center gap-2 text-cream/70">
             <Phone className="w-4 h-4 text-gold" />
             <span className="text-sm">Prefer to talk it through?</span>
