@@ -57,10 +57,16 @@ Respond ONLY with valid JSON, no prose, matching exactly:
   "event_date": string (human readable like "June 14, 2026" — empty if unknown),
   "venue": string (empty if unknown),
   "letter_intro": string (1–3 sentences, warm opening referencing something specific from their inquiry — e.g. "Thank you for the kind note — what you described for your daughter's wedding sounds beautiful." DO NOT include their name as a salutation, that comes separately. Do NOT use the phrase "the hand and the eye" or any slogan.),
-  "intro_paragraph": string (2–3 sentences MAX describing the night you'd build for them — written for OUTCOME and memory per the guidance above. Specific to their event. Sensory, hosted, never generic, never a list of services. Restraint is the brand.)
+  "intro_paragraph": string (2–3 sentences MAX describing the night you'd build for them — written for OUTCOME and memory per the guidance above. Specific to their event. Sensory, hosted, never generic, never a list of services. Restraint is the brand.),
+  "tier_prices": {
+    "tier_1": string,
+    "tier_2": string,
+    "tier_3": string
+  } (OPTIONAL — only fill if the inquiry mentions a budget, price range, or specific dollar figure. Map their budget to three tiers using these White Rabbit price anchors as the floor: Tier 1 (cocktail hour only) starts at $1,800, Tier 2 (signature evening, recommended) starts at $3,500, Tier 3 (full estate/production) starts at $5,500. If they signal a higher budget (e.g. "$10k", "around 8 thousand"), scale all three tiers up proportionally while keeping Tier 2 ≈ 1.8–2× Tier 1 and Tier 3 ≈ 1.5–1.7× Tier 2. Always format as "$X,XXX" with comma. If no budget is mentioned, leave all three as empty strings and the defaults will be used.)
 }
 
 If a field is unknown leave it as an empty string. Never invent dates, venues, or emails.`;
+
 
     const userPrompt = `Inquiry text:\n\n${inquiry_text.slice(0, 4000)}`;
 
