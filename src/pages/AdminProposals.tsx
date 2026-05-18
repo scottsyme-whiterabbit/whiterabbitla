@@ -601,12 +601,17 @@ const ProposalEditor = ({
             <button onClick={addTimeline} className="text-sm text-forest-dark/70 hover:text-forest-dark flex items-center gap-1"><Plus className="w-4 h-4" /> Add</button>
           </div>
           {proposal.timeline.map((t, i) => (
-            <div key={i} className="grid grid-cols-12 gap-3 mb-3">
+            <div key={i} className="grid grid-cols-12 gap-2 mb-3 items-center">
               <input className={inputCls + " col-span-3"} placeholder="6:30 PM" value={t.time} onChange={(e) => updateTimeline(i, { time: e.target.value })} />
-              <input className={inputCls + " col-span-8"} placeholder="Description" value={t.desc} onChange={(e) => updateTimeline(i, { desc: e.target.value })} />
-              <button onClick={() => removeTimeline(i)} className="col-span-1 text-red-600 hover:bg-red-50"><Trash2 className="w-4 h-4 mx-auto" /></button>
+              <input className={inputCls + " col-span-6"} placeholder="Description" value={t.desc} onChange={(e) => updateTimeline(i, { desc: e.target.value })} />
+              <div className="col-span-3 flex items-center justify-end gap-1">
+                <button onClick={() => moveTimeline(i, -1)} disabled={i === 0} title="Move up" className="p-1.5 border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowUp className="w-4 h-4" /></button>
+                <button onClick={() => moveTimeline(i, 1)} disabled={i === proposal.timeline.length - 1} title="Move down" className="p-1.5 border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowDown className="w-4 h-4" /></button>
+                <button onClick={() => removeTimeline(i)} title="Remove" className="p-1.5 text-red-600 hover:bg-red-50"><Trash2 className="w-4 h-4" /></button>
+              </div>
             </div>
           ))}
+
         </div>
 
         {/* Square Invoice URL (proposal-level) */}
