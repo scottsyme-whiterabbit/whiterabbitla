@@ -180,7 +180,7 @@ const COMMON_FAQS: { q: string; a: string }[] = [
   { q: "How much space do you need?", a: "For close-up walk-around, none — I move through the room. For the parlor experience, anywhere a host can comfortably gather their guests works. I'll walk you through setup a week ahead." },
   { q: "What if a guest doesn't want to participate?", a: "No one is ever pulled in who doesn't want to be. The night is built around making your guests feel hosted, not put on the spot." },
   { q: "Do you need a stage, microphone, or special lighting?", a: "For most rooms, no. I bring everything I need — including soft lighting and a discreet sound system if the space calls for it." },
-  { q: "How early do you arrive?", a: "For close-up walk-around, an hour before guests. For the full parlor experience, two hours." },
+  { q: "How early do you arrive?", a: "For close-up walk-around, a half hour before guests is all I need. For the parlor magic stage show (a 45-minute set), I arrive earlier to quietly set the room — typically 60–90 minutes before." },
   { q: "Do you travel?", a: "Yes. Standard pricing covers Los Angeles County. For destination events, travel and lodging are added." },
   { q: "What happens after I reserve the date?", a: "A 50% deposit holds your date. The remaining 50% is due the day before. Two weeks before, we hop on a final call to walk through the night together." },
 ];
