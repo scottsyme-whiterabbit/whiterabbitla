@@ -1,0 +1,1 @@
+UPDATE public.cold_email_campaigns SET status = 'active', started_at = COALESCE(started_at, now()) WHERE status = 'paused' AND campaign_category IN ('corporate_planner','wedding_planner','pr_agency','country_club','talent','nonprofit','spirits');
