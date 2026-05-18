@@ -50,15 +50,17 @@ serve(async (req) => {
     );
 
     // Thresholds — keep all numbers in one place so they're easy to tune.
+    // Tightened per Scott (May 2026): auto-pause any bucket whose
+    // trailing 7-day bounce rate exceeds 3% over a meaningful send volume.
     const T = {
-      lifetimeBouncePct: 10,
+      lifetimeBouncePct: 5,
       lifetimeBounceMinSends: 100,
-      sevenDayBouncePct: 8,
-      sevenDayBounceMinSends: 75,
-      hardBouncePct: 3,
+      sevenDayBouncePct: 3,
+      sevenDayBounceMinSends: 40,
+      hardBouncePct: 2,
       hardBounceMinSends: 100,
-      warnLifetimePct: 6,
-      warn7dPct: 5,
+      warnLifetimePct: 3,
+      warn7dPct: 2,
       cooldownHours: 48,
     };
 

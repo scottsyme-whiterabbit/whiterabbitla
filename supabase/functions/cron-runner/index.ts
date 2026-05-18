@@ -32,10 +32,22 @@ serve(async (req) => {
       });
     }
 
-    // Send window guard: only send on Tue/Wed/Thu Pacific
+    // Send window guard: only send on Tue/Wed/Thu Pacific.
+    // The bounce-threshold guardrail still runs daily below.
     const pacificDay = new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", weekday: "short" }).format(new Date());
-    if (!["Tue", "Wed", "Thu"].includes(pacificDay)) {
-      return new Response(JSON.stringify({ success: true, skipped: true, message: `Skipped: ${pacificDay} is outside the Tue-Thu send window` }), {
+    const inSendWindow = ["Tue", "Wed", "Thu"].includes(pacificDay);
+
+    // Always run bounce-threshold-check (daily guardrail, auto-pauses hot buckets)
+    const cronSecretEnv = Deno.env.get("CRON_SECRET") || "";
+    const bounceCheck = await fetch(`${FUNCTIONS_BASE}/bounce-threshold-check`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-cron-secret": cronSecretEnv },
+      body: "{}",
+    });
+    const bounceResults = { status: bounceCheck.status, body: await bounceCheck.json().catch(() => bounceCheck.statusText) };
+
+    if (!inSendWindow) {
+      return new Response(JSON.stringify({ success: true, skipped: true, message: `Skipped sends: ${pacificDay} outside Tue-Thu window`, "bounce-threshold-check": bounceResults }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -105,7 +117,7 @@ serve(async (req) => {
     });
     results["inquiry-nurture"] = { status: r7.status, body: await r7.json().catch(() => r7.statusText) };
 
-    return new Response(JSON.stringify({ success: true, results }), {
+    return new Response(JSON.stringify({ success: true, "bounce-threshold-check": bounceResults, results }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
