@@ -206,7 +206,7 @@ const AdminProposals = () => {
   return (
     <div className="min-h-screen bg-cream p-6 md:p-10">
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-3">
             <a
               href="/admin/newsletter"
@@ -220,10 +220,21 @@ const AdminProposals = () => {
               <p className="text-sm text-forest-dark/60 mt-1">Build, preview, and send personalized proposals.</p>
             </div>
           </div>
-          <button onClick={startNew} className="bg-forest-dark text-cream px-5 py-3 flex items-center gap-2 hover:opacity-90">
+          <button
+            onClick={startNew}
+            className="hidden md:inline-flex bg-forest-dark text-cream px-5 py-3 items-center gap-2 hover:opacity-90"
+          >
             <Plus className="w-4 h-4" /> New Proposal
           </button>
         </div>
+
+        {/* Mobile-prominent New Proposal CTA */}
+        <button
+          onClick={startNew}
+          className="md:hidden w-full bg-forest-dark text-cream px-5 py-4 flex items-center justify-center gap-2 hover:opacity-90 shadow-md mb-6 text-base font-medium tracking-wide"
+        >
+          <Plus className="w-5 h-5" /> New Proposal
+        </button>
 
         {loading ? (
           <div className="text-forest-dark/60">Loading…</div>
