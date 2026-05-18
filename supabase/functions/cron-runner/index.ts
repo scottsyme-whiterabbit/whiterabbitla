@@ -117,7 +117,7 @@ serve(async (req) => {
     });
     results["inquiry-nurture"] = { status: r7.status, body: await r7.json().catch(() => r7.statusText) };
 
-    return new Response(JSON.stringify({ success: true, results }), {
+    return new Response(JSON.stringify({ success: true, "bounce-threshold-check": bounceResults, results }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
