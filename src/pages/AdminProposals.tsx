@@ -721,11 +721,14 @@ const TierEditor = ({ tier, onChange, onRemove, index }: { tier: Tier; onChange:
               <button onClick={addItem} className="text-xs text-forest-dark/70 hover:text-forest-dark flex items-center gap-1"><Plus className="w-3 h-3" /> Add line</button>
             </div>
             {tier.items.map((it, i) => (
-              <div key={i} className="flex gap-2 mb-2">
+              <div key={i} className="flex gap-2 mb-2 items-center">
                 <input className={inputCls} value={it} onChange={(e) => updateItem(i, e.target.value)} />
-                <button onClick={() => removeItem(i)} className="text-red-600 hover:bg-red-50 px-2"><X className="w-4 h-4" /></button>
+                <button onClick={() => moveItem(i, -1)} disabled={i === 0} title="Move up" className="p-1.5 border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowUp className="w-4 h-4" /></button>
+                <button onClick={() => moveItem(i, 1)} disabled={i === tier.items.length - 1} title="Move down" className="p-1.5 border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowDown className="w-4 h-4" /></button>
+                <button onClick={() => removeItem(i)} title="Remove" className="text-red-600 hover:bg-red-50 px-2"><X className="w-4 h-4" /></button>
               </div>
             ))}
+
           </div>
         </div>
       )}
