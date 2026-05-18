@@ -393,6 +393,42 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         </section>
       )}
 
+      {/* PAST WORK VIDEOS */}
+      <section className="relative bg-cream text-forest-dark py-16 md:py-20 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">Curious What It Looks Like?</p>
+          <h2 className="font-serif font-light text-3xl md:text-4xl mb-4">Do You Want to See Past Work?</h2>
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <span className="w-10 h-px bg-gold/60" />
+            <span className="text-gold text-xs">✦</span>
+            <span className="w-10 h-px bg-gold/60" />
+          </div>
+          <p className="font-sans text-base text-forest-dark/75 max-w-2xl mx-auto mb-8">
+            A few short reels from recent events — guest reactions, close-up moments, and the feel of the room.
+          </p>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3 max-w-2xl mx-auto">
+            {[
+              "https://www.instagram.com/reel/DTisEB5kvV8/?igsh=NTc4MTIwNjQ2YQ==",
+              "https://www.instagram.com/reel/DMKHU37utRA/?igsh=NTc4MTIwNjQ2YQ==",
+              "https://www.instagram.com/reel/DUzHc5qAS_z/?igsh=NTc4MTIwNjQ2YQ==",
+              "https://www.instagram.com/reel/DQsN5KMkvwR/?igsh=NTc4MTIwNjQ2YQ==",
+              "https://www.instagram.com/reel/DVG5VkqEi07/?igsh=NTc4MTIwNjQ2YQ==",
+            ].map((url, i) => (
+              <a
+                key={url}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 py-3 px-4 text-xs tracking-[0.15em] uppercase border border-forest-dark/30 text-forest-dark hover:bg-forest-dark hover:text-cream transition-colors"
+              >
+                <Instagram className="w-4 h-4" />
+                Reel {i + 1}
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* RESERVE */}
       <section className="relative bg-forest-dark text-cream py-16 md:py-24 px-6 text-center overflow-hidden">
         <Flourishes tone="cream" size="md" />
