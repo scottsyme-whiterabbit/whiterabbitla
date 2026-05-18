@@ -391,6 +391,14 @@ const ProposalEditor = ({
   };
   const addTimeline = () => update({ timeline: [...proposal.timeline, { time: "", desc: "" }] });
   const removeTimeline = (i: number) => update({ timeline: proposal.timeline.filter((_, j) => j !== i) });
+  const moveTimeline = (i: number, dir: -1 | 1) => {
+    const t = [...proposal.timeline];
+    const j = i + dir;
+    if (j < 0 || j >= t.length) return;
+    [t[i], t[j]] = [t[j], t[i]];
+    update({ timeline: t });
+  };
+
 
   const updateFaq = (i: number, patch: Partial<FaqItem>) => {
     const f = [...proposal.faqs]; f[i] = { ...f[i], ...patch }; update({ faqs: f });
