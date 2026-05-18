@@ -107,6 +107,7 @@ If a field is unknown leave it as an empty string. Never invent dates, venues, o
     // Sanitize
     const allowed = ["Wedding", "Corporate Event", "Private Event", "Fundraiser", "Birthday", "Holiday Party"];
     if (!allowed.includes(parsed.event_type)) parsed.event_type = "Private Event";
+    const tp = parsed.tier_prices || {};
     const out = {
       first_name: String(parsed.first_name || "").trim(),
       last_name: String(parsed.last_name || "").trim(),
@@ -116,7 +117,13 @@ If a field is unknown leave it as an empty string. Never invent dates, venues, o
       venue: String(parsed.venue || "").trim(),
       letter_intro: String(parsed.letter_intro || "").trim(),
       intro_paragraph: String(parsed.intro_paragraph || "").trim(),
+      tier_prices: {
+        tier_1: String(tp.tier_1 || "").trim(),
+        tier_2: String(tp.tier_2 || "").trim(),
+        tier_3: String(tp.tier_3 || "").trim(),
+      },
     };
+
 
     return json({ draft: out });
   } catch (e) {
