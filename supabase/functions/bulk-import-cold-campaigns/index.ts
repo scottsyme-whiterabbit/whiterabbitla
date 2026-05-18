@@ -66,6 +66,12 @@ const VALID_CATEGORIES = [
   "trade_show",
   "golf_tournament",
   "charity_golf",
+  "country_club",
+  "pr_agency",
+  "nonprofit",
+  "talent",
+  "restaurant",
+  "nightlife",
 ];
 
 // Role-based local-parts that should never receive cold outreach.
