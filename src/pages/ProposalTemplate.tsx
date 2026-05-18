@@ -413,6 +413,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
               "https://www.instagram.com/reel/DUzHc5qAS_z/?igsh=NTc4MTIwNjQ2YQ==",
               "https://www.instagram.com/reel/DQsN5KMkvwR/?igsh=NTc4MTIwNjQ2YQ==",
               "https://www.instagram.com/reel/DVG5VkqEi07/?igsh=NTc4MTIwNjQ2YQ==",
+              "https://www.instagram.com/reel/DWcLgeMkqzp/?igsh=NTc4MTIwNjQ2YQ==",
             ].map((url, i) => (
               <a
                 key={url}
