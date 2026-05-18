@@ -684,6 +684,14 @@ const TierEditor = ({ tier, onChange, onRemove, index }: { tier: Tier; onChange:
   };
   const addItem = () => onChange({ items: [...tier.items, ""] });
   const removeItem = (i: number) => onChange({ items: tier.items.filter((_, j) => j !== i) });
+  const moveItem = (i: number, dir: -1 | 1) => {
+    const items = [...tier.items];
+    const j = i + dir;
+    if (j < 0 || j >= items.length) return;
+    [items[i], items[j]] = [items[j], items[i]];
+    onChange({ items });
+  };
+
 
   return (
     <div className="border border-forest-dark/15 mb-3">
