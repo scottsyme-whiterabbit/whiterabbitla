@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2, ArrowLeft } from "lucide-react";
+import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2, ArrowLeft, ArrowUp, ArrowDown } from "lucide-react";
 import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type Tier, type TimelineItem, type FaqItem } from "./ProposalTemplate";
 import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, PROPOSAL_TEMPLATES } from "@/data/proposalAssets";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
@@ -329,6 +329,14 @@ const ProposalEditor = ({
       const d = j.draft;
       // Apply event-type template first (if recognized) then overlay AI-extracted fields
       const tpl = PROPOSAL_TEMPLATES[d.event_type];
+      // If AI extracted tier prices from the inquiry, overlay them onto template tiers
+      const tp = d.tier_prices || {};
+      const priceOverrides = [tp.tier_1, tp.tier_2, tp.tier_3];
+      const tiersWithPricing = tpl?.tiers
+        ? tpl.tiers.map((t, idx) =>
+            priceOverrides[idx] ? { ...t, price: priceOverrides[idx] } : t
+          )
+        : proposal.tiers;
       onChange({
         ...proposal,
         first_name: d.first_name || proposal.first_name,
@@ -341,10 +349,11 @@ const ProposalEditor = ({
         intro_paragraph: d.intro_paragraph || proposal.intro_paragraph,
         hero_image: tpl?.hero_image || proposal.hero_image,
         timeline: tpl?.timeline || proposal.timeline,
-        tiers: tpl?.tiers || proposal.tiers,
+        tiers: tiersWithPricing,
         faqs: tpl?.faqs || proposal.faqs,
         closing_quote: tpl?.closing_quote ?? proposal.closing_quote,
       });
+
       toast.success("Draft ready — review and tweak");
       setInquiryText("");
     } catch (e) { toast.error((e as Error).message); }
@@ -382,6 +391,14 @@ const ProposalEditor = ({
   };
   const addTimeline = () => update({ timeline: [...proposal.timeline, { time: "", desc: "" }] });
   const removeTimeline = (i: number) => update({ timeline: proposal.timeline.filter((_, j) => j !== i) });
+  const moveTimeline = (i: number, dir: -1 | 1) => {
+    const t = [...proposal.timeline];
+    const j = i + dir;
+    if (j < 0 || j >= t.length) return;
+    [t[i], t[j]] = [t[j], t[i]];
+    update({ timeline: t });
+  };
+
 
   const updateFaq = (i: number, patch: Partial<FaqItem>) => {
     const f = [...proposal.faqs]; f[i] = { ...f[i], ...patch }; update({ faqs: f });
@@ -584,12 +601,17 @@ const ProposalEditor = ({
             <button onClick={addTimeline} className="text-sm text-forest-dark/70 hover:text-forest-dark flex items-center gap-1"><Plus className="w-4 h-4" /> Add</button>
           </div>
           {proposal.timeline.map((t, i) => (
-            <div key={i} className="grid grid-cols-12 gap-3 mb-3">
+            <div key={i} className="grid grid-cols-12 gap-2 mb-3 items-center">
               <input className={inputCls + " col-span-3"} placeholder="6:30 PM" value={t.time} onChange={(e) => updateTimeline(i, { time: e.target.value })} />
-              <input className={inputCls + " col-span-8"} placeholder="Description" value={t.desc} onChange={(e) => updateTimeline(i, { desc: e.target.value })} />
-              <button onClick={() => removeTimeline(i)} className="col-span-1 text-red-600 hover:bg-red-50"><Trash2 className="w-4 h-4 mx-auto" /></button>
+              <input className={inputCls + " col-span-6"} placeholder="Description" value={t.desc} onChange={(e) => updateTimeline(i, { desc: e.target.value })} />
+              <div className="col-span-3 flex items-center justify-end gap-1">
+                <button onClick={() => moveTimeline(i, -1)} disabled={i === 0} title="Move up" className="p-1.5 border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowUp className="w-4 h-4" /></button>
+                <button onClick={() => moveTimeline(i, 1)} disabled={i === proposal.timeline.length - 1} title="Move down" className="p-1.5 border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowDown className="w-4 h-4" /></button>
+                <button onClick={() => removeTimeline(i)} title="Remove" className="p-1.5 text-red-600 hover:bg-red-50"><Trash2 className="w-4 h-4" /></button>
+              </div>
             </div>
           ))}
+
         </div>
 
         {/* Square Invoice URL (proposal-level) */}
@@ -662,6 +684,14 @@ const TierEditor = ({ tier, onChange, onRemove, index }: { tier: Tier; onChange:
   };
   const addItem = () => onChange({ items: [...tier.items, ""] });
   const removeItem = (i: number) => onChange({ items: tier.items.filter((_, j) => j !== i) });
+  const moveItem = (i: number, dir: -1 | 1) => {
+    const items = [...tier.items];
+    const j = i + dir;
+    if (j < 0 || j >= items.length) return;
+    [items[i], items[j]] = [items[j], items[i]];
+    onChange({ items });
+  };
+
 
   return (
     <div className="border border-forest-dark/15 mb-3">
@@ -691,11 +721,14 @@ const TierEditor = ({ tier, onChange, onRemove, index }: { tier: Tier; onChange:
               <button onClick={addItem} className="text-xs text-forest-dark/70 hover:text-forest-dark flex items-center gap-1"><Plus className="w-3 h-3" /> Add line</button>
             </div>
             {tier.items.map((it, i) => (
-              <div key={i} className="flex gap-2 mb-2">
+              <div key={i} className="flex gap-2 mb-2 items-center">
                 <input className={inputCls} value={it} onChange={(e) => updateItem(i, e.target.value)} />
-                <button onClick={() => removeItem(i)} className="text-red-600 hover:bg-red-50 px-2"><X className="w-4 h-4" /></button>
+                <button onClick={() => moveItem(i, -1)} disabled={i === 0} title="Move up" className="p-1.5 border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowUp className="w-4 h-4" /></button>
+                <button onClick={() => moveItem(i, 1)} disabled={i === tier.items.length - 1} title="Move down" className="p-1.5 border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowDown className="w-4 h-4" /></button>
+                <button onClick={() => removeItem(i)} title="Remove" className="text-red-600 hover:bg-red-50 px-2"><X className="w-4 h-4" /></button>
               </div>
             ))}
+
           </div>
         </div>
       )}
