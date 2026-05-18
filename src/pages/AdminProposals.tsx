@@ -329,6 +329,14 @@ const ProposalEditor = ({
       const d = j.draft;
       // Apply event-type template first (if recognized) then overlay AI-extracted fields
       const tpl = PROPOSAL_TEMPLATES[d.event_type];
+      // If AI extracted tier prices from the inquiry, overlay them onto template tiers
+      const tp = d.tier_prices || {};
+      const priceOverrides = [tp.tier_1, tp.tier_2, tp.tier_3];
+      const tiersWithPricing = tpl?.tiers
+        ? tpl.tiers.map((t, idx) =>
+            priceOverrides[idx] ? { ...t, price: priceOverrides[idx] } : t
+          )
+        : proposal.tiers;
       onChange({
         ...proposal,
         first_name: d.first_name || proposal.first_name,
@@ -341,10 +349,11 @@ const ProposalEditor = ({
         intro_paragraph: d.intro_paragraph || proposal.intro_paragraph,
         hero_image: tpl?.hero_image || proposal.hero_image,
         timeline: tpl?.timeline || proposal.timeline,
-        tiers: tpl?.tiers || proposal.tiers,
+        tiers: tiersWithPricing,
         faqs: tpl?.faqs || proposal.faqs,
         closing_quote: tpl?.closing_quote ?? proposal.closing_quote,
       });
+
       toast.success("Draft ready — review and tweak");
       setInquiryText("");
     } catch (e) { toast.error((e as Error).message); }
