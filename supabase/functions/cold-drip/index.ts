@@ -281,7 +281,7 @@ function getCampaignEmail(
       a2: trackedLink(`${SITE_URL}/event-magician`, "See What a White Rabbit Brand Activation Looks Like", contactId, step, category),
     },
   };
-  const arts = articleLinks[category];
+  const arts = articleLinks[category] ?? articleLinks.corporate_planner;
 
   const TEMPLATES: Record<CampaignCategory, Array<{ subject: string; preheader: string; innerHtml: string }>> = {
     // ═══════════════════════════════════════════════
