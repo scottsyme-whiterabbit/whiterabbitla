@@ -7,6 +7,35 @@ import wrScriptLogo from "@/assets/wr-wordmark-cream.png";
 import heroMain from "@/assets/hero-magic-cinematic.jpg";
 import photoScottBw from "@/assets/event-scott-bw-stage.jpg";
 import proposalCardsBw from "@/assets/proposal-cards-bw.jpg";
+import proposalCenterCards from "@/assets/proposal-center-cards.jpg";
+import { DEFAULT_GALLERY_KEYS, photoKeyToSrc } from "@/data/proposalAssets";
+
+import netflixLogo from "@/assets/logos/netflix.png";
+import disneyLogo from "@/assets/logos/disney.png";
+import morganstanleyLogo from "@/assets/logos/morganstanley.png";
+import rivianLogo from "@/assets/logos/rivian.png";
+import rollsroyceLogo from "@/assets/logos/rollsroyce.png";
+import paramountLogo from "@/assets/logos/paramount.png";
+import sohohouseLogo from "@/assets/logos/sohohouse-new.png";
+import beverlyHiltonLogo from "@/assets/logos/beverlyhilton.png";
+
+const galleryPhotos: { src: string; mirror?: boolean }[] = [
+  { src: proposalCardsBw },
+  { src: proposalCenterCards },
+  { src: proposalCardsBw, mirror: true },
+];
+
+const logos = [
+  { name: "Netflix", src: netflixLogo },
+  { name: "Disney", src: disneyLogo },
+  { name: "Morgan Stanley", src: morganstanleyLogo },
+  { name: "Rivian", src: rivianLogo },
+  { name: "Rolls-Royce", src: rollsroyceLogo },
+  { name: "Paramount", src: paramountLogo },
+  { name: "Soho House", src: sohohouseLogo, sizeClass: "max-h-14 md:max-h-[68px]" },
+  { name: "The Beverly Hilton", src: beverlyHiltonLogo },
+];
+
 
 export interface VenueTestimonial {
   quote: string;
