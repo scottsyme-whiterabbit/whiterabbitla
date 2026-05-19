@@ -267,7 +267,7 @@ const ResidencyAdmin = ({ password }: Props) => {
                   <Eye className="w-4 h-4 text-forest-dark" />
                 </a>
                 <button
-                  onClick={() => sendEmail(p as FullPitch)}
+                  onClick={() => sendEmail(p)}
                   title="Email"
                   className="p-2 hover:bg-cream rounded"
                 >
