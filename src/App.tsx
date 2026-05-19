@@ -43,6 +43,7 @@ import DigitalCard from "./pages/DigitalCard";
 import Consultation from "./pages/Consultation";
 import Planners from "./pages/Planners";
 import ProposalTemplate from "./pages/ProposalTemplate";
+import ResidencyTemplate from "./pages/ResidencyTemplate";
 import AdminProposals from "./pages/AdminProposals";
 import { getBlogArticleBySlug } from "./data/blogArticles";
 import { useParams } from "react-router-dom";
@@ -118,6 +119,8 @@ const App = () => (
             <Route path="/consultation" element={<><Consultation /></>} />
             <Route path="/proposals/template" element={<ProposalTemplate preview />} />
             <Route path="/proposal/:slug" element={<ProposalTemplate />} />
+            <Route path="/residency/template" element={<ResidencyTemplate preview />} />
+            <Route path="/residency/:slug" element={<ResidencyTemplate />} />
             <Route path="/admin/proposals" element={<AdminProposals />} />
             <Route path="/*" element={<AppContent />} />
           </Routes>
