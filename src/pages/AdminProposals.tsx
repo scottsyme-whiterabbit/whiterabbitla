@@ -213,6 +213,7 @@ const AdminProposals = () => {
   return (
     <div className="min-h-screen bg-cream p-6 md:p-10">
       <div className="max-w-6xl mx-auto">
+        <BiometricEnrollPrompt namespace="proposals" password={password} variant="light" />
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-3">
             <a
