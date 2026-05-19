@@ -807,23 +807,26 @@ export type Database = {
       proposal_views: {
         Row: {
           id: string
-          proposal_id: string
+          proposal_id: string | null
           referrer: string | null
           user_agent: string | null
+          venue_pitch_id: string | null
           viewed_at: string
         }
         Insert: {
           id?: string
-          proposal_id: string
+          proposal_id?: string | null
           referrer?: string | null
           user_agent?: string | null
+          venue_pitch_id?: string | null
           viewed_at?: string
         }
         Update: {
           id?: string
-          proposal_id?: string
+          proposal_id?: string | null
           referrer?: string | null
           user_agent?: string | null
+          venue_pitch_id?: string | null
           viewed_at?: string
         }
         Relationships: [
@@ -1013,6 +1016,75 @@ export type Database = {
           id?: string
           send_volume?: number | null
           threshold_fired?: string | null
+        }
+        Relationships: []
+      }
+      venue_pitches: {
+        Row: {
+          closing_private_line: string
+          created_at: string
+          fee_dollars: number | null
+          gm_email: string | null
+          gm_name: string
+          hero_image: string
+          hero_subhead: string
+          id: string
+          intro_paragraphs: Json
+          nights_per_week: number
+          pilot_weeks: number
+          press_line: string | null
+          scheduling_url: string | null
+          sent_at: string | null
+          session_hours: number
+          slug: string
+          submarket: string | null
+          testimonials: Json
+          updated_at: string
+          venue_name: string
+        }
+        Insert: {
+          closing_private_line?: string
+          created_at?: string
+          fee_dollars?: number | null
+          gm_email?: string | null
+          gm_name?: string
+          hero_image?: string
+          hero_subhead?: string
+          id?: string
+          intro_paragraphs?: Json
+          nights_per_week?: number
+          pilot_weeks?: number
+          press_line?: string | null
+          scheduling_url?: string | null
+          sent_at?: string | null
+          session_hours?: number
+          slug: string
+          submarket?: string | null
+          testimonials?: Json
+          updated_at?: string
+          venue_name?: string
+        }
+        Update: {
+          closing_private_line?: string
+          created_at?: string
+          fee_dollars?: number | null
+          gm_email?: string | null
+          gm_name?: string
+          hero_image?: string
+          hero_subhead?: string
+          id?: string
+          intro_paragraphs?: Json
+          nights_per_week?: number
+          pilot_weeks?: number
+          press_line?: string | null
+          scheduling_url?: string | null
+          sent_at?: string | null
+          session_hours?: number
+          slug?: string
+          submarket?: string | null
+          testimonials?: Json
+          updated_at?: string
+          venue_name?: string
         }
         Relationships: []
       }

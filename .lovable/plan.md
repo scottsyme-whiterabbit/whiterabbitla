@@ -1,75 +1,73 @@
-# White Rabbit Los Angeles — Website Plan
+# Residency Proposal Builder
 
-## Vision
+A second proposal type — pitching Scott to perform at restaurants, hotels, and venues as a recurring residency — built in the same editorial style as the existing client proposals.
 
-A sleek, cinematic, high-end website for White Rabbit (magician Scott Syme) inspired by Boom Supersonic's bold simplicity and David Gerard's dramatic performer presentation. Deep forest green, gold, dusty rose, and rich textures create a luxurious, mysterious atmosphere.
+## What you'll see when it's done
 
-## Design Direction
+**Admin** (`/admin/proposals`)
+- A toggle at the top: **Client Proposals** | **Residency Pitches**
+- Each tab has its own list, "New" button, and editor
+- Same login, same Face ID, same preview/send flow you already have
 
-- **Boom Supersonic-inspired layout**: Full-bleed hero sections, minimal navigation, bold typography, smooth scroll animations, lots of breathing room
-- **David Gerard-inspired performer presence**: Large name typography, dramatic photography, "Watch Reel" style CTAs
-- **Color palette from brand book page 8**: Deep forest green (#2D4A3E), dusty rose/mauve, gold/sunburst, sage, cream/ivory backgrounds
-- **Typography**: Serif display font (matching the elegant "White Rabbit" wordmark feel) paired with clean sans-serif body text
-- **Your uploaded logos** (rabbit symbol, secondary logo, monogram) used throughout
+**Public link** (`/residency/:slug`)
+- Standalone page (no navbar/footer) at the same polish level as `/proposal/:slug`
+- Forest dark + cream + gold palette, Ogg headings, Montserrat body — identical brand feel
+- Mobile-first, sticky CTA at the bottom on mobile
 
----
+## Page structure (matches the spec you pasted)
 
-## Pages (5-6 to start)
+1. **Hero** — eyebrow ("A residency proposal"), serif headline ("A magician in residence at [Venue]"), italic subhead, single signature image
+2. **The Invitation** — short letter to the GM by name, with the Key Line callout ("…they talk about for years.")
+3. **Why a residency works** — three stat blocks (140% / +1.3% dwell / 85% share) with sources
+4. **What the night looks like** — format: one night/week, 2 hours, table-to-table, no mic
+5. **The four-week pilot** — fee, what's included, the handshake clause
+6. **About the work** — short bio paragraph, signature image, "short film available on request" line
+7. **Past evenings** — up to 3 testimonials
+8. **Let's walk the room** — primary CTA (Calendly/scheduling link), secondary CTA (tap-to-call 424-394-1850)
+9. **Footer** — Scott Syme / Magician / phone / whiterabbitla.com, plus the private "Hand and Eye" closing line (residency pages only, per your brand rule)
 
-### 1. Home Page
+## Editable fields per pitch
 
-- **Full-screen hero** with dramatic imagery, the White Rabbit logo, and a tagline like *"Redefine the Perception of a Magic Experience"*
-- Subtle scroll-down indicator (like Boom's circular arrow)
-- **Client logo strip** — Netflix, Disney, Rolls Royce, Morgan Stanley, YouTube, Hyatt, etc.
-- **Short "The Experience" teaser** — 2-3 lines + a cinematic photo, linking to the Experience page
-- **Featured testimonial** — one standout review displayed elegantly
-- **CTA section** — "Book an Experience" button leading to contact form
+Venue name, GM name, submarket/city, hero subhead line, fee, hero image, testimonials (up to 3), intro letter paragraphs, pilot length (default 4 weeks), nights-per-week, fee, scheduling link, optional "press" line.
 
-### 2. Experience Page (Services)
+Everything has a sensible default so a half-filled pitch still ships clean.
 
-- Overview of what White Rabbit offers: Close-Up Magic, Parlor Shows, Corporate Events, Private Events, Los Angeles and beyond bookings
-- Each service presented as an elegant card or full-width section with imagery
-- Brand values woven in: Immersive, Personalized, Sophisticated
-- CTA to book at the bottom
+## Technical details
 
-### 3. About / Scott Syme Page
+**Database** — new `venue_pitches` table (separate from `proposals`, as you chose):
+```text
+id, slug (unique), venue_name, gm_name, gm_email, submarket,
+hero_image, hero_subhead, intro_paragraphs (jsonb),
+pilot_weeks (default 4), nights_per_week (default 1),
+session_hours (default 2), fee_dollars,
+testimonials (jsonb), press_line, scheduling_url,
+sent_at, created_at, updated_at
+```
+- Service-role-only writes (matches existing `proposals` pattern)
+- Public SELECT by slug (so the recipient can view the link)
+- `proposal_views` table reused to log views (add nullable `venue_pitch_id` column)
 
-- Your professional photo (the B&W suit shot) as a large hero image
-- Brief bio — LA-based, performed for Fortune 500 companies, billionaires, A-list events
-- Brand story — White Rabbit's mission to redefine magic
-- The "Credits" photo with all client logos displayed beautifully
+**Edge function** — extend the existing `proposals-api` function with new actions (`list_venue`, `get_venue`, `save_venue`, `delete_venue`, `send_venue`) rather than spinning up a parallel function. Same admin password gate.
 
-### 4. Reviews Page
+**Frontend files**
+- `src/pages/ResidencyTemplate.tsx` — public renderer (mirrors `ProposalTemplate.tsx`)
+- `src/components/admin/ResidencyEditor.tsx` — split out so `AdminProposals.tsx` stays readable
+- `src/pages/AdminProposals.tsx` — add the type toggle and conditional list/editor swap
+- `src/App.tsx` — register `/residency/:slug` and `/residency/template` preview route
 
-- Curated testimonials from your current site and Google reviews
-- Elegant card layout with reviewer names, star ratings
-- Presented in a clean, editorial grid style
+**Brand guardrails I'll enforce**
+- Never the words "elevate" / "transform"
+- No italicized body text (subheads use real italic font weight via Ogg italic, not CSS italic)
+- The "Hand and Eye" line only appears on residency pages, never on client proposals or anywhere public
+- "White Rabbit LA" brand name in footer, not "White Rabbit Los Angeles"
 
-### 5. Contact / Book Page
+## Build order
 
-- Contact form (name, email, event type, date, message)
-- Phone number and email prominently displayed
-- Instagram link (@whiterabbit_la)
-- Subtle background imagery maintaining the luxurious feel
+1. Database migration (`venue_pitches` table + RLS + view-log column) — needs your approval
+2. Extend `proposals-api` edge function with venue actions
+3. Build `ResidencyTemplate.tsx` (public view) + `/residency/template` preview route
+4. Add type toggle + venue list/editor to `AdminProposals.tsx`
+5. Wire send-pitch email (reuses your existing Resend setup)
+6. QA on mobile + desktop preview
 
-### 6. Blog / Site Guide Page
-
-- Static blog posts optimized for SEO keywords (e.g., "Los Angeles Corporate Event Magician," "Luxury Private Party Entertainment LA," "Close-Up Magic for Corporate Events")
-- Inspired by Alex Kazam's site map approach — location-based and service-based SEO pages
-- Clean, readable layout with the brand's editorial feel
-
----
-
-## Shared Elements
-
-- **Navigation**: Minimal top nav with logo centered or left-aligned, transparent over hero sections (Boom-style), with links: Experience, About, Reviews, Blog, Contact
-- **Footer**: White Rabbit logo, contact info, social links, copyright
-- **Animations**: Smooth fade-in on scroll, subtle parallax on hero images
-- **Mobile**: Fully responsive with hamburger menu, touch-friendly
-- **SEO**: Meta tags, proper heading structure, keyword-rich content on blog/site guide pages
-
-## Technical Notes
-
-- Static site (no backend needed for this phase) — contact form will use a mailto link or we can add an edge function later for email delivery
-- All your uploaded logos embedded as site assets
-- Placeholder imagery for luxury/magic photos (you can swap in your own photos later)
+Step 1 will trigger a migration approval prompt. Everything after is code-only.
