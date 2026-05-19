@@ -605,6 +605,7 @@ const AdminNewsletter = () => {
     <div className="min-h-screen bg-background pt-24 pb-16 md:pb-16" onClick={() => searchOpen && setSearchOpen(false)}>
       {/* Add bottom padding on mobile for the nav bar */}
       <div className={`max-w-6xl mx-auto px-4 md:px-6 ${isMobile ? 'pb-24' : ''}`}>
+        <BiometricEnrollPrompt namespace="newsletter" password={storedPassword} variant="light" />
         <div className="flex items-center justify-between mb-4 md:mb-6">
           <h1 className="font-serif text-2xl md:text-3xl text-foreground">White Rabbit Concierge</h1>
           <div className="flex items-center gap-2">
