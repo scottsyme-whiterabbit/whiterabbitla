@@ -15,6 +15,7 @@ import SubjectScorer from "@/components/SubjectScorer";
 import ColdDripCampaignTab from "@/components/ColdDripCampaignTab";
 import EmailAnalyticsTab from "@/components/EmailAnalyticsTab";
 import LeadAttributionTab from "@/components/LeadAttributionTab";
+import { BiometricUnlockButton, BiometricEnrollPrompt } from "@/components/BiometricUnlockButton";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
