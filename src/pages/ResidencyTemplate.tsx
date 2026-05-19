@@ -169,20 +169,23 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
           <span className="text-gold text-lg">✦</span>
         </div>
         <div className="max-w-5xl mx-auto mt-6 grid grid-cols-3 gap-3 md:gap-4">
-          {[proposalCardsBw, proposalCardsBw, proposalCardsBw].map((src, i) => (
+          {galleryPhotos.map((photo, i) => (
             <div key={i} className="aspect-[3/4] overflow-hidden bg-forest-dark/60 group">
               <img
-                src={src}
+                src={photo.src}
                 alt=""
                 loading="lazy"
                 className={`w-full h-full object-cover transition-transform duration-700 ease-out ${
-                  i === 1 ? "scale-x-[-1] group-hover:scale-x-[-1.1] group-hover:scale-y-110" : "group-hover:scale-110"
+                  photo.mirror
+                    ? "scale-x-[-1] group-hover:scale-x-[-1.1] group-hover:scale-y-110"
+                    : "group-hover:scale-110"
                 }`}
               />
             </div>
           ))}
         </div>
       </section>
+
 
       {/* SECTION 2 — WHY A RESIDENCY WORKS */}
       <section className="relative bg-cream py-20 md:py-28 px-6">
