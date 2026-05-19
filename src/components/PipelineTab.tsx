@@ -114,6 +114,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
   const [showForm, setShowForm] = useState(false);
   const [editingDeal, setEditingDeal] = useState<Deal | null>(null);
   const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [expandedLostReason, setExpandedLostReason] = useState<string | null>(null);
   const [expandedCols, setExpandedCols] = useState<Record<string, boolean>>({});
   const [emailActivity, setEmailActivity] = useState<{ clicks: any[]; opens: any[] } | null>(null);
   const [loadingActivity, setLoadingActivity] = useState(false);
