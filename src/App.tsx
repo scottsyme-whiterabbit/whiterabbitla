@@ -43,6 +43,7 @@ import DigitalCard from "./pages/DigitalCard";
 import Consultation from "./pages/Consultation";
 import Planners from "./pages/Planners";
 import ProposalTemplate from "./pages/ProposalTemplate";
+import ResidencyTemplate from "./pages/ResidencyTemplate";
 import AdminProposals from "./pages/AdminProposals";
 import { getBlogArticleBySlug } from "./data/blogArticles";
 import { useParams } from "react-router-dom";
