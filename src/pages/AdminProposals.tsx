@@ -5,6 +5,7 @@ import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type T
 import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, PROPOSAL_TEMPLATES } from "@/data/proposalAssets";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
 import { BiometricUnlockButton, BiometricEnrollPrompt } from "@/components/BiometricUnlockButton";
+import ResidencyAdmin from "@/components/admin/ResidencyAdmin";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const FN = `${SUPABASE_URL}/functions/v1/proposals-api`;
