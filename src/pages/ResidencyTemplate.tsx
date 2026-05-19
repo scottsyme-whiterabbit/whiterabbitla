@@ -7,6 +7,35 @@ import wrScriptLogo from "@/assets/wr-wordmark-cream.png";
 import heroMain from "@/assets/hero-magic-cinematic.jpg";
 import photoScottBw from "@/assets/event-scott-bw-stage.jpg";
 import proposalCardsBw from "@/assets/proposal-cards-bw.jpg";
+import proposalCenterCards from "@/assets/proposal-center-cards.jpg";
+import { DEFAULT_GALLERY_KEYS, photoKeyToSrc } from "@/data/proposalAssets";
+
+import netflixLogo from "@/assets/logos/netflix.png";
+import disneyLogo from "@/assets/logos/disney.png";
+import morganstanleyLogo from "@/assets/logos/morganstanley.png";
+import rivianLogo from "@/assets/logos/rivian.png";
+import rollsroyceLogo from "@/assets/logos/rollsroyce.png";
+import paramountLogo from "@/assets/logos/paramount.png";
+import sohohouseLogo from "@/assets/logos/sohohouse-new.png";
+import beverlyHiltonLogo from "@/assets/logos/beverlyhilton.png";
+
+const galleryPhotos: { src: string; mirror?: boolean }[] = [
+  { src: proposalCardsBw },
+  { src: proposalCenterCards },
+  { src: proposalCardsBw, mirror: true },
+];
+
+const logos = [
+  { name: "Netflix", src: netflixLogo },
+  { name: "Disney", src: disneyLogo },
+  { name: "Morgan Stanley", src: morganstanleyLogo },
+  { name: "Rivian", src: rivianLogo },
+  { name: "Rolls-Royce", src: rollsroyceLogo },
+  { name: "Paramount", src: paramountLogo },
+  { name: "Soho House", src: sohohouseLogo, sizeClass: "max-h-14 md:max-h-[68px]" },
+  { name: "The Beverly Hilton", src: beverlyHiltonLogo },
+];
+
 
 export interface VenueTestimonial {
   quote: string;
@@ -140,20 +169,23 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
           <span className="text-gold text-lg">✦</span>
         </div>
         <div className="max-w-5xl mx-auto mt-6 grid grid-cols-3 gap-3 md:gap-4">
-          {[proposalCardsBw, proposalCardsBw, proposalCardsBw].map((src, i) => (
+          {galleryPhotos.map((photo, i) => (
             <div key={i} className="aspect-[3/4] overflow-hidden bg-forest-dark/60 group">
               <img
-                src={src}
+                src={photo.src}
                 alt=""
                 loading="lazy"
                 className={`w-full h-full object-cover transition-transform duration-700 ease-out ${
-                  i === 1 ? "scale-x-[-1] group-hover:scale-x-[-1.1] group-hover:scale-y-110" : "group-hover:scale-110"
+                  photo.mirror
+                    ? "scale-x-[-1] group-hover:scale-x-[-1.1] group-hover:scale-y-110"
+                    : "group-hover:scale-110"
                 }`}
               />
             </div>
           ))}
         </div>
       </section>
+
 
       {/* SECTION 2 — WHY A RESIDENCY WORKS */}
       <section className="relative bg-cream py-20 md:py-28 px-6">
@@ -336,7 +368,57 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
         </div>
       </section>
 
+      {/* GALLERY STRIP */}
+      {(() => {
+        const items = DEFAULT_GALLERY_KEYS
+          .map((k) => photoKeyToSrc(k))
+          .filter((s): s is string => !!s);
+        if (items.length === 0) return null;
+        return (
+          <section className="bg-forest-dark py-6 md:py-10 px-4">
+            <div className="max-w-6xl mx-auto grid grid-cols-3 md:grid-cols-5 gap-1">
+              {items.map((src, i) => (
+                <div key={i} className="aspect-square overflow-hidden group">
+                  <img
+                    src={src}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-110"
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      })()}
+
+      {/* IN GOOD COMPANY — logos */}
+      <section className="relative bg-cream py-16 md:py-20 px-6">
+        <div className="max-w-5xl mx-auto text-center">
+          <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">In Good Company</p>
+          <OrnamentalDivider />
+          <p className="font-sans text-sm md:text-base text-forest-dark/65 mt-6 mb-10">
+            A few of the rooms we've worked.
+          </p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-8 items-center">
+            {logos.map((logo) => (
+              <div key={logo.name} className="flex items-center justify-center">
+                <img
+                  src={logo.src}
+                  alt={logo.name}
+                  loading="lazy"
+                  className={`${(logo as any).sizeClass ?? "max-h-9 md:max-h-11"} w-auto object-contain opacity-60 hover:opacity-100 transition-opacity`}
+                  style={{ filter: "grayscale(100%)" }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* PHOTO BREAK 2 */}
+
       <section className="relative h-56 md:h-80 overflow-hidden bg-forest-dark">
         <img
           src={photoScottBw}
