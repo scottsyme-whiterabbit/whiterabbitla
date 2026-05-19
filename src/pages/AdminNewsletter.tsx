@@ -15,6 +15,7 @@ import SubjectScorer from "@/components/SubjectScorer";
 import ColdDripCampaignTab from "@/components/ColdDripCampaignTab";
 import EmailAnalyticsTab from "@/components/EmailAnalyticsTab";
 import LeadAttributionTab from "@/components/LeadAttributionTab";
+import { BiometricUnlockButton, BiometricEnrollPrompt } from "@/components/BiometricUnlockButton";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -215,8 +216,9 @@ const AdminNewsletter = () => {
     if (authenticated) loadData();
   }, [authenticated, loadData]);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLogin = async (e?: React.FormEvent, pwOverride?: string) => {
+    if (e) e.preventDefault();
+    const candidate = pwOverride ?? password;
     try {
       const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
         method: "POST",
@@ -224,12 +226,13 @@ const AdminNewsletter = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${SUPABASE_KEY}`,
         },
-        body: JSON.stringify({ action: "get_stats", adminPassword: password }),
+        body: JSON.stringify({ action: "get_stats", adminPassword: candidate }),
       });
       if (res.ok) {
-        setStoredPassword(password);
+        setPassword(candidate);
+        setStoredPassword(candidate);
         setAuthenticated(true);
-        const session = JSON.stringify({ pw: password, ts: Date.now() });
+        const session = JSON.stringify({ pw: candidate, ts: Date.now() });
         localStorage.setItem("wr_admin_session", session);
         sessionStorage.setItem("wr_admin_session", session);
         toast.success("Welcome back");
@@ -541,6 +544,11 @@ const AdminNewsletter = () => {
       <div className="min-h-screen bg-[hsl(var(--forest-dark))] flex items-center justify-center px-6">
         <form onSubmit={handleLogin} className="w-full max-w-sm">
           <h1 className="font-serif text-3xl text-cream mb-8 text-center">White Rabbit Concierge</h1>
+          <BiometricUnlockButton
+            namespace="newsletter"
+            variant="dark"
+            onUnlock={(pw) => handleLogin(undefined, pw)}
+          />
           <input
             type="password"
             value={password}
@@ -597,6 +605,7 @@ const AdminNewsletter = () => {
     <div className="min-h-screen bg-background pt-24 pb-16 md:pb-16" onClick={() => searchOpen && setSearchOpen(false)}>
       {/* Add bottom padding on mobile for the nav bar */}
       <div className={`max-w-6xl mx-auto px-4 md:px-6 ${isMobile ? 'pb-24' : ''}`}>
+        <BiometricEnrollPrompt namespace="newsletter" password={storedPassword} variant="light" />
         <div className="flex items-center justify-between mb-4 md:mb-6">
           <h1 className="font-serif text-2xl md:text-3xl text-foreground">White Rabbit Concierge</h1>
           <div className="flex items-center gap-2">

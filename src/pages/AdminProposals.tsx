@@ -4,6 +4,7 @@ import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loa
 import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type Tier, type TimelineItem, type FaqItem } from "./ProposalTemplate";
 import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, PROPOSAL_TEMPLATES } from "@/data/proposalAssets";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
+import { BiometricUnlockButton, BiometricEnrollPrompt } from "@/components/BiometricUnlockButton";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const FN = `${SUPABASE_URL}/functions/v1/proposals-api`;
@@ -80,13 +81,14 @@ const AdminProposals = () => {
     return j;
   };
 
-  const tryLogin = async () => {
+  const tryLogin = async (pw?: string) => {
+    const candidate = pw ?? pwInput;
     try {
-      const res = await fetch(`${FN}?action=list`, { headers: { "x-admin-password": pwInput } });
+      const res = await fetch(`${FN}?action=list`, { headers: { "x-admin-password": candidate } });
       if (!res.ok) throw new Error("Wrong password");
-      setPassword(pwInput);
+      setPassword(candidate);
       setAuthed(true);
-      const session = JSON.stringify({ pw: pwInput, ts: Date.now() });
+      const session = JSON.stringify({ pw: candidate, ts: Date.now() });
       localStorage.setItem("wr_admin_session", session);
     } catch (e) {
       toast.error((e as Error).message);
@@ -169,6 +171,11 @@ const AdminProposals = () => {
       <div className="min-h-screen bg-forest-dark flex items-center justify-center p-6">
         <div className="bg-cream p-8 max-w-sm w-full">
           <h1 className="font-serif text-2xl text-forest-dark mb-6">Proposals Admin</h1>
+          <BiometricUnlockButton
+            namespace="proposals"
+            variant="light"
+            onUnlock={(pw) => tryLogin(pw)}
+          />
           <input
             type="password"
             value={pwInput}
@@ -177,7 +184,7 @@ const AdminProposals = () => {
             placeholder="Admin password"
             className="w-full border border-forest-dark/20 px-4 py-3 mb-4 bg-white"
           />
-          <button onClick={tryLogin} className="w-full bg-forest-dark text-cream py-3 hover:opacity-90">
+          <button onClick={() => tryLogin()} className="w-full bg-forest-dark text-cream py-3 hover:opacity-90">
             Sign in
           </button>
         </div>
@@ -206,6 +213,7 @@ const AdminProposals = () => {
   return (
     <div className="min-h-screen bg-cream p-6 md:p-10">
       <div className="max-w-6xl mx-auto">
+        <BiometricEnrollPrompt namespace="proposals" password={password} variant="light" />
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-3">
             <a
