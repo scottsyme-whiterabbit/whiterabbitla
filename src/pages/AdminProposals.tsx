@@ -171,6 +171,11 @@ const AdminProposals = () => {
       <div className="min-h-screen bg-forest-dark flex items-center justify-center p-6">
         <div className="bg-cream p-8 max-w-sm w-full">
           <h1 className="font-serif text-2xl text-forest-dark mb-6">Proposals Admin</h1>
+          <BiometricUnlockButton
+            namespace="proposals"
+            variant="light"
+            onUnlock={(pw) => tryLogin(pw)}
+          />
           <input
             type="password"
             value={pwInput}
@@ -179,7 +184,7 @@ const AdminProposals = () => {
             placeholder="Admin password"
             className="w-full border border-forest-dark/20 px-4 py-3 mb-4 bg-white"
           />
-          <button onClick={tryLogin} className="w-full bg-forest-dark text-cream py-3 hover:opacity-90">
+          <button onClick={() => tryLogin()} className="w-full bg-forest-dark text-cream py-3 hover:opacity-90">
             Sign in
           </button>
         </div>
