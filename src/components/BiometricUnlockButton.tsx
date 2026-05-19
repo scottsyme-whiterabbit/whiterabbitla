@@ -28,7 +28,7 @@ export function BiometricUnlockButton({ namespace, onUnlock, variant = "dark" }:
     const r = await unlock();
     setBusy(false);
     if (!r.ok) {
-      toast.error(r.error || "Face ID unlock failed");
+      toast.error((r as { error?: string }).error || "Face ID unlock failed");
       return;
     }
     onUnlock(r.password);
