@@ -200,37 +200,67 @@ serve(async (req) => {
       }
 
       case "get_send_log": {
-        const { data: sends, error: sendsErr } = await supabase
-          .from("newsletter_send_log")
-          .select("campaign_id, sent_at, contact_id")
-          .order("sent_at", { ascending: false })
-          .limit(2000);
-        if (sendsErr) throw sendsErr;
-        return new Response(JSON.stringify({ sends: sends || [] }), {
+        let allSends: { campaign_id: string; sent_at: string; contact_id: string }[] = [];
+        let page = 0;
+        const PAGE = 1000;
+        while (true) {
+          const { data: batch, error } = await supabase
+            .from("newsletter_send_log")
+            .select("campaign_id, sent_at, contact_id")
+            .order("sent_at", { ascending: false })
+            .range(page * PAGE, (page + 1) * PAGE - 1);
+          if (error) throw error;
+          if (!batch || batch.length === 0) break;
+          allSends = allSends.concat(batch);
+          if (batch.length < PAGE) break;
+          page++;
+          if (page > 50) break;
+        }
+        return new Response(JSON.stringify({ sends: allSends }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
 
       case "get_opens_log": {
-        const { data: opensData, error: opensErr2 } = await supabase
-          .from("newsletter_opens")
-          .select("contact_id, opened_at, drip_step")
-          .order("opened_at", { ascending: false })
-          .limit(2000);
-        if (opensErr2) throw opensErr2;
-        return new Response(JSON.stringify({ opens: opensData || [] }), {
+        let allOpens: { contact_id: string; opened_at: string; drip_step: number }[] = [];
+        let page = 0;
+        const PAGE = 1000;
+        while (true) {
+          const { data: batch, error } = await supabase
+            .from("newsletter_opens")
+            .select("contact_id, opened_at, drip_step")
+            .order("opened_at", { ascending: false })
+            .range(page * PAGE, (page + 1) * PAGE - 1);
+          if (error) throw error;
+          if (!batch || batch.length === 0) break;
+          allOpens = allOpens.concat(batch);
+          if (batch.length < PAGE) break;
+          page++;
+          if (page > 50) break;
+        }
+        return new Response(JSON.stringify({ opens: allOpens }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
 
       case "get_clicks_log": {
-        const { data: clicksData, error: clicksErr } = await supabase
-          .from("newsletter_clicks")
-          .select("contact_id, clicked_at, drip_step, link_slug")
-          .order("clicked_at", { ascending: false })
-          .limit(2000);
-        if (clicksErr) throw clicksErr;
-        return new Response(JSON.stringify({ clicks: clicksData || [] }), {
+        let allClicks: { contact_id: string; clicked_at: string; drip_step: number; link_slug: string }[] = [];
+        let page = 0;
+        const PAGE = 1000;
+        while (true) {
+          const { data: batch, error } = await supabase
+            .from("newsletter_clicks")
+            .select("contact_id, clicked_at, drip_step, link_slug")
+            .order("clicked_at", { ascending: false })
+            .range(page * PAGE, (page + 1) * PAGE - 1);
+          if (error) throw error;
+          if (!batch || batch.length === 0) break;
+          allClicks = allClicks.concat(batch);
+          if (batch.length < PAGE) break;
+          page++;
+          if (page > 50) break;
+        }
+        return new Response(JSON.stringify({ clicks: allClicks }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
