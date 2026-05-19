@@ -544,6 +544,11 @@ const AdminNewsletter = () => {
       <div className="min-h-screen bg-[hsl(var(--forest-dark))] flex items-center justify-center px-6">
         <form onSubmit={handleLogin} className="w-full max-w-sm">
           <h1 className="font-serif text-3xl text-cream mb-8 text-center">White Rabbit Concierge</h1>
+          <BiometricUnlockButton
+            namespace="newsletter"
+            variant="dark"
+            onUnlock={(pw) => handleLogin(undefined, pw)}
+          />
           <input
             type="password"
             value={password}
