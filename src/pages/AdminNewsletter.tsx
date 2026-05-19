@@ -1342,7 +1342,7 @@ const AdminNewsletter = () => {
 
         {/* Email Analytics */}
         {activeTab === "email_analytics" && (
-          <EmailAnalyticsTab />
+          <EmailAnalyticsTab storedPassword={storedPassword} />
         )}
 
         {/* Lead Attribution */}
