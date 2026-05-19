@@ -160,6 +160,139 @@ Deno.serve(async (req) => {
       return json({ ok: true });
     }
 
+    /* ========== VENUE PITCH ADMIN ACTIONS ========== */
+
+    if (action === "list_venue") {
+      const { data, error } = await supabase
+        .from("venue_pitches")
+        .select("id, slug, venue_name, gm_name, gm_email, submarket, fee_dollars, sent_at, created_at")
+        .order("created_at", { ascending: false });
+      if (error) return json({ error: error.message }, 500);
+
+      const ids = (data || []).map((p: any) => p.id);
+      let stats: Record<string, { count: number; last: string | null }> = {};
+      if (ids.length) {
+        const { data: views } = await supabase
+          .from("proposal_views")
+          .select("venue_pitch_id, viewed_at")
+          .in("venue_pitch_id", ids)
+          .order("viewed_at", { ascending: false });
+        for (const v of views || []) {
+          const s = stats[v.venue_pitch_id] ||= { count: 0, last: null };
+          s.count++;
+          if (!s.last) s.last = v.viewed_at;
+        }
+      }
+      const enriched = (data || []).map((p: any) => ({
+        ...p,
+        view_count: stats[p.id]?.count || 0,
+        last_viewed_at: stats[p.id]?.last || null,
+      }));
+      return json({ pitches: enriched });
+    }
+
+    if (action === "create_venue" && req.method === "POST") {
+      const body = await req.json();
+      const newSlug = body.slug || slugifyVenue(body.venue_name || "");
+      const { data, error } = await supabase
+        .from("venue_pitches")
+        .insert({ ...body, slug: newSlug })
+        .select()
+        .single();
+      if (error) return json({ error: error.message }, 500);
+      return json({ pitch: data });
+    }
+
+    if (action === "update_venue" && req.method === "POST") {
+      const body = await req.json();
+      const { id, ...updates } = body;
+      delete updates.created_at;
+      delete updates.updated_at;
+      const { data, error } = await supabase
+        .from("venue_pitches")
+        .update(updates)
+        .eq("id", id)
+        .select()
+        .single();
+      if (error) return json({ error: error.message }, 500);
+      return json({ pitch: data });
+    }
+
+    if (action === "delete_venue" && req.method === "POST") {
+      const { id } = await req.json();
+      const { error } = await supabase.from("venue_pitches").delete().eq("id", id);
+      if (error) return json({ error: error.message }, 500);
+      return json({ ok: true });
+    }
+
+    if (action === "send_venue" && req.method === "POST") {
+      const { id, to, subject, message, link, gmName, venueName } = await req.json();
+      if (!to || !link) return json({ error: "Missing fields" }, 400);
+
+      const LOGO_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-email-logo.png";
+      const greeting = (gmName || "").toString().trim();
+      const safeGreeting = greeting.replace(/</g, "&lt;");
+      const finalSubject = subject || `A residency proposal for ${venueName || "your room"}`;
+      const messageText = (message || "").trim() ||
+        `I put together a short proposal for a four-week residency at ${venueName || "your venue"}. Twenty minutes in the room is all I'm asking for to start.\n\nBest,\n-Scott`;
+      const safeMessageHtml = messageText
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br/>");
+
+      const html = `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+<body style="margin:0; padding:0; background-color:#335747;">
+<center style="width:100%; background-color:#335747;">
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color:#335747;">
+<tr><td style="padding: 30px 0;">
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="560" align="center" style="max-width:560px; margin:auto; background-color:#223D34; border-radius:4px;">
+<tr><td style="padding: 40px 40px 24px; text-align:center;"><img src="${LOGO_URL}" alt="White Rabbit" width="90" style="width:90px; height:auto; display:block; margin:0 auto;" /></td></tr>
+<tr><td style="padding: 0 40px 20px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);"><p style="margin:0;">${safeGreeting ? safeGreeting + "," : "Hello,"}</p></td></tr>
+<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);"><p style="margin:0;">${safeMessageHtml}</p></td></tr>
+<tr><td style="padding: 0 40px 32px; text-align:center;"><a href="${link}" target="_blank" style="display:inline-block; padding:14px 36px; font-family:Georgia,serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#C9A3A8; text-decoration:none; font-weight:bold; border:1px solid #C9A3A8; border-radius:2px;">View the Proposal</a></td></tr>
+<tr><td style="padding: 0 40px 28px; text-align:center;"><p style="margin:0; font-family:Georgia,serif; font-size:12px; color:rgba(245,240,232,0.4);">Or open in your browser:<br/><a href="${link}" style="color:rgba(201,163,168,0.7); word-break:break-all; text-decoration:none;">${link}</a></p></td></tr>
+<tr><td style="padding: 0 40px;"><hr style="border:none; border-top:1px solid rgba(201,163,168,0.15); margin:0 0 24px;" /></td></tr>
+<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:13px; line-height:1.7; color:rgba(245,240,232,0.55);">
+<p style="margin:0;"><span style="color:rgba(245,240,232,0.85);">Scott Syme</span><br/>White Rabbit LA — Luxury Magic<br/>Office <a href="tel:+14243941850" style="color:rgba(201,163,168,0.85); text-decoration:none;">(424) 394-1850</a><br/><a href="https://whiterabbitla.com" style="color:rgba(201,163,168,0.85); text-decoration:none;">whiterabbitla.com</a></p>
+</td></tr>
+<tr><td style="padding: 0 40px 32px; text-align:center;"><p style="margin:0; font-family:Georgia,serif; font-size:12px; color:rgba(245,240,232,0.4);">White Rabbit · Los Angeles<br/>7393 W. Manchester Ave #209, Los Angeles, CA 90045</p></td></tr>
+</table></td></tr></table></center></body></html>`;
+
+      const text = `${greeting ? greeting + "," : "Hello,"}
+
+${messageText}
+
+View the proposal: ${link}
+
+Scott Syme
+White Rabbit LA — Luxury Magic
+(424) 394-1850 · whiterabbitla.com`;
+
+      const r = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          from: "Scott Syme <scott.syme@whiterabbitla.com>",
+          to: [to],
+          subject: finalSubject,
+          html,
+          text,
+          reply_to: "scott.syme@whiterabbitla.com",
+          headers: {
+            "List-Unsubscribe": "<mailto:scott.syme@whiterabbitla.com?subject=unsubscribe>",
+            "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+          },
+        }),
+      });
+      if (!r.ok) {
+        const t = await r.text();
+        return json({ error: `Email send failed: ${t}` }, 500);
+      }
+      if (id) {
+        await supabase.from("venue_pitches").update({ sent_at: new Date().toISOString() }).eq("id", id);
+      }
+      return json({ ok: true });
+    }
+
+
     if (action === "send" && req.method === "POST") {
       const { id, to, subject, message, link, firstName } = await req.json();
       if (!to || !link) return json({ error: "Missing fields" }, 400);
