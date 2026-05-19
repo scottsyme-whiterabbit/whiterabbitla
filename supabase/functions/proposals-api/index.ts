@@ -44,17 +44,15 @@ Deno.serve(async (req) => {
     const action = url.searchParams.get("action") || "";
     const slug = url.searchParams.get("slug") || "";
 
-    // PUBLIC: get by slug
+    // PUBLIC: get proposal by slug
     if (action === "get" && slug) {
       const { data, error } = await supabase.from("proposals").select("*").eq("slug", slug).maybeSingle();
       if (error) return json({ error: error.message }, 500);
       if (!data) return json({ error: "Not found" }, 404);
 
-      // Log view (skip if admin preview header present)
       if (!isAdmin(req)) {
         const ua = req.headers.get("user-agent") || "";
         const ref = req.headers.get("referer") || "";
-        // fire-and-forget
         supabase.from("proposal_views").insert({
           proposal_id: data.id,
           user_agent: ua.slice(0, 500),
@@ -64,7 +62,24 @@ Deno.serve(async (req) => {
       return json({ proposal: data });
     }
 
-    // PUBLIC: views for a single proposal (no PII) — used by admin list too
+    // PUBLIC: get venue pitch by slug
+    if (action === "get_venue" && slug) {
+      const { data, error } = await supabase.from("venue_pitches").select("*").eq("slug", slug).maybeSingle();
+      if (error) return json({ error: error.message }, 500);
+      if (!data) return json({ error: "Not found" }, 404);
+
+      if (!isAdmin(req)) {
+        const ua = req.headers.get("user-agent") || "";
+        const ref = req.headers.get("referer") || "";
+        supabase.from("proposal_views").insert({
+          venue_pitch_id: data.id,
+          user_agent: ua.slice(0, 500),
+          referrer: ref.slice(0, 500),
+        }).then(() => {});
+      }
+      return json({ pitch: data });
+    }
+
     // ADMIN actions below
     if (!isAdmin(req)) return json({ error: "Unauthorized" }, 401);
 
