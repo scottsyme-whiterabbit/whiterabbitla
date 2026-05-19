@@ -611,7 +611,7 @@ const AdminNewsletter = () => {
           <div className="flex items-center gap-2">
             <a
               href="/admin/proposals"
-              className="inline-flex items-center gap-1.5 px-3 py-2 border border-border text-foreground hover:border-accent hover:text-accent transition-colors font-sans text-xs tracking-[0.15em] uppercase min-h-[44px]"
+              className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 border border-border text-foreground hover:border-accent hover:text-accent transition-colors font-sans text-xs tracking-[0.15em] uppercase min-h-[44px]"
               title="Proposals"
             >
               <FileText size={14} /> Proposals
@@ -621,6 +621,14 @@ const AdminNewsletter = () => {
             </button>
           </div>
         </div>
+
+        {/* Mobile-prominent Proposals CTA */}
+        <a
+          href="/admin/proposals"
+          className="md:hidden w-full bg-forest-dark text-cream px-5 py-4 flex items-center justify-center gap-2 hover:opacity-90 shadow-md mb-4 text-base font-medium tracking-wide"
+        >
+          <FileText size={18} /> Open Proposals
+        </a>
 
         {/* Global Search Bar */}
         <div className="relative mb-6">
