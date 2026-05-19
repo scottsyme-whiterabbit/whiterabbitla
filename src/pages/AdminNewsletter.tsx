@@ -216,8 +216,9 @@ const AdminNewsletter = () => {
     if (authenticated) loadData();
   }, [authenticated, loadData]);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLogin = async (e?: React.FormEvent, pwOverride?: string) => {
+    if (e) e.preventDefault();
+    const candidate = pwOverride ?? password;
     try {
       const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
         method: "POST",
@@ -225,12 +226,13 @@ const AdminNewsletter = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${SUPABASE_KEY}`,
         },
-        body: JSON.stringify({ action: "get_stats", adminPassword: password }),
+        body: JSON.stringify({ action: "get_stats", adminPassword: candidate }),
       });
       if (res.ok) {
-        setStoredPassword(password);
+        setPassword(candidate);
+        setStoredPassword(candidate);
         setAuthenticated(true);
-        const session = JSON.stringify({ pw: password, ts: Date.now() });
+        const session = JSON.stringify({ pw: candidate, ts: Date.now() });
         localStorage.setItem("wr_admin_session", session);
         sessionStorage.setItem("wr_admin_session", session);
         toast.success("Welcome back");
