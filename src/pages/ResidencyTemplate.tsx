@@ -97,7 +97,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
             <span className="text-gold text-xs">✦</span>
             <span className="w-10 h-px bg-gold/60" />
           </div>
-          <p className="font-serif italic text-lg md:text-xl text-cream/85 mt-8 max-w-2xl leading-relaxed">
+          <p className="font-sans text-lg md:text-xl text-cream/85 mt-8 max-w-2xl leading-relaxed">
             {data.hero_subhead}
           </p>
           {data.submarket && (
@@ -202,7 +202,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
           </div>
 
           {data.submarket && (
-            <p className="font-sans text-sm text-forest-dark/65 mt-12 max-w-2xl mx-auto italic">
+            <p className="font-sans text-sm text-forest-dark/65 mt-12 max-w-2xl mx-auto">
               Numbers like these matter most in a market like {data.submarket}, where guests already expect the room to deliver.
             </p>
           )}
@@ -326,7 +326,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
             They're not watching a performance — they're inside one.
           </p>
           {data.press_line && (
-            <p className="font-sans text-sm text-forest-dark/65 mt-6 italic">
+            <p className="font-sans text-sm text-forest-dark/65 mt-6">
               {data.press_line}
             </p>
           )}
@@ -496,7 +496,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
 
         {/* Private positioning line — residency proposals only */}
         {data.closing_private_line && (
-          <p className="font-serif italic text-sm text-forest-dark/45 mt-10 max-w-md mx-auto leading-relaxed">
+          <p className="font-sans text-sm text-forest-dark/45 mt-10 max-w-md mx-auto leading-relaxed">
             {data.closing_private_line}
           </p>
         )}
