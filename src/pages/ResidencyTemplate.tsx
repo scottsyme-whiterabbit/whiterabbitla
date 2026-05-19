@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Phone, Calendar, Instagram, Linkedin } from "lucide-react";
+import { Phone, Calendar, Instagram, Linkedin, Award, Star, ArrowRight } from "lucide-react";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
 import threeStars from "@/assets/three-stars-gold.png";
 import wrScriptLogo from "@/assets/wr-wordmark-cream.png";
@@ -367,6 +367,105 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
           </p>
         </div>
       </section>
+
+      {/* CREDENTIALS / ACCREDITATIONS */}
+      <section className="relative bg-forest-dark text-cream py-16 md:py-20 px-6">
+        <div className="max-w-5xl mx-auto text-center">
+          <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">
+            Credentials
+          </p>
+          <OrnamentalDivider />
+          <h2 className="font-serif font-light text-3xl md:text-4xl text-cream mt-6 mb-12">
+            Vetted by the rooms that don't let just anyone in.
+          </h2>
+
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8 text-left">
+            {[
+              {
+                title: "The Magic Castle",
+                detail: "Performing member and consultant at the Academy of Magical Arts in Hollywood — the most selective magic society in the world.",
+              },
+              {
+                title: "Hyatt Hotels",
+                detail: "Strolling close-up magic across Hyatt properties — lobby bars and private events, never disrupting the room.",
+              },
+              {
+                title: "Rideu at Arden, West Hollywood",
+                detail: "Close-up performer inside one of West Hollywood's most discreet supper-club rooms.",
+              },
+            ].map((c, i) => (
+              <div key={i} className="border border-gold/30 bg-cream/[0.03] p-6">
+                <Award className="w-6 h-6 text-gold mb-3" />
+                <div className="font-serif text-xl text-cream mb-2 leading-snug">
+                  {c.title}
+                </div>
+                <p className="font-sans text-sm text-cream/75 leading-relaxed">
+                  {c.detail}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* HIGHLIGHTED REVIEWS */}
+      <section className="relative bg-cream py-20 md:py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="flex justify-center gap-1 mb-3">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className="w-4 h-4 fill-gold text-gold" />
+              ))}
+            </div>
+            <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-3">
+              5.0 on Google · What Rooms Are Saying
+            </p>
+            <OrnamentalDivider />
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                quote: "Scott was the highlight of our evening. Guests are still talking about it weeks later.",
+                attribution: "Private Event, Beverly Hills",
+              },
+              {
+                quote: "He read the room perfectly — quiet, elegant, never in the way. Exactly what we wanted.",
+                attribution: "Hotel General Manager",
+              },
+              {
+                quote: "The most impossible thing I've ever seen happen six inches from my face.",
+                attribution: "Guest, Magic Castle",
+              },
+            ].map((t, i) => (
+              <div key={i} className="text-center md:text-left">
+                <span className="font-serif text-5xl text-gold/60 leading-none block mb-2">
+                  "
+                </span>
+                <p className="font-serif text-lg text-forest-dark leading-relaxed mb-4">
+                  {t.quote}
+                </p>
+                <p className="font-sans text-xs tracking-[0.15em] uppercase text-forest-dark/60">
+                  — {t.attribution}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <a
+              href="https://whiterabbitla.com/reviews"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-xs tracking-[0.25em] uppercase text-forest-dark border-b border-gold/60 pb-1 hover:text-gold transition-colors"
+            >
+              Read More Reviews <ArrowRight className="w-3.5 h-3.5" />
+            </a>
+          </div>
+        </div>
+      </section>
+
+
 
       {/* GALLERY STRIP */}
       {(() => {
