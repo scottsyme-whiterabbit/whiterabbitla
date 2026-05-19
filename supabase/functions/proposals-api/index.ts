@@ -25,6 +25,12 @@ const slugify = (first: string, last: string) => {
   return `${base}-${rand}`;
 };
 
+const slugifyVenue = (venue: string) => {
+  const base = (venue || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "residency";
+  const rand = Math.random().toString(36).slice(2, 8);
+  return `${base}-${rand}`;
+};
+
 const isAdmin = (req: Request) => {
   const pw = req.headers.get("x-admin-password") || "";
   return ADMIN_PASSWORD && pw === ADMIN_PASSWORD;
