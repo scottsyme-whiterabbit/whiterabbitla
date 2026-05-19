@@ -96,7 +96,7 @@ export function BiometricEnrollPrompt({ namespace, password, variant = "light" }
     if (r.ok) {
       toast.success("Face ID enabled on this device");
     } else {
-      toast.error(r.error || "Couldn't enable Face ID");
+      toast.error((r as { error?: string }).error || "Couldn't enable Face ID");
     }
   };
 
