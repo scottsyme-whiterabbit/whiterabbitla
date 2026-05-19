@@ -81,13 +81,14 @@ const AdminProposals = () => {
     return j;
   };
 
-  const tryLogin = async () => {
+  const tryLogin = async (pw?: string) => {
+    const candidate = pw ?? pwInput;
     try {
-      const res = await fetch(`${FN}?action=list`, { headers: { "x-admin-password": pwInput } });
+      const res = await fetch(`${FN}?action=list`, { headers: { "x-admin-password": candidate } });
       if (!res.ok) throw new Error("Wrong password");
-      setPassword(pwInput);
+      setPassword(candidate);
       setAuthed(true);
-      const session = JSON.stringify({ pw: pwInput, ts: Date.now() });
+      const session = JSON.stringify({ pw: candidate, ts: Date.now() });
       localStorage.setItem("wr_admin_session", session);
     } catch (e) {
       toast.error((e as Error).message);
