@@ -417,26 +417,59 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
           <div className="space-y-2">
             {lostBucketEntries.map(([reason, { count, value }]) => {
               const pct = Math.round((count / lostDeals.length) * 100);
+              const dealsInBucket = lostDeals.filter(d => bucketReason(d.lost_reason) === reason);
+              const isOpen = expandedLostReason === reason;
               return (
-                <div key={reason}>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="font-sans text-xs text-foreground">{reason}</span>
-                    <span className="font-sans text-[10px] text-muted-foreground">
-                      {count} ({pct}%) {value > 0 && <span className="text-accent">· {formatCurrency(value)}</span>}
-                    </span>
-                  </div>
-                  <div className="w-full h-1.5 bg-muted/30">
-                    <div
-                      className="h-full bg-red-500/50 transition-all duration-500"
-                      style={{ width: `${pct}%` }}
-                    />
-                  </div>
+                <div key={reason} className="border border-transparent hover:border-border/60 rounded">
+                  <button
+                    type="button"
+                    onClick={() => setExpandedLostReason(isOpen ? null : reason)}
+                    className="w-full text-left p-2 -m-2 rounded hover:bg-muted/20 transition-colors"
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-sans text-xs text-foreground flex items-center gap-1.5">
+                        <span className="text-muted-foreground text-[10px]">{isOpen ? "▾" : "▸"}</span>
+                        {reason}
+                      </span>
+                      <span className="font-sans text-[10px] text-muted-foreground">
+                        {count} ({pct}%) {value > 0 && <span className="text-accent">· {formatCurrency(value)}</span>}
+                      </span>
+                    </div>
+                    <div className="w-full h-1.5 bg-muted/30">
+                      <div className="h-full bg-red-500/50 transition-all duration-500" style={{ width: `${pct}%` }} />
+                    </div>
+                  </button>
+                  {isOpen && (
+                    <div className="mt-2 ml-4 space-y-1 border-l-2 border-red-500/30 pl-3">
+                      {dealsInBucket.map(d => (
+                        <button
+                          key={d.id}
+                          type="button"
+                          onClick={() => openEdit(d)}
+                          className="w-full text-left flex items-center justify-between py-1.5 px-2 rounded hover:bg-muted/30 transition-colors group"
+                        >
+                          <div className="min-w-0 flex-1">
+                            <p className="font-sans text-xs text-foreground truncate group-hover:text-accent">
+                              {d.contact_name || d.contact_email}
+                              {d.company && <span className="text-muted-foreground"> · {d.company}</span>}
+                            </p>
+                            {d.lost_reason && d.lost_reason !== reason && (
+                              <p className="font-sans text-[10px] text-muted-foreground truncate italic">"{d.lost_reason}"</p>
+                            )}
+                          </div>
+                          <span className="font-mono text-[10px] text-accent shrink-0 ml-2">
+                            {d.deal_value ? formatCurrency(d.deal_value) : "—"}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               );
             })}
           </div>
           <p className="font-sans text-[10px] text-muted-foreground italic pt-2 border-t border-border">
-            Tip: tag every lost deal with a reason so this stays accurate.
+            Tip: tag every lost deal with a reason so this stays accurate. Click a reason to drill into those deals.
           </p>
         </div>
       )}
