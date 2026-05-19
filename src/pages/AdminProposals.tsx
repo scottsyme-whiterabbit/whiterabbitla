@@ -315,6 +315,8 @@ const AdminProposals = () => {
             ))}
           </div>
         )}
+          </>
+        )}
       </div>
     </div>
   );
