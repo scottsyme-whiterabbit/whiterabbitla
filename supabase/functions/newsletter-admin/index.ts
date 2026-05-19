@@ -987,6 +987,92 @@ serve(async (req) => {
         });
       }
 
+      case "get_deal_inbox": {
+        // Hot list: deals with recent inbound replies OR hot_signal, sorted by latest activity
+        const { data: deals } = await supabase
+          .from("deals")
+          .select("id, contact_name, contact_email, company, stage, event_type, event_date, last_inbound_at, hot_signal, hot_reason, gmail_thread_id, calendar_event_id, deal_value, source")
+          .order("last_inbound_at", { ascending: false, nullsFirst: false })
+          .limit(200);
+        return new Response(JSON.stringify({ deals: deals || [] }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "get_deal_threads": {
+        const { deal_id } = payload;
+        const { data: threads } = await supabase
+          .from("deal_email_threads")
+          .select("*")
+          .eq("deal_id", deal_id)
+          .order("last_message_at", { ascending: false });
+        const { data: messages } = await supabase
+          .from("deal_email_messages")
+          .select("*")
+          .eq("deal_id", deal_id)
+          .order("sent_at", { ascending: true });
+        const { data: activity } = await supabase
+          .from("deal_activity")
+          .select("*")
+          .eq("deal_id", deal_id)
+          .order("occurred_at", { ascending: false })
+          .limit(50);
+        return new Response(JSON.stringify({ threads: threads || [], messages: messages || [], activity: activity || [] }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "trigger_gmail_sync": {
+        const { deal_id } = payload;
+        const r = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/gmail-sync`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}` },
+          body: JSON.stringify({ adminPassword, deal_id }),
+        });
+        const data = await r.json();
+        return new Response(JSON.stringify(data), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "trigger_calendar_sync": {
+        const r = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/calendar-sync`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}` },
+          body: JSON.stringify({ adminPassword }),
+        });
+        const data = await r.json();
+        return new Response(JSON.stringify(data), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "check_availability": {
+        const { date } = payload;
+        const r = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/calendar-availability`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}` },
+          body: JSON.stringify({ date }),
+        });
+        const data = await r.json();
+        return new Response(JSON.stringify(data), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "send_gmail_reply": {
+        const { deal_id, to, subject, body_text, gmail_thread_id } = payload;
+        const r = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/gmail-send`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}` },
+          body: JSON.stringify({ adminPassword, deal_id, to, subject, body_text, gmail_thread_id }),
+        });
+        const data = await r.json();
+        return new Response(JSON.stringify(data), {
+          status: r.status, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       default:
         return new Response(JSON.stringify({ error: "Unknown action" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
