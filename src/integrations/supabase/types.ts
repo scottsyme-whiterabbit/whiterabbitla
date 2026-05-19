@@ -236,8 +236,137 @@ export type Database = {
         }
         Relationships: []
       }
+      deal_activity: {
+        Row: {
+          body: string | null
+          created_at: string
+          deal_id: string
+          id: string
+          metadata: Json | null
+          occurred_at: string
+          title: string | null
+          type: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          deal_id: string
+          id?: string
+          metadata?: Json | null
+          occurred_at?: string
+          title?: string | null
+          type: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          deal_id?: string
+          id?: string
+          metadata?: Json | null
+          occurred_at?: string
+          title?: string | null
+          type?: string
+        }
+        Relationships: []
+      }
+      deal_email_messages: {
+        Row: {
+          body_text: string | null
+          created_at: string
+          deal_id: string
+          direction: string
+          from_email: string | null
+          gmail_message_id: string
+          id: string
+          sent_at: string
+          snippet: string | null
+          subject: string | null
+          thread_id: string
+          to_email: string | null
+        }
+        Insert: {
+          body_text?: string | null
+          created_at?: string
+          deal_id: string
+          direction: string
+          from_email?: string | null
+          gmail_message_id: string
+          id?: string
+          sent_at: string
+          snippet?: string | null
+          subject?: string | null
+          thread_id: string
+          to_email?: string | null
+        }
+        Update: {
+          body_text?: string | null
+          created_at?: string
+          deal_id?: string
+          direction?: string
+          from_email?: string | null
+          gmail_message_id?: string
+          id?: string
+          sent_at?: string
+          snippet?: string | null
+          subject?: string | null
+          thread_id?: string
+          to_email?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deal_email_messages_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "deal_email_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deal_email_threads: {
+        Row: {
+          created_at: string
+          deal_id: string
+          gmail_thread_id: string
+          id: string
+          last_inbound_at: string | null
+          last_message_at: string | null
+          last_outbound_at: string | null
+          message_count: number
+          snippet: string | null
+          subject: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deal_id: string
+          gmail_thread_id: string
+          id?: string
+          last_inbound_at?: string | null
+          last_message_at?: string | null
+          last_outbound_at?: string | null
+          message_count?: number
+          snippet?: string | null
+          subject?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deal_id?: string
+          gmail_thread_id?: string
+          id?: string
+          last_inbound_at?: string | null
+          last_message_at?: string | null
+          last_outbound_at?: string | null
+          message_count?: number
+          snippet?: string | null
+          subject?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       deals: {
         Row: {
+          calendar_event_id: string | null
           company: string | null
           contact_email: string
           contact_name: string | null
@@ -246,8 +375,14 @@ export type Database = {
           event_date: string | null
           event_time: string | null
           event_type: string | null
+          gmail_thread_id: string | null
           guest_count: string | null
+          hot_reason: string | null
+          hot_signal: boolean
           id: string
+          last_calendar_sync_at: string | null
+          last_gmail_sync_at: string | null
+          last_inbound_at: string | null
           last_outreach_date: string | null
           location: string | null
           lost_reason: string | null
@@ -266,6 +401,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          calendar_event_id?: string | null
           company?: string | null
           contact_email: string
           contact_name?: string | null
@@ -274,8 +410,14 @@ export type Database = {
           event_date?: string | null
           event_time?: string | null
           event_type?: string | null
+          gmail_thread_id?: string | null
           guest_count?: string | null
+          hot_reason?: string | null
+          hot_signal?: boolean
           id?: string
+          last_calendar_sync_at?: string | null
+          last_gmail_sync_at?: string | null
+          last_inbound_at?: string | null
           last_outreach_date?: string | null
           location?: string | null
           lost_reason?: string | null
@@ -294,6 +436,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          calendar_event_id?: string | null
           company?: string | null
           contact_email?: string
           contact_name?: string | null
@@ -302,8 +445,14 @@ export type Database = {
           event_date?: string | null
           event_time?: string | null
           event_type?: string | null
+          gmail_thread_id?: string | null
           guest_count?: string | null
+          hot_reason?: string | null
+          hot_signal?: boolean
           id?: string
+          last_calendar_sync_at?: string | null
+          last_gmail_sync_at?: string | null
+          last_inbound_at?: string | null
           last_outreach_date?: string | null
           location?: string | null
           lost_reason?: string | null
