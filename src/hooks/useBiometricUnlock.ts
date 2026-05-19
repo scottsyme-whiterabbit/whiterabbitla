@@ -45,10 +45,10 @@ function b64UrlToBuf(s: string): ArrayBuffer {
   return buf.buffer;
 }
 
-function randomBytes(n: number): Uint8Array {
-  const a = new Uint8Array(n);
+function randomBytes(n: number): ArrayBuffer {
+  const a = new Uint8Array(new ArrayBuffer(n));
   crypto.getRandomValues(a);
-  return a;
+  return a.buffer;
 }
 
 export function isBiometricSupported(): boolean {
