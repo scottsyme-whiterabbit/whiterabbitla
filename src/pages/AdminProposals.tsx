@@ -54,6 +54,7 @@ const AdminProposals = () => {
   const [loading, setLoading] = useState(false);
   const [editing, setEditing] = useState<FullProposal | null>(null);
   const [showPreview, setShowPreview] = useState(false);
+  const [activeTab, setActiveTab] = useState<"client" | "residency">("client");
 
   // Try saved session
   useEffect(() => {
@@ -229,14 +230,44 @@ const AdminProposals = () => {
               <p className="text-sm text-forest-dark/60 mt-1">Build, preview, and send personalized proposals.</p>
             </div>
           </div>
+          {activeTab === "client" && (
+            <button
+              onClick={startNew}
+              className="hidden md:inline-flex bg-forest-dark text-cream px-5 py-3 items-center gap-2 hover:opacity-90"
+            >
+              <Plus className="w-4 h-4" /> New Proposal
+            </button>
+          )}
+        </div>
+
+        {/* Tab toggle */}
+        <div className="flex border-b border-forest-dark/20 mb-6">
           <button
-            onClick={startNew}
-            className="hidden md:inline-flex bg-forest-dark text-cream px-5 py-3 items-center gap-2 hover:opacity-90"
+            onClick={() => setActiveTab("client")}
+            className={`px-5 py-3 text-sm tracking-wider uppercase transition-colors ${
+              activeTab === "client"
+                ? "border-b-2 border-forest-dark text-forest-dark font-medium"
+                : "text-forest-dark/50 hover:text-forest-dark"
+            }`}
           >
-            <Plus className="w-4 h-4" /> New Proposal
+            Client Proposals
+          </button>
+          <button
+            onClick={() => setActiveTab("residency")}
+            className={`px-5 py-3 text-sm tracking-wider uppercase transition-colors ${
+              activeTab === "residency"
+                ? "border-b-2 border-forest-dark text-forest-dark font-medium"
+                : "text-forest-dark/50 hover:text-forest-dark"
+            }`}
+          >
+            Residency Pitches
           </button>
         </div>
 
+        {activeTab === "residency" ? (
+          <ResidencyAdmin password={password} />
+        ) : (
+          <>
         {/* Mobile-prominent New Proposal CTA */}
         <button
           onClick={startNew}
@@ -244,6 +275,7 @@ const AdminProposals = () => {
         >
           <Plus className="w-5 h-5" /> New Proposal
         </button>
+
 
         {loading ? (
           <div className="text-forest-dark/60">Loading…</div>
@@ -282,6 +314,8 @@ const AdminProposals = () => {
               </div>
             ))}
           </div>
+        )}
+          </>
         )}
       </div>
     </div>
