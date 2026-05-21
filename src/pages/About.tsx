@@ -50,12 +50,6 @@ const About = () => {
             </h2>
             <div className="space-y-6 font-sans text-base text-muted-foreground leading-relaxed">
               <p>
-                The posture is borrowed from rooms that know how to host. The quiet of a five-star
-                lobby. The discretion of a great maître d'. The care of someone who has set a
-                table for people he respects. Guests are the subject. The host is the reason it is
-                possible. The magician is the last to let go.
-              </p>
-              <p>
                 Based in Los Angeles, Scott Syme is the creative force behind White Rabbit, a
                 luxury magic experience built on a simple belief: the best entertainment makes
                 people feel truly alive. Not through tricks, but through an atmosphere of joy,
@@ -67,35 +61,39 @@ const About = () => {
               <p>
                 Scott's path to magic wasn't a straight line, and that's what makes him different.
                 Before White Rabbit, he built a career in luxury real estate at Compass in Beverly
-                Hills, learning to anticipate the needs of high-net-worth clients and deliver
-                white-glove service. When he decided to pursue magic full-time, he took a job as a
-                hotel valet. Not out of necessity, but intention. He wanted to study hospitality
-                from the ground up. On his very first day after leaving that position to become a
-                full-time magician, he was invited to perform at a billionaire's home.
+                Hills, where he learned to anticipate the needs of high-net-worth clients and
+                deliver white-glove service. When he decided to pursue magic full-time, he took a
+                job as a hotel valet. Not out of necessity, but intention. He wanted to study
+                hospitality from the ground up, learning what makes people feel genuinely welcomed
+                and cared for. On his very first day after leaving that position to become a
+                full-time magician, he was invited to perform at a billionaire's home. A moment
+                that cemented what he already felt: he was exactly where he was meant to be.
               </p>
               <p>
                 That combination of business acumen, hospitality training, and world-class
                 showmanship is why Fortune 500 companies, charitable organizations, and the most
                 discerning private clients (Netflix, Disney, Rolls Royce, Morgan Stanley, and
                 countless industry leaders) trust Scott with their most important events. Beyond
-                performing, he has consulted for major productions, teaching the cast of Disney
-                Channel's Bizaardvark how to perform magic on screen alongside Olivia Rodrigo,
-                consulting for America's Got Talent winner Dustin Tavella, and coaching comedian
-                Adam Ray for a show at the legendary Comedy Store.
+                performing, Scott has consulted for major productions, teaching the cast of
+                Disney Channel's Bizaardvark how to perform magic on screen alongside Olivia
+                Rodrigo, consulting for America's Got Talent champion winner Dustin Tavella, and
+                coaching comedian Adam Ray for a show at the legendary Comedy Store. When you
+                hire White Rabbit, you're not just booking a magician. You're hiring someone who
+                has dedicated his life to making people feel extraordinary.
               </p>
               <p>
                 In 2025, Scott created and hosted Magic Mondays at the Kookaburra Lounge in
-                Hollywood, a weekly magic and comedy show featuring names like Taylor Hughes,
-                Kyle Marlett, Franco Pascali, and Blake Vogt, alongside comedians Adam Ray,
-                Tiffany Haddish, Craig Robinson, Dean Delray, and Katie Cazorla. Magic Mondays
-                returns in 2026 in Studio City.
+                Hollywood, a weekly magic and comedy show produced by White Rabbit and the
+                Kookaburra Lounge. The show featured some of the biggest names in magic,
+                including Taylor Hughes, Kyle Marlett, Franco Pascali, and Blake Vogt, alongside
+                comedians like Adam Ray, Tiffany Haddish, Craig Robinson, Dean Delray, and Katie
+                Cazorla.
               </p>
               <p>
-                For premium White Rabbit private magic shows, Scott transforms spaces with
-                emerald curtain drapes, cinematic uplighting, and a curated soundtrack, creating
-                an atmosphere that feels like stepping into an upscale hotel lobby. The show is
-                bigger emotionally than it is physically. Guests don't just leave entertained;
-                they leave feeling changed, carrying stories they'll tell for years.
+                The posture is borrowed from rooms that know how to host. The quiet of a
+                five-star lobby. The discretion of a great maître d'. The care of someone who has
+                set a table for people he respects. Guests are the subject. The host is the
+                reason it is possible. The magician is the last to let go.
               </p>
             </div>
           </AnimatedSection>
