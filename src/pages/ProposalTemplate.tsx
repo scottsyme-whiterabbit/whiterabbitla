@@ -300,7 +300,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         <Flourishes tone="cream" size="md" />
         <div className="max-w-6xl mx-auto relative">
           <div className="text-center mb-12">
-            <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">Three Options</p>
+            <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">{data.tiers.length === 1 ? "Your Option" : data.tiers.length === 2 ? "Two Options" : "Three Options"}</p>
             <h2 className="font-serif font-light text-4xl md:text-5xl text-cream mb-3">Choose Your Evening</h2>
             <div className="flex items-center justify-center gap-3 mt-4">
               <span className="w-8 h-px bg-gold/50" />
@@ -308,7 +308,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
               <span className="w-8 h-px bg-gold/50" />
             </div>
           </div>
-          <div className="grid md:grid-cols-3 gap-5 md:gap-6 items-stretch">
+          <div className={`grid gap-5 md:gap-6 items-stretch justify-center mx-auto ${data.tiers.length === 1 ? "max-w-md" : data.tiers.length === 2 ? "md:grid-cols-2 max-w-3xl" : "md:grid-cols-3"}`}>
             {data.tiers.map((tier, i) => {
               const rec = tier.recommended;
               return (
