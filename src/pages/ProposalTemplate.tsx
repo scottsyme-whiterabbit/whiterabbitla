@@ -102,7 +102,7 @@ export const DEFAULT_PROPOSAL: ProposalData = {
   venue: "",
   letter_intro: "",
   intro_paragraph:
-    "What you described isn't a magic act dropped into your evening — it's an entire texture woven through the night. Quiet conversation that turns into wide-eyed silence, then laughter, then the kind of story your guests will still be telling on Monday.",
+    "What you described isn't a magic act dropped into your evening. It is an entire texture woven through the night. Quiet conversation that turns into wide-eyed silence, then laughter, then the kind of story your guests will still be telling on Monday.",
   hero_image: "wedding",
   timeline: [
     { time: "6:30 PM", desc: "I arrive, set quietly, full environment built before guests arrive." },
@@ -156,9 +156,9 @@ export const DEFAULT_PROPOSAL: ProposalData = {
     },
   ],
   faqs: [
-    { q: "How much space do you need?", a: "For close-up walk-around, none — I move through the room. For the parlor experience, anywhere a host can comfortably gather their guests works. I'll walk you through setup a week ahead." },
+    { q: "How much space do you need?", a: "For close-up walk-around, none. I move through the room. For the parlor experience, anywhere a host can comfortably gather their guests works. I'll walk you through setup a week ahead." },
     { q: "What if a guest doesn't want to participate?", a: "No one is ever pulled in who doesn't want to be. The night is built around making your guests feel hosted, not put on the spot." },
-    { q: "Do you need a stage, microphone, or special lighting?", a: "For most rooms, no. I bring everything I need — including soft lighting and a discreet sound system if the space calls for it." },
+    { q: "Do you need a stage, microphone, or special lighting?", a: "For most rooms, no. I bring everything I need, including soft lighting and a discreet sound system if the space calls for it." },
     { q: "What's your weather contingency for outdoor events?", a: "We move indoors. I'll work with your planner on the indoor backup so it's ready before it's needed." },
     { q: "How early do you arrive?", a: "For close-up walk-around, an hour before guests. For the full parlor experience, two hours." },
     { q: "Do you travel?", a: "Yes. Standard pricing covers Los Angeles County. For destination events, travel and lodging are added." },
@@ -215,7 +215,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           <div className="font-sans text-base md:text-lg leading-relaxed text-forest-dark space-y-5 mt-8">
             <p className="font-serif text-xl md:text-2xl text-forest">{data.first_name},</p>
             {data.letter_intro && <p className="whitespace-pre-wrap">{data.letter_intro}</p>}
-            <p className="font-serif text-2xl pl-2 mb-0 text-forest">— Scott</p>
+            <p className="font-serif text-2xl pl-2 mb-0 text-forest">Scott</p>
           </div>
         </div>
       </section>
@@ -404,7 +404,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
             <span className="w-10 h-px bg-gold/60" />
           </div>
           <p className="font-sans text-base text-forest-dark/75 max-w-2xl mx-auto mb-8">
-            A few short reels from recent events — guest reactions, close-up moments, and the feel of the room.
+            A few short reels from recent events: guest reactions, close-up moments, and the feel of the room.
           </p>
           <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3 max-w-2xl mx-auto">
             {[
@@ -443,7 +443,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           </div>
           <div className="font-sans text-base leading-relaxed text-cream/80 max-w-2xl mx-auto space-y-4">
             <p>A 50% deposit holds your date and locks the booking. The remaining 50% is due the day before the event.</p>
-            <p>This proposal — and the date — is held for 14 days from today.</p>
+            <p>This proposal, and the date, is held for 14 days from today.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-3 mt-10 max-w-4xl mx-auto">
             {data.tiers.map((tier, i) => {
@@ -452,7 +452,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
               if (!linkHref) return null;
               return (
                 <a key={i} href={linkHref} target="_blank" rel="noopener noreferrer" className={`block py-4 px-5 text-xs tracking-[0.15em] uppercase font-medium transition-opacity hover:opacity-85 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream hover:border-gold hover:text-gold"}`}>
-                  {tier.cta} — {tier.price}
+                  {tier.cta} · {tier.price}
                 </a>
               );
             })}
