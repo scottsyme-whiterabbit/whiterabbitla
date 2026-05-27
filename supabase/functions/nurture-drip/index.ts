@@ -158,12 +158,12 @@ function getNurtureEmail(category: CampaignCategory, step: number, name: string,
     // ═══════════════════════════════════════════════
     corporate_planner: [
       {
-        subject: "400 phones went face-down",
-        preheader: "What happened at the Morgan Stanley dinner.",
+        subject: "When the phones go face-down",
+        preheader: "What happens when close-up magic lands in a corporate room.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">I performed at a Morgan Stanley dinner recently. 400 people — sharp, skeptical, not easily impressed.</p>
-<p style="margin:0 0 18px;">Within 90 seconds of starting close-up magic at the tables, every phone in the room went face-down. Not because anyone asked — because what was happening three feet away was more interesting than anything on the screen.</p>
-<p style="margin:0 0 18px;">The conversations at dinner were different after that. People were looser, more connected. I have seen the same thing at Rivian, Rolls-Royce, and events in New York. When something unexpected happens up close, the room resets.</p>
+<p style="margin:0 0 18px;">A recent corporate dinner. Sharp room, skeptical guests, not easily impressed.</p>
+<p style="margin:0 0 18px;">Within 90 seconds of starting close-up magic at the tables, every phone in the room went face-down. Not because anyone asked. Because what was happening three feet away was more interesting than anything on the screen.</p>
+<p style="margin:0 0 18px;">The conversations at dinner were different after that. People were looser, more connected. I have seen the same thing at Rivian, Rolls-Royce, and Morgan Stanley events. When something unexpected happens up close, the room resets.</p>
 <p style="margin:0 0 18px;">Worth a quick conversation if you are planning anything where the energy in the room matters.</p>
 ${cta}
 <p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/why-cocktail-hour-entertainment-matters`, "Why Cocktail Hour Entertainment Changes Everything", contactId, step, `nurture-${category}`)}</p>
