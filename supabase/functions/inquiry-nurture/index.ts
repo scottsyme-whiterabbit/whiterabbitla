@@ -140,7 +140,7 @@ ${signoff()}`);
   if (step === 2) {
     const inner = bodyCell(`<p style="margin:0 0 18px;">Hi ${name},</p>
 <p style="margin:0 0 18px;">A quick recap of where the last few months have taken me — figured you might enjoy a little behind-the-scenes:</p>
-<p style="margin:0 0 18px;">A Morgan Stanley dinner for 400 in Manhattan. A wedding cocktail hour at a private estate in Santa Barbara. A client appreciation evening for Rolls-Royce. A small dinner for ten at a Hollywood Hills home that turned into one of my favorite nights of the year.</p>
+<p style="margin:0 0 18px;">A corporate dinner for Morgan Stanley. A wedding cocktail hour at a private estate in Santa Barbara. A client appreciation evening for Rolls-Royce. A small dinner for ten at a Hollywood Hills home that turned into one of my favorite nights of the year.</p>
 <p style="margin:0 0 18px;">Different rooms, different crowds — but the same thing happens every time. People put their phones down. Strangers laugh together. The room gets a little warmer.</p>
 <p style="margin:0 0 18px;">If you are still thinking about your event, I would love to hear where you are. ${trackedLink("https://calendar.app.google/58WjggPt3RFAcJjq8", "Grab a quick call here", cid, step)} or just reply to this email.</p>
 ${signoff()}`);
