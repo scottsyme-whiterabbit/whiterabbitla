@@ -832,13 +832,22 @@ const ServicePage = () => {
             <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-10">
               Frequently Asked Questions
             </h2>
+            {/* SEO: crawler-visible Q&A pairs (sr-only; visual UI is the accordion below) */}
+            <div className="sr-only">
+              {page.faqs.map((faq, i) => (
+                <div key={`seo-${i}`}>
+                  <h3>{faq.question}</h3>
+                  <p>{faq.answer}</p>
+                </div>
+              ))}
+            </div>
             <Accordion type="single" collapsible className="w-full">
               {page.faqs.map((faq, i) => (
                 <AccordionItem key={i} value={`faq-${i}`}>
                   <AccordionTrigger className="font-sans text-sm md:text-base text-foreground text-left">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="font-sans text-sm text-muted-foreground leading-relaxed">
+                  <AccordionContent forceMount className="font-sans text-sm text-muted-foreground leading-relaxed">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>

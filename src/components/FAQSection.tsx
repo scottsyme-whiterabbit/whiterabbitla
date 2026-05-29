@@ -67,6 +67,15 @@ const FAQSection = ({
           </h2>
         </AnimatedSection>
         <AnimatedSection delay={0.1}>
+          {/* SEO: crawler-visible Q&A pairs (sr-only; visual UI is the accordion below) */}
+          <div className="sr-only">
+            {faqs.map((faq, index) => (
+              <div key={`seo-${index}`}>
+                <h3>{faq.question}</h3>
+                <p>{faq.answer}</p>
+              </div>
+            ))}
+          </div>
           <Accordion type="single" collapsible className="w-full">
             {faqs.map((faq, index) => (
               <AccordionItem
@@ -77,7 +86,7 @@ const FAQSection = ({
                 <AccordionTrigger className="font-sans text-sm md:text-base text-foreground text-left py-6 hover:no-underline hover:text-accent transition-colors">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="font-sans text-sm text-muted-foreground leading-relaxed pb-6">
+                <AccordionContent forceMount className="font-sans text-sm text-muted-foreground leading-relaxed pb-6">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
