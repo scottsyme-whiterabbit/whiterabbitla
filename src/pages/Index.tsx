@@ -114,7 +114,7 @@ const Index = () => {
 
   return (
     <main id="main-content">
-      <SEOHead title={seoTitle} description={seoDescription} canonical="/" ogImage={heroImage} />
+      <SEOHead title={seoTitle} description={seoDescription} canonical="/" ogImage="/og-image.jpg" />
       {/* Hero */}
       <section className="relative overflow-hidden md:h-screen">
         {/* Image container */}
