@@ -30,6 +30,98 @@
     <meta name="google-site-verification" content="Spqd21iDRrKMHE0_MnbETolOXFlqrb9OAiwdYW4Uizw" />
     <link rel="llms" href="/llms.txt" type="text/plain" title="LLM-readable site summary" />
     <link rel="llms-full" href="/llms-full.txt" type="text/plain" title="LLM-readable full site content" />
+
+    <!-- Sitewide structured data — static so non-JS crawlers see it in raw HTML -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://whiterabbitla.com/#organization",
+          "name": "White Rabbit LA",
+          "alternateName": "White Rabbit Magic",
+          "url": "https://whiterabbitla.com",
+          "logo": "https://whiterabbitla.com/og-image.jpg",
+          "email": "events@whiterabbitla.com",
+          "telephone": "+14243941850",
+          "sameAs": [
+            "https://www.instagram.com/scottsyme_/",
+            "https://www.instagram.com/whiterabbit_la/"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://whiterabbitla.com/#website",
+          "url": "https://whiterabbitla.com",
+          "name": "White Rabbit LA",
+          "description": "Bespoke magic and mentalism entertainment for luxury events. Led by magician Scott Syme.",
+          "publisher": { "@id": "https://whiterabbitla.com/#organization" },
+          "inLanguage": "en-US"
+        },
+        {
+          "@type": "LocalBusiness",
+          "@id": "https://whiterabbitla.com/#business",
+          "name": "White Rabbit LA",
+          "alternateName": "White Rabbit Magic",
+          "description": "White Rabbit delivers bespoke magical experiences for Fortune 500 events, private celebrations, and luxury gatherings across Los Angeles and beyond. Led by magician Scott Syme.",
+          "url": "https://whiterabbitla.com",
+          "telephone": "+14243941850",
+          "email": "events@whiterabbitla.com",
+          "image": "https://whiterabbitla.com/og-image.jpg",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Los Angeles",
+            "addressRegion": "CA",
+            "addressCountry": "US"
+          },
+          "geo": { "@type": "GeoCoordinates", "latitude": 34.0522, "longitude": -118.2437 },
+          "areaServed": [
+            { "@type": "City", "name": "Los Angeles" },
+            { "@type": "City", "name": "Beverly Hills" },
+            { "@type": "City", "name": "Santa Monica" },
+            { "@type": "City", "name": "Malibu" },
+            { "@type": "City", "name": "Las Vegas" },
+            { "@type": "City", "name": "New York" },
+            { "@type": "City", "name": "Miami" },
+            { "@type": "City", "name": "San Francisco" },
+            { "@type": "City", "name": "Aspen" },
+            { "@type": "City", "name": "The Hamptons" }
+          ],
+          "sameAs": [
+            "https://www.instagram.com/scottsyme_/",
+            "https://www.instagram.com/whiterabbit_la/"
+          ],
+          "founder": { "@id": "https://whiterabbitla.com/#scott-syme" },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "5",
+            "bestRating": "5",
+            "ratingCount": "50",
+            "reviewCount": "50"
+          }
+        },
+        {
+          "@type": "Person",
+          "@id": "https://whiterabbitla.com/#scott-syme",
+          "name": "Scott Syme",
+          "url": "https://whiterabbitla.com/about",
+          "jobTitle": "Magician & Mentalist",
+          "image": "https://whiterabbitla.com/og-image.jpg",
+          "worksFor": { "@id": "https://whiterabbitla.com/#business" },
+          "memberOf": {
+            "@type": "Organization",
+            "name": "The Academy of Magical Arts (Magic Castle®)",
+            "url": "https://www.magiccastle.com"
+          },
+          "sameAs": [
+            "https://www.instagram.com/scottsyme_/",
+            "https://shoutoutla.com/meet-scott-syme-jr-founder-magician/"
+          ]
+        }
+      ]
+    }
+    </script>
     <!-- Google Analytics (GA4) — deferred to not block LCP -->
     <script>
       window.addEventListener('load', function() {

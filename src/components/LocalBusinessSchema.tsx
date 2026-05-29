@@ -45,7 +45,7 @@ const LocalBusinessSchema = () => {
       telephone: "+14243941850",
       email: "events@whiterabbitla.com",
       image: "https://whiterabbitla.com/og-image.jpg",
-      priceRange: "$$$$",
+      
       areaServed: [
         { "@type": "City", name: "Los Angeles", "@id": "https://www.wikidata.org/wiki/Q65" },
         { "@type": "City", name: "Beverly Hills" },
