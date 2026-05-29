@@ -92,7 +92,7 @@ const Index = () => {
   }, []);
 
   const seoTitle = "White Rabbit LA — Private Magic, by Appointment";
-  const seoDescription = "Close-up magic and mentalism for private events in Los Angeles, Miami, Aspen, Jackson Hole, the Hamptons, and select destinations. By appointment. Member, The Magic Castle®. Trusted by Netflix, Disney, and Morgan Stanley.";
+  const seoDescription = "Close-up magic and mentalism for private events in Los Angeles and select destinations. Magic Castle member trusted by Netflix, Disney, and Morgan Stanley.";
 
   // Homepage Person schema
   useJsonLd("homepage-person-schema", {
