@@ -164,7 +164,7 @@ export const DEFAULT_PROPOSAL: ProposalData = {
     { q: "Do you travel?", a: "Yes. Standard pricing covers Los Angeles County. For destination events, travel and lodging are added." },
     { q: "What happens after I reserve the date?", a: "A 50% deposit holds your date. The remaining 50% is due the day before. Two weeks before, we hop on a final call to walk through the night together." },
   ],
-  closing_quote: "An evening built with intention. A night your guests will remember.",
+  closing_quote: "In those moments, nothing feels impossible. And maybe, for the guests who were there, nothing quite does afterward either.",
   closing_attribution: "",
 };
 
