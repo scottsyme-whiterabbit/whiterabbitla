@@ -246,7 +246,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
       { q: "What's your weather contingency for outdoor events?", a: "We move indoors. I'll work with your planner on the indoor backup so it's ready before it's needed." },
       ...COMMON_FAQS,
     ],
-    closing_quote: "An evening built with intention. A night your guests will remember.",
+    closing_quote: "In those moments, nothing feels impossible. And maybe, for the guests who were there, nothing quite does afterward either.",
     closing_attribution: "",
   },
 
@@ -372,7 +372,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
       },
     ],
     faqs: COMMON_FAQS,
-    closing_quote: "An evening built with intention. A night your guests will remember.",
+    closing_quote: "In those moments, nothing feels impossible. And maybe, for the guests who were there, nothing quite does afterward either.",
     closing_attribution: "",
   },
 
