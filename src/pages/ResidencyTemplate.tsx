@@ -285,6 +285,86 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
         </div>
       </section>
 
+      {/* SECTION 3.5 — TWO WAYS IN */}
+      <section className="relative bg-cream pb-20 md:pb-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-3">
+              Simple to Begin
+            </p>
+            <OrnamentalDivider />
+            <h2 className="font-serif font-light text-3xl md:text-4xl text-forest-dark mt-6">
+              Two ways in.
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+            <div className="border border-forest-dark/15 bg-white p-8 md:p-10">
+              <p className="text-[11px] tracking-[0.3em] uppercase text-gold mb-4">
+                The First Night
+              </p>
+              <h3 className="font-serif text-2xl md:text-3xl text-forest-dark mb-4 leading-snug">
+                One evening, on me.
+              </h3>
+              <p className="font-sans text-base text-forest-dark/80 leading-relaxed mb-6">
+                You watch exactly how your own room responds before anything is
+                decided. No commitment. No risk. If your guests don't light up,
+                we shake hands and part as friends.
+              </p>
+              <div className="font-serif text-xl text-forest mb-6">Complimentary</div>
+              <a
+                href={`mailto:scott.syme@whiterabbitla.com?subject=${encodeURIComponent(
+                  `A first night at ${data.venue_name}`
+                )}`}
+                className="inline-flex items-center justify-center gap-2 border border-forest-dark/30 text-forest-dark py-3 px-5 text-[11px] tracking-[0.25em] uppercase hover:bg-forest-dark hover:text-cream transition-colors"
+              >
+                Begin with one night
+              </a>
+            </div>
+
+            <div className="relative border border-gold/60 bg-forest-dark text-cream p-8 md:p-10">
+              <span className="absolute top-0 left-0 w-4 h-px bg-gold/70" />
+              <span className="absolute top-0 left-0 w-px h-4 bg-gold/70" />
+              <span className="absolute top-0 right-0 w-4 h-px bg-gold/70" />
+              <span className="absolute top-0 right-0 w-px h-4 bg-gold/70" />
+              <span className="absolute bottom-0 left-0 w-4 h-px bg-gold/70" />
+              <span className="absolute bottom-0 left-0 w-px h-4 bg-gold/70" />
+              <span className="absolute bottom-0 right-0 w-4 h-px bg-gold/70" />
+              <span className="absolute bottom-0 right-0 w-px h-4 bg-gold/70" />
+
+              <p className="text-[11px] tracking-[0.3em] uppercase text-gold mb-4">
+                The Residency
+              </p>
+              <h3 className="font-serif text-2xl md:text-3xl text-cream mb-4 leading-snug">
+                One night each week. Part of your room.
+              </h3>
+              <ul className="space-y-2.5 text-sm text-cream/85 leading-relaxed mb-6">
+                {[
+                  "One evening per week",
+                  `Up to ${data.session_hours} hours moving through the room`,
+                  "No stage, no microphone, no setup that touches service",
+                  "Your room on your guests' feeds the next morning",
+                  "Month to month. Never locked in.",
+                ].map((it, i) => (
+                  <li key={i} className="flex gap-2.5">
+                    <span className="text-gold mt-1 text-[10px]">✦</span>
+                    <span>{it}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={`mailto:scott.syme@whiterabbitla.com?subject=${encodeURIComponent(
+                  `Residency at ${data.venue_name}`
+                )}`}
+                className="inline-flex items-center justify-center gap-2 bg-gold text-forest-dark py-3 px-5 text-[11px] tracking-[0.25em] uppercase hover:opacity-90 transition-opacity"
+              >
+                Reserve a night
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* SECTION 4 — THE PILOT */}
       <section className="relative bg-forest-dark text-cream py-20 md:py-28 px-6 overflow-hidden">
         <div className="max-w-3xl mx-auto relative text-center">
@@ -378,6 +458,59 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
           <h2 className="font-serif font-light text-3xl md:text-4xl text-cream mt-6 mb-12">
             Vetted by the rooms that don't let just anyone in.
           </h2>
+      {/* A FEW QUESTIONS */}
+      <section className="relative bg-cream py-20 md:py-24 px-6">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-3">
+              Before You Decide
+            </p>
+            <OrnamentalDivider />
+            <h2 className="font-serif font-light text-3xl md:text-4xl text-forest-dark mt-6">
+              A few questions.
+            </h2>
+          </div>
+
+          <div className="divide-y divide-forest-dark/10 border-t border-b border-forest-dark/10">
+            {[
+              {
+                q: "Will this interrupt service?",
+                a: "No. I move with your team and never approach a table mid-course or one that wants to be left alone. If the kitchen is in the weeds, I read that and ease off.",
+              },
+              {
+                q: "What if a table isn't interested?",
+                a: "I see it before they have to say a word, and I move on warmly. No guest is ever put on the spot.",
+              },
+              {
+                q: "What do you need from us?",
+                a: "Almost nothing. No stage, no microphone, no special lighting. A quiet word with your floor lead before service, and a sense of which tables you'd like me to reach.",
+              },
+              {
+                q: "A slow night versus a packed room?",
+                a: "I work both. On a quiet night I give each table more time. On a full room I keep it light and quick so service never feels the weight of it.",
+              },
+              {
+                q: "What does it cost if it doesn't work?",
+                a: "Nothing. The first night is on me, and the residency is month to month. You are never locked into anything.",
+              },
+              {
+                q: "Do you bring props that clutter the room?",
+                a: "No. Everything I use fits in my jacket. Cards, a borrowed ring, a guest's own phone. Nothing that doesn't already belong in your room.",
+              },
+            ].map((item, i) => (
+              <div key={i} className="py-6">
+                <div className="font-serif text-lg md:text-xl text-forest-dark mb-2">
+                  {item.q}
+                </div>
+                <p className="font-sans text-base text-forest-dark/75 leading-relaxed">
+                  {item.a}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
 
           <div className="grid md:grid-cols-3 gap-6 md:gap-8 text-left">
             {[
