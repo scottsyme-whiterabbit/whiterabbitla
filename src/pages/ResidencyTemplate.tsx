@@ -458,6 +458,59 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
           <h2 className="font-serif font-light text-3xl md:text-4xl text-cream mt-6 mb-12">
             Vetted by the rooms that don't let just anyone in.
           </h2>
+      {/* A FEW QUESTIONS */}
+      <section className="relative bg-cream py-20 md:py-24 px-6">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-3">
+              Before You Decide
+            </p>
+            <OrnamentalDivider />
+            <h2 className="font-serif font-light text-3xl md:text-4xl text-forest-dark mt-6">
+              A few questions.
+            </h2>
+          </div>
+
+          <div className="divide-y divide-forest-dark/10 border-t border-b border-forest-dark/10">
+            {[
+              {
+                q: "Will this interrupt service?",
+                a: "No. I move with your team and never approach a table mid-course or one that wants to be left alone. If the kitchen is in the weeds, I read that and ease off.",
+              },
+              {
+                q: "What if a table isn't interested?",
+                a: "I see it before they have to say a word, and I move on warmly. No guest is ever put on the spot.",
+              },
+              {
+                q: "What do you need from us?",
+                a: "Almost nothing. No stage, no microphone, no special lighting. A quiet word with your floor lead before service, and a sense of which tables you'd like me to reach.",
+              },
+              {
+                q: "A slow night versus a packed room?",
+                a: "I work both. On a quiet night I give each table more time. On a full room I keep it light and quick so service never feels the weight of it.",
+              },
+              {
+                q: "What does it cost if it doesn't work?",
+                a: "Nothing. The first night is on me, and the residency is month to month. You are never locked into anything.",
+              },
+              {
+                q: "Do you bring props that clutter the room?",
+                a: "No. Everything I use fits in my jacket. Cards, a borrowed ring, a guest's own phone. Nothing that doesn't already belong in your room.",
+              },
+            ].map((item, i) => (
+              <div key={i} className="py-6">
+                <div className="font-serif text-lg md:text-xl text-forest-dark mb-2">
+                  {item.q}
+                </div>
+                <p className="font-sans text-base text-forest-dark/75 leading-relaxed">
+                  {item.a}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
 
           <div className="grid md:grid-cols-3 gap-6 md:gap-8 text-left">
             {[
