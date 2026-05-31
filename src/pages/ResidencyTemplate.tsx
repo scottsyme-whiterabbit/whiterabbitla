@@ -285,6 +285,86 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
         </div>
       </section>
 
+      {/* SECTION 3.5 — TWO WAYS IN */}
+      <section className="relative bg-cream pb-20 md:pb-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-3">
+              Simple to Begin
+            </p>
+            <OrnamentalDivider />
+            <h2 className="font-serif font-light text-3xl md:text-4xl text-forest-dark mt-6">
+              Two ways in.
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8">
+            <div className="border border-forest-dark/15 bg-white p-8 md:p-10">
+              <p className="text-[11px] tracking-[0.3em] uppercase text-gold mb-4">
+                The First Night
+              </p>
+              <h3 className="font-serif text-2xl md:text-3xl text-forest-dark mb-4 leading-snug">
+                One evening, on me.
+              </h3>
+              <p className="font-sans text-base text-forest-dark/80 leading-relaxed mb-6">
+                You watch exactly how your own room responds before anything is
+                decided. No commitment. No risk. If your guests don't light up,
+                we shake hands and part as friends.
+              </p>
+              <div className="font-serif text-xl text-forest mb-6">Complimentary</div>
+              <a
+                href={`mailto:scott.syme@whiterabbitla.com?subject=${encodeURIComponent(
+                  `A first night at ${data.venue_name}`
+                )}`}
+                className="inline-flex items-center justify-center gap-2 border border-forest-dark/30 text-forest-dark py-3 px-5 text-[11px] tracking-[0.25em] uppercase hover:bg-forest-dark hover:text-cream transition-colors"
+              >
+                Begin with one night
+              </a>
+            </div>
+
+            <div className="relative border border-gold/60 bg-forest-dark text-cream p-8 md:p-10">
+              <span className="absolute top-0 left-0 w-4 h-px bg-gold/70" />
+              <span className="absolute top-0 left-0 w-px h-4 bg-gold/70" />
+              <span className="absolute top-0 right-0 w-4 h-px bg-gold/70" />
+              <span className="absolute top-0 right-0 w-px h-4 bg-gold/70" />
+              <span className="absolute bottom-0 left-0 w-4 h-px bg-gold/70" />
+              <span className="absolute bottom-0 left-0 w-px h-4 bg-gold/70" />
+              <span className="absolute bottom-0 right-0 w-4 h-px bg-gold/70" />
+              <span className="absolute bottom-0 right-0 w-px h-4 bg-gold/70" />
+
+              <p className="text-[11px] tracking-[0.3em] uppercase text-gold mb-4">
+                The Residency
+              </p>
+              <h3 className="font-serif text-2xl md:text-3xl text-cream mb-4 leading-snug">
+                One night each week. Part of your room.
+              </h3>
+              <ul className="space-y-2.5 text-sm text-cream/85 leading-relaxed mb-6">
+                {[
+                  "One evening per week",
+                  `Up to ${data.session_hours} hours moving through the room`,
+                  "No stage, no microphone, no setup that touches service",
+                  "Your room on your guests' feeds the next morning",
+                  "Month to month. Never locked in.",
+                ].map((it, i) => (
+                  <li key={i} className="flex gap-2.5">
+                    <span className="text-gold mt-1 text-[10px]">✦</span>
+                    <span>{it}</span>
+                  </li>
+                ))}
+              </ul>
+              <a
+                href={`mailto:scott.syme@whiterabbitla.com?subject=${encodeURIComponent(
+                  `Residency at ${data.venue_name}`
+                )}`}
+                className="inline-flex items-center justify-center gap-2 bg-gold text-forest-dark py-3 px-5 text-[11px] tracking-[0.25em] uppercase hover:opacity-90 transition-opacity"
+              >
+                Reserve a night
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* SECTION 4 — THE PILOT */}
       <section className="relative bg-forest-dark text-cream py-20 md:py-28 px-6 overflow-hidden">
         <div className="max-w-3xl mx-auto relative text-center">
