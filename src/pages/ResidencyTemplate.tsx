@@ -84,7 +84,7 @@ export const DEFAULT_VENUE_PITCH: VenuePitchData = {
   testimonials: [],
   press_line: null,
   scheduling_url: null,
-  closing_private_line: "The Hand and Eye in your home. And, perhaps, in your room.",
+  closing_private_line: "In those moments, nothing feels impossible. And maybe, for the guests who were there, nothing quite does afterward either.",
 };
 
 const formatFee = (n?: number | null) =>
