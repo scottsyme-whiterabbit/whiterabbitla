@@ -475,7 +475,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         <Flourishes size="sm" />
         <img src={threeStars} alt="" className="w-10 mx-auto mb-6 opacity-70" />
         <p className="font-serif text-2xl md:text-3xl text-forest-dark max-w-2xl mx-auto leading-relaxed">
-          Thank you for trusting me with your evening.
+          {data.closing_quote || "Thank you for trusting me with your evening."}
         </p>
         <p
           className="text-3xl md:text-4xl text-forest-dark/85 mt-8 leading-tight -rotate-2 inline-block"
