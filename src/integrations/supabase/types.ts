@@ -22,12 +22,16 @@ export type Database = {
           company: string | null
           created_at: string
           current_step: number
+          domain: string | null
           email: string
+          email_status: string | null
           engagement_clicks: number | null
           engagement_opens: number | null
+          first_name: string | null
           hot_tag: boolean | null
           id: string
           last_email_sent_at: string | null
+          last_name: string | null
           linkedin_url: string | null
           name: string | null
           notes: string | null
@@ -45,6 +49,7 @@ export type Database = {
           tournament_name: string | null
           unsubscribed_at: string | null
           updated_at: string
+          website: string | null
         }
         Insert: {
           apollo_id?: string | null
@@ -53,12 +58,16 @@ export type Database = {
           company?: string | null
           created_at?: string
           current_step?: number
+          domain?: string | null
           email: string
+          email_status?: string | null
           engagement_clicks?: number | null
           engagement_opens?: number | null
+          first_name?: string | null
           hot_tag?: boolean | null
           id?: string
           last_email_sent_at?: string | null
+          last_name?: string | null
           linkedin_url?: string | null
           name?: string | null
           notes?: string | null
@@ -76,6 +85,7 @@ export type Database = {
           tournament_name?: string | null
           unsubscribed_at?: string | null
           updated_at?: string
+          website?: string | null
         }
         Update: {
           apollo_id?: string | null
@@ -84,12 +94,16 @@ export type Database = {
           company?: string | null
           created_at?: string
           current_step?: number
+          domain?: string | null
           email?: string
+          email_status?: string | null
           engagement_clicks?: number | null
           engagement_opens?: number | null
+          first_name?: string | null
           hot_tag?: boolean | null
           id?: string
           last_email_sent_at?: string | null
+          last_name?: string | null
           linkedin_url?: string | null
           name?: string | null
           notes?: string | null
@@ -107,6 +121,7 @@ export type Database = {
           tournament_name?: string | null
           unsubscribed_at?: string | null
           updated_at?: string
+          website?: string | null
         }
         Relationships: []
       }
