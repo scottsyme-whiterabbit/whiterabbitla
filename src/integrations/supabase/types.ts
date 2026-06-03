@@ -14,6 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      auto_unsubscribe_log: {
+        Row: {
+          email: string
+          id: string
+          matched_pattern: string
+          notified_at: string | null
+          processed_at: string
+          reply_from_email: string | null
+          source_message_id: string | null
+          source_thread_id: string | null
+        }
+        Insert: {
+          email: string
+          id?: string
+          matched_pattern: string
+          notified_at?: string | null
+          processed_at?: string
+          reply_from_email?: string | null
+          source_message_id?: string | null
+          source_thread_id?: string | null
+        }
+        Update: {
+          email?: string
+          id?: string
+          matched_pattern?: string
+          notified_at?: string | null
+          processed_at?: string
+          reply_from_email?: string | null
+          source_message_id?: string | null
+          source_thread_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "auto_unsubscribe_log_source_thread_id_fkey"
+            columns: ["source_thread_id"]
+            isOneToOne: false
+            referencedRelation: "deal_email_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cold_email_campaigns: {
         Row: {
           apollo_id: string | null

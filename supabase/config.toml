@@ -93,3 +93,6 @@ verify_jwt = false
 [functions.calendar-availability]
 verify_jwt = false
 
+[functions.process-stop-replies]
+verify_jwt = false
+
