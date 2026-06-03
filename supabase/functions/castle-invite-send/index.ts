@@ -208,7 +208,8 @@ serve(async (req) => {
       if (!batch || batch.length === 0) continue;
 
       for (const row of batch) {
-        const firstName = row.first_name || extractFirstName(row.name);
+        const rawFirst = row.first_name?.trim();
+        const firstName = (rawFirst && rawFirst.length > 0) ? rawFirst : extractFirstName(row.name, row.email);
         const tpl = buildTemplate(tier, firstName);
         const html = renderPlainHtml(tpl.preheader, tpl.paragraphs, row.email, row.id);
         const text = renderPlainText(tpl.paragraphs);
