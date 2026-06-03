@@ -20,7 +20,7 @@ const PLAIN_FONT = `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helve
 const SITE_URL = "https://whiterabbitla.com";
 
 const COMPANY_SUFFIXES = ["agency","group","co","studio","productions","marketing","pr","events","inc","llc","ltd","partners","associates","collective"];
-const SHORT_NAME_WHITELIST = new Set(["bo","ed","jo","sam","max","ben","tim","tom","jay","ray","al","ali","ana","amy","ava","eli","eva","ian","ivy","kai","kim","leo","lou","mia","nia","pat","sue","zoe","cj","dj","aj","tj","kj","mj","rj"]);
+const SHORT_NAME_WHITELIST = new Set(["bo","ed","jo","sam","max","ben","tim","tom","jay","ray","al","ali","ana","amy","ava","eli","eva","ian","ivy","kai","kim","leo","lou","mia","nia","pat","sue","zoe","cj","dj","aj","tj","kj","mj","rj","bob","joe","dan","meg","rob","zac","tal","ria","jim","ken","don","ron","ted","jen","liz","lia","noa","rey","gus","abe","art","guy","hal","ira","jed","kit","lev","luz","may","mel","moe","ned","nik","pam","peg","phi","raj","sal","syd","val","vic","wes","wyn"]);
 const GENERIC_LOCALS = new Set(["hello","info","contact","team","support","admin","office","events","sales","bookings","media","press","marketing","reception","general","ops","hr"]);
 
 export function extractFirstName(name: string | null | undefined, email?: string): string {
