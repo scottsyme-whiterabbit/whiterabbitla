@@ -119,10 +119,16 @@ serve(async (req) => {
     );
   }
 
-  // ---- Auth: token-only (BULK_IMPORT_TOKEN) ----
+  // ---- Auth: accept x-diagnostics-token (BOUNCE_DIAGNOSTICS_TOKEN) OR x-bulk-import-token (BULK_IMPORT_TOKEN, fallback) ----
+  const diagToken = req.headers.get("x-diagnostics-token") || "";
   const importToken = req.headers.get("x-bulk-import-token") || "";
+  const expectedDiag = Deno.env.get("BOUNCE_DIAGNOSTICS_TOKEN") || "";
   const expectedImport = Deno.env.get("BULK_IMPORT_TOKEN") || "";
-  if (!importToken) {
+
+  const diagValid = !!expectedDiag && diagToken === expectedDiag;
+  const importValid = !!expectedImport && importToken === expectedImport;
+
+  if (!diagToken && !importToken) {
     return finalize(
       new Response(JSON.stringify({ error: "auth_failed" }), {
         status: 401,
@@ -131,7 +137,7 @@ serve(async (req) => {
       "missing_token"
     );
   }
-  if (!expectedImport || importToken !== expectedImport) {
+  if (!diagValid && !importValid) {
     return finalize(
       new Response(JSON.stringify({ error: "auth_failed" }), {
         status: 401,
