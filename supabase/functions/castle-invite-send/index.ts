@@ -19,11 +19,26 @@ const OPEN_TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/tr
 const PLAIN_FONT = `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif`;
 const SITE_URL = "https://whiterabbitla.com";
 
-function extractFirstName(name: string | null | undefined): string {
+const COMPANY_SUFFIXES = ["agency","group","co","studio","productions","marketing","pr","events","inc","llc","ltd","partners","associates","collective"];
+const SHORT_NAME_WHITELIST = new Set(["bo","ed","jo","sam","max","ben","tim","tom","jay","ray","al","ali","ana","amy","ava","eli","eva","ian","ivy","kai","kim","leo","lou","mia","nia","pat","sue","zoe","cj","dj","aj","tj","kj","mj","rj"]);
+const GENERIC_LOCALS = new Set(["hello","info","contact","team","support","admin","office","events","sales","bookings","media","press","marketing","reception","general","ops","hr"]);
+
+export function extractFirstName(name: string | null | undefined, email?: string): string {
+  if (email) {
+    const local = email.split("@")[0]?.toLowerCase().replace(/[._-].*$/, "");
+    if (local && GENERIC_LOCALS.has(local)) return "there";
+  }
   if (!name) return "there";
-  if (name.includes(" and ") || name.includes(" & ")) return name;
-  if (name.trim().toLowerCase().endsWith("team")) return name;
-  return name.split(" ")[0];
+  const trimmed = name.trim();
+  if (trimmed.includes(" and ") || trimmed.includes(" & ")) return trimmed;
+  if (trimmed.toLowerCase().endsWith("team")) return trimmed;
+  const tokens = trimmed.split(/\s+/);
+  const lowerTokens = tokens.map((t) => t.toLowerCase().replace(/[.,]/g, ""));
+  if (lowerTokens.some((t) => COMPANY_SUFFIXES.includes(t))) return "there";
+  const first = tokens[0].replace(/[.,]/g, "");
+  const firstLower = first.toLowerCase();
+  if (first.length <= 3 && !SHORT_NAME_WHITELIST.has(firstLower)) return "there";
+  return first;
 }
 
 function buildTemplate(tier: Tier, firstName: string): { subject: string; preheader: string; paragraphs: string[] } {
