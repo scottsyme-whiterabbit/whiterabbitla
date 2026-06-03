@@ -96,3 +96,9 @@ verify_jwt = false
 [functions.process-stop-replies]
 verify_jwt = false
 
+[functions.castle-invite-send]
+verify_jwt = false
+
+[functions.castle-invite-summary]
+verify_jwt = false
+
