@@ -55,10 +55,51 @@ export type Database = {
           },
         ]
       }
+      castle_invite_log: {
+        Row: {
+          accepted: number
+          created_at: string
+          declined: number
+          id: string
+          log_date: string
+          replies_received: number
+          sent: number
+          tier: string
+          updated_at: string
+        }
+        Insert: {
+          accepted?: number
+          created_at?: string
+          declined?: number
+          id?: string
+          log_date?: string
+          replies_received?: number
+          sent?: number
+          tier: string
+          updated_at?: string
+        }
+        Update: {
+          accepted?: number
+          created_at?: string
+          declined?: number
+          id?: string
+          log_date?: string
+          replies_received?: number
+          sent?: number
+          tier?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       cold_email_campaigns: {
         Row: {
           apollo_id: string | null
           campaign_category: string
+          campaign_track: string
+          castle_invite_status: string | null
+          castle_invited_at: string | null
+          castle_night_date: string | null
+          castle_tier: string | null
           city: string | null
           company: string | null
           created_at: string
@@ -95,6 +136,11 @@ export type Database = {
         Insert: {
           apollo_id?: string | null
           campaign_category: string
+          campaign_track?: string
+          castle_invite_status?: string | null
+          castle_invited_at?: string | null
+          castle_night_date?: string | null
+          castle_tier?: string | null
           city?: string | null
           company?: string | null
           created_at?: string
@@ -131,6 +177,11 @@ export type Database = {
         Update: {
           apollo_id?: string | null
           campaign_category?: string
+          campaign_track?: string
+          castle_invite_status?: string | null
+          castle_invited_at?: string | null
+          castle_night_date?: string | null
+          castle_tier?: string | null
           city?: string | null
           company?: string | null
           created_at?: string
