@@ -6,7 +6,7 @@ const FUNCTION_NAME = "bounce-diagnostics";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-bulk-import-token",
+    "authorization, x-client-info, apikey, content-type, x-bulk-import-token, x-diagnostics-token",
 };
 
 // ---- Observability helpers (metadata only, no PII) ----
