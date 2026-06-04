@@ -438,7 +438,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
 
       {/* Table - Desktop */}
       <div className="hidden md:block border border-border">
-        <div className="grid grid-cols-[90px_1.2fr_100px_1fr_160px_150px_130px] gap-3 bg-muted/30 border-b border-border px-4 py-2">
+        <div className="grid grid-cols-[80px_1.3fr_90px_1.1fr_150px_220px_120px] gap-3 bg-muted/30 border-b border-border px-4 py-2">
           {["Priority", "Contact", "Source", "Engagement", "Status", "Action", "Last Contact"].map(h => (
             <span key={h} className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">{h}</span>
           ))}
@@ -456,7 +456,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
 
             return (
               <div key={item.email}>
-                <div className={`grid grid-cols-[90px_1.2fr_100px_1fr_160px_150px_130px] gap-3 px-4 py-3 border-b border-border items-center transition-colors ${rowBg}`}>
+                <div className={`grid grid-cols-[80px_1.3fr_90px_1.1fr_150px_220px_120px] gap-3 px-4 py-3 border-b border-border items-center transition-colors ${rowBg}`}>
                   <div>{priorityBadge(item.priority)}</div>
                   <div className="min-w-0">
                     <button onClick={() => setExpandedEmail(isExpanded ? null : item.email)} className="text-left flex items-center gap-1">
