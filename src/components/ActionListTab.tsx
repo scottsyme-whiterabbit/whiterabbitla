@@ -398,6 +398,52 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
         ))}
       </div>
 
+      {/* Today's Follow-Up Reminders */}
+      {(() => {
+        const overdue = actionItems.filter(i => i.deal?.next_follow_up && i.deal.next_follow_up < today && i.outreachStatus !== "booked" && i.outreachStatus !== "not_interested");
+        const dueToday = actionItems.filter(i => i.deal?.next_follow_up === today && i.outreachStatus !== "booked" && i.outreachStatus !== "not_interested");
+        if (overdue.length === 0 && dueToday.length === 0) return null;
+        return (
+          <div className="border border-accent/40 bg-accent/5 p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Clock size={14} className="text-accent" />
+              <h3 className="font-sans text-[11px] tracking-[0.2em] uppercase text-accent">Today's Follow-Ups</h3>
+              <span className="font-sans text-[10px] text-muted-foreground ml-auto">{overdue.length} overdue · {dueToday.length} due today</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {[...overdue, ...dueToday].slice(0, 10).map(item => {
+                const isOverdue = !!(item.deal?.next_follow_up && item.deal.next_follow_up < today);
+                return (
+                  <div key={item.email} className="flex items-center gap-2 bg-background border border-border px-3 py-2">
+                    <span className={`text-[9px] px-1.5 py-0.5 border tracking-wider uppercase shrink-0 ${isOverdue ? "bg-red-500/20 text-red-400 border-red-500/30" : "bg-blue-500/20 text-blue-400 border-blue-500/30"}`}>
+                      {isOverdue ? "Overdue" : "Today"}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="font-sans text-sm text-foreground truncate">{item.name || item.email.split("@")[0]}</p>
+                      <p className="font-sans text-[10px] text-muted-foreground truncate">
+                        {item.deal?.next_follow_up && format(new Date(item.deal.next_follow_up + "T00:00:00"), "MMM d")}
+                        {item.deal?.event_type && ` · ${item.deal.event_type}`}
+                        {item.company && ` · ${item.company}`}
+                      </p>
+                    </div>
+                    <div className="flex gap-1 shrink-0">
+                      {item.phone && (
+                        <a href={gvCallUrl(item.phone)} target="_blank" rel="noopener noreferrer" className="px-2 py-1 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 text-[9px] tracking-wider uppercase" title="Call">
+                          <PhoneOutgoing size={10} />
+                        </a>
+                      )}
+                      <button onClick={() => openLogModal(item, "call")} className="px-2 py-1 bg-muted/20 text-foreground border border-border text-[9px] tracking-wider uppercase" title="Log outreach">
+                        <ClipboardList size={10} />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Source Filter */}
       <div className="flex flex-wrap gap-2">
         {([
