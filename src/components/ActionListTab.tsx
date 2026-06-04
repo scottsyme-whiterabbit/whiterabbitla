@@ -398,6 +398,52 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
         ))}
       </div>
 
+      {/* Today's Follow-Up Reminders */}
+      {(() => {
+        const overdue = actionItems.filter(i => i.deal?.next_follow_up && i.deal.next_follow_up < today && i.outreachStatus !== "booked" && i.outreachStatus !== "not_interested");
+        const dueToday = actionItems.filter(i => i.deal?.next_follow_up === today && i.outreachStatus !== "booked" && i.outreachStatus !== "not_interested");
+        if (overdue.length === 0 && dueToday.length === 0) return null;
+        return (
+          <div className="border border-accent/40 bg-accent/5 p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Clock size={14} className="text-accent" />
+              <h3 className="font-sans text-[11px] tracking-[0.2em] uppercase text-accent">Today's Follow-Ups</h3>
+              <span className="font-sans text-[10px] text-muted-foreground ml-auto">{overdue.length} overdue · {dueToday.length} due today</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {[...overdue, ...dueToday].slice(0, 10).map(item => {
+                const isOverdue = !!(item.deal?.next_follow_up && item.deal.next_follow_up < today);
+                return (
+                  <div key={item.email} className="flex items-center gap-2 bg-background border border-border px-3 py-2">
+                    <span className={`text-[9px] px-1.5 py-0.5 border tracking-wider uppercase shrink-0 ${isOverdue ? "bg-red-500/20 text-red-400 border-red-500/30" : "bg-blue-500/20 text-blue-400 border-blue-500/30"}`}>
+                      {isOverdue ? "Overdue" : "Today"}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <p className="font-sans text-sm text-foreground truncate">{item.name || item.email.split("@")[0]}</p>
+                      <p className="font-sans text-[10px] text-muted-foreground truncate">
+                        {item.deal?.next_follow_up && format(new Date(item.deal.next_follow_up + "T00:00:00"), "MMM d")}
+                        {item.deal?.event_type && ` · ${item.deal.event_type}`}
+                        {item.company && ` · ${item.company}`}
+                      </p>
+                    </div>
+                    <div className="flex gap-1 shrink-0">
+                      {item.phone && (
+                        <a href={gvCallUrl(item.phone)} target="_blank" rel="noopener noreferrer" className="px-2 py-1 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 text-[9px] tracking-wider uppercase" title="Call">
+                          <PhoneOutgoing size={10} />
+                        </a>
+                      )}
+                      <button onClick={() => openLogModal(item, "call")} className="px-2 py-1 bg-muted/20 text-foreground border border-border text-[9px] tracking-wider uppercase" title="Log outreach">
+                        <ClipboardList size={10} />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Source Filter */}
       <div className="flex flex-wrap gap-2">
         {([
@@ -438,7 +484,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
 
       {/* Table - Desktop */}
       <div className="hidden md:block border border-border">
-        <div className="grid grid-cols-[90px_1.2fr_100px_1fr_160px_150px_130px] gap-3 bg-muted/30 border-b border-border px-4 py-2">
+        <div className="grid grid-cols-[80px_1.3fr_90px_1.1fr_150px_220px_120px] gap-3 bg-muted/30 border-b border-border px-4 py-2">
           {["Priority", "Contact", "Source", "Engagement", "Status", "Action", "Last Contact"].map(h => (
             <span key={h} className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">{h}</span>
           ))}
@@ -456,7 +502,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
 
             return (
               <div key={item.email}>
-                <div className={`grid grid-cols-[90px_1.2fr_100px_1fr_160px_150px_130px] gap-3 px-4 py-3 border-b border-border items-center transition-colors ${rowBg}`}>
+                <div className={`grid grid-cols-[80px_1.3fr_90px_1.1fr_150px_220px_120px] gap-3 px-4 py-3 border-b border-border items-center transition-colors ${rowBg}`}>
                   <div>{priorityBadge(item.priority)}</div>
                   <div className="min-w-0">
                     <button onClick={() => setExpandedEmail(isExpanded ? null : item.email)} className="text-left flex items-center gap-1">
@@ -528,23 +574,23 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                       </div>
                     )}
                   </div>
-                  <div className="flex gap-1">
+                  <div className="grid grid-cols-4 gap-1">
                     {item.phone ? (
-                      <a href={gvCallUrl(item.phone)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 px-2 py-1 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 text-[10px] tracking-wider uppercase hover:bg-emerald-600/30 transition-colors" title={`Call ${item.phone}`}>
+                      <a href={gvCallUrl(item.phone)} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1 px-1.5 py-1 bg-emerald-600/20 text-emerald-400 border border-emerald-600/30 text-[10px] tracking-wider uppercase hover:bg-emerald-600/30 transition-colors" title={`Call ${item.phone}`}>
                         <PhoneOutgoing size={10} /> Call
                       </a>
                     ) : (
-                      <span className="flex items-center gap-1 px-2 py-1 bg-muted/20 text-muted-foreground border border-border text-[10px] tracking-wider uppercase cursor-not-allowed" title="No phone number">
+                      <span className="flex items-center justify-center gap-1 px-1.5 py-1 bg-muted/20 text-muted-foreground border border-border text-[10px] tracking-wider uppercase cursor-not-allowed" title="No phone number">
                         <Phone size={10} /> No #
                       </span>
                     )}
-                    <button onClick={() => openLogModal(item, "call")} className="flex items-center gap-1 px-2 py-1 bg-muted/20 text-foreground border border-border text-[10px] tracking-wider uppercase hover:bg-muted/30 transition-colors" title="Log a call">
+                    <button onClick={() => openLogModal(item, "call")} className="flex items-center justify-center gap-1 px-1.5 py-1 bg-muted/20 text-foreground border border-border text-[10px] tracking-wider uppercase hover:bg-muted/30 transition-colors" title="Log a call">
                       <ClipboardList size={10} /> Log
                     </button>
-                    <button onClick={() => openLogModal(item, "email")} className="flex items-center gap-1 px-2 py-1 bg-accent/20 text-accent border border-accent/30 text-[10px] tracking-wider uppercase hover:bg-accent/30 transition-colors">
+                    <button onClick={() => openLogModal(item, "email")} className="flex items-center justify-center gap-1 px-1.5 py-1 bg-accent/20 text-accent border border-accent/30 text-[10px] tracking-wider uppercase hover:bg-accent/30 transition-colors">
                       <Mail size={10} /> Email
                     </button>
-                    <button onClick={() => openEditModal(item)} className="flex items-center gap-1 px-2 py-1 bg-muted/20 text-foreground border border-border text-[10px] tracking-wider uppercase hover:bg-muted/30 transition-colors" title="Edit contact info">
+                    <button onClick={() => openEditModal(item)} className="flex items-center justify-center gap-1 px-1.5 py-1 bg-muted/20 text-foreground border border-border text-[10px] tracking-wider uppercase hover:bg-muted/30 transition-colors" title="Edit contact info">
                       <Pencil size={10} /> Edit
                     </button>
                   </div>
