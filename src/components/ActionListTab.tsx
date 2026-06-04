@@ -115,6 +115,72 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
   const [logModal, setLogModal] = useState<{ email: string; name: string | null; dealId?: string; actionType: string } | null>(null);
   const [logForm, setLogForm] = useState({ action_type: "call", outcome: "", notes: "", follow_up_date: "" });
   const [saving, setSaving] = useState(false);
+  const [editModal, setEditModal] = useState<ActionItem | null>(null);
+  const [editForm, setEditForm] = useState({
+    contact_name: "", contact_email: "", company: "", phone: "",
+    event_type: "", event_date: "", location: "", guest_count: "",
+    deal_value: "", notes: "", next_follow_up: "",
+  });
+  const [editSaving, setEditSaving] = useState(false);
+
+  const openEditModal = (item: ActionItem) => {
+    setEditModal(item);
+    setEditForm({
+      contact_name: item.name || "",
+      contact_email: item.email,
+      company: item.company || "",
+      phone: item.phone || "",
+      event_type: item.deal?.event_type || "",
+      event_date: item.deal?.event_date || "",
+      location: item.deal?.location || "",
+      guest_count: item.deal?.guest_count || "",
+      deal_value: item.deal?.deal_value ? String(item.deal.deal_value / 100) : "",
+      notes: item.deal?.notes || "",
+      next_follow_up: item.deal?.next_follow_up || "",
+    });
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editModal) return;
+    setEditSaving(true);
+    try {
+      if (editModal.deal) {
+        await callAdmin("update_deal", {
+          deal: {
+            ...editModal.deal,
+            contact_name: editForm.contact_name,
+            contact_email: editForm.contact_email,
+            company: editForm.company,
+            phone: editForm.phone,
+            event_type: editForm.event_type,
+            event_date: editForm.event_date || null,
+            location: editForm.location,
+            guest_count: editForm.guest_count,
+            deal_value: editForm.deal_value ? Math.round(parseFloat(editForm.deal_value) * 100) : null,
+            notes: editForm.notes,
+            next_follow_up: editForm.next_follow_up || null,
+          },
+        });
+      } else if (editModal.contact) {
+        await callAdmin("update_contact", {
+          contactId: editModal.contact.id,
+          updates: {
+            name: editForm.contact_name,
+            email: editForm.contact_email,
+            company: editForm.company,
+            phone: editForm.phone,
+          },
+        });
+      }
+      toast.success("Contact updated");
+      setEditModal(null);
+      loadData();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Save failed");
+    } finally {
+      setEditSaving(false);
+    }
+  };
 
   const callAdmin = useCallback(async (action: string, payload: Record<string, unknown> = {}) => {
     const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
