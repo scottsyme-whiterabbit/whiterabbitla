@@ -52,6 +52,7 @@ import agtLogo from "@/assets/logos/agt.png";
 import beverlyHiltonLogo from "@/assets/logos/beverlyhilton.png";
 import sohohouseLogo from "@/assets/logos/sohohouse-new.png";
 import gravitasLogo from "@/assets/logos/gravitas.webp";
+import magicCastleLogo from "@/assets/logos/magiccastle.png";
 
 const clients = [
 { name: "Netflix", logo: netflixLogo },
