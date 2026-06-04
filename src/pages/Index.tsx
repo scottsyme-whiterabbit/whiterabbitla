@@ -52,6 +52,7 @@ import agtLogo from "@/assets/logos/agt.png";
 import beverlyHiltonLogo from "@/assets/logos/beverlyhilton.png";
 import sohohouseLogo from "@/assets/logos/sohohouse-new.png";
 import gravitasLogo from "@/assets/logos/gravitas.webp";
+import magicCastleLogo from "@/assets/logos/magiccastle.png";
 
 const clients = [
 { name: "Netflix", logo: netflixLogo },
@@ -68,7 +69,8 @@ const clients = [
 { name: "Taittinger", logo: taittingerLogo },
 { name: "Lionsgate", logo: lionsgateLogo },
 { name: "Pistola", logo: pistolaLogo },
-{ name: "Gravitas Beverly Hills", logo: gravitasLogo }];
+{ name: "Gravitas Beverly Hills", logo: gravitasLogo },
+{ name: "The Magic Castle", logo: magicCastleLogo }];
 
 const heroReviews = [
   { text: "That was well worth it.", name: "Don Cheadle", role: "Actor" },
