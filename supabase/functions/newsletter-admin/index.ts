@@ -495,6 +495,20 @@ serve(async (req) => {
         });
       }
 
+      case "update_contact": {
+        const { contactId, updates } = payload;
+        const patch: Record<string, unknown> = {};
+        if (updates.name !== undefined) patch.name = updates.name || null;
+        if (updates.company !== undefined) patch.company = updates.company || null;
+        if (updates.phone !== undefined) patch.phone = updates.phone || null;
+        if (updates.email !== undefined) patch.email = updates.email;
+        const { error } = await supabase.from("newsletter_contacts").update(patch).eq("id", contactId);
+        if (error) throw error;
+        return new Response(JSON.stringify({ success: true }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       case "delete_deal": {
         const { dealId } = payload;
         const { error } = await supabase
