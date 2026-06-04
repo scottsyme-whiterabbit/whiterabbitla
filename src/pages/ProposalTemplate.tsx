@@ -14,6 +14,7 @@ import rollsroyceLogo from "@/assets/logos/rollsroyce.png";
 import paramountLogo from "@/assets/logos/paramount.png";
 import sohohouseLogo from "@/assets/logos/sohohouse-new.png";
 import beverlyHiltonLogo from "@/assets/logos/beverlyhilton.png";
+import magicCastleLogo from "@/assets/logos/magiccastle.png";
 
 import heroMain from "@/assets/hero-magic-cinematic.jpg";
 import proposalCardsBw from "@/assets/proposal-cards-bw.jpg";
