@@ -684,6 +684,15 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                     </button>
                   </div>
 
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); openEditModal(item); }}
+                    className="w-full flex items-center justify-center gap-2 py-3 bg-muted/20 text-foreground border border-border text-[11px] tracking-wider uppercase font-sans active:bg-muted/40 touch-manipulation"
+                    style={{ minHeight: '44px' }}
+                  >
+                    <Pencil size={14} /> Edit Contact Info
+                  </button>
+
                   {/* Contact Details Grid */}
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block mb-0.5">Phone</span><span className="text-foreground">{item.phone || "—"}</span></div>
