@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { toast } from "sonner";
-import { Phone, PhoneOutgoing, Mail, ChevronDown, ChevronUp, Search, Flame, Clock, CheckCircle, TrendingUp, ClipboardList } from "lucide-react";
+import { Phone, PhoneOutgoing, Mail, ChevronDown, ChevronUp, Search, Flame, Clock, CheckCircle, TrendingUp, ClipboardList, Pencil } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { format } from "date-fns";
 
@@ -115,6 +115,72 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
   const [logModal, setLogModal] = useState<{ email: string; name: string | null; dealId?: string; actionType: string } | null>(null);
   const [logForm, setLogForm] = useState({ action_type: "call", outcome: "", notes: "", follow_up_date: "" });
   const [saving, setSaving] = useState(false);
+  const [editModal, setEditModal] = useState<ActionItem | null>(null);
+  const [editForm, setEditForm] = useState({
+    contact_name: "", contact_email: "", company: "", phone: "",
+    event_type: "", event_date: "", location: "", guest_count: "",
+    deal_value: "", notes: "", next_follow_up: "",
+  });
+  const [editSaving, setEditSaving] = useState(false);
+
+  const openEditModal = (item: ActionItem) => {
+    setEditModal(item);
+    setEditForm({
+      contact_name: item.name || "",
+      contact_email: item.email,
+      company: item.company || "",
+      phone: item.phone || "",
+      event_type: item.deal?.event_type || "",
+      event_date: item.deal?.event_date || "",
+      location: item.deal?.location || "",
+      guest_count: item.deal?.guest_count || "",
+      deal_value: item.deal?.deal_value ? String(item.deal.deal_value / 100) : "",
+      notes: item.deal?.notes || "",
+      next_follow_up: item.deal?.next_follow_up || "",
+    });
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editModal) return;
+    setEditSaving(true);
+    try {
+      if (editModal.deal) {
+        await callAdmin("update_deal", {
+          deal: {
+            ...editModal.deal,
+            contact_name: editForm.contact_name,
+            contact_email: editForm.contact_email,
+            company: editForm.company,
+            phone: editForm.phone,
+            event_type: editForm.event_type,
+            event_date: editForm.event_date || null,
+            location: editForm.location,
+            guest_count: editForm.guest_count,
+            deal_value: editForm.deal_value ? Math.round(parseFloat(editForm.deal_value) * 100) : null,
+            notes: editForm.notes,
+            next_follow_up: editForm.next_follow_up || null,
+          },
+        });
+      } else if (editModal.contact) {
+        await callAdmin("update_contact", {
+          contactId: editModal.contact.id,
+          updates: {
+            name: editForm.contact_name,
+            email: editForm.contact_email,
+            company: editForm.company,
+            phone: editForm.phone,
+          },
+        });
+      }
+      toast.success("Contact updated");
+      setEditModal(null);
+      loadData();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Save failed");
+    } finally {
+      setEditSaving(false);
+    }
+  };
 
   const callAdmin = useCallback(async (action: string, payload: Record<string, unknown> = {}) => {
     const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
@@ -478,6 +544,9 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                     <button onClick={() => openLogModal(item, "email")} className="flex items-center gap-1 px-2 py-1 bg-accent/20 text-accent border border-accent/30 text-[10px] tracking-wider uppercase hover:bg-accent/30 transition-colors">
                       <Mail size={10} /> Email
                     </button>
+                    <button onClick={() => openEditModal(item)} className="flex items-center gap-1 px-2 py-1 bg-muted/20 text-foreground border border-border text-[10px] tracking-wider uppercase hover:bg-muted/30 transition-colors" title="Edit contact info">
+                      <Pencil size={10} /> Edit
+                    </button>
                   </div>
                   <div className="text-[11px] text-muted-foreground">
                     {item.lastOutreach ? `${format(new Date(item.lastOutreach.created_at), "MMM d")} — ${item.lastOutreach.action_type}` : "Never"}
@@ -615,6 +684,15 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                     </button>
                   </div>
 
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); openEditModal(item); }}
+                    className="w-full flex items-center justify-center gap-2 py-3 bg-muted/20 text-foreground border border-border text-[11px] tracking-wider uppercase font-sans active:bg-muted/40 touch-manipulation"
+                    style={{ minHeight: '44px' }}
+                  >
+                    <Pencil size={14} /> Edit Contact Info
+                  </button>
+
                   {/* Contact Details Grid */}
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block mb-0.5">Phone</span><span className="text-foreground">{item.phone || "—"}</span></div>
@@ -728,6 +806,75 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
             </div>
             <button onClick={handleSaveLog} disabled={saving} className="w-full bg-accent text-accent-foreground py-2.5 font-sans text-xs tracking-[0.2em] uppercase hover:bg-accent/80 transition-colors disabled:opacity-50">
               {saving ? "Saving..." : "Save"}
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Contact Modal */}
+      <Dialog open={!!editModal} onOpenChange={() => setEditModal(null)}>
+        <DialogContent className="max-w-lg bg-background border-border max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="font-serif text-xl">Edit Contact Info</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground block mb-1">Name</label>
+                <input value={editForm.contact_name} onChange={e => setEditForm(f => ({ ...f, contact_name: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+              </div>
+              <div>
+                <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground block mb-1">Company</label>
+                <input value={editForm.company} onChange={e => setEditForm(f => ({ ...f, company: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+              </div>
+              <div>
+                <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground block mb-1">Email</label>
+                <input type="email" value={editForm.contact_email} onChange={e => setEditForm(f => ({ ...f, contact_email: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+              </div>
+              <div>
+                <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground block mb-1">Phone</label>
+                <input value={editForm.phone} onChange={e => setEditForm(f => ({ ...f, phone: e.target.value }))} placeholder="(555) 555-5555" className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+              </div>
+            </div>
+            {editModal?.deal && (
+              <>
+                <div className="pt-2 border-t border-border">
+                  <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-2">Deal Details</p>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground block mb-1">Event Type</label>
+                    <input value={editForm.event_type} onChange={e => setEditForm(f => ({ ...f, event_type: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+                  </div>
+                  <div>
+                    <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground block mb-1">Event Date</label>
+                    <input type="date" value={editForm.event_date} onChange={e => setEditForm(f => ({ ...f, event_date: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+                  </div>
+                  <div>
+                    <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground block mb-1">Location</label>
+                    <input value={editForm.location} onChange={e => setEditForm(f => ({ ...f, location: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+                  </div>
+                  <div>
+                    <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground block mb-1">Guests</label>
+                    <input value={editForm.guest_count} onChange={e => setEditForm(f => ({ ...f, guest_count: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+                  </div>
+                  <div>
+                    <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground block mb-1">Deal Value ($)</label>
+                    <input type="number" value={editForm.deal_value} onChange={e => setEditForm(f => ({ ...f, deal_value: e.target.value }))} placeholder="2000" className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+                  </div>
+                  <div>
+                    <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground block mb-1">Next Follow-up</label>
+                    <input type="date" value={editForm.next_follow_up} onChange={e => setEditForm(f => ({ ...f, next_follow_up: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+                  </div>
+                </div>
+                <div>
+                  <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground block mb-1">Notes</label>
+                  <textarea value={editForm.notes} onChange={e => setEditForm(f => ({ ...f, notes: e.target.value }))} rows={3} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent resize-none" />
+                </div>
+              </>
+            )}
+            <button onClick={handleSaveEdit} disabled={editSaving} className="w-full bg-accent text-accent-foreground py-2.5 font-sans text-xs tracking-[0.2em] uppercase hover:bg-accent/80 transition-colors disabled:opacity-50">
+              {editSaving ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </DialogContent>
