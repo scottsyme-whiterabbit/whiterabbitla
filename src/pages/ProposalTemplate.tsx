@@ -54,6 +54,7 @@ const logos = [
   { name: "Paramount", src: paramountLogo },
   { name: "Soho House", src: sohohouseLogo, sizeClass: "max-h-14 md:max-h-[68px]" },
   { name: "The Beverly Hilton", src: beverlyHiltonLogo },
+  { name: "The Magic Castle", src: magicCastleLogo, sizeClass: "max-h-14 md:max-h-16" },
 ];
 
 export interface Tier {
