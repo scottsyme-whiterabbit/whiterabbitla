@@ -69,7 +69,8 @@ const clients = [
 { name: "Taittinger", logo: taittingerLogo },
 { name: "Lionsgate", logo: lionsgateLogo },
 { name: "Pistola", logo: pistolaLogo },
-{ name: "Gravitas Beverly Hills", logo: gravitasLogo }];
+{ name: "Gravitas Beverly Hills", logo: gravitasLogo },
+{ name: "The Magic Castle", logo: magicCastleLogo }];
 
 const heroReviews = [
   { text: "That was well worth it.", name: "Don Cheadle", role: "Actor" },
