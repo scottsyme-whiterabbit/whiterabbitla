@@ -16,6 +16,7 @@ import ColdDripCampaignTab from "@/components/ColdDripCampaignTab";
 import EmailAnalyticsTab from "@/components/EmailAnalyticsTab";
 import LeadAttributionTab from "@/components/LeadAttributionTab";
 import DealInboxTab from "@/components/DealInboxTab";
+import CastleInvitesTab from "@/components/CastleInvitesTab";
 import { BiometricUnlockButton, BiometricEnrollPrompt } from "@/components/BiometricUnlockButton";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -104,7 +105,7 @@ const AdminNewsletter = () => {
     return "";
   });
 
-  const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "inbox" | "actions" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "email_analytics" | "planner" | "apartment" | "thankyou" | "cold" | "lead_attribution">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "inbox" | "actions" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "email_analytics" | "planner" | "apartment" | "thankyou" | "cold" | "lead_attribution" | "castle">("dashboard");
   const [coldCategory, setColdCategory] = useState<string>("corporate_planner");
   const [actionBadge, setActionBadge] = useState(0);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
@@ -690,7 +691,7 @@ const AdminNewsletter = () => {
 
         {/* Desktop Tabs — hidden on mobile */}
         <div className="hidden md:flex gap-1 mb-8 border-b border-border overflow-x-auto">
-          {(["dashboard", "pipeline", "inbox", "actions", "revenue", "contacts", "cold", "compose", "campaigns", "calendar", "analytics", "email_analytics", "lead_attribution", "planner", "apartment", "thankyou"] as const).map(tab => (
+          {(["dashboard", "pipeline", "inbox", "actions", "revenue", "contacts", "cold", "castle", "compose", "campaigns", "calendar", "analytics", "email_analytics", "lead_attribution", "planner", "apartment", "thankyou"] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -698,7 +699,7 @@ const AdminNewsletter = () => {
                 activeTab === tab ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              {tab === "actions" ? "ACTION LIST" : tab === "inbox" ? "📬 INBOX" : tab === "email_analytics" ? "📊 EMAIL ANALYTICS" : tab === "lead_attribution" ? "📈 ATTRIBUTION" : tab === "cold" ? "🎯 OUTREACH" : tab}
+              {tab === "actions" ? "ACTION LIST" : tab === "inbox" ? "📬 INBOX" : tab === "email_analytics" ? "📊 EMAIL ANALYTICS" : tab === "lead_attribution" ? "📈 ATTRIBUTION" : tab === "cold" ? "🎯 OUTREACH" : tab === "castle" ? "🏰 CASTLE" : tab}
               {tab === "actions" && actionBadge > 0 && (
                 <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-[9px] font-sans min-w-[16px] h-4 flex items-center justify-center rounded-full px-1">{actionBadge}</span>
               )}
@@ -716,7 +717,7 @@ const AdminNewsletter = () => {
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-4 space-y-1">
-              {(["dashboard", "pipeline", "inbox", "actions", "revenue", "contacts", "cold", "compose", "campaigns", "calendar", "analytics", "email_analytics", "lead_attribution", "planner", "apartment", "thankyou"] as const).map(tab => (
+              {(["dashboard", "pipeline", "inbox", "actions", "revenue", "contacts", "cold", "castle", "compose", "campaigns", "calendar", "analytics", "email_analytics", "lead_attribution", "planner", "apartment", "thankyou"] as const).map(tab => (
                 <button
                   key={tab}
                   onClick={() => { setActiveTab(tab); setShowMoreTabs(false); }}
@@ -724,7 +725,7 @@ const AdminNewsletter = () => {
                     activeTab === tab ? "text-accent bg-accent/10" : "text-foreground hover:bg-muted/20"
                   }`}
                 >
-                  {tab === "actions" ? "ACTION LIST" : tab === "inbox" ? "📬 Inbox" : tab === "email_analytics" ? "📊 Email Analytics" : tab === "lead_attribution" ? "📈 Lead Attribution" : tab === "cold" ? "🎯 Cold Outreach" : tab}
+                  {tab === "actions" ? "ACTION LIST" : tab === "inbox" ? "📬 Inbox" : tab === "email_analytics" ? "📊 Email Analytics" : tab === "lead_attribution" ? "📈 Lead Attribution" : tab === "cold" ? "🎯 Cold Outreach" : tab === "castle" ? "🏰 Castle Invites" : tab}
                   {tab === "actions" && actionBadge > 0 && (
                     <span className="ml-2 bg-destructive text-destructive-foreground text-[9px] font-sans min-w-[16px] h-4 inline-flex items-center justify-center rounded-full px-1">{actionBadge}</span>
                   )}
@@ -1363,6 +1364,10 @@ const AdminNewsletter = () => {
         {activeTab === "apartment" && (
           <ResidentDripTab storedPassword={storedPassword} onNavigateToContacts={(filter) => { setContactsFilter(filter); setActiveTab("contacts"); }} />
         )}
+        {activeTab === "castle" && (
+          <CastleInvitesTab />
+        )}
+
         {activeTab === "cold" && (
           <div>
             {/* Category sub-selector */}
