@@ -12,7 +12,8 @@ import NewsletterSignup from "@/components/NewsletterSignup";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
 import Guestbook from "@/components/Guestbook";
-import heroVideoAsset from "@/assets/triptych/hero-triptych.mp4.asset.json";
+import heroVideo720 from "@/assets/triptych/hero-720.mp4.asset.json";
+import heroVideo480 from "@/assets/triptych/hero-480.mp4.asset.json";
 import heroVideoPoster from "@/assets/triptych/hero-triptych-poster.jpg.asset.json";
 
 import SEOHead from "@/components/SEOHead";
@@ -124,17 +125,19 @@ const Index = () => {
         {/* Image container */}
         <div className="relative w-full aspect-video md:aspect-auto md:h-screen md:absolute md:inset-0 bg-forest-dark">
           <video
-            src={heroVideoAsset.url}
             poster={heroVideoPoster.url}
             autoPlay
             muted
             loop
             playsInline
-            preload="metadata"
+            preload="auto"
             width={1920}
             height={1080}
             className="w-full h-full object-cover md:object-[center_60%]"
-          />
+          >
+            <source src={heroVideo720.url} type="video/mp4" media="(min-width: 768px)" />
+            <source src={heroVideo480.url} type="video/mp4" />
+          </video>
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/30 to-forest-dark/10 hidden md:block" />
           {/* Bottom 40% gradient for text contrast */}
           <div className="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-t from-black/45 via-black/15 to-transparent hidden md:block" />
