@@ -349,9 +349,13 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
 
   const panels: PanelKind[] = ["hook", "blindspot", "reframe", "proof", "cta"];
   const [bgs, setBgs] = useState<(string | null)[]>([null, null, null, null, null]);
+  const defaultBgColors: BgColor[] = ["green", "cream", "green", "cream", "green"];
+  const [bgColors, setBgColors] = useState<BgColor[]>(defaultBgColors);
   const [slideLogos, setSlideLogos] = useState<SlideLogos[]>(
     panels.map(() => ({ top: "rabbit", bottom: "wordmark" }))
   );
+  const [ctaStyle, setCtaStyle] = useState<"comment" | "readfull">("readfull");
+
 
   // Global controls (mirror Story Mode)
   const [overlayOpacity, setOverlayOpacity] = useState(55);
