@@ -113,12 +113,6 @@ const PhotoBackdrop = ({ src, overlayOpacity, isExport, baseColor }: { src: stri
 };
 
 const renderPanel = (p: PanelProps) => {
-  const { kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, bgs, idx, overlayOpacity, logoScale, slideLogos, isExport } = p;
-  const bg = bgs[idx] ?? null;
-  // Determine if the panel base is dark (emerald) or light (cream)
-  const isDarkBase = kind === "hook" || kind === "reframe" || kind === "cta";
-  // When a photo is present, treat as dark so cream text is legible
-const renderPanel = (p: PanelProps) => {
   const { kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, bgs, idx, overlayOpacity, logoScale, textScale, slideLogos, isExport } = p;
   const bg = bgs[idx] ?? null;
   const ts = textScale / 100;
