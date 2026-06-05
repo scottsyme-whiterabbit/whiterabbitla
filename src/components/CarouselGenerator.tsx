@@ -532,7 +532,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
     toast({ title: "Caption copied" });
   };
 
-  const refs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
+  const refs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
 
   const setBgFor = (i: number, src: string | null) => setBgs((prev) => prev.map((v, j) => (i === j ? src : v)));
   const setBgColorFor = (i: number, c: BgColor) => setBgColors((prev) => prev.map((v, j) => (i === j ? c : v)));
