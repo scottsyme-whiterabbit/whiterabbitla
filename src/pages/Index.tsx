@@ -12,6 +12,7 @@ import NewsletterSignup from "@/components/NewsletterSignup";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
 import Guestbook from "@/components/Guestbook";
+import VerticalTriptych from "@/components/VerticalTriptych";
 
 import SEOHead from "@/components/SEOHead";
 import { useJsonLd } from "@/hooks/useSchemaOrg";
@@ -291,6 +292,9 @@ const Index = () => {
           </div>
         </section>
       </AnimatedSection>
+
+      {/* Vertical video triptych */}
+      <VerticalTriptych />
 
       {/* From the Guestbook */}
       <AnimatedSection>
