@@ -44,7 +44,9 @@ interface PanelProps {
   ctaQuestion: string;
   keyword: string;
   url: string;
+  ctaStyle: "comment" | "readfull";
   bgs: (string | null)[];
+  bgColor: BgColor;
   idx: number;
   overlayOpacity: number; // 0-100
   logoScale: number; // percentage
@@ -52,6 +54,7 @@ interface PanelProps {
   slideLogos: SlideLogos;
   isExport: boolean;
 }
+
 
 const LogoImg = ({ kind, color, scale }: { kind: LogoKind; color: "cream" | "emerald"; scale: number }) => {
   if (kind === "none") return null;
