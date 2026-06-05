@@ -651,6 +651,30 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
                 </div>
               </div>
 
+              <div>
+                <p className="font-sans text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-2">Text Color (Panel {activePanel + 1})</p>
+                <div className="flex flex-wrap gap-1">
+                  {([
+                    { val: "auto", label: "Auto", swatch: "transparent" },
+                    { val: "cream", label: "Cream", swatch: "#F8F5F0" },
+                    { val: "forest", label: "Forest", swatch: "#223D34" },
+                    { val: "black", label: "Black", swatch: "#0A0A0A" },
+                    { val: "white", label: "White", swatch: "#FFFFFF" },
+                    { val: "gold", label: "Gold", swatch: "#C8963E" },
+                    { val: "rose", label: "Rose", swatch: "#C9A3A8" },
+                  ] as { val: TextColor; label: string; swatch: string }[]).map((o) => (
+                    <button
+                      key={o.val}
+                      onClick={() => setTextColorFor(activePanel, o.val)}
+                      className={`flex items-center gap-1.5 font-sans text-[10px] tracking-[0.2em] uppercase px-2 py-2 border ${textColors[activePanel] === o.val ? "bg-accent text-accent-foreground border-accent" : "border-border text-muted-foreground hover:border-accent"}`}
+                    >
+                      <span className="inline-block w-3 h-3 border border-border" style={{ background: o.swatch }} />
+                      {o.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
