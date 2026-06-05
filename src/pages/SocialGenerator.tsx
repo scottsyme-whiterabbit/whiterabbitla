@@ -8,6 +8,7 @@ import wrSymbol from "@/assets/wr-symbol.png";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
 import wrLogo from "@/assets/wr-primary-logo.png";
 import wrSecondaryLogo from "@/assets/wr-secondary-logo.png";
+import CarouselGenerator from "@/components/CarouselGenerator";
 
 // Brand photos library
 import heroDesert from "@/assets/hero-desert.jpg";
