@@ -2,6 +2,7 @@ import { useState, useRef, useCallback } from "react";
 import { toPng } from "html-to-image";
 import { toast } from "@/hooks/use-toast";
 import wrSecondaryLogo from "@/assets/wr-secondary-logo.png";
+import wrSymbol from "@/assets/wr-symbol.png";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
 
 // Brand tokens
@@ -13,8 +14,14 @@ const W = 1080;
 const H = 1350;
 
 type PanelKind = "hook" | "blindspot" | "reframe" | "proof" | "cta";
+type LogoKind = "none" | "rabbit" | "wordmark";
 
 interface PhotoItem { src: string; label: string }
+
+interface SlideLogos {
+  top: LogoKind;
+  bottom: LogoKind;
+}
 
 interface PanelProps {
   kind: PanelKind;
@@ -26,23 +33,48 @@ interface PanelProps {
   ctaQuestion: string;
   keyword: string;
   url: string;
-  bg1: string | null;
-  bg4: string | null;
+  bgs: (string | null)[];
+  idx: number;
+  overlayOpacity: number; // 0-100
+  logoScale: number; // percentage
+  slideLogos: SlideLogos;
   isExport: boolean;
 }
 
-const Logo = ({ color }: { color: "cream" | "emerald" }) => (
-  <img
-    src={wrSecondaryLogo}
-    alt="White Rabbit Los Angeles"
-    crossOrigin="anonymous"
-    style={{
-      height: 64,
-      objectFit: "contain",
-      filter: color === "cream" ? "brightness(0) invert(1)" : "brightness(0) saturate(100%) invert(18%) sepia(15%) saturate(900%) hue-rotate(100deg) brightness(95%) contrast(90%)",
-    }}
-  />
-);
+const LogoImg = ({ kind, color, scale }: { kind: LogoKind; color: "cream" | "emerald"; scale: number }) => {
+  if (kind === "none") return null;
+  const src = kind === "rabbit" ? wrSymbol : wrSecondaryLogo;
+  const baseHeight = kind === "rabbit" ? 110 : 64;
+  return (
+    <img
+      src={src}
+      alt="White Rabbit Los Angeles"
+      crossOrigin="anonymous"
+      style={{
+        height: baseHeight * (scale / 100),
+        objectFit: "contain",
+        filter:
+          color === "cream"
+            ? "brightness(0) invert(1)"
+            : "brightness(0) saturate(100%) invert(18%) sepia(15%) saturate(900%) hue-rotate(100deg) brightness(95%) contrast(90%)",
+      }}
+    />
+  );
+};
+
+const TopLogoRow = ({ kind, color, scale }: { kind: LogoKind; color: "cream" | "emerald"; scale: number }) =>
+  kind === "none" ? <div style={{ height: 70 }} /> : (
+    <div style={{ display: "flex", justifyContent: "center", paddingTop: 70, paddingBottom: 10 }}>
+      <LogoImg kind={kind} color={color} scale={scale} />
+    </div>
+  );
+
+const BottomLogoRow = ({ kind, color, scale }: { kind: LogoKind; color: "cream" | "emerald"; scale: number }) =>
+  kind === "none" ? <div style={{ height: 70 }} /> : (
+    <div style={{ display: "flex", justifyContent: "center", paddingBottom: 70, paddingTop: 10 }}>
+      <LogoImg kind={kind} color={color} scale={scale} />
+    </div>
+  );
 
 const PanelFrame = ({ children, bg }: { children: React.ReactNode; bg: string }) => (
   <div style={{ width: W, height: H, position: "relative", overflow: "hidden", background: bg, fontFamily: "'Ogg', Georgia, serif", display: "flex", flexDirection: "column" }}>
@@ -50,87 +82,102 @@ const PanelFrame = ({ children, bg }: { children: React.ReactNode; bg: string })
   </div>
 );
 
-const LogoRow = ({ color }: { color: "cream" | "emerald" }) => (
-  <div style={{ display: "flex", justifyContent: "center", paddingTop: 70, paddingBottom: 20 }}>
-    <Logo color={color} />
-  </div>
-);
+const PhotoBackdrop = ({ src, overlayOpacity, isExport, baseColor }: { src: string | null; overlayOpacity: number; isExport: boolean; baseColor: string }) => {
+  if (!src) return null;
+  const alpha = Math.round((overlayOpacity / 100) * 255).toString(16).padStart(2, "0");
+  return (
+    <>
+      <img
+        src={src}
+        alt=""
+        {...(isExport ? { crossOrigin: "anonymous" as const } : {})}
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+      />
+      <div style={{ position: "absolute", inset: 0, background: `${baseColor}${alpha}` }} />
+    </>
+  );
+};
 
-const renderPanel = ({ kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, bg1, bg4, isExport }: PanelProps) => {
+const renderPanel = (p: PanelProps) => {
+  const { kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, bgs, idx, overlayOpacity, logoScale, slideLogos, isExport } = p;
+  const bg = bgs[idx] ?? null;
+  // Determine if the panel base is dark (emerald) or light (cream)
+  const isDarkBase = kind === "hook" || kind === "reframe" || kind === "cta";
+  // When a photo is present, treat as dark so cream text is legible
+  const useCreamText = isDarkBase || !!bg;
+  const baseBg = isDarkBase ? forestDark : cream;
+  const overlayColor = useCreamText ? forestDark : cream;
+  const logoColor: "cream" | "emerald" = useCreamText ? "cream" : "emerald";
+  const textColor = useCreamText ? cream : forestDark;
+
+  // Special proof split layout stays unique
+  if (kind === "proof") {
+    return (
+      <PanelFrame bg={cream}>
+        <div style={{ position: "relative", width: "100%", height: "55%", background: forestDark }}>
+          <PhotoBackdrop src={bg} overlayOpacity={Math.max(20, overlayOpacity - 20)} isExport={isExport} baseColor={forestDark} />
+          <div style={{ position: "relative", display: "flex", justifyContent: "center", paddingTop: 60 }}>
+            <LogoImg kind={slideLogos.top} color="cream" scale={logoScale} />
+          </div>
+        </div>
+        <div style={{ flex: 1, padding: "60px 90px 40px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 44, lineHeight: 1.3, color: forestDark, margin: 0, fontWeight: 400 }}>{proof}</p>
+          {proofCred && (
+            <p style={{ fontFamily: "'Ogg', Georgia, serif", fontStyle: "italic", fontSize: 24, lineHeight: 1.4, color: forestDark, opacity: 0.7, marginTop: 24 }}>{proofCred}</p>
+          )}
+        </div>
+        <BottomLogoRow kind={slideLogos.bottom} color="emerald" scale={logoScale} />
+      </PanelFrame>
+    );
+  }
+
+  let bodyContent: React.ReactNode = null;
   switch (kind) {
     case "hook":
-      return (
-        <PanelFrame bg={forestDark}>
-          {bg1 && (
-            <img src={bg1} alt="" {...(isExport ? { crossOrigin: "anonymous" as const } : {})} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
-          )}
-          <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, ${forestDark}AA 0%, ${forestDark}E6 100%)` }} />
-          <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", height: "100%" }}>
-            <LogoRow color="cream" />
-            <div style={{ flex: 1 }} />
-            <div style={{ padding: "0 90px 140px" }}>
-              <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 72, lineHeight: 1.12, color: cream, margin: 0, fontWeight: 400 }}>{hook}</p>
-            </div>
-          </div>
-        </PanelFrame>
+      bodyContent = (
+        <div style={{ flex: 1, display: "flex", alignItems: "flex-end", padding: "0 90px 60px" }}>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 72, lineHeight: 1.12, color: textColor, margin: 0, fontWeight: 400 }}>{hook}</p>
+        </div>
       );
+      break;
     case "blindspot":
-      return (
-        <PanelFrame bg={cream}>
-          <LogoRow color="emerald" />
-          <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 110px" }}>
-            <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 56, lineHeight: 1.25, color: forestDark, margin: 0, textAlign: "center", fontWeight: 400 }}>{blindSpot}</p>
-          </div>
-          <div style={{ height: 100 }} />
-        </PanelFrame>
+      bodyContent = (
+        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 110px" }}>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 56, lineHeight: 1.25, color: textColor, margin: 0, textAlign: "center", fontWeight: 400 }}>{blindSpot}</p>
+        </div>
       );
+      break;
     case "reframe":
-      return (
-        <PanelFrame bg={forestDark}>
-          <LogoRow color="cream" />
-          <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 100px" }}>
-            <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 64, lineHeight: 1.22, color: cream, margin: 0, textAlign: "center", fontWeight: 400 }}>{reframe}</p>
-          </div>
-          <div style={{ height: 100 }} />
-        </PanelFrame>
+      bodyContent = (
+        <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 100px" }}>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 64, lineHeight: 1.22, color: textColor, margin: 0, textAlign: "center", fontWeight: 400 }}>{reframe}</p>
+        </div>
       );
-    case "proof":
-      return (
-        <PanelFrame bg={cream}>
-          <div style={{ position: "relative", width: "100%", height: "55%", background: forestDark }}>
-            {bg4 && (
-              <img src={bg4} alt="" {...(isExport ? { crossOrigin: "anonymous" as const } : {})} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
-            )}
-            <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, ${forestDark}55 0%, ${forestDark}11 60%)` }} />
-            <div style={{ position: "relative", display: "flex", justifyContent: "center", paddingTop: 60 }}>
-              <Logo color="cream" />
-            </div>
-          </div>
-          <div style={{ flex: 1, padding: "60px 90px 80px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 44, lineHeight: 1.3, color: forestDark, margin: 0, fontWeight: 400 }}>{proof}</p>
-            {proofCred && (
-              <p style={{ fontFamily: "'Ogg', Georgia, serif", fontStyle: "italic", fontSize: 24, lineHeight: 1.4, color: forestDark, opacity: 0.7, marginTop: 24 }}>{proofCred}</p>
-            )}
-          </div>
-        </PanelFrame>
-      );
+      break;
     case "cta":
-      return (
-        <PanelFrame bg={forestDark}>
-          <LogoRow color="cream" />
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 100px", textAlign: "center" }}>
-            <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 56, lineHeight: 1.25, color: cream, margin: 0, fontWeight: 400 }}>{ctaQuestion}</p>
-            <div style={{ width: 80, height: 2, background: gold, margin: "50px auto" }} />
-            <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 40, lineHeight: 1.3, color: cream, margin: 0 }}>
-              Comment <span style={{ color: gold, fontWeight: 700 }}>{keyword || "READ"}</span> for the full read.
-            </p>
-          </div>
-          <div style={{ paddingBottom: 80, textAlign: "center" }}>
-            <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 22, letterSpacing: "0.35em", color: cream, opacity: 0.85, margin: 0, textTransform: "uppercase" }}>{url}</p>
-          </div>
-        </PanelFrame>
+      bodyContent = (
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 100px", textAlign: "center" }}>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 56, lineHeight: 1.25, color: textColor, margin: 0, fontWeight: 400 }}>{ctaQuestion}</p>
+          <div style={{ width: 80, height: 2, background: gold, margin: "40px auto" }} />
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 40, lineHeight: 1.3, color: textColor, margin: 0 }}>
+            Comment <span style={{ color: gold, fontWeight: 700 }}>{keyword || "READ"}</span> for the full read.
+          </p>
+          <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 22, letterSpacing: "0.35em", color: textColor, opacity: 0.85, margin: "40px 0 0", textTransform: "uppercase" }}>{url}</p>
+        </div>
       );
+      break;
   }
+
+  return (
+    <PanelFrame bg={baseBg}>
+      <PhotoBackdrop src={bg} overlayOpacity={overlayOpacity} isExport={isExport} baseColor={overlayColor} />
+      <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", height: "100%" }}>
+        <TopLogoRow kind={slideLogos.top} color={logoColor} scale={logoScale} />
+        {bodyContent}
+        <BottomLogoRow kind={slideLogos.bottom} color={logoColor} scale={logoScale} />
+      </div>
+    </PanelFrame>
+  );
 };
 
 interface Props {
@@ -153,14 +200,19 @@ const PhotoPicker = ({
   customPhotos: PhotoItem[];
   setCustomPhotos: (next: PhotoItem[]) => void;
   selected: string | null;
-  setSelected: (src: string) => void;
+  setSelected: (src: string | null) => void;
 }) => {
   const uploadRef = useRef<HTMLInputElement>(null);
   const all = [...brandPhotos, ...customPhotos];
   return (
     <div className="border border-border p-4 space-y-3">
-      <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent">{label}</p>
-      <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 max-h-[260px] overflow-y-auto pr-1">
+      <div className="flex items-center justify-between">
+        <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent">{label}</p>
+        {selected && (
+          <button onClick={() => setSelected(null)} className="font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground hover:text-accent">Clear</button>
+        )}
+      </div>
+      <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 max-h-[220px] overflow-y-auto pr-1">
         <button
           type="button"
           onClick={() => uploadRef.current?.click()}
@@ -223,6 +275,14 @@ const PhotoPicker = ({
   );
 };
 
+const PANEL_LABELS: Record<PanelKind, string> = {
+  hook: "Hook",
+  blindspot: "Blind Spot",
+  reframe: "Reframe",
+  proof: "Proof",
+  cta: "CTA",
+};
+
 const CarouselGenerator = ({ brandPhotos, password }: Props) => {
   const [hook, setHook] = useState("At ultra-luxury hotels under 50 keys, if the crowd is uninteresting, you'll feel it.");
   const [blindSpot, setBlindSpot] = useState("Most operators cannot give a precise answer to the question: who is your guest?");
@@ -232,13 +292,26 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
   const [ctaQuestion, setCtaQuestion] = useState("Who is responsible for guest curation at your next event: the planner, the venue, or both?");
   const [keyword, setKeyword] = useState("MIX");
   const [url, setUrl] = useState("whiterabbitla.com");
-  const [bg1, setBg1] = useState<string | null>(null);
-  const [bg4, setBg4] = useState<string | null>(null);
+
+  const panels: PanelKind[] = ["hook", "blindspot", "reframe", "proof", "cta"];
+  const [bgs, setBgs] = useState<(string | null)[]>([null, null, null, null, null]);
+  const [slideLogos, setSlideLogos] = useState<SlideLogos[]>(
+    panels.map(() => ({ top: "rabbit", bottom: "wordmark" }))
+  );
+
+  // Global controls (mirror Story Mode)
+  const [overlayOpacity, setOverlayOpacity] = useState(55);
+  const [logoScale, setLogoScale] = useState(100);
+
   const [customPhotos, setCustomPhotos] = useState<PhotoItem[]>([]);
   const [exporting, setExporting] = useState(false);
+  const [activePanel, setActivePanel] = useState<number>(0);
 
   const refs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
-  const panels: PanelKind[] = ["hook", "blindspot", "reframe", "proof", "cta"];
+
+  const setBgFor = (i: number, src: string | null) => setBgs((prev) => prev.map((v, j) => (i === j ? src : v)));
+  const setLogoFor = (i: number, key: "top" | "bottom", val: LogoKind) =>
+    setSlideLogos((prev) => prev.map((s, j) => (i === j ? { ...s, [key]: val } : s)));
 
   const downloadOne = useCallback(async (idx: number) => {
     const el = refs[idx].current;
@@ -265,9 +338,16 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
     toast({ title: "All 5 panels downloaded" });
   }, [downloadOne]);
 
-  const panelProps = (kind: PanelKind, isExport: boolean): PanelProps => ({
-    kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, bg1, bg4, isExport,
+  const panelProps = (kind: PanelKind, i: number, isExport: boolean): PanelProps => ({
+    kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url,
+    bgs, idx: i, overlayOpacity, logoScale, slideLogos: slideLogos[i], isExport,
   });
+
+  const LOGO_OPTIONS: { val: LogoKind; label: string }[] = [
+    { val: "rabbit", label: "Rabbit" },
+    { val: "wordmark", label: "Script" },
+    { val: "none", label: "None" },
+  ];
 
   return (
     <section className="py-12">
@@ -275,12 +355,30 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* LEFT: Inputs */}
           <div className="space-y-6">
+            {/* Global controls */}
+            <div className="border border-accent/40 p-4 space-y-4 bg-accent/5">
+              <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent">Global Controls (all panels)</p>
+              <div>
+                <label className="flex justify-between font-sans text-[11px] tracking-[0.25em] uppercase text-muted-foreground mb-2">
+                  <span>Photo Darkness</span><span>{overlayOpacity}%</span>
+                </label>
+                <input type="range" min={0} max={100} value={overlayOpacity} onChange={(e) => setOverlayOpacity(Number(e.target.value))} className="w-full accent-accent" />
+              </div>
+              <div>
+                <label className="flex justify-between font-sans text-[11px] tracking-[0.25em] uppercase text-muted-foreground mb-2">
+                  <span>Logo Size</span><span>{logoScale}%</span>
+                </label>
+                <input type="range" min={50} max={180} value={logoScale} onChange={(e) => setLogoScale(Number(e.target.value))} className="w-full accent-accent" />
+              </div>
+            </div>
+
+            {/* Copy fields */}
             {[
               { label: "Panel 1 — Hook", value: hook, set: setHook, rows: 3 },
               { label: "Panel 2 — Blind Spot", value: blindSpot, set: setBlindSpot, rows: 3 },
               { label: "Panel 3 — Reframe (quotable)", value: reframe, set: setReframe, rows: 3 },
               { label: "Panel 4 — Proof", value: proof, set: setProof, rows: 3 },
-              { label: "Panel 4 — Credibility line (optional, italic)", value: proofCred, set: setProofCred, rows: 2 },
+              { label: "Panel 4 — Credibility line (optional)", value: proofCred, set: setProofCred, rows: 2 },
               { label: "Panel 5 — CTA Question", value: ctaQuestion, set: setCtaQuestion, rows: 3 },
             ].map((f) => (
               <div key={f.label}>
@@ -300,24 +398,58 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
               </div>
             </div>
 
-            <PhotoPicker
-              label="Panel 1 Background Photo"
-              brandPhotos={brandPhotos}
-              password={password}
-              customPhotos={customPhotos}
-              setCustomPhotos={setCustomPhotos}
-              selected={bg1}
-              setSelected={setBg1}
-            />
-            <PhotoPicker
-              label="Panel 4 Background Photo"
-              brandPhotos={brandPhotos}
-              password={password}
-              customPhotos={customPhotos}
-              setCustomPhotos={setCustomPhotos}
-              selected={bg4}
-              setSelected={setBg4}
-            />
+            {/* Per-panel photo & logo controls */}
+            <div className="border border-border p-4 space-y-4">
+              <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent">Per-Panel Settings</p>
+              <div className="flex flex-wrap gap-2">
+                {panels.map((k, i) => (
+                  <button
+                    key={k}
+                    onClick={() => setActivePanel(i)}
+                    className={`font-sans text-[10px] tracking-[0.2em] uppercase px-3 py-2 border ${activePanel === i ? "bg-accent text-accent-foreground border-accent" : "border-border text-muted-foreground hover:text-accent hover:border-accent"}`}
+                  >
+                    {i + 1}. {PANEL_LABELS[k]}
+                  </button>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <p className="font-sans text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-2">Top Logo</p>
+                  <div className="flex gap-1">
+                    {LOGO_OPTIONS.map((o) => (
+                      <button
+                        key={o.val}
+                        onClick={() => setLogoFor(activePanel, "top", o.val)}
+                        className={`flex-1 font-sans text-[10px] tracking-[0.2em] uppercase px-2 py-2 border ${slideLogos[activePanel].top === o.val ? "bg-accent text-accent-foreground border-accent" : "border-border text-muted-foreground hover:border-accent"}`}
+                      >{o.label}</button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <p className="font-sans text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-2">Bottom Logo</p>
+                  <div className="flex gap-1">
+                    {LOGO_OPTIONS.map((o) => (
+                      <button
+                        key={o.val}
+                        onClick={() => setLogoFor(activePanel, "bottom", o.val)}
+                        className={`flex-1 font-sans text-[10px] tracking-[0.2em] uppercase px-2 py-2 border ${slideLogos[activePanel].bottom === o.val ? "bg-accent text-accent-foreground border-accent" : "border-border text-muted-foreground hover:border-accent"}`}
+                      >{o.label}</button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <PhotoPicker
+                label={`Panel ${activePanel + 1} Background Photo (optional)`}
+                brandPhotos={brandPhotos}
+                password={password}
+                customPhotos={customPhotos}
+                setCustomPhotos={setCustomPhotos}
+                selected={bgs[activePanel]}
+                setSelected={(src) => setBgFor(activePanel, src)}
+              />
+            </div>
 
             <button
               onClick={downloadAll}
@@ -333,10 +465,10 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground">Live Previews — 1080×1350</p>
             {panels.map((kind, i) => (
               <div key={kind} className="space-y-2">
-                <p className="font-sans text-[10px] tracking-[0.25em] uppercase text-accent">Panel {i + 1} — {kind}</p>
-                <div className="border border-border overflow-hidden mx-auto" style={{ aspectRatio: "4 / 5", maxWidth: 360 }}>
+                <button onClick={() => setActivePanel(i)} className={`font-sans text-[10px] tracking-[0.25em] uppercase ${activePanel === i ? "text-accent" : "text-muted-foreground"}`}>Panel {i + 1} — {PANEL_LABELS[kind]} {activePanel === i ? "•" : ""}</button>
+                <div className={`border overflow-hidden mx-auto ${activePanel === i ? "border-accent" : "border-border"}`} style={{ aspectRatio: "4 / 5", maxWidth: 360 }}>
                   <div style={{ width: W, height: H, transform: `scale(${360 / W})`, transformOrigin: "top left" }}>
-                    {renderPanel(panelProps(kind, false))}
+                    {renderPanel(panelProps(kind, i, false))}
                   </div>
                 </div>
                 <button
@@ -355,7 +487,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
       <div style={{ position: "absolute", left: "-99999px", top: 0 }}>
         {panels.map((kind, i) => (
           <div key={kind} ref={refs[i]}>
-            {renderPanel(panelProps(kind, true))}
+            {renderPanel(panelProps(kind, i, true))}
           </div>
         ))}
       </div>
