@@ -508,7 +508,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
 
   const panelProps = (kind: PanelKind, i: number, isExport: boolean): PanelProps => ({
     kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle,
-    bgs, bgColor: bgColors[i], idx: i, overlayOpacity, logoScale, textScale, slideLogos: slideLogos[i], isExport,
+    bgs, bgColor: bgColors[i], textColorChoice: textColors[i], idx: i, overlayOpacity, logoScale, textScale, slideLogos: slideLogos[i], isExport,
   });
 
 
