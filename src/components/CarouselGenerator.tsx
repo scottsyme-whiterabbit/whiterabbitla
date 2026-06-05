@@ -92,7 +92,13 @@ const PanelFrame = ({ children, bg }: { children: React.ReactNode; bg: string })
 
 const PhotoBackdrop = ({ src, overlayOpacity, isExport, baseColor }: { src: string | null; overlayOpacity: number; isExport: boolean; baseColor: string }) => {
   if (!src) return null;
-  const alpha = Math.round((overlayOpacity / 100) * 255).toString(16).padStart(2, "0");
+  // Always use forest green for the wash, applied as a vertical gradient
+  // so the 5 slides read as one continuous green wash when swiped.
+  const toHex = (n: number) => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, "0");
+  const topAlpha = toHex((Math.max(0, overlayOpacity - 20) / 100) * 255);
+  const midAlpha = toHex((overlayOpacity / 100) * 255);
+  const botAlpha = toHex((Math.min(100, overlayOpacity + 20) / 100) * 255);
+  const green = forestDark;
   return (
     <>
       <img
@@ -101,7 +107,7 @@ const PhotoBackdrop = ({ src, overlayOpacity, isExport, baseColor }: { src: stri
         {...(isExport ? { crossOrigin: "anonymous" as const } : {})}
         style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
       />
-      <div style={{ position: "absolute", inset: 0, background: `${baseColor}${alpha}` }} />
+      <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, ${green}${topAlpha} 0%, ${green}${midAlpha} 55%, ${green}${botAlpha} 100%)` }} />
     </>
   );
 };
