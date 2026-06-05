@@ -47,6 +47,7 @@ interface PanelProps {
   keyword: string;
   url: string;
   ctaStyle: "comment" | "readfull";
+  ctaBottomDamask: boolean;
   bgs: (string | null)[];
   bgColor: BgColor;
   textColorChoice: TextColor;
