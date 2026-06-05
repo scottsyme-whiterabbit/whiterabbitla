@@ -380,6 +380,7 @@ const PhotoPicker = ({
 };
 
 const PANEL_LABELS: Record<PanelKind, string> = {
+  title: "Title",
   hook: "Hook",
   blindspot: "Blind Spot",
   reframe: "Reframe",
