@@ -402,6 +402,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
     panels.map(() => ({ top: "rabbit", bottom: "wordmark" }))
   );
   const [ctaStyle, setCtaStyle] = useState<"comment" | "readfull">("readfull");
+  const [ctaBottomDamask, setCtaBottomDamask] = useState(false);
 
 
   // Global controls (mirror Story Mode)
