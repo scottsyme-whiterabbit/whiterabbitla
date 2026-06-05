@@ -3,6 +3,7 @@ import { toPng } from "html-to-image";
 import { toast } from "@/hooks/use-toast";
 import wrSecondaryLogo from "@/assets/wr-secondary-logo.png";
 import wrSymbol from "@/assets/wr-symbol.png";
+import damaskForest from "@/assets/damask-forest.jpg";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
 import { blogArticles } from "@/data/blogArticles";
 
