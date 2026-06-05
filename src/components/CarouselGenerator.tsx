@@ -38,6 +38,7 @@ interface SlideLogos {
 
 interface PanelProps {
   kind: PanelKind;
+  articleTitle: string;
   hook: string;
   blindSpot: string;
   reframe: string;
