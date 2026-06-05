@@ -4,6 +4,13 @@ import { toast } from "@/hooks/use-toast";
 import wrSecondaryLogo from "@/assets/wr-secondary-logo.png";
 import wrSymbol from "@/assets/wr-symbol.png";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
+import { blogArticles } from "@/data/blogArticles";
+
+const stripHtml = (s: string) => s.replace(/<[^>]+>/g, "").trim();
+const firstSentence = (s: string) => {
+  const m = stripHtml(s).match(/^[^.!?]+[.!?]/);
+  return (m ? m[0] : stripHtml(s)).trim();
+};
 
 // Brand tokens
 const forestDark = "#223D34";
