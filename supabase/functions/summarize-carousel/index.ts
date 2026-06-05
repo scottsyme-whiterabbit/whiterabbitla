@@ -37,7 +37,7 @@ EXCERPT: ${articleExcerpt || ""}
 BODY:
 ${(articleBody || "").slice(0, 8000)}
 
-Return the carousel using the build_carousel tool. Humanize the language — sound like a thoughtful host talking to one planner, not a brand. Keep each panel short enough to fit on a 1080x1350 slide.`;
+Return the carousel using the build_carousel tool. Humanize the language — sound like a thoughtful host talking to one planner, not a brand. Give each panel room to breathe; depth and specificity beat brevity. Pull real details from the article body instead of generic abstractions. Aim for a substantive read, not a tagline.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
