@@ -23,7 +23,7 @@ const gold = "#C8963E";
 const W = 1080;
 const H = 1350;
 
-type PanelKind = "hook" | "blindspot" | "reframe" | "proof" | "cta";
+type PanelKind = "title" | "hook" | "blindspot" | "reframe" | "proof" | "cta";
 type LogoKind = "none" | "rabbit" | "wordmark";
 type BgColor = "green" | "cream" | "rose";
 type TextColor = "auto" | "cream" | "forest" | "black" | "white" | "gold" | "rose";
@@ -38,6 +38,7 @@ interface SlideLogos {
 
 interface PanelProps {
   kind: PanelKind;
+  articleTitle: string;
   hook: string;
   blindSpot: string;
   reframe: string;
@@ -133,7 +134,7 @@ const TEXT_COLOR_MAP: Record<Exclude<TextColor, "auto">, string> = {
 };
 
 const renderPanel = (p: PanelProps) => {
-  const { kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle, ctaBottomDamask, bgs, bgColor, textColorChoice, idx, overlayOpacity, logoScale, textScale, slideLogos, isExport } = p;
+  const { kind, articleTitle, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle, ctaBottomDamask, bgs, bgColor, textColorChoice, idx, overlayOpacity, logoScale, textScale, slideLogos, isExport } = p;
   const bg = bgs[idx] ?? null;
   const ts = textScale / 100;
   // Resolve chosen base color
@@ -171,6 +172,24 @@ const renderPanel = (p: PanelProps) => {
     );
   }
 
+
+  // Title panel: photo backdrop, logos top, article title at bottom
+  if (kind === "title") {
+    return (
+      <PanelFrame bg={baseBg}>
+        <PhotoBackdrop src={bg} overlayOpacity={overlayOpacity} isExport={isExport} baseColor={overlayColor} />
+        <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", height: "100%" }}>
+          <TopLogoRow kind={slideLogos.top} color={logoColor} scale={logoScale} />
+          <div style={{ flex: 1 }} />
+          <div style={{ padding: "0 90px 80px" }}>
+            <div style={{ width: 80, height: 2, background: gold, marginBottom: 32 }} />
+            <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 76 * ts, lineHeight: 1.1, color: textColor, margin: 0, fontWeight: 400 }}>{articleTitle || hook}</p>
+          </div>
+          <BottomLogoRow kind={slideLogos.bottom} color={logoColor} scale={logoScale} />
+        </div>
+      </PanelFrame>
+    );
+  }
 
   let bodyContent: React.ReactNode = null;
   switch (kind) {
@@ -361,6 +380,7 @@ const PhotoPicker = ({
 };
 
 const PANEL_LABELS: Record<PanelKind, string> = {
+  title: "Title",
   hook: "Hook",
   blindspot: "Blind Spot",
   reframe: "Reframe",
@@ -369,6 +389,7 @@ const PANEL_LABELS: Record<PanelKind, string> = {
 };
 
 const CarouselGenerator = ({ brandPhotos, password }: Props) => {
+  const [articleTitle, setArticleTitle] = useState("Curating the Room: Who Belongs at the Bar");
   const [hook, setHook] = useState("At ultra-luxury hotels under 50 keys, if the crowd is uninteresting, you'll feel it.");
   const [blindSpot, setBlindSpot] = useState("Most operators cannot give a precise answer to the question: who is your guest?");
   const [reframe, setReframe] = useState("Brand attracts a type. Room mix determines the proportion. Most have only invested in the first.");
@@ -385,8 +406,9 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
     const a = blogArticles.find((x) => x.slug === slug);
     if (!a) return;
     const paras = (a.content || []).map(stripHtml).filter((p) => p && p.length > 40);
-    setHook(a.title);
-    setBlindSpot(firstSentence(a.excerpt) || a.excerpt);
+    setArticleTitle(a.title);
+    setHook(firstSentence(a.excerpt) || a.title);
+    setBlindSpot(paras[0] ? firstSentence(paras[0]) : firstSentence(a.excerpt));
     setReframe(paras[1] ? firstSentence(paras[1]) : firstSentence(a.excerpt));
     setProof(paras[2] ? firstSentence(paras[2]) : (paras[0] ? firstSentence(paras[0]) : ""));
     setProofCred(`— ${a.category}`);
@@ -394,9 +416,9 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
     setUrl(`whiterabbitla.com/blog/${a.slug}`);
   };
 
-  const panels: PanelKind[] = ["hook", "blindspot", "reframe", "proof", "cta"];
-  const [bgs, setBgs] = useState<(string | null)[]>([null, null, null, null, null]);
-  const defaultBgColors: BgColor[] = ["green", "cream", "green", "cream", "green"];
+  const panels: PanelKind[] = ["title", "hook", "blindspot", "reframe", "proof", "cta"];
+  const [bgs, setBgs] = useState<(string | null)[]>([null, null, null, null, null, null]);
+  const defaultBgColors: BgColor[] = ["green", "green", "cream", "green", "cream", "green"];
   const [bgColors, setBgColors] = useState<BgColor[]>(defaultBgColors);
   const [slideLogos, setSlideLogos] = useState<SlideLogos[]>(
     panels.map(() => ({ top: "rabbit", bottom: "wordmark" }))
@@ -413,7 +435,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
   const [customPhotos, setCustomPhotos] = useState<PhotoItem[]>([]);
   const [exporting, setExporting] = useState(false);
   const [activePanel, setActivePanel] = useState<number>(0);
-  const [textColors, setTextColors] = useState<TextColor[]>(["auto", "auto", "auto", "auto", "auto"]);
+  const [textColors, setTextColors] = useState<TextColor[]>(["auto", "auto", "auto", "auto", "auto", "auto"]);
   const setTextColorFor = (i: number, c: TextColor) => setTextColors((prev) => prev.map((v, j) => (i === j ? c : v)));
   const [caption, setCaption] = useState("");
   const [generatingCaption, setGeneratingCaption] = useState(false);
@@ -449,6 +471,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
         return;
       }
       const data = await res.json();
+      setArticleTitle(article.title);
       if (data.hook) setHook(data.hook);
       if (data.blindSpot) setBlindSpot(data.blindSpot);
       if (data.reframe) setReframe(data.reframe);
@@ -509,7 +532,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
     toast({ title: "Caption copied" });
   };
 
-  const refs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
+  const refs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
 
   const setBgFor = (i: number, src: string | null) => setBgs((prev) => prev.map((v, j) => (i === j ? src : v)));
   const setBgColorFor = (i: number, c: BgColor) => setBgColors((prev) => prev.map((v, j) => (i === j ? c : v)));
@@ -539,11 +562,11 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
       await new Promise((r) => setTimeout(r, 400));
     }
     setExporting(false);
-    toast({ title: "All 5 panels downloaded" });
+    toast({ title: "All 6 panels downloaded" });
   }, [downloadOne]);
 
   const panelProps = (kind: PanelKind, i: number, isExport: boolean): PanelProps => ({
-    kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle, ctaBottomDamask,
+    kind, articleTitle, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle, ctaBottomDamask,
     bgs, bgColor: bgColors[i], textColorChoice: textColors[i], idx: i, overlayOpacity, logoScale, textScale, slideLogos: slideLogos[i], isExport,
   });
 
@@ -598,7 +621,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
                   <option key={a.slug} value={a.slug}>{a.category} · {a.title}</option>
                 ))}
               </select>
-              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Auto-fills all 5 panels. You can still edit each below.</p>
+              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Auto-fills all 6 panels. You can still edit each below.</p>
               <button
                 onClick={handleSummarizeArticle}
                 disabled={summarizing || !selectedSlug}
@@ -606,17 +629,18 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
               >
                 {summarizing ? "Distilling..." : "Summarize Article With AI"}
               </button>
-              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground/70">AI distills the article into a humanized 5-panel carousel in brand voice.</p>
+              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground/70">AI distills the article into a humanized 6-panel carousel in brand voice.</p>
             </div>
 
             {/* Copy fields */}
             {[
-              { label: "Panel 1 — Hook", value: hook, set: setHook, rows: 3 },
-              { label: "Panel 2 — Blind Spot", value: blindSpot, set: setBlindSpot, rows: 3 },
-              { label: "Panel 3 — Reframe (quotable)", value: reframe, set: setReframe, rows: 3 },
-              { label: "Panel 4 — Proof", value: proof, set: setProof, rows: 3 },
-              { label: "Panel 4 — Credibility line (optional)", value: proofCred, set: setProofCred, rows: 2 },
-              { label: "Panel 5 — CTA Question", value: ctaQuestion, set: setCtaQuestion, rows: 3 },
+              { label: "Panel 1 — Article Title", value: articleTitle, set: setArticleTitle, rows: 2 },
+              { label: "Panel 2 — Hook", value: hook, set: setHook, rows: 3 },
+              { label: "Panel 3 — Blind Spot", value: blindSpot, set: setBlindSpot, rows: 3 },
+              { label: "Panel 4 — Reframe (quotable)", value: reframe, set: setReframe, rows: 3 },
+              { label: "Panel 5 — Proof", value: proof, set: setProof, rows: 3 },
+              { label: "Panel 5 — Credibility line (optional)", value: proofCred, set: setProofCred, rows: 2 },
+              { label: "Panel 6 — CTA Question", value: ctaQuestion, set: setCtaQuestion, rows: 3 },
             ].map((f) => (
               <div key={f.label}>
                 <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-2">{f.label}</label>
@@ -625,7 +649,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
             ))}
 
             <div className="border border-border p-4 space-y-3">
-              <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent">Panel 5 CTA Style</p>
+              <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent">Panel 6 CTA Style</p>
               <div className="flex gap-1">
                 {[
                   { val: "readfull" as const, label: "Read Full Article" },
@@ -794,7 +818,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
               disabled={exporting}
               className="w-full font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-4 hover:bg-accent/80 transition-colors disabled:opacity-50"
             >
-              {exporting ? "Exporting..." : "Download All 5 Panels"}
+              {exporting ? "Exporting..." : "Download All 6 Panels"}
             </button>
           </div>
 
