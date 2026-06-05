@@ -367,6 +367,53 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
   const [activePanel, setActivePanel] = useState<number>(0);
   const [caption, setCaption] = useState("");
   const [generatingCaption, setGeneratingCaption] = useState(false);
+  const [summarizing, setSummarizing] = useState(false);
+
+  const handleSummarizeArticle = useCallback(async () => {
+    if (!selectedSlug) {
+      toast({ title: "Pick an article first", variant: "destructive" });
+      return;
+    }
+    const article = blogArticles.find((a) => a.slug === selectedSlug);
+    if (!article) return;
+    setSummarizing(true);
+    try {
+      const body = (article.content || []).map(stripHtml).join("\n\n");
+      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/summarize-carousel`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({
+          articleTitle: article.title,
+          articleExcerpt: article.excerpt,
+          articleBody: body,
+          category: article.category,
+          adminPassword: password,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: "Request failed" }));
+        toast({ title: err.error || "Summarization failed", variant: "destructive" });
+        return;
+      }
+      const data = await res.json();
+      if (data.hook) setHook(data.hook);
+      if (data.blindSpot) setBlindSpot(data.blindSpot);
+      if (data.reframe) setReframe(data.reframe);
+      if (data.proof) setProof(data.proof);
+      if (typeof data.proofCred === "string") setProofCred(data.proofCred);
+      if (data.ctaQuestion) setCtaQuestion(data.ctaQuestion);
+      setUrl(`whiterabbitla.com/blog/${article.slug}`);
+      toast({ title: "Panels filled from article" });
+    } catch (err) {
+      console.error("Summarize error:", err);
+      toast({ title: "Connection failed", variant: "destructive" });
+    } finally {
+      setSummarizing(false);
+    }
+  }, [selectedSlug, password]);
 
   const handleGenerateCaption = useCallback(async () => {
     setGeneratingCaption(true);
