@@ -15,7 +15,9 @@ const firstSentence = (s: string) => {
 // Brand tokens
 const forestDark = "#223D34";
 const cream = "#F8F5F0";
+const rose = "#C9A3A8";
 const gold = "#C8963E";
+
 
 const W = 1080;
 const H = 1350;
