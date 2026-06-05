@@ -377,6 +377,8 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
   const [customPhotos, setCustomPhotos] = useState<PhotoItem[]>([]);
   const [exporting, setExporting] = useState(false);
   const [activePanel, setActivePanel] = useState<number>(0);
+  const [textColors, setTextColors] = useState<TextColor[]>(["auto", "auto", "auto", "auto", "auto"]);
+  const setTextColorFor = (i: number, c: TextColor) => setTextColors((prev) => prev.map((v, j) => (i === j ? c : v)));
   const [caption, setCaption] = useState("");
   const [generatingCaption, setGeneratingCaption] = useState(false);
   const [summarizing, setSummarizing] = useState(false);
