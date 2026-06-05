@@ -133,7 +133,7 @@ const TEXT_COLOR_MAP: Record<Exclude<TextColor, "auto">, string> = {
 };
 
 const renderPanel = (p: PanelProps) => {
-  const { kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle, bgs, bgColor, textColorChoice, idx, overlayOpacity, logoScale, textScale, slideLogos, isExport } = p;
+  const { kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle, ctaBottomDamask, bgs, bgColor, textColorChoice, idx, overlayOpacity, logoScale, textScale, slideLogos, isExport } = p;
   const bg = bgs[idx] ?? null;
   const ts = textScale / 100;
   // Resolve chosen base color
