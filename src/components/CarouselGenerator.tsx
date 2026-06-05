@@ -562,11 +562,11 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
       await new Promise((r) => setTimeout(r, 400));
     }
     setExporting(false);
-    toast({ title: "All 5 panels downloaded" });
+    toast({ title: "All 6 panels downloaded" });
   }, [downloadOne]);
 
   const panelProps = (kind: PanelKind, i: number, isExport: boolean): PanelProps => ({
-    kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle, ctaBottomDamask,
+    kind, articleTitle, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle, ctaBottomDamask,
     bgs, bgColor: bgColors[i], textColorChoice: textColors[i], idx: i, overlayOpacity, logoScale, textScale, slideLogos: slideLogos[i], isExport,
   });
 
