@@ -71,15 +71,15 @@ const LogoImg = ({ kind, color, scale }: { kind: LogoKind; color: "cream" | "eme
 };
 
 const TopLogoRow = ({ kind, color, scale }: { kind: LogoKind; color: "cream" | "emerald"; scale: number }) =>
-  kind === "none" ? <div style={{ height: 70 }} /> : (
-    <div style={{ display: "flex", justifyContent: "center", paddingTop: 70, paddingBottom: 10 }}>
+  kind === "none" ? <div style={{ height: 110 }} /> : (
+    <div style={{ display: "flex", justifyContent: "center", paddingTop: 120, paddingBottom: 10 }}>
       <LogoImg kind={kind} color={color} scale={scale} />
     </div>
   );
 
 const BottomLogoRow = ({ kind, color, scale }: { kind: LogoKind; color: "cream" | "emerald"; scale: number }) =>
-  kind === "none" ? <div style={{ height: 70 }} /> : (
-    <div style={{ display: "flex", justifyContent: "center", paddingBottom: 70, paddingTop: 10 }}>
+  kind === "none" ? <div style={{ height: 110 }} /> : (
+    <div style={{ display: "flex", justifyContent: "center", paddingBottom: 120, paddingTop: 10 }}>
       <LogoImg kind={kind} color={color} scale={scale} />
     </div>
   );
