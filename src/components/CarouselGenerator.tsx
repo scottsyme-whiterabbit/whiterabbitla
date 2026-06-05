@@ -120,17 +120,19 @@ const PhotoBackdrop = ({ src, overlayOpacity, isExport, baseColor }: { src: stri
 };
 
 const renderPanel = (p: PanelProps) => {
-  const { kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, bgs, idx, overlayOpacity, logoScale, textScale, slideLogos, isExport } = p;
+  const { kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle, bgs, bgColor, idx, overlayOpacity, logoScale, textScale, slideLogos, isExport } = p;
   const bg = bgs[idx] ?? null;
   const ts = textScale / 100;
-  // Determine if the panel base is dark (emerald) or light (cream)
-  const isDarkBase = kind === "hook" || kind === "reframe" || kind === "cta";
+  // Resolve chosen base color
+  const colorMap: Record<BgColor, string> = { green: forestDark, cream, rose };
+  const baseBg = colorMap[bgColor];
+  const isDarkBase = bgColor === "green";
   // When a photo is present, treat as dark so cream text is legible
   const useCreamText = isDarkBase || !!bg;
-  const baseBg = isDarkBase ? forestDark : cream;
   const overlayColor = useCreamText ? forestDark : cream;
   const logoColor: "cream" | "emerald" = useCreamText ? "cream" : "emerald";
   const textColor = useCreamText ? cream : forestDark;
+
 
   // Special proof split layout stays unique
   if (kind === "proof") {
