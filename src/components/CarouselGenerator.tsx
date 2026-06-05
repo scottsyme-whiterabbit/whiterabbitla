@@ -3,6 +3,7 @@ import { toPng } from "html-to-image";
 import { toast } from "@/hooks/use-toast";
 import wrSecondaryLogo from "@/assets/wr-secondary-logo.png";
 import wrSymbol from "@/assets/wr-symbol.png";
+import damaskForest from "@/assets/damask-forest.jpg";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
 import { blogArticles } from "@/data/blogArticles";
 
@@ -46,6 +47,7 @@ interface PanelProps {
   keyword: string;
   url: string;
   ctaStyle: "comment" | "readfull";
+  ctaBottomDamask: boolean;
   bgs: (string | null)[];
   bgColor: BgColor;
   textColorChoice: TextColor;
@@ -131,7 +133,7 @@ const TEXT_COLOR_MAP: Record<Exclude<TextColor, "auto">, string> = {
 };
 
 const renderPanel = (p: PanelProps) => {
-  const { kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle, bgs, bgColor, textColorChoice, idx, overlayOpacity, logoScale, textScale, slideLogos, isExport } = p;
+  const { kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle, ctaBottomDamask, bgs, bgColor, textColorChoice, idx, overlayOpacity, logoScale, textScale, slideLogos, isExport } = p;
   const bg = bgs[idx] ?? null;
   const ts = textScale / 100;
   // Resolve chosen base color
@@ -194,6 +196,38 @@ const renderPanel = (p: PanelProps) => {
       );
       break;
     case "cta":
+      if (ctaBottomDamask) {
+        return (
+          <PanelFrame bg={baseBg}>
+            <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", height: "55%" }}>
+              <TopLogoRow kind={slideLogos.top} color={logoColor} scale={logoScale} />
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 100px 30px", textAlign: "center" }}>
+                <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 56 * ts, lineHeight: 1.2, color: textColor, margin: 0, fontWeight: 400 }}>{ctaQuestion}</p>
+                <div style={{ width: 80, height: 2, background: gold, margin: "32px auto" }} />
+                {ctaStyle === "readfull" ? (
+                  <>
+                    <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 32 * ts, lineHeight: 1.3, color: textColor, margin: 0 }}>Read the full article at</p>
+                    <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 22 * ts, letterSpacing: "0.3em", color: gold, margin: "18px 0 0", textTransform: "uppercase", fontWeight: 700 }}>{url}</p>
+                  </>
+                ) : (
+                  <>
+                    <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 36 * ts, lineHeight: 1.3, color: textColor, margin: 0 }}>
+                      Comment <span style={{ color: gold, fontWeight: 700 }}>{keyword || "READ"}</span> for the full read.
+                    </p>
+                    <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 20 * ts, letterSpacing: "0.35em", color: textColor, opacity: 0.85, margin: "24px 0 0", textTransform: "uppercase" }}>{url}</p>
+                  </>
+                )}
+              </div>
+            </div>
+            <div style={{ position: "relative", width: "100%", height: "45%", overflow: "hidden", background: forestDark }}>
+              <img src={damaskForest} alt="" {...(isExport ? { crossOrigin: "anonymous" as const } : {})} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.95 }} />
+              <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <img src={wrSecondaryLogo} alt="White Rabbit Los Angeles" {...(isExport ? { crossOrigin: "anonymous" as const } : {})} style={{ width: "70%", maxHeight: "70%", objectFit: "contain", filter: "brightness(0) invert(1)" }} />
+              </div>
+            </div>
+          </PanelFrame>
+        );
+      }
       bodyContent = (
         <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 100px", textAlign: "center" }}>
           <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 56 * ts, lineHeight: 1.25, color: textColor, margin: 0, fontWeight: 400 }}>{ctaQuestion}</p>
@@ -368,6 +402,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
     panels.map(() => ({ top: "rabbit", bottom: "wordmark" }))
   );
   const [ctaStyle, setCtaStyle] = useState<"comment" | "readfull">("readfull");
+  const [ctaBottomDamask, setCtaBottomDamask] = useState(false);
 
 
   // Global controls (mirror Story Mode)
@@ -508,9 +543,11 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
   }, [downloadOne]);
 
   const panelProps = (kind: PanelKind, i: number, isExport: boolean): PanelProps => ({
-    kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle,
+    kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle, ctaBottomDamask,
     bgs, bgColor: bgColors[i], textColorChoice: textColors[i], idx: i, overlayOpacity, logoScale, textScale, slideLogos: slideLogos[i], isExport,
   });
+
+
 
 
   const LOGO_OPTIONS: { val: LogoKind; label: string }[] = [
@@ -613,6 +650,17 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
                   <input value={url} onChange={(e) => setUrl(e.target.value)} className="w-full bg-background border border-border font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent" />
                 </div>
               </div>
+              <label className="flex items-center gap-3 pt-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={ctaBottomDamask}
+                  onChange={(e) => setCtaBottomDamask(e.target.checked)}
+                  className="accent-accent w-4 h-4"
+                />
+                <span className="font-sans text-[11px] tracking-[0.25em] uppercase text-muted-foreground">
+                  Full-bleed damask wordmark on bottom half
+                </span>
+              </label>
             </div>
 
 
