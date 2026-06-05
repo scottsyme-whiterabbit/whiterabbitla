@@ -369,8 +369,10 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
   const refs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
 
   const setBgFor = (i: number, src: string | null) => setBgs((prev) => prev.map((v, j) => (i === j ? src : v)));
+  const setBgColorFor = (i: number, c: BgColor) => setBgColors((prev) => prev.map((v, j) => (i === j ? c : v)));
   const setLogoFor = (i: number, key: "top" | "bottom", val: LogoKind) =>
     setSlideLogos((prev) => prev.map((s, j) => (i === j ? { ...s, [key]: val } : s)));
+
 
   const downloadOne = useCallback(async (idx: number) => {
     const el = refs[idx].current;
