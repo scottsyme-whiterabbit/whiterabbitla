@@ -365,6 +365,52 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
   const [customPhotos, setCustomPhotos] = useState<PhotoItem[]>([]);
   const [exporting, setExporting] = useState(false);
   const [activePanel, setActivePanel] = useState<number>(0);
+  const [caption, setCaption] = useState("");
+  const [generatingCaption, setGeneratingCaption] = useState(false);
+
+  const handleGenerateCaption = useCallback(async () => {
+    setGeneratingCaption(true);
+    try {
+      const article = blogArticles.find((a) => a.slug === selectedSlug);
+      const articleTitle = article?.title || hook;
+      const articleExcerpt = article?.excerpt || [blindSpot, reframe, proof].filter(Boolean).join(" ");
+      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-ad-copy`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({
+          audience: "",
+          format: "Instagram carousel",
+          articleTitle,
+          articleExcerpt,
+          adminPassword: password,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: "Request failed" }));
+        toast({ title: err.error || "Caption generation failed", variant: "destructive" });
+        return;
+      }
+      const data = await res.json();
+      const base = data.instagramCaption || "";
+      const articleUrl = article ? `https://whiterabbitla.com/blog/${article.slug}` : `https://${url}`;
+      const full = base ? `${base}\n\nRead the full article: ${articleUrl}` : "";
+      setCaption(full);
+      toast({ title: "Caption generated" });
+    } catch (err) {
+      console.error("Caption error:", err);
+      toast({ title: "Connection failed", variant: "destructive" });
+    } finally {
+      setGeneratingCaption(false);
+    }
+  }, [selectedSlug, hook, blindSpot, reframe, proof, url, password]);
+
+  const handleCopyCaption = () => {
+    navigator.clipboard.writeText(caption);
+    toast({ title: "Caption copied" });
+  };
 
   const refs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
 
@@ -572,6 +618,33 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
                 selected={bgs[activePanel]}
                 setSelected={(src) => setBgFor(activePanel, src)}
               />
+            </div>
+
+            <div className="border border-accent/40 p-4 space-y-3 bg-accent/5">
+              <div className="flex items-center justify-between">
+                <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent">Instagram Caption</p>
+                <button
+                  onClick={handleGenerateCaption}
+                  disabled={generatingCaption}
+                  className="font-sans text-[10px] tracking-[0.25em] uppercase border border-accent text-accent px-3 py-1.5 hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50"
+                >
+                  {generatingCaption ? "Generating..." : "Generate with AI"}
+                </button>
+              </div>
+              <textarea
+                value={caption}
+                onChange={(e) => setCaption(e.target.value)}
+                rows={6}
+                placeholder="Generate a caption based on the selected article, or write your own."
+                className="w-full bg-background border border-border text-foreground font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent resize-none"
+              />
+              <button
+                onClick={handleCopyCaption}
+                disabled={!caption}
+                className="w-full font-sans text-xs tracking-[0.2em] uppercase border border-border text-muted-foreground px-4 py-2 hover:border-accent hover:text-accent transition-colors disabled:opacity-50"
+              >
+                Copy Caption
+              </button>
             </div>
 
             <button
