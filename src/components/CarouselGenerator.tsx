@@ -547,6 +547,14 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
                 ))}
               </select>
               <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Auto-fills all 5 panels. You can still edit each below.</p>
+              <button
+                onClick={handleSummarizeArticle}
+                disabled={summarizing || !selectedSlug}
+                className="w-full font-sans text-[11px] tracking-[0.25em] uppercase bg-accent text-accent-foreground px-4 py-2.5 hover:bg-accent/80 transition-colors disabled:opacity-50"
+              >
+                {summarizing ? "Distilling..." : "Summarize Article With AI"}
+              </button>
+              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground/70">AI distills the article into a humanized 5-panel carousel in brand voice.</p>
             </div>
 
             {/* Copy fields */}
