@@ -620,6 +620,33 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
               />
             </div>
 
+            <div className="border border-accent/40 p-4 space-y-3 bg-accent/5">
+              <div className="flex items-center justify-between">
+                <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent">Instagram Caption</p>
+                <button
+                  onClick={handleGenerateCaption}
+                  disabled={generatingCaption}
+                  className="font-sans text-[10px] tracking-[0.25em] uppercase border border-accent text-accent px-3 py-1.5 hover:bg-accent hover:text-accent-foreground transition-colors disabled:opacity-50"
+                >
+                  {generatingCaption ? "Generating..." : "Generate with AI"}
+                </button>
+              </div>
+              <textarea
+                value={caption}
+                onChange={(e) => setCaption(e.target.value)}
+                rows={6}
+                placeholder="Generate a caption based on the selected article, or write your own."
+                className="w-full bg-background border border-border text-foreground font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent resize-none"
+              />
+              <button
+                onClick={handleCopyCaption}
+                disabled={!caption}
+                className="w-full font-sans text-xs tracking-[0.2em] uppercase border border-border text-muted-foreground px-4 py-2 hover:border-accent hover:text-accent transition-colors disabled:opacity-50"
+              >
+                Copy Caption
+              </button>
+            </div>
+
             <button
               onClick={downloadAll}
               disabled={exporting}
