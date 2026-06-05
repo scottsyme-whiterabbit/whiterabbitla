@@ -52,7 +52,7 @@ interface PanelProps {
 const LogoImg = ({ kind, color, scale }: { kind: LogoKind; color: "cream" | "emerald"; scale: number }) => {
   if (kind === "none") return null;
   const src = kind === "rabbit" ? wrSymbol : wrSecondaryLogo;
-  const baseHeight = kind === "rabbit" ? 110 : 64;
+  const baseHeight = kind === "rabbit" ? 90 : 80;
   return (
     <img
       src={src}
