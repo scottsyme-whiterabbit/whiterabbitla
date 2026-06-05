@@ -4,6 +4,13 @@ import { toast } from "@/hooks/use-toast";
 import wrSecondaryLogo from "@/assets/wr-secondary-logo.png";
 import wrSymbol from "@/assets/wr-symbol.png";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
+import { blogArticles } from "@/data/blogArticles";
+
+const stripHtml = (s: string) => s.replace(/<[^>]+>/g, "").trim();
+const firstSentence = (s: string) => {
+  const m = stripHtml(s).match(/^[^.!?]+[.!?]/);
+  return (m ? m[0] : stripHtml(s)).trim();
+};
 
 // Brand tokens
 const forestDark = "#223D34";
@@ -292,6 +299,22 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
   const [ctaQuestion, setCtaQuestion] = useState("Who is responsible for guest curation at your next event: the planner, the venue, or both?");
   const [keyword, setKeyword] = useState("MIX");
   const [url, setUrl] = useState("whiterabbitla.com");
+  const [selectedSlug, setSelectedSlug] = useState("");
+
+  const applyArticle = (slug: string) => {
+    setSelectedSlug(slug);
+    if (!slug) return;
+    const a = blogArticles.find((x) => x.slug === slug);
+    if (!a) return;
+    const paras = (a.content || []).map(stripHtml).filter((p) => p && p.length > 40);
+    setHook(a.title);
+    setBlindSpot(firstSentence(a.excerpt) || a.excerpt);
+    setReframe(paras[1] ? firstSentence(paras[1]) : firstSentence(a.excerpt));
+    setProof(paras[2] ? firstSentence(paras[2]) : (paras[0] ? firstSentence(paras[0]) : ""));
+    setProofCred(`— ${a.category}`);
+    setCtaQuestion(`Want the full read on ${a.title.toLowerCase().replace(/[.?!]+$/, "")}?`);
+    setUrl(`whiterabbitla.com/blog/${a.slug}`);
+  };
 
   const panels: PanelKind[] = ["hook", "blindspot", "reframe", "proof", "cta"];
   const [bgs, setBgs] = useState<(string | null)[]>([null, null, null, null, null]);
@@ -370,6 +393,22 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
                 </label>
                 <input type="range" min={50} max={180} value={logoScale} onChange={(e) => setLogoScale(Number(e.target.value))} className="w-full accent-accent" />
               </div>
+            </div>
+
+            {/* Article source */}
+            <div className="border border-border p-4 space-y-3">
+              <label className="block font-sans text-xs tracking-[0.3em] uppercase text-accent">Pull From Article (optional)</label>
+              <select
+                value={selectedSlug}
+                onChange={(e) => applyArticle(e.target.value)}
+                className="w-full bg-background border border-border text-foreground font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent"
+              >
+                <option value="">— Custom copy —</option>
+                {blogArticles.map((a) => (
+                  <option key={a.slug} value={a.slug}>{a.category} · {a.title}</option>
+                ))}
+              </select>
+              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Auto-fills all 5 panels. You can still edit each below.</p>
             </div>
 
             {/* Copy fields */}
