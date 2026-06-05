@@ -12,7 +12,8 @@ import NewsletterSignup from "@/components/NewsletterSignup";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
 import Guestbook from "@/components/Guestbook";
-import VerticalTriptych from "@/components/VerticalTriptych";
+import heroVideoAsset from "@/assets/triptych/hero-triptych.mp4.asset.json";
+import heroVideoPoster from "@/assets/triptych/hero-triptych-poster.jpg.asset.json";
 
 import SEOHead from "@/components/SEOHead";
 import { useJsonLd } from "@/hooks/useSchemaOrg";
