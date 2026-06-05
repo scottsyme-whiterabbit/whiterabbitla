@@ -148,7 +148,8 @@ const renderPanel = (p: PanelProps) => {
 
   // Special proof split layout stays unique. Bottom half uses the chosen base color.
   if (kind === "proof") {
-    const proofTextColor = bgColor === "green" ? cream : forestDark;
+    const autoProof = bgColor === "green" ? cream : forestDark;
+    const proofTextColor = textColorChoice === "auto" ? autoProof : TEXT_COLOR_MAP[textColorChoice];
     return (
       <PanelFrame bg={baseBg}>
         <div style={{ position: "relative", width: "100%", height: "55%", background: forestDark }}>
