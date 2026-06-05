@@ -629,7 +629,7 @@ const SocialGenerator = () => {
         </div>
       </section>
 
-      {mode === "carousel" && <CarouselGenerator />}
+      {mode === "carousel" && <CarouselGenerator brandPhotos={brandPhotos} password={password} />}
 
       {mode === "story" && (
       <section className="py-12">
