@@ -471,16 +471,34 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
               </div>
             ))}
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-2">Keyword</label>
-                <input value={keyword} onChange={(e) => setKeyword(e.target.value.toUpperCase())} className="w-full bg-background border border-border font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent" />
+            <div className="border border-border p-4 space-y-3">
+              <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent">Panel 5 CTA Style</p>
+              <div className="flex gap-1">
+                {[
+                  { val: "readfull" as const, label: "Read Full Article" },
+                  { val: "comment" as const, label: "Comment Keyword" },
+                ].map((o) => (
+                  <button
+                    key={o.val}
+                    onClick={() => setCtaStyle(o.val)}
+                    className={`flex-1 font-sans text-[10px] tracking-[0.2em] uppercase px-3 py-2 border ${ctaStyle === o.val ? "bg-accent text-accent-foreground border-accent" : "border-border text-muted-foreground hover:border-accent"}`}
+                  >{o.label}</button>
+                ))}
               </div>
-              <div>
-                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-2">URL</label>
-                <input value={url} onChange={(e) => setUrl(e.target.value)} className="w-full bg-background border border-border font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent" />
+              <div className="grid grid-cols-2 gap-4">
+                {ctaStyle === "comment" && (
+                  <div>
+                    <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-2">Keyword</label>
+                    <input value={keyword} onChange={(e) => setKeyword(e.target.value.toUpperCase())} className="w-full bg-background border border-border font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent" />
+                  </div>
+                )}
+                <div className={ctaStyle === "comment" ? "" : "col-span-2"}>
+                  <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-2">URL</label>
+                  <input value={url} onChange={(e) => setUrl(e.target.value)} className="w-full bg-background border border-border font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent" />
+                </div>
               </div>
             </div>
+
 
             {/* Per-panel photo & logo controls */}
             <div className="border border-border p-4 space-y-4">
