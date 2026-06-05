@@ -1,18 +1,44 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import AnimatedSection from "@/components/AnimatedSection";
 import clip1 from "@/assets/triptych/triptych-1.mp4.asset.json";
 import clip2 from "@/assets/triptych/triptych-2.mp4.asset.json";
 import clip3 from "@/assets/triptych/triptych-3.mp4.asset.json";
+import poster1 from "@/assets/triptych/triptych-1-poster.jpg.asset.json";
+import poster2 from "@/assets/triptych/triptych-2-poster.jpg.asset.json";
+import poster3 from "@/assets/triptych/triptych-3-poster.jpg.asset.json";
 
-const clips = [clip1.url, clip2.url, clip3.url];
+const clips = [
+  { src: clip1.url, poster: poster1.url },
+  { src: clip2.url, poster: poster2.url },
+  { src: clip3.url, poster: poster3.url },
+];
 
-function AutoplayVideo({ src }: { src: string }) {
+function LazyAutoplayVideo({ src, poster }: { src: string; poster: string }) {
   const ref = useRef<HTMLVideoElement>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
 
+  // Phase 1: attach src when within ~600px of viewport (warm-up)
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
-    const observer = new IntersectionObserver(
+    const warm = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoad(true);
+          warm.disconnect();
+        }
+      },
+      { rootMargin: "600px 0px" }
+    );
+    warm.observe(video);
+    return () => warm.disconnect();
+  }, []);
+
+  // Phase 2: play/pause when actually visible
+  useEffect(() => {
+    const video = ref.current;
+    if (!video || !shouldLoad) return;
+    const play = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           video.play().catch(() => {});
@@ -22,18 +48,21 @@ function AutoplayVideo({ src }: { src: string }) {
       },
       { threshold: 0.3 }
     );
-    observer.observe(video);
-    return () => observer.disconnect();
-  }, []);
+    play.observe(video);
+    return () => play.disconnect();
+  }, [shouldLoad]);
 
   return (
     <video
       ref={ref}
-      src={src}
+      src={shouldLoad ? src : undefined}
+      poster={poster}
       muted
       loop
       playsInline
-      preload="metadata"
+      preload="none"
+      width={1080}
+      height={1920}
       className="w-full h-full object-cover"
     />
   );
@@ -54,15 +83,14 @@ const VerticalTriptych = () => {
         </AnimatedSection>
 
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-0 gap-6">
-          {clips.map((src, i) => (
-            <AnimatedSection key={src} delay={i * 0.12}>
+          {clips.map((clip, i) => (
+            <AnimatedSection key={clip.src} delay={i * 0.12}>
               <div
                 className={`relative aspect-[9/16] overflow-hidden bg-black ${
                   i > 0 ? "md:border-l md:border-accent/30" : ""
                 }`}
               >
-                <AutoplayVideo src={src} />
-                {/* subtle vignette to anchor edges */}
+                <LazyAutoplayVideo src={clip.src} poster={clip.poster} />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-forest-dark/40" />
               </div>
             </AnimatedSection>
