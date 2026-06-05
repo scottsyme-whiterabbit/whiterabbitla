@@ -402,6 +402,12 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
                 </label>
                 <input type="range" min={50} max={180} value={logoScale} onChange={(e) => setLogoScale(Number(e.target.value))} className="w-full accent-accent" />
               </div>
+              <div>
+                <label className="flex justify-between font-sans text-[11px] tracking-[0.25em] uppercase text-muted-foreground mb-2">
+                  <span>Text Size</span><span>{textScale}%</span>
+                </label>
+                <input type="range" min={60} max={150} value={textScale} onChange={(e) => setTextScale(Number(e.target.value))} className="w-full accent-accent" />
+              </div>
             </div>
 
             {/* Article source */}
