@@ -196,6 +196,38 @@ const renderPanel = (p: PanelProps) => {
       );
       break;
     case "cta":
+      if (ctaBottomDamask) {
+        return (
+          <PanelFrame bg={baseBg}>
+            <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", height: "55%" }}>
+              <TopLogoRow kind={slideLogos.top} color={logoColor} scale={logoScale} />
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 100px 30px", textAlign: "center" }}>
+                <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 56 * ts, lineHeight: 1.2, color: textColor, margin: 0, fontWeight: 400 }}>{ctaQuestion}</p>
+                <div style={{ width: 80, height: 2, background: gold, margin: "32px auto" }} />
+                {ctaStyle === "readfull" ? (
+                  <>
+                    <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 32 * ts, lineHeight: 1.3, color: textColor, margin: 0 }}>Read the full article at</p>
+                    <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 22 * ts, letterSpacing: "0.3em", color: gold, margin: "18px 0 0", textTransform: "uppercase", fontWeight: 700 }}>{url}</p>
+                  </>
+                ) : (
+                  <>
+                    <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 36 * ts, lineHeight: 1.3, color: textColor, margin: 0 }}>
+                      Comment <span style={{ color: gold, fontWeight: 700 }}>{keyword || "READ"}</span> for the full read.
+                    </p>
+                    <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 20 * ts, letterSpacing: "0.35em", color: textColor, opacity: 0.85, margin: "24px 0 0", textTransform: "uppercase" }}>{url}</p>
+                  </>
+                )}
+              </div>
+            </div>
+            <div style={{ position: "relative", width: "100%", height: "45%", overflow: "hidden", background: forestDark }}>
+              <img src={damaskForest} alt="" {...(isExport ? { crossOrigin: "anonymous" as const } : {})} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.95 }} />
+              <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <img src={wrSecondaryLogo} alt="White Rabbit Los Angeles" {...(isExport ? { crossOrigin: "anonymous" as const } : {})} style={{ width: "70%", maxHeight: "70%", objectFit: "contain", filter: "brightness(0) invert(1)" }} />
+              </div>
+            </div>
+          </PanelFrame>
+        );
+      }
       bodyContent = (
         <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 100px", textAlign: "center" }}>
           <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 56 * ts, lineHeight: 1.25, color: textColor, margin: 0, fontWeight: 400 }}>{ctaQuestion}</p>
