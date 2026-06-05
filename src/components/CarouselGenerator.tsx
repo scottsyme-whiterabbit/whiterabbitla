@@ -497,6 +497,27 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
                 ))}
               </div>
 
+              <div>
+                <p className="font-sans text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-2">Background Color (Panel {activePanel + 1})</p>
+                <div className="flex gap-1">
+                  {([
+                    { val: "green", label: "Forest", swatch: "#223D34" },
+                    { val: "cream", label: "Cream", swatch: "#F8F5F0" },
+                    { val: "rose", label: "Rose", swatch: "#C9A3A8" },
+                  ] as { val: BgColor; label: string; swatch: string }[]).map((o) => (
+                    <button
+                      key={o.val}
+                      onClick={() => setBgColorFor(activePanel, o.val)}
+                      className={`flex-1 flex items-center justify-center gap-2 font-sans text-[10px] tracking-[0.2em] uppercase px-2 py-2 border ${bgColors[activePanel] === o.val ? "bg-accent text-accent-foreground border-accent" : "border-border text-muted-foreground hover:border-accent"}`}
+                    >
+                      <span className="inline-block w-3 h-3 border border-border" style={{ background: o.swatch }} />
+                      {o.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <p className="font-sans text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-2">Top Logo</p>
