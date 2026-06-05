@@ -8,6 +8,7 @@ import wrSymbol from "@/assets/wr-symbol.png";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
 import wrLogo from "@/assets/wr-primary-logo.png";
 import wrSecondaryLogo from "@/assets/wr-secondary-logo.png";
+import CarouselGenerator from "@/components/CarouselGenerator";
 
 // Brand photos library
 import heroDesert from "@/assets/hero-desert.jpg";
@@ -229,6 +230,7 @@ const SocialGenerator = () => {
   const [generatingVariants, setGeneratingVariants] = useState(false);
   const [generatingAICopy, setGeneratingAICopy] = useState(false);
   const [instagramCaption, setInstagramCaption] = useState("");
+  const [mode, setMode] = useState<"story" | "carousel">("story");
 
   const [finalImage, setFinalImage] = useState<string | null>(null);
   const [compositing, setCompositing] = useState(false);
@@ -606,6 +608,30 @@ const SocialGenerator = () => {
         </div>
       </section>
 
+      {/* Mode toggle */}
+      <section className="py-8 border-b border-border">
+        <div className="max-w-3xl mx-auto px-6">
+          <div className="flex justify-center gap-3">
+            {(["story", "carousel"] as const).map((m) => (
+              <button
+                key={m}
+                onClick={() => setMode(m)}
+                className={`font-sans text-xs tracking-[0.25em] uppercase px-8 py-3 border transition-colors ${
+                  mode === m
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "border-border text-muted-foreground hover:border-accent"
+                }`}
+              >
+                {m === "story" ? "Story Mode" : "Carousel Mode"}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {mode === "carousel" && <CarouselGenerator />}
+
+      {mode === "story" && (
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -1090,6 +1116,7 @@ const SocialGenerator = () => {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 5. SAVED AD LIBRARY ── */}
       {savedAds.length > 0 && (
