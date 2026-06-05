@@ -185,13 +185,25 @@ const renderPanel = (p: PanelProps) => {
         <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 100px", textAlign: "center" }}>
           <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 56 * ts, lineHeight: 1.25, color: textColor, margin: 0, fontWeight: 400 }}>{ctaQuestion}</p>
           <div style={{ width: 80, height: 2, background: gold, margin: "40px auto" }} />
-          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 40 * ts, lineHeight: 1.3, color: textColor, margin: 0 }}>
-            Comment <span style={{ color: gold, fontWeight: 700 }}>{keyword || "READ"}</span> for the full read.
-          </p>
-          <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 22 * ts, letterSpacing: "0.35em", color: textColor, opacity: 0.85, margin: "40px 0 0", textTransform: "uppercase" }}>{url}</p>
+          {ctaStyle === "readfull" ? (
+            <>
+              <p style={{ fontFamily: "'Ogg', Georgia, serif", fontStyle: "italic", fontSize: 36 * ts, lineHeight: 1.3, color: textColor, margin: 0 }}>
+                Read the full article at
+              </p>
+              <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 26 * ts, letterSpacing: "0.3em", color: gold, margin: "24px 0 0", textTransform: "uppercase", fontWeight: 700 }}>{url}</p>
+            </>
+          ) : (
+            <>
+              <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 40 * ts, lineHeight: 1.3, color: textColor, margin: 0 }}>
+                Comment <span style={{ color: gold, fontWeight: 700 }}>{keyword || "READ"}</span> for the full read.
+              </p>
+              <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 22 * ts, letterSpacing: "0.35em", color: textColor, opacity: 0.85, margin: "40px 0 0", textTransform: "uppercase" }}>{url}</p>
+            </>
+          )}
         </div>
       );
       break;
+
   }
 
   return (
