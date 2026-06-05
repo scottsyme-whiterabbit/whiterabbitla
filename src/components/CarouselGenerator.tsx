@@ -15,13 +15,17 @@ const firstSentence = (s: string) => {
 // Brand tokens
 const forestDark = "#223D34";
 const cream = "#F8F5F0";
+const rose = "#C9A3A8";
 const gold = "#C8963E";
+
 
 const W = 1080;
 const H = 1350;
 
 type PanelKind = "hook" | "blindspot" | "reframe" | "proof" | "cta";
 type LogoKind = "none" | "rabbit" | "wordmark";
+type BgColor = "green" | "cream" | "rose";
+
 
 interface PhotoItem { src: string; label: string }
 
@@ -40,7 +44,9 @@ interface PanelProps {
   ctaQuestion: string;
   keyword: string;
   url: string;
+  ctaStyle: "comment" | "readfull";
   bgs: (string | null)[];
+  bgColor: BgColor;
   idx: number;
   overlayOpacity: number; // 0-100
   logoScale: number; // percentage
@@ -48,6 +54,7 @@ interface PanelProps {
   slideLogos: SlideLogos;
   isExport: boolean;
 }
+
 
 const LogoImg = ({ kind, color, scale }: { kind: LogoKind; color: "cream" | "emerald"; scale: number }) => {
   if (kind === "none") return null;
@@ -113,22 +120,25 @@ const PhotoBackdrop = ({ src, overlayOpacity, isExport, baseColor }: { src: stri
 };
 
 const renderPanel = (p: PanelProps) => {
-  const { kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, bgs, idx, overlayOpacity, logoScale, textScale, slideLogos, isExport } = p;
+  const { kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle, bgs, bgColor, idx, overlayOpacity, logoScale, textScale, slideLogos, isExport } = p;
   const bg = bgs[idx] ?? null;
   const ts = textScale / 100;
-  // Determine if the panel base is dark (emerald) or light (cream)
-  const isDarkBase = kind === "hook" || kind === "reframe" || kind === "cta";
+  // Resolve chosen base color
+  const colorMap: Record<BgColor, string> = { green: forestDark, cream, rose };
+  const baseBg = colorMap[bgColor];
+  const isDarkBase = bgColor === "green";
   // When a photo is present, treat as dark so cream text is legible
   const useCreamText = isDarkBase || !!bg;
-  const baseBg = isDarkBase ? forestDark : cream;
   const overlayColor = useCreamText ? forestDark : cream;
   const logoColor: "cream" | "emerald" = useCreamText ? "cream" : "emerald";
   const textColor = useCreamText ? cream : forestDark;
 
-  // Special proof split layout stays unique
+
+  // Special proof split layout stays unique. Bottom half uses the chosen base color.
   if (kind === "proof") {
+    const proofTextColor = bgColor === "green" ? cream : forestDark;
     return (
-      <PanelFrame bg={cream}>
+      <PanelFrame bg={baseBg}>
         <div style={{ position: "relative", width: "100%", height: "55%", background: forestDark }}>
           <PhotoBackdrop src={bg} overlayOpacity={Math.max(20, overlayOpacity - 20)} isExport={isExport} baseColor={forestDark} />
           <div style={{ position: "relative", display: "flex", justifyContent: "center", paddingTop: 90 }}>
@@ -136,15 +146,16 @@ const renderPanel = (p: PanelProps) => {
           </div>
         </div>
         <div style={{ flex: 1, padding: "60px 90px 40px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 44 * ts, lineHeight: 1.3, color: forestDark, margin: 0, fontWeight: 400 }}>{proof}</p>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 44 * ts, lineHeight: 1.3, color: proofTextColor, margin: 0, fontWeight: 400 }}>{proof}</p>
           {proofCred && (
-            <p style={{ fontFamily: "'Ogg', Georgia, serif", fontStyle: "italic", fontSize: 24 * ts, lineHeight: 1.4, color: forestDark, opacity: 0.7, marginTop: 24 }}>{proofCred}</p>
+            <p style={{ fontFamily: "'Ogg', Georgia, serif", fontStyle: "italic", fontSize: 24 * ts, lineHeight: 1.4, color: proofTextColor, opacity: 0.7, marginTop: 24 }}>{proofCred}</p>
           )}
         </div>
-        <BottomLogoRow kind={slideLogos.bottom} color="emerald" scale={logoScale} />
+        <BottomLogoRow kind={slideLogos.bottom} color={bgColor === "green" ? "cream" : "emerald"} scale={logoScale} />
       </PanelFrame>
     );
   }
+
 
   let bodyContent: React.ReactNode = null;
   switch (kind) {
@@ -174,13 +185,25 @@ const renderPanel = (p: PanelProps) => {
         <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 100px", textAlign: "center" }}>
           <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 56 * ts, lineHeight: 1.25, color: textColor, margin: 0, fontWeight: 400 }}>{ctaQuestion}</p>
           <div style={{ width: 80, height: 2, background: gold, margin: "40px auto" }} />
-          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 40 * ts, lineHeight: 1.3, color: textColor, margin: 0 }}>
-            Comment <span style={{ color: gold, fontWeight: 700 }}>{keyword || "READ"}</span> for the full read.
-          </p>
-          <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 22 * ts, letterSpacing: "0.35em", color: textColor, opacity: 0.85, margin: "40px 0 0", textTransform: "uppercase" }}>{url}</p>
+          {ctaStyle === "readfull" ? (
+            <>
+              <p style={{ fontFamily: "'Ogg', Georgia, serif", fontStyle: "italic", fontSize: 36 * ts, lineHeight: 1.3, color: textColor, margin: 0 }}>
+                Read the full article at
+              </p>
+              <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 26 * ts, letterSpacing: "0.3em", color: gold, margin: "24px 0 0", textTransform: "uppercase", fontWeight: 700 }}>{url}</p>
+            </>
+          ) : (
+            <>
+              <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 40 * ts, lineHeight: 1.3, color: textColor, margin: 0 }}>
+                Comment <span style={{ color: gold, fontWeight: 700 }}>{keyword || "READ"}</span> for the full read.
+              </p>
+              <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 22 * ts, letterSpacing: "0.35em", color: textColor, opacity: 0.85, margin: "40px 0 0", textTransform: "uppercase" }}>{url}</p>
+            </>
+          )}
         </div>
       );
       break;
+
   }
 
   return (
@@ -326,9 +349,13 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
 
   const panels: PanelKind[] = ["hook", "blindspot", "reframe", "proof", "cta"];
   const [bgs, setBgs] = useState<(string | null)[]>([null, null, null, null, null]);
+  const defaultBgColors: BgColor[] = ["green", "cream", "green", "cream", "green"];
+  const [bgColors, setBgColors] = useState<BgColor[]>(defaultBgColors);
   const [slideLogos, setSlideLogos] = useState<SlideLogos[]>(
     panels.map(() => ({ top: "rabbit", bottom: "wordmark" }))
   );
+  const [ctaStyle, setCtaStyle] = useState<"comment" | "readfull">("readfull");
+
 
   // Global controls (mirror Story Mode)
   const [overlayOpacity, setOverlayOpacity] = useState(55);
@@ -342,8 +369,10 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
   const refs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
 
   const setBgFor = (i: number, src: string | null) => setBgs((prev) => prev.map((v, j) => (i === j ? src : v)));
+  const setBgColorFor = (i: number, c: BgColor) => setBgColors((prev) => prev.map((v, j) => (i === j ? c : v)));
   const setLogoFor = (i: number, key: "top" | "bottom", val: LogoKind) =>
     setSlideLogos((prev) => prev.map((s, j) => (i === j ? { ...s, [key]: val } : s)));
+
 
   const downloadOne = useCallback(async (idx: number) => {
     const el = refs[idx].current;
@@ -371,9 +400,10 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
   }, [downloadOne]);
 
   const panelProps = (kind: PanelKind, i: number, isExport: boolean): PanelProps => ({
-    kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url,
-    bgs, idx: i, overlayOpacity, logoScale, textScale, slideLogos: slideLogos[i], isExport,
+    kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle,
+    bgs, bgColor: bgColors[i], idx: i, overlayOpacity, logoScale, textScale, slideLogos: slideLogos[i], isExport,
   });
+
 
   const LOGO_OPTIONS: { val: LogoKind; label: string }[] = [
     { val: "rabbit", label: "Rabbit" },
@@ -441,16 +471,34 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
               </div>
             ))}
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-2">Keyword</label>
-                <input value={keyword} onChange={(e) => setKeyword(e.target.value.toUpperCase())} className="w-full bg-background border border-border font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent" />
+            <div className="border border-border p-4 space-y-3">
+              <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent">Panel 5 CTA Style</p>
+              <div className="flex gap-1">
+                {[
+                  { val: "readfull" as const, label: "Read Full Article" },
+                  { val: "comment" as const, label: "Comment Keyword" },
+                ].map((o) => (
+                  <button
+                    key={o.val}
+                    onClick={() => setCtaStyle(o.val)}
+                    className={`flex-1 font-sans text-[10px] tracking-[0.2em] uppercase px-3 py-2 border ${ctaStyle === o.val ? "bg-accent text-accent-foreground border-accent" : "border-border text-muted-foreground hover:border-accent"}`}
+                  >{o.label}</button>
+                ))}
               </div>
-              <div>
-                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-2">URL</label>
-                <input value={url} onChange={(e) => setUrl(e.target.value)} className="w-full bg-background border border-border font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent" />
+              <div className="grid grid-cols-2 gap-4">
+                {ctaStyle === "comment" && (
+                  <div>
+                    <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-2">Keyword</label>
+                    <input value={keyword} onChange={(e) => setKeyword(e.target.value.toUpperCase())} className="w-full bg-background border border-border font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent" />
+                  </div>
+                )}
+                <div className={ctaStyle === "comment" ? "" : "col-span-2"}>
+                  <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-2">URL</label>
+                  <input value={url} onChange={(e) => setUrl(e.target.value)} className="w-full bg-background border border-border font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent" />
+                </div>
               </div>
             </div>
+
 
             {/* Per-panel photo & logo controls */}
             <div className="border border-border p-4 space-y-4">
@@ -466,6 +514,27 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
                   </button>
                 ))}
               </div>
+
+              <div>
+                <p className="font-sans text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-2">Background Color (Panel {activePanel + 1})</p>
+                <div className="flex gap-1">
+                  {([
+                    { val: "green", label: "Forest", swatch: "#223D34" },
+                    { val: "cream", label: "Cream", swatch: "#F8F5F0" },
+                    { val: "rose", label: "Rose", swatch: "#C9A3A8" },
+                  ] as { val: BgColor; label: string; swatch: string }[]).map((o) => (
+                    <button
+                      key={o.val}
+                      onClick={() => setBgColorFor(activePanel, o.val)}
+                      className={`flex-1 flex items-center justify-center gap-2 font-sans text-[10px] tracking-[0.2em] uppercase px-2 py-2 border ${bgColors[activePanel] === o.val ? "bg-accent text-accent-foreground border-accent" : "border-border text-muted-foreground hover:border-accent"}`}
+                    >
+                      <span className="inline-block w-3 h-3 border border-border" style={{ background: o.swatch }} />
+                      {o.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
