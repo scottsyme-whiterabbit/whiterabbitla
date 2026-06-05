@@ -818,7 +818,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
               disabled={exporting}
               className="w-full font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-4 hover:bg-accent/80 transition-colors disabled:opacity-50"
             >
-              {exporting ? "Exporting..." : "Download All 5 Panels"}
+              {exporting ? "Exporting..." : "Download All 6 Panels"}
             </button>
           </div>
 
