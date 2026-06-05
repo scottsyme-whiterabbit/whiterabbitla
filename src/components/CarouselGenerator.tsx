@@ -365,6 +365,52 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
   const [customPhotos, setCustomPhotos] = useState<PhotoItem[]>([]);
   const [exporting, setExporting] = useState(false);
   const [activePanel, setActivePanel] = useState<number>(0);
+  const [caption, setCaption] = useState("");
+  const [generatingCaption, setGeneratingCaption] = useState(false);
+
+  const handleGenerateCaption = useCallback(async () => {
+    setGeneratingCaption(true);
+    try {
+      const article = blogArticles.find((a) => a.slug === selectedSlug);
+      const articleTitle = article?.title || hook;
+      const articleExcerpt = article?.excerpt || [blindSpot, reframe, proof].filter(Boolean).join(" ");
+      const res = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-ad-copy`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({
+          audience: "",
+          format: "Instagram carousel",
+          articleTitle,
+          articleExcerpt,
+          adminPassword: password,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: "Request failed" }));
+        toast({ title: err.error || "Caption generation failed", variant: "destructive" });
+        return;
+      }
+      const data = await res.json();
+      const base = data.instagramCaption || "";
+      const articleUrl = article ? `https://whiterabbitla.com/blog/${article.slug}` : `https://${url}`;
+      const full = base ? `${base}\n\nRead the full article: ${articleUrl}` : "";
+      setCaption(full);
+      toast({ title: "Caption generated" });
+    } catch (err) {
+      console.error("Caption error:", err);
+      toast({ title: "Connection failed", variant: "destructive" });
+    } finally {
+      setGeneratingCaption(false);
+    }
+  }, [selectedSlug, hook, blindSpot, reframe, proof, url, password]);
+
+  const handleCopyCaption = () => {
+    navigator.clipboard.writeText(caption);
+    toast({ title: "Caption copied" });
+  };
 
   const refs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
 
