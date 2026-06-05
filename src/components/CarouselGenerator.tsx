@@ -400,9 +400,10 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
   }, [downloadOne]);
 
   const panelProps = (kind: PanelKind, i: number, isExport: boolean): PanelProps => ({
-    kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url,
-    bgs, idx: i, overlayOpacity, logoScale, textScale, slideLogos: slideLogos[i], isExport,
+    kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle,
+    bgs, bgColor: bgColors[i], idx: i, overlayOpacity, logoScale, textScale, slideLogos: slideLogos[i], isExport,
   });
+
 
   const LOGO_OPTIONS: { val: LogoKind; label: string }[] = [
     { val: "rabbit", label: "Rabbit" },
