@@ -121,7 +121,7 @@ const Index = () => {
     <main id="main-content">
       <SEOHead title={seoTitle} description={seoDescription} canonical="/" ogImage="/og-image.jpg" />
       {/* Hero */}
-      <section className="relative overflow-hidden md:h-screen">
+      <section className="relative overflow-hidden md:h-screen pt-32 md:pt-0 bg-forest-dark">
         {/* Image container */}
         <div className="relative w-full aspect-video md:aspect-auto md:h-screen md:absolute md:inset-0 bg-forest-dark">
           <video
