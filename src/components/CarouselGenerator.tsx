@@ -118,6 +118,13 @@ const renderPanel = (p: PanelProps) => {
   // Determine if the panel base is dark (emerald) or light (cream)
   const isDarkBase = kind === "hook" || kind === "reframe" || kind === "cta";
   // When a photo is present, treat as dark so cream text is legible
+const renderPanel = (p: PanelProps) => {
+  const { kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, bgs, idx, overlayOpacity, logoScale, textScale, slideLogos, isExport } = p;
+  const bg = bgs[idx] ?? null;
+  const ts = textScale / 100;
+  // Determine if the panel base is dark (emerald) or light (cream)
+  const isDarkBase = kind === "hook" || kind === "reframe" || kind === "cta";
+  // When a photo is present, treat as dark so cream text is legible
   const useCreamText = isDarkBase || !!bg;
   const baseBg = isDarkBase ? forestDark : cream;
   const overlayColor = useCreamText ? forestDark : cream;
@@ -130,14 +137,14 @@ const renderPanel = (p: PanelProps) => {
       <PanelFrame bg={cream}>
         <div style={{ position: "relative", width: "100%", height: "55%", background: forestDark }}>
           <PhotoBackdrop src={bg} overlayOpacity={Math.max(20, overlayOpacity - 20)} isExport={isExport} baseColor={forestDark} />
-          <div style={{ position: "relative", display: "flex", justifyContent: "center", paddingTop: 60 }}>
+          <div style={{ position: "relative", display: "flex", justifyContent: "center", paddingTop: 90 }}>
             <LogoImg kind={slideLogos.top} color="cream" scale={logoScale} />
           </div>
         </div>
         <div style={{ flex: 1, padding: "60px 90px 40px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 44, lineHeight: 1.3, color: forestDark, margin: 0, fontWeight: 400 }}>{proof}</p>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 44 * ts, lineHeight: 1.3, color: forestDark, margin: 0, fontWeight: 400 }}>{proof}</p>
           {proofCred && (
-            <p style={{ fontFamily: "'Ogg', Georgia, serif", fontStyle: "italic", fontSize: 24, lineHeight: 1.4, color: forestDark, opacity: 0.7, marginTop: 24 }}>{proofCred}</p>
+            <p style={{ fontFamily: "'Ogg', Georgia, serif", fontStyle: "italic", fontSize: 24 * ts, lineHeight: 1.4, color: forestDark, opacity: 0.7, marginTop: 24 }}>{proofCred}</p>
           )}
         </div>
         <BottomLogoRow kind={slideLogos.bottom} color="emerald" scale={logoScale} />
@@ -150,33 +157,33 @@ const renderPanel = (p: PanelProps) => {
     case "hook":
       bodyContent = (
         <div style={{ flex: 1, display: "flex", alignItems: "flex-end", padding: "0 90px 60px" }}>
-          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 72, lineHeight: 1.12, color: textColor, margin: 0, fontWeight: 400 }}>{hook}</p>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 72 * ts, lineHeight: 1.12, color: textColor, margin: 0, fontWeight: 400 }}>{hook}</p>
         </div>
       );
       break;
     case "blindspot":
       bodyContent = (
         <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 110px" }}>
-          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 56, lineHeight: 1.25, color: textColor, margin: 0, textAlign: "center", fontWeight: 400 }}>{blindSpot}</p>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 56 * ts, lineHeight: 1.25, color: textColor, margin: 0, textAlign: "center", fontWeight: 400 }}>{blindSpot}</p>
         </div>
       );
       break;
     case "reframe":
       bodyContent = (
         <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 100px" }}>
-          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 64, lineHeight: 1.22, color: textColor, margin: 0, textAlign: "center", fontWeight: 400 }}>{reframe}</p>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 64 * ts, lineHeight: 1.22, color: textColor, margin: 0, textAlign: "center", fontWeight: 400 }}>{reframe}</p>
         </div>
       );
       break;
     case "cta":
       bodyContent = (
         <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 100px", textAlign: "center" }}>
-          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 56, lineHeight: 1.25, color: textColor, margin: 0, fontWeight: 400 }}>{ctaQuestion}</p>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 56 * ts, lineHeight: 1.25, color: textColor, margin: 0, fontWeight: 400 }}>{ctaQuestion}</p>
           <div style={{ width: 80, height: 2, background: gold, margin: "40px auto" }} />
-          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 40, lineHeight: 1.3, color: textColor, margin: 0 }}>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 40 * ts, lineHeight: 1.3, color: textColor, margin: 0 }}>
             Comment <span style={{ color: gold, fontWeight: 700 }}>{keyword || "READ"}</span> for the full read.
           </p>
-          <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 22, letterSpacing: "0.35em", color: textColor, opacity: 0.85, margin: "40px 0 0", textTransform: "uppercase" }}>{url}</p>
+          <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 22 * ts, letterSpacing: "0.35em", color: textColor, opacity: 0.85, margin: "40px 0 0", textTransform: "uppercase" }}>{url}</p>
         </div>
       );
       break;
