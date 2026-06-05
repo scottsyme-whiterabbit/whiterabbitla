@@ -372,7 +372,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
 
   const panelProps = (kind: PanelKind, i: number, isExport: boolean): PanelProps => ({
     kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url,
-    bgs, idx: i, overlayOpacity, logoScale, slideLogos: slideLogos[i], isExport,
+    bgs, idx: i, overlayOpacity, logoScale, textScale, slideLogos: slideLogos[i], isExport,
   });
 
   const LOGO_OPTIONS: { val: LogoKind; label: string }[] = [
