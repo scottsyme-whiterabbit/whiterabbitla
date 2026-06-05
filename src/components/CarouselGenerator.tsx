@@ -395,6 +395,22 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
               </div>
             </div>
 
+            {/* Article source */}
+            <div className="border border-border p-4 space-y-3">
+              <label className="block font-sans text-xs tracking-[0.3em] uppercase text-accent">Pull From Article (optional)</label>
+              <select
+                value={selectedSlug}
+                onChange={(e) => applyArticle(e.target.value)}
+                className="w-full bg-background border border-border text-foreground font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent"
+              >
+                <option value="">— Custom copy —</option>
+                {blogArticles.map((a) => (
+                  <option key={a.slug} value={a.slug}>{a.category} · {a.title}</option>
+                ))}
+              </select>
+              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Auto-fills all 5 panels. You can still edit each below.</p>
+            </div>
+
             {/* Copy fields */}
             {[
               { label: "Panel 1 — Hook", value: hook, set: setHook, rows: 3 },
