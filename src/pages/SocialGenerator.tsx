@@ -230,6 +230,7 @@ const SocialGenerator = () => {
   const [generatingVariants, setGeneratingVariants] = useState(false);
   const [generatingAICopy, setGeneratingAICopy] = useState(false);
   const [instagramCaption, setInstagramCaption] = useState("");
+  const [mode, setMode] = useState<"story" | "carousel">("story");
 
   const [finalImage, setFinalImage] = useState<string | null>(null);
   const [compositing, setCompositing] = useState(false);
