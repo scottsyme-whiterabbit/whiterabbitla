@@ -173,6 +173,24 @@ const renderPanel = (p: PanelProps) => {
   }
 
 
+  // Title panel: photo backdrop, logos top, article title at bottom
+  if (kind === "title") {
+    return (
+      <PanelFrame bg={baseBg}>
+        <PhotoBackdrop src={bg} overlayOpacity={overlayOpacity} isExport={isExport} baseColor={overlayColor} />
+        <div style={{ position: "relative", zIndex: 2, display: "flex", flexDirection: "column", height: "100%" }}>
+          <TopLogoRow kind={slideLogos.top} color={logoColor} scale={logoScale} />
+          <div style={{ flex: 1 }} />
+          <div style={{ padding: "0 90px 80px" }}>
+            <div style={{ width: 80, height: 2, background: gold, marginBottom: 32 }} />
+            <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 76 * ts, lineHeight: 1.1, color: textColor, margin: 0, fontWeight: 400 }}>{articleTitle || hook}</p>
+          </div>
+          <BottomLogoRow kind={slideLogos.bottom} color={logoColor} scale={logoScale} />
+        </div>
+      </PanelFrame>
+    );
+  }
+
   let bodyContent: React.ReactNode = null;
   switch (kind) {
     case "hook":
