@@ -44,6 +44,7 @@ interface PanelProps {
   idx: number;
   overlayOpacity: number; // 0-100
   logoScale: number; // percentage
+  textScale: number; // percentage
   slideLogos: SlideLogos;
   isExport: boolean;
 }
