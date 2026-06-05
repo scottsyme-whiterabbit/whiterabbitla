@@ -1116,6 +1116,7 @@ const SocialGenerator = () => {
           </div>
         </div>
       </section>
+      )}
 
       {/* ── 5. SAVED AD LIBRARY ── */}
       {savedAds.length > 0 && (
