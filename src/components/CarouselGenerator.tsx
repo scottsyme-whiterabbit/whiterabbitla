@@ -134,10 +134,11 @@ const renderPanel = (p: PanelProps) => {
   const textColor = useCreamText ? cream : forestDark;
 
 
-  // Special proof split layout stays unique
+  // Special proof split layout stays unique. Bottom half uses the chosen base color.
   if (kind === "proof") {
+    const proofTextColor = bgColor === "green" ? cream : forestDark;
     return (
-      <PanelFrame bg={cream}>
+      <PanelFrame bg={baseBg}>
         <div style={{ position: "relative", width: "100%", height: "55%", background: forestDark }}>
           <PhotoBackdrop src={bg} overlayOpacity={Math.max(20, overlayOpacity - 20)} isExport={isExport} baseColor={forestDark} />
           <div style={{ position: "relative", display: "flex", justifyContent: "center", paddingTop: 90 }}>
@@ -145,15 +146,16 @@ const renderPanel = (p: PanelProps) => {
           </div>
         </div>
         <div style={{ flex: 1, padding: "60px 90px 40px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 44 * ts, lineHeight: 1.3, color: forestDark, margin: 0, fontWeight: 400 }}>{proof}</p>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 44 * ts, lineHeight: 1.3, color: proofTextColor, margin: 0, fontWeight: 400 }}>{proof}</p>
           {proofCred && (
-            <p style={{ fontFamily: "'Ogg', Georgia, serif", fontStyle: "italic", fontSize: 24 * ts, lineHeight: 1.4, color: forestDark, opacity: 0.7, marginTop: 24 }}>{proofCred}</p>
+            <p style={{ fontFamily: "'Ogg', Georgia, serif", fontStyle: "italic", fontSize: 24 * ts, lineHeight: 1.4, color: proofTextColor, opacity: 0.7, marginTop: 24 }}>{proofCred}</p>
           )}
         </div>
-        <BottomLogoRow kind={slideLogos.bottom} color="emerald" scale={logoScale} />
+        <BottomLogoRow kind={slideLogos.bottom} color={bgColor === "green" ? "cream" : "emerald"} scale={logoScale} />
       </PanelFrame>
     );
   }
+
 
   let bodyContent: React.ReactNode = null;
   switch (kind) {
