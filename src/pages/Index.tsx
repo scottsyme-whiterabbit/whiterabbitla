@@ -294,8 +294,6 @@ const Index = () => {
         </section>
       </AnimatedSection>
 
-      {/* Vertical video triptych */}
-      <VerticalTriptych />
 
       {/* From the Guestbook */}
       <AnimatedSection>
