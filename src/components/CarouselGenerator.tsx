@@ -621,7 +621,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
                   <option key={a.slug} value={a.slug}>{a.category} · {a.title}</option>
                 ))}
               </select>
-              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Auto-fills all 5 panels. You can still edit each below.</p>
+              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground">Auto-fills all 6 panels. You can still edit each below.</p>
               <button
                 onClick={handleSummarizeArticle}
                 disabled={summarizing || !selectedSlug}
@@ -629,17 +629,18 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
               >
                 {summarizing ? "Distilling..." : "Summarize Article With AI"}
               </button>
-              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground/70">AI distills the article into a humanized 5-panel carousel in brand voice.</p>
+              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-muted-foreground/70">AI distills the article into a humanized 6-panel carousel in brand voice.</p>
             </div>
 
             {/* Copy fields */}
             {[
-              { label: "Panel 1 — Hook", value: hook, set: setHook, rows: 3 },
-              { label: "Panel 2 — Blind Spot", value: blindSpot, set: setBlindSpot, rows: 3 },
-              { label: "Panel 3 — Reframe (quotable)", value: reframe, set: setReframe, rows: 3 },
-              { label: "Panel 4 — Proof", value: proof, set: setProof, rows: 3 },
-              { label: "Panel 4 — Credibility line (optional)", value: proofCred, set: setProofCred, rows: 2 },
-              { label: "Panel 5 — CTA Question", value: ctaQuestion, set: setCtaQuestion, rows: 3 },
+              { label: "Panel 1 — Article Title", value: articleTitle, set: setArticleTitle, rows: 2 },
+              { label: "Panel 2 — Hook", value: hook, set: setHook, rows: 3 },
+              { label: "Panel 3 — Blind Spot", value: blindSpot, set: setBlindSpot, rows: 3 },
+              { label: "Panel 4 — Reframe (quotable)", value: reframe, set: setReframe, rows: 3 },
+              { label: "Panel 5 — Proof", value: proof, set: setProof, rows: 3 },
+              { label: "Panel 5 — Credibility line (optional)", value: proofCred, set: setProofCred, rows: 2 },
+              { label: "Panel 6 — CTA Question", value: ctaQuestion, set: setCtaQuestion, rows: 3 },
             ].map((f) => (
               <div key={f.label}>
                 <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-2">{f.label}</label>
