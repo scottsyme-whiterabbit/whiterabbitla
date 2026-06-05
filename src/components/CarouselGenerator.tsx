@@ -333,6 +333,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
   // Global controls (mirror Story Mode)
   const [overlayOpacity, setOverlayOpacity] = useState(55);
   const [logoScale, setLogoScale] = useState(100);
+  const [textScale, setTextScale] = useState(100);
 
   const [customPhotos, setCustomPhotos] = useState<PhotoItem[]>([]);
   const [exporting, setExporting] = useState(false);
