@@ -25,6 +25,7 @@ const H = 1350;
 type PanelKind = "hook" | "blindspot" | "reframe" | "proof" | "cta";
 type LogoKind = "none" | "rabbit" | "wordmark";
 type BgColor = "green" | "cream" | "rose";
+type TextColor = "auto" | "cream" | "forest" | "black" | "white" | "gold" | "rose";
 
 
 interface PhotoItem { src: string; label: string }
@@ -47,6 +48,7 @@ interface PanelProps {
   ctaStyle: "comment" | "readfull";
   bgs: (string | null)[];
   bgColor: BgColor;
+  textColorChoice: TextColor;
   idx: number;
   overlayOpacity: number; // 0-100
   logoScale: number; // percentage
