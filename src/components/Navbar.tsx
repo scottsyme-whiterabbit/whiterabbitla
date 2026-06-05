@@ -28,11 +28,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav aria-label="Main navigation" className={`fixed top-14 md:top-10 left-0 right-0 z-50 transition-all duration-300 ${
-      scrolled || !isHome
-        ? "bg-forest-dark/90 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.4)]"
-        : "bg-transparent"
-    }`}>
+    <nav aria-label="Main navigation" className="fixed top-14 md:top-10 left-0 right-0 z-50 transition-all duration-300 bg-forest-dark/90 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.4)]">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="flex items-center justify-center h-20">
           <Link to="/" className="absolute left-6 lg:left-12 flex-shrink-0">
