@@ -12,7 +12,8 @@ import NewsletterSignup from "@/components/NewsletterSignup";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
 import Guestbook from "@/components/Guestbook";
-import VerticalTriptych from "@/components/VerticalTriptych";
+import heroVideoAsset from "@/assets/triptych/hero-triptych.mp4.asset.json";
+import heroVideoPoster from "@/assets/triptych/hero-triptych-poster.jpg.asset.json";
 
 import SEOHead from "@/components/SEOHead";
 import { useJsonLd } from "@/hooks/useSchemaOrg";
@@ -121,8 +122,19 @@ const Index = () => {
       {/* Hero */}
       <section className="relative overflow-hidden md:h-screen">
         {/* Image container */}
-        <div className="relative w-full aspect-[3/4] md:h-screen md:absolute md:inset-0 bg-forest-dark">
-          <img src={heroImage} alt="Scott Syme, White Rabbit luxury magician tossing cards in a cinematic desert landscape – private event entertainment in Los Angeles" width={1200} height={630} className="w-full h-full object-cover object-[center_45%] md:object-[center_60%] scale-110" fetchPriority="high" />
+        <div className="relative w-full aspect-video md:aspect-auto md:h-screen md:absolute md:inset-0 bg-forest-dark">
+          <video
+            src={heroVideoAsset.url}
+            poster={heroVideoPoster.url}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            width={1920}
+            height={1080}
+            className="w-full h-full object-cover md:object-[center_60%]"
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/30 to-forest-dark/10 hidden md:block" />
           {/* Bottom 40% gradient for text contrast */}
           <div className="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-t from-black/45 via-black/15 to-transparent hidden md:block" />
@@ -293,8 +305,6 @@ const Index = () => {
         </section>
       </AnimatedSection>
 
-      {/* Vertical video triptych */}
-      <VerticalTriptych />
 
       {/* From the Guestbook */}
       <AnimatedSection>
