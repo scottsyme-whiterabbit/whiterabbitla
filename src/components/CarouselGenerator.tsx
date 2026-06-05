@@ -471,6 +471,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
         return;
       }
       const data = await res.json();
+      setArticleTitle(article.title);
       if (data.hook) setHook(data.hook);
       if (data.blindSpot) setBlindSpot(data.blindSpot);
       if (data.reframe) setReframe(data.reframe);
