@@ -25,6 +25,7 @@ const H = 1350;
 type PanelKind = "hook" | "blindspot" | "reframe" | "proof" | "cta";
 type LogoKind = "none" | "rabbit" | "wordmark";
 type BgColor = "green" | "cream" | "rose";
+type TextColor = "auto" | "cream" | "forest" | "black" | "white" | "gold" | "rose";
 
 
 interface PhotoItem { src: string; label: string }
@@ -47,6 +48,7 @@ interface PanelProps {
   ctaStyle: "comment" | "readfull";
   bgs: (string | null)[];
   bgColor: BgColor;
+  textColorChoice: TextColor;
   idx: number;
   overlayOpacity: number; // 0-100
   logoScale: number; // percentage
@@ -119,8 +121,17 @@ const PhotoBackdrop = ({ src, overlayOpacity, isExport, baseColor }: { src: stri
   );
 };
 
+const TEXT_COLOR_MAP: Record<Exclude<TextColor, "auto">, string> = {
+  cream,
+  forest: forestDark,
+  black: "#0A0A0A",
+  white: "#FFFFFF",
+  gold,
+  rose,
+};
+
 const renderPanel = (p: PanelProps) => {
-  const { kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle, bgs, bgColor, idx, overlayOpacity, logoScale, textScale, slideLogos, isExport } = p;
+  const { kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle, bgs, bgColor, textColorChoice, idx, overlayOpacity, logoScale, textScale, slideLogos, isExport } = p;
   const bg = bgs[idx] ?? null;
   const ts = textScale / 100;
   // Resolve chosen base color
@@ -131,12 +142,14 @@ const renderPanel = (p: PanelProps) => {
   const useCreamText = isDarkBase || !!bg;
   const overlayColor = useCreamText ? forestDark : cream;
   const logoColor: "cream" | "emerald" = useCreamText ? "cream" : "emerald";
-  const textColor = useCreamText ? cream : forestDark;
+  const autoTextColor = useCreamText ? cream : forestDark;
+  const textColor = textColorChoice === "auto" ? autoTextColor : TEXT_COLOR_MAP[textColorChoice];
 
 
   // Special proof split layout stays unique. Bottom half uses the chosen base color.
   if (kind === "proof") {
-    const proofTextColor = bgColor === "green" ? cream : forestDark;
+    const autoProof = bgColor === "green" ? cream : forestDark;
+    const proofTextColor = textColorChoice === "auto" ? autoProof : TEXT_COLOR_MAP[textColorChoice];
     return (
       <PanelFrame bg={baseBg}>
         <div style={{ position: "relative", width: "100%", height: "55%", background: forestDark }}>
@@ -365,6 +378,8 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
   const [customPhotos, setCustomPhotos] = useState<PhotoItem[]>([]);
   const [exporting, setExporting] = useState(false);
   const [activePanel, setActivePanel] = useState<number>(0);
+  const [textColors, setTextColors] = useState<TextColor[]>(["auto", "auto", "auto", "auto", "auto"]);
+  const setTextColorFor = (i: number, c: TextColor) => setTextColors((prev) => prev.map((v, j) => (i === j ? c : v)));
   const [caption, setCaption] = useState("");
   const [generatingCaption, setGeneratingCaption] = useState(false);
   const [summarizing, setSummarizing] = useState(false);
@@ -494,7 +509,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
 
   const panelProps = (kind: PanelKind, i: number, isExport: boolean): PanelProps => ({
     kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, ctaStyle,
-    bgs, bgColor: bgColors[i], idx: i, overlayOpacity, logoScale, textScale, slideLogos: slideLogos[i], isExport,
+    bgs, bgColor: bgColors[i], textColorChoice: textColors[i], idx: i, overlayOpacity, logoScale, textScale, slideLogos: slideLogos[i], isExport,
   });
 
 
@@ -628,6 +643,30 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
                       key={o.val}
                       onClick={() => setBgColorFor(activePanel, o.val)}
                       className={`flex-1 flex items-center justify-center gap-2 font-sans text-[10px] tracking-[0.2em] uppercase px-2 py-2 border ${bgColors[activePanel] === o.val ? "bg-accent text-accent-foreground border-accent" : "border-border text-muted-foreground hover:border-accent"}`}
+                    >
+                      <span className="inline-block w-3 h-3 border border-border" style={{ background: o.swatch }} />
+                      {o.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <p className="font-sans text-[10px] tracking-[0.25em] uppercase text-muted-foreground mb-2">Text Color (Panel {activePanel + 1})</p>
+                <div className="flex flex-wrap gap-1">
+                  {([
+                    { val: "auto", label: "Auto", swatch: "transparent" },
+                    { val: "cream", label: "Cream", swatch: "#F8F5F0" },
+                    { val: "forest", label: "Forest", swatch: "#223D34" },
+                    { val: "black", label: "Black", swatch: "#0A0A0A" },
+                    { val: "white", label: "White", swatch: "#FFFFFF" },
+                    { val: "gold", label: "Gold", swatch: "#C8963E" },
+                    { val: "rose", label: "Rose", swatch: "#C9A3A8" },
+                  ] as { val: TextColor; label: string; swatch: string }[]).map((o) => (
+                    <button
+                      key={o.val}
+                      onClick={() => setTextColorFor(activePanel, o.val)}
+                      className={`flex items-center gap-1.5 font-sans text-[10px] tracking-[0.2em] uppercase px-2 py-2 border ${textColors[activePanel] === o.val ? "bg-accent text-accent-foreground border-accent" : "border-border text-muted-foreground hover:border-accent"}`}
                     >
                       <span className="inline-block w-3 h-3 border border-border" style={{ background: o.swatch }} />
                       {o.label}
