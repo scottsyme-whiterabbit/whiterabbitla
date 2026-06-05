@@ -44,6 +44,7 @@ interface PanelProps {
   idx: number;
   overlayOpacity: number; // 0-100
   logoScale: number; // percentage
+  textScale: number; // percentage
   slideLogos: SlideLogos;
   isExport: boolean;
 }
@@ -70,15 +71,15 @@ const LogoImg = ({ kind, color, scale }: { kind: LogoKind; color: "cream" | "eme
 };
 
 const TopLogoRow = ({ kind, color, scale }: { kind: LogoKind; color: "cream" | "emerald"; scale: number }) =>
-  kind === "none" ? <div style={{ height: 70 }} /> : (
-    <div style={{ display: "flex", justifyContent: "center", paddingTop: 70, paddingBottom: 10 }}>
+  kind === "none" ? <div style={{ height: 110 }} /> : (
+    <div style={{ display: "flex", justifyContent: "center", paddingTop: 120, paddingBottom: 10 }}>
       <LogoImg kind={kind} color={color} scale={scale} />
     </div>
   );
 
 const BottomLogoRow = ({ kind, color, scale }: { kind: LogoKind; color: "cream" | "emerald"; scale: number }) =>
-  kind === "none" ? <div style={{ height: 70 }} /> : (
-    <div style={{ display: "flex", justifyContent: "center", paddingBottom: 70, paddingTop: 10 }}>
+  kind === "none" ? <div style={{ height: 110 }} /> : (
+    <div style={{ display: "flex", justifyContent: "center", paddingBottom: 120, paddingTop: 10 }}>
       <LogoImg kind={kind} color={color} scale={scale} />
     </div>
   );
@@ -91,7 +92,13 @@ const PanelFrame = ({ children, bg }: { children: React.ReactNode; bg: string })
 
 const PhotoBackdrop = ({ src, overlayOpacity, isExport, baseColor }: { src: string | null; overlayOpacity: number; isExport: boolean; baseColor: string }) => {
   if (!src) return null;
-  const alpha = Math.round((overlayOpacity / 100) * 255).toString(16).padStart(2, "0");
+  // Always use forest green for the wash, applied as a vertical gradient
+  // so the 5 slides read as one continuous green wash when swiped.
+  const toHex = (n: number) => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, "0");
+  const topAlpha = toHex((Math.max(0, overlayOpacity - 20) / 100) * 255);
+  const midAlpha = toHex((overlayOpacity / 100) * 255);
+  const botAlpha = toHex((Math.min(100, overlayOpacity + 20) / 100) * 255);
+  const green = forestDark;
   return (
     <>
       <img
@@ -100,14 +107,15 @@ const PhotoBackdrop = ({ src, overlayOpacity, isExport, baseColor }: { src: stri
         {...(isExport ? { crossOrigin: "anonymous" as const } : {})}
         style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
       />
-      <div style={{ position: "absolute", inset: 0, background: `${baseColor}${alpha}` }} />
+      <div style={{ position: "absolute", inset: 0, background: `linear-gradient(180deg, ${green}${topAlpha} 0%, ${green}${midAlpha} 55%, ${green}${botAlpha} 100%)` }} />
     </>
   );
 };
 
 const renderPanel = (p: PanelProps) => {
-  const { kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, bgs, idx, overlayOpacity, logoScale, slideLogos, isExport } = p;
+  const { kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url, bgs, idx, overlayOpacity, logoScale, textScale, slideLogos, isExport } = p;
   const bg = bgs[idx] ?? null;
+  const ts = textScale / 100;
   // Determine if the panel base is dark (emerald) or light (cream)
   const isDarkBase = kind === "hook" || kind === "reframe" || kind === "cta";
   // When a photo is present, treat as dark so cream text is legible
@@ -123,14 +131,14 @@ const renderPanel = (p: PanelProps) => {
       <PanelFrame bg={cream}>
         <div style={{ position: "relative", width: "100%", height: "55%", background: forestDark }}>
           <PhotoBackdrop src={bg} overlayOpacity={Math.max(20, overlayOpacity - 20)} isExport={isExport} baseColor={forestDark} />
-          <div style={{ position: "relative", display: "flex", justifyContent: "center", paddingTop: 60 }}>
+          <div style={{ position: "relative", display: "flex", justifyContent: "center", paddingTop: 90 }}>
             <LogoImg kind={slideLogos.top} color="cream" scale={logoScale} />
           </div>
         </div>
         <div style={{ flex: 1, padding: "60px 90px 40px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 44, lineHeight: 1.3, color: forestDark, margin: 0, fontWeight: 400 }}>{proof}</p>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 44 * ts, lineHeight: 1.3, color: forestDark, margin: 0, fontWeight: 400 }}>{proof}</p>
           {proofCred && (
-            <p style={{ fontFamily: "'Ogg', Georgia, serif", fontStyle: "italic", fontSize: 24, lineHeight: 1.4, color: forestDark, opacity: 0.7, marginTop: 24 }}>{proofCred}</p>
+            <p style={{ fontFamily: "'Ogg', Georgia, serif", fontStyle: "italic", fontSize: 24 * ts, lineHeight: 1.4, color: forestDark, opacity: 0.7, marginTop: 24 }}>{proofCred}</p>
           )}
         </div>
         <BottomLogoRow kind={slideLogos.bottom} color="emerald" scale={logoScale} />
@@ -143,33 +151,33 @@ const renderPanel = (p: PanelProps) => {
     case "hook":
       bodyContent = (
         <div style={{ flex: 1, display: "flex", alignItems: "flex-end", padding: "0 90px 60px" }}>
-          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 72, lineHeight: 1.12, color: textColor, margin: 0, fontWeight: 400 }}>{hook}</p>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 72 * ts, lineHeight: 1.12, color: textColor, margin: 0, fontWeight: 400 }}>{hook}</p>
         </div>
       );
       break;
     case "blindspot":
       bodyContent = (
         <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 110px" }}>
-          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 56, lineHeight: 1.25, color: textColor, margin: 0, textAlign: "center", fontWeight: 400 }}>{blindSpot}</p>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 56 * ts, lineHeight: 1.25, color: textColor, margin: 0, textAlign: "center", fontWeight: 400 }}>{blindSpot}</p>
         </div>
       );
       break;
     case "reframe":
       bodyContent = (
         <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 100px" }}>
-          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 64, lineHeight: 1.22, color: textColor, margin: 0, textAlign: "center", fontWeight: 400 }}>{reframe}</p>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 64 * ts, lineHeight: 1.22, color: textColor, margin: 0, textAlign: "center", fontWeight: 400 }}>{reframe}</p>
         </div>
       );
       break;
     case "cta":
       bodyContent = (
         <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 100px", textAlign: "center" }}>
-          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 56, lineHeight: 1.25, color: textColor, margin: 0, fontWeight: 400 }}>{ctaQuestion}</p>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 56 * ts, lineHeight: 1.25, color: textColor, margin: 0, fontWeight: 400 }}>{ctaQuestion}</p>
           <div style={{ width: 80, height: 2, background: gold, margin: "40px auto" }} />
-          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 40, lineHeight: 1.3, color: textColor, margin: 0 }}>
+          <p style={{ fontFamily: "'Ogg', Georgia, serif", fontSize: 40 * ts, lineHeight: 1.3, color: textColor, margin: 0 }}>
             Comment <span style={{ color: gold, fontWeight: 700 }}>{keyword || "READ"}</span> for the full read.
           </p>
-          <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 22, letterSpacing: "0.35em", color: textColor, opacity: 0.85, margin: "40px 0 0", textTransform: "uppercase" }}>{url}</p>
+          <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 22 * ts, letterSpacing: "0.35em", color: textColor, opacity: 0.85, margin: "40px 0 0", textTransform: "uppercase" }}>{url}</p>
         </div>
       );
       break;
@@ -325,6 +333,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
   // Global controls (mirror Story Mode)
   const [overlayOpacity, setOverlayOpacity] = useState(55);
   const [logoScale, setLogoScale] = useState(100);
+  const [textScale, setTextScale] = useState(100);
 
   const [customPhotos, setCustomPhotos] = useState<PhotoItem[]>([]);
   const [exporting, setExporting] = useState(false);
@@ -363,7 +372,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
 
   const panelProps = (kind: PanelKind, i: number, isExport: boolean): PanelProps => ({
     kind, hook, blindSpot, reframe, proof, proofCred, ctaQuestion, keyword, url,
-    bgs, idx: i, overlayOpacity, logoScale, slideLogos: slideLogos[i], isExport,
+    bgs, idx: i, overlayOpacity, logoScale, textScale, slideLogos: slideLogos[i], isExport,
   });
 
   const LOGO_OPTIONS: { val: LogoKind; label: string }[] = [
@@ -392,6 +401,12 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
                   <span>Logo Size</span><span>{logoScale}%</span>
                 </label>
                 <input type="range" min={50} max={180} value={logoScale} onChange={(e) => setLogoScale(Number(e.target.value))} className="w-full accent-accent" />
+              </div>
+              <div>
+                <label className="flex justify-between font-sans text-[11px] tracking-[0.25em] uppercase text-muted-foreground mb-2">
+                  <span>Text Size</span><span>{textScale}%</span>
+                </label>
+                <input type="range" min={60} max={150} value={textScale} onChange={(e) => setTextScale(Number(e.target.value))} className="w-full accent-accent" />
               </div>
             </div>
 
