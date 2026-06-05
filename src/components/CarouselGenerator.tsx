@@ -650,6 +650,17 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
                   <input value={url} onChange={(e) => setUrl(e.target.value)} className="w-full bg-background border border-border font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent" />
                 </div>
               </div>
+              <label className="flex items-center gap-3 pt-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={ctaBottomDamask}
+                  onChange={(e) => setCtaBottomDamask(e.target.checked)}
+                  className="accent-accent w-4 h-4"
+                />
+                <span className="font-sans text-[11px] tracking-[0.25em] uppercase text-muted-foreground">
+                  Full-bleed damask wordmark on bottom half
+                </span>
+              </label>
             </div>
 
 
