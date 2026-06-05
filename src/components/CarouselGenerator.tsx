@@ -299,6 +299,22 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
   const [ctaQuestion, setCtaQuestion] = useState("Who is responsible for guest curation at your next event: the planner, the venue, or both?");
   const [keyword, setKeyword] = useState("MIX");
   const [url, setUrl] = useState("whiterabbitla.com");
+  const [selectedSlug, setSelectedSlug] = useState("");
+
+  const applyArticle = (slug: string) => {
+    setSelectedSlug(slug);
+    if (!slug) return;
+    const a = blogArticles.find((x) => x.slug === slug);
+    if (!a) return;
+    const paras = (a.content || []).map(stripHtml).filter((p) => p && p.length > 40);
+    setHook(a.title);
+    setBlindSpot(firstSentence(a.excerpt) || a.excerpt);
+    setReframe(paras[1] ? firstSentence(paras[1]) : firstSentence(a.excerpt));
+    setProof(paras[2] ? firstSentence(paras[2]) : (paras[0] ? firstSentence(paras[0]) : ""));
+    setProofCred(`— ${a.category}`);
+    setCtaQuestion(`Want the full read on ${a.title.toLowerCase().replace(/[.?!]+$/, "")}?`);
+    setUrl(`whiterabbitla.com/blog/${a.slug}`);
+  };
 
   const panels: PanelKind[] = ["hook", "blindspot", "reframe", "proof", "cta"];
   const [bgs, setBgs] = useState<(string | null)[]>([null, null, null, null, null]);
