@@ -389,6 +389,7 @@ const PANEL_LABELS: Record<PanelKind, string> = {
 };
 
 const CarouselGenerator = ({ brandPhotos, password }: Props) => {
+  const [articleTitle, setArticleTitle] = useState("Curating the Room: Who Belongs at the Bar");
   const [hook, setHook] = useState("At ultra-luxury hotels under 50 keys, if the crowd is uninteresting, you'll feel it.");
   const [blindSpot, setBlindSpot] = useState("Most operators cannot give a precise answer to the question: who is your guest?");
   const [reframe, setReframe] = useState("Brand attracts a type. Room mix determines the proportion. Most have only invested in the first.");
@@ -405,8 +406,9 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
     const a = blogArticles.find((x) => x.slug === slug);
     if (!a) return;
     const paras = (a.content || []).map(stripHtml).filter((p) => p && p.length > 40);
-    setHook(a.title);
-    setBlindSpot(firstSentence(a.excerpt) || a.excerpt);
+    setArticleTitle(a.title);
+    setHook(firstSentence(a.excerpt) || a.title);
+    setBlindSpot(paras[0] ? firstSentence(paras[0]) : firstSentence(a.excerpt));
     setReframe(paras[1] ? firstSentence(paras[1]) : firstSentence(a.excerpt));
     setProof(paras[2] ? firstSentence(paras[2]) : (paras[0] ? firstSentence(paras[0]) : ""));
     setProofCred(`— ${a.category}`);
@@ -414,9 +416,9 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
     setUrl(`whiterabbitla.com/blog/${a.slug}`);
   };
 
-  const panels: PanelKind[] = ["hook", "blindspot", "reframe", "proof", "cta"];
-  const [bgs, setBgs] = useState<(string | null)[]>([null, null, null, null, null]);
-  const defaultBgColors: BgColor[] = ["green", "cream", "green", "cream", "green"];
+  const panels: PanelKind[] = ["title", "hook", "blindspot", "reframe", "proof", "cta"];
+  const [bgs, setBgs] = useState<(string | null)[]>([null, null, null, null, null, null]);
+  const defaultBgColors: BgColor[] = ["green", "green", "cream", "green", "cream", "green"];
   const [bgColors, setBgColors] = useState<BgColor[]>(defaultBgColors);
   const [slideLogos, setSlideLogos] = useState<SlideLogos[]>(
     panels.map(() => ({ top: "rabbit", bottom: "wordmark" }))
