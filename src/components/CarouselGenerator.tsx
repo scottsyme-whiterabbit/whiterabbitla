@@ -649,7 +649,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
             ))}
 
             <div className="border border-border p-4 space-y-3">
-              <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent">Panel 5 CTA Style</p>
+              <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent">Panel 6 CTA Style</p>
               <div className="flex gap-1">
                 {[
                   { val: "readfull" as const, label: "Read Full Article" },
