@@ -125,22 +125,36 @@ const Index = () => {
       <SEOHead title={seoTitle} description={seoDescription} canonical="/" ogImage="/og-image.jpg" />
       {/* Hero */}
       <section className="relative overflow-hidden md:h-screen pt-32 md:pt-0 bg-forest-dark">
-        {/* Image container */}
-        <div className="relative w-full aspect-video md:aspect-auto md:h-screen md:absolute md:inset-0 bg-forest-dark">
-          <video
-            poster={heroVideoPoster.url}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-            width={1920}
-            height={1080}
-            className="w-full h-full object-cover md:object-[center_60%]"
-          >
-            <source src={heroVideo720.url} type="video/mp4" media="(min-width: 768px)" />
-            <source src={heroVideo480.url} type="video/mp4" />
-          </video>
+        {/* Triptych video container */}
+        <div className="relative w-full md:h-screen md:absolute md:inset-0 bg-forest-dark">
+          <div className="grid grid-cols-3 w-full h-full">
+            {[
+              { src: heroClip1.url, poster: heroPoster1.url },
+              { src: heroClip2.url, poster: heroPoster2.url },
+              { src: heroClip3.url, poster: heroPoster3.url },
+            ].map((clip, i) => (
+              <div
+                key={clip.src}
+                className={`relative aspect-[9/16] md:aspect-auto md:h-full overflow-hidden bg-black ${
+                  i > 0 ? "border-l border-accent/20" : ""
+                }`}
+              >
+                <video
+                  poster={clip.poster}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                  width={1080}
+                  height={1920}
+                  className="w-full h-full object-cover"
+                >
+                  <source src={clip.src} type="video/mp4" />
+                </video>
+              </div>
+            ))}
+          </div>
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/30 to-forest-dark/10 hidden md:block" />
           {/* Bottom 40% gradient for text contrast */}
           <div className="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-t from-black/45 via-black/15 to-transparent hidden md:block" />
