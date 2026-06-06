@@ -15,6 +15,9 @@ import Guestbook from "@/components/Guestbook";
 import heroClip1 from "@/assets/triptych/triptych-1.mp4.asset.json";
 import heroClip2 from "@/assets/triptych/triptych-2.mp4.asset.json";
 import heroClip3 from "@/assets/triptych/triptych-3.mp4.asset.json";
+import heroClip1Mobile from "@/assets/triptych/triptych-1-480.mp4.asset.json";
+import heroClip2Mobile from "@/assets/triptych/triptych-2-480.mp4.asset.json";
+import heroClip3Mobile from "@/assets/triptych/triptych-3-480.mp4.asset.json";
 import heroPoster1 from "@/assets/triptych/triptych-1-poster.jpg.asset.json";
 import heroPoster2 from "@/assets/triptych/triptych-2-poster.jpg.asset.json";
 import heroPoster3 from "@/assets/triptych/triptych-3-poster.jpg.asset.json";
@@ -145,9 +148,9 @@ const Index = () => {
         <div className="relative w-full h-full md:h-[calc(100vh-120px)] md:absolute md:top-[120px] md:left-0 md:right-0 md:bottom-0 bg-forest-dark">
           <div className="grid grid-cols-3 w-full h-full">
             {[
-              { src: heroClip2.url, poster: heroPoster2.url, offset: 0 },
-              { src: heroClip1.url, poster: heroPoster1.url, offset: 3.5 },
-              { src: heroClip3.url, poster: heroPoster3.url, offset: 7 },
+              { src: heroClip2.url, mobileSrc: heroClip2Mobile.url, poster: heroPoster2.url, offset: 0 },
+              { src: heroClip1.url, mobileSrc: heroClip1Mobile.url, poster: heroPoster1.url, offset: 3.5 },
+              { src: heroClip3.url, mobileSrc: heroClip3Mobile.url, poster: heroPoster3.url, offset: 7 },
             ].map((clip, i) => {
               // Rotate column position every cycle so clips swap places
               const position = (i + heroRotation) % 3;
@@ -165,7 +168,7 @@ const Index = () => {
                     muted
                     loop
                     playsInline
-                    preload="auto"
+                    preload="metadata"
                     width={1080}
                     height={1920}
                     className="w-full h-full object-cover transition-opacity duration-700"
@@ -177,6 +180,7 @@ const Index = () => {
                       }
                     }}
                   >
+                    <source src={clip.mobileSrc} media="(max-width: 768px)" type="video/mp4" />
                     <source src={clip.src} type="video/mp4" />
                   </video>
                 </div>
