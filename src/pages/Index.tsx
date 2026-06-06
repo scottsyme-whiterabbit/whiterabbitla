@@ -91,11 +91,27 @@ const heroReviews = [
 const Index = () => {
   const { openQuiz } = useBookingQuiz();
   const [heroReviewIndex, setHeroReviewIndex] = useState(0);
+  const [heroRotation, setHeroRotation] = useState(0);
+  const [heroFading, setHeroFading] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setHeroReviewIndex((prev) => (prev + 1) % heroReviews.length);
     }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Rotate triptych column positions every ~12s with a brief crossfade
+  useEffect(() => {
+    const ROTATE_MS = 12000;
+    const FADE_MS = 700;
+    const interval = setInterval(() => {
+      setHeroFading(true);
+      setTimeout(() => {
+        setHeroRotation((r) => (r + 1) % 3);
+        setHeroFading(false);
+      }, FADE_MS);
+    }, ROTATE_MS);
     return () => clearInterval(interval);
   }, []);
 
@@ -132,34 +148,40 @@ const Index = () => {
               { src: heroClip2.url, poster: heroPoster2.url, offset: 0 },
               { src: heroClip1.url, poster: heroPoster1.url, offset: 3.5 },
               { src: heroClip3.url, poster: heroPoster3.url, offset: 7 },
-            ].map((clip, i) => (
-              <div
-                key={clip.src}
-                className={`relative aspect-[9/16] md:aspect-auto md:h-full overflow-hidden bg-black ${
-                  i > 0 ? "border-l border-accent/20" : ""
-                }`}
-              >
-                <video
-                  poster={clip.poster}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="auto"
-                  width={1080}
-                  height={1920}
-                  className="w-full h-full object-cover"
-                  onLoadedMetadata={(e) => {
-                    const v = e.currentTarget;
-                    if (v.duration && isFinite(v.duration)) {
-                      v.currentTime = clip.offset % v.duration;
-                    }
-                  }}
+            ].map((clip, i) => {
+              // Rotate column position every cycle so clips swap places
+              const position = (i + heroRotation) % 3;
+              return (
+                <div
+                  key={clip.src}
+                  style={{ order: position }}
+                  className={`relative aspect-[9/16] md:aspect-auto md:h-full overflow-hidden bg-black transition-[border-color] duration-700 ${
+                    position > 0 ? "border-l border-accent/20" : "border-l border-transparent"
+                  }`}
                 >
-                  <source src={clip.src} type="video/mp4" />
-                </video>
-              </div>
-            ))}
+                  <video
+                    poster={clip.poster}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="auto"
+                    width={1080}
+                    height={1920}
+                    className="w-full h-full object-cover transition-opacity duration-700"
+                    style={{ opacity: heroFading ? 0.35 : 1 }}
+                    onLoadedMetadata={(e) => {
+                      const v = e.currentTarget;
+                      if (v.duration && isFinite(v.duration)) {
+                        v.currentTime = clip.offset % v.duration;
+                      }
+                    }}
+                  >
+                    <source src={clip.src} type="video/mp4" />
+                  </video>
+                </div>
+              );
+            })}
           </div>
           <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/30 to-forest-dark/10 hidden md:block" />
           {/* Bottom 40% gradient for text contrast */}
