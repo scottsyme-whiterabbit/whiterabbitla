@@ -129,9 +129,9 @@ const Index = () => {
         <div className="relative w-full h-full md:h-[calc(100vh-120px)] md:absolute md:top-[120px] md:left-0 md:right-0 md:bottom-0 bg-forest-dark">
           <div className="grid grid-cols-3 w-full h-full">
             {[
-              { src: heroClip1.url, poster: heroPoster1.url },
-              { src: heroClip2.url, poster: heroPoster2.url },
-              { src: heroClip3.url, poster: heroPoster3.url },
+              { src: heroClip2.url, poster: heroPoster2.url, offset: 0 },
+              { src: heroClip1.url, poster: heroPoster1.url, offset: 3.5 },
+              { src: heroClip3.url, poster: heroPoster3.url, offset: 7 },
             ].map((clip, i) => (
               <div
                 key={clip.src}
@@ -149,6 +149,12 @@ const Index = () => {
                   width={1080}
                   height={1920}
                   className="w-full h-full object-cover"
+                  onLoadedMetadata={(e) => {
+                    const v = e.currentTarget;
+                    if (v.duration && isFinite(v.duration)) {
+                      v.currentTime = clip.offset % v.duration;
+                    }
+                  }}
                 >
                   <source src={clip.src} type="video/mp4" />
                 </video>
