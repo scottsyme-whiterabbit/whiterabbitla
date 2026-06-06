@@ -126,7 +126,7 @@ const Index = () => {
       {/* Hero */}
       <section className="relative overflow-hidden md:h-screen pt-32 md:pt-0 bg-forest-dark">
         {/* Triptych video container */}
-        <div className="relative w-full md:h-screen md:absolute md:inset-0 bg-forest-dark">
+        <div className="relative w-full h-full md:h-[calc(100vh-120px)] md:absolute md:top-[120px] md:left-0 md:right-0 md:bottom-0 bg-forest-dark">
           <div className="grid grid-cols-3 w-full h-full">
             {[
               { src: heroClip1.url, poster: heroPoster1.url },
@@ -261,7 +261,7 @@ const Index = () => {
           className="flex justify-center mt-6">
           <button
             onClick={openQuiz}
-            className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-accent px-8 py-3 hover:bg-accent hover:text-accent-foreground transition-colors max-w-[280px] w-full text-center">
+            className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-accent px-6 py-2 hover:bg-accent hover:text-accent-foreground transition-colors max-w-[280px] w-full text-center">
             Book an Experience
           </button>
         </motion.div>
