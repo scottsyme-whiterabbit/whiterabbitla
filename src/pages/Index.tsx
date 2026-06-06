@@ -165,7 +165,7 @@ const Index = () => {
                     muted
                     loop
                     playsInline
-                    preload="auto"
+                    preload="metadata"
                     width={1080}
                     height={1920}
                     className="w-full h-full object-cover transition-opacity duration-700"
@@ -177,6 +177,9 @@ const Index = () => {
                       }
                     }}
                   >
+                    {clip.mobileSrc && (
+                      <source src={clip.mobileSrc} media="(max-width: 768px)" type="video/mp4" />
+                    )}
                     <source src={clip.src} type="video/mp4" />
                   </video>
                 </div>
