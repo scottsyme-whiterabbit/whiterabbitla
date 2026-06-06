@@ -177,9 +177,6 @@ const Index = () => {
                       }
                     }}
                   >
-                    {clip.mobileSrc && (
-                      <source src={clip.mobileSrc} media="(max-width: 768px)" type="video/mp4" />
-                    )}
                     <source src={clip.src} type="video/mp4" />
                   </video>
                 </div>
