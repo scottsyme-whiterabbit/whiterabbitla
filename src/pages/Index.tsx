@@ -12,9 +12,12 @@ import NewsletterSignup from "@/components/NewsletterSignup";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
 import Guestbook from "@/components/Guestbook";
-import heroVideo720 from "@/assets/triptych/hero-720.mp4.asset.json";
-import heroVideo480 from "@/assets/triptych/hero-480.mp4.asset.json";
-import heroVideoPoster from "@/assets/triptych/hero-triptych-poster.jpg.asset.json";
+import heroClip1 from "@/assets/triptych/triptych-1.mp4.asset.json";
+import heroClip2 from "@/assets/triptych/triptych-2.mp4.asset.json";
+import heroClip3 from "@/assets/triptych/triptych-3.mp4.asset.json";
+import heroPoster1 from "@/assets/triptych/triptych-1-poster.jpg.asset.json";
+import heroPoster2 from "@/assets/triptych/triptych-2-poster.jpg.asset.json";
+import heroPoster3 from "@/assets/triptych/triptych-3-poster.jpg.asset.json";
 
 import SEOHead from "@/components/SEOHead";
 import { useJsonLd } from "@/hooks/useSchemaOrg";
