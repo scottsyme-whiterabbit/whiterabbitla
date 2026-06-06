@@ -91,11 +91,27 @@ const heroReviews = [
 const Index = () => {
   const { openQuiz } = useBookingQuiz();
   const [heroReviewIndex, setHeroReviewIndex] = useState(0);
+  const [heroRotation, setHeroRotation] = useState(0);
+  const [heroFading, setHeroFading] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setHeroReviewIndex((prev) => (prev + 1) % heroReviews.length);
     }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Rotate triptych column positions every ~12s with a brief crossfade
+  useEffect(() => {
+    const ROTATE_MS = 12000;
+    const FADE_MS = 700;
+    const interval = setInterval(() => {
+      setHeroFading(true);
+      setTimeout(() => {
+        setHeroRotation((r) => (r + 1) % 3);
+        setHeroFading(false);
+      }, FADE_MS);
+    }, ROTATE_MS);
     return () => clearInterval(interval);
   }, []);
 
