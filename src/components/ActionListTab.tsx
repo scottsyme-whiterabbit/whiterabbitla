@@ -219,6 +219,17 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
       setDeals(res.deals || []);
       setHotWarmContacts(res.hotWarmContacts || []);
       setOutreachLogs(res.outreachLogs || []);
+      const inbound: InboundLead[] = [
+        ...(res.inquiries || []).map((r: Record<string, unknown>) => ({ ...r, source_table: "contact_inquiries" as const })),
+        ...(res.quizLeads || []).map((r: Record<string, unknown>) => ({ ...r, source_table: "discovery_quiz_leads" as const })),
+        ...(res.consultationLeads || []).map((r: Record<string, unknown>) => ({
+          ...r,
+          source_table: "consultation_leads" as const,
+          event_date: r.event_date as string | null,
+          message: r.description as string | null,
+        })),
+      ] as InboundLead[];
+      setInboundLeads(inbound);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed to load");
     } finally {
