@@ -58,8 +58,26 @@ interface OutreachLog {
   created_at: string;
 }
 
+interface InboundLead {
+  id: string;
+  source_table: "contact_inquiries" | "discovery_quiz_leads" | "consultation_leads";
+  name: string | null;
+  email: string | null;
+  phone: string | null;
+  event_type: string | null;
+  event_date: string | null;
+  location: string | null;
+  guest_count: string | null;
+  budget: string | null;
+  message: string | null;
+  client_type: string | null;
+  source: string | null;
+  recommendation: string | null;
+  created_at: string;
+}
+
 interface ActionItem {
-  type: "deal" | "contact";
+  type: "deal" | "contact" | "inbound";
   email: string;
   name: string | null;
   company: string | null;
@@ -70,6 +88,7 @@ interface ActionItem {
   phone?: string | null;
   deal?: Deal;
   contact?: HotWarmContact;
+  inbound?: InboundLead;
   lastOutreach?: OutreachLog;
   outreachStatus: string;
 }
