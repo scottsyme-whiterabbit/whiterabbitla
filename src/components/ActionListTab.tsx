@@ -58,8 +58,26 @@ interface OutreachLog {
   created_at: string;
 }
 
+interface InboundLead {
+  id: string;
+  source_table: "contact_inquiries" | "discovery_quiz_leads" | "consultation_leads";
+  name: string | null;
+  email: string | null;
+  phone: string | null;
+  event_type: string | null;
+  event_date: string | null;
+  location: string | null;
+  guest_count: string | null;
+  budget: string | null;
+  message: string | null;
+  client_type: string | null;
+  source: string | null;
+  recommendation: string | null;
+  created_at: string;
+}
+
 interface ActionItem {
-  type: "deal" | "contact";
+  type: "deal" | "contact" | "inbound";
   email: string;
   name: string | null;
   company: string | null;
@@ -70,6 +88,7 @@ interface ActionItem {
   phone?: string | null;
   deal?: Deal;
   contact?: HotWarmContact;
+  inbound?: InboundLead;
   lastOutreach?: OutreachLog;
   outreachStatus: string;
 }
@@ -106,6 +125,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
   const [deals, setDeals] = useState<Deal[]>([]);
   const [hotWarmContacts, setHotWarmContacts] = useState<HotWarmContact[]>([]);
   const [outreachLogs, setOutreachLogs] = useState<OutreachLog[]>([]);
+  const [inboundLeads, setInboundLeads] = useState<InboundLead[]>([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<string>("all");
   const [sourceFilter, setSourceFilter] = useState<string>("all");
@@ -199,6 +219,17 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
       setDeals(res.deals || []);
       setHotWarmContacts(res.hotWarmContacts || []);
       setOutreachLogs(res.outreachLogs || []);
+      const inbound: InboundLead[] = [
+        ...(res.inquiries || []).map((r: Record<string, unknown>) => ({ ...r, source_table: "contact_inquiries" as const })),
+        ...(res.quizLeads || []).map((r: Record<string, unknown>) => ({ ...r, source_table: "discovery_quiz_leads" as const })),
+        ...(res.consultationLeads || []).map((r: Record<string, unknown>) => ({
+          ...r,
+          source_table: "consultation_leads" as const,
+          event_date: r.event_date as string | null,
+          message: r.description as string | null,
+        })),
+      ] as InboundLead[];
+      setInboundLeads(inbound);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed to load");
     } finally {
@@ -260,8 +291,48 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
       });
     }
 
+    // From inbound form leads NOT already in deals/contacts
+    const existing = new Set([...dealEmails, ...hotWarmContacts.map(c => c.email.toLowerCase())]);
+    for (const lead of inboundLeads) {
+      if (!lead.email) continue;
+      const email = lead.email.toLowerCase();
+      if (existing.has(email)) continue;
+      existing.add(email);
+      const lastLog = outreachLogs.find(l => l.contact_email.toLowerCase() === email);
+      const isNew = (Date.now() - new Date(lead.created_at).getTime()) < 48 * 60 * 60 * 1000;
+
+      const sourceLabel =
+        lead.source_table === "contact_inquiries" ? `Contact Form${lead.source && lead.source !== "contact_form" ? ` (${lead.source})` : ""}`
+        : lead.source_table === "discovery_quiz_leads" ? "Discovery Quiz"
+        : `Consultation${lead.source ? ` (${lead.source})` : ""}`;
+
+      let engagement = lead.event_type || "";
+      if (lead.guest_count) engagement += `${engagement ? ", " : ""}${lead.guest_count} guests`;
+      if (lead.location) engagement += `${engagement ? ", " : ""}${lead.location}`;
+      if (lead.event_date) {
+        try { engagement += `${engagement ? ", " : ""}${format(new Date(lead.event_date + "T00:00:00"), "MMM d")}`; } catch { /* skip */ }
+      }
+      if (lead.message) engagement += `${engagement ? " — " : ""}"${lead.message.slice(0, 80)}${lead.message.length > 80 ? "…" : ""}"`;
+      if (!engagement) engagement = "Inbound inquiry";
+
+      items.push({
+        type: "inbound",
+        email,
+        name: lead.name,
+        company: null,
+        source: sourceLabel,
+        engagement,
+        priority: isNew ? "hot" : "warm",
+        priorityScore: isNew ? 85 : 55,
+        phone: lead.phone,
+        inbound: lead,
+        lastOutreach: lastLog,
+        outreachStatus: lastLog ? "attempted" : "not_contacted",
+      });
+    }
+
     return items;
-  }, [deals, hotWarmContacts, outreachLogs, today]);
+  }, [deals, hotWarmContacts, outreachLogs, inboundLeads, today]);
 
   // Badge count
   useEffect(() => {
@@ -301,7 +372,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
       if (aCompleted !== bCompleted) return aCompleted ? 1 : -1;
 
       if (sortBy === "priority") return b.priorityScore - a.priorityScore;
-      if (sortBy === "newest") return new Date(b.deal?.created_at || b.contact?.created_at || "").getTime() - new Date(a.deal?.created_at || a.contact?.created_at || "").getTime();
+      if (sortBy === "newest") return new Date(b.deal?.created_at || b.contact?.created_at || b.inbound?.created_at || "").getTime() - new Date(a.deal?.created_at || a.contact?.created_at || a.inbound?.created_at || "").getTime();
       if (sortBy === "follow_up") {
         const aFu = a.deal?.next_follow_up || "9999";
         const bFu = b.deal?.next_follow_up || "9999";

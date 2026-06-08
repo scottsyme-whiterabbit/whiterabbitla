@@ -564,20 +564,29 @@ serve(async (req) => {
       }
 
       case "get_action_list_data": {
-        // Get deals, hot/warm contacts, and outreach logs in one call
-        const [dealsRes, contactsRes, logsRes] = await Promise.all([
+        // Get deals, hot/warm contacts, outreach logs, and inbound form leads
+        const [dealsRes, contactsRes, logsRes, inquiriesRes, quizRes, consultRes] = await Promise.all([
           supabase.from("deals").select("*").not("stage", "in", "(completed,lost)").order("created_at", { ascending: false }),
           supabase.from("newsletter_contacts").select("id, email, name, company, source, drip_campaign, drip_step, engagement_status, subscribed, created_at, phone").in("engagement_status", ["hot", "warm"]).eq("subscribed", true).order("created_at", { ascending: false }),
           supabase.from("outreach_log").select("*").order("created_at", { ascending: false }).limit(1000),
+          supabase.from("contact_inquiries").select("id, name, email, phone, event_type, date, location, guest_count, budget, message, client_type, source, recommendation, created_at").order("created_at", { ascending: false }).limit(500),
+          supabase.from("discovery_quiz_leads").select("id, name, email, event_type, guest_count, biggest_concern, experience_priority, recommendation, client_type, created_at").order("created_at", { ascending: false }).limit(500),
+          supabase.from("consultation_leads").select("id, name, email, phone, event_type, event_date, description, source, created_at").order("created_at", { ascending: false }).limit(500),
         ]);
         if (dealsRes.error) throw dealsRes.error;
         if (contactsRes.error) throw contactsRes.error;
         if (logsRes.error) throw logsRes.error;
+        if (inquiriesRes.error) throw inquiriesRes.error;
+        if (quizRes.error) throw quizRes.error;
+        if (consultRes.error) throw consultRes.error;
 
         return new Response(JSON.stringify({
           deals: dealsRes.data || [],
           hotWarmContacts: contactsRes.data || [],
           outreachLogs: logsRes.data || [],
+          inquiries: inquiriesRes.data || [],
+          quizLeads: quizRes.data || [],
+          consultationLeads: consultRes.data || [],
         }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
