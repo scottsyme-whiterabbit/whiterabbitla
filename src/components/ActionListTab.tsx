@@ -125,6 +125,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
   const [deals, setDeals] = useState<Deal[]>([]);
   const [hotWarmContacts, setHotWarmContacts] = useState<HotWarmContact[]>([]);
   const [outreachLogs, setOutreachLogs] = useState<OutreachLog[]>([]);
+  const [inboundLeads, setInboundLeads] = useState<InboundLead[]>([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<string>("all");
   const [sourceFilter, setSourceFilter] = useState<string>("all");
