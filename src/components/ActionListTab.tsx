@@ -372,7 +372,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
       if (aCompleted !== bCompleted) return aCompleted ? 1 : -1;
 
       if (sortBy === "priority") return b.priorityScore - a.priorityScore;
-      if (sortBy === "newest") return new Date(b.deal?.created_at || b.contact?.created_at || "").getTime() - new Date(a.deal?.created_at || a.contact?.created_at || "").getTime();
+      if (sortBy === "newest") return new Date(b.deal?.created_at || b.contact?.created_at || b.inbound?.created_at || "").getTime() - new Date(a.deal?.created_at || a.contact?.created_at || a.inbound?.created_at || "").getTime();
       if (sortBy === "follow_up") {
         const aFu = a.deal?.next_follow_up || "9999";
         const bFu = b.deal?.next_follow_up || "9999";
