@@ -291,8 +291,48 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
       });
     }
 
+    // From inbound form leads NOT already in deals/contacts
+    const existing = new Set([...dealEmails, ...hotWarmContacts.map(c => c.email.toLowerCase())]);
+    for (const lead of inboundLeads) {
+      if (!lead.email) continue;
+      const email = lead.email.toLowerCase();
+      if (existing.has(email)) continue;
+      existing.add(email);
+      const lastLog = outreachLogs.find(l => l.contact_email.toLowerCase() === email);
+      const isNew = (Date.now() - new Date(lead.created_at).getTime()) < 48 * 60 * 60 * 1000;
+
+      const sourceLabel =
+        lead.source_table === "contact_inquiries" ? `Contact Form${lead.source && lead.source !== "contact_form" ? ` (${lead.source})` : ""}`
+        : lead.source_table === "discovery_quiz_leads" ? "Discovery Quiz"
+        : `Consultation${lead.source ? ` (${lead.source})` : ""}`;
+
+      let engagement = lead.event_type || "";
+      if (lead.guest_count) engagement += `${engagement ? ", " : ""}${lead.guest_count} guests`;
+      if (lead.location) engagement += `${engagement ? ", " : ""}${lead.location}`;
+      if (lead.event_date) {
+        try { engagement += `${engagement ? ", " : ""}${format(new Date(lead.event_date + "T00:00:00"), "MMM d")}`; } catch { /* skip */ }
+      }
+      if (lead.message) engagement += `${engagement ? " — " : ""}"${lead.message.slice(0, 80)}${lead.message.length > 80 ? "…" : ""}"`;
+      if (!engagement) engagement = "Inbound inquiry";
+
+      items.push({
+        type: "inbound",
+        email,
+        name: lead.name,
+        company: null,
+        source: sourceLabel,
+        engagement,
+        priority: isNew ? "hot" : "warm",
+        priorityScore: isNew ? 85 : 55,
+        phone: lead.phone,
+        inbound: lead,
+        lastOutreach: lastLog,
+        outreachStatus: lastLog ? "attempted" : "not_contacted",
+      });
+    }
+
     return items;
-  }, [deals, hotWarmContacts, outreachLogs, today]);
+  }, [deals, hotWarmContacts, outreachLogs, inboundLeads, today]);
 
   // Badge count
   useEffect(() => {
