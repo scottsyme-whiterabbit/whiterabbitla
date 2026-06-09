@@ -8,10 +8,10 @@ const trio = [
     image: "https://images.unsplash.com/photo-1578241561880-0a1d5db3cb8a?w=900&h=600&fit=crop",
   },
   {
-    slug: "the-hamptons",
-    city: "The Hamptons",
-    line: "An end-of-summer dinner in Sagaponack.",
-    image: "/areas/the-hamptons.jpg",
+    slug: "beverly-hills",
+    city: "Beverly Hills",
+    line: "An estate gala off Rodeo Drive.",
+    image: "/areas/beverly-hills.jpg",
   },
   {
     slug: "jackson-hole",
