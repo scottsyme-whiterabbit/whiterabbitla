@@ -355,6 +355,14 @@ const Index = () => {
                 </div>
               ))}
             </div>
+            <div className="mt-6 pt-5 border-t border-accent/10 space-y-2 text-center">
+              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-accent/80">
+                Consulting: Olivia Rodrigo &middot; Disney Channel &middot; Adam Ray &middot; AGT Champion Dustin Tavella
+              </p>
+              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-accent/80">
+                Performed for: Don Cheadle &middot; Dolph Lundgren &middot; Richard Jefferson &middot; Peter Farrelly
+              </p>
+            </div>
           </div>
         </section>
       </AnimatedSection>
