@@ -189,9 +189,10 @@ const Index = () => {
               );
             })}
           </div>
-          <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/70 via-forest-dark/30 to-forest-dark/10 hidden md:block" />
-          {/* Bottom 40% gradient for text contrast */}
-          <div className="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-t from-black/45 via-black/15 to-transparent hidden md:block" />
+          {/* Diagonal emerald overlay for headline contrast: deep at bottom-left, light at top-right */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-[#1B3A2DA6] via-[#1B3A2D4D] to-[#1B3A2D33] pointer-events-none hidden md:block" />
+          {/* Bottom reinforcement for CTA and quote bar */}
+          <div className="absolute bottom-0 left-0 right-0 h-[35%] bg-gradient-to-t from-[#1B3A2D80] via-[#1B3A2D1A] to-transparent pointer-events-none hidden md:block" />
           {/* Ambient warm glow behind hero text */}
           <div className="absolute bottom-0 left-[10vw] w-[500px] h-[300px] bg-[radial-gradient(ellipse_at_center,_hsl(var(--accent)/0.08)_0%,_transparent_70%)] pointer-events-none hidden md:block" />
         </div>
