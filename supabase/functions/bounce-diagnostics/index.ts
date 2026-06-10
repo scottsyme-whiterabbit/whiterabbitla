@@ -415,6 +415,7 @@ serve(async (req) => {
             },
             current_bounce_rate_percent: currentBounceRatePercent,
             bounces_by_campaign_category: bouncesByCampaignCategory,
+            rolling_7d_by_category: rolling7dByCategory,
             bounces_by_contact_source: bouncesByContactSource,
             top_10_bouncing_domains: topBouncingDomains,
             trend_30d: {
