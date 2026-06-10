@@ -35,13 +35,30 @@ Deno.serve(async (req) => {
     return json({ error: "Invalid JSON body" }, 400);
   }
 
-  const contacts = Array.isArray(payload?.contacts) ? payload.contacts : null;
-  if (!contacts) return json({ error: "Body must include contacts: []" }, 400);
-
   const supabase = createClient(
     Deno.env.get("SUPABASE_URL")!,
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
   );
+
+  // ---- check_ids action: read-only existence check by apollo_id ----
+  if (payload?.action === "check_ids") {
+    const ids = Array.isArray(payload?.apollo_ids) ? payload.apollo_ids.filter((x: any) => typeof x === "string" && x.length > 0) : null;
+    if (!ids) return json({ error: "apollo_ids must be a string array" }, 400);
+    const known: string[] = [];
+    for (let i = 0; i < ids.length; i += 500) {
+      const batch = ids.slice(i, i + 500);
+      const { data, error } = await supabase
+        .from("cold_email_campaigns")
+        .select("apollo_id")
+        .in("apollo_id", batch);
+      if (error) return json({ error: error.message }, 500);
+      (data || []).forEach((r: any) => { if (r.apollo_id) known.push(r.apollo_id); });
+    }
+    return json({ known });
+  }
+
+  const contacts = Array.isArray(payload?.contacts) ? payload.contacts : null;
+  if (!contacts) return json({ error: "Body must include contacts: [] or action: 'check_ids'" }, 400);
 
   let inserted = 0;
   let updated = 0;
