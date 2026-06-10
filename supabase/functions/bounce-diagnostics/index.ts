@@ -351,6 +351,48 @@ serve(async (req) => {
     const trendPctChange =
       prior30 > 0 ? Number((((last30 - prior30) / prior30) * 100).toFixed(2)) : null;
 
+    // ---------------- 7-day rolling by campaign category ----------------
+    const d7 = new Date(now - 7 * 86400000);
+    const d7Iso = d7.toISOString();
+
+    // 7d sends per cold category (proxy: rows with last_email_sent_at in window)
+    const sends7dByCat: Record<string, number> = {};
+    let s7From = 0;
+    while (true) {
+      const { data, error } = await supabase
+        .from("cold_email_campaigns")
+        .select("campaign_category, last_email_sent_at")
+        .gte("last_email_sent_at", d7Iso)
+        .range(s7From, s7From + pageSize - 1);
+      if (error) break;
+      if (!data || data.length === 0) break;
+      for (const r of data as any[]) {
+        const c = r.campaign_category || "unknown";
+        sends7dByCat[c] = (sends7dByCat[c] || 0) + 1;
+      }
+      if (data.length < pageSize) break;
+      s7From += pageSize;
+    }
+
+    // 7d bounces per category
+    const bounces7dByCat: Record<string, number> = {};
+    for (const b of allBounces) {
+      const cls = classifyBounce(b);
+      if (cls !== "hard" && cls !== "soft") continue;
+      if (new Date(b.created_at).getTime() < d7.getTime()) continue;
+      const cat = emailToCategory.get(b.email.toLowerCase()) || "unknown";
+      bounces7dByCat[cat] = (bounces7dByCat[cat] || 0) + 1;
+    }
+
+    const rolling7dByCategory = Object.keys({ ...sends7dByCat, ...bounces7dByCat })
+      .map((cat) => {
+        const sends = sends7dByCat[cat] || 0;
+        const bounces = bounces7dByCat[cat] || 0;
+        const rate = sends > 0 ? Number(((bounces / sends) * 100).toFixed(2)) : null;
+        return { campaign_category: cat, sends, bounces, rate_percent: rate };
+      })
+      .sort((a, b) => b.bounces - a.bounces);
+
     return finalize(
       new Response(
         JSON.stringify(
