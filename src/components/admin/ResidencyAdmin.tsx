@@ -642,7 +642,7 @@ const ResidencyEditor = ({
                 className={`${inputCls} min-h-[80px]`}
                 value={pitch.case_study_quote || ""}
                 onChange={(e) => update({ case_study_quote: e.target.value })}
-                placeholder="Guests didn't want the check. They wanted five more minutes."
+                placeholder="Scott was our resident Magician at Rideau. His performances, combined, elegance, technical mastery and humor, creating memorable experiences that our guests truly loved."
               />
             </div>
             <div>
