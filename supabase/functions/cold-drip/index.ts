@@ -354,10 +354,7 @@ ${signoffFull()}`),
 <p style="margin:0 0 18px;">Planners I've worked with tell me cocktail hour is consistently the moment guests bring up first when they recap the night.</p>
 <p style="margin:0 0 18px;">If any of${companyClause ? ` ${(company || "").trim()}'s` : " your"} upcoming couples might be a fit, want to grab 10 minutes this week or next?</p>
 ${cta}
-<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
-Scott<br/>
-<span style="font-size:12px; color:rgba(245,240,232,0.35);">Office (424) 394-1850 · Cell (650) 678-9428</span>
-</p>`),
+${signoff()}`),
       },
       {
         subject: "a weird offer",
