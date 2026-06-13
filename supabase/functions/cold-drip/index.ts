@@ -154,8 +154,8 @@ function plainCalendarSentence(contactId: string, step: number, campaign: string
 function plainSignature(): string {
   return `<p class="sig">
 Scott Syme<br>
-White Rabbit LA<br>
-<a href="mailto:scott.syme@whiterabbitla.com" class="plain">scott.syme@whiterabbitla.com</a><br>
+Magician<br>
+<a href="tel:+14243941850" class="plain">(424) 394-1850</a><br>
 <a href="https://whiterabbitla.com" class="plain">whiterabbitla.com</a>
 </p>`;
 }
