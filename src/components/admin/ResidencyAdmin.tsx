@@ -609,6 +609,42 @@ const ResidencyEditor = ({
                 }
               />
             </div>
+            <div>
+              <label className={labelCls}>Case study result sentence</label>
+              <textarea
+                className={`${inputCls} min-h-[80px]`}
+                value={pitch.case_study_result || ""}
+                onChange={(e) => update({ case_study_result: e.target.value })}
+                placeholder="On residency nights, tables stayed through dessert and asked for him by name."
+              />
+            </div>
+            <div>
+              <label className={labelCls}>Case study quote</label>
+              <textarea
+                className={`${inputCls} min-h-[80px]`}
+                value={pitch.case_study_quote || ""}
+                onChange={(e) => update({ case_study_quote: e.target.value })}
+                placeholder="Guests didn't want the check. They wanted five more minutes."
+              />
+            </div>
+            <div>
+              <label className={labelCls}>Case study attribution</label>
+              <input
+                className={inputCls}
+                value={pitch.case_study_attribution || ""}
+                onChange={(e) => update({ case_study_attribution: e.target.value })}
+                placeholder="General Manager, Rideau at Arden"
+              />
+            </div>
+            <div>
+              <label className={labelCls}>Video URL (case-study film link)</label>
+              <input
+                className={inputCls}
+                value={pitch.video_url || ""}
+                onChange={(e) => update({ video_url: e.target.value })}
+                placeholder="https://..."
+              />
+            </div>
           </div>
         </div>
       </div>

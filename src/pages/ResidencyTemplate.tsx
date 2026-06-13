@@ -61,6 +61,10 @@ export interface VenuePitchData {
   press_line?: string | null;
   scheduling_url?: string | null;
   closing_private_line?: string | null;
+  video_url?: string | null;
+  case_study_result?: string | null;
+  case_study_quote?: string | null;
+  case_study_attribution?: string | null;
 }
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -86,6 +90,10 @@ export const DEFAULT_VENUE_PITCH: VenuePitchData = {
   press_line: null,
   scheduling_url: null,
   closing_private_line: "In those moments, nothing feels impossible. And maybe, for the guests who were there, nothing quite does afterward either.",
+  video_url: null,
+  case_study_result: "On residency nights, tables stayed through dessert and asked for him by name.",
+  case_study_quote: "Guests didn't want the check. They wanted five more minutes.",
+  case_study_attribution: "General Manager, Rideau at Arden",
 };
 
 const formatFee = (n?: number | null) =>
@@ -295,6 +303,47 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* SECTION 3.25 — THIS ALREADY WORKS IN A ROOM LIKE YOURS */}
+      <section className="relative bg-cream py-20 md:py-28 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-3">
+            This Already Works in a Room Like Yours
+          </p>
+          <OrnamentalDivider />
+          <p className="text-[11px] tracking-[0.4em] uppercase text-gold mt-8 mb-6">
+            Rideau at Arden, West Hollywood
+          </p>
+          <p className="font-sans text-base md:text-lg text-forest-dark/85 leading-relaxed mb-10">
+            {data.case_study_result || "On residency nights, tables stayed through dessert and asked for him by name."}
+          </p>
+
+          <div className="text-center max-w-2xl mx-auto">
+            <span className="font-serif text-5xl text-gold/60 leading-none block mb-2">
+              &ldquo;
+            </span>
+            <p className="font-serif text-lg md:text-xl text-forest-dark leading-relaxed mb-4">
+              {data.case_study_quote || "Guests didn't want the check. They wanted five more minutes."}
+            </p>
+            <p className="font-sans text-xs tracking-[0.15em] uppercase text-forest-dark/60">
+              &mdash; {data.case_study_attribution || "General Manager, Rideau at Arden"}
+            </p>
+          </div>
+
+          {data.video_url && (
+            <div className="mt-10">
+              <a
+                href={data.video_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-xs tracking-[0.25em] uppercase text-forest-dark border-b border-gold/60 pb-1 hover:text-gold transition-colors"
+              >
+                A sixty-second film of the work, shot at the table, is available here <ArrowRight className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          )}
         </div>
       </section>
 
