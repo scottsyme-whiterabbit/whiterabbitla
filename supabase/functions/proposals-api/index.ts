@@ -391,7 +391,7 @@ ${messageText}
 
 Scott Syme
 White Rabbit LA — Luxury Magic & Entertainment
-Office (424) 394-1850 · Cell (650) 678-9428
+(424) 394-1850
 scott.syme@whiterabbitla.com · https://whiterabbitla.com
 
 View your proposal: ${link}
