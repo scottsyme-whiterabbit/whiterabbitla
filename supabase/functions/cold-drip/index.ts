@@ -608,7 +608,7 @@ ${signoff()}`),
         preheader: "Just planting the seed.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
 <p style="margin:0 0 18px;">I know brand calendars plan months out. Just wanted to make sure you have my info for whenever the right activation lands. Launches, trade events, tasting dinners — I work across all of them.</p>
-<p style="margin:0 0 18px;">My calendar fills 4 to 6 weeks out during peak season, so early planning helps.</p>
+<p style="margin:0 0 18px;">Brand calendars plan months out and so do I — early conversations make it easier to land on the right activation.</p>
 <p style="margin:0 0 18px;">${arts.a2}</p>
 ${signoffFull()}`),
       },
