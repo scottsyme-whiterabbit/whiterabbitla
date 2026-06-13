@@ -703,6 +703,35 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
         </section>
       )}
 
+      {/* FOR YOUR OWNERSHIP GROUP */}
+      <section className="relative bg-cream py-16 md:py-20 px-6">
+        <div className="max-w-3xl mx-auto">
+          <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">
+            For Your Ownership Group
+          </p>
+          <p className="font-sans text-base text-forest-dark/80 leading-relaxed mb-6">
+            If this needs a yes from above you, here is the whole thing in four sentences — forward it as is.
+          </p>
+          <div className="relative border border-forest-dark/15 bg-white p-8 md:p-10">
+            <p className="font-sans text-base text-forest-dark/85 leading-relaxed">
+              "A close-up magician in residence, one night a week, moving table to table — no stage, no microphone, nothing that touches service. $300 a night, month to month, and the first night is a free audition we watch ourselves. He's a Magic Castle performing member who already works a West Hollywood supper-club room. Worst case: one interesting Tuesday."
+            </p>
+            <button
+              onClick={() => {
+                const text = 'A close-up magician in residence, one night a week, moving table to table — no stage, no microphone, nothing that touches service. $300 a night, month to month, and the first night is a free audition we watch ourselves. He\'s a Magic Castle performing member who already works a West Hollywood supper-club room. Worst case: one interesting Tuesday.';
+                navigator.clipboard.writeText(text);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 2000);
+              }}
+              className="mt-6 inline-flex items-center gap-2 text-[11px] tracking-[0.2em] uppercase text-forest-dark border border-forest-dark/20 px-4 py-2 hover:bg-forest-dark hover:text-cream transition-colors"
+            >
+              {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+              {copied ? "Copied" : "Copy"}
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* SECTION 7 — LET'S WALK THE ROOM */}
       <section className="relative bg-forest-dark text-cream py-20 md:py-28 px-6 text-center overflow-hidden">
         <div className="max-w-3xl mx-auto relative">
