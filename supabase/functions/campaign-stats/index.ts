@@ -279,13 +279,18 @@ serve(async (req) => {
     return finalize(json(405, { error: "method_not_allowed" }), "valid");
   }
 
-  // Auth: token-only
-  const importToken = req.headers.get("x-bulk-import-token") || "";
-  const expectedImport = Deno.env.get("BULK_IMPORT_TOKEN") || "";
-  if (!importToken) {
+  // Auth: token-only. Accept either x-bulk-import-token (BULK_IMPORT_TOKEN)
+  // or x-import-token (EXTERNAL_IMPORT_TOKEN) for external reporting pulls.
+  const bulkToken = req.headers.get("x-bulk-import-token") || "";
+  const importToken = req.headers.get("x-import-token") || "";
+  const expectedBulk = Deno.env.get("BULK_IMPORT_TOKEN") || "";
+  const expectedImport = Deno.env.get("EXTERNAL_IMPORT_TOKEN") || "";
+  const bulkOk = !!bulkToken && !!expectedBulk && bulkToken === expectedBulk;
+  const importOk = !!importToken && !!expectedImport && importToken === expectedImport;
+  if (!bulkToken && !importToken) {
     return finalize(json(401, { error: "auth_failed" }), "missing_token");
   }
-  if (!expectedImport || importToken !== expectedImport) {
+  if (!bulkOk && !importOk) {
     return finalize(json(401, { error: "auth_failed" }), "invalid_token");
   }
 
