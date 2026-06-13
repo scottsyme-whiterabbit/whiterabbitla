@@ -364,10 +364,7 @@ ${signoff()}`),
 <p style="margin:0 0 18px;">I'm LA-based, performing weekly at the Magic Castle. If you're in town, I'll come to your office and do 10 minutes of close-up for you and your team. No pitch, no obligation, no follow-up unless you ask. You see what your couples would see.</p>
 <p style="margin:0 0 18px;">If you're outside LA, I have a 90-second clip from a recent wedding that does the same job. Want me to send it?</p>
 ${cta}
-<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
-Scott<br/>
-<span style="font-size:12px; color:rgba(245,240,232,0.35);">Office (424) 394-1850 · Cell (650) 678-9428</span>
-</p>`),
+${signoff()}`),
       },
       {
         subject: "quick check",
