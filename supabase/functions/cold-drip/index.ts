@@ -373,10 +373,7 @@ ${signoff()}`),
 <p style="margin:0 0 18px;">Before I close the loop, one question.</p>
 <p style="margin:0 0 18px;">Is this a "not now, circle back in a few months" or a "not a fit, remove me"?</p>
 <p style="margin:0 0 18px;">Either answer helps. Don't want to keep emailing a planner whose entertainment roster is locked.</p>
-<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
-Scott<br/>
-<span style="font-size:12px; color:rgba(245,240,232,0.35);">Office (424) 394-1850 · Cell (650) 678-9428</span>
-</p>`),
+${signoff()}`),
       },
     ],
 
