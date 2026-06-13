@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Phone, Calendar, Instagram, Linkedin, Award, Star, ArrowRight } from "lucide-react";
+import { Phone, Calendar, Instagram, Linkedin, Award, Star, ArrowRight, Copy, Check } from "lucide-react";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
 import threeStars from "@/assets/three-stars-gold.png";
 import wrScriptLogo from "@/assets/wr-wordmark-cream.png";
