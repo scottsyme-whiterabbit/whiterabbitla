@@ -1752,7 +1752,7 @@ const citySpecificOverrides: Record<string, string[]> = {
   ],
   // ── Studio City ─────────────────────────────────────────────────────
   "studio-city--corporate-event-magician": [
-    "Corporate events in Studio City are industry events by default. CBS Radford is right there, post-production houses line Ventura Boulevard, and the guest list at any company gathering is half people who work in entertainment. That makes the audience both the best and the hardest to perform for — they know what goes into a production, they've seen performers work, and they're not going to fake a reaction. When Scott's close-up magic genuinely surprises them, the response is real, and it spreads fast.",
+    "Corporate events in Studio City are industry events by default. Studios anchor the neighborhood, post-production houses line Ventura Boulevard, and the guest list at any company gathering is half people who work in entertainment. That makes the audience both the best and the hardest to perform for — they know what goes into a production, they've seen performers work, and they're not going to fake a reaction. When Scott's close-up magic genuinely surprises them, the response is real, and it spreads fast.",
     "Scott performs at corporate events throughout Studio City — venue receptions, restaurant buyouts along Ventura, and company parties at local spaces. The magic is designed for a crowd that appreciates craft. No gimmicks, no overselling. Just impossible things happening in their hands, performed by someone who belongs in a room full of people who do this for a living.",
   ],
   "studio-city--private-party-magician": [
