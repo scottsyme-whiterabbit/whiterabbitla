@@ -65,6 +65,8 @@ export interface VenuePitchData {
   case_study_result?: string | null;
   case_study_quote?: string | null;
   case_study_attribution?: string | null;
+  first_name?: string | null;
+  room_detail?: string | null;
 }
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
