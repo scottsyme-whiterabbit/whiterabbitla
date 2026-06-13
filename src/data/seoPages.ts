@@ -642,7 +642,7 @@ const locationVenues: Record<string, { dining: string[]; hotels: string[]; cultu
   "Studio City": {
     dining: ["Firefly", "Aroma Coffee & Tea", "Vitello's"],
     hotels: ["Sportsmen's Lodge", "The Garland", "The Beverly Garland"],
-    culture: ["Tujunga Village", "Fryman Canyon", "CBS Studio Center"],
+    culture: ["Tujunga Village", "Fryman Canyon", "Brady Bunch House"],
   },
   "Encino": {
     dining: ["Katsu-Ya Encino", "Gasolina Café", "Buca di Beppo"],
