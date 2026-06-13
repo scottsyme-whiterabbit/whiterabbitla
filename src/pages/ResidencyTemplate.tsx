@@ -106,6 +106,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
   const realTestimonials = (data.testimonials || []).filter(
     (t) => t && t.quote && t.quote.trim().length > 0
   );
+  const [copied, setCopied] = useState(false);
 
   return (
     <div className="bg-cream text-forest-dark font-sans">
