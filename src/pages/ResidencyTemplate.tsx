@@ -75,7 +75,6 @@ export const DEFAULT_VENUE_PITCH: VenuePitchData = {
   intro_paragraphs: [
     "Your venue is one of the rooms in Los Angeles where I would actually want to perform. The bar, the room, the kind of guest who walks in on a Thursday at nine — those are the people I want my work in front of, and those are the people I think would remember an evening at your room differently if there was a magician quietly moving between tables.",
     "This is a proposal for a four-week residency. One night a week. Two hours of close-up magic, table to table, between the second course and dessert. You decide the night. I bring the room.",
-    "If at the end of four weeks the dwell time, the check average, and the social engagement haven't moved, we shake hands. You've still given your guests four nights they'll talk about, at no risk to the room.",
   ],
   pilot_weeks: 4,
   nights_per_week: 1,
@@ -134,6 +133,18 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
               {data.submarket}
             </p>
           )}
+        </div>
+      </section>
+
+      {/* GUARANTEE STRIP */}
+      <section className="relative bg-cream py-16 md:py-20 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-5">
+            The White Rabbit Guarantee
+          </p>
+          <p className="font-serif text-xl md:text-2xl text-forest-dark leading-relaxed">
+            "If after four weeks you haven't seen it — in the tables that linger, the checks, the tags — we shake hands and part as friends. No retainer. No lock-in. The first night is on me."
+          </p>
         </div>
       </section>
 
@@ -412,13 +423,6 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
               ))}
             </ul>
           </div>
-
-          <p className="font-sans text-base text-cream/80 mt-10 max-w-xl mx-auto leading-relaxed">
-            If at the end of {data.pilot_weeks} weeks the dwell time, the check
-            average, and the social engagement haven't moved — we shake hands.
-            No retainer. No extension obligation. Just four nights your guests
-            won't forget.
-          </p>
         </div>
       </section>
 
