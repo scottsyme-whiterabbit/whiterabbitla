@@ -588,7 +588,7 @@ ${signoff()}`),
         subject: "The vendor every guest mentions the next day",
         preheader: "What brand teams say after the first booking.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Here is something I hear from brand teams after the first event: "We have never had a vendor that every single guest mentioned the next day."</p>
+<p style="margin:0 0 18px;">A pattern I've seen with brand teams after the first event: guests bring it up the next day, unprompted, and the brand gets the credit for booking something memorable.</p>
 <p style="margin:0 0 18px;">I am a member at the Magic Castle in Hollywood and have consulted on America's Got Talent. But what actually sells is what happens in the room — people genuinely losing their minds and connecting that feeling to your brand.</p>
 <p style="margin:0 0 18px;">Happy to chat about how this works for your next event.</p>
 ${cta}
