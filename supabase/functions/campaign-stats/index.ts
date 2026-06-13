@@ -8,7 +8,7 @@ const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, OPTIONS",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-bulk-import-token",
+    "authorization, x-client-info, apikey, content-type, x-bulk-import-token, x-import-token",
 };
 
 const json = (status: number, body: unknown) =>
@@ -211,6 +211,48 @@ async function computeCategoryStats(
   // 8. Replies (status='replied')
   const replies = all.filter((c: any) => c.status === "replied").length;
 
+  // 9. Per-step breakdown (opens + clicks per drip_step, since window)
+  //    Replies aren't tracked per-step, so we report totals at category level only.
+  const perStepMap: Record<number, { opens: number; clicks: number }> = {};
+  for (let s = 0; s <= 4; s++) perStepMap[s] = { opens: 0, clicks: 0 };
+  if (idArr.length > 0) {
+    for (let i = 0; i < idArr.length; i += 100) {
+      const batch = idArr.slice(i, i + 100);
+      const { data: oRows } = await supabase
+        .from("newsletter_opens")
+        .select("drip_step")
+        .in("contact_id", batch)
+        .gte("opened_at", sinceISO);
+      (oRows || []).forEach((r: any) => {
+        const s = r.drip_step;
+        if (typeof s === "number") {
+          perStepMap[s] = perStepMap[s] || { opens: 0, clicks: 0 };
+          perStepMap[s].opens++;
+        }
+      });
+      const { data: cRows } = await supabase
+        .from("newsletter_clicks")
+        .select("drip_step")
+        .in("contact_id", batch)
+        .gte("clicked_at", sinceISO);
+      (cRows || []).forEach((r: any) => {
+        const s = r.drip_step;
+        if (typeof s === "number") {
+          perStepMap[s] = perStepMap[s] || { opens: 0, clicks: 0 };
+          perStepMap[s].clicks++;
+        }
+      });
+    }
+  }
+  const per_step = Object.keys(perStepMap)
+    .map((k) => Number(k))
+    .sort((a, b) => a - b)
+    .map((step) => ({
+      step,
+      opens: perStepMap[step].opens,
+      clicks: perStepMap[step].clicks,
+    }));
+
   const delivered = Math.max(0, emails_sent - bounces);
   const bounce_rate_pct = pct(bounces, emails_sent);
   const open_rate_pct = pct(opens, delivered);
@@ -227,6 +269,7 @@ async function computeCategoryStats(
     click_rate_pct,
     unsubs,
     replies,
+    per_step,
   };
 
   const health_flags = computeHealthFlags({
@@ -279,13 +322,18 @@ serve(async (req) => {
     return finalize(json(405, { error: "method_not_allowed" }), "valid");
   }
 
-  // Auth: token-only
-  const importToken = req.headers.get("x-bulk-import-token") || "";
-  const expectedImport = Deno.env.get("BULK_IMPORT_TOKEN") || "";
-  if (!importToken) {
+  // Auth: token-only. Accept either x-bulk-import-token (BULK_IMPORT_TOKEN)
+  // or x-import-token (EXTERNAL_IMPORT_TOKEN) for external reporting pulls.
+  const bulkToken = req.headers.get("x-bulk-import-token") || "";
+  const importToken = req.headers.get("x-import-token") || "";
+  const expectedBulk = Deno.env.get("BULK_IMPORT_TOKEN") || "";
+  const expectedImport = Deno.env.get("EXTERNAL_IMPORT_TOKEN") || "";
+  const bulkOk = !!bulkToken && !!expectedBulk && bulkToken === expectedBulk;
+  const importOk = !!importToken && !!expectedImport && importToken === expectedImport;
+  if (!bulkToken && !importToken) {
     return finalize(json(401, { error: "auth_failed" }), "missing_token");
   }
-  if (!expectedImport || importToken !== expectedImport) {
+  if (!bulkOk && !importOk) {
     return finalize(json(401, { error: "auth_failed" }), "invalid_token");
   }
 
