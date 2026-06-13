@@ -489,7 +489,7 @@ ${signoffFull()}`),
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
 <p style="margin:0 0 18px;">Here is why close-up magic works differently than a stage act at a fundraiser: it happens right at the donor's table. It is personal and participatory. Guests are not watching from a distance. They are holding objects, handing me their phones, and reacting out loud when I tell them exactly what they are thinking. It creates a one-on-one connection that puts the room in an emotionally open state before the fundraising portion begins.</p>
 <p style="margin:0 0 18px;">I move between tables performing 3 to 5 minute sets for groups of 6 to 10 guests. No microphone, no stage, no disruption to your event flow.</p>
-<p style="margin:0 0 18px;">I have performed at corporate events for Disney, CBS, and Morgan Stanley. Happy to walk you through how this would work at your next event.</p>
+<p style="margin:0 0 18px;">I have performed at corporate events for Disney, Paramount, and Morgan Stanley. Happy to walk you through how this would work at your next event.</p>
 <p style="margin:0 0 18px;">${arts.a1}</p>
 ${signoff()}`),
       },
