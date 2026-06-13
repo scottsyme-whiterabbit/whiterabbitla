@@ -164,8 +164,9 @@ function plainBody(paragraphs: string[]): string {
   return paragraphs.map((p) => `<p>${p}</p>`).join("\n");
 }
 
-function wrapPlainEmail(preheader: string, innerHtml: string, _email: string, contactId: string, step: number): string {
+function wrapPlainEmail(preheader: string, innerHtml: string, email: string, contactId: string, step: number): string {
   const openPixel = `<img src="${OPEN_TRACK_URL}?cid=${contactId}&step=${step}" width="1" height="1" style="display:block;width:1px;height:1px;border:0;" alt="" />`;
+  const unsubUrl = `${SITE_URL}/unsubscribe?email=${encodeURIComponent(email)}`;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -179,12 +180,18 @@ p{margin:0 0 16px}
 a{color:#1a0dab}
 a.plain{color:#000;text-decoration:none}
 .preheader{display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#fff}
+.legal{margin-top:28px;padding-top:16px;border-top:1px solid #eee;font-size:11px;line-height:1.5;color:#888}
+.legal a{color:#888;text-decoration:underline}
 </style>
 </head>
 <body>
 <div class="preheader">${preheader}</div>
 <div class="wrap">
 ${innerHtml}
+<div class="legal">
+White Rabbit LA · 7393 W. Manchester Ave #209, Los Angeles, CA 90045<br>
+<a href="${unsubUrl}">Unsubscribe</a>
+</div>
 </div>
 ${openPixel}
 </body></html>`;
