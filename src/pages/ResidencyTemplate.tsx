@@ -94,7 +94,7 @@ export const DEFAULT_VENUE_PITCH: VenuePitchData = {
   closing_private_line: "In those moments, nothing feels impossible. And maybe, for the guests who were there, nothing quite does afterward either.",
   video_url: null,
   case_study_result: "On residency nights, tables stayed through dessert and asked for him by name.",
-  case_study_quote: "Guests didn't want the check. They wanted five more minutes.",
+  case_study_quote: "Scott was our resident Magician at Rideau. His performances, combined, elegance, technical mastery and humor, creating memorable experiences that our guests truly loved.",
   case_study_attribution: "General Manager, Rideau at Arden",
   first_name: null,
   room_detail: "The booths along the back wall, the bar at nine on a Thursday",
@@ -331,7 +331,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
               &ldquo;
             </span>
             <p className="font-serif text-lg md:text-xl text-forest-dark leading-relaxed mb-4">
-              {data.case_study_quote || "Guests didn't want the check. They wanted five more minutes."}
+              {data.case_study_quote || "Scott was our resident Magician at Rideau. His performances, combined, elegance, technical mastery and humor, creating memorable experiences that our guests truly loved."}
             </p>
             <p className="font-sans text-xs tracking-[0.15em] uppercase text-forest-dark/60">
               &mdash; {data.case_study_attribution || "General Manager, Rideau at Arden"}
