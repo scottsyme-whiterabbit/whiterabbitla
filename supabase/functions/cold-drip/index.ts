@@ -432,7 +432,7 @@ ${signoffFull()}`),
         preheader: "Close-up magic for brand events and activations.",
         innerHtml: plainBody([
           `${firstName},`,
-          `I am a close-up magician and mind reader who works with brands like Netflix, Disney, and CBS for experiential events and activations.`,
+          `I am a close-up magician and mind reader who works with brands like Netflix, Disney, and Paramount for experiential events and activations.`,
           `My work is designed for the cocktail hour of a launch party, the VIP lounge at a brand event, or the unexpected moment during a press dinner that guests post about before they leave. No stage, no AV, just real-time interaction that photographs well and creates shareable content. Guests hand me their phones, I read their minds, and things appear in their hands that should not be there. The reactions are genuine and they film themselves.`,
           `If your agency ever sources talent for client events, I would love to be on your roster.`,
           plainCalendarSentence(contactId, step, category),
