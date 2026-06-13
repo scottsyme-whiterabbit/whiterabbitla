@@ -49,28 +49,18 @@ interface ColdCampaign {
 // SHARED HELPERS
 // ═══════════════════════════════════════════════
 
+// Canonical signature — exact format required for compliance.
+// Scott Syme / Magician / (424) 394-1850 / whiterabbitla.com
 function signoff(): string {
   return `<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
-Scott<br/>
-<span style="font-size:13px; color:rgba(245,240,232,0.5);">White Rabbit · Los Angeles</span><br/>
-<span style="font-size:12px; color:rgba(245,240,232,0.35);">(424) 394-1850 · scott.syme@whiterabbitla.com</span>
-</p>`;
-}
-
-function signoffShort(): string {
-  return `<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
-Scott<br/>
-<span style="font-size:12px; color:rgba(245,240,232,0.35);">(424) 394-1850</span>
-</p>`;
-}
-
-function signoffFull(): string {
-  return `<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
 Scott Syme<br/>
-<span style="font-size:13px; color:rgba(245,240,232,0.5);">White Rabbit · Los Angeles</span><br/>
-<span style="font-size:12px; color:rgba(245,240,232,0.35);">whiterabbitla.com · (424) 394-1850</span>
+<span style="font-size:13px; color:rgba(245,240,232,0.5);">Magician</span><br/>
+<span style="font-size:12px; color:rgba(245,240,232,0.35);"><a href="tel:+14243941850" style="color:rgba(245,240,232,0.35); text-decoration:none;">(424) 394-1850</a></span><br/>
+<span style="font-size:12px;"><a href="https://whiterabbitla.com" style="color:rgba(245,240,232,0.35); text-decoration:none;">whiterabbitla.com</a></span>
 </p>`;
 }
+const signoffShort = signoff;
+const signoffFull = signoff;
 
 function trackedLink(url: string, text: string, contactId: string, step: number, campaign: string): string {
   const sep = url.includes("?") ? "&" : "?";
@@ -164,8 +154,8 @@ function plainCalendarSentence(contactId: string, step: number, campaign: string
 function plainSignature(): string {
   return `<p class="sig">
 Scott Syme<br>
-White Rabbit LA<br>
-<a href="mailto:scott.syme@whiterabbitla.com" class="plain">scott.syme@whiterabbitla.com</a><br>
+Magician<br>
+<a href="tel:+14243941850" class="plain">(424) 394-1850</a><br>
 <a href="https://whiterabbitla.com" class="plain">whiterabbitla.com</a>
 </p>`;
 }
@@ -174,8 +164,9 @@ function plainBody(paragraphs: string[]): string {
   return paragraphs.map((p) => `<p>${p}</p>`).join("\n");
 }
 
-function wrapPlainEmail(preheader: string, innerHtml: string, _email: string, contactId: string, step: number): string {
+function wrapPlainEmail(preheader: string, innerHtml: string, email: string, contactId: string, step: number): string {
   const openPixel = `<img src="${OPEN_TRACK_URL}?cid=${contactId}&step=${step}" width="1" height="1" style="display:block;width:1px;height:1px;border:0;" alt="" />`;
+  const unsubUrl = `${SITE_URL}/unsubscribe?email=${encodeURIComponent(email)}`;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -189,12 +180,18 @@ p{margin:0 0 16px}
 a{color:#1a0dab}
 a.plain{color:#000;text-decoration:none}
 .preheader{display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#fff}
+.legal{margin-top:28px;padding-top:16px;border-top:1px solid #eee;font-size:11px;line-height:1.5;color:#888}
+.legal a{color:#888;text-decoration:underline}
 </style>
 </head>
 <body>
 <div class="preheader">${preheader}</div>
 <div class="wrap">
 ${innerHtml}
+<div class="legal">
+White Rabbit LA · 7393 W. Manchester Ave #209, Los Angeles, CA 90045<br>
+<a href="${unsubUrl}">Unsubscribe</a>
+</div>
 </div>
 ${openPixel}
 </body></html>`;
@@ -325,7 +322,7 @@ ${signoffFull()}`),
         preheader: "Planting the seed for your next event.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
 <p style="margin:0 0 18px;">I know your inbox is relentless, so I will keep this short.</p>
-<p style="margin:0 0 18px;">If you ever need a reliable entertainment option for a cocktail reception, client dinner, or team event, I would love to be on your radar. My calendar fills 4 to 6 weeks out during peak season.</p>
+<p style="margin:0 0 18px;">If you ever need a reliable entertainment option for a cocktail reception, client dinner, or team event, I would love to be on your radar. Early planning helps during peak season.</p>
 <p style="margin:0 0 18px;">No pressure at all. Just planting the seed.</p>
 <p style="margin:0 0 18px;">${arts.a2}</p>
 ${signoffFull()}`),
@@ -354,13 +351,10 @@ ${signoffFull()}`),
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">Hi ${firstName},</p>
 <p style="margin:0 0 18px;">Following up on the last one.</p>
 <p style="margin:0 0 18px;">"Magic at a wedding" means a hundred different things, so here's what I actually do. 60 to 90 minutes walking cocktail hour and standing reception. Close-up at arm's length. No stage, no mic, no "ladies and gentlemen." Guests cluster naturally after the first effect. By the time you're calling seating, half the room is texting friends.</p>
-<p style="margin:0 0 18px;">One planner told me last season it was the most-DM'd moment on her couple's wedding Instagram, ahead of the vows and the first dance.</p>
+<p style="margin:0 0 18px;">Planners I've worked with tell me cocktail hour is consistently the moment guests bring up first when they recap the night.</p>
 <p style="margin:0 0 18px;">If any of${companyClause ? ` ${(company || "").trim()}'s` : " your"} upcoming couples might be a fit, want to grab 10 minutes this week or next?</p>
 ${cta}
-<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
-Scott<br/>
-<span style="font-size:12px; color:rgba(245,240,232,0.35);">Office (424) 394-1850 · Cell (650) 678-9428</span>
-</p>`),
+${signoff()}`),
       },
       {
         subject: "a weird offer",
@@ -370,10 +364,7 @@ Scott<br/>
 <p style="margin:0 0 18px;">I'm LA-based, performing weekly at the Magic Castle. If you're in town, I'll come to your office and do 10 minutes of close-up for you and your team. No pitch, no obligation, no follow-up unless you ask. You see what your couples would see.</p>
 <p style="margin:0 0 18px;">If you're outside LA, I have a 90-second clip from a recent wedding that does the same job. Want me to send it?</p>
 ${cta}
-<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
-Scott<br/>
-<span style="font-size:12px; color:rgba(245,240,232,0.35);">Office (424) 394-1850 · Cell (650) 678-9428</span>
-</p>`),
+${signoff()}`),
       },
       {
         subject: "quick check",
@@ -382,10 +373,7 @@ Scott<br/>
 <p style="margin:0 0 18px;">Before I close the loop, one question.</p>
 <p style="margin:0 0 18px;">Is this a "not now, circle back in a few months" or a "not a fit, remove me"?</p>
 <p style="margin:0 0 18px;">Either answer helps. Don't want to keep emailing a planner whose entertainment roster is locked.</p>
-<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
-Scott<br/>
-<span style="font-size:12px; color:rgba(245,240,232,0.35);">Office (424) 394-1850 · Cell (650) 678-9428</span>
-</p>`),
+${signoff()}`),
       },
     ],
 
@@ -444,7 +432,7 @@ ${signoffFull()}`),
         preheader: "Close-up magic for brand events and activations.",
         innerHtml: plainBody([
           `${firstName},`,
-          `I am a close-up magician and mind reader who works with brands like Netflix, Disney, and CBS for experiential events and activations.`,
+          `I am a close-up magician and mind reader who works with brands like Netflix, Disney, and Paramount for experiential events and activations.`,
           `My work is designed for the cocktail hour of a launch party, the VIP lounge at a brand event, or the unexpected moment during a press dinner that guests post about before they leave. No stage, no AV, just real-time interaction that photographs well and creates shareable content. Guests hand me their phones, I read their minds, and things appear in their hands that should not be there. The reactions are genuine and they film themselves.`,
           `If your agency ever sources talent for client events, I would love to be on your roster.`,
           plainCalendarSentence(contactId, step, category),
@@ -463,7 +451,7 @@ ${signoff()}`),
         subject: "Why agencies keep bringing me back",
         preheader: "Zero logistics for your event day.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">I work with a Vogue-listed event producer in LA who books me for multi-day client activations. The reason she keeps bringing me back: zero logistics. I show up, perform, and leave. No rider, no tech requirements, no coordination beyond a start time.</p>
+<p style="margin:0 0 18px;">I work with experiential producers in LA on multi-day client activations. The reason they keep bringing me back: zero logistics. I show up, perform, and leave. No rider, no tech requirements, no coordination beyond a start time.</p>
 <p style="margin:0 0 18px;">For an agency managing a dozen vendors on event day, having one that requires nothing from your team is valuable.</p>
 <p style="margin:0 0 18px;">I am also a Magic Castle member and AGT consultant, which helps when agencies need a quick credential check for their client.</p>
 ${cta}
@@ -501,7 +489,7 @@ ${signoffFull()}`),
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
 <p style="margin:0 0 18px;">Here is why close-up magic works differently than a stage act at a fundraiser: it happens right at the donor's table. It is personal and participatory. Guests are not watching from a distance. They are holding objects, handing me their phones, and reacting out loud when I tell them exactly what they are thinking. It creates a one-on-one connection that puts the room in an emotionally open state before the fundraising portion begins.</p>
 <p style="margin:0 0 18px;">I move between tables performing 3 to 5 minute sets for groups of 6 to 10 guests. No microphone, no stage, no disruption to your event flow.</p>
-<p style="margin:0 0 18px;">I have performed at corporate events for Disney, CBS, and Morgan Stanley. Happy to walk you through how this would work at your next event.</p>
+<p style="margin:0 0 18px;">I have performed at corporate events for Disney, Paramount, and Morgan Stanley. Happy to walk you through how this would work at your next event.</p>
 <p style="margin:0 0 18px;">${arts.a1}</p>
 ${signoff()}`),
       },
@@ -600,7 +588,7 @@ ${signoff()}`),
         subject: "The vendor every guest mentions the next day",
         preheader: "What brand teams say after the first booking.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">Here is something I hear from brand teams after the first event: "We have never had a vendor that every single guest mentioned the next day."</p>
+<p style="margin:0 0 18px;">A pattern I've seen with brand teams after the first event: guests bring it up the next day, unprompted, and the brand gets the credit for booking something memorable.</p>
 <p style="margin:0 0 18px;">I am a member at the Magic Castle in Hollywood and have consulted on America's Got Talent. But what actually sells is what happens in the room — people genuinely losing their minds and connecting that feeling to your brand.</p>
 <p style="margin:0 0 18px;">Happy to chat about how this works for your next event.</p>
 ${cta}
@@ -620,7 +608,7 @@ ${signoff()}`),
         preheader: "Just planting the seed.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
 <p style="margin:0 0 18px;">I know brand calendars plan months out. Just wanted to make sure you have my info for whenever the right activation lands. Launches, trade events, tasting dinners — I work across all of them.</p>
-<p style="margin:0 0 18px;">My calendar fills 4 to 6 weeks out during peak season, so early planning helps.</p>
+<p style="margin:0 0 18px;">Brand calendars plan months out and so do I — early conversations make it easier to land on the right activation.</p>
 <p style="margin:0 0 18px;">${arts.a2}</p>
 ${signoffFull()}`),
       },
@@ -737,7 +725,7 @@ ${signoffFull()}`),
         ]) + plainSignature(),
       },
       {
-        subject: `Did the ${tournamentLabel} dead-zone note land?`,
+        subject: `Did the dead-zone note land for ${tournamentLabel}?`,
         preheader: `Quick follow-up on filling the gap before the awards dinner.`,
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">Hi ${firstName},</p>
 <p style="margin:0 0 18px;">Quick follow-up. If filling the gap between the last putt and the awards dinner is something you're actively solving for ${tournamentLabel}, my number is (424) 394-1850.</p>
@@ -804,6 +792,22 @@ serve(async (req) => {
         });
       }
     }
+
+    // Auth: any non-preview invocation (i.e. anything that can actually send mail
+    // or read/mutate campaign data) requires the x-import-token shared secret.
+    // CRON_SECRET is also accepted so the scheduled cron runner can still trigger.
+    const provided = req.headers.get("x-import-token") ?? "";
+    const cronAuth = req.headers.get("authorization") ?? "";
+    const importToken = Deno.env.get("EXTERNAL_IMPORT_TOKEN") ?? "";
+    const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
+    const tokenOk = importToken.length > 0 && provided === importToken;
+    const cronOk = cronSecret.length > 0 && cronAuth === `Bearer ${cronSecret}`;
+    if (!tokenOk && !cronOk) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
 
     // Send window guard: only send on Tue/Wed/Thu Pacific
     const pacificDay = new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", weekday: "short" }).format(new Date());

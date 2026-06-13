@@ -338,11 +338,11 @@ export const cityContentMap: Record<string, CityContentData> = {
     state: "CA",
     stateFullName: "California",
     region: "Southern California",
-    venues: ["Sportsmen's Lodge", "CBS Studio Center", "Fryman Canyon", "Brady Bunch House", "Tujunga Village"],
+    venues: ["Sportsmen's Lodge", "Fryman Canyon", "Brady Bunch House", "Tujunga Village"],
     nearbyLinks: ["burbank", "encino", "hollywood", "los-feliz", "silver-lake"],
     uniqueContent: [
       "Studio City's charming Tujunga Village and canyon neighborhoods create an intimate, community-driven social scene. Scott Syme performs regularly in Studio City — including Magic Monday, his acclaimed weekly close-up magic show — and has become the neighborhood's go-to entertainment for private parties, restaurant events, and corporate celebrations. His presence in the community means Studio City hosts are booking a neighbor as much as a world-class performer.",
-      "CBS Studio Center and Sportsmen's Lodge anchor Studio City's event scene, while private homes in the hills above Fryman Canyon host some of the Valley's most exclusive gatherings. Scott's deep connection to the neighborhood — combined with his Magic Castle membership and Fortune 500 client roster — makes White Rabbit the natural choice for Studio City events that demand both warmth and wow.",
+      "Sportsmen's Lodge anchors Studio City's event scene, while private homes in the hills above Fryman Canyon host some of the Valley's most exclusive gatherings. Scott's deep connection to the neighborhood — combined with his Magic Castle membership and Fortune 500 client roster — makes White Rabbit the natural choice for Studio City events that demand both warmth and wow.",
     ],
   },
   "westlake-village": {

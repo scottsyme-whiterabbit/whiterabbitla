@@ -116,7 +116,10 @@ Magician<br>
 <a href="tel:+14243941850" class="plain">(424) 394-1850</a><br>
 <a href="https://whiterabbitla.com" class="plain">whiterabbitla.com</a>
 </p>`;
-  const unsub = `<p class="unsub"><a href="${SITE_URL}/unsubscribe?email=${encodeURIComponent(email)}">Unsubscribe</a></p>`;
+  const legal = `<div class="legal">
+White Rabbit LA · 7393 W. Manchester Ave #209, Los Angeles, CA 90045<br>
+<a href="${SITE_URL}/unsubscribe?email=${encodeURIComponent(email)}">Unsubscribe</a>
+</div>`;
   return `<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
@@ -127,15 +130,15 @@ p{margin:0 0 16px}
 a{color:#1a0dab}
 a.plain{color:#000;text-decoration:none}
 .preheader{display:none;max-height:0;overflow:hidden;font-size:1px;line-height:1px;color:#fff}
-.unsub{margin-top:24px;font-size:11px;color:#888}
-.unsub a{color:#888}
+.legal{margin-top:28px;padding-top:16px;border-top:1px solid #eee;font-size:11px;line-height:1.5;color:#888}
+.legal a{color:#888;text-decoration:underline}
 </style></head>
 <body>
 <div class="preheader">${preheader}</div>
 <div class="wrap">
 ${body}
 ${sig}
-${unsub}
+${legal}
 </div>
 ${openPixel}
 </body></html>`;

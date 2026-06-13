@@ -54,9 +54,13 @@ serve(async (req) => {
     }
 
     const anonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
-    const headers = {
+    const importToken = Deno.env.get("EXTERNAL_IMPORT_TOKEN") ?? "";
+    const headers: Record<string, string> = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${anonKey}`,
+      // cold-drip (and other token-gated drips) require x-import-token for any
+      // non-preview action. Pass it here so the cron run is authorized.
+      "x-import-token": importToken,
     };
 
     const results: Record<string, unknown> = {};

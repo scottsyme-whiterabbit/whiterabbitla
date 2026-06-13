@@ -123,7 +123,7 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
         <div className="max-w-3xl mx-auto px-6">
           <AnimatedSection>
             <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8" data-speakable="true">
-              White Rabbit LA provides luxury close-up magic and mentalism entertainment for private events in {cityName}, {stateFullName}. Performed by Scott Syme — a member of the Magic Castle in Hollywood and consultant to performers on America's Got Talent and Disney Channel — every show is tailored to your event, whether it's a corporate gala, wedding reception, private party, or fundraiser. 5-star rated on Google with clients including Netflix, Disney, CBS, and Hyatt.
+              White Rabbit LA provides luxury close-up magic and mentalism entertainment for private events in {cityName}, {stateFullName}. Performed by Scott Syme — a member of the Magic Castle in Hollywood and consultant to performers on America's Got Talent and Disney Channel — every show is tailored to your event, whether it's a corporate gala, wedding reception, private party, or fundraiser. 5-star rated on Google with clients including Netflix, Disney, Paramount, and Hyatt.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <button onClick={openQuiz} className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors">

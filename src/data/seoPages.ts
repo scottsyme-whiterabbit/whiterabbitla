@@ -642,7 +642,7 @@ const locationVenues: Record<string, { dining: string[]; hotels: string[]; cultu
   "Studio City": {
     dining: ["Firefly", "Aroma Coffee & Tea", "Vitello's"],
     hotels: ["Sportsmen's Lodge", "The Garland", "The Beverly Garland"],
-    culture: ["Tujunga Village", "Fryman Canyon", "CBS Studio Center"],
+    culture: ["Tujunga Village", "Fryman Canyon", "Brady Bunch House"],
   },
   "Encino": {
     dining: ["Katsu-Ya Encino", "Gasolina Café", "Buca di Beppo"],
@@ -1752,7 +1752,7 @@ const citySpecificOverrides: Record<string, string[]> = {
   ],
   // ── Studio City ─────────────────────────────────────────────────────
   "studio-city--corporate-event-magician": [
-    "Corporate events in Studio City are industry events by default. CBS Radford is right there, post-production houses line Ventura Boulevard, and the guest list at any company gathering is half people who work in entertainment. That makes the audience both the best and the hardest to perform for — they know what goes into a production, they've seen performers work, and they're not going to fake a reaction. When Scott's close-up magic genuinely surprises them, the response is real, and it spreads fast.",
+    "Corporate events in Studio City are industry events by default. Studios anchor the neighborhood, post-production houses line Ventura Boulevard, and the guest list at any company gathering is half people who work in entertainment. That makes the audience both the best and the hardest to perform for — they know what goes into a production, they've seen performers work, and they're not going to fake a reaction. When Scott's close-up magic genuinely surprises them, the response is real, and it spreads fast.",
     "Scott performs at corporate events throughout Studio City — venue receptions, restaurant buyouts along Ventura, and company parties at local spaces. The magic is designed for a crowd that appreciates craft. No gimmicks, no overselling. Just impossible things happening in their hands, performed by someone who belongs in a room full of people who do this for a living.",
   ],
   "studio-city--private-party-magician": [
@@ -1804,7 +1804,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "For New Year's Eve, Scott brings higher energy — faster pace, bigger reveals, countdown-ready material. Whether it's a dinner party in the hills or a standing reception at a local venue, White Rabbit makes your Studio City holiday event the one people reference through awards season. December dates fill fast in this market.",
   ],
   "studio-city--premiere-red-carpet-magician": [
-    "Studio City is where a lot of entertainment gets made — CBS Radford, post-production houses, editing bays — and the wrap parties and industry celebrations happen locally. Scott's close-up magic works at these events because the crowd creates entertainment for a living and doesn't react to things that aren't genuinely impressive. When the magic lands with writers, producers, and editors, the reactions are authentic in a way that matters to this audience.",
+    "Studio City is where a lot of entertainment gets made — local studios, post-production houses, editing bays — and the wrap parties and industry celebrations happen locally. Scott's close-up magic works at these events because the crowd creates entertainment for a living and doesn't react to things that aren't genuinely impressive. When the magic lands with writers, producers, and editors, the reactions are authentic in a way that matters to this audience.",
     "White Rabbit has worked with Netflix, Disney, Paramount, and Lionsgate. Scott belongs in industry rooms, and Studio City is full of them. The magic is polished, the interactions are genuine, and the host gets credit for booking something that surprised a roomful of people who thought they were unsurprisable.",
   ],
   "studio-city--dmc-entertainment": [
@@ -3061,7 +3061,7 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
   const metaOverrides: Record<string, { metaTitle: string; metaDescription: string }> = {
     "beverly-hills-premiere-red-carpet-magician": {
       metaTitle: "Beverly Hills Premiere & Red Carpet Magician | White Rabbit",
-      metaDescription: "Book Scott Syme for your Beverly Hills film premiere or red carpet event. Magic Castle pro who has entertained Netflix, Disney, and CBS guests.",
+      metaDescription: "Book Scott Syme for your Beverly Hills film premiere or red carpet event. Magic Castle pro who has entertained Netflix, Disney, and Paramount guests.",
     },
     "san-francisco-corporate-event-magician": {
       metaTitle: "SF Corporate Event Magician — Trusted by Netflix & Disney",
