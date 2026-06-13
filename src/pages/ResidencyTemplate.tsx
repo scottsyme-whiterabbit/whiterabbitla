@@ -80,8 +80,8 @@ export const DEFAULT_VENUE_PITCH: VenuePitchData = {
   hero_subhead:
     "One night a week. Every booth. Two hours. No microphone. No spectacle.",
   intro_paragraphs: [
-    "Your venue is one of the rooms in Los Angeles where I would actually want to perform. The bar, the room, the kind of guest who walks in on a Thursday at nine — those are the people I want my work in front of, and those are the people I think would remember an evening at your room differently if there was a magician quietly moving between tables.",
-    "This is a proposal for a four-week residency. One night a week. Two hours of close-up magic, table to table, between the second course and dessert. You decide the night. I bring the room.",
+    "There are a handful of rooms in Los Angeles where the evening already feels like an occasion before anything happens. Your Venue is one of them. The booths along the back wall, the bar at nine on a Thursday — that's a room where a magician moving quietly between tables doesn't add noise. It adds a story your guests tell on the way home.",
+    "This is a proposal for a four-week residency. One night a week, two hours, table to table. You pick the night. Your guests don't watch a show — they become the show.",
   ],
   pilot_weeks: 4,
   nights_per_week: 1,
@@ -96,6 +96,8 @@ export const DEFAULT_VENUE_PITCH: VenuePitchData = {
   case_study_result: "On residency nights, tables stayed through dessert and asked for him by name.",
   case_study_quote: "Guests didn't want the check. They wanted five more minutes.",
   case_study_attribution: "General Manager, Rideau at Arden",
+  first_name: null,
+  room_detail: "The booths along the back wall, the bar at nine on a Thursday",
 };
 
 const formatFee = (n?: number | null) =>
@@ -167,13 +169,14 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
           <OrnamentalDivider />
           <div className="font-sans text-base md:text-lg leading-relaxed text-forest-dark space-y-5 mt-8">
             <p className="font-serif text-xl md:text-2xl text-forest">
-              {data.gm_name},
+              {data.first_name || data.gm_name},
             </p>
-            {data.intro_paragraphs.map((p, i) => (
-              <p key={i} className="whitespace-pre-wrap">
-                {p}
-              </p>
-            ))}
+            <p className="whitespace-pre-wrap">
+              There are a handful of rooms in Los Angeles where the evening already feels like an occasion before anything happens. {data.venue_name} is one of them. {data.room_detail || "The booths along the back wall, the bar at nine on a Thursday"} — that's a room where a magician moving quietly between tables doesn't add noise. It adds a story your guests tell on the way home.
+            </p>
+            <p className="whitespace-pre-wrap">
+              This is a proposal for a four-week residency. One night a week, two hours, table to table. You pick the night. Your guests don't watch a show — they become the show.
+            </p>
           </div>
 
           {/* Key Line callout */}
