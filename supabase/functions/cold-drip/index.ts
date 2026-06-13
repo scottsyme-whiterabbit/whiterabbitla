@@ -793,6 +793,22 @@ serve(async (req) => {
       }
     }
 
+    // Auth: any non-preview invocation (i.e. anything that can actually send mail
+    // or read/mutate campaign data) requires the x-import-token shared secret.
+    // CRON_SECRET is also accepted so the scheduled cron runner can still trigger.
+    const provided = req.headers.get("x-import-token") ?? "";
+    const cronAuth = req.headers.get("authorization") ?? "";
+    const importToken = Deno.env.get("EXTERNAL_IMPORT_TOKEN") ?? "";
+    const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
+    const tokenOk = importToken.length > 0 && provided === importToken;
+    const cronOk = cronSecret.length > 0 && cronAuth === `Bearer ${cronSecret}`;
+    if (!tokenOk && !cronOk) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+
     // Send window guard: only send on Tue/Wed/Thu Pacific
     const pacificDay = new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", weekday: "short" }).format(new Date());
     if (!["Tue", "Wed", "Thu"].includes(pacificDay)) {
