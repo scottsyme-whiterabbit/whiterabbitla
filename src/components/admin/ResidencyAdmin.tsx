@@ -400,6 +400,15 @@ const ResidencyEditor = ({
               />
             </div>
             <div>
+              <label className={labelCls}>First name (for greeting)</label>
+              <input
+                className={inputCls}
+                value={pitch.first_name || ""}
+                onChange={(e) => update({ first_name: e.target.value })}
+                placeholder="Offer"
+              />
+            </div>
+            <div>
               <label className={labelCls}>GM email</label>
               <input
                 className={inputCls}
@@ -425,6 +434,15 @@ const ResidencyEditor = ({
                 value={pitch.hero_subhead}
                 onChange={(e) => update({ hero_subhead: e.target.value })}
                 placeholder="One Thursday a month. Lobby lounge. From 7 to 9."
+              />
+            </div>
+            <div className="md:col-span-2">
+              <label className={labelCls}>Room detail (specific observation for letter)</label>
+              <input
+                className={inputCls}
+                value={pitch.room_detail || ""}
+                onChange={(e) => update({ room_detail: e.target.value })}
+                placeholder="The booths along the back wall, the bar at nine on a Thursday"
               />
             </div>
           </div>

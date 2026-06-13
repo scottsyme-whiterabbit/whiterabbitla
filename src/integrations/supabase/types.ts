@@ -1277,18 +1277,24 @@ export type Database = {
       }
       venue_pitches: {
         Row: {
+          case_study_attribution: string | null
+          case_study_quote: string | null
+          case_study_result: string | null
           closing_private_line: string
           created_at: string
           fee_dollars: number | null
+          first_name: string | null
           gm_email: string | null
           gm_name: string
           hero_image: string
           hero_subhead: string
           id: string
           intro_paragraphs: Json
+          night_of_week: string | null
           nights_per_week: number
           pilot_weeks: number
           press_line: string | null
+          room_detail: string | null
           scheduling_url: string | null
           sent_at: string | null
           session_hours: number
@@ -1297,20 +1303,27 @@ export type Database = {
           testimonials: Json
           updated_at: string
           venue_name: string
+          video_url: string | null
         }
         Insert: {
+          case_study_attribution?: string | null
+          case_study_quote?: string | null
+          case_study_result?: string | null
           closing_private_line?: string
           created_at?: string
           fee_dollars?: number | null
+          first_name?: string | null
           gm_email?: string | null
           gm_name?: string
           hero_image?: string
           hero_subhead?: string
           id?: string
           intro_paragraphs?: Json
+          night_of_week?: string | null
           nights_per_week?: number
           pilot_weeks?: number
           press_line?: string | null
+          room_detail?: string | null
           scheduling_url?: string | null
           sent_at?: string | null
           session_hours?: number
@@ -1319,20 +1332,27 @@ export type Database = {
           testimonials?: Json
           updated_at?: string
           venue_name?: string
+          video_url?: string | null
         }
         Update: {
+          case_study_attribution?: string | null
+          case_study_quote?: string | null
+          case_study_result?: string | null
           closing_private_line?: string
           created_at?: string
           fee_dollars?: number | null
+          first_name?: string | null
           gm_email?: string | null
           gm_name?: string
           hero_image?: string
           hero_subhead?: string
           id?: string
           intro_paragraphs?: Json
+          night_of_week?: string | null
           nights_per_week?: number
           pilot_weeks?: number
           press_line?: string | null
+          room_detail?: string | null
           scheduling_url?: string | null
           sent_at?: string | null
           session_hours?: number
@@ -1341,6 +1361,7 @@ export type Database = {
           testimonials?: Json
           updated_at?: string
           venue_name?: string
+          video_url?: string | null
         }
         Relationships: []
       }
