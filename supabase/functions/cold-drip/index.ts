@@ -351,7 +351,7 @@ ${signoffFull()}`),
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">Hi ${firstName},</p>
 <p style="margin:0 0 18px;">Following up on the last one.</p>
 <p style="margin:0 0 18px;">"Magic at a wedding" means a hundred different things, so here's what I actually do. 60 to 90 minutes walking cocktail hour and standing reception. Close-up at arm's length. No stage, no mic, no "ladies and gentlemen." Guests cluster naturally after the first effect. By the time you're calling seating, half the room is texting friends.</p>
-<p style="margin:0 0 18px;">One planner told me last season it was the most-DM'd moment on her couple's wedding Instagram, ahead of the vows and the first dance.</p>
+<p style="margin:0 0 18px;">Planners I've worked with tell me cocktail hour is consistently the moment guests bring up first when they recap the night.</p>
 <p style="margin:0 0 18px;">If any of${companyClause ? ` ${(company || "").trim()}'s` : " your"} upcoming couples might be a fit, want to grab 10 minutes this week or next?</p>
 ${cta}
 <p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
