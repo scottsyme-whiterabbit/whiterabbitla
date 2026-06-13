@@ -322,7 +322,7 @@ ${signoffFull()}`),
         preheader: "Planting the seed for your next event.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
 <p style="margin:0 0 18px;">I know your inbox is relentless, so I will keep this short.</p>
-<p style="margin:0 0 18px;">If you ever need a reliable entertainment option for a cocktail reception, client dinner, or team event, I would love to be on your radar. My calendar fills 4 to 6 weeks out during peak season.</p>
+<p style="margin:0 0 18px;">If you ever need a reliable entertainment option for a cocktail reception, client dinner, or team event, I would love to be on your radar. Early planning helps during peak season.</p>
 <p style="margin:0 0 18px;">No pressure at all. Just planting the seed.</p>
 <p style="margin:0 0 18px;">${arts.a2}</p>
 ${signoffFull()}`),
