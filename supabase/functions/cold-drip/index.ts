@@ -725,7 +725,7 @@ ${signoffFull()}`),
         ]) + plainSignature(),
       },
       {
-        subject: `Did the ${tournamentLabel} dead-zone note land?`,
+        subject: `Did the dead-zone note land for ${tournamentLabel}?`,
         preheader: `Quick follow-up on filling the gap before the awards dinner.`,
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">Hi ${firstName},</p>
 <p style="margin:0 0 18px;">Quick follow-up. If filling the gap between the last putt and the awards dinner is something you're actively solving for ${tournamentLabel}, my number is (424) 394-1850.</p>
