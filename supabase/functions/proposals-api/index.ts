@@ -363,7 +363,7 @@ body { margin: 0; padding: 0; width: 100% !important; background-color: #335747;
 <p style="margin:0;">
 <span style="color:rgba(245,240,232,0.85);">Scott Syme</span><br/>
 White Rabbit LA — Luxury Magic &amp; Entertainment<br/>
-Office <a href="tel:+14243941850" style="color:rgba(201,163,168,0.85); text-decoration:none;">(424) 394-1850</a> · Cell <a href="tel:+16506789428" style="color:rgba(201,163,168,0.85); text-decoration:none;">(650) 678-9428</a><br/>
+<a href="tel:+14243941850" style="color:rgba(201,163,168,0.85); text-decoration:none;">(424) 394-1850</a><br/>
 <a href="mailto:scott.syme@whiterabbitla.com" style="color:rgba(201,163,168,0.85); text-decoration:none;">scott.syme@whiterabbitla.com</a> · <a href="https://whiterabbitla.com" style="color:rgba(201,163,168,0.85); text-decoration:none;">whiterabbitla.com</a>
 </p>
 </td></tr>
