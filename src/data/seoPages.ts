@@ -3061,7 +3061,7 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
   const metaOverrides: Record<string, { metaTitle: string; metaDescription: string }> = {
     "beverly-hills-premiere-red-carpet-magician": {
       metaTitle: "Beverly Hills Premiere & Red Carpet Magician | White Rabbit",
-      metaDescription: "Book Scott Syme for your Beverly Hills film premiere or red carpet event. Magic Castle pro who has entertained Netflix, Disney, and CBS guests.",
+      metaDescription: "Book Scott Syme for your Beverly Hills film premiere or red carpet event. Magic Castle pro who has entertained Netflix, Disney, and Paramount guests.",
     },
     "san-francisco-corporate-event-magician": {
       metaTitle: "SF Corporate Event Magician — Trusted by Netflix & Disney",
