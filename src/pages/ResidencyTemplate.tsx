@@ -56,6 +56,7 @@ export interface VenuePitchData {
   nights_per_week: number;
   session_hours: number;
   fee_dollars?: number | null;
+  night_of_week?: string | null;
   testimonials: VenueTestimonial[];
   press_line?: string | null;
   scheduling_url?: string | null;
