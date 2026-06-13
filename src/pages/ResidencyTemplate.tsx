@@ -747,10 +747,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
             <span className="w-10 h-px bg-gold/60" />
           </div>
           <p className="font-sans text-base md:text-lg leading-relaxed text-cream/85 max-w-2xl mx-auto mb-10">
-            Before any of this becomes real, I'd love to come by {data.venue_name},
-            see the room you imagine me working in, and meet the team. Twenty
-            minutes is enough. If after that it doesn't feel right, no proposal
-            goes forward.
+            Before any of this becomes real, I'd like to stand in the room with you. Twenty minutes at {data.venue_name} — see the space, meet the team, watch me work two tables if you like. If it doesn't feel right after that, no proposal goes forward and we part as friends.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
@@ -762,7 +759,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
                 className="inline-flex items-center justify-center gap-2 bg-gold text-forest-dark py-4 px-6 text-xs tracking-[0.2em] uppercase font-medium hover:opacity-90 transition-opacity"
               >
                 <Calendar className="w-4 h-4" />
-                Book a 20-minute walkthrough
+                Book the audition — 20 minutes
               </a>
             ) : (
               <a
@@ -772,7 +769,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
                 className="inline-flex items-center justify-center gap-2 bg-gold text-forest-dark py-4 px-6 text-xs tracking-[0.2em] uppercase font-medium hover:opacity-90 transition-opacity"
               >
                 <Calendar className="w-4 h-4" />
-                Book a 20-minute walkthrough
+                Book the audition — 20 minutes
               </a>
             )}
             <a
