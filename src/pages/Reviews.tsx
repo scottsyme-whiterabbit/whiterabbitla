@@ -11,6 +11,12 @@ import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
 const reviews = [
 {
+  name: "Maddie Miller",
+  role: "Private Birthday Event",
+  text: "Scott was so fun, personable, and entertaining! He made everyone feel welcome and included, engaging the room in his routine and even talked with people after his show. He is a skilled magician and made the night so memorable for everyone.",
+  rating: 5
+},
+{
   name: "Meridith F.",
   role: "40th Birthday Party",
   text: "Scott performed up close magic for small groups at my 40th birthday party and was OUTSTANDING. I can't tell you how many guests told me he was the highlight of the evening and his magic/mentalism was out of this world good. I cannot recommend him enough — hire him. You will not be disappointed.",
