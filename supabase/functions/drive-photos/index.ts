@@ -58,13 +58,17 @@ Deno.serve(async (req) => {
       });
       if (!r.ok) return json({ error: `drive ${r.status}` }, r.status);
       const ct = r.headers.get("content-type") ?? "image/jpeg";
-      return new Response(r.body, {
-        headers: {
-          ...corsHeaders,
-          "Content-Type": ct,
-          "Cache-Control": "public, max-age=3600",
-        },
-      });
+      const len = r.headers.get("content-length");
+      const headers: Record<string, string> = {
+        ...corsHeaders,
+        "Content-Type": ct,
+        // fileId is immutable; cache aggressively at the edge + browser
+        "Cache-Control": "public, max-age=31536000, immutable",
+        "Accept-Ranges": "bytes",
+        "ETag": `"${fileId}"`,
+      };
+      if (len) headers["Content-Length"] = len;
+      return new Response(r.body, { headers });
     }
 
     // Public: stream a previously-uploaded gallery file from private storage
@@ -79,7 +83,8 @@ Deno.serve(async (req) => {
           ...corsHeaders,
           "Content-Type": ct,
           "Accept-Ranges": "bytes",
-          "Cache-Control": "public, max-age=3600",
+          "Cache-Control": "public, max-age=31536000, immutable",
+          "ETag": `"${path}"`,
         },
       });
     }
