@@ -126,18 +126,34 @@ Deno.serve(async (req) => {
     if (req.method === "GET" && action === "list") {
       const folderId = url.searchParams.get("folderId");
       if (!folderId) return json({ error: "folderId required" }, 400);
+      const includeVideos = url.searchParams.get("includeVideos") === "1";
+      const typeClause = includeVideos
+        ? "(mimeType contains 'image/' or mimeType contains 'video/')"
+        : "mimeType contains 'image/'";
       const q = encodeURIComponent(
-        `'${folderId}' in parents and mimeType contains 'image/' and trashed=false`,
+        `'${folderId}' in parents and ${typeClause} and trashed=false`,
       );
       const fields = encodeURIComponent("files(id,name,mimeType,thumbnailLink,modifiedTime)");
       const r = await fetch(
-        `${GATEWAY}/files?q=${q}&fields=${fields}&pageSize=200&orderBy=modifiedTime desc`,
+        `${GATEWAY}/files?q=${q}&fields=${fields}&pageSize=500&orderBy=modifiedTime desc`,
         { headers: gwHeaders() },
       );
       const body = await r.json();
       if (!r.ok) return json({ error: body }, r.status);
       return json({ files: body.files ?? [] });
     }
+
+    if (req.method === "GET" && action === "picks") {
+      const folderId = url.searchParams.get("folderId");
+      if (!folderId) return json({ error: "folderId required" }, 400);
+      const { data, error } = await sb
+        .from("drive_gallery_picks")
+        .select("file_id")
+        .eq("folder_id", folderId);
+      if (error) return json({ error: error.message }, 500);
+      return json({ file_ids: (data ?? []).map((d) => d.file_id) });
+    }
+
 
     if (req.method === "POST") {
       const body = await req.json().catch(() => ({}));
