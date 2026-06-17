@@ -405,7 +405,7 @@ export function DrivePhotoBank({
                             : "border-transparent hover:border-forest-dark/40 opacity-90 hover:opacity-100"
                         }`}
                       >
-                        <img src={IMG(file.id)} alt={file.name} loading="lazy" className="w-full h-full object-cover bg-forest-dark/10" />
+                        <img src={THUMB(file)} onError={(e) => onThumbErr(e, file.id)} alt={file.name} loading="lazy" decoding="async" className="w-full h-full object-cover bg-forest-dark/10" />
                         {isVideo && (
                           <div className="absolute bottom-1 left-1 bg-forest-dark/80 text-cream text-[9px] uppercase tracking-wider px-1.5 py-0.5">
                             Video
