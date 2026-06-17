@@ -58,13 +58,17 @@ Deno.serve(async (req) => {
       });
       if (!r.ok) return json({ error: `drive ${r.status}` }, r.status);
       const ct = r.headers.get("content-type") ?? "image/jpeg";
-      return new Response(r.body, {
-        headers: {
-          ...corsHeaders,
-          "Content-Type": ct,
-          "Cache-Control": "public, max-age=3600",
-        },
-      });
+      const len = r.headers.get("content-length");
+      const headers: Record<string, string> = {
+        ...corsHeaders,
+        "Content-Type": ct,
+        // fileId is immutable; cache aggressively at the edge + browser
+        "Cache-Control": "public, max-age=31536000, immutable",
+        "Accept-Ranges": "bytes",
+        "ETag": `"${fileId}"`,
+      };
+      if (len) headers["Content-Length"] = len;
+      return new Response(r.body, { headers });
     }
 
     // Public: stream a previously-uploaded gallery file from private storage
@@ -79,7 +83,8 @@ Deno.serve(async (req) => {
           ...corsHeaders,
           "Content-Type": ct,
           "Accept-Ranges": "bytes",
-          "Cache-Control": "public, max-age=3600",
+          "Cache-Control": "public, max-age=31536000, immutable",
+          "ETag": `"${path}"`,
         },
       });
     }
@@ -103,6 +108,8 @@ Deno.serve(async (req) => {
         folder: string;
         sort_order: number;
         created_at: string;
+        width?: number;
+        height?: number;
       };
       const items: Item[] = [];
       const fnBase = new URL(req.url);
@@ -133,7 +140,9 @@ Deno.serve(async (req) => {
         const q = encodeURIComponent(
           `'${f.folder_id}' in parents and (mimeType contains 'image/' or mimeType contains 'video/') and trashed=false`,
         );
-        const fields = encodeURIComponent("files(id,name,mimeType,modifiedTime)");
+        const fields = encodeURIComponent(
+          "files(id,name,mimeType,modifiedTime,imageMediaMetadata(width,height),videoMediaMetadata(width,height))",
+        );
         const r = await fetch(
           `${GATEWAY}/files?q=${q}&fields=${fields}&pageSize=200&orderBy=modifiedTime desc`,
           { headers: gwHeaders() },
@@ -142,6 +151,7 @@ Deno.serve(async (req) => {
         if (r.ok && Array.isArray(body.files)) {
           for (const file of body.files) {
             if (pickSet.size > 0 && !pickSet.has(file.id)) continue;
+            const meta = file.imageMediaMetadata ?? file.videoMediaMetadata ?? {};
             items.push({
               key: `drive:${file.id}`,
               source: "drive",
@@ -152,6 +162,8 @@ Deno.serve(async (req) => {
               folder: f.label,
               sort_order: orderIndex.get(`drive:${file.id}`) ?? 1000000,
               created_at: file.modifiedTime ?? "",
+              width: meta.width ? Number(meta.width) : undefined,
+              height: meta.height ? Number(meta.height) : undefined,
             });
 
           }

@@ -12,6 +12,8 @@ interface GalleryItem {
   name: string;
   mimeType: string;
   folder: string;
+  width?: number;
+  height?: number;
 }
 
 
@@ -96,30 +98,28 @@ const ExperienceGallery = () => {
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 [column-fill:_balance]">
             {items.map((item) => {
               const isVideo = item.mimeType.startsWith("video/");
+              const w = item.width && item.width > 0 ? item.width : 4;
+              const h = item.height && item.height > 0 ? item.height : 5;
               return (
                 <button
                   key={item.key}
                   type="button"
                   onClick={() => setLightbox(item)}
                   className="group relative mb-4 block w-full break-inside-avoid overflow-hidden bg-forest-dark/5"
+                  style={{ aspectRatio: `${w} / ${h}` }}
                   aria-label={`Open ${item.name}`}
                 >
                   {isVideo ? (
-                    <video
-                      src={item.src}
-                      preload="metadata"
-                      muted
-                      loop
-                      autoPlay
-                      playsInline
-                      className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.02]"
-                    />
+                    <TileVideo src={item.src} />
                   ) : (
                     <img
                       src={item.src}
                       alt={item.name}
                       loading="lazy"
-                      className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.02]"
+                      decoding="async"
+                      width={w}
+                      height={h}
+                      className="w-full h-full object-cover block transition-transform duration-500 group-hover:scale-[1.02]"
                     />
                   )}
                 </button>
@@ -182,6 +182,57 @@ function LightboxVideo({ src }: { src: string }) {
       autoPlay
       playsInline
       className="max-h-[88vh] max-w-full"
+    />
+  );
+}
+
+/**
+ * Tile video: defers loading until near the viewport, only plays when actually
+ * visible, and pauses when scrolled away. Keeps the grid smooth and saves
+ * bandwidth so large galleries feel seamless.
+ */
+function TileVideo({ src }: { src: string }) {
+  const ref = useRef<HTMLVideoElement | null>(null);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    // Phase 1: warm up — when near viewport, set src so metadata can preload
+    const warm = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setReady(true);
+          warm.disconnect();
+        }
+      },
+      { rootMargin: "300px" },
+    );
+    warm.observe(v);
+    // Phase 2: play/pause based on actual visibility
+    const play = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) v.play().catch(() => {});
+        else v.pause();
+      },
+      { threshold: 0.25 },
+    );
+    play.observe(v);
+    return () => {
+      warm.disconnect();
+      play.disconnect();
+    };
+  }, []);
+
+  return (
+    <video
+      ref={ref}
+      src={ready ? src : undefined}
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      className="w-full h-full object-cover block transition-transform duration-500 group-hover:scale-[1.02]"
     />
   );
 }
