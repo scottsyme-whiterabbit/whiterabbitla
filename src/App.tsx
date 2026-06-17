@@ -18,6 +18,7 @@ import StickyMobileCTA from "@/components/StickyMobileCTA";
 import SocialProofToast from "@/components/SocialProofToast";
 import Index from "./pages/Index";
 import Experience from "./pages/Experience";
+import ExperienceGallery from "./pages/ExperienceGallery";
 import About from "./pages/About";
 import Reviews from "./pages/Reviews";
 import Contact from "./pages/Contact";
