@@ -236,15 +236,3 @@ function json(payload: unknown, status = 200) {
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 }
-
-    const msg = e instanceof Error ? e.message : String(e);
-    return json({ error: msg }, 500);
-  }
-});
-
-function json(payload: unknown, status = 200) {
-  return new Response(JSON.stringify(payload), {
-    status,
-    headers: { ...corsHeaders, "Content-Type": "application/json" },
-  });
-}
