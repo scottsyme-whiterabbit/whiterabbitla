@@ -806,6 +806,27 @@ export type Database = {
         }
         Relationships: []
       }
+      gallery_order: {
+        Row: {
+          ref: string
+          sort_order: number
+          source: string
+          updated_at: string
+        }
+        Insert: {
+          ref: string
+          sort_order?: number
+          source: string
+          updated_at?: string
+        }
+        Update: {
+          ref?: string
+          sort_order?: number
+          source?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       gallery_uploads: {
         Row: {
           created_at: string
