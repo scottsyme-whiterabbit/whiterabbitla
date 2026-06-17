@@ -155,6 +155,17 @@ Deno.serve(async (req) => {
         if (error) return json({ error: error.message }, 500);
         return json({ ok: true });
       }
+      if (op === "toggle_gallery") {
+        const id = String(body.id ?? "");
+        const is_gallery = Boolean(body.is_gallery);
+        if (!id) return json({ error: "id required" }, 400);
+        const { error } = await sb
+          .from("drive_photo_folders")
+          .update({ is_gallery })
+          .eq("id", id);
+        if (error) return json({ error: error.message }, 500);
+        return json({ ok: true, is_gallery });
+      }
       return json({ error: "unknown op" }, 400);
     }
 
