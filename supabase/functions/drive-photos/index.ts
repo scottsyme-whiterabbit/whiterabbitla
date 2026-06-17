@@ -77,6 +77,13 @@ Deno.serve(async (req) => {
       if (gErr) return json({ error: gErr.message }, 500);
       const items: Array<{ id: string; name: string; mimeType: string; folder: string }> = [];
       for (const f of gFolders ?? []) {
+        // Per-folder picks: if any rows exist, restrict to those file ids
+        const { data: picks } = await sb
+          .from("drive_gallery_picks")
+          .select("file_id,file_name,mime_type")
+          .eq("folder_id", f.folder_id);
+        const pickSet = new Set((picks ?? []).map((p) => p.file_id));
+
         const q = encodeURIComponent(
           `'${f.folder_id}' in parents and (mimeType contains 'image/' or mimeType contains 'video/') and trashed=false`,
         );
@@ -88,11 +95,13 @@ Deno.serve(async (req) => {
         const body = await r.json();
         if (r.ok && Array.isArray(body.files)) {
           for (const file of body.files) {
+            if (pickSet.size > 0 && !pickSet.has(file.id)) continue;
             items.push({ id: file.id, name: file.name, mimeType: file.mimeType, folder: f.label });
           }
         }
       }
       return new Response(JSON.stringify({ items }), {
+
         headers: {
           ...corsHeaders,
           "Content-Type": "application/json",
