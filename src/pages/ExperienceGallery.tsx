@@ -98,30 +98,28 @@ const ExperienceGallery = () => {
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 [column-fill:_balance]">
             {items.map((item) => {
               const isVideo = item.mimeType.startsWith("video/");
+              const w = item.width && item.width > 0 ? item.width : 4;
+              const h = item.height && item.height > 0 ? item.height : 5;
               return (
                 <button
                   key={item.key}
                   type="button"
                   onClick={() => setLightbox(item)}
                   className="group relative mb-4 block w-full break-inside-avoid overflow-hidden bg-forest-dark/5"
+                  style={{ aspectRatio: `${w} / ${h}` }}
                   aria-label={`Open ${item.name}`}
                 >
                   {isVideo ? (
-                    <video
-                      src={item.src}
-                      preload="metadata"
-                      muted
-                      loop
-                      autoPlay
-                      playsInline
-                      className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.02]"
-                    />
+                    <TileVideo src={item.src} />
                   ) : (
                     <img
                       src={item.src}
                       alt={item.name}
                       loading="lazy"
-                      className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.02]"
+                      decoding="async"
+                      width={w}
+                      height={h}
+                      className="w-full h-full object-cover block transition-transform duration-500 group-hover:scale-[1.02]"
                     />
                   )}
                 </button>
