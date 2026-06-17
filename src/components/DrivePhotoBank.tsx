@@ -412,13 +412,7 @@ export function DrivePhotoBank({
           </div>
         </div>
       )}
-
-                ))}
-              </ul>
-            )}
-          </div>
-        </details>
-      )}
     </div>
   );
 }
+
