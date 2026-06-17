@@ -10,6 +10,7 @@ export interface DriveFolder {
   folder_id: string;
   label: string;
   sort_order: number;
+  is_gallery?: boolean;
 }
 
 export interface DriveFile {
