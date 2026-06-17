@@ -191,11 +191,52 @@ Deno.serve(async (req) => {
         if (error) return json({ error: error.message }, 500);
         return json({ ok: true, is_gallery });
       }
+      if (op === "pick_toggle") {
+        const folder_id = String(body.folder_id ?? "");
+        const file_id = String(body.file_id ?? "");
+        const file_name = body.file_name ? String(body.file_name) : null;
+        const mime_type = body.mime_type ? String(body.mime_type) : null;
+        const selected = Boolean(body.selected);
+        if (!folder_id || !file_id) return json({ error: "folder_id and file_id required" }, 400);
+        if (selected) {
+          const { error } = await sb
+            .from("drive_gallery_picks")
+            .upsert({ folder_id, file_id, file_name, mime_type }, { onConflict: "folder_id,file_id" });
+          if (error) return json({ error: error.message }, 500);
+        } else {
+          const { error } = await sb
+            .from("drive_gallery_picks")
+            .delete()
+            .eq("folder_id", folder_id)
+            .eq("file_id", file_id);
+          if (error) return json({ error: error.message }, 500);
+        }
+        return json({ ok: true, selected });
+      }
+      if (op === "pick_clear") {
+        const folder_id = String(body.folder_id ?? "");
+        if (!folder_id) return json({ error: "folder_id required" }, 400);
+        const { error } = await sb.from("drive_gallery_picks").delete().eq("folder_id", folder_id);
+        if (error) return json({ error: error.message }, 500);
+        return json({ ok: true });
+      }
       return json({ error: "unknown op" }, 400);
     }
 
     return json({ error: "not found" }, 404);
   } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return json({ error: msg }, 500);
+  }
+});
+
+function json(payload: unknown, status = 200) {
+  return new Response(JSON.stringify(payload), {
+    status,
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
     const msg = e instanceof Error ? e.message : String(e);
     return json({ error: msg }, 500);
   }
