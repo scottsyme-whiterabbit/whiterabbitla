@@ -965,6 +965,13 @@ const SocialGenerator = () => {
                 />
               </div>
 
+              {/* Public gallery manager (uploads + ordering) */}
+              <div>
+                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Public gallery</label>
+                <GalleryManager password={password} />
+              </div>
+
+
               {/* Generate */}
               <button
                 onClick={generateComposite}
