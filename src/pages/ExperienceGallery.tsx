@@ -95,7 +95,7 @@ const ExperienceGallery = () => {
         )}
 
         {hasItems && (
-          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 [column-fill:_balance]">
+          <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6 gap-2 sm:gap-2.5 [column-fill:_balance]">
             {items.map((item) => {
               const isVideo = item.mimeType.startsWith("video/");
               const w = item.width && item.width > 0 ? item.width : 4;
@@ -105,7 +105,7 @@ const ExperienceGallery = () => {
                   key={item.key}
                   type="button"
                   onClick={() => setLightbox(item)}
-                  className="group relative mb-4 block w-full break-inside-avoid overflow-hidden bg-forest-dark/5"
+                  className="group relative mb-2 sm:mb-2.5 block w-full break-inside-avoid overflow-hidden bg-forest-dark/5 ring-1 ring-forest-dark/5 hover:ring-forest-dark/20 hover:shadow-[0_10px_30px_-12px_rgba(34,61,52,0.35)] transition-all duration-500"
                   style={{ aspectRatio: `${w} / ${h}` }}
                   aria-label={`Open ${item.name}`}
                 >
@@ -119,8 +119,15 @@ const ExperienceGallery = () => {
                       decoding="async"
                       width={w}
                       height={h}
-                      className="w-full h-full object-cover block transition-transform duration-500 group-hover:scale-[1.02]"
+                      className="w-full h-full object-cover block transition-transform duration-700 group-hover:scale-[1.04]"
                     />
+                  )}
+                  {/* subtle vignette + film tag on hover */}
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-forest-dark/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  {isVideo && (
+                    <div className="absolute bottom-1.5 right-1.5 bg-forest-dark/70 text-cream text-[9px] tracking-[0.15em] uppercase px-1.5 py-0.5">
+                      Film
+                    </div>
                   )}
                 </button>
               );
