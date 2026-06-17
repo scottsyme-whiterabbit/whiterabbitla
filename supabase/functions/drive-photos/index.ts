@@ -172,10 +172,11 @@ Deno.serve(async (req) => {
           name: u.file_name ?? "upload",
           mimeType: u.mime_type ?? "application/octet-stream",
           folder: "Uploads",
-          sort_order: u.sort_order ?? 0,
+          sort_order: orderIndex.get(`upload:${u.id}`) ?? 1000000,
           created_at: u.created_at ?? "",
         });
       }
+
 
       items.sort((a, b) => {
         if (a.sort_order !== b.sort_order) return a.sort_order - b.sort_order;
