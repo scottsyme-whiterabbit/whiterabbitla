@@ -12,6 +12,8 @@ interface GalleryItem {
   name: string;
   mimeType: string;
   folder: string;
+  width?: number;
+  height?: number;
 }
 
 
