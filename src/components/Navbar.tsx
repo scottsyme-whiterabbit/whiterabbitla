@@ -7,9 +7,9 @@ import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 
 const navLinks = [
   { to: "/experience", label: "Experience" },
-  { to: "/experience/gallery", label: "Gallery" },
   { to: "/about", label: "About" },
   { to: "/reviews", label: "Reviews" },
+  { to: "/experience/gallery", label: "Gallery" },
   { to: "/areas", label: "Service Areas" },
   { to: "/blog", label: "Blog" },
   { to: "/contact", label: "Contact" },

@@ -67,7 +67,24 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Public: aggregated gallery feed (images + videos) from folders flagged is_gallery
+    // Public: stream a previously-uploaded gallery file from private storage
+    if (req.method === "GET" && action === "upload") {
+      const path = url.searchParams.get("path");
+      if (!path) return json({ error: "path required" }, 400);
+      const { data: blob, error } = await sb.storage.from("gallery-uploads").download(path);
+      if (error || !blob) return json({ error: error?.message ?? "not found" }, 404);
+      const ct = blob.type || "application/octet-stream";
+      return new Response(blob.stream(), {
+        headers: {
+          ...corsHeaders,
+          "Content-Type": ct,
+          "Accept-Ranges": "bytes",
+          "Cache-Control": "public, max-age=3600",
+        },
+      });
+    }
+
+    // Public: aggregated gallery feed — drive picks + uploads, merged by sort_order
     if (req.method === "GET" && action === "gallery") {
       const { data: gFolders, error: gErr } = await sb
         .from("drive_photo_folders")
@@ -75,15 +92,44 @@ Deno.serve(async (req) => {
         .eq("is_gallery", true)
         .order("sort_order", { ascending: true });
       if (gErr) return json({ error: gErr.message }, 500);
-      const items: Array<{ id: string; name: string; mimeType: string; folder: string }> = [];
-      for (const f of gFolders ?? []) {
-        // Per-folder picks: if any rows exist, restrict to those file ids
-        const { data: picks } = await sb
-          .from("drive_gallery_picks")
-          .select("file_id,file_name,mime_type")
-          .eq("folder_id", f.folder_id);
-        const pickSet = new Set((picks ?? []).map((p) => p.file_id));
 
+      type Item = {
+        key: string;
+        source: "drive" | "upload";
+        ref: string;
+        src: string;
+        name: string;
+        mimeType: string;
+        folder: string;
+        sort_order: number;
+        created_at: string;
+      };
+      const items: Item[] = [];
+      const fnBase = new URL(req.url);
+      const selfBase = `${fnBase.origin}${fnBase.pathname}`;
+
+      // Build pick metadata across all folders so we know which drive files are picked
+      const { data: allPicks } = await sb
+        .from("drive_gallery_picks")
+        .select("folder_id,file_id,created_at");
+      const pickByFolder = new Map<string, Set<string>>();
+      for (const p of allPicks ?? []) {
+        if (!pickByFolder.has(p.folder_id)) pickByFolder.set(p.folder_id, new Set());
+        pickByFolder.get(p.folder_id)!.add(p.file_id);
+      }
+
+      // Load explicit ordering rows
+      const { data: orderRows } = await sb
+        .from("gallery_order")
+        .select("source,ref,sort_order");
+      const orderIndex = new Map<string, number>();
+      for (const o of orderRows ?? []) {
+        orderIndex.set(`${o.source}:${o.ref}`, o.sort_order ?? 0);
+      }
+
+
+      for (const f of gFolders ?? []) {
+        const pickSet = pickByFolder.get(f.folder_id) ?? new Set<string>();
         const q = encodeURIComponent(
           `'${f.folder_id}' in parents and (mimeType contains 'image/' or mimeType contains 'video/') and trashed=false`,
         );
@@ -96,19 +142,57 @@ Deno.serve(async (req) => {
         if (r.ok && Array.isArray(body.files)) {
           for (const file of body.files) {
             if (pickSet.size > 0 && !pickSet.has(file.id)) continue;
-            items.push({ id: file.id, name: file.name, mimeType: file.mimeType, folder: f.label });
+            const meta = pickIndex.get(`${f.folder_id}:${file.id}`);
+            items.push({
+              key: `drive:${file.id}`,
+              source: "drive",
+              ref: file.id,
+              src: `${selfBase}?action=image&fileId=${encodeURIComponent(file.id)}`,
+              name: file.name,
+              mimeType: file.mimeType,
+              folder: f.label,
+              sort_order: orderIndex.get(`drive:${file.id}`) ?? 1000000,
+              created_at: file.modifiedTime ?? "",
+            });
+
           }
         }
       }
-      return new Response(JSON.stringify({ items }), {
 
+      // Uploads
+      const { data: uploads } = await sb
+        .from("gallery_uploads")
+        .select("id,storage_path,file_name,mime_type,sort_order,created_at");
+      for (const u of uploads ?? []) {
+        items.push({
+          key: `upload:${u.id}`,
+          source: "upload",
+          ref: u.id,
+          src: `${selfBase}?action=upload&path=${encodeURIComponent(u.storage_path)}`,
+          name: u.file_name ?? "upload",
+          mimeType: u.mime_type ?? "application/octet-stream",
+          folder: "Uploads",
+          sort_order: orderIndex.get(`upload:${u.id}`) ?? 1000000,
+          created_at: u.created_at ?? "",
+        });
+      }
+
+
+      items.sort((a, b) => {
+        if (a.sort_order !== b.sort_order) return a.sort_order - b.sort_order;
+        return (b.created_at || "").localeCompare(a.created_at || "");
+      });
+
+      return new Response(JSON.stringify({ items }), {
         headers: {
           ...corsHeaders,
           "Content-Type": "application/json",
-          "Cache-Control": "public, max-age=300",
+          "Cache-Control": "public, max-age=60",
         },
       });
     }
+
+
 
     // Admin-only beyond this point
     if (!isAdmin(req)) return json({ error: "unauthorized" }, 401);
@@ -220,8 +304,78 @@ Deno.serve(async (req) => {
         if (error) return json({ error: error.message }, 500);
         return json({ ok: true });
       }
+      if (op === "upload_url") {
+        const file_name = String(body.file_name ?? "").trim();
+        const mime_type = String(body.mime_type ?? "").trim();
+        if (!file_name) return json({ error: "file_name required" }, 400);
+        const ext = file_name.includes(".") ? file_name.split(".").pop() : "bin";
+        const safe = file_name.replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 80);
+        const path = `${crypto.randomUUID()}-${safe}`;
+        const { data, error } = await sb.storage
+          .from("gallery-uploads")
+          .createSignedUploadUrl(path);
+        if (error || !data) return json({ error: error?.message ?? "sign failed" }, 500);
+        return json({ path, token: data.token, signedUrl: data.signedUrl, mime_type });
+      }
+      if (op === "upload_register") {
+        const storage_path = String(body.path ?? "").trim();
+        const file_name = String(body.file_name ?? "").trim() || null;
+        const mime_type = String(body.mime_type ?? "").trim() || null;
+        const size_bytes = Number(body.size_bytes ?? 0) || null;
+        if (!storage_path) return json({ error: "path required" }, 400);
+        // Place at end: max(sort_order)+1
+        const { data: maxRow } = await sb
+          .from("gallery_uploads")
+          .select("sort_order")
+          .order("sort_order", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        const sort_order = (maxRow?.sort_order ?? 0) + 1;
+        const { data, error } = await sb
+          .from("gallery_uploads")
+          .insert({ storage_path, file_name, mime_type, size_bytes, sort_order })
+          .select()
+          .single();
+        if (error) return json({ error: error.message }, 500);
+        return json({ upload: data });
+      }
+      if (op === "upload_remove") {
+        const id = String(body.id ?? "");
+        if (!id) return json({ error: "id required" }, 400);
+        const { data: row } = await sb
+          .from("gallery_uploads")
+          .select("storage_path")
+          .eq("id", id)
+          .maybeSingle();
+        if (row?.storage_path) {
+          await sb.storage.from("gallery-uploads").remove([row.storage_path]);
+        }
+        const { error } = await sb.from("gallery_uploads").delete().eq("id", id);
+        if (error) return json({ error: error.message }, 500);
+        return json({ ok: true });
+      }
+      if (op === "reorder") {
+        const items = Array.isArray(body.items) ? body.items : [];
+        const rows = items
+          .map((it: { source?: string; ref?: string; sort_order?: number }) => ({
+            source: String(it.source ?? ""),
+            ref: String(it.ref ?? ""),
+            sort_order: Number(it.sort_order ?? 0),
+            updated_at: new Date().toISOString(),
+          }))
+          .filter((r: { source: string; ref: string }) => r.source && r.ref);
+        if (rows.length > 0) {
+          const { error } = await sb
+            .from("gallery_order")
+            .upsert(rows, { onConflict: "source,ref" });
+          if (error) return json({ error: error.message }, 500);
+        }
+        return json({ ok: true });
+      }
+
       return json({ error: "unknown op" }, 400);
     }
+
 
     return json({ error: "not found" }, 404);
   } catch (e) {

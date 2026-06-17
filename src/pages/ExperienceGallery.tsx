@@ -1,16 +1,19 @@
-import { useEffect, useMemo, useState } from "react";
-import { Loader2, Play, X } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Loader2, X } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 const FN = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/drive-photos`;
-const MEDIA = (fileId: string) => `${FN}?action=image&fileId=${encodeURIComponent(fileId)}`;
 
 interface GalleryItem {
-  id: string;
+  key: string;
+  source: "drive" | "upload";
+  ref: string;
+  src: string;
   name: string;
   mimeType: string;
   folder: string;
 }
+
 
 const ExperienceGallery = () => {
   usePageMeta({
@@ -95,30 +98,25 @@ const ExperienceGallery = () => {
               const isVideo = item.mimeType.startsWith("video/");
               return (
                 <button
-                  key={item.id}
+                  key={item.key}
                   type="button"
                   onClick={() => setLightbox(item)}
                   className="group relative mb-4 block w-full break-inside-avoid overflow-hidden bg-forest-dark/5"
                   aria-label={`Open ${item.name}`}
                 >
                   {isVideo ? (
-                    <div className="relative">
-                      <video
-                        src={MEDIA(item.id)}
-                        preload="metadata"
-                        muted
-                        playsInline
-                        className="w-full h-auto block"
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center bg-forest-dark/20 group-hover:bg-forest-dark/30 transition-colors">
-                        <div className="w-14 h-14 rounded-full bg-cream/90 flex items-center justify-center shadow-lg">
-                          <Play className="w-6 h-6 text-forest-dark fill-forest-dark ml-0.5" />
-                        </div>
-                      </div>
-                    </div>
+                    <video
+                      src={item.src}
+                      preload="metadata"
+                      muted
+                      loop
+                      autoPlay
+                      playsInline
+                      className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.02]"
+                    />
                   ) : (
                     <img
-                      src={MEDIA(item.id)}
+                      src={item.src}
                       alt={item.name}
                       loading="lazy"
                       className="w-full h-auto block transition-transform duration-500 group-hover:scale-[1.02]"
@@ -138,7 +136,7 @@ const ExperienceGallery = () => {
         >
           <button
             type="button"
-            className="absolute top-6 right-6 text-cream/80 hover:text-cream"
+            className="absolute top-6 right-6 text-cream/80 hover:text-cream z-10"
             onClick={() => setLightbox(null)}
             aria-label="Close"
           >
@@ -149,16 +147,10 @@ const ExperienceGallery = () => {
             onClick={(e) => e.stopPropagation()}
           >
             {lightboxIsVideo ? (
-              <video
-                src={MEDIA(lightbox.id)}
-                controls
-                autoPlay
-                playsInline
-                className="max-h-[88vh] max-w-full"
-              />
+              <LightboxVideo src={lightbox.src} />
             ) : (
               <img
-                src={MEDIA(lightbox.id)}
+                src={lightbox.src}
                 alt={lightbox.name}
                 className="max-h-[88vh] max-w-full object-contain"
               />
@@ -166,8 +158,33 @@ const ExperienceGallery = () => {
           </div>
         </div>
       )}
+
     </main>
   );
 };
 
+function LightboxVideo({ src }: { src: string }) {
+  const ref = useRef<HTMLVideoElement | null>(null);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    v.currentTime = 0;
+    v.muted = false;
+    v.volume = 1;
+    const p = v.play();
+    if (p && typeof p.catch === "function") p.catch(() => {});
+  }, []);
+  return (
+    <video
+      ref={ref}
+      src={src}
+      controls
+      autoPlay
+      playsInline
+      className="max-h-[88vh] max-w-full"
+    />
+  );
+}
+
 export default ExperienceGallery;
+

@@ -806,6 +806,57 @@ export type Database = {
         }
         Relationships: []
       }
+      gallery_order: {
+        Row: {
+          ref: string
+          sort_order: number
+          source: string
+          updated_at: string
+        }
+        Insert: {
+          ref: string
+          sort_order?: number
+          source: string
+          updated_at?: string
+        }
+        Update: {
+          ref?: string
+          sort_order?: number
+          source?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      gallery_uploads: {
+        Row: {
+          created_at: string
+          file_name: string | null
+          id: string
+          mime_type: string | null
+          size_bytes: number | null
+          sort_order: number
+          storage_path: string
+        }
+        Insert: {
+          created_at?: string
+          file_name?: string | null
+          id?: string
+          mime_type?: string | null
+          size_bytes?: number | null
+          sort_order?: number
+          storage_path: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string | null
+          id?: string
+          mime_type?: string | null
+          size_bytes?: number | null
+          sort_order?: number
+          storage_path?: string
+        }
+        Relationships: []
+      }
       lead_magnet_signups: {
         Row: {
           created_at: string

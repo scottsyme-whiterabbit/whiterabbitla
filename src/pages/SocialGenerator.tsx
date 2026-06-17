@@ -6,6 +6,7 @@ import AnimatedSection from "@/components/AnimatedSection";
 import { toPng } from "html-to-image";
 import wrSymbol from "@/assets/wr-symbol.png";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
+import { GalleryManager } from "@/components/GalleryManager";
 import wrLogo from "@/assets/wr-primary-logo.png";
 import wrSecondaryLogo from "@/assets/wr-secondary-logo.png";
 import CarouselGenerator from "@/components/CarouselGenerator";
@@ -964,6 +965,13 @@ const SocialGenerator = () => {
                   }}
                 />
               </div>
+
+              {/* Public gallery manager (uploads + ordering) */}
+              <div>
+                <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">Public gallery</label>
+                <GalleryManager password={password} />
+              </div>
+
 
               {/* Generate */}
               <button
