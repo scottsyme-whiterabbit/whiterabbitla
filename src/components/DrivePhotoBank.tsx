@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Loader2, RefreshCw, Plus, Trash2 } from "lucide-react";
+import { Loader2, RefreshCw, Plus, Trash2, ImageIcon, X } from "lucide-react";
 import { toast } from "sonner";
 
 const FN = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/drive-photos`;
