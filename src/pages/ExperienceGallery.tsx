@@ -186,5 +186,56 @@ function LightboxVideo({ src }: { src: string }) {
   );
 }
 
+/**
+ * Tile video: defers loading until near the viewport, only plays when actually
+ * visible, and pauses when scrolled away. Keeps the grid smooth and saves
+ * bandwidth so large galleries feel seamless.
+ */
+function TileVideo({ src }: { src: string }) {
+  const ref = useRef<HTMLVideoElement | null>(null);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    // Phase 1: warm up — when near viewport, set src so metadata can preload
+    const warm = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setReady(true);
+          warm.disconnect();
+        }
+      },
+      { rootMargin: "300px" },
+    );
+    warm.observe(v);
+    // Phase 2: play/pause based on actual visibility
+    const play = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) v.play().catch(() => {});
+        else v.pause();
+      },
+      { threshold: 0.25 },
+    );
+    play.observe(v);
+    return () => {
+      warm.disconnect();
+      play.disconnect();
+    };
+  }, []);
+
+  return (
+    <video
+      ref={ref}
+      src={ready ? src : undefined}
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      className="w-full h-full object-cover block transition-transform duration-500 group-hover:scale-[1.02]"
+    />
+  );
+}
+
 export default ExperienceGallery;
 
