@@ -626,6 +626,7 @@ export type Database = {
           created_at: string
           folder_id: string
           id: string
+          is_gallery: boolean
           label: string
           sort_order: number
         }
@@ -633,6 +634,7 @@ export type Database = {
           created_at?: string
           folder_id: string
           id?: string
+          is_gallery?: boolean
           label: string
           sort_order?: number
         }
@@ -640,6 +642,7 @@ export type Database = {
           created_at?: string
           folder_id?: string
           id?: string
+          is_gallery?: boolean
           label?: string
           sort_order?: number
         }
