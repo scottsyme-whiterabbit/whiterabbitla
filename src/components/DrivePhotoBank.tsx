@@ -4,6 +4,19 @@ import { toast } from "sonner";
 
 const FN = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/drive-photos`;
 const IMG = (fileId: string) => `${FN}?action=image&fileId=${encodeURIComponent(fileId)}`;
+// Rewrite Drive thumbnailLink to a small size for fast picker rendering.
+const THUMB = (file: DriveFile, size = 240): string => {
+  const link = file.thumbnailLink;
+  if (link) return link.replace(/=s\d+(-[a-z])?$/, `=s${size}`);
+  return IMG(file.id);
+};
+const onThumbErr = (e: React.SyntheticEvent<HTMLImageElement>, fileId: string) => {
+  const img = e.currentTarget;
+  if (!img.dataset.fallback) {
+    img.dataset.fallback = "1";
+    img.src = IMG(fileId);
+  }
+};
 
 export interface DriveFolder {
   id: string;
