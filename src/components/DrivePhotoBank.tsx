@@ -306,6 +306,16 @@ export function DrivePhotoBank({
                       />
                       Public gallery
                     </label>
+                    {f.is_gallery && (
+                      <button
+                        type="button"
+                        onClick={() => openPicker(f)}
+                        className="text-[10px] uppercase tracking-wider px-2 py-1 border border-forest-dark/30 hover:border-forest-dark flex items-center gap-1 whitespace-nowrap"
+                        title="Choose specific items from this folder"
+                      >
+                        <ImageIcon className="w-3 h-3" /> Choose items
+                      </button>
+                    )}
                     <button
                       type="button"
                       onClick={() => removeFolder(f.id, f.label)}
@@ -315,6 +325,94 @@ export function DrivePhotoBank({
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </details>
+      )}
+
+      {/* Per-folder picker modal */}
+      {pickerFolder && (
+        <div className="fixed inset-0 z-[100] bg-forest-dark/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setPickerFolder(null)}>
+          <div className="bg-cream max-w-5xl w-full max-h-[90vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-5 py-3 border-b border-forest-dark/15">
+              <div>
+                <div className="text-xs uppercase tracking-wider text-forest-dark/60">Gallery items</div>
+                <div className="font-ogg text-xl text-forest-dark">{pickerFolder.label}</div>
+                <div className="text-[11px] text-forest-dark/60 mt-0.5">
+                  {pickerSelected.size === 0
+                    ? "No picks yet — the entire folder will show on the gallery."
+                    : `${pickerSelected.size} item${pickerSelected.size === 1 ? "" : "s"} will show on the gallery.`}
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                {pickerSelected.size > 0 && (
+                  <button
+                    type="button"
+                    onClick={clearPicks}
+                    className="text-xs px-3 py-1.5 border border-forest-dark/30 hover:border-forest-dark"
+                  >
+                    Clear picks
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setPickerFolder(null)}
+                  className="p-1.5 hover:bg-forest-dark/10"
+                  aria-label="Close"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4">
+              {pickerLoading && (
+                <div className="text-center text-xs text-forest-dark/60 py-10">
+                  <Loader2 className="w-4 h-4 animate-spin mx-auto mb-2" /> Loading…
+                </div>
+              )}
+              {!pickerLoading && pickerFiles.length === 0 && (
+                <div className="text-center text-xs text-forest-dark/60 py-10">No media in this folder.</div>
+              )}
+              {!pickerLoading && pickerFiles.length > 0 && (
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                  {pickerFiles.map((file) => {
+                    const selected = pickerSelected.has(file.id);
+                    const isVideo = file.mimeType?.startsWith("video/");
+                    return (
+                      <button
+                        key={file.id}
+                        type="button"
+                        onClick={() => togglePick(file)}
+                        title={file.name}
+                        className={`relative aspect-square overflow-hidden border-2 transition-all ${
+                          selected
+                            ? "border-gold ring-2 ring-gold/30"
+                            : "border-transparent hover:border-forest-dark/40 opacity-90 hover:opacity-100"
+                        }`}
+                      >
+                        <img src={IMG(file.id)} alt={file.name} loading="lazy" className="w-full h-full object-cover bg-forest-dark/10" />
+                        {isVideo && (
+                          <div className="absolute bottom-1 left-1 bg-forest-dark/80 text-cream text-[9px] uppercase tracking-wider px-1.5 py-0.5">
+                            Video
+                          </div>
+                        )}
+                        {selected && (
+                          <div className="absolute top-1 right-1 bg-gold text-forest-dark w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold">
+                            ✓
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
                 ))}
               </ul>
             )}
