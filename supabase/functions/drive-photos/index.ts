@@ -112,8 +112,7 @@ Deno.serve(async (req) => {
         height?: number;
       };
       const items: Item[] = [];
-      const fnBase = new URL(req.url);
-      const selfBase = `${fnBase.origin}${fnBase.pathname}`;
+      const selfBase = `${SUPABASE_URL}/functions/v1/drive-photos`;
 
       // Build pick metadata across all folders so we know which drive files are picked
       const { data: allPicks } = await sb
