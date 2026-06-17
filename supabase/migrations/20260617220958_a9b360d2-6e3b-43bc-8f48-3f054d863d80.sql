@@ -1,0 +1,1 @@
+ALTER TABLE public.drive_photo_folders ADD COLUMN IF NOT EXISTS is_gallery boolean NOT NULL DEFAULT false;
