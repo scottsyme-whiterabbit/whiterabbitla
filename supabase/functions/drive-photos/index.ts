@@ -151,9 +151,10 @@ Deno.serve(async (req) => {
               name: file.name,
               mimeType: file.mimeType,
               folder: f.label,
-              sort_order: meta?.sort_order ?? 0,
+              sort_order: orderIndex.get(`drive:${file.id}`) ?? 1000000,
               created_at: file.modifiedTime ?? "",
             });
+
           }
         }
       }
