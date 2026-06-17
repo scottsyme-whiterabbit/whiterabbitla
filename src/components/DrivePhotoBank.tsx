@@ -124,6 +124,73 @@ export function DrivePhotoBank({
     loadFolders();
   };
 
+  // ---------- per-folder item picker (gallery selection) ----------
+  const [pickerFolder, setPickerFolder] = useState<DriveFolder | null>(null);
+  const [pickerFiles, setPickerFiles] = useState<DriveFile[]>([]);
+  const [pickerSelected, setPickerSelected] = useState<Set<string>>(new Set());
+  const [pickerLoading, setPickerLoading] = useState(false);
+
+  const openPicker = async (folder: DriveFolder) => {
+    setPickerFolder(folder);
+    setPickerFiles([]);
+    setPickerSelected(new Set());
+    setPickerLoading(true);
+    try {
+      const [filesRes, picksRes] = await Promise.all([
+        fetch(`${FN}?action=list&includeVideos=1&folderId=${encodeURIComponent(folder.folder_id)}`, { headers }),
+        fetch(`${FN}?action=picks&folderId=${encodeURIComponent(folder.folder_id)}`, { headers }),
+      ]);
+      const filesJ = await filesRes.json();
+      const picksJ = await picksRes.json();
+      if (!filesRes.ok) throw new Error(filesJ.error || "load failed");
+      setPickerFiles(filesJ.files || []);
+      setPickerSelected(new Set<string>(picksJ.file_ids || []));
+    } catch (e) {
+      toast.error(`Picker: ${e instanceof Error ? e.message : "failed"}`);
+    } finally {
+      setPickerLoading(false);
+    }
+  };
+  const togglePick = async (file: DriveFile) => {
+    if (!pickerFolder) return;
+    const willSelect = !pickerSelected.has(file.id);
+    // optimistic
+    const next = new Set(pickerSelected);
+    willSelect ? next.add(file.id) : next.delete(file.id);
+    setPickerSelected(next);
+    const r = await fetch(FN, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        op: "pick_toggle",
+        folder_id: pickerFolder.folder_id,
+        file_id: file.id,
+        file_name: file.name,
+        mime_type: file.mimeType,
+        selected: willSelect,
+      }),
+    });
+    if (!r.ok) {
+      const j = await r.json().catch(() => ({}));
+      toast.error(j.error || "Update failed");
+      // revert
+      const rev = new Set(pickerSelected);
+      setPickerSelected(rev);
+    }
+  };
+  const clearPicks = async () => {
+    if (!pickerFolder) return;
+    if (!confirm("Clear all picks for this folder? The whole folder will then show on the gallery.")) return;
+    const r = await fetch(FN, {
+      method: "POST", headers,
+      body: JSON.stringify({ op: "pick_clear", folder_id: pickerFolder.folder_id }),
+    });
+    if (!r.ok) { toast.error("Clear failed"); return; }
+    setPickerSelected(new Set());
+    toast.success("Cleared — whole folder will show.");
+  };
+
+
   return (
     <div className="space-y-3">
       {/* Folder tabs */}
