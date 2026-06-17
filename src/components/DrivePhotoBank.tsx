@@ -112,6 +112,17 @@ export function DrivePhotoBank({
     if (folders.find(f => f.id === id)?.folder_id === activeFolder) setActiveFolder(null);
     loadFolders();
   };
+  const toggleGallery = async (id: string, next: boolean) => {
+    const r = await fetch(FN, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ op: "toggle_gallery", id, is_gallery: next }),
+    });
+    const j = await r.json();
+    if (!r.ok) { toast.error(j.error || "Update failed"); return; }
+    toast.success(next ? "Added to public gallery" : "Removed from public gallery");
+    loadFolders();
+  };
 
   return (
     <div className="space-y-3">
