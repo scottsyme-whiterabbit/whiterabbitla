@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Loader2, Play, X } from "lucide-react";
-import usePageMeta from "@/hooks/usePageMeta";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const FN = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/drive-photos`;
 const MEDIA = (fileId: string) => `${FN}?action=image&fileId=${encodeURIComponent(fileId)}`;
