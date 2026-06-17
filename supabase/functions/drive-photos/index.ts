@@ -297,8 +297,77 @@ Deno.serve(async (req) => {
         if (error) return json({ error: error.message }, 500);
         return json({ ok: true });
       }
+      if (op === "upload_url") {
+        const file_name = String(body.file_name ?? "").trim();
+        const mime_type = String(body.mime_type ?? "").trim();
+        if (!file_name) return json({ error: "file_name required" }, 400);
+        const ext = file_name.includes(".") ? file_name.split(".").pop() : "bin";
+        const safe = file_name.replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 80);
+        const path = `${crypto.randomUUID()}-${safe}`;
+        const { data, error } = await sb.storage
+          .from("gallery-uploads")
+          .createSignedUploadUrl(path);
+        if (error || !data) return json({ error: error?.message ?? "sign failed" }, 500);
+        return json({ path, token: data.token, signedUrl: data.signedUrl, mime_type });
+      }
+      if (op === "upload_register") {
+        const storage_path = String(body.path ?? "").trim();
+        const file_name = String(body.file_name ?? "").trim() || null;
+        const mime_type = String(body.mime_type ?? "").trim() || null;
+        const size_bytes = Number(body.size_bytes ?? 0) || null;
+        if (!storage_path) return json({ error: "path required" }, 400);
+        // Place at end: max(sort_order)+1
+        const { data: maxRow } = await sb
+          .from("gallery_uploads")
+          .select("sort_order")
+          .order("sort_order", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        const sort_order = (maxRow?.sort_order ?? 0) + 1;
+        const { data, error } = await sb
+          .from("gallery_uploads")
+          .insert({ storage_path, file_name, mime_type, size_bytes, sort_order })
+          .select()
+          .single();
+        if (error) return json({ error: error.message }, 500);
+        return json({ upload: data });
+      }
+      if (op === "upload_remove") {
+        const id = String(body.id ?? "");
+        if (!id) return json({ error: "id required" }, 400);
+        const { data: row } = await sb
+          .from("gallery_uploads")
+          .select("storage_path")
+          .eq("id", id)
+          .maybeSingle();
+        if (row?.storage_path) {
+          await sb.storage.from("gallery-uploads").remove([row.storage_path]);
+        }
+        const { error } = await sb.from("gallery_uploads").delete().eq("id", id);
+        if (error) return json({ error: error.message }, 500);
+        return json({ ok: true });
+      }
+      if (op === "reorder") {
+        const items = Array.isArray(body.items) ? body.items : [];
+        for (const it of items) {
+          const source = String(it.source ?? "");
+          const ref = String(it.ref ?? "");
+          const sort_order = Number(it.sort_order ?? 0);
+          if (!source || !ref) continue;
+          if (source === "drive") {
+            await sb
+              .from("drive_gallery_picks")
+              .update({ sort_order })
+              .eq("file_id", ref);
+          } else if (source === "upload") {
+            await sb.from("gallery_uploads").update({ sort_order }).eq("id", ref);
+          }
+        }
+        return json({ ok: true });
+      }
       return json({ error: "unknown op" }, 400);
     }
+
 
     return json({ error: "not found" }, 404);
   } catch (e) {
