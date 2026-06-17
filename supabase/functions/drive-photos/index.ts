@@ -152,6 +152,7 @@ Deno.serve(async (req) => {
           for (const file of body.files) {
             // Only include files the admin has explicitly picked for this folder.
             if (!pickSet.has(file.id)) continue;
+            const meta = file.imageMediaMetadata ?? file.videoMediaMetadata ?? {};
             items.push({
               key: `drive:${file.id}`,
               source: "drive",
