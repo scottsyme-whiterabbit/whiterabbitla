@@ -356,22 +356,23 @@ Deno.serve(async (req) => {
       }
       if (op === "reorder") {
         const items = Array.isArray(body.items) ? body.items : [];
-        for (const it of items) {
-          const source = String(it.source ?? "");
-          const ref = String(it.ref ?? "");
-          const sort_order = Number(it.sort_order ?? 0);
-          if (!source || !ref) continue;
-          if (source === "drive") {
-            await sb
-              .from("drive_gallery_picks")
-              .update({ sort_order })
-              .eq("file_id", ref);
-          } else if (source === "upload") {
-            await sb.from("gallery_uploads").update({ sort_order }).eq("id", ref);
-          }
+        const rows = items
+          .map((it: { source?: string; ref?: string; sort_order?: number }) => ({
+            source: String(it.source ?? ""),
+            ref: String(it.ref ?? ""),
+            sort_order: Number(it.sort_order ?? 0),
+            updated_at: new Date().toISOString(),
+          }))
+          .filter((r: { source: string; ref: string }) => r.source && r.ref);
+        if (rows.length > 0) {
+          const { error } = await sb
+            .from("gallery_order")
+            .upsert(rows, { onConflict: "source,ref" });
+          if (error) return json({ error: error.message }, 500);
         }
         return json({ ok: true });
       }
+
       return json({ error: "unknown op" }, 400);
     }
 
