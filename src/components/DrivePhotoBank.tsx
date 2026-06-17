@@ -228,8 +228,17 @@ export function DrivePhotoBank({
             {folders.length > 0 && (
               <ul className="text-xs divide-y divide-forest-dark/10">
                 {folders.map((f) => (
-                  <li key={f.id} className="flex items-center justify-between py-1.5">
-                    <span><strong>{f.label}</strong> <span className="text-forest-dark/40 ml-2 font-mono text-[10px]">{f.folder_id}</span></span>
+                  <li key={f.id} className="flex items-center justify-between py-1.5 gap-3">
+                    <span className="min-w-0 flex-1 truncate"><strong>{f.label}</strong> <span className="text-forest-dark/40 ml-2 font-mono text-[10px]">{f.folder_id}</span></span>
+                    <label className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-forest-dark/60 cursor-pointer whitespace-nowrap">
+                      <input
+                        type="checkbox"
+                        checked={!!f.is_gallery}
+                        onChange={(e) => toggleGallery(f.id, e.target.checked)}
+                        className="accent-forest-dark"
+                      />
+                      Public gallery
+                    </label>
                     <button
                       type="button"
                       onClick={() => removeFolder(f.id, f.label)}
