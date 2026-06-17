@@ -67,6 +67,40 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Public: aggregated gallery feed (images + videos) from folders flagged is_gallery
+    if (req.method === "GET" && action === "gallery") {
+      const { data: gFolders, error: gErr } = await sb
+        .from("drive_photo_folders")
+        .select("folder_id,label,sort_order")
+        .eq("is_gallery", true)
+        .order("sort_order", { ascending: true });
+      if (gErr) return json({ error: gErr.message }, 500);
+      const items: Array<{ id: string; name: string; mimeType: string; folder: string }> = [];
+      for (const f of gFolders ?? []) {
+        const q = encodeURIComponent(
+          `'${f.folder_id}' in parents and (mimeType contains 'image/' or mimeType contains 'video/') and trashed=false`,
+        );
+        const fields = encodeURIComponent("files(id,name,mimeType,modifiedTime)");
+        const r = await fetch(
+          `${GATEWAY}/files?q=${q}&fields=${fields}&pageSize=200&orderBy=modifiedTime desc`,
+          { headers: gwHeaders() },
+        );
+        const body = await r.json();
+        if (r.ok && Array.isArray(body.files)) {
+          for (const file of body.files) {
+            items.push({ id: file.id, name: file.name, mimeType: file.mimeType, folder: f.label });
+          }
+        }
+      }
+      return new Response(JSON.stringify({ items }), {
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json",
+          "Cache-Control": "public, max-age=300",
+        },
+      });
+    }
+
     // Admin-only beyond this point
     if (!isAdmin(req)) return json({ error: "unauthorized" }, 401);
 
