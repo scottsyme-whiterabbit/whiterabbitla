@@ -142,7 +142,6 @@ Deno.serve(async (req) => {
         if (r.ok && Array.isArray(body.files)) {
           for (const file of body.files) {
             if (pickSet.size > 0 && !pickSet.has(file.id)) continue;
-            const meta = pickIndex.get(`${f.folder_id}:${file.id}`);
             items.push({
               key: `drive:${file.id}`,
               source: "drive",
