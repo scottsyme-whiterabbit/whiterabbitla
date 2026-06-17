@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Loader2, X } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { useJsonLd } from "@/hooks/useSchemaOrg";
 
 const FN = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/drive-photos`;
 
@@ -22,6 +23,7 @@ const ExperienceGallery = () => {
     title: "Gallery | White Rabbit LA",
     description:
       "A look inside White Rabbit LA — photos and films from private salons, luxury weddings, and corporate events.",
+    path: "/experience/gallery",
   });
 
   const [items, setItems] = useState<GalleryItem[]>([]);
@@ -49,6 +51,38 @@ const ExperienceGallery = () => {
   }, []);
 
   const hasItems = items.length > 0;
+
+  const schemaItems = useMemo(
+    () =>
+      items.slice(0, 24).map((item, index) => ({
+        "@type": item.mimeType.startsWith("video/") ? "VideoObject" : "ImageObject",
+        position: index + 1,
+        name: cleanMediaName(item.name),
+        caption: `${cleanMediaName(item.name)} from ${item.folder} by White Rabbit LA`,
+        contentUrl: item.src,
+        thumbnailUrl: item.src,
+        encodingFormat: item.mimeType,
+        ...(item.width && item.height
+          ? { width: item.width, height: item.height }
+          : {}),
+      })),
+    [items],
+  );
+
+  useJsonLd("gallery-schema", [
+    {
+      "@type": "CollectionPage",
+      name: "White Rabbit LA Gallery",
+      description:
+        "Photos and films from White Rabbit LA private salons, luxury weddings, and corporate events.",
+      url: "https://whiterabbitla.com/experience/gallery",
+      mainEntity: {
+        "@type": "ItemList",
+        numberOfItems: items.length,
+        itemListElement: schemaItems,
+      },
+    },
+  ]);
 
   const lightboxIsVideo = useMemo(
     () => (lightbox ? lightbox.mimeType.startsWith("video/") : false),
@@ -114,7 +148,7 @@ const ExperienceGallery = () => {
                   ) : (
                     <img
                       src={item.src}
-                      alt={item.name}
+                      alt={`${cleanMediaName(item.name)} from ${item.folder} by White Rabbit LA`}
                       loading="lazy"
                       decoding="async"
                       width={w}
@@ -158,7 +192,7 @@ const ExperienceGallery = () => {
             ) : (
               <img
                 src={lightbox.src}
-                alt={lightbox.name}
+                alt={`${cleanMediaName(lightbox.name)} from ${lightbox.folder} by White Rabbit LA`}
                 className="max-h-[88vh] max-w-full object-contain"
               />
             )}
@@ -242,6 +276,14 @@ function TileVideo({ src }: { src: string }) {
       className="w-full h-full object-cover block transition-transform duration-500 group-hover:scale-[1.02]"
     />
   );
+}
+
+function cleanMediaName(name: string) {
+  return name
+    .replace(/\.[a-z0-9]+$/i, "")
+    .replace(/[-_]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim() || "White Rabbit LA event moment";
 }
 
 export default ExperienceGallery;
