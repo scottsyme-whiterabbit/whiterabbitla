@@ -77,6 +77,13 @@ Deno.serve(async (req) => {
       if (gErr) return json({ error: gErr.message }, 500);
       const items: Array<{ id: string; name: string; mimeType: string; folder: string }> = [];
       for (const f of gFolders ?? []) {
+        // Per-folder picks: if any rows exist, restrict to those file ids
+        const { data: picks } = await sb
+          .from("drive_gallery_picks")
+          .select("file_id,file_name,mime_type")
+          .eq("folder_id", f.folder_id);
+        const pickSet = new Set((picks ?? []).map((p) => p.file_id));
+
         const q = encodeURIComponent(
           `'${f.folder_id}' in parents and (mimeType contains 'image/' or mimeType contains 'video/') and trashed=false`,
         );
@@ -88,11 +95,13 @@ Deno.serve(async (req) => {
         const body = await r.json();
         if (r.ok && Array.isArray(body.files)) {
           for (const file of body.files) {
+            if (pickSet.size > 0 && !pickSet.has(file.id)) continue;
             items.push({ id: file.id, name: file.name, mimeType: file.mimeType, folder: f.label });
           }
         }
       }
       return new Response(JSON.stringify({ items }), {
+
         headers: {
           ...corsHeaders,
           "Content-Type": "application/json",
@@ -117,18 +126,34 @@ Deno.serve(async (req) => {
     if (req.method === "GET" && action === "list") {
       const folderId = url.searchParams.get("folderId");
       if (!folderId) return json({ error: "folderId required" }, 400);
+      const includeVideos = url.searchParams.get("includeVideos") === "1";
+      const typeClause = includeVideos
+        ? "(mimeType contains 'image/' or mimeType contains 'video/')"
+        : "mimeType contains 'image/'";
       const q = encodeURIComponent(
-        `'${folderId}' in parents and mimeType contains 'image/' and trashed=false`,
+        `'${folderId}' in parents and ${typeClause} and trashed=false`,
       );
       const fields = encodeURIComponent("files(id,name,mimeType,thumbnailLink,modifiedTime)");
       const r = await fetch(
-        `${GATEWAY}/files?q=${q}&fields=${fields}&pageSize=200&orderBy=modifiedTime desc`,
+        `${GATEWAY}/files?q=${q}&fields=${fields}&pageSize=500&orderBy=modifiedTime desc`,
         { headers: gwHeaders() },
       );
       const body = await r.json();
       if (!r.ok) return json({ error: body }, r.status);
       return json({ files: body.files ?? [] });
     }
+
+    if (req.method === "GET" && action === "picks") {
+      const folderId = url.searchParams.get("folderId");
+      if (!folderId) return json({ error: "folderId required" }, 400);
+      const { data, error } = await sb
+        .from("drive_gallery_picks")
+        .select("file_id")
+        .eq("folder_id", folderId);
+      if (error) return json({ error: error.message }, 500);
+      return json({ file_ids: (data ?? []).map((d) => d.file_id) });
+    }
+
 
     if (req.method === "POST") {
       const body = await req.json().catch(() => ({}));
@@ -165,6 +190,35 @@ Deno.serve(async (req) => {
           .eq("id", id);
         if (error) return json({ error: error.message }, 500);
         return json({ ok: true, is_gallery });
+      }
+      if (op === "pick_toggle") {
+        const folder_id = String(body.folder_id ?? "");
+        const file_id = String(body.file_id ?? "");
+        const file_name = body.file_name ? String(body.file_name) : null;
+        const mime_type = body.mime_type ? String(body.mime_type) : null;
+        const selected = Boolean(body.selected);
+        if (!folder_id || !file_id) return json({ error: "folder_id and file_id required" }, 400);
+        if (selected) {
+          const { error } = await sb
+            .from("drive_gallery_picks")
+            .upsert({ folder_id, file_id, file_name, mime_type }, { onConflict: "folder_id,file_id" });
+          if (error) return json({ error: error.message }, 500);
+        } else {
+          const { error } = await sb
+            .from("drive_gallery_picks")
+            .delete()
+            .eq("folder_id", folder_id)
+            .eq("file_id", file_id);
+          if (error) return json({ error: error.message }, 500);
+        }
+        return json({ ok: true, selected });
+      }
+      if (op === "pick_clear") {
+        const folder_id = String(body.folder_id ?? "");
+        if (!folder_id) return json({ error: "folder_id required" }, 400);
+        const { error } = await sb.from("drive_gallery_picks").delete().eq("folder_id", folder_id);
+        if (error) return json({ error: error.message }, 500);
+        return json({ ok: true });
       }
       return json({ error: "unknown op" }, 400);
     }

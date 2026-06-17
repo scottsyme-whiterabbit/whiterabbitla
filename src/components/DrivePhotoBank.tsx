@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Loader2, RefreshCw, Plus, Trash2 } from "lucide-react";
+import { Loader2, RefreshCw, Plus, Trash2, ImageIcon, X } from "lucide-react";
 import { toast } from "sonner";
 
 const FN = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/drive-photos`;
@@ -124,6 +124,73 @@ export function DrivePhotoBank({
     loadFolders();
   };
 
+  // ---------- per-folder item picker (gallery selection) ----------
+  const [pickerFolder, setPickerFolder] = useState<DriveFolder | null>(null);
+  const [pickerFiles, setPickerFiles] = useState<DriveFile[]>([]);
+  const [pickerSelected, setPickerSelected] = useState<Set<string>>(new Set());
+  const [pickerLoading, setPickerLoading] = useState(false);
+
+  const openPicker = async (folder: DriveFolder) => {
+    setPickerFolder(folder);
+    setPickerFiles([]);
+    setPickerSelected(new Set());
+    setPickerLoading(true);
+    try {
+      const [filesRes, picksRes] = await Promise.all([
+        fetch(`${FN}?action=list&includeVideos=1&folderId=${encodeURIComponent(folder.folder_id)}`, { headers }),
+        fetch(`${FN}?action=picks&folderId=${encodeURIComponent(folder.folder_id)}`, { headers }),
+      ]);
+      const filesJ = await filesRes.json();
+      const picksJ = await picksRes.json();
+      if (!filesRes.ok) throw new Error(filesJ.error || "load failed");
+      setPickerFiles(filesJ.files || []);
+      setPickerSelected(new Set<string>(picksJ.file_ids || []));
+    } catch (e) {
+      toast.error(`Picker: ${e instanceof Error ? e.message : "failed"}`);
+    } finally {
+      setPickerLoading(false);
+    }
+  };
+  const togglePick = async (file: DriveFile) => {
+    if (!pickerFolder) return;
+    const willSelect = !pickerSelected.has(file.id);
+    // optimistic
+    const next = new Set(pickerSelected);
+    willSelect ? next.add(file.id) : next.delete(file.id);
+    setPickerSelected(next);
+    const r = await fetch(FN, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        op: "pick_toggle",
+        folder_id: pickerFolder.folder_id,
+        file_id: file.id,
+        file_name: file.name,
+        mime_type: file.mimeType,
+        selected: willSelect,
+      }),
+    });
+    if (!r.ok) {
+      const j = await r.json().catch(() => ({}));
+      toast.error(j.error || "Update failed");
+      // revert
+      const rev = new Set(pickerSelected);
+      setPickerSelected(rev);
+    }
+  };
+  const clearPicks = async () => {
+    if (!pickerFolder) return;
+    if (!confirm("Clear all picks for this folder? The whole folder will then show on the gallery.")) return;
+    const r = await fetch(FN, {
+      method: "POST", headers,
+      body: JSON.stringify({ op: "pick_clear", folder_id: pickerFolder.folder_id }),
+    });
+    if (!r.ok) { toast.error("Clear failed"); return; }
+    setPickerSelected(new Set());
+    toast.success("Cleared — whole folder will show.");
+  };
+
+
   return (
     <div className="space-y-3">
       {/* Folder tabs */}
@@ -239,6 +306,16 @@ export function DrivePhotoBank({
                       />
                       Public gallery
                     </label>
+                    {f.is_gallery && (
+                      <button
+                        type="button"
+                        onClick={() => openPicker(f)}
+                        className="text-[10px] uppercase tracking-wider px-2 py-1 border border-forest-dark/30 hover:border-forest-dark flex items-center gap-1 whitespace-nowrap"
+                        title="Choose specific items from this folder"
+                      >
+                        <ImageIcon className="w-3 h-3" /> Choose items
+                      </button>
+                    )}
                     <button
                       type="button"
                       onClick={() => removeFolder(f.id, f.label)}
@@ -254,6 +331,88 @@ export function DrivePhotoBank({
           </div>
         </details>
       )}
+
+      {/* Per-folder picker modal */}
+      {pickerFolder && (
+        <div className="fixed inset-0 z-[100] bg-forest-dark/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setPickerFolder(null)}>
+          <div className="bg-cream max-w-5xl w-full max-h-[90vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-5 py-3 border-b border-forest-dark/15">
+              <div>
+                <div className="text-xs uppercase tracking-wider text-forest-dark/60">Gallery items</div>
+                <div className="font-ogg text-xl text-forest-dark">{pickerFolder.label}</div>
+                <div className="text-[11px] text-forest-dark/60 mt-0.5">
+                  {pickerSelected.size === 0
+                    ? "No picks yet — the entire folder will show on the gallery."
+                    : `${pickerSelected.size} item${pickerSelected.size === 1 ? "" : "s"} will show on the gallery.`}
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                {pickerSelected.size > 0 && (
+                  <button
+                    type="button"
+                    onClick={clearPicks}
+                    className="text-xs px-3 py-1.5 border border-forest-dark/30 hover:border-forest-dark"
+                  >
+                    Clear picks
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={() => setPickerFolder(null)}
+                  className="p-1.5 hover:bg-forest-dark/10"
+                  aria-label="Close"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4">
+              {pickerLoading && (
+                <div className="text-center text-xs text-forest-dark/60 py-10">
+                  <Loader2 className="w-4 h-4 animate-spin mx-auto mb-2" /> Loading…
+                </div>
+              )}
+              {!pickerLoading && pickerFiles.length === 0 && (
+                <div className="text-center text-xs text-forest-dark/60 py-10">No media in this folder.</div>
+              )}
+              {!pickerLoading && pickerFiles.length > 0 && (
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                  {pickerFiles.map((file) => {
+                    const selected = pickerSelected.has(file.id);
+                    const isVideo = file.mimeType?.startsWith("video/");
+                    return (
+                      <button
+                        key={file.id}
+                        type="button"
+                        onClick={() => togglePick(file)}
+                        title={file.name}
+                        className={`relative aspect-square overflow-hidden border-2 transition-all ${
+                          selected
+                            ? "border-gold ring-2 ring-gold/30"
+                            : "border-transparent hover:border-forest-dark/40 opacity-90 hover:opacity-100"
+                        }`}
+                      >
+                        <img src={IMG(file.id)} alt={file.name} loading="lazy" className="w-full h-full object-cover bg-forest-dark/10" />
+                        {isVideo && (
+                          <div className="absolute bottom-1 left-1 bg-forest-dark/80 text-cream text-[9px] uppercase tracking-wider px-1.5 py-0.5">
+                            Video
+                          </div>
+                        )}
+                        {selected && (
+                          <div className="absolute top-1 right-1 bg-gold text-forest-dark w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold">
+                            ✓
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+

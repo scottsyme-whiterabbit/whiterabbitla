@@ -621,6 +621,36 @@ export type Database = {
         }
         Relationships: []
       }
+      drive_gallery_picks: {
+        Row: {
+          created_at: string
+          file_id: string
+          file_name: string | null
+          folder_id: string
+          id: string
+          mime_type: string | null
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          file_id: string
+          file_name?: string | null
+          folder_id: string
+          id?: string
+          mime_type?: string | null
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          file_id?: string
+          file_name?: string | null
+          folder_id?: string
+          id?: string
+          mime_type?: string | null
+          sort_order?: number
+        }
+        Relationships: []
+      }
       drive_photo_folders: {
         Row: {
           created_at: string
