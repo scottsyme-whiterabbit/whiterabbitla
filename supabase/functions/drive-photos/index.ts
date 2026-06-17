@@ -108,20 +108,25 @@ Deno.serve(async (req) => {
       const fnBase = new URL(req.url);
       const selfBase = `${fnBase.origin}${fnBase.pathname}`;
 
-      // Build pick metadata across all folders so we can look up sort_order
+      // Build pick metadata across all folders so we know which drive files are picked
       const { data: allPicks } = await sb
         .from("drive_gallery_picks")
-        .select("folder_id,file_id,sort_order,created_at");
-      const pickIndex = new Map<string, { sort_order: number; created_at: string }>();
+        .select("folder_id,file_id,created_at");
       const pickByFolder = new Map<string, Set<string>>();
       for (const p of allPicks ?? []) {
-        pickIndex.set(`${p.folder_id}:${p.file_id}`, {
-          sort_order: p.sort_order ?? 0,
-          created_at: p.created_at ?? "",
-        });
         if (!pickByFolder.has(p.folder_id)) pickByFolder.set(p.folder_id, new Set());
         pickByFolder.get(p.folder_id)!.add(p.file_id);
       }
+
+      // Load explicit ordering rows
+      const { data: orderRows } = await sb
+        .from("gallery_order")
+        .select("source,ref,sort_order");
+      const orderIndex = new Map<string, number>();
+      for (const o of orderRows ?? []) {
+        orderIndex.set(`${o.source}:${o.ref}`, o.sort_order ?? 0);
+      }
+
 
       for (const f of gFolders ?? []) {
         const pickSet = pickByFolder.get(f.folder_id) ?? new Set<string>();
