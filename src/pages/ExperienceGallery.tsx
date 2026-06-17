@@ -163,4 +163,28 @@ const ExperienceGallery = () => {
   );
 };
 
+function LightboxVideo({ src }: { src: string }) {
+  const ref = useRef<HTMLVideoElement | null>(null);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    v.currentTime = 0;
+    v.muted = false;
+    v.volume = 1;
+    const p = v.play();
+    if (p && typeof p.catch === "function") p.catch(() => {});
+  }, []);
+  return (
+    <video
+      ref={ref}
+      src={src}
+      controls
+      autoPlay
+      playsInline
+      className="max-h-[88vh] max-w-full"
+    />
+  );
+}
+
 export default ExperienceGallery;
+
