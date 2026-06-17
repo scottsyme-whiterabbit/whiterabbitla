@@ -4,6 +4,19 @@ import { toast } from "sonner";
 
 const FN = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/drive-photos`;
 const IMG = (fileId: string) => `${FN}?action=image&fileId=${encodeURIComponent(fileId)}`;
+// Rewrite Drive thumbnailLink to a small size for fast picker rendering.
+const THUMB = (file: DriveFile, size = 240): string => {
+  const link = file.thumbnailLink;
+  if (link) return link.replace(/=s\d+(-[a-z])?$/, `=s${size}`);
+  return IMG(file.id);
+};
+const onThumbErr = (e: React.SyntheticEvent<HTMLImageElement>, fileId: string) => {
+  const img = e.currentTarget;
+  if (!img.dataset.fallback) {
+    img.dataset.fallback = "1";
+    img.src = IMG(fileId);
+  }
+};
 
 export interface DriveFolder {
   id: string;
@@ -248,7 +261,7 @@ export function DrivePhotoBank({
                 title={file.name}
                 className={`relative ${thumbClassName} ${selected ? selectedClassName : unselectedClassName}`}
               >
-                <img src={IMG(file.id)} alt={file.name} loading="lazy" className="w-full h-full object-cover" />
+                <img src={THUMB(file)} onError={(e) => onThumbErr(e, file.id)} alt={file.name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                 {selected && order !== null && (
                   <div className="absolute top-1 right-1 bg-gold text-forest-dark w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold">
                     {order}
@@ -392,7 +405,7 @@ export function DrivePhotoBank({
                             : "border-transparent hover:border-forest-dark/40 opacity-90 hover:opacity-100"
                         }`}
                       >
-                        <img src={IMG(file.id)} alt={file.name} loading="lazy" className="w-full h-full object-cover bg-forest-dark/10" />
+                        <img src={THUMB(file)} onError={(e) => onThumbErr(e, file.id)} alt={file.name} loading="lazy" decoding="async" className="w-full h-full object-cover bg-forest-dark/10" />
                         {isVideo && (
                           <div className="absolute bottom-1 left-1 bg-forest-dark/80 text-cream text-[9px] uppercase tracking-wider px-1.5 py-0.5">
                             Video

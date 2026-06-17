@@ -235,7 +235,13 @@ Deno.serve(async (req) => {
       );
       const body = await r.json();
       if (!r.ok) return json({ error: body }, r.status);
-      return json({ files: body.files ?? [] });
+      return new Response(JSON.stringify({ files: body.files ?? [] }), {
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json",
+          "Cache-Control": "private, max-age=120",
+        },
+      });
     }
 
     if (req.method === "GET" && action === "picks") {
