@@ -261,7 +261,7 @@ export function DrivePhotoBank({
                 title={file.name}
                 className={`relative ${thumbClassName} ${selected ? selectedClassName : unselectedClassName}`}
               >
-                <img src={IMG(file.id)} alt={file.name} loading="lazy" className="w-full h-full object-cover" />
+                <img src={THUMB(file)} onError={(e) => onThumbErr(e, file.id)} alt={file.name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
                 {selected && order !== null && (
                   <div className="absolute top-1 right-1 bg-gold text-forest-dark w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold">
                     {order}
