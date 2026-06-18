@@ -105,6 +105,7 @@ Deno.serve(async (req) => {
         src: string;
         thumb?: string;
         srcset?: string;
+        blur?: string;
         poster?: string;
         name: string;
         mimeType: string;
