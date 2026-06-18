@@ -244,9 +244,10 @@ const ExperienceGallery = () => {
   );
 };
 
-function LightboxVideo({ src }: { src: string }) {
+function LightboxVideo({ src, poster }: { src: string; poster?: string }) {
   const ref = useRef<HTMLVideoElement | null>(null);
   const [muted, setMuted] = useState(true);
+  const [needsTap, setNeedsTap] = useState(false);
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
@@ -256,8 +257,18 @@ function LightboxVideo({ src }: { src: string }) {
     v.muted = true;
     v.currentTime = 0;
     const p = v.play();
-    if (p && typeof p.catch === "function") p.catch(() => {});
+    if (p && typeof p.catch === "function") p.catch(() => setNeedsTap(true));
   }, []);
+  const startPlayback = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const v = ref.current;
+    if (!v) return;
+    v.muted = true;
+    v.play().then(() => {
+      setMuted(true);
+      setNeedsTap(false);
+    }).catch(() => setNeedsTap(true));
+  };
   const toggleMute = (e: React.MouseEvent) => {
     e.stopPropagation();
     const v = ref.current;
@@ -275,13 +286,31 @@ function LightboxVideo({ src }: { src: string }) {
       <video
         ref={ref}
         src={src}
+        poster={poster}
         controls
         autoPlay
         muted
         playsInline
         preload="auto"
+        data-gallery-lightbox-video
+        onPlay={() => setNeedsTap(false)}
+        onCanPlay={() => {
+          const v = ref.current;
+          if (!v || !v.paused) return;
+          v.play().catch(() => setNeedsTap(true));
+        }}
         className="max-h-[88vh] max-w-full"
       />
+      {needsTap && (
+        <button
+          type="button"
+          onClick={startPlayback}
+          className="absolute inset-0 flex items-center justify-center bg-forest-dark/20 text-cream text-xs uppercase tracking-[0.24em]"
+          aria-label="Play video"
+        >
+          Tap to play
+        </button>
+      )}
       {muted && (
         <button
           type="button"
