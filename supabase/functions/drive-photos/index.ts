@@ -105,6 +105,7 @@ Deno.serve(async (req) => {
         src: string;
         thumb?: string;
         srcset?: string;
+        blur?: string;
         poster?: string;
         name: string;
         mimeType: string;
@@ -134,9 +135,10 @@ Deno.serve(async (req) => {
         orderIndex.set(`${o.source}:${o.ref}`, o.sort_order ?? 0);
       }
 
-      // Rewrite Drive thumbnailLink (=sNNN) to any width — served from Google CDN
-      const sizedThumb = (link: string, size: number) =>
-        link.replace(/=s\d+(-[a-z0-9]+)?$/i, `=s${size}`);
+      // Rewrite Drive thumbnailLink (=sNNN) to any width — served from Google CDN.
+      // Append `-rw` to request WebP encoding (smaller payload than JPEG).
+      const sizedThumb = (link: string, size: number, webp = true) =>
+        link.replace(/=s\d+(-[a-z0-9]+)?$/i, `=s${size}${webp ? "-rw" : ""}`);
 
       for (const f of gFolders ?? []) {
         const pickSet = pickByFolder.get(f.folder_id) ?? new Set<string>();
@@ -158,6 +160,7 @@ Deno.serve(async (req) => {
             const isVideo = String(file.mimeType ?? "").startsWith("video/");
             const link: string | undefined = file.thumbnailLink;
             const thumb = link ? sizedThumb(link, 640) : undefined;
+            const blur = link ? sizedThumb(link, 24) : undefined;
             const srcset = link
               ? [320, 480, 640, 960, 1280, 1600]
                   .map((s) => `${sizedThumb(link, s)} ${s}w`)
@@ -174,6 +177,7 @@ Deno.serve(async (req) => {
                 : (link ? sizedThumb(link, 1600) : `${selfBase}?action=image&fileId=${encodeURIComponent(file.id)}`),
               thumb,
               srcset: isVideo ? undefined : srcset,
+              blur,
               poster: isVideo && link ? sizedThumb(link, 960) : undefined,
               name: file.name,
               mimeType: file.mimeType,

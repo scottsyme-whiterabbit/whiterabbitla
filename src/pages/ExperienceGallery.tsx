@@ -12,6 +12,7 @@ interface GalleryItem {
   src: string;
   thumb?: string;
   srcset?: string;
+  blur?: string;
   poster?: string;
   name: string;
   mimeType: string;
@@ -149,23 +150,28 @@ const ExperienceGallery = () => {
                   type="button"
                   onClick={() => setLightbox(item)}
                   className="group relative mb-2 sm:mb-2.5 block w-full break-inside-avoid overflow-hidden bg-forest-dark/5 ring-1 ring-forest-dark/5 hover:ring-forest-dark/20 hover:shadow-[0_10px_30px_-12px_rgba(34,61,52,0.35)] transition-all duration-500"
-                  style={{ aspectRatio: `${w} / ${h}` }}
+                  style={{
+                    aspectRatio: `${w} / ${h}`,
+                    // Tiny blurred thumbnail as background — paints instantly,
+                    // eliminates blank gray boxes while the full image loads.
+                    backgroundImage: item.blur ? `url(${item.blur})` : undefined,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    filter: undefined,
+                  }}
                   aria-label={`Open ${item.name}`}
                 >
                   {isVideo ? (
                     <TileVideo src={item.src} poster={item.poster} />
                   ) : (
-                    <img
+                    <BlurImg
                       src={item.thumb || item.src}
                       srcSet={item.srcset}
                       sizes={item.srcset ? TILE_SIZES : undefined}
                       alt={`${cleanMediaName(item.name)} from ${item.folder} by White Rabbit LA`}
-                      loading={eager ? "eager" : "lazy"}
-                      fetchPriority={eager ? "high" : "low"}
-                      decoding="async"
+                      eager={eager}
                       width={w}
                       height={h}
-                      className="w-full h-full object-cover block transition-transform duration-700 group-hover:scale-[1.04]"
                     />
                   )}
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-forest-dark/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -286,6 +292,48 @@ function TileVideo({ src, poster }: { src: string; poster?: string }) {
       playsInline
       preload="metadata"
       className="w-full h-full object-cover block transition-transform duration-500 group-hover:scale-[1.02]"
+    />
+  );
+}
+
+/**
+ * Image tile that fades in over a CSS blur-up background placeholder
+ * (set on the parent button) once the full image decodes. Eager-loaded
+ * for above-the-fold tiles; lazy + low-priority for the rest.
+ */
+function BlurImg({
+  src,
+  srcSet,
+  sizes,
+  alt,
+  eager,
+  width,
+  height,
+}: {
+  src: string;
+  srcSet?: string;
+  sizes?: string;
+  alt: string;
+  eager: boolean;
+  width: number;
+  height: number;
+}) {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <img
+      src={src}
+      srcSet={srcSet}
+      sizes={sizes}
+      alt={alt}
+      loading={eager ? "eager" : "lazy"}
+      fetchPriority={eager ? "high" : "low"}
+      decoding="async"
+      width={width}
+      height={height}
+      onLoad={() => setLoaded(true)}
+      className={`w-full h-full object-cover block transition-all duration-700 group-hover:scale-[1.04] ${
+        loaded ? "opacity-100" : "opacity-0"
+      }`}
     />
   );
 }
