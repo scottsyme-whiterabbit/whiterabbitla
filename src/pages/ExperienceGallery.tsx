@@ -252,18 +252,20 @@ function LightboxVideo({ src }: { src: string }) {
 }
 
 /**
- * Tile video: defers loading until near the viewport, only plays when actually
- * visible, and pauses when scrolled away. Keeps the grid smooth and saves
- * bandwidth so large galleries feel seamless.
+ * Tile video: always paints a poster still frame instantly (never a blank
+ * gray box), then warms up and plays the muted loop once near the viewport.
+ * Pauses when scrolled away to keep the grid smooth.
  */
 function TileVideo({ src, poster }: { src: string; poster?: string }) {
-  const ref = useRef<HTMLVideoElement | null>(null);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const [ready, setReady] = useState(false);
+  const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
-    const v = ref.current;
-    if (!v) return;
-    // Phase 1: warm up — when near viewport, set src so metadata can preload
+    const el = wrapRef.current;
+    if (!el) return;
+    // Phase 1: when near viewport, mount the <video> so metadata can preload
     const warm = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -273,16 +275,18 @@ function TileVideo({ src, poster }: { src: string; poster?: string }) {
       },
       { rootMargin: "300px" },
     );
-    warm.observe(v);
+    warm.observe(el);
     // Phase 2: play/pause based on actual visibility
     const play = new IntersectionObserver(
       ([entry]) => {
+        const v = videoRef.current;
+        if (!v) return;
         if (entry.isIntersecting) v.play().catch(() => {});
         else v.pause();
       },
       { threshold: 0.25 },
     );
-    play.observe(v);
+    play.observe(el);
     return () => {
       warm.disconnect();
       play.disconnect();
@@ -290,16 +294,32 @@ function TileVideo({ src, poster }: { src: string; poster?: string }) {
   }, []);
 
   return (
-    <video
-      ref={ref}
-      src={ready ? src : undefined}
-      poster={poster}
-      muted
-      loop
-      playsInline
-      preload="metadata"
-      className="w-full h-full object-cover block transition-transform duration-500 group-hover:scale-[1.02]"
-    />
+    <div ref={wrapRef} className="relative w-full h-full">
+      {poster && (
+        <img
+          src={poster}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover block"
+        />
+      )}
+      {ready && (
+        <video
+          ref={videoRef}
+          src={src}
+          poster={poster}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          onPlaying={() => setPlaying(true)}
+          className={`absolute inset-0 w-full h-full object-cover block transition-opacity duration-500 ${
+            playing ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      )}
+    </div>
   );
 }
 

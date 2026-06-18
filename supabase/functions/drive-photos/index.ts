@@ -178,7 +178,7 @@ Deno.serve(async (req) => {
               thumb,
               srcset: isVideo ? undefined : srcset,
               blur,
-              poster: isVideo && link ? sizedThumb(link, 960) : undefined,
+              poster: isVideo && link ? sizedThumb(link, 960, false) : undefined,
               name: file.name,
               mimeType: file.mimeType,
               folder: f.label,
