@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import { Loader2, Volume2, VolumeX, X } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useJsonLd } from "@/hooks/useSchemaOrg";
@@ -100,6 +101,21 @@ const ExperienceGallery = () => {
     [lightbox],
   );
 
+  const openLightbox = (item: GalleryItem) => {
+    if (!item.mimeType.startsWith("video/")) {
+      setLightbox(item);
+      return;
+    }
+
+    // On mobile, playback has to be started inside the original tap handler.
+    flushSync(() => setLightbox(item));
+    const video = document.querySelector<HTMLVideoElement>("[data-gallery-lightbox-video]");
+    if (!video) return;
+    video.muted = true;
+    video.currentTime = 0;
+    video.play().catch(() => {});
+  };
+
   useEffect(() => {
     if (!lightbox) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setLightbox(null);
@@ -155,7 +171,7 @@ const ExperienceGallery = () => {
                 <button
                   key={item.key}
                   type="button"
-                  onClick={() => setLightbox(item)}
+                  onClick={() => openLightbox(item)}
                   className="group relative mb-2 sm:mb-2.5 block w-full break-inside-avoid overflow-hidden bg-forest-dark/5 ring-1 ring-forest-dark/5 hover:ring-forest-dark/20 hover:shadow-[0_10px_30px_-12px_rgba(34,61,52,0.35)] transition-all duration-500"
                   style={{
                     aspectRatio: `${w} / ${h}`,
@@ -212,7 +228,7 @@ const ExperienceGallery = () => {
             onClick={(e) => e.stopPropagation()}
           >
             {lightboxIsVideo ? (
-              <LightboxVideo src={lightbox.src} />
+              <LightboxVideo src={lightbox.src} poster={lightbox.poster || lightbox.thumb || lightbox.blur} />
             ) : (
               <img
                 src={lightbox.src}
