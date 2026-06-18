@@ -56,7 +56,7 @@ Deno.serve(async (req) => {
       if (!fileId) return json({ error: "fileId required" }, 400);
       const range = req.headers.get("range");
       const r = await fetch(`${GATEWAY}/files/${encodeURIComponent(fileId)}?alt=media`, {
-        headers: gwHeaders(range ? { Range: range } : undefined),
+        headers: range ? gwHeaders({ Range: range }) : gwHeaders(),
       });
       if (!r.ok) return json({ error: `drive ${r.status}` }, r.status);
       const ct = r.headers.get("content-type") ?? "image/jpeg";
@@ -91,7 +91,7 @@ Deno.serve(async (req) => {
       const ct = r.headers.get("content-type") || "application/octet-stream";
       const len = r.headers.get("content-length");
       const contentRange = r.headers.get("content-range");
-      return new Response(blob.stream(), {
+      return new Response(r.body, {
         status: r.status,
         headers: {
           ...corsHeaders,
