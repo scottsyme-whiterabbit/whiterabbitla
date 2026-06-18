@@ -160,6 +160,7 @@ Deno.serve(async (req) => {
             const isVideo = String(file.mimeType ?? "").startsWith("video/");
             const link: string | undefined = file.thumbnailLink;
             const thumb = link ? sizedThumb(link, 640) : undefined;
+            const blur = link ? sizedThumb(link, 24) : undefined;
             const srcset = link
               ? [320, 480, 640, 960, 1280, 1600]
                   .map((s) => `${sizedThumb(link, s)} ${s}w`)
@@ -176,6 +177,7 @@ Deno.serve(async (req) => {
                 : (link ? sizedThumb(link, 1600) : `${selfBase}?action=image&fileId=${encodeURIComponent(file.id)}`),
               thumb,
               srcset: isVideo ? undefined : srcset,
+              blur,
               poster: isVideo && link ? sizedThumb(link, 960) : undefined,
               name: file.name,
               mimeType: file.mimeType,
