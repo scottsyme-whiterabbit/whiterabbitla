@@ -296,6 +296,48 @@ function TileVideo({ src, poster }: { src: string; poster?: string }) {
   );
 }
 
+/**
+ * Image tile that fades in over a CSS blur-up background placeholder
+ * (set on the parent button) once the full image decodes. Eager-loaded
+ * for above-the-fold tiles; lazy + low-priority for the rest.
+ */
+function BlurImg({
+  src,
+  srcSet,
+  sizes,
+  alt,
+  eager,
+  width,
+  height,
+}: {
+  src: string;
+  srcSet?: string;
+  sizes?: string;
+  alt: string;
+  eager: boolean;
+  width: number;
+  height: number;
+}) {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <img
+      src={src}
+      srcSet={srcSet}
+      sizes={sizes}
+      alt={alt}
+      loading={eager ? "eager" : "lazy"}
+      fetchPriority={eager ? "high" : "low"}
+      decoding="async"
+      width={width}
+      height={height}
+      onLoad={() => setLoaded(true)}
+      className={`w-full h-full object-cover block transition-all duration-700 group-hover:scale-[1.04] ${
+        loaded ? "opacity-100" : "opacity-0"
+      }`}
+    />
+  );
+}
+
 function cleanMediaName(name: string) {
   return name
     .replace(/\.[a-z0-9]+$/i, "")
