@@ -134,9 +134,10 @@ Deno.serve(async (req) => {
         orderIndex.set(`${o.source}:${o.ref}`, o.sort_order ?? 0);
       }
 
-      // Rewrite Drive thumbnailLink (=sNNN) to any width — served from Google CDN
-      const sizedThumb = (link: string, size: number) =>
-        link.replace(/=s\d+(-[a-z0-9]+)?$/i, `=s${size}`);
+      // Rewrite Drive thumbnailLink (=sNNN) to any width — served from Google CDN.
+      // Append `-rw` to request WebP encoding (smaller payload than JPEG).
+      const sizedThumb = (link: string, size: number, webp = true) =>
+        link.replace(/=s\d+(-[a-z0-9]+)?$/i, `=s${size}${webp ? "-rw" : ""}`);
 
       for (const f of gFolders ?? []) {
         const pickSet = pickByFolder.get(f.folder_id) ?? new Set<string>();
