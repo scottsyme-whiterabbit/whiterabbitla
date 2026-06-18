@@ -280,6 +280,7 @@ function TileVideo({ src, poster }: { src: string; poster?: string }) {
     <video
       ref={ref}
       src={ready ? src : undefined}
+      poster={poster}
       muted
       loop
       playsInline
