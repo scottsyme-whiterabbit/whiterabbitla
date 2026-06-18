@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Loader2, X } from "lucide-react";
+import { Loader2, Volume2, VolumeX, X } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useJsonLd } from "@/hooks/useSchemaOrg";
+import heroVideo from "@/assets/triptych/hero-triptych.mp4.asset.json";
+import heroPoster from "@/assets/triptych/hero-triptych-poster.jpg.asset.json";
 
 const FN = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/drive-photos`;
+const BOOK_CALL_URL = "https://calendar.app.google/9DnGRoMUWaMDvvpt9";
 
 interface GalleryItem {
   key: string;
