@@ -10,12 +10,19 @@ interface GalleryItem {
   source: "drive" | "upload";
   ref: string;
   src: string;
+  thumb?: string;
+  srcset?: string;
+  poster?: string;
   name: string;
   mimeType: string;
   folder: string;
   width?: number;
   height?: number;
 }
+
+// Responsive sizes — matches the columns-2 → columns-6 grid breakpoints
+const TILE_SIZES =
+  "(min-width: 1280px) 16vw, (min-width: 1024px) 20vw, (min-width: 768px) 25vw, (min-width: 640px) 33vw, 50vw";
 
 
 const ExperienceGallery = () => {
@@ -130,10 +137,12 @@ const ExperienceGallery = () => {
 
         {hasItems && (
           <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6 gap-2 sm:gap-2.5 [column-fill:_balance]">
-            {items.map((item) => {
+            {items.map((item, index) => {
               const isVideo = item.mimeType.startsWith("video/");
               const w = item.width && item.width > 0 ? item.width : 4;
               const h = item.height && item.height > 0 ? item.height : 5;
+              // First ~12 tiles are above/near the fold — load eagerly with high priority
+              const eager = index < 12;
               return (
                 <button
                   key={item.key}
@@ -144,19 +153,21 @@ const ExperienceGallery = () => {
                   aria-label={`Open ${item.name}`}
                 >
                   {isVideo ? (
-                    <TileVideo src={item.src} />
+                    <TileVideo src={item.src} poster={item.poster} />
                   ) : (
                     <img
-                      src={item.src}
+                      src={item.thumb || item.src}
+                      srcSet={item.srcset}
+                      sizes={item.srcset ? TILE_SIZES : undefined}
                       alt={`${cleanMediaName(item.name)} from ${item.folder} by White Rabbit LA`}
-                      loading="lazy"
+                      loading={eager ? "eager" : "lazy"}
+                      fetchPriority={eager ? "high" : "low"}
                       decoding="async"
                       width={w}
                       height={h}
                       className="w-full h-full object-cover block transition-transform duration-700 group-hover:scale-[1.04]"
                     />
                   )}
-                  {/* subtle vignette + film tag on hover */}
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-forest-dark/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   {isVideo && (
                     <div className="absolute bottom-1.5 right-1.5 bg-forest-dark/70 text-cream text-[9px] tracking-[0.15em] uppercase px-1.5 py-0.5">
@@ -232,7 +243,7 @@ function LightboxVideo({ src }: { src: string }) {
  * visible, and pauses when scrolled away. Keeps the grid smooth and saves
  * bandwidth so large galleries feel seamless.
  */
-function TileVideo({ src }: { src: string }) {
+function TileVideo({ src, poster }: { src: string; poster?: string }) {
   const ref = useRef<HTMLVideoElement | null>(null);
   const [ready, setReady] = useState(false);
 
@@ -269,6 +280,7 @@ function TileVideo({ src }: { src: string }) {
     <video
       ref={ref}
       src={ready ? src : undefined}
+      poster={poster}
       muted
       loop
       playsInline
