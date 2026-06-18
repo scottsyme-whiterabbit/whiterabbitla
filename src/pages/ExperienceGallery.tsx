@@ -243,7 +243,7 @@ function LightboxVideo({ src }: { src: string }) {
  * visible, and pauses when scrolled away. Keeps the grid smooth and saves
  * bandwidth so large galleries feel seamless.
  */
-function TileVideo({ src }: { src: string }) {
+function TileVideo({ src, poster }: { src: string; poster?: string }) {
   const ref = useRef<HTMLVideoElement | null>(null);
   const [ready, setReady] = useState(false);
 
