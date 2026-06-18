@@ -10,8 +10,9 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-admin-password",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-admin-password, range",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Expose-Headers": "content-length, content-range, accept-ranges, etag",
 };
 
 const GATEWAY = "https://connector-gateway.lovable.dev/google_drive/drive/v3";
@@ -53,12 +54,14 @@ Deno.serve(async (req) => {
     if (req.method === "GET" && action === "image") {
       const fileId = url.searchParams.get("fileId");
       if (!fileId) return json({ error: "fileId required" }, 400);
+      const range = req.headers.get("range");
       const r = await fetch(`${GATEWAY}/files/${encodeURIComponent(fileId)}?alt=media`, {
-        headers: gwHeaders(),
+        headers: gwHeaders(range ? { Range: range } : undefined),
       });
       if (!r.ok) return json({ error: `drive ${r.status}` }, r.status);
       const ct = r.headers.get("content-type") ?? "image/jpeg";
       const len = r.headers.get("content-length");
+      const contentRange = r.headers.get("content-range");
       const headers: Record<string, string> = {
         ...corsHeaders,
         "Content-Type": ct,
@@ -68,20 +71,33 @@ Deno.serve(async (req) => {
         "ETag": `"${fileId}"`,
       };
       if (len) headers["Content-Length"] = len;
-      return new Response(r.body, { headers });
+      if (contentRange) headers["Content-Range"] = contentRange;
+      return new Response(r.body, { status: r.status, headers });
     }
 
     // Public: stream a previously-uploaded gallery file from private storage
     if (req.method === "GET" && action === "upload") {
       const path = url.searchParams.get("path");
       if (!path) return json({ error: "path required" }, 400);
-      const { data: blob, error } = await sb.storage.from("gallery-uploads").download(path);
-      if (error || !blob) return json({ error: error?.message ?? "not found" }, 404);
-      const ct = blob.type || "application/octet-stream";
+      const range = req.headers.get("range");
+      const encodedPath = path.split("/").map(encodeURIComponent).join("/");
+      const r = await fetch(`${SUPABASE_URL}/storage/v1/object/gallery-uploads/${encodedPath}`, {
+        headers: {
+          Authorization: `Bearer ${SERVICE_ROLE}`,
+          ...(range ? { Range: range } : {}),
+        },
+      });
+      if (!r.ok) return json({ error: "not found" }, r.status === 404 ? 404 : r.status);
+      const ct = r.headers.get("content-type") || "application/octet-stream";
+      const len = r.headers.get("content-length");
+      const contentRange = r.headers.get("content-range");
       return new Response(blob.stream(), {
+        status: r.status,
         headers: {
           ...corsHeaders,
           "Content-Type": ct,
+          ...(len ? { "Content-Length": len } : {}),
+          ...(contentRange ? { "Content-Range": contentRange } : {}),
           "Accept-Ranges": "bytes",
           "Cache-Control": "public, max-age=31536000, immutable",
           "ETag": `"${path}"`,
