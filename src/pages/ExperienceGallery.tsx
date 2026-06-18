@@ -121,6 +121,10 @@ const ExperienceGallery = () => {
           </p>
         </header>
 
+        <HeroReel />
+
+
+
         {loading && (
           <div className="flex items-center justify-center py-24 text-forest-dark/50">
             <Loader2 className="w-5 h-5 animate-spin mr-2" /> Loading gallery…
