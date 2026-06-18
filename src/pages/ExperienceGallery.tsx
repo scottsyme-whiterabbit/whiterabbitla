@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Loader2, X } from "lucide-react";
+import { Loader2, Volume2, VolumeX, X } from "lucide-react";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useJsonLd } from "@/hooks/useSchemaOrg";
+import heroVideo from "@/assets/triptych/hero-triptych.mp4.asset.json";
+import heroPoster from "@/assets/triptych/hero-triptych-poster.jpg.asset.json";
 
 const FN = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/drive-photos`;
+const BOOK_CALL_URL = "https://calendar.app.google/9DnGRoMUWaMDvvpt9";
 
 interface GalleryItem {
   key: string;
@@ -117,6 +120,10 @@ const ExperienceGallery = () => {
             weddings, and brand evenings where wonder was the point of the night.
           </p>
         </header>
+
+        <HeroReel />
+
+
 
         {loading && (
           <div className="flex items-center justify-center py-24 text-forest-dark/50">
@@ -335,6 +342,66 @@ function BlurImg({
         loaded ? "opacity-100" : "opacity-0"
       }`}
     />
+  );
+}
+
+/**
+ * Hero reel: full-width autoplaying, muted, looping film with a poster so it
+ * never paints blank. Includes an unobtrusive mute toggle and a single
+ * primary CTA below linking to the booking calendar.
+ */
+function HeroReel() {
+  const ref = useRef<HTMLVideoElement | null>(null);
+  const [muted, setMuted] = useState(true);
+
+  const toggleMute = () => {
+    const v = ref.current;
+    if (!v) return;
+    const next = !muted;
+    v.muted = next;
+    if (!next) {
+      v.volume = 1;
+      v.play().catch(() => {});
+    }
+    setMuted(next);
+  };
+
+  return (
+    <div className="mb-12">
+      <div className="relative overflow-hidden ring-1 ring-forest-dark/10 shadow-[0_30px_80px_-30px_rgba(34,61,52,0.45)] bg-forest-dark">
+        <video
+          ref={ref}
+          src={heroVideo.url}
+          poster={heroPoster.url}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          className="w-full h-auto block aspect-video object-cover"
+        />
+        <button
+          type="button"
+          onClick={toggleMute}
+          aria-label={muted ? "Unmute reel" : "Mute reel"}
+          className="absolute bottom-4 right-4 flex items-center gap-2 bg-forest-dark/70 hover:bg-forest-dark/90 text-cream backdrop-blur-sm px-3 py-2 transition-colors duration-300 text-[10px] uppercase tracking-[0.2em]"
+        >
+          {muted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+          <span className="hidden sm:inline">{muted ? "Unmute" : "Mute"}</span>
+        </button>
+      </div>
+
+      <div className="flex justify-center mt-8">
+        <a
+          href={BOOK_CALL_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 bg-forest-dark text-cream hover:bg-forest-dark/90 border border-gold/60 hover:border-gold transition-colors duration-300 px-8 py-4 font-ogg text-base tracking-wide"
+        >
+          Book a 15-minute conversation
+        </a>
+      </div>
+    </div>
   );
 }
 
