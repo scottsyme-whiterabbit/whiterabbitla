@@ -10,12 +10,19 @@ interface GalleryItem {
   source: "drive" | "upload";
   ref: string;
   src: string;
+  thumb?: string;
+  srcset?: string;
+  poster?: string;
   name: string;
   mimeType: string;
   folder: string;
   width?: number;
   height?: number;
 }
+
+// Responsive sizes — matches the columns-2 → columns-6 grid breakpoints
+const TILE_SIZES =
+  "(min-width: 1280px) 16vw, (min-width: 1024px) 20vw, (min-width: 768px) 25vw, (min-width: 640px) 33vw, 50vw";
 
 
 const ExperienceGallery = () => {
