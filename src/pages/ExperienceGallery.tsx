@@ -230,24 +230,53 @@ const ExperienceGallery = () => {
 
 function LightboxVideo({ src }: { src: string }) {
   const ref = useRef<HTMLVideoElement | null>(null);
+  const [muted, setMuted] = useState(true);
   useEffect(() => {
     const v = ref.current;
     if (!v) return;
+    // Mobile browsers block autoplay with sound. Start muted so playback
+    // always begins; user can tap the unmute button (or native controls)
+    // to hear audio. This keeps the click gesture chain intact.
+    v.muted = true;
     v.currentTime = 0;
-    v.muted = false;
-    v.volume = 1;
     const p = v.play();
     if (p && typeof p.catch === "function") p.catch(() => {});
   }, []);
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const v = ref.current;
+    if (!v) return;
+    const next = !muted;
+    v.muted = next;
+    if (!next) {
+      v.volume = 1;
+      v.play().catch(() => {});
+    }
+    setMuted(next);
+  };
   return (
-    <video
-      ref={ref}
-      src={src}
-      controls
-      autoPlay
-      playsInline
-      className="max-h-[88vh] max-w-full"
-    />
+    <div className="relative max-h-[88vh] max-w-full" onClick={(e) => e.stopPropagation()}>
+      <video
+        ref={ref}
+        src={src}
+        controls
+        autoPlay
+        muted
+        playsInline
+        preload="auto"
+        className="max-h-[88vh] max-w-full"
+      />
+      {muted && (
+        <button
+          type="button"
+          onClick={toggleMute}
+          className="absolute top-3 right-3 flex items-center gap-2 bg-forest-dark/80 hover:bg-forest-dark text-cream backdrop-blur-sm px-3 py-2 text-[10px] uppercase tracking-[0.2em]"
+          aria-label="Unmute video"
+        >
+          <VolumeX className="w-4 h-4" /> <span>Tap for sound</span>
+        </button>
+      )}
+    </div>
   );
 }
 
