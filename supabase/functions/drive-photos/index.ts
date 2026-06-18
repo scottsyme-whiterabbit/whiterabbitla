@@ -83,6 +83,7 @@ Deno.serve(async (req) => {
       const encodedPath = path.split("/").map(encodeURIComponent).join("/");
       const r = await fetch(`${SUPABASE_URL}/storage/v1/object/gallery-uploads/${encodedPath}`, {
         headers: {
+          apikey: SERVICE_ROLE,
           Authorization: `Bearer ${SERVICE_ROLE}`,
           ...(range ? { Range: range } : {}),
         },
