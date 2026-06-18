@@ -103,6 +103,9 @@ Deno.serve(async (req) => {
         source: "drive" | "upload";
         ref: string;
         src: string;
+        thumb?: string;
+        srcset?: string;
+        poster?: string;
         name: string;
         mimeType: string;
         folder: string;
@@ -114,7 +117,6 @@ Deno.serve(async (req) => {
       const items: Item[] = [];
       const selfBase = `${SUPABASE_URL}/functions/v1/drive-photos`;
 
-      // Build pick metadata across all folders so we know which drive files are picked
       const { data: allPicks } = await sb
         .from("drive_gallery_picks")
         .select("folder_id,file_id,created_at");
@@ -124,7 +126,6 @@ Deno.serve(async (req) => {
         pickByFolder.get(p.folder_id)!.add(p.file_id);
       }
 
-      // Load explicit ordering rows
       const { data: orderRows } = await sb
         .from("gallery_order")
         .select("source,ref,sort_order");
@@ -133,6 +134,9 @@ Deno.serve(async (req) => {
         orderIndex.set(`${o.source}:${o.ref}`, o.sort_order ?? 0);
       }
 
+      // Rewrite Drive thumbnailLink (=sNNN) to any width — served from Google CDN
+      const sizedThumb = (link: string, size: number) =>
+        link.replace(/=s\d+(-[a-z0-9]+)?$/i, `=s${size}`);
 
       for (const f of gFolders ?? []) {
         const pickSet = pickByFolder.get(f.folder_id) ?? new Set<string>();
@@ -140,7 +144,7 @@ Deno.serve(async (req) => {
           `'${f.folder_id}' in parents and (mimeType contains 'image/' or mimeType contains 'video/') and trashed=false`,
         );
         const fields = encodeURIComponent(
-          "files(id,name,mimeType,modifiedTime,imageMediaMetadata(width,height),videoMediaMetadata(width,height))",
+          "files(id,name,mimeType,modifiedTime,thumbnailLink,imageMediaMetadata(width,height),videoMediaMetadata(width,height))",
         );
         const r = await fetch(
           `${GATEWAY}/files?q=${q}&fields=${fields}&pageSize=200&orderBy=modifiedTime desc`,
@@ -149,14 +153,28 @@ Deno.serve(async (req) => {
         const body = await r.json();
         if (r.ok && Array.isArray(body.files)) {
           for (const file of body.files) {
-            // Only include files the admin has explicitly picked for this folder.
             if (!pickSet.has(file.id)) continue;
             const meta = file.imageMediaMetadata ?? file.videoMediaMetadata ?? {};
+            const isVideo = String(file.mimeType ?? "").startsWith("video/");
+            const link: string | undefined = file.thumbnailLink;
+            const thumb = link ? sizedThumb(link, 640) : undefined;
+            const srcset = link
+              ? [320, 480, 640, 960, 1280, 1600]
+                  .map((s) => `${sizedThumb(link, s)} ${s}w`)
+                  .join(", ")
+              : undefined;
             items.push({
               key: `drive:${file.id}`,
               source: "drive",
               ref: file.id,
-              src: `${selfBase}?action=image&fileId=${encodeURIComponent(file.id)}`,
+              // Images: Google CDN sized variant (fast, parallel, cached).
+              // Videos: must stream through our proxy.
+              src: isVideo
+                ? `${selfBase}?action=image&fileId=${encodeURIComponent(file.id)}`
+                : (link ? sizedThumb(link, 1600) : `${selfBase}?action=image&fileId=${encodeURIComponent(file.id)}`),
+              thumb,
+              srcset: isVideo ? undefined : srcset,
+              poster: isVideo && link ? sizedThumb(link, 960) : undefined,
               name: file.name,
               mimeType: file.mimeType,
               folder: f.label,
@@ -165,12 +183,10 @@ Deno.serve(async (req) => {
               width: meta.width ? Number(meta.width) : undefined,
               height: meta.height ? Number(meta.height) : undefined,
             });
-
           }
         }
       }
 
-      // Uploads
       const { data: uploads } = await sb
         .from("gallery_uploads")
         .select("id,storage_path,file_name,mime_type,sort_order,created_at");
@@ -198,7 +214,7 @@ Deno.serve(async (req) => {
         headers: {
           ...corsHeaders,
           "Content-Type": "application/json",
-          "Cache-Control": "public, max-age=60",
+          "Cache-Control": "public, max-age=60, s-maxage=300, stale-while-revalidate=600",
         },
       });
     }
