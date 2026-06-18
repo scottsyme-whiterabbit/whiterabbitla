@@ -12,6 +12,7 @@ interface GalleryItem {
   src: string;
   thumb?: string;
   srcset?: string;
+  blur?: string;
   poster?: string;
   name: string;
   mimeType: string;
