@@ -69,6 +69,17 @@ serve(async (req) => {
 
     const firstName = name.split(" ")[0] || name;
 
+    const TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-click";
+    const BOOKING_URL = "https://calendar.app.google/9DnGRoMUWaMDvvpt9";
+
+    function buildTrackedUrl(url: string, contactId: string, step: number, content: string): string {
+      const sep = url.includes("?") ? "&" : "?";
+      const taggedUrl = `${url}${sep}utm_source=email&utm_medium=inquiry-auto-reply&utm_campaign=inquiry&utm_content=${encodeURIComponent(content)}`;
+      return `${TRACK_URL}?cid=${encodeURIComponent(contactId)}&step=${step}&r=${encodeURIComponent(taggedUrl)}`;
+    }
+
+    const calendarTrackingUrl = buildTrackedUrl(BOOKING_URL, email, 0, "inquiry-calendar");
+
     const confirmationHtml = `
 <!DOCTYPE html>
 <html lang="en">
@@ -109,6 +120,11 @@ serve(async (req) => {
           <p style="margin:0 0 20px;text-align:center;">
             <a href="https://whiterabbitla.com/experience" style="font-family:Georgia,serif;font-size:14px;letter-spacing:0.15em;text-transform:uppercase;color:#C9A3A8;text-decoration:none;border-bottom:1px solid rgba(201,163,168,0.3);padding-bottom:2px;">
               Explore the Experience
+            </a>
+          </p>
+          <p style="margin:0 0 20px;text-align:center;">
+            <a href="${calendarTrackingUrl}" target="_blank" style="font-family:Georgia,serif;font-size:13px;color:#C9A3A8;text-decoration:none;border-bottom:1px solid rgba(201,163,168,0.4);">
+              or book a 15-minute conversation
             </a>
           </p>
           <p style="margin:0;font-family:Georgia,serif;font-size:16px;line-height:1.8;color:rgba(245,240,232,0.85);">
