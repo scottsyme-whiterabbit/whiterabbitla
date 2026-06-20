@@ -62,15 +62,29 @@ function trackedLink(url: string, text: string, contactId: string, step: number,
   return `<a href="${trackingUrl}" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.3);" target="_blank">${text}</a>`;
 }
 
-const BOOKING_URL = `${SITE_URL}/booking`;
+const GALLERY_URL = `${SITE_URL}/experience/gallery`;
+const BOOKING_URL = `${SITE_URL}/consultation`;
 
-function bookCallCTA(contactId: string, step: number, campaign: string, label: string = "Book a Call"): string {
-  const sep = BOOKING_URL.includes("?") ? "&" : "?";
-  const taggedUrl = `${BOOKING_URL}${sep}utm_source=email&utm_medium=nurture-drip&utm_campaign=${encodeURIComponent(campaign)}&utm_content=nurture-${step}`;
-  const trackingUrl = `${TRACK_URL}?cid=${contactId}&step=${100 + step}&r=${encodeURIComponent(taggedUrl)}`;
-  return `<p style="margin:24px 0 0; text-align:center;">
-<a href="${trackingUrl}" target="_blank" style="display:inline-block; padding:12px 32px; font-family:Georgia,serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#C9A3A8; text-decoration:none; font-weight:bold; border:1px solid #C9A3A8; border-radius:2px;">${label}</a>
-</p>`;
+function buildTrackedUrl(url: string, contactId: string, step: number, campaign: string, content: string): string {
+  const sep = url.includes("?") ? "&" : "?";
+  const taggedUrl = `${url}${sep}utm_source=email&utm_medium=nurture-drip&utm_campaign=${encodeURIComponent(campaign)}&utm_content=${encodeURIComponent(content)}`;
+  return `${TRACK_URL}?cid=${contactId}&step=${100 + step}&r=${encodeURIComponent(taggedUrl)}`;
+}
+
+// Unified bottom-of-email CTA: emerald button to gallery + secondary calendar link.
+// Both links are click-tracked through /track-click. `label` is accepted for
+// backwards compatibility with existing call sites but no longer used.
+function bookCallCTA(contactId: string, step: number, campaign: string, _label: string = "Book a Call"): string {
+  const galleryTracking = buildTrackedUrl(GALLERY_URL, contactId, step, campaign, `nurture-${step}-gallery`);
+  const calendarTracking = buildTrackedUrl(BOOKING_URL, contactId, step, campaign, `nurture-${step}-calendar`);
+  return `<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:28px 0 0;">
+<tr><td align="center" style="text-align:center;">
+<a href="${galleryTracking}" target="_blank" style="display:inline-block; padding:14px 32px; font-family:Georgia,serif; font-size:13px; letter-spacing:1.5px; text-transform:uppercase; color:#F8F5F0; background-color:#3A6B52; text-decoration:none; font-weight:bold; border-radius:6px; mso-padding-alt:14px 32px;">See a night in action&nbsp;&rarr;</a>
+</td></tr>
+<tr><td align="center" style="text-align:center; padding-top:12px;">
+<p style="margin:0; font-family:Georgia,serif; font-size:13px; line-height:1.6; color:rgba(245,240,232,0.65);">or <a href="${calendarTracking}" target="_blank" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.4);">book a 15-minute conversation</a></p>
+</td></tr>
+</table>`;
 }
 
 function wrapEmail(preheader: string, innerHtml: string, email: string, contactId: string, step: number): string {
