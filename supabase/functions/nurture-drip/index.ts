@@ -63,7 +63,7 @@ function trackedLink(url: string, text: string, contactId: string, step: number,
 }
 
 const GALLERY_URL = `${SITE_URL}/experience/gallery`;
-const BOOKING_URL = `${SITE_URL}/consultation`;
+const BOOKING_URL = "https://calendar.app.google/9DnGRoMUWaMDvvpt9";
 
 function buildTrackedUrl(url: string, contactId: string, step: number, campaign: string, content: string): string {
   const sep = url.includes("?") ? "&" : "?";
