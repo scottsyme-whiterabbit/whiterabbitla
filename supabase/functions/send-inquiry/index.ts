@@ -69,6 +69,17 @@ serve(async (req) => {
 
     const firstName = name.split(" ")[0] || name;
 
+    const TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-click";
+    const BOOKING_URL = "https://calendar.app.google/9DnGRoMUWaMDvvpt9";
+
+    function buildTrackedUrl(url: string, contactId: string, step: number, content: string): string {
+      const sep = url.includes("?") ? "&" : "?";
+      const taggedUrl = `${url}${sep}utm_source=email&utm_medium=inquiry-auto-reply&utm_campaign=inquiry&utm_content=${encodeURIComponent(content)}`;
+      return `${TRACK_URL}?cid=${encodeURIComponent(contactId)}&step=${step}&r=${encodeURIComponent(taggedUrl)}`;
+    }
+
+    const calendarTrackingUrl = buildTrackedUrl(BOOKING_URL, email, 0, "inquiry-calendar");
+
     const confirmationHtml = `
 <!DOCTYPE html>
 <html lang="en">
