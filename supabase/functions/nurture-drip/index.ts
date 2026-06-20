@@ -79,10 +79,10 @@ function bookCallCTA(contactId: string, step: number, campaign: string, _label: 
   const calendarTracking = buildTrackedUrl(BOOKING_URL, contactId, step, campaign, `nurture-${step}-calendar`);
   return `<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin:28px 0 0;">
 <tr><td align="center" style="text-align:center;">
-<a href="${galleryTracking}" target="_blank" style="display:inline-block; padding:14px 32px; font-family:Georgia,serif; font-size:13px; letter-spacing:1.5px; text-transform:uppercase; color:#F8F5F0; background-color:#3A6B52; text-decoration:none; font-weight:bold; border-radius:6px; mso-padding-alt:14px 32px;">See a night in action&nbsp;&rarr;</a>
+<a href="${galleryTracking}" target="_blank" style="display:inline-block; padding:14px 32px; font-family:Georgia,serif; font-size:13px; letter-spacing:1.5px; text-transform:uppercase; color:#F8F5F0; background-color:#3A6B52; text-decoration:none; font-weight:bold; border-radius:6px; mso-padding-alt:14px 32px;">gallery link</a>
 </td></tr>
 <tr><td align="center" style="text-align:center; padding-top:12px;">
-<p style="margin:0; font-family:Georgia,serif; font-size:13px; line-height:1.6; color:rgba(245,240,232,0.65);">or <a href="${calendarTracking}" target="_blank" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.4);">book a 15-minute conversation</a></p>
+<p style="margin:0; font-family:Georgia,serif; font-size:13px; line-height:1.6; color:rgba(245,240,232,0.65);">or <a href="${calendarTracking}" target="_blank" style="color:#C9A3A8; text-decoration:none; border-bottom:1px solid rgba(201,163,168,0.4);">calendar link</a></p>
 </td></tr>
 </table>`;
 }
