@@ -848,7 +848,7 @@ serve(async (req) => {
           const warmSubject = getSubject(template, warmVariant);
           const firstName = extractFirstName(contact.name);
           const bodyInner = template.body(firstName, contact.company || "", contact.city || "");
-          const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, step);
+          const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, step, `warm-step-${step}`, warmVariant);
 
           try {
             const res = await fetch("https://api.resend.com/emails", {
