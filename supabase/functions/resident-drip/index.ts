@@ -773,7 +773,7 @@ serve(async (req) => {
               const breakupVariant = pickVariant();
               const breakupSubject = getSubject(BREAKUP_TEMPLATE, breakupVariant);
               const bodyInner = BREAKUP_TEMPLATE.body(firstName, contact.company || "", contact.city || "");
-              const html = wrapEmail(BREAKUP_TEMPLATE.preheader, bodyInner, contact.email, contact.id, 5);
+              const html = wrapEmail(BREAKUP_TEMPLATE.preheader, bodyInner, contact.email, contact.id, 5, "resident-breakup", breakupVariant);
               try {
                 const res = await fetch("https://api.resend.com/emails", {
                   method: "POST",
