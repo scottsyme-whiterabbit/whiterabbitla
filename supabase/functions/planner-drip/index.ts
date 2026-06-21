@@ -40,9 +40,11 @@ function getSubject(template: EmailTemplate, variant: "A" | "B"): string {
   return variant === "A" ? template.subjectA : template.subjectB;
 }
 
-function wrapEmail(preheader: string, innerHtml: string, email: string, contactId?: string, step?: number): string {
-  const openPixel = contactId ? `<img src="${OPEN_TRACK_URL}?cid=${contactId}&step=${step ?? 0}" width="1" height="1" style="display:block;width:1px;height:1px;border:0;" alt="" />` : "";
+function wrapEmail(preheader: string, innerHtml: string, email: string, contactId?: string, step?: number, campaignId?: string, variant?: "A" | "B"): string {
+  const pixelQs = contactId ? `?cid=${contactId}&step=${step ?? 0}${campaignId ? `&cam=${encodeURIComponent(campaignId)}` : ""}${variant ? `&v=${variant}` : ""}` : "";
+  const openPixel = contactId ? `<img src="${OPEN_TRACK_URL}${pixelQs}" width="1" height="1" style="display:block;width:1px;height:1px;border:0;" alt="" />` : "";
   return `<!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="utf-8">
