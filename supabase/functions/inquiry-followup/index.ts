@@ -177,7 +177,7 @@ ${signoff()}
   return {
     subject: "Thought this might help",
     preheader: "A quick lookbook to share with your team.",
-    html: wrapEmail("A quick lookbook to share with your team.", innerHtml, inquiry.email, contactId, 1),
+    html: wrapEmail("A quick lookbook to share with your team.", innerHtml, inquiry.email, contactId, 1, "inquiry-followup-1"),
   };
 }
 
