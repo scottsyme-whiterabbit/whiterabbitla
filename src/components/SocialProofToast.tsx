@@ -5,6 +5,11 @@ import { useLocation } from "react-router-dom";
 // Real testimonial snippets for social proof
 const proofItems = [
   {
+    quote: "Beyond magnificent! Scott is mesmerizing and my guests were in awe the entire time.",
+    name: "Farnaz F.",
+    context: "40th Birthday at Gravitas, Beverly Hills",
+  },
+  {
     quote: "Jaws were hitting the floor so hard the downstairs neighbors started wondering what was going down.",
     name: "Mohammad R.",
     context: "Private Event",
