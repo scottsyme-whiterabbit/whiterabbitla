@@ -22,7 +22,7 @@ const OPEN_TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/tr
 // Day offsets: Email 1 (0), Email 2 (3), Email 3 (10), Breakup (24)
 const COLD_SCHEDULE = [0, 3, 10, 24];
 // Global cap = per-category cap × number of active categories (8 × 7 = 56).
-// Effective cap drops to ~40 while pr_agency + restaurant remain paused.
+// Effective cap drops to ~48 while pr_agency remains paused.
 const DAILY_SEND_CAP = 56;
 const PER_CATEGORY_DAILY_CAP = 8;
 
