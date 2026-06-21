@@ -6,6 +6,11 @@ import GoogleReviewsBadge from "./GoogleReviewsBadge";
 
 const testimonials = [
   {
+    text: "Beyond magnificent! Scott is mesmerizing and my guests were in awe the entire time. From booking him to seeing him live, I was truly blown away. I could not recommend him highly enough and will most definitely be booking him for future events.",
+    name: "Farnaz F.",
+    role: "40th Birthday at Gravitas, Beverly Hills",
+  },
+  {
     text: "Scott performed at a 200-person event for us and the guests absolutely LOVED him and were amazed by his talents. I could not recommend him more! We can't wait to have him back.",
     name: "Morgan Stanley",
     role: "200-Person Corporate Event",
