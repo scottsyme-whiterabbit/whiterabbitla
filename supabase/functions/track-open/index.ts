@@ -16,6 +16,8 @@ serve(async (req) => {
   const contactId = url.searchParams.get("cid");
   const step = parseInt(url.searchParams.get("step") || "0", 10);
   const campaignId = url.searchParams.get("cam") || null;
+  const rawVariant = url.searchParams.get("v");
+  const abVariant = rawVariant === "A" || rawVariant === "B" ? rawVariant : null;
   const userAgent = req.headers.get("user-agent") || null;
 
   if (contactId) {
