@@ -830,7 +830,7 @@ serve(async (req) => {
               const pulseSubject = getSubject(template, pulseVariant);
               const firstName = extractFirstName(contact.name);
               const bodyInner = template.body(firstName, contact.company || "", contact.city || "");
-              const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, 200 + pulseIndex);
+              const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, 200 + pulseIndex, `resident-pulse-${pulseIndex}`, pulseVariant);
 
               try {
                 const res = await fetch("https://api.resend.com/emails", {
