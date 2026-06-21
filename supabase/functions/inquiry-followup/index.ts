@@ -156,7 +156,7 @@ ${signoff()}
     subjectA: `Quick follow-up on your ${eventType}`,
     subjectB: eventDate ? `Thinking about your ${eventDate} event` : `Following up on your inquiry`,
     preheader: "I saw your inquiry and wanted to reach out personally.",
-    html: wrapEmail("I saw your inquiry and wanted to reach out personally.", innerHtml, inquiry.email, contactId, 0),
+    html: wrapEmail("I saw your inquiry and wanted to reach out personally.", innerHtml, inquiry.email, contactId, 0, "inquiry-followup-0", variant),
   };
 }
 
