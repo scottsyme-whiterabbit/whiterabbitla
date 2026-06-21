@@ -280,8 +280,8 @@ serve(async (req) => {
 
         switch (currentStep) {
           case 0: {
-            const email1 = getEmail1(inquiry as Inquiry);
             const variant = pickVariant();
+            const email1 = getEmail1(inquiry as Inquiry, variant);
             abVariant = variant;
             subject = variant === "A" ? email1.subjectA : email1.subjectB;
             html = email1.html;
