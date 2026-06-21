@@ -1,0 +1,1 @@
+ALTER TABLE public.newsletter_opens ADD COLUMN IF NOT EXISTS ab_variant TEXT; CREATE INDEX IF NOT EXISTS idx_newsletter_opens_variant ON public.newsletter_opens(ab_variant) WHERE ab_variant IS NOT NULL;
