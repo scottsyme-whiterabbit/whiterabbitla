@@ -58,6 +58,7 @@ serve(async (req) => {
         contact_id: contactId,
         drip_step: step,
         campaign_id: campaignId,
+        ab_variant: abVariant,
         user_agent: userAgent,
         contact_source: contactSource,
       });
