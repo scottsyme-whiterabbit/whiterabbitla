@@ -122,7 +122,7 @@ interface Inquiry {
   created_at: string;
 }
 
-function getEmail1(inquiry: Inquiry): { subjectA: string; subjectB: string; preheader: string; html: string } {
+function getEmail1(inquiry: Inquiry, variant?: "A" | "B"): { subjectA: string; subjectB: string; preheader: string; html: string } {
   const name = inquiry.name?.split(" ")[0] || "there";
   const eventType = inquiry.event_type || "event";
   const eventDate = inquiry.date || "";
