@@ -204,7 +204,7 @@ ${signoff()}
   return {
     subject: "Still thinking it over?",
     preheader: "No rush — just here if you need anything.",
-    html: wrapEmail("No rush — just here if you need anything.", innerHtml, inquiry.email, contactId, 2),
+    html: wrapEmail("No rush — just here if you need anything.", innerHtml, inquiry.email, contactId, 2, "inquiry-followup-2"),
   };
 }
 
