@@ -283,10 +283,10 @@ ${cta}
 ${signoffFull()}`),
       },
       {
-        subject: "I just visited The Hand and The Eye",
+        subject: "Where private entertainment is heading",
         preheader: "The future of experiential entertainment is already here.",
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
-<p style="margin:0 0 18px;">I recently visited The Hand and The Eye in Chicago — a dedicated space for experiential entertainment. The demand for curated, intimate experiences is growing fast, and clubs are positioned perfectly to capitalize on it.</p>
+<p style="margin:0 0 18px;">I spend my life inside the most elevated rooms in the country, and they are all moving in one direction — away from big stages and toward curated, intimate experiences guests feel up close, in their own hands. That demand is growing fast, and private clubs are positioned perfectly to lead it rather than follow.</p>
 <p style="margin:0 0 18px;">Three formats that work especially well for clubs:</p>
 <p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Evening of Wonder</strong> — a 45-minute parlor show for 30 to 60 guests. Intimate, theatrical, unforgettable.</p>
 <p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Roaming Cocktail Magic</strong> — close-up magic during receptions and social hours. No setup, no stage.</p>
@@ -551,7 +551,7 @@ ${signoff()}`),
 <p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Ticketed experience nights</strong> at $100 to $200 per head on slow nights. Turn your weakest night into your most profitable.</p>
 <p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">PDR upsells</strong> that increase the average check by adding entertainment to private dining packages.</p>
 <p style="margin:0 0 18px;"><strong style="color:rgba(245,240,232,0.9);">Social moments</strong> where guests tag your location. Organic marketing you cannot buy.</p>
-<p style="margin:0 0 18px;">I recently visited The Hand and The Eye in Chicago — a dedicated venue for experiential entertainment. The trend is real and it is accelerating.</p>
+<p style="margin:0 0 18px;">The most talked-about rooms in hospitality right now are not selling food alone — they are selling an experience guests cannot get anywhere else. That shift is real, and it is accelerating.</p>
 ${cta}
 <p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/best-magic-experiences-los-angeles`, "Best Magic Experiences in Los Angeles", contactId, step, `nurture-${category}`)}</p>
 ${signoffFull()}`),
