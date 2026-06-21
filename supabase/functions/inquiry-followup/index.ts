@@ -47,8 +47,8 @@ Scott Syme<br/>
 </p>`;
 }
 
-function wrapEmail(preheader: string, innerHtml: string, email: string, contactId: string, step: number): string {
-  const openPixel = `<img src="${OPEN_TRACK_URL}?cid=${contactId}&step=${step}" width="1" height="1" style="display:block;width:1px;height:1px;border:0;" alt="" />`;
+function wrapEmail(preheader: string, innerHtml: string, email: string, contactId: string, step: number, campaignId?: string, variant?: "A" | "B"): string {
+  const openPixel = `<img src="${OPEN_TRACK_URL}?cid=${contactId}&step=${step}${campaignId ? `&cam=${encodeURIComponent(campaignId)}` : ""}${variant ? `&v=${variant}` : ""}" width="1" height="1" style="display:block;width:1px;height:1px;border:0;" alt="" />`;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
