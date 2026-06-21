@@ -47,8 +47,8 @@ Scott Syme<br/>
 </p>`;
 }
 
-function wrapEmail(preheader: string, innerHtml: string, email: string, contactId: string, step: number): string {
-  const openPixel = `<img src="${OPEN_TRACK_URL}?cid=${contactId}&step=${step}" width="1" height="1" style="display:block;width:1px;height:1px;border:0;" alt="" />`;
+function wrapEmail(preheader: string, innerHtml: string, email: string, contactId: string, step: number, campaignId?: string, variant?: "A" | "B"): string {
+  const openPixel = `<img src="${OPEN_TRACK_URL}?cid=${contactId}&step=${step}${campaignId ? `&cam=${encodeURIComponent(campaignId)}` : ""}${variant ? `&v=${variant}` : ""}" width="1" height="1" style="display:block;width:1px;height:1px;border:0;" alt="" />`;
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -122,7 +122,7 @@ interface Inquiry {
   created_at: string;
 }
 
-function getEmail1(inquiry: Inquiry): { subjectA: string; subjectB: string; preheader: string; html: string } {
+function getEmail1(inquiry: Inquiry, variant?: "A" | "B"): { subjectA: string; subjectB: string; preheader: string; html: string } {
   const name = inquiry.name?.split(" ")[0] || "there";
   const eventType = inquiry.event_type || "event";
   const eventDate = inquiry.date || "";
@@ -156,7 +156,7 @@ ${signoff()}
     subjectA: `Quick follow-up on your ${eventType}`,
     subjectB: eventDate ? `Thinking about your ${eventDate} event` : `Following up on your inquiry`,
     preheader: "I saw your inquiry and wanted to reach out personally.",
-    html: wrapEmail("I saw your inquiry and wanted to reach out personally.", innerHtml, inquiry.email, contactId, 0),
+    html: wrapEmail("I saw your inquiry and wanted to reach out personally.", innerHtml, inquiry.email, contactId, 0, "inquiry-followup-0", variant),
   };
 }
 
@@ -177,7 +177,7 @@ ${signoff()}
   return {
     subject: "Thought this might help",
     preheader: "A quick lookbook to share with your team.",
-    html: wrapEmail("A quick lookbook to share with your team.", innerHtml, inquiry.email, contactId, 1),
+    html: wrapEmail("A quick lookbook to share with your team.", innerHtml, inquiry.email, contactId, 1, "inquiry-followup-1"),
   };
 }
 
@@ -204,7 +204,7 @@ ${signoff()}
   return {
     subject: "Still thinking it over?",
     preheader: "No rush — just here if you need anything.",
-    html: wrapEmail("No rush — just here if you need anything.", innerHtml, inquiry.email, contactId, 2),
+    html: wrapEmail("No rush — just here if you need anything.", innerHtml, inquiry.email, contactId, 2, "inquiry-followup-2"),
   };
 }
 
@@ -280,8 +280,8 @@ serve(async (req) => {
 
         switch (currentStep) {
           case 0: {
-            const email1 = getEmail1(inquiry as Inquiry);
             const variant = pickVariant();
+            const email1 = getEmail1(inquiry as Inquiry, variant);
             abVariant = variant;
             subject = variant === "A" ? email1.subjectA : email1.subjectB;
             html = email1.html;

@@ -37,8 +37,10 @@ function getSubject(template: EmailTemplate, variant: "A" | "B"): string {
   return variant === "A" ? template.subjectA : template.subjectB;
 }
 
-function wrapEmail(preheader: string, innerHtml: string, email: string, contactId?: string, step?: number): string {
-  const openPixel = contactId ? `<img src="${OPEN_TRACK_URL}?cid=${contactId}&step=${step ?? 0}" width="1" height="1" style="display:block;width:1px;height:1px;border:0;" alt="" />` : "";
+function wrapEmail(preheader: string, innerHtml: string, email: string, contactId?: string, step?: number, campaignId?: string, variant?: "A" | "B"): string {
+  const pixelQs = contactId ? `?cid=${contactId}&step=${step ?? 0}${campaignId ? `&cam=${encodeURIComponent(campaignId)}` : ""}${variant ? `&v=${variant}` : ""}` : "";
+  const openPixel = contactId ? `<img src="${OPEN_TRACK_URL}${pixelQs}" width="1" height="1" style="display:block;width:1px;height:1px;border:0;" alt="" />` : "";
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -704,7 +706,7 @@ serve(async (req) => {
           const subject = getSubject(template, variant);
           const firstName = extractFirstName(contact.name);
           const bodyInner = template.body(firstName, contact.company || "", contact.city || "", contact.id, step);
-          const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, step);
+          const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, step, `resident-step-${step}`, variant);
 
           try {
             const res = await fetch("https://api.resend.com/emails", {
@@ -771,7 +773,7 @@ serve(async (req) => {
               const breakupVariant = pickVariant();
               const breakupSubject = getSubject(BREAKUP_TEMPLATE, breakupVariant);
               const bodyInner = BREAKUP_TEMPLATE.body(firstName, contact.company || "", contact.city || "");
-              const html = wrapEmail(BREAKUP_TEMPLATE.preheader, bodyInner, contact.email, contact.id, 5);
+              const html = wrapEmail(BREAKUP_TEMPLATE.preheader, bodyInner, contact.email, contact.id, 5, "resident-breakup", breakupVariant);
               try {
                 const res = await fetch("https://api.resend.com/emails", {
                   method: "POST",
@@ -828,7 +830,7 @@ serve(async (req) => {
               const pulseSubject = getSubject(template, pulseVariant);
               const firstName = extractFirstName(contact.name);
               const bodyInner = template.body(firstName, contact.company || "", contact.city || "");
-              const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, 200 + pulseIndex);
+              const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, 200 + pulseIndex, `resident-pulse-${pulseIndex}`, pulseVariant);
 
               try {
                 const res = await fetch("https://api.resend.com/emails", {

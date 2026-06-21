@@ -1051,6 +1051,7 @@ export type Database = {
       }
       newsletter_opens: {
         Row: {
+          ab_variant: string | null
           campaign_id: string | null
           contact_id: string
           contact_source: string
@@ -1060,6 +1061,7 @@ export type Database = {
           user_agent: string | null
         }
         Insert: {
+          ab_variant?: string | null
           campaign_id?: string | null
           contact_id: string
           contact_source?: string
@@ -1069,6 +1071,7 @@ export type Database = {
           user_agent?: string | null
         }
         Update: {
+          ab_variant?: string | null
           campaign_id?: string | null
           contact_id?: string
           contact_source?: string
