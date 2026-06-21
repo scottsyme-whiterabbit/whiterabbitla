@@ -706,7 +706,7 @@ serve(async (req) => {
           const subject = getSubject(template, variant);
           const firstName = extractFirstName(contact.name);
           const bodyInner = template.body(firstName, contact.company || "", contact.city || "", contact.id, step);
-          const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, step);
+          const html = wrapEmail(template.preheader, bodyInner, contact.email, contact.id, step, `resident-step-${step}`, variant);
 
           try {
             const res = await fetch("https://api.resend.com/emails", {
