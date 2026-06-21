@@ -71,6 +71,7 @@ serve(async (req) => {
 
     const TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-click";
     const BOOKING_URL = "https://calendar.app.google/9DnGRoMUWaMDvvpt9";
+    const GALLERY_URL = "https://whiterabbitla.com/experience";
 
     function buildTrackedUrl(url: string, contactId: string, step: number, content: string): string {
       const sep = url.includes("?") ? "&" : "?";
@@ -79,6 +80,7 @@ serve(async (req) => {
     }
 
     const calendarTrackingUrl = buildTrackedUrl(BOOKING_URL, email, 0, "inquiry-calendar");
+    const galleryTrackingUrl = buildTrackedUrl(GALLERY_URL, email, 0, "inquiry-gallery");
 
     const confirmationHtml = `
 <!DOCTYPE html>
@@ -97,7 +99,7 @@ serve(async (req) => {
         <!-- Headline -->
         <tr><td style="padding:32px 40px 0;text-align:center;">
           <h1 style="margin:0;font-family:Georgia,serif;font-size:28px;font-weight:normal;color:#F8F5F0;letter-spacing:0.02em;line-height:1.3;">
-            We Received Your Inquiry
+            Your note reached me, ${firstName}
           </h1>
         </td></tr>
 
@@ -109,39 +111,42 @@ serve(async (req) => {
         <!-- Body -->
         <tr><td style="padding:24px 40px 0;">
           <p style="margin:0 0 20px;font-family:Georgia,serif;font-size:16px;line-height:1.8;color:rgba(245,240,232,0.85);">
-            ${firstName}, thank you for reaching out.
+            ${firstName}, your inquiry just landed with me — and I'm already looking forward to hearing about your event.
           </p>
           <p style="margin:0 0 20px;font-family:Georgia,serif;font-size:16px;line-height:1.8;color:rgba(245,240,232,0.85);">
-            Your inquiry has been received, and Scott is reviewing the details now. You can expect a personal response within 2 to 5 hours. Every event is different, and he wants to make sure he gives yours the attention it deserves.
+            I read every one of these myself, so this isn't an auto-pilot reply. I'll be in touch within a few hours to talk through your evening; every event is different and yours deserves that attention.
           </p>
           <p style="margin:0 0 20px;font-family:Georgia,serif;font-size:16px;line-height:1.8;color:rgba(245,240,232,0.85);">
-            In the meantime, feel free to explore what a White Rabbit experience looks like:
+            If you'd rather not wait, you can put a time straight on my calendar — a short, easy fifteen minutes about what you're planning:
           </p>
-          <p style="margin:0 0 20px;text-align:center;">
-            <a href="https://whiterabbitla.com/experience" style="font-family:Georgia,serif;font-size:14px;letter-spacing:0.15em;text-transform:uppercase;color:#C9A3A8;text-decoration:none;border-bottom:1px solid rgba(201,163,168,0.3);padding-bottom:2px;">
-              Explore the Experience
+
+          <!-- Calendar CTA Button -->
+          <p style="margin:0 0 28px;text-align:center;">
+            <a href="${calendarTrackingUrl}" target="_blank" style="display:inline-block;font-family:Georgia,serif;font-size:14px;letter-spacing:0.12em;text-transform:uppercase;color:#223D34;text-decoration:none;background-color:#C9A3A8;padding:14px 28px;border-radius:4px;">
+              Book a 15-minute conversation →
             </a>
           </p>
-          <p style="margin:0 0 20px;text-align:center;">
-            <a href="${calendarTrackingUrl}" target="_blank" style="font-family:Georgia,serif;font-size:13px;color:#C9A3A8;text-decoration:none;border-bottom:1px solid rgba(201,163,168,0.4);">
-              or book a 15-minute conversation
+
+          <p style="margin:0 0 20px;font-family:Georgia,serif;font-size:16px;line-height:1.8;color:rgba(245,240,232,0.85);">
+            And if you'd like a glimpse while you wait:
+          </p>
+          <p style="margin:0 0 28px;text-align:center;">
+            <a href="${galleryTrackingUrl}" target="_blank" style="font-family:Georgia,serif;font-size:14px;letter-spacing:0.15em;text-transform:uppercase;color:#C9A3A8;text-decoration:none;border-bottom:1px solid rgba(201,163,168,0.3);padding-bottom:2px;">
+              See a night in action →
             </a>
           </p>
-          <p style="margin:0;font-family:Georgia,serif;font-size:16px;line-height:1.8;color:rgba(245,240,232,0.85);">
-            We look forward to creating something extraordinary together.
+          <p style="margin:0 0 20px;font-family:Georgia,serif;font-size:16px;line-height:1.8;color:rgba(245,240,232,0.85);">
+            Looking forward to it.
           </p>
         </td></tr>
 
         <!-- Sign off -->
         <tr><td style="padding:32px 40px 0;">
-          <p style="margin:0;font-family:Georgia,serif;font-size:15px;color:rgba(245,240,232,0.6);font-style:italic;">
-            Warmly,
-          </p>
-          <p style="margin:4px 0 0;font-family:Georgia,serif;font-size:16px;color:#F8F5F0;">
+          <p style="margin:0;font-family:Georgia,serif;font-size:15px;color:rgba(245,240,232,0.6);">
             Scott Syme
           </p>
           <p style="margin:2px 0 0;font-family:Georgia,serif;font-size:13px;color:rgba(245,240,232,0.4);letter-spacing:0.1em;text-transform:uppercase;">
-            White Rabbit · Los Angeles
+            Magician · (424) 394-1850 · whiterabbitla.com
           </p>
         </td></tr>
 
@@ -196,9 +201,9 @@ serve(async (req) => {
         from: "White Rabbit <scott.syme@whiterabbitla.com>",
         to: [email],
         reply_to: "events@whiterabbitla.com",
-        subject: "We received your inquiry, " + firstName,
+        subject: "Your note reached me, " + firstName,
         html: confirmationHtml,
-        text: `${firstName}, thank you for reaching out.\n\nYour inquiry has been received, and Scott is reviewing the details now. You can expect a personal response within 2 to 5 hours.\n\nIn the meantime, explore what a White Rabbit experience looks like: https://whiterabbitla.com/experience\n\nWe look forward to creating something extraordinary together.\n\nWarmly,\nScott Syme\nWhite Rabbit · Los Angeles`,
+        text: `${firstName}, your inquiry just landed with me — and I'm already looking forward to hearing about your event.\n\nI read every one of these myself, so this isn't an auto-pilot reply. I'll be in touch within a few hours to talk through your evening; every event is different and yours deserves that attention.\n\nIf you'd rather not wait, you can put a time straight on my calendar — a short, easy fifteen minutes about what you're planning:\n${calendarTrackingUrl}\n\nAnd if you'd like a glimpse while you wait:\n${galleryTrackingUrl}\n\nLooking forward to it.\n\nScott Syme\nMagician · (424) 394-1850 · whiterabbitla.com`,
         headers: {
           "List-Unsubscribe": "<mailto:events@whiterabbitla.com?subject=Unsubscribe>",
         },
