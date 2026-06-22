@@ -673,8 +673,8 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                     <button onClick={() => openLogModal(item, "call")} className="flex items-center justify-center gap-1 px-1.5 py-1 bg-muted/20 text-foreground border border-border text-[10px] tracking-wider uppercase hover:bg-muted/30 transition-colors" title="Log a call">
                       <ClipboardList size={10} /> Log
                     </button>
-                    <button onClick={() => openLogModal(item, "email")} className="flex items-center justify-center gap-1 px-1.5 py-1 bg-accent/20 text-accent border border-accent/30 text-[10px] tracking-wider uppercase hover:bg-accent/30 transition-colors">
-                      <Mail size={10} /> Email
+                    <button onClick={() => openAIDraft(item)} className="flex items-center justify-center gap-1 px-1.5 py-1 bg-accent/20 text-accent border border-accent/30 text-[10px] tracking-wider uppercase hover:bg-accent/30 transition-colors" title="AI-draft a follow-up email">
+                      <Sparkles size={10} /> AI Draft
                     </button>
                     <button onClick={() => openEditModal(item)} className="flex items-center justify-center gap-1 px-1.5 py-1 bg-muted/20 text-foreground border border-border text-[10px] tracking-wider uppercase hover:bg-muted/30 transition-colors" title="Edit contact info">
                       <Pencil size={10} /> Edit
