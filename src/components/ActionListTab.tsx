@@ -143,6 +143,20 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
     deal_value: "", notes: "", next_follow_up: "",
   });
   const [editSaving, setEditSaving] = useState(false);
+  const [aiDraftCtx, setAiDraftCtx] = useState<AIDraftContext | null>(null);
+
+  const openAIDraft = (item: ActionItem) => {
+    setAiDraftCtx({
+      contact_email: item.email,
+      contact_name: item.name,
+      company: item.company,
+      vertical: item.deal?.event_type || item.contact?.drip_campaign || null,
+      source: item.source,
+      deal_id: item.deal?.id || null,
+      engagement_summary: item.engagement,
+      notes: item.deal?.notes || null,
+    });
+  };
 
   const openEditModal = (item: ActionItem) => {
     setEditModal(item);
