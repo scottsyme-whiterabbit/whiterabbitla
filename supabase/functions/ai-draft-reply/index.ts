@@ -117,7 +117,7 @@ The 3 variants are:
 1. soft_reengage — warm, low-pressure, gives them room.
 2. value_forward — leads with what their guests/room would actually get.
 3. direct — confident and brief, makes the ask early.
-Use \\n\\n for paragraph breaks in body. End each body with "— Scott".`;
+Use \\n\\n for paragraph breaks in body. End each body with "-Scott".`;
 
 function buildUserPrompt(args: any) {
   const { contact_name, company, vertical, source, engagement_summary, deal, thread, user_hint, notes } = args;
