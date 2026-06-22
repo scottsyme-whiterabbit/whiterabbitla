@@ -800,6 +800,11 @@ const AdminNewsletter = () => {
           <ActionListTab adminPassword={storedPassword} onBadgeCount={setActionBadge} />
         )}
 
+        {/* AI Follow-Ups Queue */}
+        {activeTab === "followups" && (
+          <FollowupQueueTab adminPassword={storedPassword} />
+        )}
+
         {/* Revenue */}
         {activeTab === "revenue" && (
           <RevenueTab adminPassword={storedPassword} />
