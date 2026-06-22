@@ -16,6 +16,7 @@ import ColdDripCampaignTab from "@/components/ColdDripCampaignTab";
 import EmailAnalyticsTab from "@/components/EmailAnalyticsTab";
 import LeadAttributionTab from "@/components/LeadAttributionTab";
 import DealInboxTab from "@/components/DealInboxTab";
+import FollowupQueueTab from "@/components/FollowupQueueTab";
 import CastleInvitesTab from "@/components/CastleInvitesTab";
 import { BiometricUnlockButton, BiometricEnrollPrompt } from "@/components/BiometricUnlockButton";
 import { useIsMobile } from "@/hooks/use-mobile";
