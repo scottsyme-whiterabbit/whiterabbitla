@@ -1,0 +1,139 @@
+// Admin CRUD for email_drafts: list, update (edit subject/body), approve, dismiss, send.
+// Sending re-uses the gmail-send function so threading + deal_activity logging still work.
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+};
+
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
+const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const ADMIN_PASSWORD = Deno.env.get("ADMIN_PASSWORD");
+const supabase = createClient(SUPABASE_URL, SERVICE_KEY);
+
+async function sendViaGmail(draft: any, adminPassword: string) {
+  const r = await fetch(`${SUPABASE_URL}/functions/v1/gmail-send`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${SERVICE_KEY}`,
+      apikey: SERVICE_KEY,
+    },
+    body: JSON.stringify({
+      adminPassword,
+      deal_id: draft.deal_id || undefined,
+      to: draft.contact_email,
+      subject: draft.subject,
+      body_text: draft.body,
+      gmail_thread_id: draft.gmail_thread_id || undefined,
+      in_reply_to: draft.in_reply_to || undefined,
+    }),
+  });
+  const data = await r.json();
+  if (!r.ok) throw new Error(data.error || `Gmail send ${r.status}`);
+  return data;
+}
+
+serve(async (req) => {
+  if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+  try {
+    const body = await req.json();
+    if (body.adminPassword !== ADMIN_PASSWORD) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+    const { action } = body;
+
+    if (action === "list") {
+      const status = body.status || ["draft", "approved"];
+      const statuses = Array.isArray(status) ? status : [status];
+      const { data, error } = await supabase
+        .from("email_drafts")
+        .select("*")
+        .in("status", statuses)
+        .order("created_at", { ascending: false })
+        .limit(200);
+      if (error) throw error;
+      return new Response(JSON.stringify({ drafts: data }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
+    if (action === "update") {
+      const { id, subject, body: text, user_hint } = body;
+      const patch: any = { updated_at: new Date().toISOString() };
+      if (subject !== undefined) patch.subject = subject;
+      if (text !== undefined) patch.body = text;
+      if (user_hint !== undefined) patch.user_hint = user_hint;
+      const { data, error } = await supabase.from("email_drafts").update(patch).eq("id", id).select("*").maybeSingle();
+      if (error) throw error;
+      return new Response(JSON.stringify({ draft: data }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
+    if (action === "approve" || action === "dismiss") {
+      const { id } = body;
+      const patch: any = action === "approve"
+        ? { status: "approved" }
+        : { status: "dismissed", dismissed_at: new Date().toISOString() };
+      const { data, error } = await supabase.from("email_drafts").update(patch).eq("id", id).select("*").maybeSingle();
+      if (error) throw error;
+      // If approving one variant, dismiss its siblings in the same generation
+      if (action === "approve" && data?.generation_id) {
+        await supabase.from("email_drafts")
+          .update({ status: "dismissed", dismissed_at: new Date().toISOString() })
+          .eq("generation_id", data.generation_id)
+          .neq("id", id)
+          .in("status", ["draft"]);
+      }
+      return new Response(JSON.stringify({ draft: data }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
+    if (action === "send") {
+      const { id } = body;
+      const { data: draft, error } = await supabase.from("email_drafts").select("*").eq("id", id).maybeSingle();
+      if (error) throw error;
+      if (!draft) throw new Error("Draft not found");
+      if (draft.status === "sent") throw new Error("Already sent");
+      const result = await sendViaGmail(draft, body.adminPassword);
+      const { data: updated } = await supabase.from("email_drafts").update({
+        status: "sent",
+        sent_at: new Date().toISOString(),
+        sent_message_id: result.message_id || null,
+      }).eq("id", id).select("*").maybeSingle();
+      // Auto-dismiss sibling variants
+      if (draft.generation_id) {
+        await supabase.from("email_drafts")
+          .update({ status: "dismissed", dismissed_at: new Date().toISOString() })
+          .eq("generation_id", draft.generation_id)
+          .neq("id", id)
+          .in("status", ["draft", "approved"]);
+      }
+      return new Response(JSON.stringify({ draft: updated, send_result: result }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
+    if (action === "send_batch") {
+      const { ids } = body as { ids: string[] };
+      const results: any[] = [];
+      for (const id of ids) {
+        try {
+          const { data: draft } = await supabase.from("email_drafts").select("*").eq("id", id).maybeSingle();
+          if (!draft || draft.status === "sent") { results.push({ id, ok: false, error: "not sendable" }); continue; }
+          const r = await sendViaGmail(draft, body.adminPassword);
+          await supabase.from("email_drafts").update({ status: "sent", sent_at: new Date().toISOString(), sent_message_id: r.message_id || null }).eq("id", id);
+          if (draft.generation_id) {
+            await supabase.from("email_drafts").update({ status: "dismissed", dismissed_at: new Date().toISOString() })
+              .eq("generation_id", draft.generation_id).neq("id", id).in("status", ["draft", "approved"]);
+          }
+          results.push({ id, ok: true, message_id: r.message_id });
+        } catch (e) {
+          results.push({ id, ok: false, error: String(e?.message || e) });
+        }
+      }
+      return new Response(JSON.stringify({ results }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
+    return new Response(JSON.stringify({ error: `Unknown action: ${action}` }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+  } catch (e) {
+    console.error("drafts-admin error", e);
+    return new Response(JSON.stringify({ error: String(e?.message || e) }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+  }
+});

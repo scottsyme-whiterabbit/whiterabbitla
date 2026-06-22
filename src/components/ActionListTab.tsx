@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { toast } from "sonner";
-import { Phone, PhoneOutgoing, Mail, ChevronDown, ChevronUp, Search, Flame, Clock, CheckCircle, TrendingUp, ClipboardList, Pencil } from "lucide-react";
+import { Phone, PhoneOutgoing, Mail, ChevronDown, ChevronUp, Search, Flame, Clock, CheckCircle, TrendingUp, ClipboardList, Pencil, Sparkles } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { format } from "date-fns";
+import AIDraftModal, { type AIDraftContext } from "./AIDraftModal";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -142,6 +143,20 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
     deal_value: "", notes: "", next_follow_up: "",
   });
   const [editSaving, setEditSaving] = useState(false);
+  const [aiDraftCtx, setAiDraftCtx] = useState<AIDraftContext | null>(null);
+
+  const openAIDraft = (item: ActionItem) => {
+    setAiDraftCtx({
+      contact_email: item.email,
+      contact_name: item.name,
+      company: item.company,
+      vertical: item.deal?.event_type || item.contact?.drip_campaign || null,
+      source: item.source,
+      deal_id: item.deal?.id || null,
+      engagement_summary: item.engagement,
+      notes: item.deal?.notes || null,
+    });
+  };
 
   const openEditModal = (item: ActionItem) => {
     setEditModal(item);
@@ -658,8 +673,8 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                     <button onClick={() => openLogModal(item, "call")} className="flex items-center justify-center gap-1 px-1.5 py-1 bg-muted/20 text-foreground border border-border text-[10px] tracking-wider uppercase hover:bg-muted/30 transition-colors" title="Log a call">
                       <ClipboardList size={10} /> Log
                     </button>
-                    <button onClick={() => openLogModal(item, "email")} className="flex items-center justify-center gap-1 px-1.5 py-1 bg-accent/20 text-accent border border-accent/30 text-[10px] tracking-wider uppercase hover:bg-accent/30 transition-colors">
-                      <Mail size={10} /> Email
+                    <button onClick={() => openAIDraft(item)} className="flex items-center justify-center gap-1 px-1.5 py-1 bg-accent/20 text-accent border border-accent/30 text-[10px] tracking-wider uppercase hover:bg-accent/30 transition-colors" title="AI-draft a follow-up email">
+                      <Sparkles size={10} /> AI Draft
                     </button>
                     <button onClick={() => openEditModal(item)} className="flex items-center justify-center gap-1 px-1.5 py-1 bg-muted/20 text-foreground border border-border text-[10px] tracking-wider uppercase hover:bg-muted/30 transition-colors" title="Edit contact info">
                       <Pencil size={10} /> Edit
@@ -783,14 +798,14 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                         <Phone size={14} /> Direct
                       </a>
                     )}
-                    <a
-                      href={`mailto:${item.email}`}
-                      onClick={(e) => e.stopPropagation()}
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); openAIDraft(item); }}
                       className="flex items-center justify-center gap-1.5 py-3 bg-accent/20 text-accent border border-accent/30 text-[10px] tracking-wider uppercase font-sans active:bg-accent/40 touch-manipulation"
                       style={{ minHeight: '44px' }}
                     >
-                      <Mail size={14} /> Email
-                    </a>
+                      <Sparkles size={14} /> AI Draft
+                    </button>
                     <button
                       type="button"
                       onClick={(e) => { e.stopPropagation(); openLogModal(item, "call"); }}
@@ -996,6 +1011,13 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
           </div>
         </DialogContent>
       </Dialog>
+
+      <AIDraftModal
+        open={!!aiDraftCtx}
+        onClose={() => setAiDraftCtx(null)}
+        adminPassword={adminPassword}
+        context={aiDraftCtx}
+      />
     </div>
   );
 };
