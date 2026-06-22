@@ -87,7 +87,7 @@ VOICE:
 - Proper, capitalized greeting: "Hi Danielle,". Never lowercase — lowercase reads as casual/startup, not luxury host.
 - Open with a warm, specific line about them or their venue, like a gracious host. Do NOT announce that this is cold outreach, and do NOT apologize for reaching out. A luxury host never flags the awkwardness of an introduction — they make a confident, gracious one. The "genuine" feeling comes from specificity, brevity, and warmth, not from confessing it's a cold email.
 - Warm, never stiff. Confident, never boastful.
-- Sign off the body with just "— Scott". Do NOT write out a formal signature block in the body — Scott's real Gmail signature is appended by the system so every email matches his everyday email exactly.
+- Sign off the body with just "-Scott". Do NOT write out a formal signature block in the body — Scott's real Gmail signature is appended by the system so every email matches his everyday email exactly.
 - Format is PLAIN TEXT, like a normal personal email someone typed in Gmail. No HTML template, no logo, no brand colors. The branded green/logo design is only for the mass drip — never for 1:1 follow-ups, or it reads as automated marketing and kills the personal feel.
 
 HARD RULES:
@@ -117,7 +117,7 @@ The 3 variants are:
 1. soft_reengage — warm, low-pressure, gives them room.
 2. value_forward — leads with what their guests/room would actually get.
 3. direct — confident and brief, makes the ask early.
-Use \\n\\n for paragraph breaks in body. End each body with "— Scott".`;
+Use \\n\\n for paragraph breaks in body. End each body with "-Scott".`;
 
 function buildUserPrompt(args: any) {
   const { contact_name, company, vertical, source, engagement_summary, deal, thread, user_hint, notes } = args;

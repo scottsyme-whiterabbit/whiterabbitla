@@ -81,13 +81,13 @@ function escapeHtml(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-// Strip any AI-generated sign-off lines so we don't duplicate "— Scott" above the signature.
+// Strip any AI-generated sign-off lines so we don't duplicate "-Scott" above the signature.
 function stripTrailingSignoff(body: string): string {
   let out = body.replace(/\s+$/, "");
   // Remove trailing "-- " separator and anything that looks like a hand-typed sig block
   out = out.replace(/\n--\s*\n[\s\S]*$/m, "");
-  // Strip trailing "— Scott" / "-Scott" / "- Scott" / "Scott Syme" lines
-  out = out.replace(/(\n\s*[-—–]\s*Scott(\s+Syme)?\s*)+\s*$/i, "");
+  // Strip trailing "-Scott" / "— Scott" / "- Scott" / "Scott Syme" lines
+  out = out.replace(/(\s*[-—–]\s*Scott(\s+Syme)?\s*)+\s*$/i, "");
   out = out.replace(/(\n\s*Scott(\s+Syme)?\s*)+$/i, "");
   return out.replace(/\s+$/, "");
 }
