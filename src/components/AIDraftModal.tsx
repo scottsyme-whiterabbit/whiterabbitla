@@ -68,11 +68,13 @@ export default function AIDraftModal({ open, onClose, adminPassword, context }: 
     }
   };
 
-  // Auto-generate when opened
-  useState(() => {
-    if (open && context && drafts.length === 0 && !loading) generate();
-    return undefined;
-  });
+  // Auto-generate the first time the modal opens for a given contact
+  useEffect(() => {
+    if (open && context && drafts.length === 0 && !loading) {
+      generate();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, context?.contact_email]);
 
   const current = drafts[active];
 
