@@ -1011,6 +1011,13 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
           </div>
         </DialogContent>
       </Dialog>
+
+      <AIDraftModal
+        open={!!aiDraftCtx}
+        onClose={() => setAiDraftCtx(null)}
+        adminPassword={adminPassword}
+        context={aiDraftCtx}
+      />
     </div>
   );
 };
