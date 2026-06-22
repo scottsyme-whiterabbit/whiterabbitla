@@ -752,6 +752,81 @@ export type Database = {
           },
         ]
       }
+      email_drafts: {
+        Row: {
+          ai_meta: Json | null
+          angle: string | null
+          body: string
+          company: string | null
+          contact_email: string
+          contact_name: string | null
+          created_at: string
+          deal_id: string | null
+          dismissed_at: string | null
+          generation_id: string | null
+          gmail_thread_id: string | null
+          id: string
+          in_reply_to: string | null
+          sent_at: string | null
+          sent_message_id: string | null
+          source: string | null
+          status: string
+          subject: string
+          updated_at: string
+          user_hint: string | null
+          variant_index: number
+          vertical: string | null
+        }
+        Insert: {
+          ai_meta?: Json | null
+          angle?: string | null
+          body: string
+          company?: string | null
+          contact_email: string
+          contact_name?: string | null
+          created_at?: string
+          deal_id?: string | null
+          dismissed_at?: string | null
+          generation_id?: string | null
+          gmail_thread_id?: string | null
+          id?: string
+          in_reply_to?: string | null
+          sent_at?: string | null
+          sent_message_id?: string | null
+          source?: string | null
+          status?: string
+          subject: string
+          updated_at?: string
+          user_hint?: string | null
+          variant_index?: number
+          vertical?: string | null
+        }
+        Update: {
+          ai_meta?: Json | null
+          angle?: string | null
+          body?: string
+          company?: string | null
+          contact_email?: string
+          contact_name?: string | null
+          created_at?: string
+          deal_id?: string | null
+          dismissed_at?: string | null
+          generation_id?: string | null
+          gmail_thread_id?: string | null
+          id?: string
+          in_reply_to?: string | null
+          sent_at?: string | null
+          sent_message_id?: string | null
+          source?: string | null
+          status?: string
+          subject?: string
+          updated_at?: string
+          user_hint?: string | null
+          variant_index?: number
+          vertical?: string | null
+        }
+        Relationships: []
+      }
       email_suppression_list: {
         Row: {
           email: string
