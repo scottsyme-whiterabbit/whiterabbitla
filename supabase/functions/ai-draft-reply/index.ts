@@ -252,7 +252,7 @@ serve(async (req) => {
       status: "draft",
       user_hint: user_hint || null,
       generation_id,
-      ai_meta: { thread_messages: thread.messages.length, engagement },
+      ai_meta: { thread_messages: thread.messages.length, engagement, needs_personal_touch: !!parsed.needs_personal_touch, hook_used: parsed.hook_used || null },
     }));
     const { data: inserted, error } = await supabase.from("email_drafts").insert(rows).select("*");
     if (error) throw error;
