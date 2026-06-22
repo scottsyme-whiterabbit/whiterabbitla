@@ -692,7 +692,7 @@ const AdminNewsletter = () => {
 
         {/* Desktop Tabs — hidden on mobile */}
         <div className="hidden md:flex gap-1 mb-8 border-b border-border overflow-x-auto">
-          {(["dashboard", "pipeline", "inbox", "actions", "revenue", "contacts", "cold", "castle", "compose", "campaigns", "calendar", "analytics", "email_analytics", "lead_attribution", "planner", "apartment", "thankyou"] as const).map(tab => (
+          {(["dashboard", "pipeline", "inbox", "actions", "followups", "revenue", "contacts", "cold", "castle", "compose", "campaigns", "calendar", "analytics", "email_analytics", "lead_attribution", "planner", "apartment", "thankyou"] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
