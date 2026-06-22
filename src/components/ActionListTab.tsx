@@ -798,14 +798,14 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                         <Phone size={14} /> Direct
                       </a>
                     )}
-                    <a
-                      href={`mailto:${item.email}`}
-                      onClick={(e) => e.stopPropagation()}
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); openAIDraft(item); }}
                       className="flex items-center justify-center gap-1.5 py-3 bg-accent/20 text-accent border border-accent/30 text-[10px] tracking-wider uppercase font-sans active:bg-accent/40 touch-manipulation"
                       style={{ minHeight: '44px' }}
                     >
-                      <Mail size={14} /> Email
-                    </a>
+                      <Sparkles size={14} /> AI Draft
+                    </button>
                     <button
                       type="button"
                       onClick={(e) => { e.stopPropagation(); openLogModal(item, "call"); }}
