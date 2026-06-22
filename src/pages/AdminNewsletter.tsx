@@ -700,7 +700,7 @@ const AdminNewsletter = () => {
                 activeTab === tab ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              {tab === "actions" ? "ACTION LIST" : tab === "inbox" ? "📬 INBOX" : tab === "email_analytics" ? "📊 EMAIL ANALYTICS" : tab === "lead_attribution" ? "📈 ATTRIBUTION" : tab === "cold" ? "🎯 OUTREACH" : tab === "castle" ? "🏰 CASTLE" : tab}
+              {tab === "actions" ? "ACTION LIST" : tab === "followups" ? "✨ FOLLOW-UPS" : tab === "inbox" ? "📬 INBOX" : tab === "email_analytics" ? "📊 EMAIL ANALYTICS" : tab === "lead_attribution" ? "📈 ATTRIBUTION" : tab === "cold" ? "🎯 OUTREACH" : tab === "castle" ? "🏰 CASTLE" : tab}
               {tab === "actions" && actionBadge > 0 && (
                 <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-[9px] font-sans min-w-[16px] h-4 flex items-center justify-center rounded-full px-1">{actionBadge}</span>
               )}
