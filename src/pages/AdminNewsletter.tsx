@@ -718,7 +718,7 @@ const AdminNewsletter = () => {
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-4 space-y-1">
-              {(["dashboard", "pipeline", "inbox", "actions", "revenue", "contacts", "cold", "castle", "compose", "campaigns", "calendar", "analytics", "email_analytics", "lead_attribution", "planner", "apartment", "thankyou"] as const).map(tab => (
+              {(["dashboard", "pipeline", "inbox", "actions", "followups", "revenue", "contacts", "cold", "castle", "compose", "campaigns", "calendar", "analytics", "email_analytics", "lead_attribution", "planner", "apartment", "thankyou"] as const).map(tab => (
                 <button
                   key={tab}
                   onClick={() => { setActiveTab(tab); setShowMoreTabs(false); }}
