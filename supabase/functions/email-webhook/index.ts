@@ -212,6 +212,14 @@ serve(async (req) => {
             contact_source: "newsletter",
           });
 
+          await supabase.from("action_log").insert({
+            action_type: "email_clicked",
+            contact_email: recipientEmail,
+            contact_name: contact.name || null,
+            summary: `${recipientEmail} clicked a link`,
+            metadata: { link: body.data?.click?.link || null, source: "newsletter" },
+          });
+
           await supabase
             .from("newsletter_contacts")
             .update({ engagement_status: "hot" })
