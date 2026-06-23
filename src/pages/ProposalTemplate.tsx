@@ -363,6 +363,65 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         </div>
       </section>
 
+      {/* REVIEWS */}
+      <section className="relative bg-cream py-16 md:py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">What Hosts Say</p>
+            <OrnamentalDivider />
+            <h2 className="font-serif font-light text-3xl md:text-4xl text-forest-dark mt-6">A Few Words From the Room</h2>
+          </div>
+          <div className="grid md:grid-cols-3 gap-5 md:gap-6">
+            {[
+              {
+                text: "That was well worth it.",
+                name: "Don Cheadle",
+                role: "Actor",
+              },
+              {
+                text: "Beyond magnificent. Scott is mesmerizing and my guests were in awe the entire time. I was truly blown away and will most definitely be booking him for future events.",
+                name: "Farnaz F.",
+                role: "40th Birthday, Gravitas Beverly Hills",
+              },
+              {
+                text: "Scott performed at a 200-person event for us this week and the guests absolutely LOVED him. I could not recommend him more. We can't wait to have him back.",
+                name: "Jamie I.",
+                role: "Morgan Stanley",
+              },
+            ].map((r, i) => (
+              <figure key={i} className="relative bg-cream border border-forest-dark/10 p-6 md:p-7 flex flex-col">
+                <span className="absolute top-0 left-0 w-4 h-px bg-gold/70" />
+                <span className="absolute top-0 left-0 w-px h-4 bg-gold/70" />
+                <span className="absolute top-0 right-0 w-4 h-px bg-gold/70" />
+                <span className="absolute top-0 right-0 w-px h-4 bg-gold/70" />
+                <span className="absolute bottom-0 left-0 w-4 h-px bg-gold/70" />
+                <span className="absolute bottom-0 left-0 w-px h-4 bg-gold/70" />
+                <span className="absolute bottom-0 right-0 w-4 h-px bg-gold/70" />
+                <span className="absolute bottom-0 right-0 w-px h-4 bg-gold/70" />
+                <div className="text-gold text-sm tracking-[0.3em] mb-3">★ ★ ★ ★ ★</div>
+                <blockquote className="font-serif text-lg md:text-xl leading-relaxed text-forest-dark/90 flex-1">
+                  "{r.text}"
+                </blockquote>
+                <figcaption className="mt-5 pt-4 border-t border-gold/30">
+                  <div className="font-sans text-sm font-medium text-forest-dark">{r.name}</div>
+                  <div className="font-sans text-xs text-forest-dark/60 tracking-wide">{r.role}</div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+          <div className="text-center mt-10">
+            <a
+              href="https://whiterabbitla.com/reviews"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block py-3.5 px-8 text-xs tracking-[0.2em] uppercase font-medium border border-forest-dark/40 text-forest-dark hover:bg-forest-dark hover:text-cream transition-colors"
+            >
+              Read All Reviews
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* PHOTO BREAK 3 */}
       <section className="relative h-56 md:h-80 overflow-hidden bg-forest-dark">
         <img src={photoScottBw} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover object-top opacity-80" />
