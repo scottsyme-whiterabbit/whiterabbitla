@@ -160,6 +160,17 @@ serve(async (req) => {
           console.log(`Cold contact opened email: ${recipientEmail} (campaign: ${coldContact.campaign_category}, step: ${coldContact.current_step})`);
         }
 
+        // Mirror open into action_log
+        if (contact || coldContact) {
+          await supabase.from("action_log").insert({
+            action_type: "email_opened",
+            contact_email: recipientEmail,
+            contact_name: contact?.name || coldContact?.contact_name || null,
+            summary: `${recipientEmail} opened an email`,
+            metadata: { source: contact ? "newsletter" : "cold", user_agent: body.data?.user_agent || null },
+          });
+        }
+
         if (contact && (contact.engagement_status === "new" || contact.engagement_status === "warm")) {
           const { count: openCount } = await supabase
             .from("newsletter_opens")
@@ -201,6 +212,14 @@ serve(async (req) => {
             contact_source: "newsletter",
           });
 
+          await supabase.from("action_log").insert({
+            action_type: "email_clicked",
+            contact_email: recipientEmail,
+            contact_name: contact.name || null,
+            summary: `${recipientEmail} clicked a link`,
+            metadata: { link: body.data?.click?.link || null, source: "newsletter" },
+          });
+
           await supabase
             .from("newsletter_contacts")
             .update({ engagement_status: "hot" })
@@ -237,6 +256,13 @@ serve(async (req) => {
             drip_step: coldContact.current_step ?? 0,
             link_slug: _clickedLinkAll.replace(/^https?:\/\/[^/]+/, "").replace(/^\//, ""),
             contact_source: "cold",
+          });
+          await supabase.from("action_log").insert({
+            action_type: "email_clicked",
+            contact_email: recipientEmail,
+            contact_name: coldContact.contact_name || null,
+            summary: `${recipientEmail} clicked a link`,
+            metadata: { link: _clickedLinkAll, source: "cold" },
           });
         }
         if (coldContact && coldContact.status === "active") {

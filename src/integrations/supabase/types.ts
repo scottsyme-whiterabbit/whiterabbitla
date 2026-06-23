@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      action_log: {
+        Row: {
+          action_type: string
+          actor: string
+          contact_email: string | null
+          contact_name: string | null
+          created_at: string
+          deal_id: string | null
+          draft_id: string | null
+          id: string
+          metadata: Json
+          occurred_at: string
+          subject: string | null
+          summary: string | null
+        }
+        Insert: {
+          action_type: string
+          actor?: string
+          contact_email?: string | null
+          contact_name?: string | null
+          created_at?: string
+          deal_id?: string | null
+          draft_id?: string | null
+          id?: string
+          metadata?: Json
+          occurred_at?: string
+          subject?: string | null
+          summary?: string | null
+        }
+        Update: {
+          action_type?: string
+          actor?: string
+          contact_email?: string | null
+          contact_name?: string | null
+          created_at?: string
+          deal_id?: string | null
+          draft_id?: string | null
+          id?: string
+          metadata?: Json
+          occurred_at?: string
+          subject?: string | null
+          summary?: string | null
+        }
+        Relationships: []
+      }
       auto_unsubscribe_log: {
         Row: {
           email: string

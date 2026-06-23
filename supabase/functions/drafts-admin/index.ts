@@ -13,6 +13,23 @@ const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const ADMIN_PASSWORD = Deno.env.get("ADMIN_PASSWORD");
 const supabase = createClient(SUPABASE_URL, SERVICE_KEY);
 
+async function logAction(row: { action_type: string; contact_email?: string | null; contact_name?: string | null; deal_id?: string | null; draft_id?: string | null; subject?: string | null; summary?: string | null; metadata?: any }) {
+  try {
+    await supabase.from("action_log").insert({
+      action_type: row.action_type,
+      contact_email: row.contact_email || null,
+      contact_name: row.contact_name || null,
+      deal_id: row.deal_id || null,
+      draft_id: row.draft_id || null,
+      subject: row.subject || null,
+      summary: row.summary || null,
+      metadata: row.metadata || {},
+    });
+  } catch (e) {
+    console.warn("action_log insert failed", e);
+  }
+}
+
 async function sendViaGmail(draft: any, adminPassword: string) {
   const r = await fetch(`${SUPABASE_URL}/functions/v1/gmail-send`, {
     method: "POST",
@@ -66,6 +83,7 @@ serve(async (req) => {
       if (user_hint !== undefined) patch.user_hint = user_hint;
       const { data, error } = await supabase.from("email_drafts").update(patch).eq("id", id).select("*").maybeSingle();
       if (error) throw error;
+      await logAction({ action_type: "draft_edited", contact_email: data?.contact_email, contact_name: data?.contact_name, deal_id: data?.deal_id, draft_id: id, subject: data?.subject, summary: `Edited draft to ${data?.contact_email}`, metadata: { fields: Object.keys(patch).filter(k => k !== "updated_at") } });
       return new Response(JSON.stringify({ draft: data }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
@@ -84,6 +102,11 @@ serve(async (req) => {
           .neq("id", id)
           .in("status", ["draft"]);
       }
+      await logAction({
+        action_type: action === "approve" ? "draft_approved" : "draft_dismissed",
+        contact_email: data?.contact_email, contact_name: data?.contact_name, deal_id: data?.deal_id, draft_id: id, subject: data?.subject,
+        summary: action === "approve" ? `Approved draft to ${data?.contact_email}` : `Dismissed draft to ${data?.contact_email}`,
+      });
       return new Response(JSON.stringify({ draft: data }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
@@ -107,6 +130,7 @@ serve(async (req) => {
           .neq("id", id)
           .in("status", ["draft", "approved"]);
       }
+      await logAction({ action_type: "email_sent", contact_email: draft.contact_email, contact_name: draft.contact_name, deal_id: draft.deal_id, draft_id: id, subject: draft.subject, summary: `Sent email to ${draft.contact_email}`, metadata: { message_id: result.message_id || null, gmail_thread_id: draft.gmail_thread_id || null } });
       return new Response(JSON.stringify({ draft: updated, send_result: result }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
@@ -123,6 +147,7 @@ serve(async (req) => {
             await supabase.from("email_drafts").update({ status: "dismissed", dismissed_at: new Date().toISOString() })
               .eq("generation_id", draft.generation_id).neq("id", id).in("status", ["draft", "approved"]);
           }
+          await logAction({ action_type: "email_sent", contact_email: draft.contact_email, contact_name: draft.contact_name, deal_id: draft.deal_id, draft_id: id, subject: draft.subject, summary: `Sent email to ${draft.contact_email}`, metadata: { batch: true, message_id: r.message_id || null } });
           results.push({ id, ok: true, message_id: r.message_id });
         } catch (e) {
           results.push({ id, ok: false, error: String(e?.message || e) });
@@ -130,6 +155,20 @@ serve(async (req) => {
       }
       return new Response(JSON.stringify({ results }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
+
+    // Read activity log
+    if (action === "log_list") {
+      const limit = Math.min(Number(body.limit) || 100, 500);
+      const filterType = body.action_type;
+      const filterEmail = body.contact_email;
+      let q = supabase.from("action_log").select("*").order("occurred_at", { ascending: false }).limit(limit);
+      if (filterType) q = q.eq("action_type", filterType);
+      if (filterEmail) q = q.eq("contact_email", filterEmail);
+      const { data, error } = await q;
+      if (error) throw error;
+      return new Response(JSON.stringify({ entries: data }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
 
     return new Response(JSON.stringify({ error: `Unknown action: ${action}` }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e) {
