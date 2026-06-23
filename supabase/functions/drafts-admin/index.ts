@@ -181,6 +181,7 @@ serve(async (req) => {
               .eq("generation_id", draft.generation_id).neq("id", id).in("status", ["draft", "approved"]);
           }
           await logAction({ action_type: "email_sent", contact_email: draft.contact_email, contact_name: draft.contact_name, deal_id: draft.deal_id, draft_id: id, subject: draft.subject, summary: `Sent email to ${draft.contact_email}`, metadata: { batch: true, message_id: r.message_id || null } });
+          await markContactedAfterSend(draft, r.message_id || null);
           results.push({ id, ok: true, message_id: r.message_id });
         } catch (e) {
           results.push({ id, ok: false, error: String(e?.message || e) });
