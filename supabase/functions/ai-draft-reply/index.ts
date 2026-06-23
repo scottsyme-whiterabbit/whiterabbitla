@@ -257,6 +257,18 @@ serve(async (req) => {
     const { data: inserted, error } = await supabase.from("email_drafts").insert(rows).select("*");
     if (error) throw error;
 
+    // Log to action_log
+    try {
+      await supabase.from("action_log").insert({
+        action_type: "draft_generated",
+        contact_email,
+        contact_name: contact_name || null,
+        deal_id: deal_id || null,
+        summary: `AI drafted ${variants.length} reply variant${variants.length === 1 ? "" : "s"}${parsed.hook_used ? ` — hook: ${parsed.hook_used}` : ""}`,
+        metadata: { generation_id, variant_count: variants.length, hook_used: parsed.hook_used || null, needs_personal_touch: !!parsed.needs_personal_touch, user_hint: user_hint || null },
+      });
+    } catch (e) { console.warn("action_log insert failed", e); }
+
     return new Response(JSON.stringify({ success: true, generation_id, drafts: inserted, thread_context: { messageCount: thread.messages.length, hadPriorThread: !!resolvedThreadId } }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
