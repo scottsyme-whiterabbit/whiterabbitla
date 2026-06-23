@@ -806,6 +806,11 @@ const AdminNewsletter = () => {
           <FollowupQueueTab adminPassword={storedPassword} />
         )}
 
+        {/* Activity Log */}
+        {activeTab === "activity" && (
+          <ActivityLogTab adminPassword={storedPassword} />
+        )}
+
         {/* Revenue */}
         {activeTab === "revenue" && (
           <RevenueTab adminPassword={storedPassword} />
