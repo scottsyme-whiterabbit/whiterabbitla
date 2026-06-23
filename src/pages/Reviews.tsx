@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import QuizCTA from "@/components/QuizCTA";
 import audienceImg from "@/assets/event-audience.jpg";
 import SEOHead from "@/components/SEOHead";
-import { useBreadcrumbSchema, useSpeakableSchema } from "@/hooks/useSchemaOrg";
+import { useBreadcrumbSchema, useSpeakableSchema, useJsonLd } from "@/hooks/useSchemaOrg";
 import threeStars from "@/assets/three-stars-gold.png";
 import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
