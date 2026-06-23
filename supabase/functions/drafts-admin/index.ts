@@ -163,6 +163,7 @@ serve(async (req) => {
           .in("status", ["draft", "approved"]);
       }
       await logAction({ action_type: "email_sent", contact_email: draft.contact_email, contact_name: draft.contact_name, deal_id: draft.deal_id, draft_id: id, subject: draft.subject, summary: `Sent email to ${draft.contact_email}`, metadata: { message_id: result.message_id || null, gmail_thread_id: draft.gmail_thread_id || null } });
+      await markContactedAfterSend(draft, result.message_id || null);
       return new Response(JSON.stringify({ draft: updated, send_result: result }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
