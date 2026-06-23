@@ -331,6 +331,11 @@ const BlogArticle = () => {
                         White Rabbit · Private Event Entertainment
                       </figcaption>
                     </figure>
+                    {slug === "best-magic-shows-las-vegas" && (
+                      <p className="font-sans text-base text-muted-foreground leading-[1.85] mb-7 -mt-4 md:-mt-6">
+                        There's a reason the best Vegas performers stay after the show to shake every hand. The magic people carry home is the moment it happened close enough to touch, with their own card, in their own hands. That's what White Rabbit brings to a private event: your guests don't watch the show, they become the show.
+                      </p>
+                    )}
                   </AnimatedSection>
                 );
               }
