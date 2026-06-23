@@ -15,6 +15,28 @@ const gvCallUrl = (phone: string) => {
   return `https://voice.google.com/u/0/calls?a=nc,${encodeURIComponent(num)}`;
 };
 
+// Fallback "business name" from the email domain when no explicit company is set,
+// so the Action List shows something Scott can address the owner of by name.
+const GENERIC_EMAIL_DOMAINS = new Set([
+  "gmail.com","yahoo.com","hotmail.com","outlook.com","icloud.com","me.com",
+  "aol.com","live.com","msn.com","comcast.net","proton.me","protonmail.com",
+  "googlemail.com","mac.com","ymail.com",
+]);
+const businessFromEmail = (email?: string | null): string | null => {
+  if (!email) return null;
+  const at = email.lastIndexOf("@");
+  if (at < 0) return null;
+  const domain = email.slice(at + 1).toLowerCase().trim();
+  if (!domain || GENERIC_EMAIL_DOMAINS.has(domain)) return null;
+  const root = domain.replace(/\.(com|net|org|co|io|us|biz|info|tv|me|app|inc|llc|group|agency|events)(\.[a-z]{2})?$/i, "")
+    .split(".").slice(-1)[0] || domain.split(".")[0];
+  return root
+    .split(/[-_]/)
+    .filter(Boolean)
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+};
+
 interface Deal {
   id: string;
   contact_email: string;
@@ -281,7 +303,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
       if (deal.event_date) engagement += `, ${format(new Date(deal.event_date + "T00:00:00"), "MMM d")}`;
 
       items.push({
-        type: "deal", email, name: deal.contact_name, company: deal.company,
+        type: "deal", email, name: deal.contact_name, company: deal.company || businessFromEmail(email),
         source: deal.source || "Manual", engagement, priority, priorityScore,
         phone: deal.phone,
         deal, lastOutreach: lastLog, outreachStatus: status,
@@ -295,7 +317,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
       const lastLog = outreachLogs.find(l => l.contact_email.toLowerCase() === email);
       const isHot = c.engagement_status === "hot";
       items.push({
-        type: "contact", email, name: c.name, company: c.company,
+        type: "contact", email, name: c.name, company: c.company || businessFromEmail(email),
         source: c.drip_campaign === "planner" ? "Planner Drip" : c.drip_campaign === "resident" ? "Apartment Drip" : c.source || "Drip",
         engagement: isHot ? "Highly engaged (3+ interactions)" : "Warm (1-2 interactions)",
         priority: isHot ? "hot" : "warm",
@@ -334,7 +356,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
         type: "inbound",
         email,
         name: lead.name,
-        company: null,
+        company: businessFromEmail(email),
         source: sourceLabel,
         engagement,
         priority: isNew ? "hot" : "warm",
