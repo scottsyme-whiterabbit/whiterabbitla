@@ -222,6 +222,21 @@ const Reviews = () => {
   const seoDescription = "Read 50+ five-star reviews from corporate planners, brides, and private event hosts. See why White Rabbit is LA's most trusted luxury magic entertainment.";
   useBreadcrumbSchema([{ name: "Home", path: "/" }, { name: "Reviews", path: "/reviews" }]);
   useSpeakableSchema({ name: "Client Reviews", path: "/reviews" });
+  useJsonLd("business-reviews", {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": "https://whiterabbitla.com/#business",
+    review: reviews.map((r) => ({
+      "@type": "Review",
+      author: { "@type": "Person", name: r.name },
+      reviewBody: r.text,
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: String(r.rating),
+        bestRating: "5"
+      }
+    }))
+  });
 
 
   return (
