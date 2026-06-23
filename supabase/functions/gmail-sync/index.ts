@@ -152,6 +152,17 @@ async function syncDeal(deal: any) {
       occurred_at: sentAt,
     });
 
+    // Mirror into action_log so the activity log shows replies + sends
+    await supabase.from("action_log").insert({
+      action_type: direction === "inbound" ? "reply_received" : "email_sent_gmail",
+      contact_email: direction === "inbound" ? from : to,
+      deal_id: deal.id,
+      subject,
+      summary: direction === "inbound" ? `Reply received from ${from}` : `Email sent to ${to}`,
+      metadata: { gmail_message_id: m.id, gmail_thread_id: threadId, snippet },
+      occurred_at: sentAt,
+    });
+
     if (direction === "inbound") {
       newInbound++;
       if (!latestInboundAt || sentAt > latestInboundAt) latestInboundAt = sentAt;
