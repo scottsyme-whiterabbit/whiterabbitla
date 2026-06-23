@@ -15,6 +15,28 @@ const gvCallUrl = (phone: string) => {
   return `https://voice.google.com/u/0/calls?a=nc,${encodeURIComponent(num)}`;
 };
 
+// Fallback "business name" from the email domain when no explicit company is set,
+// so the Action List shows something Scott can address the owner of by name.
+const GENERIC_EMAIL_DOMAINS = new Set([
+  "gmail.com","yahoo.com","hotmail.com","outlook.com","icloud.com","me.com",
+  "aol.com","live.com","msn.com","comcast.net","proton.me","protonmail.com",
+  "googlemail.com","mac.com","ymail.com",
+]);
+const businessFromEmail = (email?: string | null): string | null => {
+  if (!email) return null;
+  const at = email.lastIndexOf("@");
+  if (at < 0) return null;
+  const domain = email.slice(at + 1).toLowerCase().trim();
+  if (!domain || GENERIC_EMAIL_DOMAINS.has(domain)) return null;
+  const root = domain.replace(/\.(com|net|org|co|io|us|biz|info|tv|me|app|inc|llc|group|agency|events)(\.[a-z]{2})?$/i, "")
+    .split(".").slice(-1)[0] || domain.split(".")[0];
+  return root
+    .split(/[-_]/)
+    .filter(Boolean)
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+};
+
 interface Deal {
   id: string;
   contact_email: string;
