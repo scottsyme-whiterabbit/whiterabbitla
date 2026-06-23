@@ -366,6 +366,11 @@ const BlogArticle = () => {
                         White Rabbit · Los Angeles
                       </figcaption>
                     </figure>
+                    {slug === "best-magic-shows-las-vegas" && (
+                      <p className="font-sans text-base text-muted-foreground leading-[1.85] mb-7 -mt-4 md:-mt-6">
+                        Take away the spectacle and you find what magic has always been: a small group, a quiet room, and the sense that the person in front of you is genuinely glad you're here. That's the standard White Rabbit was built on, performed in living rooms, ballrooms, and boardrooms across the country.
+                      </p>
+                    )}
                   </AnimatedSection>
                 );
               }
