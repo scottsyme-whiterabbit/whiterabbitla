@@ -13,6 +13,23 @@ const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const ADMIN_PASSWORD = Deno.env.get("ADMIN_PASSWORD");
 const supabase = createClient(SUPABASE_URL, SERVICE_KEY);
 
+async function logAction(row: { action_type: string; contact_email?: string | null; contact_name?: string | null; deal_id?: string | null; draft_id?: string | null; subject?: string | null; summary?: string | null; metadata?: any }) {
+  try {
+    await supabase.from("action_log").insert({
+      action_type: row.action_type,
+      contact_email: row.contact_email || null,
+      contact_name: row.contact_name || null,
+      deal_id: row.deal_id || null,
+      draft_id: row.draft_id || null,
+      subject: row.subject || null,
+      summary: row.summary || null,
+      metadata: row.metadata || {},
+    });
+  } catch (e) {
+    console.warn("action_log insert failed", e);
+  }
+}
+
 async function sendViaGmail(draft: any, adminPassword: string) {
   const r = await fetch(`${SUPABASE_URL}/functions/v1/gmail-send`, {
     method: "POST",
