@@ -190,32 +190,34 @@ export default function ActivityLogTab({ adminPassword }: Props) {
             const drafts = g.counts.draft_generated || 0;
             return (
               <div key={g.email} className="border border-border bg-background hover:border-accent/30 transition-colors">
-                <div className="p-3 flex items-center gap-3 flex-wrap">
+                <div className="p-3 flex items-start sm:items-center gap-3 flex-wrap">
                   <div className="shrink-0 w-9 h-9 bg-muted/30 border border-border flex items-center justify-center">
                     <User size={14} className="text-muted-foreground" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{g.name || g.email.split("@")[0]}</p>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <p className="text-sm font-medium truncate">{g.name || g.email.split("@")[0]}</p>
+                      <span className="text-[10px] text-muted-foreground whitespace-nowrap">
+                        {formatDistanceToNow(new Date(g.lastAt), { addSuffix: true })}
+                      </span>
+                    </div>
                     <p className="text-[10px] text-muted-foreground truncate">{g.email}</p>
+                    <div className="flex gap-1 flex-wrap text-[10px] mt-1.5">
+                      {sent > 0 && <span className="px-2 py-0.5 border border-emerald-500/30 bg-emerald-500/10 text-emerald-300">{sent} sent</span>}
+                      {opens > 0 && <span className="px-2 py-0.5 border border-sky-500/30 bg-sky-500/10 text-sky-300">{opens} open{opens === 1 ? "" : "s"}</span>}
+                      {clicks > 0 && <span className="px-2 py-0.5 border border-rose-500/30 bg-rose-500/10 text-rose-300">{clicks} click{clicks === 1 ? "" : "s"}</span>}
+                      {replies > 0 && <span className="px-2 py-0.5 border border-orange-500/30 bg-orange-500/10 text-orange-300">{replies} repl{replies === 1 ? "y" : "ies"}</span>}
+                      {drafts > 0 && <span className="px-2 py-0.5 border border-purple-500/30 bg-purple-500/10 text-purple-300">{drafts} draft{drafts === 1 ? "" : "s"}</span>}
+                    </div>
                   </div>
-                  <div className="flex gap-1 flex-wrap text-[10px]">
-                    {sent > 0 && <span className="px-2 py-0.5 border border-emerald-500/30 bg-emerald-500/10 text-emerald-300">{sent} sent</span>}
-                    {opens > 0 && <span className="px-2 py-0.5 border border-sky-500/30 bg-sky-500/10 text-sky-300">{opens} open{opens === 1 ? "" : "s"}</span>}
-                    {clicks > 0 && <span className="px-2 py-0.5 border border-rose-500/30 bg-rose-500/10 text-rose-300">{clicks} click{clicks === 1 ? "" : "s"}</span>}
-                    {replies > 0 && <span className="px-2 py-0.5 border border-orange-500/30 bg-orange-500/10 text-orange-300">{replies} repl{replies === 1 ? "y" : "ies"}</span>}
-                    {drafts > 0 && <span className="px-2 py-0.5 border border-purple-500/30 bg-purple-500/10 text-purple-300">{drafts} draft{drafts === 1 ? "" : "s"}</span>}
-                  </div>
-                  <span className="text-[10px] text-muted-foreground whitespace-nowrap">
-                    {formatDistanceToNow(new Date(g.lastAt), { addSuffix: true })}
-                  </span>
-                  <div className="flex gap-1">
+                  <div className="flex gap-1 w-full sm:w-auto">
                     <button onClick={() => openDraftFor(g)}
-                      className="px-2 py-1 bg-accent text-accent-foreground text-[10px] uppercase tracking-wider hover:bg-accent/80 flex items-center gap-1">
-                      <Sparkles size={10} /> Draft Follow-Up
+                      className="flex-1 sm:flex-none min-h-[40px] px-3 py-2 bg-accent text-accent-foreground text-[10px] uppercase tracking-wider hover:bg-accent/80 flex items-center justify-center gap-1">
+                      <Sparkles size={12} /> Draft
                     </button>
                     <button onClick={() => setSelectedContact(g.email)}
-                      className="px-2 py-1 border border-border text-[10px] uppercase tracking-wider hover:bg-muted/20 flex items-center gap-1">
-                      <ListPlus size={10} /> View
+                      className="flex-1 sm:flex-none min-h-[40px] px-3 py-2 border border-border text-[10px] uppercase tracking-wider hover:bg-muted/20 flex items-center justify-center gap-1">
+                      <ListPlus size={12} /> View
                     </button>
                   </div>
                 </div>
