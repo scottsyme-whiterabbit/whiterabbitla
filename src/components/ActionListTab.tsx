@@ -356,7 +356,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
         type: "inbound",
         email,
         name: lead.name,
-        company: null,
+        company: businessFromEmail(email),
         source: sourceLabel,
         engagement,
         priority: isNew ? "hot" : "warm",
