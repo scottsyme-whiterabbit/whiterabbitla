@@ -107,7 +107,7 @@ const AdminNewsletter = () => {
     return "";
   });
 
-  const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "inbox" | "actions" | "followups" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "email_analytics" | "planner" | "apartment" | "thankyou" | "cold" | "lead_attribution" | "castle">("dashboard");
+  const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "inbox" | "actions" | "followups" | "activity" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "email_analytics" | "planner" | "apartment" | "thankyou" | "cold" | "lead_attribution" | "castle">("dashboard");
   const [coldCategory, setColdCategory] = useState<string>("corporate_planner");
   const [actionBadge, setActionBadge] = useState(0);
   const [showQuickAdd, setShowQuickAdd] = useState(false);
