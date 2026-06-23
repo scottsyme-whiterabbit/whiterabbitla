@@ -295,7 +295,7 @@ export const blogArticles: BlogArticle[] = [
     slug: "best-magic-shows-las-vegas",
     title: "The Best Magic Shows in Las Vegas: A Complete Guide",
     metaTitle: "Best Magic Shows in Las Vegas 2026 | White Rabbit Magic",
-    metaDescription: "From David Copperfield to Penn & Teller, discover the best magic shows in Las Vegas. A curated guide to every must-see performance on the Strip and beyond.",
+    metaDescription: "The best magic shows in Las Vegas, from the Strip's grand theaters to its hidden close-up rooms, and how to bring that same intimate magic to your own private event.",
     category: "Magic Destinations",
     publishDate: "2026-02-12",
     readTime: "10 min read",
