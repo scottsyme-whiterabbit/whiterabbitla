@@ -257,6 +257,13 @@ serve(async (req) => {
             link_slug: _clickedLinkAll.replace(/^https?:\/\/[^/]+/, "").replace(/^\//, ""),
             contact_source: "cold",
           });
+          await supabase.from("action_log").insert({
+            action_type: "email_clicked",
+            contact_email: recipientEmail,
+            contact_name: coldContact.contact_name || null,
+            summary: `${recipientEmail} clicked a link`,
+            metadata: { link: _clickedLinkAll, source: "cold" },
+          });
         }
         if (coldContact && coldContact.status === "active") {
           const clickedLink = body.data?.click?.link || "";
