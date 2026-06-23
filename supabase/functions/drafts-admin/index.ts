@@ -30,6 +30,38 @@ async function logAction(row: { action_type: string; contact_email?: string | nu
   }
 }
 
+// After a successful AI-bot send, update "last contacted" fields across all
+// places the Action List reads from, so Last Contact and outreach status reflect it.
+async function markContactedAfterSend(draft: any, messageId: string | null) {
+  const email = (draft.contact_email || "").toLowerCase();
+  const nowIso = new Date().toISOString();
+  if (!email) return;
+  try {
+    // Deals: by deal_id if known, else by contact_email
+    const dealPatch = { last_outreach_date: nowIso, outreach_status: "attempted" } as any;
+    if (draft.deal_id) {
+      await supabase.from("deals").update(dealPatch).eq("id", draft.deal_id);
+    } else {
+      await supabase.from("deals").update(dealPatch).ilike("contact_email", email);
+    }
+  } catch (e) { console.warn("deals last_outreach_date update failed", e); }
+  try {
+    await supabase.from("newsletter_contacts").update({ last_emailed_at: nowIso }).ilike("email", email);
+  } catch (e) { console.warn("newsletter_contacts last_emailed_at update failed", e); }
+  try {
+    await supabase.from("cold_email_campaigns").update({ last_email_sent_at: nowIso }).ilike("email", email);
+  } catch (e) { console.warn("cold_email_campaigns last_email_sent_at update failed", e); }
+  try {
+    await supabase.from("outreach_log").insert({
+      contact_email: email,
+      contact_name: draft.contact_name || null,
+      action_type: "email",
+      outcome: "sent",
+      notes: `AI bot sent: ${draft.subject || "(no subject)"}${messageId ? ` [${messageId}]` : ""}`,
+    });
+  } catch (e) { console.warn("outreach_log insert failed", e); }
+}
+
 async function sendViaGmail(draft: any, adminPassword: string) {
   const r = await fetch(`${SUPABASE_URL}/functions/v1/gmail-send`, {
     method: "POST",
