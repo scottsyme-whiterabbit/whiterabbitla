@@ -317,7 +317,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
       const lastLog = outreachLogs.find(l => l.contact_email.toLowerCase() === email);
       const isHot = c.engagement_status === "hot";
       items.push({
-        type: "contact", email, name: c.name, company: c.company,
+        type: "contact", email, name: c.name, company: c.company || businessFromEmail(email),
         source: c.drip_campaign === "planner" ? "Planner Drip" : c.drip_campaign === "resident" ? "Apartment Drip" : c.source || "Drip",
         engagement: isHot ? "Highly engaged (3+ interactions)" : "Warm (1-2 interactions)",
         priority: isHot ? "hot" : "warm",
