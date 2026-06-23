@@ -160,6 +160,17 @@ serve(async (req) => {
           console.log(`Cold contact opened email: ${recipientEmail} (campaign: ${coldContact.campaign_category}, step: ${coldContact.current_step})`);
         }
 
+        // Mirror open into action_log
+        if (contact || coldContact) {
+          await supabase.from("action_log").insert({
+            action_type: "email_opened",
+            contact_email: recipientEmail,
+            contact_name: contact?.name || coldContact?.contact_name || null,
+            summary: `${recipientEmail} opened an email`,
+            metadata: { source: contact ? "newsletter" : "cold", user_agent: body.data?.user_agent || null },
+          });
+        }
+
         if (contact && (contact.engagement_status === "new" || contact.engagement_status === "warm")) {
           const { count: openCount } = await supabase
             .from("newsletter_opens")
