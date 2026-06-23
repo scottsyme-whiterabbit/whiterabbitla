@@ -303,7 +303,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
       if (deal.event_date) engagement += `, ${format(new Date(deal.event_date + "T00:00:00"), "MMM d")}`;
 
       items.push({
-        type: "deal", email, name: deal.contact_name, company: deal.company,
+        type: "deal", email, name: deal.contact_name, company: deal.company || businessFromEmail(email),
         source: deal.source || "Manual", engagement, priority, priorityScore,
         phone: deal.phone,
         deal, lastOutreach: lastLog, outreachStatus: status,
