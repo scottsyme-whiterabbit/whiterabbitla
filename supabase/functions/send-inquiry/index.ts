@@ -212,7 +212,7 @@ serve(async (req) => {
         reply_to: "events@whiterabbitla.com",
         subject: "Your note reached me, " + firstName,
         html: confirmationHtml,
-        text: `${firstName}, your inquiry just landed with me — and I'm already looking forward to hearing about your event.\n\nI read every one of these myself, so this isn't an auto-pilot reply. I'll be in touch within a few hours to talk through your evening; every event is different and yours deserves that attention.\n\nIf you'd rather not wait, you can put a time straight on my calendar — a short, easy fifteen minutes about what you're planning:\n${calendarTrackingUrl}\n\nAnd if you'd like a glimpse while you wait:\n${galleryTrackingUrl}\n\nLooking forward to it.\n\nScott Syme\nMagician · (424) 394-1850 · whiterabbitla.com`,
+        text: `${firstName}, your inquiry just landed with me — and I'm already looking forward to hearing about your event.\n\nI read every one of these myself, so this isn't an auto-pilot reply. I'll be in touch within a few hours to talk through your evening; every event is different and yours deserves that attention.\n\nIf you'd rather not wait, you can put a time straight on my calendar — a short, easy fifteen minutes about what you're planning:\n${calendarTrackingUrl}\n\nAnd if you'd like a glimpse while you wait:\n${galleryTrackingUrl}\n\nPrefer to talk it through? Pick a time that suits you and we'll map out your event together.\n${scheduleCallUrl}\n\nLooking forward to it.\n\nScott Syme\nMagician · (424) 394-1850 · whiterabbitla.com`,
         headers: {
           "List-Unsubscribe": "<mailto:events@whiterabbitla.com?subject=Unsubscribe>",
         },
