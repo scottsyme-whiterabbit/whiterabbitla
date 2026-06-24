@@ -456,6 +456,20 @@ const DiscoveryQuiz = () => {
                   <p className="font-sans text-xs text-cream/40 tracking-wide">
                     Limited availability. No obligation to confirm until you're ready.
                   </p>
+                  <div className="mt-6 pt-6 border-t border-cream/10">
+                    <p className="font-serif text-base text-cream/80 italic mb-3">
+                      Prefer to talk it through? Pick a time that suits you.
+                    </p>
+                    <a
+                      href="https://calendar.app.google/z5ZF2B9FeMMLXUjV7"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-accent px-10 py-4 hover:bg-accent hover:text-accent-foreground transition-colors"
+                    >
+                      Schedule a Call
+                    </a>
+                  </div>
+
                 </div>
 
                 {/* Persona reveal + card — Zoltar-style dramatic reveal */}
