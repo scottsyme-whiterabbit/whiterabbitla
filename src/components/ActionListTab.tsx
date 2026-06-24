@@ -930,19 +930,13 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                     </select>
                   </div>
 
-                  {/* Outreach History */}
-                  {contactLogs(item.email).length > 0 && (
-                    <div>
-                      <p className="font-sans text-[9px] tracking-[0.15em] uppercase text-muted-foreground mb-2">Recent Outreach</p>
-                      {contactLogs(item.email).slice(0, 3).map(log => (
-                        <div key={log.id} className="flex gap-2 text-[11px] py-1 border-b border-border/50 last:border-0">
-                          <span className="text-muted-foreground w-14 shrink-0">{format(new Date(log.created_at), "MMM d")}</span>
-                          <span className="text-accent w-16 shrink-0 uppercase">{log.action_type}</span>
-                          <span className="text-foreground truncate">{log.notes || log.outcome || "—"}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  {/* Full Activity Timeline */}
+                  <ActivityTimeline
+                    email={item.email}
+                    items={activityByEmail[item.email.toLowerCase()]}
+                    loading={!!activityLoading[item.email.toLowerCase()]}
+                  />
+
                 </div>
               )}
             </div>
