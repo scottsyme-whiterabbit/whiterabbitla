@@ -81,6 +81,7 @@ serve(async (req) => {
 
     const calendarTrackingUrl = buildTrackedUrl(BOOKING_URL, email, 0, "inquiry-calendar");
     const galleryTrackingUrl = buildTrackedUrl(GALLERY_URL, email, 0, "inquiry-gallery");
+    const scheduleCallUrl = buildTrackedUrl("https://calendar.app.google/z5ZF2B9FeMMLXUjV7", email, 0, "inquiry-schedule-call");
 
     const confirmationHtml = `
 <!DOCTYPE html>
