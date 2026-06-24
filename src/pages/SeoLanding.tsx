@@ -313,7 +313,7 @@ const SeoLanding = () => {
               {page.midCtaText}
             </h2>
             <p className="font-sans text-base text-muted-foreground mb-4 max-w-xl mx-auto">
-              Dates fill quickly, especially during peak event season. Tell us about your event and we'll confirm availability within 24 hours.
+              Dates fill quickly, especially during peak event season. Tell us about your event and we'll usually confirm availability within a few hours.
             </p>
             <div className="flex items-center justify-center gap-2 mb-8">
               <Clock size={14} className="text-accent" />
