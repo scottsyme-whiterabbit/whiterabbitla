@@ -806,7 +806,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  setExpandedEmail(isExpanded ? null : item.email);
+                  toggleExpanded(item.email, item.deal?.id);
                 }}
                 className="w-full text-left p-4 touch-manipulation select-none"
                 style={{ WebkitTapHighlightColor: 'rgba(0,0,0,0.05)', WebkitUserSelect: 'none', minHeight: '64px' } as React.CSSProperties}
