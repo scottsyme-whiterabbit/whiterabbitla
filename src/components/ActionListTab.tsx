@@ -762,24 +762,13 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                         </>
                       )}
                     </div>
-                    {/* Outreach History */}
-                    <div>
-                      <h4 className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-2">Outreach History</h4>
-                      {contactLogs(item.email).length === 0 ? (
-                        <p className="text-sm text-muted-foreground">No outreach logged yet</p>
-                      ) : (
-                        <div className="space-y-1">
-                          {contactLogs(item.email).map(log => (
-                            <div key={log.id} className="flex gap-3 text-sm border-l-2 border-accent/30 pl-3 py-1">
-                              <span className="text-muted-foreground text-[11px] w-16 shrink-0">{format(new Date(log.created_at), "MMM d")}</span>
-                              <span className="text-[11px] uppercase tracking-wider text-accent w-16 shrink-0">{log.action_type}</span>
-                              <span className="text-[11px] text-muted-foreground w-20 shrink-0">{log.outcome || "—"}</span>
-                              <span className="text-[11px] text-foreground">{log.notes || ""}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                    {/* Full Activity Timeline */}
+                    <ActivityTimeline
+                      email={item.email}
+                      items={activityByEmail[item.email.toLowerCase()]}
+                      loading={!!activityLoading[item.email.toLowerCase()]}
+                    />
+
                   </div>
                 )}
               </div>
