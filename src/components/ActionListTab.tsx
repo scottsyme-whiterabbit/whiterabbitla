@@ -290,6 +290,29 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
 
   useEffect(() => { loadData(); }, [loadData]);
 
+  const loadActivity = useCallback(async (email: string, dealId?: string) => {
+    const key = email.toLowerCase();
+    if (activityByEmail[key] || activityLoading[key]) return;
+    setActivityLoading(s => ({ ...s, [key]: true }));
+    try {
+      const res = await callAdmin("get_contact_activity", { email: key, deal_id: dealId });
+      setActivityByEmail(s => ({ ...s, [key]: res.timeline || [] }));
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to load activity");
+    } finally {
+      setActivityLoading(s => ({ ...s, [key]: false }));
+    }
+  }, [callAdmin, activityByEmail, activityLoading]);
+
+  const toggleExpanded = useCallback((email: string, dealId?: string) => {
+    setExpandedEmail(prev => {
+      const next = prev === email ? null : email;
+      if (next) void loadActivity(email, dealId);
+      return next;
+    });
+  }, [loadActivity]);
+
+
   const today = new Date().toISOString().slice(0, 10);
 
   const actionItems = useMemo((): ActionItem[] => {
