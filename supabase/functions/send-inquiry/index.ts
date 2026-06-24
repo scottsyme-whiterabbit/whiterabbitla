@@ -137,6 +137,14 @@ serve(async (req) => {
             </a>
           </p>
           <p style="margin:0 0 20px;font-family:Georgia,serif;font-size:16px;line-height:1.8;color:rgba(245,240,232,0.85);">
+            Prefer to talk it through? Pick a time that suits you and we'll map out your event together.
+          </p>
+          <p style="margin:0 0 28px;text-align:center;">
+            <a href="${scheduleCallUrl}" target="_blank" style="font-family:Georgia,serif;font-size:14px;letter-spacing:0.15em;text-transform:uppercase;color:#C9A3A8;text-decoration:none;border-bottom:1px solid rgba(201,163,168,0.3);padding-bottom:2px;">
+              Schedule a Call →
+            </a>
+          </p>
+          <p style="margin:0 0 20px;font-family:Georgia,serif;font-size:16px;line-height:1.8;color:rgba(245,240,232,0.85);">
             Looking forward to it.
           </p>
         </td></tr>
