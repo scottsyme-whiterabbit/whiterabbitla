@@ -185,13 +185,29 @@ HTML styling:
 
     const draft = JSON.parse(jsonMatch[0]);
 
+    const scheduleCallBlock = `
+<div style="text-align:center;margin:28px auto 8px;padding:20px 16px;border-top:1px solid rgba(245,240,232,0.15);">
+  <p style="font-family:Georgia,serif;color:rgba(245,240,232,0.85);font-size:15px;line-height:1.6;margin:0 0 14px;font-style:italic;">Prefer to talk it through? Pick a time that suits you.</p>
+  <a href="https://calendar.app.google/z5ZF2B9FeMMLXUjV7" style="display:inline-block;font-family:Georgia,serif;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#c8a0a0;text-decoration:none;border-bottom:1px solid #c8a0a0;padding-bottom:4px;">Schedule a Call</a>
+</div>`;
+
     // Personalize
-    const html = draft.body_html
+    let html = draft.body_html
       .replace(/\{\{NAME\}\}/g, name ? (name.includes(" and ") || name.includes(" & ") || name.trim().toLowerCase().endsWith("team") ? name : name.split(" ")[0]) : "there")
       .replace(
         /\{\{UNSUBSCRIBE_LINK\}\}/g,
         `https://whiterabbitla.com/unsubscribe?email=${encodeURIComponent(email)}`
       );
+
+    // Inject Schedule a Call CTA before footer
+    if (/white rabbit · los angeles/i.test(html)) {
+      html = html.replace(/(<[^>]+>\s*White Rabbit · Los Angeles)/i, `${scheduleCallBlock}$1`);
+    } else if (/<\/body>/i.test(html)) {
+      html = html.replace(/<\/body>/i, `${scheduleCallBlock}</body>`);
+    } else {
+      html = `${html}${scheduleCallBlock}`;
+    }
+
 
     // Send via Resend
     const sendRes = await fetch("https://api.resend.com/emails", {
