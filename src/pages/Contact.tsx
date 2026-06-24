@@ -17,7 +17,7 @@ import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
 const Contact = () => {
   const seoTitle = "Contact & Booking | White Rabbit Magic — Los Angeles";
-  const seoDescription = "Book Scott Syme for your next corporate event, wedding, or private celebration. Check availability and get a personalized quote within 24 hours.";
+  const seoDescription = "Book Scott Syme for your next corporate event, wedding, or private celebration. Check availability and get a personalized quote.";
   useWebPageSchema({ name: "Contact & Booking", description: "Book Scott Syme for your next corporate event, wedding, or private celebration.", path: "/contact", type: "ContactPage" });
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,7 +55,7 @@ const Contact = () => {
       trackFormSubmit("Contact Form", formData.eventType || "General Inquiry");
       toast({
         title: "Inquiry Sent!",
-        description: "We'll get back to you within 24 hours.",
+        description: "He usually replies within a few hours.",
       });
       setFormData({ name: "", email: "", phone: "", eventType: "", date: "", location: "", message: "", clientType: "", referralSource: "" });
     } catch (err) {
@@ -254,7 +254,7 @@ const Contact = () => {
               <div>
                 <h3 className="font-serif text-2xl text-foreground mb-4">Get in Touch</h3>
                 <p className="font-sans text-sm text-muted-foreground leading-relaxed">
-                  For booking inquiries or questions, reach out to Scott directly. He responds within 24 hours.
+                  For booking inquiries or questions, reach out to Scott directly. He usually replies within a few hours.
                 </p>
               </div>
               <div className="space-y-4">

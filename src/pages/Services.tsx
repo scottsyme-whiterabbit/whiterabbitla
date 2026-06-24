@@ -279,7 +279,7 @@ const ServicesHub = () => {
               Ready to talk about your event?
             </h2>
             <p className="font-sans text-base text-muted-foreground mb-8">
-              Tell us your date, guest count, and vibe — we'll confirm availability within 24 hours.
+              Tell us your date, guest count, and vibe — we'll usually confirm availability within a few hours.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <button
