@@ -410,7 +410,7 @@ const Consultation = () => {
             Book Your <span className="text-accent">Free Consultation</span>
           </h2>
           <p className="font-sans text-sm text-cream/60 mb-10 max-w-md mx-auto">
-            Tell us about your event and we'll be in touch within 24 hours with a custom recommendation.
+            Tell us about your event and we'll usually be in touch within a few hours with a custom recommendation.
           </p>
           <button
             onClick={() => { trackCTAClick("Book a Consultation", "consultation_form_section"); openQuiz("Facebook / Meta Ad"); }}

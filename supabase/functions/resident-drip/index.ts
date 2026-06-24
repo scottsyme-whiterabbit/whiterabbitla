@@ -172,7 +172,7 @@ ${ps(`NetVendor approved. Fully insured. Turnkey setup. Magic Castle® member. $
       return `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
 <p style="margin:0 0 18px;">${name},</p>
 <p style="margin:0 0 18px;">I know you have a hundred things on your plate. The last thing you need is a vendor that requires handholding.</p>
-<p style="margin:0 0 18px;">Here's how easy this is: you send a date, I confirm within 24 hours. I arrive with everything: professional curtains, lighting, sound, and a 45-minute show that transforms your clubhouse or rooftop into a private theater. Setup takes 30 minutes. Your team doesn't lift a finger. I'm already NetVendor approved and fully insured.</p>
+<p style="margin:0 0 18px;">Here's how easy this is: you send a date, I confirm availability quickly. I arrive with everything: professional curtains, lighting, sound, and a 45-minute show that transforms your clubhouse or rooftop into a private theater. Setup takes 30 minutes. Your team doesn't lift a finger. I'm already NetVendor approved and fully insured.</p>
 <p style="margin:0 0 18px;">Compare that to the DJ who needs a two-hour sound check or the food truck that cancels because of weather. This is the easiest booking decision you'll make all quarter.</p>
 <p style="margin:0 0 18px;">${link}</p>
 ${bookCallCTA()}

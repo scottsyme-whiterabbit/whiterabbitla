@@ -621,7 +621,7 @@ const Index = () => {
           },
           {
             question: "How far in advance should I book a magician?",
-            answer: "We recommend reaching out 4 to 8 weeks before your event, though peak seasons like the holidays and summer weekends can fill months in advance. Contact us with your date and we'll confirm availability within 24 hours.",
+            answer: "We recommend reaching out 4 to 8 weeks before your event, though peak seasons like the holidays and summer weekends can fill months in advance. Contact us with your date and we'll usually confirm availability within a few hours.",
           },
           {
             question: "What makes White Rabbit different from other magicians?",

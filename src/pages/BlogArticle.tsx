@@ -428,7 +428,7 @@ const BlogArticle = () => {
               Ready to Elevate Your Next Event?
             </h2>
             <p className="font-sans text-sm text-cream/70 mb-8">
-              Tell us about your event and we'll confirm availability within 24 hours.
+              Tell us about your event and we'll usually confirm availability within a few hours.
             </p>
             <button
               onClick={openQuiz}

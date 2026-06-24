@@ -462,7 +462,7 @@ const Planners = () => {
               Let's Work Together
             </h2>
             <p className="font-sans text-base text-cream/70 mb-10 max-w-lg mx-auto">
-              Tell us about your upcoming event and we'll get back to you within 24 hours.
+              Tell us about your upcoming event and we'll usually get back to you within a few hours.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
