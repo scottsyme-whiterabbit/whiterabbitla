@@ -143,8 +143,62 @@ const formatCurrency = (cents: number | null) => {
   if (!cents) return "—";
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0 }).format(cents / 100);
 };
+type TimelineItem = {
+  id: string;
+  source: "outreach" | "action" | "deal_activity" | "email_inbound" | "email_outbound";
+  type: string;
+  at: string;
+  title: string | null;
+  summary: string | null;
+  outcome: string | null;
+  subject: string | null;
+};
+
+const SOURCE_LABEL: Record<TimelineItem["source"], string> = {
+  outreach: "Log",
+  action: "Action",
+  deal_activity: "Activity",
+  email_inbound: "Reply In",
+  email_outbound: "Email Sent",
+};
+const SOURCE_COLOR: Record<TimelineItem["source"], string> = {
+  outreach: "text-accent border-accent/30",
+  action: "text-blue-400 border-blue-500/30",
+  deal_activity: "text-foreground border-border",
+  email_inbound: "text-emerald-400 border-emerald-500/30",
+  email_outbound: "text-muted-foreground border-border",
+};
+
+const ActivityTimeline = ({ email, items, loading }: { email: string; items: TimelineItem[] | undefined; loading: boolean }) => {
+  return (
+    <div>
+      <h4 className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-2">Full Activity</h4>
+      {loading && !items ? (
+        <p className="text-xs text-muted-foreground">Loading activity…</p>
+      ) : !items || items.length === 0 ? (
+        <p className="text-sm text-muted-foreground">No activity logged for {email} yet</p>
+      ) : (
+        <div className="space-y-1 max-h-80 overflow-y-auto pr-1">
+          {items.map(it => (
+            <div key={it.id} className={`flex gap-2 text-[11px] border-l-2 pl-3 py-1.5 ${SOURCE_COLOR[it.source].split(" ")[1] || "border-border"}`}>
+              <span className="text-muted-foreground w-20 shrink-0">{it.at ? format(new Date(it.at), "MMM d, h:mma") : "—"}</span>
+              <span className={`shrink-0 uppercase tracking-wider px-1.5 ${SOURCE_COLOR[it.source].split(" ")[0]}`}>{SOURCE_LABEL[it.source]}</span>
+              <div className="min-w-0 flex-1">
+                {it.subject && <p className="text-foreground font-medium truncate">{it.subject}</p>}
+                {it.title && !it.subject && <p className="text-foreground truncate">{it.title}</p>}
+                {it.outcome && <p className="text-muted-foreground">Outcome: {it.outcome}</p>}
+                {it.summary && <p className="text-muted-foreground whitespace-pre-wrap break-words">{it.summary}</p>}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
+
   const [deals, setDeals] = useState<Deal[]>([]);
   const [hotWarmContacts, setHotWarmContacts] = useState<HotWarmContact[]>([]);
   const [outreachLogs, setOutreachLogs] = useState<OutreachLog[]>([]);
