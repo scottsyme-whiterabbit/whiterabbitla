@@ -650,7 +650,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                 <div className={`grid grid-cols-[80px_1.3fr_90px_1.1fr_150px_220px_120px] gap-3 px-4 py-3 border-b border-border items-center transition-colors ${rowBg}`}>
                   <div>{priorityBadge(item.priority)}</div>
                   <div className="min-w-0">
-                    <button onClick={() => setExpandedEmail(isExpanded ? null : item.email)} className="text-left flex items-center gap-1">
+                    <button onClick={() => toggleExpanded(item.email, item.deal?.id)} className="text-left flex items-center gap-1">
                       <span className="font-sans text-sm text-foreground font-medium truncate">{item.name || item.email.split("@")[0]}</span>
                       {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
                     </button>
