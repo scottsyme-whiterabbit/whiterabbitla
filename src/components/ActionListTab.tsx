@@ -167,6 +167,20 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
   const [editSaving, setEditSaving] = useState(false);
   const [aiDraftCtx, setAiDraftCtx] = useState<AIDraftContext | null>(null);
 
+  type TimelineItem = {
+    id: string;
+    source: "outreach" | "action" | "deal_activity" | "email_inbound" | "email_outbound";
+    type: string;
+    at: string;
+    title: string | null;
+    summary: string | null;
+    outcome: string | null;
+    subject: string | null;
+  };
+  const [activityByEmail, setActivityByEmail] = useState<Record<string, TimelineItem[]>>({});
+  const [activityLoading, setActivityLoading] = useState<Record<string, boolean>>({});
+
+
   const openAIDraft = (item: ActionItem) => {
     setAiDraftCtx({
       contact_email: item.email,
