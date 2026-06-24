@@ -1045,6 +1045,89 @@ serve(async (req) => {
         });
       }
 
+      case "get_contact_activity": {
+        // Full unified timeline for one contact: outreach_log + action_log + deal_activity + deal_email_messages (inbound replies + outbound sends)
+        const { email, deal_id } = payload;
+        const emailLower = (email || "").toLowerCase().trim();
+        if (!emailLower) {
+          return new Response(JSON.stringify({ error: "email required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+
+        // Resolve deal ids tied to this contact email (in case multiple) plus optional explicit
+        const { data: dealRows } = await supabase
+          .from("deals")
+          .select("id")
+          .ilike("contact_email", emailLower);
+        const dealIds = Array.from(new Set([
+          ...((dealRows || []).map((d: { id: string }) => d.id)),
+          ...(deal_id ? [deal_id] : []),
+        ]));
+
+        const [outreachRes, actionRes, dealActRes, msgRes] = await Promise.all([
+          supabase.from("outreach_log").select("*").eq("contact_email", emailLower).order("created_at", { ascending: false }).limit(200),
+          supabase.from("action_log").select("*").eq("contact_email", emailLower).order("occurred_at", { ascending: false }).limit(200),
+          dealIds.length
+            ? supabase.from("deal_activity").select("*").in("deal_id", dealIds).order("occurred_at", { ascending: false }).limit(200)
+            : Promise.resolve({ data: [], error: null }),
+          dealIds.length
+            ? supabase.from("deal_email_messages").select("*").in("deal_id", dealIds).order("sent_at", { ascending: false }).limit(200)
+            : Promise.resolve({ data: [], error: null }),
+        ]);
+
+        type TimelineItem = {
+          id: string;
+          source: "outreach" | "action" | "deal_activity" | "email_inbound" | "email_outbound";
+          type: string;
+          at: string;
+          title: string | null;
+          summary: string | null;
+          outcome: string | null;
+          subject: string | null;
+        };
+        const timeline: TimelineItem[] = [];
+
+        for (const r of outreachRes.data || []) {
+          timeline.push({
+            id: `o-${r.id}`, source: "outreach", type: r.action_type || "log",
+            at: r.created_at, title: r.action_type || null, summary: r.notes || null,
+            outcome: r.outcome || null, subject: null,
+          });
+        }
+        for (const r of actionRes.data || []) {
+          timeline.push({
+            id: `a-${r.id}`, source: "action", type: r.action_type || "action",
+            at: r.occurred_at || r.created_at, title: r.action_type || null,
+            summary: r.summary || null, outcome: null, subject: r.subject || null,
+          });
+        }
+        for (const r of dealActRes.data || []) {
+          timeline.push({
+            id: `da-${r.id}`, source: "deal_activity", type: r.type || "activity",
+            at: r.occurred_at || r.created_at, title: r.title || null,
+            summary: r.body || null, outcome: null, subject: null,
+          });
+        }
+        for (const r of msgRes.data || []) {
+          const inbound = r.direction === "inbound";
+          timeline.push({
+            id: `m-${r.id}`, source: inbound ? "email_inbound" : "email_outbound",
+            type: inbound ? "reply" : "email_sent",
+            at: r.sent_at || r.created_at, title: inbound ? `From ${r.from_email}` : `To ${r.to_email}`,
+            summary: r.snippet || (r.body_text ? r.body_text.slice(0, 280) : null),
+            outcome: null, subject: r.subject || null,
+          });
+        }
+
+        timeline.sort((a, b) => (b.at || "").localeCompare(a.at || ""));
+
+        return new Response(JSON.stringify({ timeline }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+
       case "trigger_gmail_sync": {
         const { deal_id } = payload;
         const r = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/gmail-sync`, {

@@ -143,8 +143,62 @@ const formatCurrency = (cents: number | null) => {
   if (!cents) return "—";
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0 }).format(cents / 100);
 };
+type TimelineItem = {
+  id: string;
+  source: "outreach" | "action" | "deal_activity" | "email_inbound" | "email_outbound";
+  type: string;
+  at: string;
+  title: string | null;
+  summary: string | null;
+  outcome: string | null;
+  subject: string | null;
+};
+
+const SOURCE_LABEL: Record<TimelineItem["source"], string> = {
+  outreach: "Log",
+  action: "Action",
+  deal_activity: "Activity",
+  email_inbound: "Reply In",
+  email_outbound: "Email Sent",
+};
+const SOURCE_COLOR: Record<TimelineItem["source"], string> = {
+  outreach: "text-accent border-accent/30",
+  action: "text-blue-400 border-blue-500/30",
+  deal_activity: "text-foreground border-border",
+  email_inbound: "text-emerald-400 border-emerald-500/30",
+  email_outbound: "text-muted-foreground border-border",
+};
+
+const ActivityTimeline = ({ email, items, loading }: { email: string; items: TimelineItem[] | undefined; loading: boolean }) => {
+  return (
+    <div>
+      <h4 className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-2">Full Activity</h4>
+      {loading && !items ? (
+        <p className="text-xs text-muted-foreground">Loading activity…</p>
+      ) : !items || items.length === 0 ? (
+        <p className="text-sm text-muted-foreground">No activity logged for {email} yet</p>
+      ) : (
+        <div className="space-y-1 max-h-80 overflow-y-auto pr-1">
+          {items.map(it => (
+            <div key={it.id} className={`flex gap-2 text-[11px] border-l-2 pl-3 py-1.5 ${SOURCE_COLOR[it.source].split(" ")[1] || "border-border"}`}>
+              <span className="text-muted-foreground w-20 shrink-0">{it.at ? format(new Date(it.at), "MMM d, h:mma") : "—"}</span>
+              <span className={`shrink-0 uppercase tracking-wider px-1.5 ${SOURCE_COLOR[it.source].split(" ")[0]}`}>{SOURCE_LABEL[it.source]}</span>
+              <div className="min-w-0 flex-1">
+                {it.subject && <p className="text-foreground font-medium truncate">{it.subject}</p>}
+                {it.title && !it.subject && <p className="text-foreground truncate">{it.title}</p>}
+                {it.outcome && <p className="text-muted-foreground">Outcome: {it.outcome}</p>}
+                {it.summary && <p className="text-muted-foreground whitespace-pre-wrap break-words">{it.summary}</p>}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
+
   const [deals, setDeals] = useState<Deal[]>([]);
   const [hotWarmContacts, setHotWarmContacts] = useState<HotWarmContact[]>([]);
   const [outreachLogs, setOutreachLogs] = useState<OutreachLog[]>([]);
@@ -166,6 +220,10 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
   });
   const [editSaving, setEditSaving] = useState(false);
   const [aiDraftCtx, setAiDraftCtx] = useState<AIDraftContext | null>(null);
+
+  const [activityByEmail, setActivityByEmail] = useState<Record<string, TimelineItem[]>>({});
+  const [activityLoading, setActivityLoading] = useState<Record<string, boolean>>({});
+
 
   const openAIDraft = (item: ActionItem) => {
     setAiDraftCtx({
@@ -275,6 +333,29 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
   }, [callAdmin]);
 
   useEffect(() => { loadData(); }, [loadData]);
+
+  const loadActivity = useCallback(async (email: string, dealId?: string) => {
+    const key = email.toLowerCase();
+    if (activityByEmail[key] || activityLoading[key]) return;
+    setActivityLoading(s => ({ ...s, [key]: true }));
+    try {
+      const res = await callAdmin("get_contact_activity", { email: key, deal_id: dealId });
+      setActivityByEmail(s => ({ ...s, [key]: res.timeline || [] }));
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Failed to load activity");
+    } finally {
+      setActivityLoading(s => ({ ...s, [key]: false }));
+    }
+  }, [callAdmin, activityByEmail, activityLoading]);
+
+  const toggleExpanded = useCallback((email: string, dealId?: string) => {
+    setExpandedEmail(prev => {
+      const next = prev === email ? null : email;
+      if (next) void loadActivity(email, dealId);
+      return next;
+    });
+  }, [loadActivity]);
+
 
   const today = new Date().toISOString().slice(0, 10);
 
@@ -613,7 +694,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                 <div className={`grid grid-cols-[80px_1.3fr_90px_1.1fr_150px_220px_120px] gap-3 px-4 py-3 border-b border-border items-center transition-colors ${rowBg}`}>
                   <div>{priorityBadge(item.priority)}</div>
                   <div className="min-w-0">
-                    <button onClick={() => setExpandedEmail(isExpanded ? null : item.email)} className="text-left flex items-center gap-1">
+                    <button onClick={() => toggleExpanded(item.email, item.deal?.id)} className="text-left flex items-center gap-1">
                       <span className="font-sans text-sm text-foreground font-medium truncate">{item.name || item.email.split("@")[0]}</span>
                       {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
                     </button>
@@ -725,24 +806,13 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                         </>
                       )}
                     </div>
-                    {/* Outreach History */}
-                    <div>
-                      <h4 className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground mb-2">Outreach History</h4>
-                      {contactLogs(item.email).length === 0 ? (
-                        <p className="text-sm text-muted-foreground">No outreach logged yet</p>
-                      ) : (
-                        <div className="space-y-1">
-                          {contactLogs(item.email).map(log => (
-                            <div key={log.id} className="flex gap-3 text-sm border-l-2 border-accent/30 pl-3 py-1">
-                              <span className="text-muted-foreground text-[11px] w-16 shrink-0">{format(new Date(log.created_at), "MMM d")}</span>
-                              <span className="text-[11px] uppercase tracking-wider text-accent w-16 shrink-0">{log.action_type}</span>
-                              <span className="text-[11px] text-muted-foreground w-20 shrink-0">{log.outcome || "—"}</span>
-                              <span className="text-[11px] text-foreground">{log.notes || ""}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                    {/* Full Activity Timeline */}
+                    <ActivityTimeline
+                      email={item.email}
+                      items={activityByEmail[item.email.toLowerCase()]}
+                      loading={!!activityLoading[item.email.toLowerCase()]}
+                    />
+
                   </div>
                 )}
               </div>
@@ -769,7 +839,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  setExpandedEmail(isExpanded ? null : item.email);
+                  toggleExpanded(item.email, item.deal?.id);
                 }}
                 className="w-full text-left p-4 touch-manipulation select-none"
                 style={{ WebkitTapHighlightColor: 'rgba(0,0,0,0.05)', WebkitUserSelect: 'none', minHeight: '64px' } as React.CSSProperties}
@@ -904,19 +974,13 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                     </select>
                   </div>
 
-                  {/* Outreach History */}
-                  {contactLogs(item.email).length > 0 && (
-                    <div>
-                      <p className="font-sans text-[9px] tracking-[0.15em] uppercase text-muted-foreground mb-2">Recent Outreach</p>
-                      {contactLogs(item.email).slice(0, 3).map(log => (
-                        <div key={log.id} className="flex gap-2 text-[11px] py-1 border-b border-border/50 last:border-0">
-                          <span className="text-muted-foreground w-14 shrink-0">{format(new Date(log.created_at), "MMM d")}</span>
-                          <span className="text-accent w-16 shrink-0 uppercase">{log.action_type}</span>
-                          <span className="text-foreground truncate">{log.notes || log.outcome || "—"}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  {/* Full Activity Timeline */}
+                  <ActivityTimeline
+                    email={item.email}
+                    items={activityByEmail[item.email.toLowerCase()]}
+                    loading={!!activityLoading[item.email.toLowerCase()]}
+                  />
+
                 </div>
               )}
             </div>
