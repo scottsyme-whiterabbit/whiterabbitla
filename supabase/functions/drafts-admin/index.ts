@@ -143,16 +143,32 @@ serve(async (req) => {
     }
 
     if (action === "send") {
-      const { id } = body;
+      const { id, subject: overrideSubject, body: overrideBody } = body;
+      // First, persist any in-flight edits the client passed in, so DB matches what's sent.
+      if (overrideSubject !== undefined || overrideBody !== undefined) {
+        const patch: any = { updated_at: new Date().toISOString() };
+        if (overrideSubject !== undefined) patch.subject = overrideSubject;
+        if (overrideBody !== undefined) patch.body = overrideBody;
+        await supabase.from("email_drafts").update(patch).eq("id", id);
+      }
       const { data: draft, error } = await supabase.from("email_drafts").select("*").eq("id", id).maybeSingle();
       if (error) throw error;
       if (!draft) throw new Error("Draft not found");
       if (draft.status === "sent") throw new Error("Already sent");
-      const result = await sendViaGmail(draft, body.adminPassword);
+      // Build a send-payload that always reflects the explicit overrides if provided,
+      // bypassing any read-after-write race.
+      const sendDraft = {
+        ...draft,
+        subject: overrideSubject !== undefined ? overrideSubject : draft.subject,
+        body: overrideBody !== undefined ? overrideBody : draft.body,
+      };
+      const result = await sendViaGmail(sendDraft, body.adminPassword);
       const { data: updated } = await supabase.from("email_drafts").update({
         status: "sent",
         sent_at: new Date().toISOString(),
         sent_message_id: result.message_id || null,
+        subject: sendDraft.subject,
+        body: sendDraft.body,
       }).eq("id", id).select("*").maybeSingle();
       // Auto-dismiss sibling variants
       if (draft.generation_id) {
@@ -162,8 +178,8 @@ serve(async (req) => {
           .neq("id", id)
           .in("status", ["draft", "approved"]);
       }
-      await logAction({ action_type: "email_sent", contact_email: draft.contact_email, contact_name: draft.contact_name, deal_id: draft.deal_id, draft_id: id, subject: draft.subject, summary: `Sent email to ${draft.contact_email}`, metadata: { message_id: result.message_id || null, gmail_thread_id: draft.gmail_thread_id || null } });
-      await markContactedAfterSend(draft, result.message_id || null);
+      await logAction({ action_type: "email_sent", contact_email: sendDraft.contact_email, contact_name: sendDraft.contact_name, deal_id: sendDraft.deal_id, draft_id: id, subject: sendDraft.subject, summary: `Sent email to ${sendDraft.contact_email}`, metadata: { message_id: result.message_id || null, gmail_thread_id: sendDraft.gmail_thread_id || null } });
+      await markContactedAfterSend(sendDraft, result.message_id || null);
       return new Response(JSON.stringify({ draft: updated, send_result: result }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
