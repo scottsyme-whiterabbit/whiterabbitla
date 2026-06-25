@@ -93,12 +93,13 @@ export default function AIDraftModal({ open, onClose, adminPassword, context }: 
 
   const sendNow = async () => {
     if (!current) return;
-    if (!confirm(`Send this email to ${context?.contact_email} from scott.syme@whiterabbitla.com?`)) return;
+    if (!confirm(`Send this email to ${context?.contact_email} from scott.syme@whiterabbitla.com?\n\nSubject: ${current.subject}`)) return;
     setLoading(true);
     try {
-      await callFn("drafts-admin", { action: "update", id: current.id, subject: current.subject, body: current.body });
-      await callFn("drafts-admin", { action: "send", id: current.id });
-      toast.success("Sent ✓");
+      // Pass subject + body explicitly so the server uses exactly what's on screen
+      // (no read-after-write race against the edit autosave).
+      await callFn("drafts-admin", { action: "send", id: current.id, subject: current.subject, body: current.body });
+      toast.success("Sent ✓ (your edits were used)");
       onClose();
       setDrafts([]); setSteer("");
     } catch (e) {
