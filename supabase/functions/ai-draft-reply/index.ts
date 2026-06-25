@@ -121,7 +121,10 @@ Use \\n\\n for paragraph breaks in body. End each body with "-Scott".`;
 
 function buildUserPrompt(args: any) {
   const { contact_name, company, vertical, source, engagement_summary, deal, thread, user_hint, notes } = args;
-  const firstName = (contact_name || "").split(" ")[0] || "there";
+  const rawFirst = (contact_name || "").trim().split(/\s+/)[0] || "";
+  const firstName = rawFirst
+    ? rawFirst
+    : (company ? `${company.trim()} Team` : "there");
   const parts: string[] = [];
   parts.push(`CONTACT: ${contact_name || "(no name)"} <${args.contact_email}>`);
   if (company) parts.push(`COMPANY: ${company}`);
