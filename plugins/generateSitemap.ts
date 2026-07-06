@@ -90,15 +90,34 @@ export function generateSitemap(): Plugin {
 
       lines.push("");
       lines.push('  <!-- Editorial Blog Articles -->');
+      const removedCityTokens = [
+        "seattle","portland","denver","vail","telluride","park-city","jackson-hole","sun-valley","lake-tahoe",
+        "napa-valley","sonoma","carmel","hillsborough","san-mateo","burlingame","atherton","palo-alto","woodside",
+        "los-altos","menlo-park","saratoga","los-gatos","tiburon","mill-valley","austin","dallas","houston",
+        "san-antonio","fort-worth","highland-park","river-oaks","nashville","atlanta","buckhead","charleston",
+        "naples","coral-gables","jupiter","sarasota","nantucket","marthas-vineyard","greenwich","washington-dc",
+        "philadelphia","short-hills","potomac","chicago","minneapolis","winnetka","paradise-valley",
+      ];
       for (const article of blogArticles) {
+        if (removedCityTokens.some((t) => article.slug.startsWith(`${t}-`) || article.slug.includes(`-${t}-`) || article.slug.endsWith(`-${t}`))) continue;
         lines.push(url(`/blog/${article.slug}`, article.publishDate));
       }
 
       lines.push("</urlset>");
 
-      writeFileSync("public/sitemap.xml", lines.join("\n"));
+      // Deduplicate URLs (blog article slugs can collide with SEO slugs)
+      const seen = new Set<string>();
+      const deduped = lines.filter((line) => {
+        const m = line.match(/<loc>([^<]+)<\/loc>/);
+        if (!m) return true;
+        if (seen.has(m[1])) return false;
+        seen.add(m[1]);
+        return true;
+      });
+
+      writeFileSync("public/sitemap.xml", deduped.join("\n"));
       console.log(
-        `[sitemap] Generated: ${seoPages.length} SEO + ${blogArticles.length} articles + ${serviceAreas.length} areas`
+        `[sitemap] Generated: ${seen.size} unique URLs (${seoPages.length} SEO + ${blogArticles.length} articles + ${serviceAreas.length} areas)`
       );
     },
   };

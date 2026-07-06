@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, Navigate } from "react-router-dom";
 import NotFound from "./NotFound";
 import { useEffect, useState } from "react";
 import SEOHead from "@/components/SEOHead";
@@ -170,6 +170,24 @@ const SeoLanding = () => {
   }, [page]);
 
   if (!page) {
+    // De-risk redirect: pruned city×service SEO pages redirect to the canonical /services/{service}.
+    const serviceSuffixMap: Record<string, string> = {
+      "corporate-event-magician": "corporate-magician",
+      "wedding-magician": "wedding-magician",
+      "private-party-magician": "private-party-magician",
+      "close-up-magician": "close-up-magician",
+      "private-magic-show": "private-magic-show",
+      "holiday-party-magician": "holiday-party-magician",
+      "charity-gala-magician": "charity-gala-magician",
+      "trade-show-magician": "trade-show-magician",
+      "golf-tournament-magician": "golf-tournament-magician",
+      "dmc-entertainment": "dmc-entertainment",
+      "resident-event-magician": "resident-event-magician",
+    };
+    if (slug) {
+      const match = Object.keys(serviceSuffixMap).find((suffix) => slug.endsWith(`-${suffix}`));
+      if (match) return <Navigate to={`/services/${serviceSuffixMap[match]}`} replace />;
+    }
     return <NotFound />;
   }
 
@@ -188,7 +206,7 @@ const SeoLanding = () => {
         "Pre-event consultation to tailor the performance to your audience and goals",
         "World-class close-up magic, mentalism, and audience interaction",
         "Professional appearance. Scott arrives in signature style, ready to elevate",
-        "Travel coordination handled seamlessly. Scott regularly performs in " + page.location,
+        "Travel coordination handled seamlessly. Scott travels from Los Angeles to serve clients in " + page.location,
         "A follow-up to make sure your event exceeded expectations",
       ]
     : [

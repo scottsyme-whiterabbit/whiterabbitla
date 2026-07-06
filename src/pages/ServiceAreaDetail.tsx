@@ -10,6 +10,7 @@ const ServiceAreaDetail = () => {
   const { citySlug } = useParams<{ citySlug: string }>();
   const area = citySlug ? getAreaBySlug(citySlug) : undefined;
 
+  // De-risk redirect: pruned /areas/{city} pages fall back to the areas hub.
   if (!area) return <Navigate to="/areas" replace />;
 
   // Check if this city has enhanced content
