@@ -59,6 +59,90 @@ export type Database = {
         }
         Relationships: []
       }
+      apollo_batch_log: {
+        Row: {
+          apollo_fetched: number | null
+          bad_domain_rejected: number | null
+          batch_id: string | null
+          bracket_rejected: number | null
+          category: string | null
+          created_at: string | null
+          free_email_flagged: number | null
+          http_status: number | null
+          id: string
+          inserted: number | null
+          mx_rejected: number | null
+          page_pulled: number | null
+          posted: number | null
+          role_based_dropped: number | null
+          run_date: string | null
+          skipped_invalid_category: number | null
+          skipped_missing_email: number | null
+          syntax_rejected: number | null
+          updated: number | null
+        }
+        Insert: {
+          apollo_fetched?: number | null
+          bad_domain_rejected?: number | null
+          batch_id?: string | null
+          bracket_rejected?: number | null
+          category?: string | null
+          created_at?: string | null
+          free_email_flagged?: number | null
+          http_status?: number | null
+          id?: string
+          inserted?: number | null
+          mx_rejected?: number | null
+          page_pulled?: number | null
+          posted?: number | null
+          role_based_dropped?: number | null
+          run_date?: string | null
+          skipped_invalid_category?: number | null
+          skipped_missing_email?: number | null
+          syntax_rejected?: number | null
+          updated?: number | null
+        }
+        Update: {
+          apollo_fetched?: number | null
+          bad_domain_rejected?: number | null
+          batch_id?: string | null
+          bracket_rejected?: number | null
+          category?: string | null
+          created_at?: string | null
+          free_email_flagged?: number | null
+          http_status?: number | null
+          id?: string
+          inserted?: number | null
+          mx_rejected?: number | null
+          page_pulled?: number | null
+          posted?: number | null
+          role_based_dropped?: number | null
+          run_date?: string | null
+          skipped_invalid_category?: number | null
+          skipped_missing_email?: number | null
+          syntax_rejected?: number | null
+          updated?: number | null
+        }
+        Relationships: []
+      }
+      apollo_search_cursor: {
+        Row: {
+          next_page: number
+          updated_at: string
+          vertical: string
+        }
+        Insert: {
+          next_page?: number
+          updated_at?: string
+          vertical: string
+        }
+        Update: {
+          next_page?: number
+          updated_at?: string
+          vertical?: string
+        }
+        Relationships: []
+      }
       auto_unsubscribe_log: {
         Row: {
           email: string
@@ -99,6 +183,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      bounce_daily_log: {
+        Row: {
+          bounces_30d: number | null
+          complaints: number | null
+          created_at: string | null
+          direction: string | null
+          hard: number | null
+          rate_pct: number | null
+          run_date: string
+          soft: number | null
+          total_bounces: number | null
+          total_sends: number | null
+          worst_category: string | null
+          worst_category_rate: number | null
+        }
+        Insert: {
+          bounces_30d?: number | null
+          complaints?: number | null
+          created_at?: string | null
+          direction?: string | null
+          hard?: number | null
+          rate_pct?: number | null
+          run_date: string
+          soft?: number | null
+          total_bounces?: number | null
+          total_sends?: number | null
+          worst_category?: string | null
+          worst_category_rate?: number | null
+        }
+        Update: {
+          bounces_30d?: number | null
+          complaints?: number | null
+          created_at?: string | null
+          direction?: string | null
+          hard?: number | null
+          rate_pct?: number | null
+          run_date?: string
+          soft?: number | null
+          total_bounces?: number | null
+          total_sends?: number | null
+          worst_category?: string | null
+          worst_category_rate?: number | null
+        }
+        Relationships: []
       }
       castle_invite_log: {
         Row: {
