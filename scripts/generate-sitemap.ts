@@ -94,9 +94,20 @@ for (const page of filteredSeoPages) {
 
 lines.push("");
 lines.push('  <!-- Editorial Blog Articles -->');
+// Exclude blog articles tied to pruned city markets — de-risk pass keeps only kept-list cities.
+const removedCityTokens = [
+  "seattle","portland","denver","vail","telluride","park-city","jackson-hole","sun-valley","lake-tahoe",
+  "napa-valley","sonoma","carmel","hillsborough","san-mateo","burlingame","atherton","palo-alto","woodside",
+  "los-altos","menlo-park","saratoga","los-gatos","tiburon","mill-valley","austin","dallas","houston",
+  "san-antonio","fort-worth","highland-park","river-oaks","nashville","atlanta","buckhead","charleston",
+  "naples","coral-gables","jupiter","sarasota","nantucket","marthas-vineyard","greenwich","washington-dc",
+  "philadelphia","short-hills","potomac","chicago","minneapolis","winnetka","paradise-valley",
+];
 for (const article of blogArticles) {
+  if (removedCityTokens.some((t) => article.slug.startsWith(`${t}-`) || article.slug.includes(`-${t}-`) || article.slug.endsWith(`-${t}`))) continue;
   lines.push(url(`/blog/${article.slug}`, article.publishDate));
 }
+
 
 lines.push("</urlset>");
 
