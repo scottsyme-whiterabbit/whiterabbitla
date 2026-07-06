@@ -100,7 +100,17 @@ for (const article of blogArticles) {
 
 lines.push("</urlset>");
 
-writeFileSync("public/sitemap.xml", lines.join("\n"));
+// Deduplicate URLs (some blog article slugs collide with programmatic SEO slugs)
+const seen = new Set<string>();
+const deduped = lines.filter((line) => {
+  const m = line.match(/<loc>([^<]+)<\/loc>/);
+  if (!m) return true;
+  if (seen.has(m[1])) return false;
+  seen.add(m[1]);
+  return true;
+});
+
+writeFileSync("public/sitemap.xml", deduped.join("\n"));
 console.log(
-  `Sitemap generated: ${seoPages.length} SEO pages + ${blogArticles.length} articles + ${serviceAreas.length} area pages + ${validServiceSlugs.length} service pages + 9 core`
+  `Sitemap generated: ${seen.size} unique URLs (${seoPages.length} SEO + ${blogArticles.length} articles + ${serviceAreas.length} areas + ${validServiceSlugs.length} services + core)`
 );
