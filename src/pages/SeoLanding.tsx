@@ -170,6 +170,24 @@ const SeoLanding = () => {
   }, [page]);
 
   if (!page) {
+    // De-risk redirect: pruned city×service SEO pages redirect to the canonical /services/{service}.
+    const serviceSuffixMap: Record<string, string> = {
+      "corporate-event-magician": "corporate-magician",
+      "wedding-magician": "wedding-magician",
+      "private-party-magician": "private-party-magician",
+      "close-up-magician": "close-up-magician",
+      "private-magic-show": "private-magic-show",
+      "holiday-party-magician": "holiday-party-magician",
+      "charity-gala-magician": "charity-gala-magician",
+      "trade-show-magician": "trade-show-magician",
+      "golf-tournament-magician": "golf-tournament-magician",
+      "dmc-entertainment": "dmc-entertainment",
+      "resident-event-magician": "resident-event-magician",
+    };
+    if (slug) {
+      const match = Object.keys(serviceSuffixMap).find((suffix) => slug.endsWith(`-${suffix}`));
+      if (match) return <Navigate to={`/services/${serviceSuffixMap[match]}`} replace />;
+    }
     return <NotFound />;
   }
 
