@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import NotFound from "./NotFound";
 import { useEffect, useState } from "react";
 import SEOHead from "@/components/SEOHead";
