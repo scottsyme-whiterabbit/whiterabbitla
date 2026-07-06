@@ -188,7 +188,7 @@ const SeoLanding = () => {
         "Pre-event consultation to tailor the performance to your audience and goals",
         "World-class close-up magic, mentalism, and audience interaction",
         "Professional appearance. Scott arrives in signature style, ready to elevate",
-        "Travel coordination handled seamlessly. Scott regularly performs in " + page.location,
+        "Travel coordination handled seamlessly. Scott travels from Los Angeles to serve clients in " + page.location,
         "A follow-up to make sure your event exceeded expectations",
       ]
     : [
