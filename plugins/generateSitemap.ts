@@ -96,9 +96,19 @@ export function generateSitemap(): Plugin {
 
       lines.push("</urlset>");
 
-      writeFileSync("public/sitemap.xml", lines.join("\n"));
+      // Deduplicate URLs (blog article slugs can collide with SEO slugs)
+      const seen = new Set<string>();
+      const deduped = lines.filter((line) => {
+        const m = line.match(/<loc>([^<]+)<\/loc>/);
+        if (!m) return true;
+        if (seen.has(m[1])) return false;
+        seen.add(m[1]);
+        return true;
+      });
+
+      writeFileSync("public/sitemap.xml", deduped.join("\n"));
       console.log(
-        `[sitemap] Generated: ${seoPages.length} SEO + ${blogArticles.length} articles + ${serviceAreas.length} areas`
+        `[sitemap] Generated: ${seen.size} unique URLs (${seoPages.length} SEO + ${blogArticles.length} articles + ${serviceAreas.length} areas)`
       );
     },
   };
