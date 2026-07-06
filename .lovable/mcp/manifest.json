@@ -8,7 +8,7 @@
   "mcp": {
     "server": {
       "name": "white-rabbit-la-mcp",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "title": "White Rabbit LA"
     },
     "tools": [
@@ -51,6 +51,116 @@
           "$schema": "http://json-schema.org/draft-07/schema#",
           "type": "object",
           "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "import_contacts",
+        "title": "Import cold-outreach contacts",
+        "description": "Upload contacts scraped from Apollo (or similar) into a specific drip campaign category. Dedupes by email + apollo_id against existing campaigns, skips role-based addresses (info@, hello@, etc.) and anything on the suppression list. Contacts are inserted PAUSED by default — set start_immediately=true to enroll them in the drip right away. Returns a full breakdown of inserted vs skipped counts.",
+        "annotations": {
+          "readOnlyHint": false,
+          "idempotentHint": false,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "campaign_category": {
+              "type": "string",
+              "enum": [
+                "wedding_planner",
+                "corporate_planner",
+                "spirits",
+                "resident",
+                "dmc",
+                "venue",
+                "fundraiser",
+                "trade_show",
+                "golf_tournament",
+                "charity_golf",
+                "country_club",
+                "pr_agency",
+                "nonprofit",
+                "talent",
+                "restaurant",
+                "nightlife",
+                "luxury_auto",
+                "tech_events",
+                "hotel_concierge",
+                "casino_entertainment"
+              ],
+              "description": "Which drip campaign these contacts belong to."
+            },
+            "contacts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "Email address (required)."
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "first_name": {
+                    "type": "string"
+                  },
+                  "last_name": {
+                    "type": "string"
+                  },
+                  "company": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  },
+                  "linkedin_url": {
+                    "type": "string"
+                  },
+                  "apollo_id": {
+                    "type": "string"
+                  },
+                  "website": {
+                    "type": "string"
+                  },
+                  "domain": {
+                    "type": "string"
+                  },
+                  "notes": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1,
+              "maxItems": 500,
+              "description": "Array of contacts (max 500 per call)."
+            },
+            "start_immediately": {
+              "type": "boolean",
+              "description": "If true, contacts enroll in the drip immediately. Default false (paused)."
+            }
+          },
+          "required": [
+            "campaign_category",
+            "contacts"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
         },
         "outputSchema": null
       }
