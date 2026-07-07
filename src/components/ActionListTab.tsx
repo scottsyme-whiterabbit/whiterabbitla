@@ -1109,7 +1109,17 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
         onClose={() => setAiDraftCtx(null)}
         adminPassword={adminPassword}
         context={aiDraftCtx}
+        onSent={() => loadData()}
       />
+
+      <ReviewQueueModal
+        open={reviewQueueOpen}
+        onClose={() => setReviewQueueOpen(false)}
+        adminPassword={adminPassword}
+        contacts={reviewQueueContacts}
+        onFinished={() => { loadData(); void refreshFreshDrafts(); }}
+      />
+
     </div>
   );
 };
