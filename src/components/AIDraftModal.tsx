@@ -14,6 +14,7 @@ interface DraftRow {
   body: string;
   status: string;
   ai_meta?: any;
+  generation_id?: string | null;
 }
 
 export interface AIDraftContext {
