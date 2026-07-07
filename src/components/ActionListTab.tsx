@@ -518,6 +518,91 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
     return d >= weekAgo;
   }).length;
 
+  // ---- Batch AI drafting + Review Queue ----
+  const contextFromItem = (item: ActionItem): AIDraftContext & { priorityScore: number; priorityLabel: string } => ({
+    contact_email: item.email,
+    contact_name: item.name,
+    company: item.company,
+    vertical: item.deal?.event_type || item.contact?.drip_campaign || null,
+    source: item.source,
+    deal_id: item.deal?.id || null,
+    engagement_summary: item.engagement,
+    notes: item.deal?.notes || null,
+    priorityScore: item.priorityScore,
+    priorityLabel: item.priority.toUpperCase(),
+  });
+
+  const callDraftFn = async (fn: string, payload: any) => {
+    const r = await fetch(`${SUPABASE_URL}/functions/v1/${fn}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
+      body: JSON.stringify({ adminPassword, ...payload }),
+    });
+    const data = await r.json();
+    if (!r.ok) { const err: any = new Error(data.error || `Request failed (${r.status})`); err.status = r.status; throw err; }
+    return data;
+  };
+
+  const refreshFreshDrafts = useCallback(async () => {
+    const emails = Array.from(new Set(filtered.map(i => i.email.toLowerCase()).filter(Boolean)));
+    if (emails.length === 0) { setFreshDraftEmails(new Set()); return; }
+    const since = new Date(Date.now() - FRESH_DRAFT_WINDOW_MS).toISOString();
+    try {
+      // Chunk to avoid oversized `in` filters
+      const chunks: string[][] = [];
+      for (let i = 0; i < emails.length; i += 100) chunks.push(emails.slice(i, i + 100));
+      const results = await Promise.all(chunks.map(chunk =>
+        callDraftFn("drafts-admin", { action: "list", status: ["draft"], contact_emails: chunk, since, limit: 1000 })
+      ));
+      const set = new Set<string>();
+      for (const r of results) for (const d of (r.drafts || [])) set.add(String(d.contact_email).toLowerCase());
+      setFreshDraftEmails(set);
+    } catch { /* silent */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filtered, adminPassword]);
+
+  useEffect(() => { void refreshFreshDrafts(); }, [refreshFreshDrafts]);
+
+  const generateAllDrafts = async () => {
+    const targets = filtered
+      .filter(i => i.email && !freshDraftEmails.has(i.email.toLowerCase()))
+      .slice(0, 25);
+    if (targets.length === 0) { toast.info("All filtered contacts already have fresh drafts."); return; }
+    setBatchGenerating({ done: 0, total: targets.length });
+    let done = 0, failed = 0;
+    for (const item of targets) {
+      let attempt = 0;
+      while (attempt < 3) {
+        try {
+          await callDraftFn("ai-draft-reply", contextFromItem(item));
+          break;
+        } catch (e: any) {
+          if (e.status === 429 && attempt < 2) {
+            await new Promise(r => setTimeout(r, 1500 * (attempt + 1)));
+            attempt++;
+            continue;
+          }
+          failed++;
+          console.warn("batch draft failed", item.email, e?.message);
+          break;
+        }
+      }
+      done++;
+      setBatchGenerating({ done, total: targets.length });
+    }
+    setBatchGenerating(null);
+    toast.success(`Drafted ${done - failed} contacts${failed ? ` · ${failed} failed` : ""}`);
+    await refreshFreshDrafts();
+  };
+
+  const openReviewQueue = () => {
+    const withDrafts = filtered.filter(i => freshDraftEmails.has(i.email.toLowerCase()));
+    if (withDrafts.length === 0) { toast.info("No fresh drafts to review — click 'Generate All Drafts' first."); return; }
+    setReviewQueueContacts(withDrafts.map(contextFromItem));
+    setReviewQueueOpen(true);
+  };
+
+
   const openLogModal = (item: ActionItem, actionType: string) => {
     setLogModal({ email: item.email, name: item.name, dealId: item.deal?.id, actionType });
     setLogForm({ action_type: actionType, outcome: "", notes: "", follow_up_date: "" });
