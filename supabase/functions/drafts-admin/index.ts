@@ -88,6 +88,9 @@ async function sendViaGmail(draft: any, adminPassword: string) {
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   try {
+    if (!ADMIN_PASSWORD) {
+      return new Response(JSON.stringify({ error: "Server misconfigured: ADMIN_PASSWORD not set" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
     const body = await req.json();
     if (body.adminPassword !== ADMIN_PASSWORD) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
