@@ -724,6 +724,32 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
         );
       })()}
 
+      {/* Batch AI toolbar */}
+      <div className="flex flex-wrap items-center gap-2 border border-accent/30 bg-accent/5 px-3 py-2">
+        <Sparkles size={14} className="text-accent" />
+        <span className="font-sans text-[10px] tracking-[0.2em] uppercase text-accent">AI Assembly Line</span>
+        <span className="text-[11px] text-muted-foreground ml-2">
+          {freshDraftEmails.size} of {filtered.length} filtered contact{filtered.length === 1 ? "" : "s"} have fresh drafts
+        </span>
+        <div className="ml-auto flex gap-2">
+          <button
+            onClick={generateAllDrafts}
+            disabled={!!batchGenerating}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-muted/30 border border-border text-foreground text-[10px] tracking-[0.15em] uppercase hover:bg-muted/50 disabled:opacity-50"
+          >
+            <Zap size={12} />
+            {batchGenerating ? `Drafting ${batchGenerating.done} of ${batchGenerating.total}…` : "Generate All Drafts"}
+          </button>
+          <button
+            onClick={openReviewQueue}
+            disabled={!!batchGenerating || freshDraftEmails.size === 0}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-accent text-accent-foreground text-[10px] tracking-[0.15em] uppercase hover:bg-accent/80 disabled:opacity-50"
+          >
+            <ListChecks size={12} /> Review Queue ({freshDraftEmails.size})
+          </button>
+        </div>
+      </div>
+
       {/* Source Filter */}
       <div className="flex flex-wrap gap-2">
         {([
