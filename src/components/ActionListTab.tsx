@@ -221,6 +221,11 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
   });
   const [editSaving, setEditSaving] = useState(false);
   const [aiDraftCtx, setAiDraftCtx] = useState<AIDraftContext | null>(null);
+  const [batchGenerating, setBatchGenerating] = useState<{ done: number; total: number } | null>(null);
+  const [freshDraftEmails, setFreshDraftEmails] = useState<Set<string>>(new Set());
+  const [reviewQueueOpen, setReviewQueueOpen] = useState(false);
+  const [reviewQueueContacts, setReviewQueueContacts] = useState<QueueContact[]>([]);
+
 
   const [activityByEmail, setActivityByEmail] = useState<Record<string, TimelineItem[]>>({});
   const [activityLoading, setActivityLoading] = useState<Record<string, boolean>>({});
