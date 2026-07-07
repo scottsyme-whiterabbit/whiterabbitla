@@ -157,6 +157,9 @@ function buildUserPrompt(args: any) {
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   try {
+    if (!ADMIN_PASSWORD) {
+      return new Response(JSON.stringify({ error: "Server misconfigured: ADMIN_PASSWORD not set" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
     const body = await req.json();
     if (body.adminPassword !== ADMIN_PASSWORD) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
@@ -168,6 +171,15 @@ serve(async (req) => {
     if (!contact_email) {
       return new Response(JSON.stringify({ error: "Missing contact_email" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
+
+    // Dismiss any older status='draft' rows for this contact so the review queue
+    // never surfaces stale variants alongside the new generation.
+    try {
+      await supabase.from("email_drafts")
+        .update({ status: "dismissed", dismissed_at: new Date().toISOString() })
+        .ilike("contact_email", contact_email)
+        .eq("status", "draft");
+    } catch (e) { console.warn("stale draft dismiss failed", e); }
 
     // Pull deal record
     let deal: any = null;
