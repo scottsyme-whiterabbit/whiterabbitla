@@ -100,15 +100,22 @@ serve(async (req) => {
     if (action === "list") {
       const status = body.status || ["draft", "approved"];
       const statuses = Array.isArray(status) ? status : [status];
-      const { data, error } = await supabase
+      let q = supabase
         .from("email_drafts")
         .select("*")
         .in("status", statuses)
         .order("created_at", { ascending: false })
-        .limit(200);
+        .limit(body.limit || 500);
+      if (body.contact_email) q = q.ilike("contact_email", body.contact_email);
+      if (body.contact_emails && Array.isArray(body.contact_emails) && body.contact_emails.length) {
+        q = q.in("contact_email", body.contact_emails.map((e: string) => e.toLowerCase()));
+      }
+      if (body.since) q = q.gte("created_at", body.since);
+      const { data, error } = await q;
       if (error) throw error;
       return new Response(JSON.stringify({ drafts: data }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
+
 
     if (action === "update") {
       const { id, subject, body: text, user_hint } = body;
