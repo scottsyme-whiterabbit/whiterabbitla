@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Sparkles, Send, ListPlus, RefreshCw, X, Loader2 } from "lucide-react";
+import { Sparkles, Send, ListPlus, RefreshCw, X, Loader2, AlertTriangle } from "lucide-react";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -13,6 +13,8 @@ interface DraftRow {
   subject: string;
   body: string;
   status: string;
+  ai_meta?: any;
+  generation_id?: string | null;
 }
 
 export interface AIDraftContext {
@@ -32,14 +34,19 @@ interface Props {
   onClose: () => void;
   adminPassword: string;
   context: AIDraftContext | null;
+  onSent?: () => void;
 }
 
-export default function AIDraftModal({ open, onClose, adminPassword, context }: Props) {
+// 7-day freshness window used by both modal and review queue.
+export const FRESH_DRAFT_WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+
+export default function AIDraftModal({ open, onClose, adminPassword, context, onSent }: Props) {
   const [loading, setLoading] = useState(false);
   const [drafts, setDrafts] = useState<DraftRow[]>([]);
   const [active, setActive] = useState(0);
   const [steer, setSteer] = useState("");
   const [hadThread, setHadThread] = useState<boolean | null>(null);
+  const [loadedFresh, setLoadedFresh] = useState(false);
 
   const callFn = async (fn: string, payload: any) => {
     const r = await fetch(`${SUPABASE_URL}/functions/v1/${fn}`, {
@@ -52,6 +59,27 @@ export default function AIDraftModal({ open, onClose, adminPassword, context }: 
     return data;
   };
 
+  const loadFreshDrafts = async (): Promise<DraftRow[]> => {
+    if (!context?.contact_email) return [];
+    const since = new Date(Date.now() - FRESH_DRAFT_WINDOW_MS).toISOString();
+    try {
+      const data = await callFn("drafts-admin", {
+        action: "list",
+        status: ["draft"],
+        contact_email: context.contact_email.toLowerCase(),
+        since,
+      });
+      const rows: DraftRow[] = (data.drafts || []).filter((d: any) => d.status === "draft");
+      // Keep only the latest generation
+      if (rows.length === 0) return [];
+      const latestGen = rows[0].generation_id ?? null;
+      const same = latestGen ? rows.filter((r: any) => r.generation_id === latestGen) : rows;
+      return same.sort((a: any, b: any) => (a.variant_index ?? 0) - (b.variant_index ?? 0));
+    } catch {
+      return [];
+    }
+  };
+
   const generate = async (extraHint?: string) => {
     if (!context) return;
     setLoading(true);
@@ -59,6 +87,7 @@ export default function AIDraftModal({ open, onClose, adminPassword, context }: 
       const data = await callFn("ai-draft-reply", { ...context, user_hint: extraHint || steer || undefined });
       setDrafts(data.drafts || []);
       setActive(0);
+      setLoadedFresh(false);
       setHadThread(!!data.thread_context?.hadPriorThread);
       toast.success(`Generated ${data.drafts?.length || 0} variants${data.thread_context?.hadPriorThread ? " (with thread context)" : ""}`);
     } catch (e) {
@@ -68,15 +97,31 @@ export default function AIDraftModal({ open, onClose, adminPassword, context }: 
     }
   };
 
-  // Auto-generate the first time the modal opens for a given contact
+  // On open: load existing fresh drafts first; only auto-generate if none exist.
   useEffect(() => {
-    if (open && context && drafts.length === 0 && !loading) {
-      generate();
-    }
+    if (!open || !context) return;
+    let cancelled = false;
+    (async () => {
+      setLoading(true);
+      const existing = await loadFreshDrafts();
+      if (cancelled) return;
+      if (existing.length > 0) {
+        setDrafts(existing);
+        setActive(0);
+        setLoadedFresh(true);
+        setHadThread(null);
+        setLoading(false);
+      } else {
+        setLoading(false);
+        await generate();
+      }
+    })();
+    return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, context?.contact_email]);
 
   const current = drafts[active];
+  const needsTouch = !!current?.ai_meta?.needs_personal_touch;
 
   const updateField = (field: "subject" | "body", value: string) => {
     setDrafts(prev => prev.map((d, i) => i === active ? { ...d, [field]: value } : d));
@@ -96,10 +141,9 @@ export default function AIDraftModal({ open, onClose, adminPassword, context }: 
     if (!confirm(`Send this email to ${context?.contact_email} from scott.syme@whiterabbitla.com?\n\nSubject: ${current.subject}`)) return;
     setLoading(true);
     try {
-      // Pass subject + body explicitly so the server uses exactly what's on screen
-      // (no read-after-write race against the edit autosave).
       await callFn("drafts-admin", { action: "send", id: current.id, subject: current.subject, body: current.body });
       toast.success("Sent ✓ (your edits were used)");
+      onSent?.();
       onClose();
       setDrafts([]); setSteer("");
     } catch (e) {
@@ -125,7 +169,7 @@ export default function AIDraftModal({ open, onClose, adminPassword, context }: 
     }
   };
 
-  const close = () => { onClose(); setDrafts([]); setSteer(""); setActive(0); };
+  const close = () => { onClose(); setDrafts([]); setSteer(""); setActive(0); setLoadedFresh(false); };
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && close()}>
@@ -138,13 +182,14 @@ export default function AIDraftModal({ open, onClose, adminPassword, context }: 
           <p className="text-xs text-muted-foreground">
             To {context?.contact_name || context?.contact_email}{context?.company ? ` · ${context.company}` : ""}
             {hadThread !== null && <span className="ml-2 text-accent/80">{hadThread ? "· thread context loaded" : "· first-touch"}</span>}
+            {loadedFresh && <span className="ml-2 text-emerald-400/80">· loaded existing fresh drafts</span>}
           </p>
         </DialogHeader>
 
         {loading && drafts.length === 0 ? (
           <div className="py-16 text-center">
             <Loader2 className="animate-spin mx-auto mb-3 text-accent" size={28} />
-            <p className="text-sm text-muted-foreground">Generating 3 on-brand variants…</p>
+            <p className="text-sm text-muted-foreground">Loading drafts…</p>
           </div>
         ) : drafts.length === 0 ? (
           <div className="py-12 text-center">
@@ -152,6 +197,13 @@ export default function AIDraftModal({ open, onClose, adminPassword, context }: 
           </div>
         ) : (
           <div className="space-y-3">
+            {needsTouch && (
+              <div className="flex items-start gap-2 border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-[11px] text-amber-300">
+                <AlertTriangle size={14} className="mt-0.5 shrink-0" />
+                <span><span className="font-semibold uppercase tracking-wider">Needs personal touch</span> — the AI had no strong specific hook. Review and add a real detail before sending.</span>
+              </div>
+            )}
+
             {/* Variant tabs */}
             <div className="flex gap-1 border-b border-border">
               {drafts.map((d, i) => (
