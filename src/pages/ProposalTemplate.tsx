@@ -173,11 +173,10 @@ export const DEFAULT_PROPOSAL: ProposalData = {
 
 export const ProposalView = ({ data }: { data: ProposalData }) => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [signTier, setSignTier] = useState<Tier | null>(null);
   const heroSrc = HERO_MAP[data.hero_image] || HERO_MAP.wedding;
   const fullName = `${data.first_name} ${data.last_name}`.trim();
-  const payUrl = (data.square_invoice_url || "").trim() || null;
-  const resolveTierHref = (t: Tier) => (t.href && t.href.trim()) || payUrl;
-  const reserveLabel = payUrl ? "Pay Deposit & Reserve" : "Reserve";
+  const reserveLabel = "Sign & Reserve";
 
   // Corner flourishes — currently disabled
   const Flourishes = (_: { tone?: "gold" | "cream"; size?: "sm" | "md" | "lg" }) => null;
