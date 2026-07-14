@@ -52,7 +52,15 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
 
     const times = computeEventTimes(deal.event_date, deal.event_time);
     const who = deal.contact_name || deal.contact_email || "Client";
-    const summary = `${deal.event_type || "Event"} — ${who}${deal.company ? ` (${deal.company})` : ""}`;
+    const eventTypeLabels: Record<string, string> = {
+      corporate: "Corporate Event",
+      wedding: "Wedding",
+      private_party: "Private Party",
+      parlor_show: "Parlor Show",
+      other: "Event",
+    };
+    const eventLabel = eventTypeLabels[deal.event_type || "other"] || "Event";
+    const summary = `🎩 BOOKED — ${eventLabel}: ${who}${deal.company ? ` (${deal.company})` : ""}`;
     const descLines = [
       `Client: ${who}`,
       deal.contact_email ? `Email: ${deal.contact_email}` : null,
