@@ -214,6 +214,24 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
               </label>
             </div>
 
+            <label className="block mb-4">
+              <span className="text-xs uppercase tracking-wider text-forest-dark/60">
+                Arrival Time
+              </span>
+              <input
+                type="text"
+                value={arrivalTime}
+                onChange={(e) => setArrivalTime(e.target.value)}
+                className="mt-1 w-full border border-forest-dark/20 bg-white px-3 py-2.5 text-sm"
+                placeholder="30 minutes before show time"
+                maxLength={120}
+              />
+              <span className="mt-1 block text-[11px] text-forest-dark/50">
+                Default: 30 min for walk-around close-up · 45 min for a seated show. Edit if agreed otherwise.
+              </span>
+            </label>
+
+
             <div className="border border-forest-dark/15 bg-white/60 p-4 max-h-72 overflow-y-auto mb-4">
               <pre className="font-serif text-[12.5px] leading-relaxed whitespace-pre-wrap text-forest-dark/85">
                 {agreementText}
