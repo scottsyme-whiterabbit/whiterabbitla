@@ -219,6 +219,35 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
               </label>
             </div>
 
+            <div className="grid md:grid-cols-2 gap-3 mb-4">
+              <label className="block">
+                <span className="text-xs uppercase tracking-wider text-forest-dark/60">
+                  Event Location
+                </span>
+                <input
+                  type="text"
+                  value={eventLocation}
+                  onChange={(e) => setEventLocation(e.target.value)}
+                  className="mt-1 w-full border border-forest-dark/20 bg-white px-3 py-2.5 text-sm"
+                  placeholder="Venue name / address or TBA"
+                  maxLength={200}
+                />
+              </label>
+              <label className="block">
+                <span className="text-xs uppercase tracking-wider text-forest-dark/60">
+                  Performance Time
+                </span>
+                <input
+                  type="text"
+                  value={performanceTime}
+                  onChange={(e) => setPerformanceTime(e.target.value)}
+                  className="mt-1 w-full border border-forest-dark/20 bg-white px-3 py-2.5 text-sm"
+                  placeholder="e.g. 7:30 – 9:00 PM or TBA"
+                  maxLength={120}
+                />
+              </label>
+            </div>
+
             <label className="block mb-4">
               <span className="text-xs uppercase tracking-wider text-forest-dark/60">
                 Arrival Time
