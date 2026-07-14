@@ -206,7 +206,7 @@ ${signoffFull()}`),
         innerHtml: bodyCell(`<p style="margin:0 0 18px;">${firstName},</p>
 <p style="margin:0 0 18px;">Before White Rabbit LA — I was in real estate. Before that — I was parking cars.</p>
 <p style="margin:0 0 18px;">Magic was always on the side — at the valet stand, at open mics, anywhere someone would watch. What I learned parking cars for people arriving at luxury events: the experience starts before the front door.</p>
-<p style="margin:0 0 18px;">Today I perform for Morgan Stanley, Rivian, and Rolls-Royce. I have performed at Soho House and the Jonathan Club. But the approach is the same: make every person feel like the most important one in the room.</p>
+<p style="margin:0 0 18px;">Today I perform for Morgan Stanley, Rivian, and Rolls-Royce. I have performed at Soho House and the Jonathan Club, done walk-around magic for a wedding at Cipriani in New York, and headlined a larger private party in Boston. But the approach is the same: make every person feel like the most important one in the room.</p>
 <p style="margin:0 0 18px;">If that is the kind of energy your next event needs, let's talk.</p>
 ${cta}
 <p style="margin:18px 0 0;">${trackedLink(`${SITE_URL}/blog/how-to-choose-entertainment-for-luxury-event`, "How to Choose Entertainment for a Luxury Event", contactId, step, `nurture-${category}`)}</p>

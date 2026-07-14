@@ -56,6 +56,7 @@ ABOUT THE BUSINESS:
 - Scott Syme is the magician and creative force behind White Rabbit
 - Member of the Magic Castle® in Hollywood, consultant for America's Got Talent and Disney Channel
 - Clients include Netflix, Disney, Rolls Royce, Morgan Stanley, Paramount, Lionsgate, YouTube, Hyatt, Rivian, Olivia Rodrigo, Taittinger
+- Recent travel work: walk-around magic for a wedding at Cipriani in New York, and a larger private party in Boston
 - Specializes in close-up magic, parlor shows, and fully produced private events
 - Known for transforming any room into something cinematic and intimate through curated lighting, signature soundtrack, and world-class hospitality
 - Based in Los Angeles, available nationwide
