@@ -12,14 +12,23 @@ interface Props {
   proposal: ProposalData & { id?: string; slug?: string };
 }
 
+const detectDefaultArrival = (tier: Tier): string => {
+  const hay = `${tier.name} ${tier.items.join(" ")}`.toLowerCase();
+  const isShow = /(parlor|parlour|stage|show|theater|theatre|seated|illusion)/.test(hay);
+  const isWalkAround = /(walk-?around|strolling|close-?up|cocktail|roving|mingle)/.test(hay);
+  if (isShow && !isWalkAround) return "45 minutes before show time";
+  return "30 minutes before show time";
+};
+
 const buildAgreement = (opts: {
   clientName: string;
   clientEmail: string;
   tier: Tier;
   proposal: ProposalData;
   signedDate: string;
+  arrivalTime: string;
 }) => {
-  const { clientName, clientEmail, tier, proposal, signedDate } = opts;
+  const { clientName, clientEmail, tier, proposal, signedDate, arrivalTime } = opts;
   const eventDate = proposal.event_date || "TBA";
   const venue = proposal.venue || "TBA";
   const eventType = proposal.event_type || "Event";
