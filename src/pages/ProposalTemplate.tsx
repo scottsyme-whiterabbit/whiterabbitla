@@ -332,14 +332,13 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
                     ))}
                   </ul>
                   <div className="font-serif text-4xl md:text-5xl font-light mb-5">{tier.price}</div>
-                  {(() => {
-                    const linkHref = resolveTierHref(tier);
-                    return linkHref ? (
-                      <a href={linkHref} target="_blank" rel="noopener noreferrer" className={`block text-center py-3.5 px-6 text-xs tracking-[0.2em] uppercase font-medium transition-all hover:opacity-85 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream hover:border-gold hover:text-gold"}`}>{reserveLabel}</a>
-                    ) : (
-                      <div className={`block text-center py-3.5 px-6 text-xs tracking-[0.2em] uppercase font-medium opacity-50 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream"}`}>{reserveLabel}</div>
-                    );
-                  })()}
+                  <button
+                    type="button"
+                    onClick={() => setSignTier(tier)}
+                    className={`block w-full text-center py-3.5 px-6 text-xs tracking-[0.2em] uppercase font-medium transition-all hover:opacity-85 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream hover:border-gold hover:text-gold"}`}
+                  >
+                    {reserveLabel}
+                  </button>
                 </div>
               );
             })}
