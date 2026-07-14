@@ -580,6 +580,12 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           />
         </div>
       </section>
+      <SignAgreementModal
+        open={!!signTier}
+        onClose={() => setSignTier(null)}
+        tier={signTier}
+        proposal={data as ProposalData & { id?: string; slug?: string }}
+      />
     </div>
   );
 };
