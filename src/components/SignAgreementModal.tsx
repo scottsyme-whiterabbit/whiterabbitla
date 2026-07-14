@@ -96,6 +96,8 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
   const [arrivalTime, setArrivalTime] = useState(() =>
     tier ? detectDefaultArrival(tier) : "30 minutes before show time"
   );
+  const [performanceTime, setPerformanceTime] = useState("");
+  const [eventLocation, setEventLocation] = useState(proposal.venue || "");
 
   const signedDate = useMemo(
     () =>
@@ -116,6 +118,8 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
     proposal,
     signedDate,
     arrivalTime: arrivalTime.trim() || detectDefaultArrival(tier),
+    performanceTime: performanceTime.trim(),
+    eventLocation: eventLocation.trim(),
   });
 
   const submit = async () => {
