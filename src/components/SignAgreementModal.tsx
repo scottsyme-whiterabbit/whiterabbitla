@@ -41,7 +41,7 @@ Event Name: ${eventType}
 Event Date: ${eventDate}
 Event Location: ${venue}
 Performance Time: TBA
-Arrival Time: Half Hour before show time
+Arrival Time: ${arrivalTime}
 
 Package Selected: ${tier.name} — ${tier.price}
 
