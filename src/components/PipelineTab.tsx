@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
-import { Plus, DollarSign, TrendingUp, Calendar, BarChart3, ChevronDown, ChevronRight, Mail, Eye, MousePointerClick } from "lucide-react";
+import { Plus, DollarSign, TrendingUp, Calendar, BarChart3, ChevronDown, ChevronRight, Mail, Eye, MousePointerClick, Search, X } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import ShowCalendar from "@/components/ShowCalendar";
 
@@ -119,6 +119,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
   const [emailActivity, setEmailActivity] = useState<{ clicks: any[]; opens: any[] } | null>(null);
   const [loadingActivity, setLoadingActivity] = useState(false);
   const [showEmailPanel, setShowEmailPanel] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [form, setForm] = useState({
     contact_email: "",
@@ -396,15 +397,37 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
       </div>
 
       {/* Actions */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
         <p className="text-muted-foreground text-sm">{deals.length} total deals</p>
-        <button
-          onClick={() => { resetForm(); setEditingDeal(null); setShowForm(true); }}
-          className="flex items-center gap-2 bg-accent text-accent-foreground px-4 py-2 font-sans text-xs tracking-[0.15em] uppercase hover:bg-accent/80 transition-colors"
-        >
-          <Plus size={14} /> New Deal
-        </button>
+        <div className="flex items-center gap-2">
+          <div className="relative flex-1 sm:w-72">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="Search name, email, company, location..."
+              className="w-full bg-muted/20 border border-border text-foreground pl-9 pr-8 py-2 text-sm focus:outline-none focus:border-accent"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                aria-label="Clear search"
+              >
+                <X size={14} />
+              </button>
+            )}
+          </div>
+          <button
+            onClick={() => { resetForm(); setEditingDeal(null); setShowForm(true); }}
+            className="flex items-center gap-2 bg-accent text-accent-foreground px-4 py-2 font-sans text-xs tracking-[0.15em] uppercase hover:bg-accent/80 transition-colors whitespace-nowrap"
+          >
+            <Plus size={14} /> New Deal
+          </button>
+        </div>
       </div>
+
 
       {/* Lost Reasons Tracker */}
       {lostDeals.length > 0 && (
@@ -478,7 +501,19 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
       <div className="overflow-x-auto">
         <div className="flex gap-3 min-w-[1200px] pb-4">
           {STAGES.map(stage => {
-            const stageDeals = deals.filter(d => d.stage === stage.key);
+            const q = searchQuery.trim().toLowerCase();
+            const stageDeals = deals.filter(d => {
+              if (d.stage !== stage.key) return false;
+              if (!q) return true;
+              return (
+                (d.contact_name || "").toLowerCase().includes(q) ||
+                (d.contact_email || "").toLowerCase().includes(q) ||
+                (d.company || "").toLowerCase().includes(q) ||
+                (d.location || "").toLowerCase().includes(q) ||
+                (d.phone || "").toLowerCase().includes(q) ||
+                (d.event_type || "").toLowerCase().includes(q)
+              );
+            });
             const isCollapsible = COLLAPSIBLE_STAGES.includes(stage.key) && stageDeals.length > PREVIEW_COUNT;
             const isExpanded = expandedCols[stage.key] || false;
             const visibleDeals = isCollapsible && !isExpanded ? stageDeals.slice(0, PREVIEW_COUNT) : stageDeals;
