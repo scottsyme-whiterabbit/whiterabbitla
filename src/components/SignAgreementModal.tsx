@@ -12,14 +12,23 @@ interface Props {
   proposal: ProposalData & { id?: string; slug?: string };
 }
 
+const detectDefaultArrival = (tier: Tier): string => {
+  const hay = `${tier.name} ${tier.items.join(" ")}`.toLowerCase();
+  const isShow = /(parlor|parlour|stage|show|theater|theatre|seated|illusion)/.test(hay);
+  const isWalkAround = /(walk-?around|strolling|close-?up|cocktail|roving|mingle)/.test(hay);
+  if (isShow && !isWalkAround) return "45 minutes before show time";
+  return "30 minutes before show time";
+};
+
 const buildAgreement = (opts: {
   clientName: string;
   clientEmail: string;
   tier: Tier;
   proposal: ProposalData;
   signedDate: string;
+  arrivalTime: string;
 }) => {
-  const { clientName, clientEmail, tier, proposal, signedDate } = opts;
+  const { clientName, clientEmail, tier, proposal, signedDate, arrivalTime } = opts;
   const eventDate = proposal.event_date || "TBA";
   const venue = proposal.venue || "TBA";
   const eventType = proposal.event_type || "Event";
@@ -32,7 +41,7 @@ Event Name: ${eventType}
 Event Date: ${eventDate}
 Event Location: ${venue}
 Performance Time: TBA
-Arrival Time: Half Hour before show time
+Arrival Time: ${arrivalTime}
 
 Package Selected: ${tier.name} — ${tier.price}
 
@@ -83,6 +92,9 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
   const [agreed, setAgreed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [arrivalTime, setArrivalTime] = useState(() =>
+    tier ? detectDefaultArrival(tier) : "30 minutes before show time"
+  );
 
   const signedDate = useMemo(
     () =>
@@ -102,6 +114,7 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
     tier,
     proposal,
     signedDate,
+    arrivalTime: arrivalTime.trim() || detectDefaultArrival(tier),
   });
 
   const submit = async () => {
@@ -200,6 +213,24 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
                 />
               </label>
             </div>
+
+            <label className="block mb-4">
+              <span className="text-xs uppercase tracking-wider text-forest-dark/60">
+                Arrival Time
+              </span>
+              <input
+                type="text"
+                value={arrivalTime}
+                onChange={(e) => setArrivalTime(e.target.value)}
+                className="mt-1 w-full border border-forest-dark/20 bg-white px-3 py-2.5 text-sm"
+                placeholder="30 minutes before show time"
+                maxLength={120}
+              />
+              <span className="mt-1 block text-[11px] text-forest-dark/50">
+                Default: 30 min for walk-around close-up · 45 min for a seated show. Edit if agreed otherwise.
+              </span>
+            </label>
+
 
             <div className="border border-forest-dark/15 bg-white/60 p-4 max-h-72 overflow-y-auto mb-4">
               <pre className="font-serif text-[12.5px] leading-relaxed whitespace-pre-wrap text-forest-dark/85">
