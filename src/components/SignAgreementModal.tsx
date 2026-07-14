@@ -20,73 +20,55 @@ const buildAgreement = (opts: {
   signedDate: string;
 }) => {
   const { clientName, clientEmail, tier, proposal, signedDate } = opts;
-  const eventDate = proposal.event_date || "TBD";
-  const venue = proposal.venue || "TBD";
+  const eventDate = proposal.event_date || "TBA";
+  const venue = proposal.venue || "TBA";
   const eventType = proposal.event_type || "Event";
-  const items = tier.items.map((i) => `  • ${i}`).join("\n");
+  const services = tier.items.map((i) => `- ${i}`).join("\n");
 
-  return `PERFORMANCE AGREEMENT — WHITE RABBIT LA
+  return `WHITE RABBIT ENTERTAINMENT PERFORMANCE AGREEMENT
 
-Between: Scott Syme / White Rabbit LA ("Performer")
-And: ${clientName}${clientEmail ? ` <${clientEmail}>` : ""} ("Client")
-Signed: ${signedDate}
+Client Name: ${clientName}${clientEmail ? ` <${clientEmail}>` : ""}
+Event Name: ${eventType}
+Event Date: ${eventDate}
+Event Location: ${venue}
+Performance Time: TBA
+Arrival Time: Half Hour before show time
 
-EVENT
-  Type: ${eventType}
-  Date: ${eventDate}
-  Venue: ${venue}
+Package Selected: ${tier.name} — ${tier.price}
 
-PACKAGE SELECTED
-  ${tier.name} — ${tier.price}
-  ${tier.tagline}
+Services Provided:
+White Rabbit Entertainment agrees to provide professional entertainment for the above-referenced event. The services include:
+${services}
+- Pre-event consultation with the client and/or planner to confirm flow of the evening and any special moments.
 
-INCLUDES
-${items}
+Performance Requirements:
+- Client agrees to provide parking or give parking instructions close to the venue entrance for ease of access.
+- A secure area or small designated space will be made available for the performer and equipment setup.
+- Magician Scott Syme will be dressed in professional attire suitable for the event's ambiance.
+- Performance start time is fixed. Delays caused by the client or venue do not extend the agreed end time.
+- Additional performance time beyond the contracted end time is subject to availability and an agreed-upon rate determined the night of the event.
 
-PAYMENT
-  A 50% non-refundable retainer is due upon signing to reserve the date.
-  The remaining 50% balance is due no later than the day before the event.
-  Payment is made via Square invoice sent by the Performer.
+Payment & Booking Confirmation:
+- A paid invoice or deposit is required to secure the performance date. Until payment is received, the booking is not confirmed, and availability cannot be guaranteed.
+- A 50% deposit is due upon receipt to lock the date. The remaining 50% is due the day before the event, unless otherwise agreed upon in writing.
+- If the final balance is not paid within 7 days of the agreed balance-due date, a late fee of $200 will be added to the total amount owed.
 
-CANCELLATION
-  If the Client cancels more than 30 days before the event, the retainer is
-  retained by the Performer. If cancellation occurs within 30 days of the
-  event, the full contract price is due. If the Performer must cancel due
-  to circumstances beyond their control, all payments made will be refunded
-  in full or the event will be rescheduled at the Client's option.
+Cancellation & Rescheduling:
+- If the client needs to cancel or reschedule, a written notice must be provided at least 7 days before the event. Deposits are non-refundable but may be applied toward a rescheduled event at White Rabbit Entertainment's discretion.
+- In the unlikely event that White Rabbit Entertainment is unable to perform due to unforeseen circumstances (e.g., illness, emergency), reasonable efforts will be made to provide a suitable replacement or issue a full refund.
 
-TRAVEL
-  Pricing above covers standard Los Angeles County. Travel outside LA
-  County (airfare, ground transport, and lodging where applicable) will
-  be added at cost with prior written approval by the Client.
+Liability & Conduct:
+- White Rabbit Entertainment will not be held liable for any property damage, injuries, or unforeseen circumstances resulting from the performance. (White Rabbit does carry performer insurance.)
+- Performers will conduct themselves professionally and in accordance with the event's guidelines. In the event of inappropriate behavior from guests that compromises safety or disrupts the performance, White Rabbit Entertainment reserves the right to conclude the performance early without refund.
 
-RESCHEDULING
-  One reschedule is permitted at no additional charge, subject to
-  Performer availability, when requested at least 14 days in advance.
+Contact Information:
+For any questions, modifications, or special requests, please contact White Rabbit Entertainment at:
+Email: scott.syme@whiterabbitla.com
+Phone: (424) 394-1850 / (650) 678-9428
 
-FORCE MAJEURE
-  Neither party is liable for failure to perform due to events beyond
-  reasonable control (illness, injury, natural disaster, government
-  order, venue closure, or similar). In such case the parties will make
-  reasonable efforts to reschedule; if not possible, any unearned
-  payments will be refunded.
+By paying the deposit invoice, the client acknowledges and agrees to the terms outlined in this agreement.
 
-MEDIA
-  Performer may capture non-identifying photo/video of the performance
-  for portfolio and marketing use. Client may request in writing that no
-  such media be used.
-
-CONDUCT & ENVIRONMENT
-  Client agrees to provide a safe performance environment. Performer
-  reserves the right to end the engagement without refund if guests or
-  conditions become unsafe.
-
-ENTIRE AGREEMENT
-  This document is the complete agreement between the parties for the
-  event described above and supersedes any prior discussion or writing.
-
-By typing their name below, the Client agrees to the terms above and
-authorizes White Rabbit LA to send a Square invoice for the retainer.
+Thank you for choosing White Rabbit Entertainment!
 
 CLIENT SIGNATURE: ${clientName}
 DATE: ${signedDate}
