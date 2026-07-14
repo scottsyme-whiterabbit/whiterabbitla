@@ -501,7 +501,19 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
       <div className="overflow-x-auto">
         <div className="flex gap-3 min-w-[1200px] pb-4">
           {STAGES.map(stage => {
-            const stageDeals = deals.filter(d => d.stage === stage.key);
+            const q = searchQuery.trim().toLowerCase();
+            const stageDeals = deals.filter(d => {
+              if (d.stage !== stage.key) return false;
+              if (!q) return true;
+              return (
+                (d.contact_name || "").toLowerCase().includes(q) ||
+                (d.contact_email || "").toLowerCase().includes(q) ||
+                (d.company || "").toLowerCase().includes(q) ||
+                (d.location || "").toLowerCase().includes(q) ||
+                (d.phone || "").toLowerCase().includes(q) ||
+                (d.event_type || "").toLowerCase().includes(q)
+              );
+            });
             const isCollapsible = COLLAPSIBLE_STAGES.includes(stage.key) && stageDeals.length > PREVIEW_COUNT;
             const isExpanded = expandedCols[stage.key] || false;
             const visibleDeals = isCollapsible && !isExpanded ? stageDeals.slice(0, PREVIEW_COUNT) : stageDeals;
