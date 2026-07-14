@@ -564,6 +564,8 @@ serve(async (req) => {
             { onConflict: "email", ignoreDuplicates: true }
           );
 
+        if (data?.id) await syncDealToGoogleCalendar(supabase, data.id);
+
         return new Response(JSON.stringify({ deal: data }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
