@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Phone, Plus, Instagram, Linkedin } from "lucide-react";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
+import SignAgreementModal from "@/components/SignAgreementModal";
 import threeStars from "@/assets/three-stars-gold.png";
 import wrScriptLogo from "@/assets/wr-wordmark-cream.png";
 import { DEFAULT_GALLERY_KEYS, photoKeyToSrc } from "@/data/proposalAssets";
@@ -172,11 +173,10 @@ export const DEFAULT_PROPOSAL: ProposalData = {
 
 export const ProposalView = ({ data }: { data: ProposalData }) => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [signTier, setSignTier] = useState<Tier | null>(null);
   const heroSrc = HERO_MAP[data.hero_image] || HERO_MAP.wedding;
   const fullName = `${data.first_name} ${data.last_name}`.trim();
-  const payUrl = (data.square_invoice_url || "").trim() || null;
-  const resolveTierHref = (t: Tier) => (t.href && t.href.trim()) || payUrl;
-  const reserveLabel = payUrl ? "Pay Deposit & Reserve" : "Reserve";
+  const reserveLabel = "Sign & Reserve";
 
   // Corner flourishes — currently disabled
   const Flourishes = (_: { tone?: "gold" | "cream"; size?: "sm" | "md" | "lg" }) => null;
@@ -332,14 +332,13 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
                     ))}
                   </ul>
                   <div className="font-serif text-4xl md:text-5xl font-light mb-5">{tier.price}</div>
-                  {(() => {
-                    const linkHref = resolveTierHref(tier);
-                    return linkHref ? (
-                      <a href={linkHref} target="_blank" rel="noopener noreferrer" className={`block text-center py-3.5 px-6 text-xs tracking-[0.2em] uppercase font-medium transition-all hover:opacity-85 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream hover:border-gold hover:text-gold"}`}>{reserveLabel}</a>
-                    ) : (
-                      <div className={`block text-center py-3.5 px-6 text-xs tracking-[0.2em] uppercase font-medium opacity-50 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream"}`}>{reserveLabel}</div>
-                    );
-                  })()}
+                  <button
+                    type="button"
+                    onClick={() => setSignTier(tier)}
+                    className={`block w-full text-center py-3.5 px-6 text-xs tracking-[0.2em] uppercase font-medium transition-all hover:opacity-85 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream hover:border-gold hover:text-gold"}`}
+                  >
+                    {reserveLabel}
+                  </button>
                 </div>
               );
             })}
@@ -509,12 +508,15 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           <div className="grid md:grid-cols-3 gap-3 mt-10 max-w-4xl mx-auto">
             {data.tiers.map((tier, i) => {
               const rec = tier.recommended;
-              const linkHref = resolveTierHref(tier);
-              if (!linkHref) return null;
               return (
-                <a key={i} href={linkHref} target="_blank" rel="noopener noreferrer" className={`block py-4 px-5 text-xs tracking-[0.15em] uppercase font-medium transition-opacity hover:opacity-85 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream hover:border-gold hover:text-gold"}`}>
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setSignTier(tier)}
+                  className={`block py-4 px-5 text-xs tracking-[0.15em] uppercase font-medium transition-opacity hover:opacity-85 ${rec ? "bg-gold text-forest-dark" : "border border-cream/40 text-cream hover:border-gold hover:text-gold"}`}
+                >
                   {tier.cta} · {tier.price}
-                </a>
+                </button>
               );
             })}
           </div>
@@ -578,6 +580,12 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           />
         </div>
       </section>
+      <SignAgreementModal
+        open={!!signTier}
+        onClose={() => setSignTier(null)}
+        tier={signTier}
+        proposal={data as ProposalData & { id?: string; slug?: string }}
+      />
     </div>
   );
 };

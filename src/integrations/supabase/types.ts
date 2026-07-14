@@ -1548,6 +1548,71 @@ export type Database = {
         }
         Relationships: []
       }
+      signed_agreements: {
+        Row: {
+          agreement_text: string
+          client_email: string | null
+          client_name: string
+          created_at: string
+          event_date: string | null
+          event_type: string | null
+          id: string
+          invoice_sent_at: string | null
+          proposal_id: string | null
+          proposal_slug: string | null
+          signed_at: string
+          signer_ip: string | null
+          tier_name: string
+          tier_price: string | null
+          user_agent: string | null
+          venue: string | null
+        }
+        Insert: {
+          agreement_text: string
+          client_email?: string | null
+          client_name: string
+          created_at?: string
+          event_date?: string | null
+          event_type?: string | null
+          id?: string
+          invoice_sent_at?: string | null
+          proposal_id?: string | null
+          proposal_slug?: string | null
+          signed_at?: string
+          signer_ip?: string | null
+          tier_name: string
+          tier_price?: string | null
+          user_agent?: string | null
+          venue?: string | null
+        }
+        Update: {
+          agreement_text?: string
+          client_email?: string | null
+          client_name?: string
+          created_at?: string
+          event_date?: string | null
+          event_type?: string | null
+          id?: string
+          invoice_sent_at?: string | null
+          proposal_id?: string | null
+          proposal_slug?: string | null
+          signed_at?: string
+          signer_ip?: string | null
+          tier_name?: string
+          tier_price?: string | null
+          user_agent?: string | null
+          venue?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "signed_agreements_proposal_id_fkey"
+            columns: ["proposal_id"]
+            isOneToOne: false
+            referencedRelation: "proposals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       stats_cache: {
         Row: {
           cache_key: string
