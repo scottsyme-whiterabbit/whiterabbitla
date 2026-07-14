@@ -7,6 +7,122 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+// ---- Google Calendar push (booked deals → primary calendar) ----
+const GCAL_GATEWAY = "https://connector-gateway.lovable.dev/google_calendar/calendar/v3";
+const GCAL_TZ = "America/Los_Angeles";
+const GCAL_BOOKED_STAGES = new Set(["booked", "completed"]);
+
+function computeEventTimes(eventDate: string, eventTime: string | null) {
+  // Returns { start, end } as {dateTime,timeZone} or {date} pair.
+  if (eventTime && /^\d{2}:\d{2}/.test(eventTime)) {
+    const startISO = `${eventDate}T${eventTime.length === 5 ? eventTime + ":00" : eventTime}`;
+    const startDt = new Date(`${startISO}`);
+    const endDt = new Date(startDt.getTime() + 2 * 60 * 60 * 1000); // default 2h
+    const pad = (n: number) => n.toString().padStart(2, "0");
+    const fmt = (d: Date) =>
+      `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:00`;
+    return {
+      start: { dateTime: fmt(startDt), timeZone: GCAL_TZ },
+      end: { dateTime: fmt(endDt), timeZone: GCAL_TZ },
+    };
+  }
+  // All-day event
+  const d = new Date(eventDate);
+  const next = new Date(d.getTime() + 86400000);
+  return {
+    start: { date: eventDate },
+    end: { date: next.toISOString().slice(0, 10) },
+  };
+}
+
+async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
+  try {
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    const GCAL_API_KEY = Deno.env.get("GOOGLE_CALENDAR_API_KEY_1");
+    if (!LOVABLE_API_KEY || !GCAL_API_KEY) return;
+
+    const { data: deal } = await supabase
+      .from("deals")
+      .select("id, stage, event_type, event_date, event_time, location, contact_name, contact_email, company, guest_count, deal_value, notes, calendar_event_id")
+      .eq("id", dealId)
+      .maybeSingle();
+    if (!deal) return;
+    if (!GCAL_BOOKED_STAGES.has(deal.stage)) return;
+    if (!deal.event_date) return;
+
+    const times = computeEventTimes(deal.event_date, deal.event_time);
+    const who = deal.contact_name || deal.contact_email || "Client";
+    const summary = `${deal.event_type || "Event"} — ${who}${deal.company ? ` (${deal.company})` : ""}`;
+    const descLines = [
+      `Client: ${who}`,
+      deal.contact_email ? `Email: ${deal.contact_email}` : null,
+      deal.company ? `Company: ${deal.company}` : null,
+      deal.guest_count ? `Guests: ${deal.guest_count}` : null,
+      deal.deal_value ? `Value: $${(deal.deal_value / 100).toLocaleString()}` : null,
+      deal.notes ? `\nNotes:\n${deal.notes}` : null,
+      `\n— White Rabbit CRM deal ${deal.id}`,
+    ].filter(Boolean).join("\n");
+
+    const body = {
+      summary,
+      location: deal.location || undefined,
+      description: descLines,
+      ...times,
+    };
+
+    const isUpdate = !!deal.calendar_event_id;
+    const url = isUpdate
+      ? `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(deal.calendar_event_id)}`
+      : `${GCAL_GATEWAY}/calendars/primary/events`;
+    const res = await fetch(url, {
+      method: isUpdate ? "PATCH" : "POST",
+      headers: {
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        "X-Connection-Api-Key": GCAL_API_KEY,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    const respBody = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      console.error(`[gcal-push] ${res.status}:`, JSON.stringify(respBody).slice(0, 400));
+      // If patch failed because event was deleted upstream, fall back to create
+      if (isUpdate && res.status === 404) {
+        const createRes = await fetch(`${GCAL_GATEWAY}/calendars/primary/events`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${LOVABLE_API_KEY}`,
+            "X-Connection-Api-Key": GCAL_API_KEY,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        });
+        const created = await createRes.json().catch(() => ({}));
+        if (createRes.ok && created?.id) {
+          await supabase.from("deals").update({
+            calendar_event_id: created.id,
+            last_calendar_sync_at: new Date().toISOString(),
+          }).eq("id", deal.id);
+        }
+      }
+      return;
+    }
+    if (!isUpdate && respBody?.id) {
+      await supabase.from("deals").update({
+        calendar_event_id: respBody.id,
+        last_calendar_sync_at: new Date().toISOString(),
+      }).eq("id", deal.id);
+    } else if (isUpdate) {
+      await supabase.from("deals").update({
+        last_calendar_sync_at: new Date().toISOString(),
+      }).eq("id", deal.id);
+    }
+  } catch (e) {
+    console.error("[gcal-push] unexpected error:", e);
+  }
+}
+
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -448,6 +564,8 @@ serve(async (req) => {
             { onConflict: "email", ignoreDuplicates: true }
           );
 
+        if (data?.id) await syncDealToGoogleCalendar(supabase, data.id);
+
         return new Response(JSON.stringify({ deal: data }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -478,6 +596,7 @@ serve(async (req) => {
           .select()
           .single();
         if (error) throw error;
+        if (data?.id) await syncDealToGoogleCalendar(supabase, data.id);
         return new Response(JSON.stringify({ deal: data }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -490,6 +609,7 @@ serve(async (req) => {
           .update({ stage })
           .eq("id", dealId);
         if (error) throw error;
+        await syncDealToGoogleCalendar(supabase, dealId);
         return new Response(JSON.stringify({ success: true }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
