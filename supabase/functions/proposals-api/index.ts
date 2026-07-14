@@ -80,8 +80,124 @@ Deno.serve(async (req) => {
       return json({ pitch: data });
     }
 
+    // PUBLIC: sign a proposal agreement
+    if (action === "sign" && req.method === "POST") {
+      const body = await req.json();
+      const {
+        proposal_id, proposal_slug, tier_name, tier_price,
+        client_name, client_email, event_type, event_date, venue,
+        agreement_text,
+      } = body || {};
+      if (!tier_name || !client_name || !agreement_text) {
+        return json({ error: "Missing required fields" }, 400);
+      }
+      // Basic sanity limits
+      const trim = (s: any, n = 2000) => (typeof s === "string" ? s.slice(0, n) : null);
+      const ua = req.headers.get("user-agent") || "";
+      const fwd = req.headers.get("x-forwarded-for") || "";
+      const ip = fwd.split(",")[0].trim();
+
+      const { data, error } = await supabase.from("signed_agreements").insert({
+        proposal_id: proposal_id || null,
+        proposal_slug: trim(proposal_slug, 200),
+        tier_name: trim(tier_name, 200),
+        tier_price: trim(tier_price, 50),
+        client_name: trim(client_name, 200),
+        client_email: trim(client_email, 200),
+        event_type: trim(event_type, 200),
+        event_date: trim(event_date, 200),
+        venue: trim(venue, 300),
+        agreement_text: trim(agreement_text, 20000),
+        user_agent: ua.slice(0, 500),
+        signer_ip: ip.slice(0, 64),
+      }).select().single();
+      if (error) return json({ error: error.message }, 500);
+
+      // Notify Scott + client (best-effort)
+      if (RESEND_API_KEY) {
+        const subject = `Signed: ${tier_name} — ${client_name}`;
+        const plain = `${client_name} just signed for the ${tier_name} option${tier_price ? ` (${tier_price})` : ""}.
+
+Event: ${event_type || "—"} on ${event_date || "—"}${venue ? ` at ${venue}` : ""}
+Client email: ${client_email || "—"}
+Signed at: ${new Date().toISOString()}
+
+--- AGREEMENT ---
+${agreement_text}
+--- END AGREEMENT ---
+
+Copy the block above into the Square invoice notes.`;
+        const htmlBody = `<pre style="font-family:Georgia,serif;font-size:14px;line-height:1.6;white-space:pre-wrap;color:#223D34;background:#F8F5F0;padding:24px;border-radius:4px;">${plain.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</pre>`;
+        try {
+          await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
+            body: JSON.stringify({
+              from: "Scott Syme <scott.syme@whiterabbitla.com>",
+              to: ["scott.syme@whiterabbitla.com"],
+              subject,
+              html: htmlBody,
+              text: plain,
+              reply_to: client_email || "scott.syme@whiterabbitla.com",
+            }),
+          });
+        } catch {}
+        if (client_email) {
+          try {
+            await fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
+              body: JSON.stringify({
+                from: "Scott Syme <scott.syme@whiterabbitla.com>",
+                to: [client_email],
+                subject: `Your White Rabbit LA agreement — ${tier_name}`,
+                text: `${client_name},
+
+Thank you for choosing the ${tier_name} option. A copy of the agreement you just signed is below for your records. I'll follow up shortly with a Square invoice for the deposit to hold your date.
+
+--- AGREEMENT ---
+${agreement_text}
+--- END AGREEMENT ---
+
+Any questions, just reply to this email or call (424) 394-1850.
+
+Best,
+-Scott
+White Rabbit LA`,
+                reply_to: "scott.syme@whiterabbitla.com",
+              }),
+            });
+          } catch {}
+        }
+      }
+
+      return json({ ok: true, agreement: data });
+    }
+
     // ADMIN actions below
     if (!isAdmin(req)) return json({ error: "Unauthorized" }, 401);
+
+    if (action === "list_signed") {
+      const { data, error } = await supabase
+        .from("signed_agreements")
+        .select("*")
+        .order("signed_at", { ascending: false })
+        .limit(500);
+      if (error) return json({ error: error.message }, 500);
+      return json({ agreements: data || [] });
+    }
+
+    if (action === "mark_invoiced" && req.method === "POST") {
+      const { id } = await req.json();
+      if (!id) return json({ error: "Missing id" }, 400);
+      const { error } = await supabase
+        .from("signed_agreements")
+        .update({ invoice_sent_at: new Date().toISOString() })
+        .eq("id", id);
+      if (error) return json({ error: error.message }, 500);
+      return json({ ok: true });
+    }
+
 
     if (action === "list") {
       const { data, error } = await supabase
