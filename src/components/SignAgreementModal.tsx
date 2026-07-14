@@ -27,10 +27,11 @@ const buildAgreement = (opts: {
   proposal: ProposalData;
   signedDate: string;
   arrivalTime: string;
+  performanceTime: string;
+  eventLocation: string;
 }) => {
-  const { clientName, clientEmail, tier, proposal, signedDate, arrivalTime } = opts;
+  const { clientName, clientEmail, tier, proposal, signedDate, arrivalTime, performanceTime, eventLocation } = opts;
   const eventDate = proposal.event_date || "TBA";
-  const venue = proposal.venue || "TBA";
   const eventType = proposal.event_type || "Event";
   const services = tier.items.map((i) => `- ${i}`).join("\n");
 
@@ -39,8 +40,8 @@ const buildAgreement = (opts: {
 Client Name: ${clientName}${clientEmail ? ` <${clientEmail}>` : ""}
 Event Name: ${eventType}
 Event Date: ${eventDate}
-Event Location: ${venue}
-Performance Time: TBA
+Event Location: ${eventLocation || "TBA"}
+Performance Time: ${performanceTime || "TBA"}
 Arrival Time: ${arrivalTime}
 
 Package Selected: ${tier.name} — ${tier.price}
