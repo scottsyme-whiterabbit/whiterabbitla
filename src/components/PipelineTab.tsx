@@ -119,6 +119,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
   const [emailActivity, setEmailActivity] = useState<{ clicks: any[]; opens: any[] } | null>(null);
   const [loadingActivity, setLoadingActivity] = useState(false);
   const [showEmailPanel, setShowEmailPanel] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [form, setForm] = useState({
     contact_email: "",
