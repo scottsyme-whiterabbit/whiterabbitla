@@ -609,6 +609,7 @@ serve(async (req) => {
           .update({ stage })
           .eq("id", dealId);
         if (error) throw error;
+        await syncDealToGoogleCalendar(supabase, dealId);
         return new Response(JSON.stringify({ success: true }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
