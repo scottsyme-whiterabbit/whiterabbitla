@@ -27,10 +27,11 @@ const buildAgreement = (opts: {
   proposal: ProposalData;
   signedDate: string;
   arrivalTime: string;
+  performanceTime: string;
+  eventLocation: string;
 }) => {
-  const { clientName, clientEmail, tier, proposal, signedDate, arrivalTime } = opts;
+  const { clientName, clientEmail, tier, proposal, signedDate, arrivalTime, performanceTime, eventLocation } = opts;
   const eventDate = proposal.event_date || "TBA";
-  const venue = proposal.venue || "TBA";
   const eventType = proposal.event_type || "Event";
   const services = tier.items.map((i) => `- ${i}`).join("\n");
 
@@ -39,8 +40,8 @@ const buildAgreement = (opts: {
 Client Name: ${clientName}${clientEmail ? ` <${clientEmail}>` : ""}
 Event Name: ${eventType}
 Event Date: ${eventDate}
-Event Location: ${venue}
-Performance Time: TBA
+Event Location: ${eventLocation || "TBA"}
+Performance Time: ${performanceTime || "TBA"}
 Arrival Time: ${arrivalTime}
 
 Package Selected: ${tier.name} — ${tier.price}
@@ -95,6 +96,8 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
   const [arrivalTime, setArrivalTime] = useState(() =>
     tier ? detectDefaultArrival(tier) : "30 minutes before show time"
   );
+  const [performanceTime, setPerformanceTime] = useState("");
+  const [eventLocation, setEventLocation] = useState(proposal.venue || "");
 
   const signedDate = useMemo(
     () =>
@@ -115,6 +118,8 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
     proposal,
     signedDate,
     arrivalTime: arrivalTime.trim() || detectDefaultArrival(tier),
+    performanceTime: performanceTime.trim(),
+    eventLocation: eventLocation.trim(),
   });
 
   const submit = async () => {
@@ -210,6 +215,35 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
                   className="mt-1 w-full border border-forest-dark/20 bg-white px-3 py-2.5 text-sm"
                   placeholder="you@example.com"
                   maxLength={200}
+                />
+              </label>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-3 mb-4">
+              <label className="block">
+                <span className="text-xs uppercase tracking-wider text-forest-dark/60">
+                  Event Location
+                </span>
+                <input
+                  type="text"
+                  value={eventLocation}
+                  onChange={(e) => setEventLocation(e.target.value)}
+                  className="mt-1 w-full border border-forest-dark/20 bg-white px-3 py-2.5 text-sm"
+                  placeholder="Venue name / address or TBA"
+                  maxLength={200}
+                />
+              </label>
+              <label className="block">
+                <span className="text-xs uppercase tracking-wider text-forest-dark/60">
+                  Performance Time
+                </span>
+                <input
+                  type="text"
+                  value={performanceTime}
+                  onChange={(e) => setPerformanceTime(e.target.value)}
+                  className="mt-1 w-full border border-forest-dark/20 bg-white px-3 py-2.5 text-sm"
+                  placeholder="e.g. 7:30 – 9:00 PM or TBA"
+                  maxLength={120}
                 />
               </label>
             </div>
