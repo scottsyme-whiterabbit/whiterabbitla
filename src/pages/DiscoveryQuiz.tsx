@@ -247,6 +247,8 @@ const DiscoveryQuiz = () => {
           source: "quiz",
           persona: personaName,
           recommendation: recommendation.title,
+          event_type: answers.eventType || null,
+          guest_count: guestCountValue,
         },
       });
 
