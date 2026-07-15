@@ -74,6 +74,49 @@ const AdminProposals = () => {
 
   useEffect(() => { if (authed) loadList(); }, [authed]);
 
+  // Handle ?fromDeal=<id> — pre-fill a new proposal from a pipeline deal
+  useEffect(() => {
+    if (!authed) return;
+    const params = new URLSearchParams(window.location.search);
+    const dealId = params.get("fromDeal");
+    if (!dealId) return;
+    (async () => {
+      try {
+        const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+        const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${SUPABASE_KEY}` },
+          body: JSON.stringify({ action: "get_deals", adminPassword: password }),
+        });
+        const j = await res.json();
+        const deal = (j.deals || []).find((d: any) => d.id === dealId);
+        if (!deal) { toast.error("Deal not found"); return; }
+        const fullName = (deal.contact_name || "").trim();
+        const [firstName, ...rest] = fullName.split(" ");
+        const eventTypeMap: Record<string, string> = {
+          corporate: "Corporate Event", wedding: "Wedding",
+          private_party: "Private Event", parlor_show: "Private Event", other: "Private Event",
+        };
+        setEditing({
+          ...DEFAULT_PROPOSAL,
+          id: "", slug: "",
+          first_name: firstName || "",
+          last_name: rest.join(" "),
+          recipient_email: deal.contact_email || "",
+          event_type: eventTypeMap[deal.event_type] || deal.event_type || "Private Event",
+          event_date: deal.event_date || "",
+          venue: deal.location || "",
+          deal_id: deal.id,
+        } as FullProposal);
+        // Clean the URL so refresh doesn't re-trigger
+        window.history.replaceState({}, "", "/admin/proposals");
+        toast.success(`Started proposal for ${deal.contact_name || deal.contact_email}`);
+      } catch (e) {
+        toast.error("Failed to load deal");
+      }
+    })();
+  }, [authed, password]);
+
   const apiCall = async (action: string, method: "GET" | "POST" = "GET", body?: any) => {
     const res = await fetch(`${FN}?action=${action}`, {
       method,
