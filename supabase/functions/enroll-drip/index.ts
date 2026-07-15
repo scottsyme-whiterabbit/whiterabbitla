@@ -13,7 +13,7 @@ serve(async (req) => {
   }
 
   try {
-    const { name, email: rawEmail, source, persona, recommendation } = await req.json();
+    const { name, email: rawEmail, source, persona, recommendation, event_type, guest_count } = await req.json();
 
     if (!rawEmail || typeof rawEmail !== "string") {
       return new Response(JSON.stringify({ error: "Email required" }), {
