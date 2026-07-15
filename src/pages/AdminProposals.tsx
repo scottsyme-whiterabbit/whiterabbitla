@@ -545,6 +545,49 @@ const ProposalEditor = ({
               <h2 className="font-serif text-xl text-forest-dark">Quick Start</h2>
               <span className="text-xs text-forest-dark/50">— pick one to skip the blank page</span>
             </div>
+            {/* Contact search */}
+            <div className="mb-5 pb-5 border-b border-forest-dark/10">
+              <label className={labelCls}>Look up existing contact (deal, inquiry, or subscriber)</label>
+              <input
+                type="text"
+                value={contactQuery}
+                onChange={(e) => setContactQuery(e.target.value)}
+                placeholder="Search by name, email, or company…"
+                className={inputCls}
+              />
+              {contactLoading && <p className="text-xs text-forest-dark/40 mt-2">Searching…</p>}
+              {contactResults.length > 0 && (
+                <div className="mt-2 bg-white border border-forest-dark/15 divide-y divide-forest-dark/10 max-h-64 overflow-y-auto">
+                  {contactResults.map((c, i) => (
+                    <button
+                      key={i}
+                      onClick={() => applyContact(c)}
+                      className="w-full text-left px-3 py-2 hover:bg-cream flex items-center justify-between gap-3"
+                    >
+                      <div>
+                        <div className="text-sm text-forest-dark font-medium">{c.name || c.email}</div>
+                        <div className="text-xs text-forest-dark/50">
+                          {c.email}
+                          {c.company && ` · ${c.company}`}
+                          {c.event_date && ` · ${c.event_date}`}
+                          {c.venue && ` · ${c.venue}`}
+                        </div>
+                      </div>
+                      <span className={`text-[10px] tracking-wider uppercase px-2 py-0.5 ${
+                        c.source === "deal" ? "bg-forest-dark text-cream" :
+                        c.source === "inquiry" ? "bg-gold/20 text-forest-dark" : "bg-forest-dark/10 text-forest-dark/70"
+                      }`}>
+                        {c.source}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+              {proposal.deal_id && (
+                <p className="text-xs text-emerald-700 mt-2">✓ Linked to pipeline deal — signing this proposal will auto-move it to Booked.</p>
+              )}
+            </div>
+
 
             {/* AI auto-draft */}
             <div className="mb-5">
