@@ -231,10 +231,46 @@ White Rabbit LA`,
     }
 
 
+    // Search across deals, newsletter_contacts, contact_inquiries for prefill
+    if (action === "search_contacts") {
+      const q = (url.searchParams.get("q") || "").trim().toLowerCase();
+      if (!q || q.length < 2) return json({ results: [] });
+      const like = `%${q}%`;
+      const [dealsRes, contactsRes, inquiriesRes] = await Promise.all([
+        supabase.from("deals").select("id, contact_email, contact_name, company, phone, event_type, event_date, location, guest_count, notes")
+          .or(`contact_email.ilike.${like},contact_name.ilike.${like},company.ilike.${like}`).limit(8),
+        supabase.from("newsletter_contacts").select("email, name, company, phone")
+          .or(`email.ilike.${like},name.ilike.${like},company.ilike.${like}`).limit(8),
+        supabase.from("contact_inquiries").select("email, name, phone, event_type, date, location, guest_count, message")
+          .or(`email.ilike.${like},name.ilike.${like}`).limit(8),
+      ]);
+      const results: any[] = [];
+      for (const d of dealsRes.data || []) {
+        results.push({
+          source: "deal", deal_id: d.id, email: d.contact_email, name: d.contact_name, company: d.company,
+          phone: d.phone, event_type: d.event_type, event_date: d.event_date, venue: d.location,
+          guest_count: d.guest_count, notes: d.notes,
+        });
+      }
+      for (const c of contactsRes.data || []) {
+        if (results.find(r => r.email?.toLowerCase() === c.email?.toLowerCase())) continue;
+        results.push({ source: "contact", email: c.email, name: c.name, company: c.company, phone: c.phone });
+      }
+      for (const i of inquiriesRes.data || []) {
+        if (results.find(r => r.email?.toLowerCase() === i.email?.toLowerCase())) continue;
+        results.push({
+          source: "inquiry", email: i.email, name: i.name, phone: i.phone,
+          event_type: i.event_type, event_date: i.date, venue: i.location,
+          guest_count: i.guest_count, notes: i.message,
+        });
+      }
+      return json({ results: results.slice(0, 12) });
+    }
+
     if (action === "list") {
       const { data, error } = await supabase
         .from("proposals")
-        .select("id, slug, first_name, last_name, recipient_email, event_type, event_date, venue, sent_at, created_at")
+        .select("id, slug, first_name, last_name, recipient_email, event_type, event_date, venue, sent_at, created_at, deal_id")
         .order("created_at", { ascending: false });
       if (error) return json({ error: error.message }, 500);
 
