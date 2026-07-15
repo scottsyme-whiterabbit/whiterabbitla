@@ -353,6 +353,49 @@ const ProposalEditor = ({
   const [inquiryText, setInquiryText] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
   const [duplicateSlug, setDuplicateSlug] = useState("");
+  const [contactQuery, setContactQuery] = useState("");
+  const [contactResults, setContactResults] = useState<any[]>([]);
+  const [contactLoading, setContactLoading] = useState(false);
+
+  useEffect(() => {
+    const q = contactQuery.trim();
+    if (q.length < 2) { setContactResults([]); return; }
+    setContactLoading(true);
+    const t = setTimeout(async () => {
+      try {
+        const res = await fetch(`${FN}?action=search_contacts&q=${encodeURIComponent(q)}`, {
+          headers: { "x-admin-password": password },
+        });
+        const j = await res.json();
+        setContactResults(j.results || []);
+      } catch { setContactResults([]); }
+      setContactLoading(false);
+    }, 250);
+    return () => clearTimeout(t);
+  }, [contactQuery, password]);
+
+  const applyContact = (c: any) => {
+    const fullName = (c.name || "").trim();
+    const [firstName, ...rest] = fullName.split(" ");
+    const eventTypeMap: Record<string, string> = {
+      corporate: "Corporate Event", wedding: "Wedding", private_party: "Private Event",
+      parlor_show: "Private Event", other: "Private Event",
+    };
+    const mappedEventType = eventTypeMap[c.event_type] || c.event_type || proposal.event_type;
+    update({
+      first_name: firstName || proposal.first_name,
+      last_name: rest.join(" ") || proposal.last_name,
+      recipient_email: c.email || proposal.recipient_email,
+      event_type: mappedEventType,
+      event_date: c.event_date || proposal.event_date,
+      venue: c.venue || proposal.venue,
+      ...(c.deal_id ? { deal_id: c.deal_id } as any : {}),
+    });
+    setContactQuery("");
+    setContactResults([]);
+    toast.success(`Loaded ${c.name || c.email}${c.source === "deal" ? " — linked to deal" : ""}`);
+  };
+
 
   const applyTemplate = (eventType: string) => {
     const tpl = PROPOSAL_TEMPLATES[eventType];
