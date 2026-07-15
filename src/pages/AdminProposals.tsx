@@ -30,6 +30,7 @@ interface FullProposal extends ProposalData {
   id: string;
   slug: string;
   sent_at?: string | null;
+  deal_id?: string | null;
 }
 
 const EVENT_TYPES = ["Wedding", "Corporate Event", "Private Event", "Fundraiser", "Birthday", "Holiday Party"];
