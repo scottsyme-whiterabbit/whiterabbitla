@@ -13,7 +13,7 @@ serve(async (req) => {
   }
 
   try {
-    const { name, email: rawEmail, source, persona, recommendation } = await req.json();
+    const { name, email: rawEmail, source, persona, recommendation, event_type, guest_count } = await req.json();
 
     if (!rawEmail || typeof rawEmail !== "string") {
       return new Response(JSON.stringify({ error: "Email required" }), {
@@ -53,8 +53,48 @@ serve(async (req) => {
       .eq("email", email.toLowerCase().trim())
       .maybeSingle();
 
+    // Always ensure a pipeline deal exists for quiz/qualified submissions.
+    // This runs BEFORE the early-return so returning subscribers still land in the pipeline.
+    try {
+      const dealNotesParts: string[] = [];
+      if (recommendation) dealNotesParts.push(`Quiz result: ${recommendation}`);
+      if (guest_count) dealNotesParts.push(`Guests: ${guest_count}`);
+      if (persona) dealNotesParts.push(`Persona: ${persona}`);
+      const dealNotes = dealNotesParts.length ? dealNotesParts.join(" • ") : null;
+
+      const { data: existingDeal } = await supabase
+        .from("deals")
+        .select("id, stage")
+        .eq("contact_email", email.toLowerCase().trim())
+        .maybeSingle();
+
+      if (!existingDeal) {
+        await supabase.from("deals").insert({
+          contact_email: email.toLowerCase().trim(),
+          contact_name: name || null,
+          event_type: event_type || "other",
+          stage: "new",
+          source: source || "quiz",
+          notes: dealNotes,
+        });
+      } else {
+        // Only refresh notes / event_type if the deal is still early-stage and missing data
+        const openStages = ["new", "contacted"];
+        if (openStages.includes(existingDeal.stage)) {
+          const updates: any = {};
+          if (event_type) updates.event_type = event_type;
+          if (dealNotes) updates.notes = dealNotes;
+          if (Object.keys(updates).length > 0) {
+            await supabase.from("deals").update(updates).eq("id", existingDeal.id);
+          }
+        }
+      }
+    } catch (dealErr) {
+      console.error("Deal upsert failed (non-blocking):", dealErr);
+    }
+
     if (existing) {
-      // Already enrolled, skip
+      // Already enrolled in drip, skip email send (deal already handled above)
       return new Response(JSON.stringify({ success: true, skipped: true }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -82,20 +122,6 @@ serve(async (req) => {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
-    }
-
-    // Create deal in pipeline for quiz leads
-    try {
-      await supabase.from("deals").insert({
-        contact_email: email.toLowerCase().trim(),
-        contact_name: name || null,
-        event_type: "other",
-        stage: "new",
-        source: "quiz",
-        notes: recommendation ? `Quiz result: ${recommendation}` : null,
-      });
-    } catch (dealErr) {
-      console.error("Deal creation failed (non-blocking):", dealErr);
     }
 
     // Generate + send first drip email
