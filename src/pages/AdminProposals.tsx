@@ -30,6 +30,7 @@ interface FullProposal extends ProposalData {
   id: string;
   slug: string;
   sent_at?: string | null;
+  deal_id?: string | null;
 }
 
 const EVENT_TYPES = ["Wedding", "Corporate Event", "Private Event", "Fundraiser", "Birthday", "Holiday Party"];
@@ -72,6 +73,49 @@ const AdminProposals = () => {
   }, []);
 
   useEffect(() => { if (authed) loadList(); }, [authed]);
+
+  // Handle ?fromDeal=<id> — pre-fill a new proposal from a pipeline deal
+  useEffect(() => {
+    if (!authed) return;
+    const params = new URLSearchParams(window.location.search);
+    const dealId = params.get("fromDeal");
+    if (!dealId) return;
+    (async () => {
+      try {
+        const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+        const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${SUPABASE_KEY}` },
+          body: JSON.stringify({ action: "get_deals", adminPassword: password }),
+        });
+        const j = await res.json();
+        const deal = (j.deals || []).find((d: any) => d.id === dealId);
+        if (!deal) { toast.error("Deal not found"); return; }
+        const fullName = (deal.contact_name || "").trim();
+        const [firstName, ...rest] = fullName.split(" ");
+        const eventTypeMap: Record<string, string> = {
+          corporate: "Corporate Event", wedding: "Wedding",
+          private_party: "Private Event", parlor_show: "Private Event", other: "Private Event",
+        };
+        setEditing({
+          ...DEFAULT_PROPOSAL,
+          id: "", slug: "",
+          first_name: firstName || "",
+          last_name: rest.join(" "),
+          recipient_email: deal.contact_email || "",
+          event_type: eventTypeMap[deal.event_type] || deal.event_type || "Private Event",
+          event_date: deal.event_date || "",
+          venue: deal.location || "",
+          deal_id: deal.id,
+        } as FullProposal);
+        // Clean the URL so refresh doesn't re-trigger
+        window.history.replaceState({}, "", "/admin/proposals");
+        toast.success(`Started proposal for ${deal.contact_name || deal.contact_email}`);
+      } catch (e) {
+        toast.error("Failed to load deal");
+      }
+    })();
+  }, [authed, password]);
 
   const apiCall = async (action: string, method: "GET" | "POST" = "GET", body?: any) => {
     const res = await fetch(`${FN}?action=${action}`, {
@@ -242,7 +286,13 @@ const AdminProposals = () => {
         </div>
 
         {/* Tab toggle */}
-        <div className="flex border-b border-forest-dark/20 mb-6">
+        <div className="flex border-b border-forest-dark/20 mb-6 flex-wrap">
+          <a
+            href="/admin/newsletter?tab=pipeline"
+            className="px-5 py-3 text-sm tracking-wider uppercase text-forest-dark/50 hover:text-forest-dark transition-colors"
+          >
+            ← Pipeline
+          </a>
           <button
             onClick={() => setActiveTab("client")}
             className={`px-5 py-3 text-sm tracking-wider uppercase transition-colors ${
@@ -353,6 +403,49 @@ const ProposalEditor = ({
   const [inquiryText, setInquiryText] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
   const [duplicateSlug, setDuplicateSlug] = useState("");
+  const [contactQuery, setContactQuery] = useState("");
+  const [contactResults, setContactResults] = useState<any[]>([]);
+  const [contactLoading, setContactLoading] = useState(false);
+
+  useEffect(() => {
+    const q = contactQuery.trim();
+    if (q.length < 2) { setContactResults([]); return; }
+    setContactLoading(true);
+    const t = setTimeout(async () => {
+      try {
+        const res = await fetch(`${FN}?action=search_contacts&q=${encodeURIComponent(q)}`, {
+          headers: { "x-admin-password": password },
+        });
+        const j = await res.json();
+        setContactResults(j.results || []);
+      } catch { setContactResults([]); }
+      setContactLoading(false);
+    }, 250);
+    return () => clearTimeout(t);
+  }, [contactQuery, password]);
+
+  const applyContact = (c: any) => {
+    const fullName = (c.name || "").trim();
+    const [firstName, ...rest] = fullName.split(" ");
+    const eventTypeMap: Record<string, string> = {
+      corporate: "Corporate Event", wedding: "Wedding", private_party: "Private Event",
+      parlor_show: "Private Event", other: "Private Event",
+    };
+    const mappedEventType = eventTypeMap[c.event_type] || c.event_type || proposal.event_type;
+    update({
+      first_name: firstName || proposal.first_name,
+      last_name: rest.join(" ") || proposal.last_name,
+      recipient_email: c.email || proposal.recipient_email,
+      event_type: mappedEventType,
+      event_date: c.event_date || proposal.event_date,
+      venue: c.venue || proposal.venue,
+      ...(c.deal_id ? { deal_id: c.deal_id } as any : {}),
+    });
+    setContactQuery("");
+    setContactResults([]);
+    toast.success(`Loaded ${c.name || c.email}${c.source === "deal" ? " — linked to deal" : ""}`);
+  };
+
 
   const applyTemplate = (eventType: string) => {
     const tpl = PROPOSAL_TEMPLATES[eventType];
@@ -501,6 +594,49 @@ const ProposalEditor = ({
               <h2 className="font-serif text-xl text-forest-dark">Quick Start</h2>
               <span className="text-xs text-forest-dark/50">— pick one to skip the blank page</span>
             </div>
+            {/* Contact search */}
+            <div className="mb-5 pb-5 border-b border-forest-dark/10">
+              <label className={labelCls}>Look up existing contact (deal, inquiry, or subscriber)</label>
+              <input
+                type="text"
+                value={contactQuery}
+                onChange={(e) => setContactQuery(e.target.value)}
+                placeholder="Search by name, email, or company…"
+                className={inputCls}
+              />
+              {contactLoading && <p className="text-xs text-forest-dark/40 mt-2">Searching…</p>}
+              {contactResults.length > 0 && (
+                <div className="mt-2 bg-white border border-forest-dark/15 divide-y divide-forest-dark/10 max-h-64 overflow-y-auto">
+                  {contactResults.map((c, i) => (
+                    <button
+                      key={i}
+                      onClick={() => applyContact(c)}
+                      className="w-full text-left px-3 py-2 hover:bg-cream flex items-center justify-between gap-3"
+                    >
+                      <div>
+                        <div className="text-sm text-forest-dark font-medium">{c.name || c.email}</div>
+                        <div className="text-xs text-forest-dark/50">
+                          {c.email}
+                          {c.company && ` · ${c.company}`}
+                          {c.event_date && ` · ${c.event_date}`}
+                          {c.venue && ` · ${c.venue}`}
+                        </div>
+                      </div>
+                      <span className={`text-[10px] tracking-wider uppercase px-2 py-0.5 ${
+                        c.source === "deal" ? "bg-forest-dark text-cream" :
+                        c.source === "inquiry" ? "bg-gold/20 text-forest-dark" : "bg-forest-dark/10 text-forest-dark/70"
+                      }`}>
+                        {c.source}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+              {proposal.deal_id && (
+                <p className="text-xs text-emerald-700 mt-2">✓ Linked to pipeline deal — signing this proposal will auto-move it to Booked.</p>
+              )}
+            </div>
+
 
             {/* AI auto-draft */}
             <div className="mb-5">

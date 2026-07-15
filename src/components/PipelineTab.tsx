@@ -553,17 +553,27 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
                         )}
                         <div className="flex items-center justify-between mt-1.5">
                           <span className="font-mono text-xs text-accent" onClick={() => openEdit(deal)}>{formatCurrency(deal.deal_value)}</span>
-                          {stage.key === "completed" ? (
-                            <button
-                              onClick={(e) => { e.stopPropagation(); openEmailPanel(deal); }}
+                          <div className="flex items-center gap-2">
+                            <a
+                              href={`/admin/proposals?fromDeal=${deal.id}`}
+                              onClick={(e) => e.stopPropagation()}
                               className="flex items-center gap-1 text-[9px] text-accent hover:text-accent/80 transition-colors"
-                              title="View email activity"
+                              title="Create proposal from this deal"
                             >
-                              <Mail size={10} /> Emails
-                            </button>
-                          ) : (
-                            <span className="text-[9px] text-muted-foreground">{daysSince(deal.updated_at)}d ago</span>
-                          )}
+                              📄 Proposal
+                            </a>
+                            {stage.key === "completed" ? (
+                              <button
+                                onClick={(e) => { e.stopPropagation(); openEmailPanel(deal); }}
+                                className="flex items-center gap-1 text-[9px] text-accent hover:text-accent/80 transition-colors"
+                                title="View email activity"
+                              >
+                                <Mail size={10} /> Emails
+                              </button>
+                            ) : (
+                              <span className="text-[9px] text-muted-foreground">{daysSince(deal.updated_at)}d ago</span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     );

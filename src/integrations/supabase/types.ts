@@ -1436,6 +1436,7 @@ export type Database = {
           closing_attribution: string | null
           closing_quote: string | null
           created_at: string
+          deal_id: string | null
           event_date: string
           event_type: string
           faqs: Json
@@ -1459,6 +1460,7 @@ export type Database = {
           closing_attribution?: string | null
           closing_quote?: string | null
           created_at?: string
+          deal_id?: string | null
           event_date?: string
           event_type?: string
           faqs?: Json
@@ -1482,6 +1484,7 @@ export type Database = {
           closing_attribution?: string | null
           closing_quote?: string | null
           created_at?: string
+          deal_id?: string | null
           event_date?: string
           event_type?: string
           faqs?: Json
@@ -1501,7 +1504,15 @@ export type Database = {
           updated_at?: string
           venue?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "proposals_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       referrals: {
         Row: {
@@ -1554,6 +1565,7 @@ export type Database = {
           client_email: string | null
           client_name: string
           created_at: string
+          deal_id: string | null
           event_date: string | null
           event_type: string | null
           id: string
@@ -1572,6 +1584,7 @@ export type Database = {
           client_email?: string | null
           client_name: string
           created_at?: string
+          deal_id?: string | null
           event_date?: string | null
           event_type?: string | null
           id?: string
@@ -1590,6 +1603,7 @@ export type Database = {
           client_email?: string | null
           client_name?: string
           created_at?: string
+          deal_id?: string | null
           event_date?: string | null
           event_type?: string | null
           id?: string
@@ -1604,6 +1618,13 @@ export type Database = {
           venue?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "signed_agreements_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "signed_agreements_proposal_id_fkey"
             columns: ["proposal_id"]
