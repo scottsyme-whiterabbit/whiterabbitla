@@ -260,18 +260,31 @@ serve(async (req) => {
         "Parlor Show": "parlor_show",
       };
 
-      await supabase.from("deals").insert({
+      // Safely parse event_date — accept ISO/parseable strings only, else null
+      let parsedEventDate: string | null = null;
+      if (date) {
+        const d = new Date(date);
+        if (!isNaN(d.getTime())) {
+          parsedEventDate = d.toISOString().slice(0, 10);
+        }
+      }
+      const notesWithDate = parsedEventDate
+        ? message
+        : `Event Date (raw): ${date}\n\n${message || ""}`;
+
+      const { error: dealErr } = await supabase.from("deals").insert({
         contact_email: contactEmail,
         contact_name: name,
         phone: phone || null,
         event_type: eventTypeMap[eventType] || "other",
-        event_date: date || null,
+        event_date: parsedEventDate,
         location: location || null,
         stage: "new",
-        source: "contact_form",
+        source: formSource || "contact_form",
         source_id: inquiry?.id || null,
-        notes: message || null,
+        notes: notesWithDate,
       });
+      if (dealErr) console.error("Deal insert failed:", dealErr);
 
       // Auto-convert: if this email is in the drip campaign, mark as converted
       const { data: dripContact } = await supabase
