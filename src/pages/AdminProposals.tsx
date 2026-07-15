@@ -286,7 +286,13 @@ const AdminProposals = () => {
         </div>
 
         {/* Tab toggle */}
-        <div className="flex border-b border-forest-dark/20 mb-6">
+        <div className="flex border-b border-forest-dark/20 mb-6 flex-wrap">
+          <a
+            href="/admin/newsletter?tab=pipeline"
+            className="px-5 py-3 text-sm tracking-wider uppercase text-forest-dark/50 hover:text-forest-dark transition-colors"
+          >
+            ← Pipeline
+          </a>
           <button
             onClick={() => setActiveTab("client")}
             className={`px-5 py-3 text-sm tracking-wider uppercase transition-colors ${
