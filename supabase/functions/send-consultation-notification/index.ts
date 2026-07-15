@@ -73,16 +73,26 @@ serve(async (req) => {
           "Authorization": "Bearer " + supabaseKey,
           "Prefer": "return=minimal"
         },
-        body: JSON.stringify({
-          contact_name: name,
-          contact_email: email,
-          phone: phone || null,
-          event_type: event_type || null,
-          event_date: event_date || null,
-          stage: "new",
-          source: "website",
-          notes: description || null
-        })
+        body: JSON.stringify((() => {
+          let parsedEventDate: string | null = null;
+          if (event_date) {
+            const d = new Date(event_date);
+            if (!isNaN(d.getTime())) parsedEventDate = d.toISOString().slice(0, 10);
+          }
+          const notes = parsedEventDate
+            ? (description || null)
+            : `Event Date (raw): ${event_date || "—"}\n\n${description || ""}`;
+          return {
+            contact_name: name,
+            contact_email: email,
+            phone: phone || null,
+            event_type: event_type || null,
+            event_date: parsedEventDate,
+            stage: "new",
+            source: "website",
+            notes,
+          };
+        })())
       });
     } catch (e) { console.error("Deal creation error:", e); }
 
