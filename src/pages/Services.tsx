@@ -8,8 +8,14 @@ import heroDesertImg from "@/assets/experience-hero-desert.jpg";
 import closeupImg from "@/assets/event-closeup-cocktail.jpg";
 import parlorImg from "@/assets/event-parlor-stage.jpg";
 import corporateImg from "@/assets/event-penthouse-show.jpg";
-import weddingImg from "@/assets/event-group-photo.jpg";
+import weddingImg from "@/assets/service-wedding-hero.jpg";
 import privateImg from "@/assets/experience-private.jpg";
+import holidayImg from "@/assets/service-holiday-party-action.jpg";
+import charityImg from "@/assets/service-charity-gala-action.jpg";
+import tradeShowImg from "@/assets/event-crowd-reaction.jpg";
+import golfImg from "@/assets/event-guest-laughing.jpg";
+import dmcImg from "@/assets/service-dmc-hero.jpg";
+import residentImg from "@/assets/service-resident-event-hero.jpg";
 
 const BASE_URL = "https://whiterabbitla.com";
 
@@ -61,42 +67,42 @@ const services: ServiceTile[] = [
     title: "Holiday Party Magician",
     blurb:
       "The entertainment your team mentions in Monday's all-hands. Built for company holiday parties and end-of-year galas.",
-    image: corporateImg,
+    image: holidayImg,
   },
   {
     slug: "charity-gala-magician",
     title: "Charity Gala Magician",
     blurb:
       "Raises the room before the auction. Trusted by nonprofits in LA, Hollywood, Napa, the Hamptons, and 80+ luxury markets.",
-    image: parlorImg,
+    image: charityImg,
   },
   {
     slug: "trade-show-magician",
     title: "Trade Show Magician",
     blurb:
       "Lead-capture-ready routines with sales-team handoff built in. CES, Dreamforce, NRF, SXSW, HIMSS, and 80+ B2B conferences.",
-    image: closeupImg,
+    image: tradeShowImg,
   },
   {
     slug: "golf-tournament-magician",
     title: "Golf Tournament Magician",
     blurb:
       "Hospitality-tent and clubhouse magician. Fills the gap between rounds and the auction at charity and corporate tournaments.",
-    image: corporateImg,
+    image: golfImg,
   },
   {
     slug: "dmc-entertainment",
     title: "Magician for DMC Programs",
     blurb:
       "RFP-ready, insurance-loaded, performance consistent. The LA experience your incentive group remembers years later.",
-    image: privateImg,
+    image: dmcImg,
   },
   {
     slug: "resident-event-magician",
     title: "Resident Event Magician",
     blurb:
       "Multi-event partnerships for HOAs, country clubs, and luxury residential communities across LA and nationwide.",
-    image: weddingImg,
+    image: residentImg,
   },
 ];
 
