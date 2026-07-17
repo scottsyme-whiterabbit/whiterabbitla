@@ -9,13 +9,13 @@ import closeupImg from "@/assets/event-closeup-cocktail.jpg";
 import parlorImg from "@/assets/event-parlor-stage.jpg";
 import corporateImg from "@/assets/event-penthouse-show.jpg";
 import weddingImg from "@/assets/service-wedding-hero.jpg";
-import privateImg from "@/assets/experience-private.jpg";
+import privateImg from "@/assets/ladies-luncheon-laughter.jpg";
 import holidayImg from "@/assets/service-holiday-party-action.jpg";
 import charityImg from "@/assets/service-charity-gala-action.jpg";
 import tradeShowImg from "@/assets/event-crowd-reaction.jpg";
 import golfImg from "@/assets/event-guest-laughing.jpg";
 import dmcImg from "@/assets/service-dmc-hero.jpg";
-import residentImg from "@/assets/service-resident-event-hero.jpg";
+import residentImg from "@/assets/ladies-luncheon-room-wide.jpg";
 
 const BASE_URL = "https://whiterabbitla.com";
 
