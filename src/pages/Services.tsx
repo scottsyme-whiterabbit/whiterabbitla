@@ -67,42 +67,42 @@ const services: ServiceTile[] = [
     title: "Holiday Party Magician",
     blurb:
       "The entertainment your team mentions in Monday's all-hands. Built for company holiday parties and end-of-year galas.",
-    image: corporateImg,
+    image: holidayImg,
   },
   {
     slug: "charity-gala-magician",
     title: "Charity Gala Magician",
     blurb:
       "Raises the room before the auction. Trusted by nonprofits in LA, Hollywood, Napa, the Hamptons, and 80+ luxury markets.",
-    image: parlorImg,
+    image: charityImg,
   },
   {
     slug: "trade-show-magician",
     title: "Trade Show Magician",
     blurb:
       "Lead-capture-ready routines with sales-team handoff built in. CES, Dreamforce, NRF, SXSW, HIMSS, and 80+ B2B conferences.",
-    image: closeupImg,
+    image: tradeShowImg,
   },
   {
     slug: "golf-tournament-magician",
     title: "Golf Tournament Magician",
     blurb:
       "Hospitality-tent and clubhouse magician. Fills the gap between rounds and the auction at charity and corporate tournaments.",
-    image: corporateImg,
+    image: golfImg,
   },
   {
     slug: "dmc-entertainment",
     title: "Magician for DMC Programs",
     blurb:
       "RFP-ready, insurance-loaded, performance consistent. The LA experience your incentive group remembers years later.",
-    image: privateImg,
+    image: dmcImg,
   },
   {
     slug: "resident-event-magician",
     title: "Resident Event Magician",
     blurb:
       "Multi-event partnerships for HOAs, country clubs, and luxury residential communities across LA and nationwide.",
-    image: weddingImg,
+    image: residentImg,
   },
 ];
 
