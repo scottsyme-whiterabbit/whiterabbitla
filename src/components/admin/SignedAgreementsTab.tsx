@@ -142,7 +142,7 @@ const SignedAgreementsTab = ({ password }: { password: string }) => {
                   </div>
                 </div>
                 {open && (
-                  <pre className="mt-4 border border-forest-dark/10 bg-cream/60 p-4 max-h-96 overflow-y-auto font-serif text-[12.5px] leading-relaxed whitespace-pre-wrap text-forest-dark/85">
+                  <pre className="mt-4 border border-forest-dark/10 bg-cream/60 p-4 max-h-96 overflow-y-auto font-sans text-[13px] leading-[1.7] whitespace-pre-wrap text-forest-dark/90">
                     {a.agreement_text}
                   </pre>
                 )}
