@@ -8,8 +8,14 @@ import heroDesertImg from "@/assets/experience-hero-desert.jpg";
 import closeupImg from "@/assets/event-closeup-cocktail.jpg";
 import parlorImg from "@/assets/event-parlor-stage.jpg";
 import corporateImg from "@/assets/event-penthouse-show.jpg";
-import weddingImg from "@/assets/event-group-photo.jpg";
+import weddingImg from "@/assets/service-wedding-hero.jpg";
 import privateImg from "@/assets/experience-private.jpg";
+import holidayImg from "@/assets/service-holiday-party-action.jpg";
+import charityImg from "@/assets/service-charity-gala-action.jpg";
+import tradeShowImg from "@/assets/event-crowd-reaction.jpg";
+import golfImg from "@/assets/event-guest-laughing.jpg";
+import dmcImg from "@/assets/service-dmc-hero.jpg";
+import residentImg from "@/assets/service-resident-event-hero.jpg";
 
 const BASE_URL = "https://whiterabbitla.com";
 
