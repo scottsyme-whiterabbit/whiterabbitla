@@ -267,7 +267,7 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
 
 
             <div className="border border-forest-dark/15 bg-white/60 p-4 max-h-72 overflow-y-auto mb-4">
-              <pre className="font-serif text-[12.5px] leading-relaxed whitespace-pre-wrap text-forest-dark/85">
+              <pre className="font-sans text-[13px] leading-[1.7] whitespace-pre-wrap text-forest-dark/90">
                 {agreementText}
               </pre>
             </div>
