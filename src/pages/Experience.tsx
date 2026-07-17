@@ -148,7 +148,16 @@ const Experience = () => {
             </div>
           </AnimatedSection>
         </div>
+        <div className="text-center mt-10">
+          <Link
+            to="/experience/gallery"
+            className="inline-block font-sans text-xs tracking-[0.3em] uppercase text-forest-dark border-b border-gold pb-1 hover:text-gold transition-colors"
+          >
+            View the Full Gallery
+          </Link>
+        </div>
       </section>
+
 
       {/* CTA */}
       <AnimatedSection>
