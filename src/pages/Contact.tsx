@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Instagram, Linkedin, Mail, Phone } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import QuizCTA from "@/components/QuizCTA";
+import WhiteRabbitPromise from "@/components/WhiteRabbitPromise";
 import contactBg from "@/assets/event-silhouette.jpg";
 import threeStars from "@/assets/three-stars-gold.png";
 import { Input } from "@/components/ui/input";
@@ -286,6 +287,9 @@ const Contact = () => {
 
       {/* Thin gold rule */}
       <div className="max-w-xs mx-auto border-t border-accent/20 my-4" />
+
+      {/* The White Rabbit Promise — quiet guarantee near the booking CTA */}
+      <WhiteRabbitPromise />
 
       {/* Quiz CTA */}
       <QuizCTA />
