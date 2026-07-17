@@ -559,26 +559,29 @@ const servicePages: Record<string, ServiceData> = {
       },
       {
         heading: "Three LA-Themed Program Formats",
-        body: "Three formats are most commonly requested: (1) a private Magic Castle evening for incoming groups (subject to Academy of Magical Arts sponsorship rules and availability), (2) a private home or villa close-up performance staged in Beverly Hills, Hollywood Hills, or Malibu venues that DMCs already use, and (3) a featured close-up or parlor performance integrated into a curated LA-themed evening — rooftop dinner, classic-Hollywood venue, members' club, or private museum buyout. Each format can be customized to the client's brand or industry vertical.",
+        body: "Three formats are most commonly requested: (1) a private home or villa close-up performance staged in Beverly Hills, Hollywood Hills, or Malibu venues that DMCs already use, (2) a featured close-up or parlor performance integrated into a curated LA evening — rooftop dinner, classic-Hollywood venue, members' club, or private museum buyout, and (3) a bespoke parlor show built around the client's brand, industry, or program theme. Every format is custom-designed to the group; no two DMC programs get the same performance.",
       },
       {
         heading: "Built for DMC Operating Tempo",
         body: "DMC bookings are prioritized in the calendar. White Rabbit holds blocks of weekend availability specifically for DMC partners, allowing inquiries to be answered promptly and confirmed as quickly as calendar permits. For high-value incentive programs, advance booking 60 to 90 days out is preferred to lock the date and finalize custom programming. Day-of and 48-hour rush bookings are accepted at premium rates when calendar permits.",
       },
       {
-        heading: "Commercial Terms and Documentation",
-        body: "White Rabbit carries $1M general liability insurance, accepts net-30 payment terms with established DMC partners after first booking, and provides a standard one-page rider, COI naming the venue, W-9, and 1099-ready invoicing. New DMC partners are onboarded with a 50% deposit and net-30 balance. Multi-program annual agreements are available for DMCs running ongoing LA incentive programs.",
+        heading: "The White Rabbit Standard",
+        body: "$1M general liability insurance carried on every booking — COIs issued to the venue within 24 hours of request. Arrival 60 minutes before showtime, dressed and set, ready to greet guests as they walk in. One dedicated performer on your date — no substitutes, no subcontracted talent, no surprises. Clean load-in and load-out with no visible cases, wires, or clutter left in the room. Fully vetted, background-checked, and briefed on the client's brand and guest list before arrival. Standard one-page rider, W-9, and 1099-ready invoicing pre-loaded for fast RFP turnaround.",
       },
       {
         heading: "Why DMCs Book Scott Syme Specifically",
-        body: "Scott Syme is the founder and lead performer of White Rabbit LA. He is a member of the Academy of Magical Arts (Magic Castle, Hollywood), magic consultant to America's Got Talent champion Dustin Tavella, a Disney Channel magic consultant on Bizaardvark, and a former Compass Beverly Hills luxury real estate professional — a background that translates directly into the white-glove hospitality DMC clients expect. His client roster includes Netflix, Disney, Morgan Stanley, and a long list of Fortune 500 companies. The performance is consistent, the booking process is corporate-grade, and the LA-based authority signals align with the city-themed experiences DMC programs are built around.",
+        body: "Scott Syme is the founder and lead performer of White Rabbit LA. He is magic consultant to America's Got Talent champion Dustin Tavella, a Disney Channel magic consultant on Bizaardvark, and a former Compass Beverly Hills luxury real estate professional — a background that translates directly into the white-glove hospitality DMC clients expect. His client roster includes Netflix, Disney, Morgan Stanley, Rolls-Royce, and a long list of Fortune 500 companies. The performance is consistent, the booking process is corporate-grade, and the LA-based authority signals align with the city-themed experiences DMC programs are built around.",
       },
     ],
     included: [
       "Priority calendar holds for established DMC partners",
-      "RFP-ready documentation: insurance, COI, W-9, 1099-ready invoicing",
-      "Custom program design for Magic Castle, private home, and curated LA evenings",
-      "Net-30 terms after first booking; multi-program annual agreements available",
+      "RFP-ready documentation: $1M liability insurance, COI, W-9, 1099-ready invoicing",
+      "Custom program design tailored to the group, brand, or industry vertical",
+      "Scott Syme personally — no substitutes, no subcontracted performers",
+      "60-minute early arrival, dressed and set before the first guest walks in",
+      "Discreet load-in and load-out — no visible cases, wires, or clutter",
+      "Background-checked, brand-briefed, and guest-list-aware before arrival",
       "Post-program follow-up and reusable program documentation for repeat bookings",
     ],
     faqs: [
