@@ -933,6 +933,9 @@ const ServicePage = () => {
         </div>
       </section>
 
+      {/* The White Rabbit Promise — quiet guarantee above the booking CTA */}
+      <WhiteRabbitPromise />
+
       {/* Final CTA */}
       <AnimatedSection>
         <section className="py-24 text-center">
