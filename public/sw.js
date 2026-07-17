@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wr-crm-v5';
+const CACHE_NAME = 'wr-crm-v6';
 const urlsToCache = ['/', '/admin/newsletter', '/admin/proposals'];
 
 self.addEventListener('install', event => {

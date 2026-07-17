@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import RemovedRouteRedirect from "@/components/RemovedRouteRedirect";
 import Navbar from "@/components/Navbar";
 import DestinationClockBar from "@/components/DestinationClockBar";
 import Footer from "@/components/Footer";
@@ -95,12 +96,12 @@ const AppContent = () => {
         <Route path="/areas" element={<ServiceAreas />} />
         <Route path="/areas/:citySlug" element={<ServiceAreaDetail />} />
         <Route path="/unsubscribe" element={<Unsubscribe />} />
-        <Route path="/event-magician" element={<Navigate to="/" replace />} />
-        <Route path="/home" element={<Navigate to="/" replace />} />
-        <Route path="/blog/santa-barbara-halloween-party-magician" element={<Navigate to="/areas/santa-barbara" replace />} />
-        <Route path="/blog/dallas-resident-event-magician" element={<Navigate to="/blog" replace />} />
-        <Route path="/blog/napa-valley-resident-event-magician" element={<Navigate to="/blog/napa-valley-corporate-event-magician" replace />} />
-        <Route path="/post/*" element={<Navigate to="/blog" replace />} />
+        <Route path="/event-magician" element={<RemovedRouteRedirect to="/" />} />
+        <Route path="/home" element={<RemovedRouteRedirect to="/" />} />
+        <Route path="/blog/santa-barbara-halloween-party-magician" element={<RemovedRouteRedirect to="/areas/santa-barbara" />} />
+        <Route path="/blog/dallas-resident-event-magician" element={<RemovedRouteRedirect to="/blog" />} />
+        <Route path="/blog/napa-valley-resident-event-magician" element={<RemovedRouteRedirect to="/blog/napa-valley-corporate-event-magician" />} />
+        <Route path="/post/*" element={<RemovedRouteRedirect to="/blog" />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />

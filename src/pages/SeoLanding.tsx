@@ -1,4 +1,5 @@
-import { useParams, Link, Navigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import RemovedRouteRedirect from "@/components/RemovedRouteRedirect";
 import NotFound from "./NotFound";
 import { useEffect, useState } from "react";
 import SEOHead from "@/components/SEOHead";
@@ -186,7 +187,7 @@ const SeoLanding = () => {
     };
     if (slug) {
       const match = Object.keys(serviceSuffixMap).find((suffix) => slug.endsWith(`-${suffix}`));
-      if (match) return <Navigate to={`/services/${serviceSuffixMap[match]}`} replace />;
+      if (match) return <RemovedRouteRedirect to={`/services/${serviceSuffixMap[match]}`} />;
     }
     return <NotFound />;
   }

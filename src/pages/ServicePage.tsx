@@ -7,6 +7,7 @@ import SEOHead from "@/components/SEOHead";
 import { useServiceSchema } from "@/hooks/useSchemaOrg";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
+import WhiteRabbitPromise from "@/components/WhiteRabbitPromise";
 import {
   Accordion,
   AccordionContent,
@@ -932,6 +933,9 @@ const ServicePage = () => {
           </AnimatedSection>
         </div>
       </section>
+
+      {/* The White Rabbit Promise — quiet guarantee above the booking CTA */}
+      <WhiteRabbitPromise />
 
       {/* Final CTA */}
       <AnimatedSection>
