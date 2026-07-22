@@ -121,6 +121,16 @@ serve(async (req) => {
     });
     results["inquiry-nurture"] = { status: r7.status, body: await r7.json().catch(() => r7.statusText) };
 
+    // Run seasonal-campaign-process for the currently active seasonal key.
+    // Copy-only change: rotate SEASONAL_CAMPAIGN_KEY (env) to switch campaigns.
+    const seasonalKey = Deno.env.get("SEASONAL_CAMPAIGN_KEY") || "holiday_2026";
+    const r8 = await fetch(`${FUNCTIONS_BASE}/seasonal-campaign-process`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ campaign_key: seasonalKey }),
+    });
+    results["seasonal-campaign-process"] = { status: r8.status, body: await r8.json().catch(() => r8.statusText) };
+
     return new Response(JSON.stringify({ success: true, "bounce-threshold-check": bounceResults, results }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
