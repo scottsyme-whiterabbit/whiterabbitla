@@ -1559,6 +1559,71 @@ export type Database = {
         }
         Relationships: []
       }
+      seasonal_campaign_copy: {
+        Row: {
+          active: boolean
+          campaign_key: string
+          category: string
+          created_at: string
+          id: string
+          paragraphs: Json
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          campaign_key: string
+          category: string
+          created_at?: string
+          id?: string
+          paragraphs: Json
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          campaign_key?: string
+          category?: string
+          created_at?: string
+          id?: string
+          paragraphs?: Json
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      seasonal_campaign_sends: {
+        Row: {
+          campaign_key: string
+          contact_id: string
+          id: string
+          sent_at: string
+          status: string
+        }
+        Insert: {
+          campaign_key: string
+          contact_id: string
+          id?: string
+          sent_at?: string
+          status?: string
+        }
+        Update: {
+          campaign_key?: string
+          contact_id?: string
+          id?: string
+          sent_at?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "seasonal_campaign_sends_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "cold_email_campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       signed_agreements: {
         Row: {
           agreement_text: string

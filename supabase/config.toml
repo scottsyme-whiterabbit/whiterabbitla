@@ -102,3 +102,6 @@ verify_jwt = false
 [functions.castle-invite-summary]
 verify_jwt = false
 
+[functions.seasonal-campaign-process]
+verify_jwt = false
+
