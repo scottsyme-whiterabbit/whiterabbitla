@@ -82,7 +82,7 @@ ${innerHtml}
 <tr><td style="padding:0 40px 12px;text-align:center" class="padding-mobile">
 <p style="margin:0;font-family:Georgia,serif;font-size:12px;color:rgba(245,240,232,0.4)">
 White Rabbit · Los Angeles<br/>7393 W. Manchester Ave #209, Los Angeles, CA 90045<br/>
-<a href="mailto:events@whiterabbitla.com" style="color:#C9A3A8;text-decoration:none">events@whiterabbitla.com</a> · <a href="tel:+14243941850" style="color:rgba(248,245,240,0.4);text-decoration:none">(424) 394-1850</a>
+<a href="mailto:scott.syme@whiterabbitla.com" style="color:#C9A3A8;text-decoration:none">scott.syme@whiterabbitla.com</a> · <a href="tel:+14243941850" style="color:rgba(248,245,240,0.4);text-decoration:none">(424) 394-1850</a>
 </p>
 </td></tr>
 <tr><td style="padding:0 40px 32px;text-align:center" class="padding-mobile">
