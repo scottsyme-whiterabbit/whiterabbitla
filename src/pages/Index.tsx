@@ -106,7 +106,15 @@ const Index = () => {
   const [heroRotation, setHeroRotation] = useState(0);
   const [heroFading, setHeroFading] = useState(false);
   const [logoPage, setLogoPage] = useState(0);
-  const logoPages = [clients.slice(0, 10), clients.slice(10)];
+  const namesPage = {
+    entertained: ["Don Cheadle", "Dolph Lundgren", "Richard Jefferson", "Peter Farrelly", "Muse", "Brittany Broski", "Adam Ray"],
+    consulting: ["AGT Champion Dustin Tavella", "Olivia Rodrigo", "Disney Channel"],
+  };
+  const logoPages: Array<{ type: "logos"; items: typeof clients } | { type: "names" }> = [
+    { type: "logos", items: clients.slice(0, 10) },
+    { type: "logos", items: clients.slice(10) },
+    { type: "names" },
+  ];
 
   useEffect(() => {
     // Preload all logos so crossfades are instant
@@ -116,6 +124,7 @@ const Index = () => {
     }, 6000);
     return () => clearInterval(interval);
   }, [logoPages.length]);
+
 
 
 
@@ -371,34 +380,43 @@ const Index = () => {
                   transition={{ duration: 0.8, ease: "easeInOut" }}
                   className="flex flex-wrap items-center justify-center gap-x-6 gap-y-4 md:gap-x-8 md:gap-y-5"
                 >
-                  {logoPages[logoPage].map((client) => (
-                    <div key={client.name} className="flex items-center justify-center" style={{ width: '110px', height: '40px' }}>
-                      <img
-                        src={client.logo}
-                        alt={`${client.name} logo, White Rabbit client`}
-                        width={90}
-                        height={32}
-                        loading="lazy"
-                        decoding="async"
-                        className="max-h-full max-w-full w-auto h-auto object-contain opacity-60 hover:opacity-90 transition-opacity brightness-0"
-                      />
+                  {logoPages[logoPage].type === "logos" ? (
+                    (logoPages[logoPage] as { type: "logos"; items: typeof clients }).items.map((client) => (
+                      <div key={client.name} className="flex items-center justify-center" style={{ width: '110px', height: '40px' }}>
+                        <img
+                          src={client.logo}
+                          alt={`${client.name} logo, White Rabbit client`}
+                          width={90}
+                          height={32}
+                          loading="lazy"
+                          decoding="async"
+                          className="max-h-full max-w-full w-auto h-auto object-contain opacity-60 hover:opacity-90 transition-opacity brightness-0"
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <div className="w-full max-w-3xl mx-auto space-y-4 px-2">
+                      <div className="text-center">
+                        <p className="font-sans text-[10px] tracking-[0.25em] uppercase text-forest-dark/50 mb-2">Entertained</p>
+                        <p className="font-serif text-base md:text-lg text-forest-dark/85 leading-relaxed">
+                          {namesPage.entertained.join(" · ")}
+                        </p>
+                      </div>
+                      <div className="text-center pt-3 border-t border-forest-dark/10">
+                        <p className="font-sans text-[10px] tracking-[0.25em] uppercase text-forest-dark/50 mb-2">Consulting</p>
+                        <p className="font-serif text-base md:text-lg text-forest-dark/85 leading-relaxed">
+                          {namesPage.consulting.join(" · ")}
+                        </p>
+                      </div>
                     </div>
-                  ))}
+                  )}
                 </motion.div>
               </AnimatePresence>
-            </div>
-
-            <div className="mt-6 pt-5 border-t border-forest-dark/10 space-y-2 text-center">
-              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-forest-dark/80">
-                Scott Syme has entertained: Don Cheadle &middot; Dolph Lundgren &middot; Richard Jefferson &middot; Peter Farrelly &middot; Muse &middot; Brittany Broski &middot; Adam Ray
-              </p>
-              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-forest-dark/80">
-                Consulting: AGT Champion Dustin Tavella &middot; Olivia Rodrigo &middot; Disney Channel
-              </p>
             </div>
           </div>
         </section>
       </AnimatedSection>
+
 
       {/* Quiz Nudge */}
       <QuizNudge />
