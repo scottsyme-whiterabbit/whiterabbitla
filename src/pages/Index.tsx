@@ -368,16 +368,13 @@ const Index = () => {
         </section>
       </AnimatedSection>
 
-      {/* Discovery Quiz CTA */}
-      <QuizCTA title="Wondering If Magic Is Right for Your Event?" />
+      {/* Quiz Nudge */}
+      <QuizNudge />
 
       {/* From the Guestbook */}
       <AnimatedSection>
         <Guestbook />
       </AnimatedSection>
-
-      {/* Quiz Nudge */}
-      <QuizNudge />
 
       {/* The Experience Teaser */}
       <section className="py-28 lg:py-36">
@@ -438,6 +435,8 @@ const Index = () => {
         </div>
       </AnimatedSection>
 
+      {/* Discovery Quiz CTA */}
+      <QuizCTA title="Wondering If Magic Is Right for Your Event?" />
 
       <div className="flex justify-center">
         <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-14 w-auto opacity-50" />
