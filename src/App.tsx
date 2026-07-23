@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import RemovedRouteRedirect from "@/components/RemovedRouteRedirect";
 import Navbar from "@/components/Navbar";
-import DestinationClockBar from "@/components/DestinationClockBar";
+
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import usePageTracking from "@/hooks/usePageTracking";
