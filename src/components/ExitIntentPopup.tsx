@@ -18,11 +18,18 @@ const ExitIntentPopup = () => {
   const lastActivityRef = useRef(Date.now());
   const inactivityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const isDesktop = useCallback(() => {
+    if (typeof window === "undefined") return false;
+    if (window.matchMedia("(pointer: coarse)").matches) return false;
+    return window.innerWidth >= 768;
+  }, []);
+
   const canTrigger = useCallback(() => {
     const dismissed = sessionStorage.getItem("wr-exit-dismissed");
     if (dismissed || hasTriggered.current) return false;
+    if (!isDesktop()) return false;
     return true;
-  }, []);
+  }, [isDesktop]);
 
   const trigger = useCallback(() => {
     if (!canTrigger()) return;
@@ -50,17 +57,16 @@ const ExitIntentPopup = () => {
     };
     window.addEventListener("mousemove", resetActivity, { passive: true });
     window.addEventListener("keydown", resetActivity, { passive: true });
-    window.addEventListener("touchstart", resetActivity, { passive: true });
     return () => {
       window.removeEventListener("mousemove", resetActivity);
       window.removeEventListener("keydown", resetActivity);
-      window.removeEventListener("touchstart", resetActivity);
     };
   }, []);
 
   useEffect(() => {
     const excludedPaths = ["/contact", "/guide", "/quiz", "/consultation"];
     if (excludedPaths.some(p => location.pathname.startsWith(p))) return;
+    if (typeof window !== "undefined" && (window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768)) return;
 
     // 1. Mouse-leave trigger (desktop) — after 5s and 25%+ scroll
     const handleMouseLeave = (e: MouseEvent) => {
@@ -140,7 +146,7 @@ const ExitIntentPopup = () => {
           <div className="p-8 md:p-10 text-center">
             <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={200} height={80} className="h-8 w-auto opacity-50 mx-auto mb-4" />
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">
-              Wait — Take This With You
+              Before You Go
             </p>
             <h3 className="font-serif text-2xl md:text-3xl text-cream mb-3 leading-tight">
               The Guide Luxury Hosts Swear By
@@ -149,22 +155,22 @@ const ExitIntentPopup = () => {
               Used by planners at Morgan Stanley, Netflix & Soho House. Get the 7 secrets before your next event.
             </p>
 
-            {/* Primary: Get the Guide */}
+            {/* Primary: Check Availability */}
+            <button
+              onClick={handleCheckAvailability}
+              className="w-full flex items-center justify-center gap-2.5 font-sans text-sm md:text-base tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-4 hover:bg-accent/80 transition-colors mb-3"
+            >
+              <CalendarCheck size={16} strokeWidth={1.5} />
+              Check Availability
+            </button>
+
+            {/* Secondary: Get the Guide */}
             <button
               onClick={handleGetGuide}
-              className="w-full flex items-center justify-center gap-2.5 font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-4 hover:bg-accent/80 transition-colors mb-3"
+              className="w-full flex items-center justify-center gap-2 font-sans text-xs tracking-[0.2em] uppercase border border-accent text-accent bg-transparent px-6 py-3 hover:bg-accent/10 transition-colors"
             >
               Get the Free Guide
               <ArrowRight size={14} strokeWidth={2} />
-            </button>
-
-            {/* Secondary: Check Availability */}
-            <button
-              onClick={handleCheckAvailability}
-              className="w-full flex items-center justify-center gap-2 font-sans text-xs tracking-[0.2em] uppercase bg-accent text-accent-foreground px-6 py-3 hover:bg-accent/80 transition-colors"
-            >
-              <CalendarCheck size={14} strokeWidth={1.5} />
-              Check Availability
             </button>
 
             <p className="font-sans text-[10px] text-cream/25 mt-5">
