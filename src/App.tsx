@@ -16,7 +16,7 @@ import BookingQuiz from "@/components/BookingQuiz";
 import CookieConsent from "@/components/CookieConsent";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
-import SocialProofToast from "@/components/SocialProofToast";
+
 import Index from "./pages/Index";
 import Experience from "./pages/Experience";
 import ExperienceGallery from "./pages/ExperienceGallery";
@@ -66,12 +66,10 @@ const AppContent = () => {
       <DynamicCanonical />
       
       <ScrollToTop />
-      <DestinationClockBar />
       <Navbar />
       <BookingQuiz />
       <ExitIntentPopup />
       <StickyMobileCTA />
-      <SocialProofToast />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/experience" element={<Experience />} />
