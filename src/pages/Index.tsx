@@ -62,12 +62,16 @@ import beverlyHiltonLogo from "@/assets/logos/beverlyhilton.png";
 import sohohouseLogo from "@/assets/logos/sohohouse-new.png";
 import gravitasLogo from "@/assets/logos/gravitas.webp";
 import magicCastleLogo from "@/assets/logos/magiccastle.png";
+import compassLogo from "@/assets/logos/compass.png";
+import theAgencyLogo from "@/assets/logos/theagency.png";
+import lplFinancialLogo from "@/assets/logos/lplfinancial.png";
 
 const clients = [
 { name: "Netflix", logo: netflixLogo },
 { name: "Disney", logo: disneyLogo },
 { name: "Rolls Royce", logo: rollsroyceLogo },
 { name: "Morgan Stanley", logo: morganstanleyLogo },
+{ name: "LPL Financial", logo: lplFinancialLogo },
 { name: "YouTube", logo: youtubeLogo },
 { name: "Hyatt", logo: hyattLogo },
 { name: "The Beverly Hilton", logo: beverlyHiltonLogo },
@@ -78,10 +82,13 @@ const clients = [
 { name: "Taittinger", logo: taittingerLogo },
 { name: "Lionsgate", logo: lionsgateLogo },
 { name: "Pistola", logo: pistolaLogo },
+{ name: "Compass", logo: compassLogo },
+{ name: "The Agency", logo: theAgencyLogo },
 { name: "Gravitas Beverly Hills", logo: gravitasLogo },
 { name: "The Magic Castle", logo: magicCastleLogo },
 { name: "America's Got Talent", logo: agtLogo },
 ];
+
 
 const heroReviews = [
   { text: "That was well worth it.", name: "Don Cheadle", role: "Actor" },
