@@ -8,7 +8,7 @@ import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import QuizCTA from "@/components/QuizCTA";
 import QuizNudge from "@/components/QuizNudge";
 import FAQSection from "@/components/FAQSection";
-import NewsletterSignup from "@/components/NewsletterSignup";
+
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
 import Guestbook from "@/components/Guestbook";
@@ -634,14 +634,6 @@ const Index = () => {
         ]}
       />
 
-      {/* Newsletter Signup */}
-      <AnimatedSection>
-        <section className="py-16 lg:py-20 border-t border-border/30">
-          <div className="max-w-2xl mx-auto px-6">
-            <NewsletterSignup variant="section" />
-          </div>
-        </section>
-      </AnimatedSection>
 
       {/* Final CTA */}
       <AnimatedSection>

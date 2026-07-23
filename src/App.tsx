@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import RemovedRouteRedirect from "@/components/RemovedRouteRedirect";
 import Navbar from "@/components/Navbar";
-import DestinationClockBar from "@/components/DestinationClockBar";
+
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import usePageTracking from "@/hooks/usePageTracking";
@@ -16,7 +16,7 @@ import BookingQuiz from "@/components/BookingQuiz";
 import CookieConsent from "@/components/CookieConsent";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
-import SocialProofToast from "@/components/SocialProofToast";
+
 import Index from "./pages/Index";
 import Experience from "./pages/Experience";
 import ExperienceGallery from "./pages/ExperienceGallery";
@@ -66,12 +66,10 @@ const AppContent = () => {
       <DynamicCanonical />
       
       <ScrollToTop />
-      <DestinationClockBar />
       <Navbar />
       <BookingQuiz />
       <ExitIntentPopup />
       <StickyMobileCTA />
-      <SocialProofToast />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/experience" element={<Experience />} />
