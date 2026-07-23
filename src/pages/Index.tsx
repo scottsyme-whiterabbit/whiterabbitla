@@ -109,11 +109,14 @@ const Index = () => {
   const logoPages = [clients.slice(0, 10), clients.slice(10)];
 
   useEffect(() => {
+    // Preload all logos so crossfades are instant
+    clients.forEach((c) => { const img = new Image(); img.src = c.logo; });
     const interval = setInterval(() => {
       setLogoPage((p) => (p + 1) % logoPages.length);
-    }, 5000);
+    }, 6000);
     return () => clearInterval(interval);
   }, [logoPages.length]);
+
 
 
   useEffect(() => {
