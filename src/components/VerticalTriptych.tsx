@@ -97,13 +97,13 @@ const VerticalTriptych = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 md:gap-0 gap-6">
           {clips.map((clip, i) => (
-            <AnimatedSection key={clip.src} delay={i * 0.12}>
+            <AnimatedSection key={clip.hd} delay={i * 0.12}>
               <div
                 className={`relative aspect-[9/16] overflow-hidden bg-black ${
                   i > 0 ? "md:border-l md:border-accent/30" : ""
                 }`}
               >
-                <LazyAutoplayVideo src={clip.src} poster={clip.poster} />
+                <LazyAutoplayVideo hd={clip.hd} sd={clip.sd} poster={clip.poster} />
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-forest-dark/40" />
               </div>
             </AnimatedSection>
