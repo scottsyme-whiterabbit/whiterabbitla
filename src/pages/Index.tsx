@@ -105,6 +105,16 @@ const Index = () => {
   const [heroReviewIndex, setHeroReviewIndex] = useState(0);
   const [heroRotation, setHeroRotation] = useState(0);
   const [heroFading, setHeroFading] = useState(false);
+  const [logoPage, setLogoPage] = useState(0);
+  const logoPages = [clients.slice(0, 10), clients.slice(10)];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLogoPage((p) => (p + 1) % logoPages.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [logoPages.length]);
+
 
   useEffect(() => {
     const interval = setInterval(() => {
