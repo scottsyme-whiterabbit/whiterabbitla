@@ -348,21 +348,33 @@ const Index = () => {
             <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-accent mb-6">
               Trusted by World-Class Brands
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-4 md:gap-x-8 md:gap-y-5">
-              {clients.map((client) => (
-                <div key={client.name} className="flex items-center justify-center" style={{ width: '110px', height: '40px' }}>
-                  <img
-                    src={client.logo}
-                    alt={`${client.name} logo, White Rabbit client`}
-                    width={90}
-                    height={32}
-                    loading="lazy"
-                    decoding="async"
-                    className="max-h-full max-w-full w-auto h-auto object-contain opacity-60 hover:opacity-90 transition-opacity brightness-0"
-                  />
-                </div>
-              ))}
+            <div className="relative min-h-[120px] md:min-h-[100px]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={logoPage}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.8, ease: "easeInOut" }}
+                  className="flex flex-wrap items-center justify-center gap-x-6 gap-y-4 md:gap-x-8 md:gap-y-5"
+                >
+                  {logoPages[logoPage].map((client) => (
+                    <div key={client.name} className="flex items-center justify-center" style={{ width: '110px', height: '40px' }}>
+                      <img
+                        src={client.logo}
+                        alt={`${client.name} logo, White Rabbit client`}
+                        width={90}
+                        height={32}
+                        loading="lazy"
+                        decoding="async"
+                        className="max-h-full max-w-full w-auto h-auto object-contain opacity-60 hover:opacity-90 transition-opacity brightness-0"
+                      />
+                    </div>
+                  ))}
+                </motion.div>
+              </AnimatePresence>
             </div>
+
             <div className="mt-6 pt-5 border-t border-forest-dark/10 space-y-2 text-center">
               <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-forest-dark/80">
                 Scott Syme has entertained: Don Cheadle &middot; Dolph Lundgren &middot; Richard Jefferson &middot; Peter Farrelly &middot; Muse &middot; Brittany Broski &middot; Adam Ray
