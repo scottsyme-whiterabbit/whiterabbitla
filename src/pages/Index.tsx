@@ -365,12 +365,12 @@ const Index = () => {
 
       {/* Client Logos — static grid */}
       <AnimatedSection>
-        <section className="bg-gradient-to-b from-[#F8F5F0] to-[#F0E8D8] py-10">
+        <section className="bg-gradient-to-b from-[#F8F5F0] to-[#F0E8D8] py-16 md:py-20">
           <div className="max-w-5xl mx-auto px-6">
-            <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-accent mb-6">
+            <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-accent mb-10">
               Trusted by World-Class Brands
             </p>
-            <div className="relative min-h-[120px] md:min-h-[100px]">
+            <div className="relative min-h-[140px] md:min-h-[120px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={logoPage}
@@ -378,7 +378,7 @@ const Index = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.8, ease: "easeInOut" }}
-                  className="flex flex-wrap items-center justify-center gap-x-6 gap-y-4 md:gap-x-8 md:gap-y-5"
+                  className="flex flex-wrap items-center justify-center gap-x-8 gap-y-6 md:gap-x-10 md:gap-y-8"
                 >
                   {logoPages[logoPage].type === "logos" ? (
                     (logoPages[logoPage] as { type: "logos"; items: typeof clients }).items.map((client) => (
@@ -420,6 +420,10 @@ const Index = () => {
 
       {/* Quiz Nudge */}
       <QuizNudge />
+
+      <div className="flex justify-center py-10">
+        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-16 w-auto opacity-50" />
+      </div>
 
       {/* From the Guestbook */}
       <AnimatedSection>
