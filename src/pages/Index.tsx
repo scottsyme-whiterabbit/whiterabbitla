@@ -312,6 +312,14 @@ const Index = () => {
 
       {/* Mobile text section */}
       <section className="md:hidden bg-cream py-8 px-6">
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.15 }}
+          className="text-center font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4"
+        >
+          Private Magic · Los Angeles & Beyond
+        </motion.p>
         <motion.h2
           className="text-center text-2xl text-foreground tracking-wide font-bold font-serif max-w-lg mx-auto"
           initial={{ opacity: 0, y: 20 }}
@@ -327,7 +335,7 @@ const Index = () => {
           transition={{ duration: 1, delay: 0.6 }}
           className="text-center mt-5 max-w-md mx-auto font-sans text-sm text-muted-foreground italic"
         >
-          On call for private events across America's most considered destinations.
+          Some evenings are catered. Some are staged. The best are conjured.
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
