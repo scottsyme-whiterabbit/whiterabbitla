@@ -15,6 +15,7 @@ import intimateImg from "@/assets/event-closeup-intimate.jpg";
 import mentalistImg from "@/assets/event-mentalism-closeup.jpg";
 import guestLaughImg from "@/assets/event-guest-laughing.jpg";
 import scottLivingroomCloseup from "@/assets/scott-livingroom-closeup.jpg.asset.json";
+import scottCardTrickOutdoor from "@/assets/scott-card-trick-outdoor.jpg.asset.json";
 import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema, useSpeakableSchema } from "@/hooks/useSchemaOrg";
 import threeStars from "@/assets/three-stars-gold.png";
@@ -43,7 +44,7 @@ const services = [
     title: "Weddings & Private Events",
     slug: "wedding-magician",
     description: "Birthdays, weddings, holiday celebrations, and exclusive gatherings. Scott creates an atmosphere of joy through card magic, mind-reading, impossible coincidences, and playful audience participation, engaging all the senses and bringing people together. Guests leave with stories to tell their friends and a lasting impression that this was unlike anything they've experienced before.",
-    image: privateImg,
+    image: scottCardTrickOutdoor.url,
   },
 ];
 
