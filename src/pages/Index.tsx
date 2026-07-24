@@ -370,7 +370,7 @@ const Index = () => {
             <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-accent mb-10">
               Trusted by World-Class Brands
             </p>
-            <div className="relative min-h-[140px] md:min-h-[120px]">
+            <div className="relative h-[180px] md:h-[150px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={logoPage}
@@ -378,22 +378,24 @@ const Index = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.8, ease: "easeInOut" }}
-                  className="flex flex-wrap items-center justify-center gap-x-8 gap-y-6 md:gap-x-10 md:gap-y-8"
+                  className="absolute inset-0 flex items-center justify-center"
                 >
                   {logoPages[logoPage].type === "logos" ? (
-                    (logoPages[logoPage] as { type: "logos"; items: typeof clients }).items.map((client) => (
-                      <div key={client.name} className="flex items-center justify-center" style={{ width: '110px', height: '40px' }}>
-                        <img
-                          src={client.logo}
-                          alt={`${client.name} logo, White Rabbit client`}
-                          width={90}
-                          height={32}
-                          loading="lazy"
-                          decoding="async"
-                          className="max-h-full max-w-full w-auto h-auto object-contain opacity-60 hover:opacity-90 transition-opacity brightness-0"
-                        />
-                      </div>
-                    ))
+                    <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-6 md:gap-x-10 md:gap-y-8">
+                      {(logoPages[logoPage] as { type: "logos"; items: typeof clients }).items.map((client) => (
+                        <div key={client.name} className="flex items-center justify-center" style={{ width: '110px', height: '40px' }}>
+                          <img
+                            src={client.logo}
+                            alt={`${client.name} logo, White Rabbit client`}
+                            width={90}
+                            height={32}
+                            loading="lazy"
+                            decoding="async"
+                            className="max-h-full max-w-full w-auto h-auto object-contain opacity-60 hover:opacity-90 transition-opacity brightness-0"
+                          />
+                        </div>
+                      ))}
+                    </div>
                   ) : (
                     <div className="w-full max-w-3xl mx-auto space-y-4 px-2">
                       <div className="text-center">
