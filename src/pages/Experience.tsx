@@ -25,7 +25,7 @@ const services = [
     title: "Close-Up Magic",
     slug: "close-up-magician",
     description: "Intimate mentalism, interactive magic, and impossible coincidences performed inches away. But it's the hospitality that sets it apart. Scott moves through your event like a world-class host, weaving humor, audience participation, and sensory moments into every interaction, making each guest feel like the most important person in the room. Perfect for cocktail hours, dinners, and VIP receptions.",
-    image: guestLaughImg,
+    image: scottLivingroomCloseup.url,
   },
   {
     title: "Private Magic Shows",
