@@ -383,7 +383,7 @@ const Index = () => {
                   {logoPages[logoPage].type === "logos" ? (
                     <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-4 md:gap-x-10 md:gap-y-8">
                       {(logoPages[logoPage] as { type: "logos"; items: typeof clients }).items.map((client) => (
-                        <div key={client.name} className="flex items-center justify-center" style={{ width: '110px', height: '40px' }}>
+                        <div key={client.name} className="flex items-center justify-center w-[86px] h-[34px] md:w-[110px] md:h-[40px]">
                           <img
                             src={client.logo}
                             alt={`${client.name} logo, White Rabbit client`}
