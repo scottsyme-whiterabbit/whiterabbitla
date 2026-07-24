@@ -714,7 +714,7 @@ const Index = () => {
         <section className="py-12 lg:py-16 text-center">
           <div className="max-w-2xl mx-auto px-6">
             <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-12 w-auto opacity-50 mx-auto mb-4" />
-            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">Your Guests Deserve This</p>
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">For Hosts Who Intend to Be Talked About</p>
             <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">
               Don't Leave the Best Part of Your Event to Chance
             </h2>
