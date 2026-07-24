@@ -8,14 +8,14 @@ const Footer = () => {
   return (
     <footer aria-label="Site footer" className="bg-forest-dark text-cream/80 py-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[180px_180px_minmax(430px,1fr)_220px_280px] gap-x-12 gap-y-14 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-x-8 gap-y-14 items-start">
           {/* Logo & tagline */}
-          <div className="flex flex-col items-center md:items-start justify-center h-full">
+          <div className="flex flex-col items-center md:items-start justify-center h-full lg:col-span-2">
             <img src={wrLogo} alt="White Rabbit Los Angeles luxury magic entertainment logo" width={128} height={128} loading="lazy" decoding="async" className="h-32 w-auto opacity-90" />
           </div>
 
           {/* Quick Links */}
-          <nav aria-label="Footer navigation" className="text-center md:text-left">
+          <nav aria-label="Footer navigation" className="text-center md:text-left lg:col-span-2">
             <div className="flex flex-col items-center md:items-start gap-3">
               <h4 className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Navigate</h4>
               {["Experience", "About", "Reviews", "Blog", "Contact"].map((link) =>
@@ -35,9 +35,9 @@ const Footer = () => {
             </div>
           </nav>
 
-          <nav aria-label="Footer services" className="flex flex-col items-center md:items-start gap-3 text-center md:text-left md:col-span-2 xl:col-span-1">
+          <nav aria-label="Footer services" className="flex flex-col items-center md:items-start gap-3 text-center md:text-left md:col-span-2 lg:col-span-4">
             <h4 className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Services</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-3 w-full max-w-md">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 w-full max-w-md">
               <div className="flex flex-col items-center md:items-start gap-3">
                 <Link to="/services/corporate-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Corporate Events</Link>
                 <Link to="/services/wedding-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Weddings</Link>
@@ -58,7 +58,7 @@ const Footer = () => {
           </nav>
 
           {/* Contact */}
-          <div className="flex flex-col items-center md:items-end gap-4">
+          <div className="flex flex-col items-center md:items-start lg:items-end gap-4 lg:col-span-2">
             <h4 className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Get in Touch</h4>
             <a href="mailto:events@whiterabbitla.com" className="flex items-center gap-2 text-sm hover:text-cream transition-colors">
               <Mail size={16} /> events@whiterabbitla.com
@@ -69,7 +69,7 @@ const Footer = () => {
           </div>
 
           {/* Newsletter Signup */}
-          <div className="flex flex-col items-center md:items-start">
+          <div className="flex flex-col items-center md:items-start lg:col-span-2 min-w-0">
             <NewsletterSignup variant="footer" />
           </div>
         </div>
