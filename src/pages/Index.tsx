@@ -44,6 +44,7 @@ import cardsBlueImg from "@/assets/event-cards-blue.jpg";
 import crowdReactionImg from "@/assets/event-crowd-reaction.jpg";
 import groupFinaleImg from "@/assets/event-group-finale.jpg";
 import scottLivingroomCloseup from "@/assets/scott-livingroom-closeup.jpg.asset.json";
+import ladiesLuncheonCurtains from "@/assets/ladies-luncheon-curtains.jpg.asset.json";
 import rubikShowImg from "@/assets/event-rubiks-show.jpg";
 
 import netflixLogo from "@/assets/logos/netflix.png";
