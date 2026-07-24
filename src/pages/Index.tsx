@@ -554,7 +554,7 @@ const Index = () => {
               <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-accent/30 z-10" />
               <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-accent/30 z-10" />
               <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-accent/30 z-10" />
-              <img src={parlorShowImg} alt="Scott Syme private magic show with emerald curtains and uplighting" width={400} height={300} loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
+              <img src={ladiesLuncheonCurtains.url} alt="Scott Syme greeting guests at a luxury ladies' luncheon private event" width={400} height={300} loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.15}>
