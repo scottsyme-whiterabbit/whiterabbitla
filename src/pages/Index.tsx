@@ -570,7 +570,7 @@ const Index = () => {
               <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-accent/30 z-10" />
               <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-accent/30 z-10" />
               <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-accent/30 z-10" />
-              <img src={groupFinaleImg} alt="Group photo after a White Rabbit magic experience in Los Angeles" width={400} height={300} loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
+              <img src={scottLivingroomCloseup.url} alt="Scott Syme performing close-up magic for guests in a luxury Los Angeles living room" width={400} height={300} loading="lazy" decoding="async" sizes="(max-width: 768px) 50vw, 33vw" className="w-full h-full object-cover" />
             </div>
           </AnimatedSection>
           <AnimatedSection delay={0.25}>
