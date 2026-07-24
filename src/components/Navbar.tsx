@@ -19,6 +19,7 @@ const navLinks = [
   { to: "/about", label: "About" },
   { to: "/reviews", label: "Reviews" },
   { to: "/areas", label: "Service Areas" },
+  { to: "/gallery", label: "Gallery" },
   { to: "/blog", label: "Blog" },
   { to: "/contact", label: "Contact" },
 ];
