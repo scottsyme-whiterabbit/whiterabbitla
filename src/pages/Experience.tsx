@@ -14,6 +14,7 @@ import cardsEmeraldImg from "@/assets/event-cards-emerald.jpg";
 import intimateImg from "@/assets/event-closeup-intimate.jpg";
 import mentalistImg from "@/assets/event-mentalism-closeup.jpg";
 import guestLaughImg from "@/assets/event-guest-laughing.jpg";
+import scottLivingroomCloseup from "@/assets/scott-livingroom-closeup.jpg.asset.json";
 import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema, useSpeakableSchema } from "@/hooks/useSchemaOrg";
 import threeStars from "@/assets/three-stars-gold.png";
