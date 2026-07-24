@@ -8,14 +8,14 @@ const Footer = () => {
   return (
     <footer aria-label="Site footer" className="bg-forest-dark text-cream/80 py-16">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-x-8 gap-y-14 items-start">
           {/* Logo & tagline */}
-          <div className="flex flex-col items-center md:items-start justify-center h-full">
+          <div className="flex flex-col items-center md:items-start justify-center h-full lg:col-span-2">
             <img src={wrLogo} alt="White Rabbit Los Angeles luxury magic entertainment logo" width={128} height={128} loading="lazy" decoding="async" className="h-32 w-auto opacity-90" />
           </div>
 
           {/* Quick Links */}
-          <nav aria-label="Footer navigation" className="grid grid-cols-2 gap-x-8 gap-y-3 text-center md:text-left">
+          <nav aria-label="Footer navigation" className="text-center md:text-left lg:col-span-2">
             <div className="flex flex-col items-center md:items-start gap-3">
               <h4 className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Navigate</h4>
               {["Experience", "About", "Reviews", "Blog", "Contact"].map((link) =>
@@ -33,31 +33,32 @@ const Footer = () => {
                 For Event Professionals
               </Link>
             </div>
-            <div className="flex flex-col items-center md:items-start gap-3">
-              <h4 className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Services</h4>
-              <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-center md:text-left">
-                <div className="flex flex-col items-center md:items-start gap-3">
-                  <Link to="/services/corporate-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Corporate Events</Link>
-                  <Link to="/services/wedding-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Weddings</Link>
-                  <Link to="/services/private-party-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Private Parties</Link>
-                  <Link to="/services/holiday-party-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Holiday Parties</Link>
-                  <Link to="/services/charity-gala-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Charity Galas</Link>
-                  <Link to="/services/trade-show-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Trade Shows</Link>
-                </div>
-                <div className="flex flex-col items-center md:items-start gap-3">
-                  <Link to="/services/golf-tournament-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Golf Tournaments</Link>
-                  <Link to="/services/dmc-entertainment" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">DMC Programs</Link>
-                  <Link to="/services/resident-event-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Resident Events</Link>
-                  <Link to="/services/close-up-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Close-Up Magic</Link>
-                  <Link to="/services/private-magic-show" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Private Magic Show</Link>
-                </div>
+          </nav>
+
+          <nav aria-label="Footer services" className="flex flex-col items-center md:items-start gap-3 text-center md:text-left md:col-span-2 lg:col-span-4">
+            <h4 className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Services</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 w-full max-w-md">
+              <div className="flex flex-col items-center md:items-start gap-3">
+                <Link to="/services/corporate-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Corporate Events</Link>
+                <Link to="/services/wedding-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Weddings</Link>
+                <Link to="/services/private-party-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Private Parties</Link>
+                <Link to="/services/holiday-party-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Holiday Parties</Link>
+                <Link to="/services/charity-gala-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Charity Galas</Link>
+                <Link to="/services/trade-show-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Trade Shows</Link>
               </div>
-              <Link to="/quiz" className="font-sans text-sm tracking-wider text-accent hover:text-cream transition-colors mt-3">Not sure? Take our quiz →</Link>
+              <div className="flex flex-col items-center md:items-start gap-3">
+                <Link to="/services/golf-tournament-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Golf Tournaments</Link>
+                <Link to="/services/dmc-entertainment" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">DMC Programs</Link>
+                <Link to="/services/resident-event-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Resident Events</Link>
+                <Link to="/services/close-up-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Close-Up Magic</Link>
+                <Link to="/services/private-magic-show" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Private Magic Show</Link>
+              </div>
             </div>
+            <Link to="/quiz" className="font-sans text-sm tracking-wider text-accent hover:text-cream transition-colors mt-3">Not sure? Take our quiz →</Link>
           </nav>
 
           {/* Contact */}
-          <div className="flex flex-col items-center md:items-end gap-4">
+          <div className="flex flex-col items-center md:items-start lg:items-end gap-4 lg:col-span-4">
             <h4 className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Get in Touch</h4>
             <a href="mailto:events@whiterabbitla.com" className="flex items-center gap-2 text-sm hover:text-cream transition-colors">
               <Mail size={16} /> events@whiterabbitla.com
@@ -68,7 +69,7 @@ const Footer = () => {
           </div>
 
           {/* Newsletter Signup */}
-          <div className="flex flex-col items-center md:items-start">
+          <div className="flex flex-col items-center md:items-start lg:items-end lg:col-span-4 lg:col-start-9 min-w-0">
             <NewsletterSignup variant="footer" />
           </div>
         </div>
