@@ -370,7 +370,7 @@ const Index = () => {
             <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-accent mb-10">
               Trusted by World-Class Brands
             </p>
-            <div className="relative h-[180px] md:h-[150px]">
+            <div className="relative h-[280px] md:h-[160px] overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={logoPage}
@@ -378,10 +378,10 @@ const Index = () => {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.8, ease: "easeInOut" }}
-                  className="absolute inset-0 flex items-center justify-center"
+                  className="absolute inset-0 flex items-center justify-center px-2"
                 >
                   {logoPages[logoPage].type === "logos" ? (
-                    <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-6 md:gap-x-10 md:gap-y-8">
+                    <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-4 md:gap-x-10 md:gap-y-8">
                       {(logoPages[logoPage] as { type: "logos"; items: typeof clients }).items.map((client) => (
                         <div key={client.name} className="flex items-center justify-center" style={{ width: '110px', height: '40px' }}>
                           <img
