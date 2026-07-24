@@ -58,7 +58,7 @@ const Footer = () => {
           </nav>
 
           {/* Contact */}
-          <div className="flex flex-col items-center md:items-start lg:items-end gap-4 lg:col-span-2">
+          <div className="flex flex-col items-center md:items-start lg:items-end gap-4 lg:col-span-4">
             <h4 className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Get in Touch</h4>
             <a href="mailto:events@whiterabbitla.com" className="flex items-center gap-2 text-sm hover:text-cream transition-colors">
               <Mail size={16} /> events@whiterabbitla.com
@@ -69,7 +69,7 @@ const Footer = () => {
           </div>
 
           {/* Newsletter Signup */}
-          <div className="flex flex-col items-center md:items-start lg:col-span-2 min-w-0">
+          <div className="flex flex-col items-center md:items-start lg:items-end lg:col-span-4 lg:col-start-9 min-w-0">
             <NewsletterSignup variant="footer" />
           </div>
         </div>
