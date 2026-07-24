@@ -238,6 +238,15 @@ const Index = () => {
 
         {/* Text overlaid — bottom-left aligned (desktop only) */}
         <div className="hidden md:flex absolute inset-0 z-10 flex-col items-start justify-end pb-28 md:pb-24 pl-6 md:pl-[10vw] pr-6 text-left">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.35 }}
+            className="relative mb-4 md:mb-5 font-sans text-xs tracking-[0.3em] uppercase text-accent drop-shadow-lg"
+            style={{ textShadow: "0 0 40px hsl(var(--accent) / 0.35), 0 0 80px hsl(var(--accent) / 0.15)" }}
+          >
+            Private Magic · Los Angeles & Beyond
+          </motion.p>
           <motion.h1
             className="relative text-2xl md:text-[1.875rem] lg:text-[2.5rem] text-cream/90 tracking-wide font-bold font-serif drop-shadow-lg max-w-4xl"
             initial={{ opacity: 0, y: 20 }}
@@ -253,7 +262,7 @@ const Index = () => {
             transition={{ duration: 1, delay: 0.85 }}
             className="relative mt-5 md:mt-7 max-w-xl font-sans text-sm md:text-base text-cream/75 italic"
           >
-            On call for private events across America's most considered destinations.
+            Some evenings are catered. Some are staged. The best are conjured.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
