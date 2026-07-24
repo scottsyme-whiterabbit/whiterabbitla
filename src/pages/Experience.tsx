@@ -14,6 +14,7 @@ import cardsEmeraldImg from "@/assets/event-cards-emerald.jpg";
 import intimateImg from "@/assets/event-closeup-intimate.jpg";
 import mentalistImg from "@/assets/event-mentalism-closeup.jpg";
 import guestLaughImg from "@/assets/event-guest-laughing.jpg";
+import scottLivingroomCloseup from "@/assets/scott-livingroom-closeup.jpg.asset.json";
 import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema, useSpeakableSchema } from "@/hooks/useSchemaOrg";
 import threeStars from "@/assets/three-stars-gold.png";
@@ -24,7 +25,7 @@ const services = [
     title: "Close-Up Magic",
     slug: "close-up-magician",
     description: "Intimate mentalism, interactive magic, and impossible coincidences performed inches away. But it's the hospitality that sets it apart. Scott moves through your event like a world-class host, weaving humor, audience participation, and sensory moments into every interaction, making each guest feel like the most important person in the room. Perfect for cocktail hours, dinners, and VIP receptions.",
-    image: guestLaughImg,
+    image: scottLivingroomCloseup.url,
   },
   {
     title: "Private Magic Shows",
