@@ -44,7 +44,7 @@ const services = [
     title: "Weddings & Private Events",
     slug: "wedding-magician",
     description: "Birthdays, weddings, holiday celebrations, and exclusive gatherings. Scott creates an atmosphere of joy through card magic, mind-reading, impossible coincidences, and playful audience participation, engaging all the senses and bringing people together. Guests leave with stories to tell their friends and a lasting impression that this was unlike anything they've experienced before.",
-    image: privateImg,
+    image: scottCardTrickOutdoor.url,
   },
 ];
 
