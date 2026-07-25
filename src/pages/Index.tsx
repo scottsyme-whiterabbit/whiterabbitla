@@ -47,50 +47,51 @@ import scottLivingroomCloseup from "@/assets/scott-livingroom-closeup.jpg.asset.
 import ladiesLuncheonCurtains from "@/assets/ladies-luncheon-curtains.jpg.asset.json";
 import rubikShowImg from "@/assets/event-rubiks-show.jpg";
 
-import netflixLogo from "@/assets/logos/netflix.png";
-import disneyLogo from "@/assets/logos/disney.png";
-import rollsroyceLogo from "@/assets/logos/rollsroyce.png";
-import morganstanleyLogo from "@/assets/logos/morganstanley.png";
-import youtubeLogo from "@/assets/logos/youtube.png";
-import hyattLogo from "@/assets/logos/hyatt.png";
-import rivianLogo from "@/assets/logos/rivian.png";
-import paramountLogo from "@/assets/logos/paramount.png";
-import oliviarodrigoLogo from "@/assets/logos/oliviarodrigo.png";
-import taittingerLogo from "@/assets/logos/taittinger.png";
-import pistolaLogo from "@/assets/logos/pistola-new.png";
-import lionsgateLogo from "@/assets/logos/lionsgate.png";
-import agtLogo from "@/assets/logos/agt.png";
-import beverlyHiltonLogo from "@/assets/logos/beverlyhilton.png";
-import sohohouseLogo from "@/assets/logos/sohohouse-new.png";
-import gravitasLogo from "@/assets/logos/gravitas.webp";
-import magicCastleLogo from "@/assets/logos/magiccastle.png";
-import compassLogo from "@/assets/logos/compass.png";
-import theAgencyLogo from "@/assets/logos/theagency.png";
-import lplFinancialLogo from "@/assets/logos/lplfinancial.png";
+import netflixLogo from "@/assets/logos/normalized/netflix.png";
+import disneyLogo from "@/assets/logos/normalized/disney.png";
+import rollsroyceLogo from "@/assets/logos/normalized/rollsroyce.png";
+import morganstanleyLogo from "@/assets/logos/normalized/morganstanley.png";
+import youtubeLogo from "@/assets/logos/normalized/youtube.png";
+import hyattLogo from "@/assets/logos/normalized/hyatt.png";
+import rivianLogo from "@/assets/logos/normalized/rivian.png";
+import paramountLogo from "@/assets/logos/normalized/paramount.png";
+import oliviarodrigoLogo from "@/assets/logos/normalized/oliviarodrigo.png";
+import taittingerLogo from "@/assets/logos/normalized/taittinger.png";
+import pistolaLogo from "@/assets/logos/normalized/pistola.png";
+import lionsgateLogo from "@/assets/logos/normalized/lionsgate.png";
+import agtLogo from "@/assets/logos/normalized/agt.png";
+import beverlyHiltonLogo from "@/assets/logos/normalized/beverlyhilton.png";
+import sohohouseLogo from "@/assets/logos/normalized/sohohouse.png";
+import gravitasLogo from "@/assets/logos/normalized/gravitas.png";
+import magicCastleLogo from "@/assets/logos/normalized/magiccastle.png";
+import compassLogo from "@/assets/logos/normalized/compass.png";
+import theAgencyLogo from "@/assets/logos/normalized/theagency.png";
+import lplFinancialLogo from "@/assets/logos/normalized/lplfinancial.png";
 
-// `scale` visually normalizes logos whose intrinsic artwork padding makes them
-// render smaller or larger than neighbors at the same container height.
-const clients: { name: string; logo: string; scale?: number }[] = [
-{ name: "Netflix", logo: netflixLogo, scale: 1.0 },
-{ name: "Disney", logo: disneyLogo, scale: 1.15 },
-{ name: "Rolls Royce", logo: rollsroyceLogo, scale: 1.5 },
-{ name: "Morgan Stanley", logo: morganstanleyLogo, scale: 1.0 },
-{ name: "LPL Financial", logo: lplFinancialLogo, scale: 1.1 },
-{ name: "YouTube", logo: youtubeLogo, scale: 1.0 },
-{ name: "Hyatt", logo: hyattLogo, scale: 1.05 },
-{ name: "The Beverly Hilton", logo: beverlyHiltonLogo, scale: 1.25 },
-{ name: "Soho House", logo: sohohouseLogo, scale: 1.35 },
-{ name: "Rivian", logo: rivianLogo, scale: 1.0 },
-{ name: "Paramount", logo: paramountLogo, scale: 1.4 },
-{ name: "Olivia Rodrigo", logo: oliviarodrigoLogo, scale: 1.1 },
-{ name: "Taittinger", logo: taittingerLogo, scale: 1.15 },
-{ name: "Lionsgate", logo: lionsgateLogo, scale: 1.05 },
-{ name: "Pistola", logo: pistolaLogo, scale: 1.0 },
-{ name: "Compass", logo: compassLogo, scale: 1.0 },
-{ name: "The Agency", logo: theAgencyLogo, scale: 1.0 },
-{ name: "Gravitas Beverly Hills", logo: gravitasLogo, scale: 1.1 },
-{ name: "The Magic Castle", logo: magicCastleLogo, scale: 1.5 },
-{ name: "America's Got Talent", logo: agtLogo, scale: 1.3 },
+// Logos are pre-normalized (trimmed of baked padding, exported at 3x retina).
+// `h` is the render height in px, tiered by aspect ratio for optical balance:
+//   aspect > 2.5 → 20px, 1.5–2.5 → 26px, < 1.5 → 34px.
+const clients: { name: string; logo: string; h: number }[] = [
+{ name: "Netflix", logo: netflixLogo, h: 20 },
+{ name: "Disney", logo: disneyLogo, h: 20 },
+{ name: "Rolls Royce", logo: rollsroyceLogo, h: 34 },
+{ name: "Morgan Stanley", logo: morganstanleyLogo, h: 20 },
+{ name: "LPL Financial", logo: lplFinancialLogo, h: 26 },
+{ name: "YouTube", logo: youtubeLogo, h: 20 },
+{ name: "Hyatt", logo: hyattLogo, h: 20 },
+{ name: "The Beverly Hilton", logo: beverlyHiltonLogo, h: 20 },
+{ name: "Soho House", logo: sohohouseLogo, h: 26 },
+{ name: "Rivian", logo: rivianLogo, h: 34 },
+{ name: "Paramount", logo: paramountLogo, h: 34 },
+{ name: "Olivia Rodrigo", logo: oliviarodrigoLogo, h: 26 },
+{ name: "Taittinger", logo: taittingerLogo, h: 34 },
+{ name: "Lionsgate", logo: lionsgateLogo, h: 20 },
+{ name: "Pistola", logo: pistolaLogo, h: 20 },
+{ name: "Compass", logo: compassLogo, h: 20 },
+{ name: "The Agency", logo: theAgencyLogo, h: 26 },
+{ name: "Gravitas Beverly Hills", logo: gravitasLogo, h: 34 },
+{ name: "The Magic Castle", logo: magicCastleLogo, h: 34 },
+{ name: "America's Got Talent", logo: agtLogo, h: 20 },
 ];
 
 
