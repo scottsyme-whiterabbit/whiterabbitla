@@ -68,27 +68,29 @@ import compassLogo from "@/assets/logos/compass.png";
 import theAgencyLogo from "@/assets/logos/theagency.png";
 import lplFinancialLogo from "@/assets/logos/lplfinancial.png";
 
-const clients = [
-{ name: "Netflix", logo: netflixLogo },
-{ name: "Disney", logo: disneyLogo },
-{ name: "Rolls Royce", logo: rollsroyceLogo },
-{ name: "Morgan Stanley", logo: morganstanleyLogo },
-{ name: "LPL Financial", logo: lplFinancialLogo },
-{ name: "YouTube", logo: youtubeLogo },
-{ name: "Hyatt", logo: hyattLogo },
-{ name: "The Beverly Hilton", logo: beverlyHiltonLogo },
-{ name: "Soho House", logo: sohohouseLogo },
-{ name: "Rivian", logo: rivianLogo },
-{ name: "Paramount", logo: paramountLogo },
-{ name: "Olivia Rodrigo", logo: oliviarodrigoLogo },
-{ name: "Taittinger", logo: taittingerLogo },
-{ name: "Lionsgate", logo: lionsgateLogo },
-{ name: "Pistola", logo: pistolaLogo },
-{ name: "Compass", logo: compassLogo },
-{ name: "The Agency", logo: theAgencyLogo },
-{ name: "Gravitas Beverly Hills", logo: gravitasLogo },
-{ name: "The Magic Castle", logo: magicCastleLogo },
-{ name: "America's Got Talent", logo: agtLogo },
+// `scale` visually normalizes logos whose intrinsic artwork padding makes them
+// render smaller or larger than neighbors at the same container height.
+const clients: { name: string; logo: string; scale?: number }[] = [
+{ name: "Netflix", logo: netflixLogo, scale: 1.0 },
+{ name: "Disney", logo: disneyLogo, scale: 1.15 },
+{ name: "Rolls Royce", logo: rollsroyceLogo, scale: 1.5 },
+{ name: "Morgan Stanley", logo: morganstanleyLogo, scale: 1.0 },
+{ name: "LPL Financial", logo: lplFinancialLogo, scale: 1.1 },
+{ name: "YouTube", logo: youtubeLogo, scale: 1.0 },
+{ name: "Hyatt", logo: hyattLogo, scale: 1.05 },
+{ name: "The Beverly Hilton", logo: beverlyHiltonLogo, scale: 1.25 },
+{ name: "Soho House", logo: sohohouseLogo, scale: 1.35 },
+{ name: "Rivian", logo: rivianLogo, scale: 1.0 },
+{ name: "Paramount", logo: paramountLogo, scale: 1.4 },
+{ name: "Olivia Rodrigo", logo: oliviarodrigoLogo, scale: 1.1 },
+{ name: "Taittinger", logo: taittingerLogo, scale: 1.15 },
+{ name: "Lionsgate", logo: lionsgateLogo, scale: 1.05 },
+{ name: "Pistola", logo: pistolaLogo, scale: 1.0 },
+{ name: "Compass", logo: compassLogo, scale: 1.0 },
+{ name: "The Agency", logo: theAgencyLogo, scale: 1.0 },
+{ name: "Gravitas Beverly Hills", logo: gravitasLogo, scale: 1.1 },
+{ name: "The Magic Castle", logo: magicCastleLogo, scale: 1.5 },
+{ name: "America's Got Talent", logo: agtLogo, scale: 1.3 },
 ];
 
 
@@ -385,21 +387,25 @@ const Index = () => {
         <section className="bg-gradient-to-b from-[#F8F5F0] to-[#F0E8D8] py-14 md:py-16">
           <div className="max-w-6xl mx-auto px-6">
             <p className="text-center font-sans text-[11px] tracking-[0.4em] uppercase text-forest-dark/55 mb-8">
-              In Good Company
+              Trusted By World Class Brands
             </p>
             <div className="relative overflow-hidden group" style={{ maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)" }}>
               <div
                 className="flex items-center gap-16 md:gap-20 w-max animate-marquee-logos group-hover:[animation-play-state:paused]"
               >
                 {[...clients, ...clients].map((client, i) => (
-                  <div key={`${client.name}-${i}`} className="flex items-center justify-center flex-shrink-0 h-7 md:h-[26px]">
+                  <div key={`${client.name}-${i}`} className="flex items-center justify-center flex-shrink-0 h-10 md:h-12">
                     <img
                       src={client.logo}
                       alt={`${client.name} logo, White Rabbit client`}
                       loading="lazy"
                       decoding="async"
-                      className="h-full w-auto object-contain opacity-55 hover:opacity-80 transition-opacity"
-                      style={{ filter: "brightness(0) saturate(100%) invert(24%) sepia(9%) saturate(1200%) hue-rotate(70deg) brightness(95%) contrast(85%)" }}
+                      className="max-h-full w-auto object-contain opacity-55 hover:opacity-80 transition-opacity"
+                      style={{
+                        filter: "brightness(0) saturate(100%) invert(24%) sepia(9%) saturate(1200%) hue-rotate(70deg) brightness(95%) contrast(85%)",
+                        transform: `scale(${client.scale ?? 1})`,
+                        transformOrigin: "center",
+                      }}
                     />
                   </div>
                 ))}
