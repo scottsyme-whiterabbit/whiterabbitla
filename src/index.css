@@ -295,6 +295,16 @@ html {
   animation-play-state: paused;
 }
 
+@keyframes marquee-logos {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee-logos {
+  animation: marquee-logos 38s linear infinite;
+  will-change: transform;
+}
+
 /* Accessibility: visible focus rings for keyboard navigation */
 *:focus-visible {
   outline: 2px solid hsl(var(--accent));

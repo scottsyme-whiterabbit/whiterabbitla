@@ -107,25 +107,7 @@ const Index = () => {
   const [heroReviewIndex, setHeroReviewIndex] = useState(0);
   const [heroRotation, setHeroRotation] = useState(0);
   const [heroFading, setHeroFading] = useState(false);
-  const [logoPage, setLogoPage] = useState(0);
-  const namesPage = {
-    entertained: ["Don Cheadle", "Dolph Lundgren", "Richard Jefferson", "Peter Farrelly", "Muse", "Brittany Broski", "Adam Ray"],
-    consulting: ["AGT Champion Dustin Tavella", "Olivia Rodrigo", "Disney Channel"],
-  };
-  const logoPages: Array<{ type: "logos"; items: typeof clients } | { type: "names" }> = [
-    { type: "logos", items: clients.slice(0, 10) },
-    { type: "logos", items: clients.slice(10) },
-    { type: "names" },
-  ];
 
-  useEffect(() => {
-    // Preload all logos so crossfades are instant
-    clients.forEach((c) => { const img = new Image(); img.src = c.logo; });
-    const interval = setInterval(() => {
-      setLogoPage((p) => (p + 1) % logoPages.length);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, [logoPages.length]);
 
 
 
@@ -264,6 +246,14 @@ const Index = () => {
           >
             Some evenings are catered. Some are staged. The best are conjured.
           </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.95 }}
+            className="relative mt-4 md:mt-5 font-sans text-[10px] md:text-[11px] tracking-[0.35em] uppercase text-cream/60 drop-shadow-md"
+          >
+            Los Angeles · Aspen · Jackson Hole · The Hamptons · Miami
+          </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -272,7 +262,7 @@ const Index = () => {
             <button
               onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-10 py-4 hover:bg-accent hover:text-accent-foreground transition-colors">
-              Book an Experience
+              Inquire
             </button>
           </motion.div>
         </div>
@@ -337,6 +327,14 @@ const Index = () => {
         >
           Some evenings are catered. Some are staged. The best are conjured.
         </motion.p>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.75 }}
+          className="text-center mt-4 font-sans text-[10px] tracking-[0.35em] uppercase text-muted-foreground/80"
+        >
+          Los Angeles · Aspen · Jackson Hole · The Hamptons · Miami
+        </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -345,7 +343,7 @@ const Index = () => {
           <button
             onClick={openQuiz}
             className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-accent px-6 py-2 hover:bg-accent hover:text-accent-foreground transition-colors max-w-[280px] w-full text-center">
-            Book an Experience
+            Inquire
           </button>
         </motion.div>
       </section>
@@ -382,61 +380,35 @@ const Index = () => {
         </div>
       </motion.div>
 
-      {/* Client Logos — static grid */}
+      {/* Client Logos — auto-scrolling marquee */}
       <AnimatedSection>
-        <section className="bg-gradient-to-b from-[#F8F5F0] to-[#F0E8D8] py-16 md:py-20">
-          <div className="max-w-5xl mx-auto px-6">
-            <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-accent mb-10">
-              Trusted by World-Class Brands
+        <section className="bg-gradient-to-b from-[#F8F5F0] to-[#F0E8D8] py-14 md:py-16">
+          <div className="max-w-6xl mx-auto px-6">
+            <p className="text-center font-sans text-[11px] tracking-[0.4em] uppercase text-forest-dark/55 mb-8">
+              In Good Company
             </p>
-            <div className="relative h-[280px] md:h-[160px] overflow-hidden">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={logoPage}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.8, ease: "easeInOut" }}
-                  className="absolute inset-0 flex items-center justify-center px-2"
-                >
-                  {logoPages[logoPage].type === "logos" ? (
-                    <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-4 md:gap-x-10 md:gap-y-8">
-                      {(logoPages[logoPage] as { type: "logos"; items: typeof clients }).items.map((client) => (
-                        <div key={client.name} className="flex items-center justify-center w-[86px] h-[34px] md:w-[110px] md:h-[40px]">
-                          <img
-                            src={client.logo}
-                            alt={`${client.name} logo, White Rabbit client`}
-                            width={90}
-                            height={32}
-                            loading="lazy"
-                            decoding="async"
-                            className="max-h-full max-w-full w-auto h-auto object-contain opacity-60 hover:opacity-90 transition-opacity brightness-0"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="w-full max-w-3xl mx-auto space-y-4 px-2">
-                      <div className="text-center">
-                        <p className="font-sans text-[10px] tracking-[0.25em] uppercase text-forest-dark/50 mb-2">Entertained</p>
-                        <p className="font-serif text-base md:text-lg text-forest-dark/85 leading-relaxed">
-                          {namesPage.entertained.join(" · ")}
-                        </p>
-                      </div>
-                      <div className="text-center pt-3 border-t border-forest-dark/10">
-                        <p className="font-sans text-[10px] tracking-[0.25em] uppercase text-forest-dark/50 mb-2">Consulting</p>
-                        <p className="font-serif text-base md:text-lg text-forest-dark/85 leading-relaxed">
-                          {namesPage.consulting.join(" · ")}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </motion.div>
-              </AnimatePresence>
+            <div className="relative overflow-hidden group" style={{ maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)" }}>
+              <div
+                className="flex items-center gap-16 md:gap-20 w-max animate-marquee-logos group-hover:[animation-play-state:paused]"
+              >
+                {[...clients, ...clients].map((client, i) => (
+                  <div key={`${client.name}-${i}`} className="flex items-center justify-center flex-shrink-0 h-7 md:h-[26px]">
+                    <img
+                      src={client.logo}
+                      alt={`${client.name} logo, White Rabbit client`}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-full w-auto object-contain opacity-55 hover:opacity-80 transition-opacity"
+                      style={{ filter: "brightness(0) saturate(100%) invert(24%) sepia(9%) saturate(1200%) hue-rotate(70deg) brightness(95%) contrast(85%)" }}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
       </AnimatedSection>
+
 
 
       {/* Quiz Nudge */}
@@ -711,27 +683,21 @@ const Index = () => {
 
       {/* Final CTA */}
       <AnimatedSection>
-        <section className="py-12 lg:py-16 text-center">
+        <section className="py-16 lg:py-20 text-center">
           <div className="max-w-2xl mx-auto px-6">
-            <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-12 w-auto opacity-50 mx-auto mb-4" />
-            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">For Hosts Who Intend to Be Talked About</p>
-            <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6">
-              Don't Leave the Best Part of Your Event to Chance
+            <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-12 w-auto opacity-50 mx-auto mb-6" />
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-5">For Hosts Who Intend to Be Talked About</p>
+            <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6 leading-tight">
+              An evening like this begins with a conversation.
             </h2>
-            <p className="font-sans text-base text-muted-foreground mb-4">
-              The venue is booked. The caterer is confirmed. The playlist is set.
-              But what happens when your guests are standing in a circle, drink in hand, waiting for something to happen?
+            <p className="font-sans text-base text-muted-foreground italic mb-10 max-w-lg mx-auto">
+              Your guests don't watch the show. They become the show.
             </p>
-            <p className="font-sans text-base text-muted-foreground mb-10">
-              Scott fills that moment with joy, laughter, and genuine connection. No awkward silences. No forgettable entertainment.
-              Just an atmosphere your guests will be talking about long after the night is over.
-            </p>
-            <button
-              onClick={openQuiz}
-              className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors">
-              Book Now
-            </button>
-            <p className="font-sans text-xs text-muted-foreground mt-4">Limited dates each month. No associates. Just Scott.</p>
+            <Link
+              to="/contact"
+              className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-primary text-primary px-10 py-4 hover:bg-primary hover:text-primary-foreground transition-colors">
+              Inquire
+            </Link>
           </div>
         </section>
       </AnimatedSection>

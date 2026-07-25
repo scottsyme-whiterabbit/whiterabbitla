@@ -117,7 +117,7 @@ const Navbar = () => {
               onClick={openQuiz}
               className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-6 py-2 hover:bg-accent/80 transition-colors"
             >
-              Book Now
+              Inquire
             </button>
           </div>
 
@@ -196,7 +196,7 @@ const Navbar = () => {
                 onClick={() => { setIsOpen(false); openQuiz(); }}
                 className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-6 py-2 text-center"
               >
-                Book Now
+                Inquire
               </button>
             </div>
           </motion.div>
