@@ -68,27 +68,29 @@ import compassLogo from "@/assets/logos/compass.png";
 import theAgencyLogo from "@/assets/logos/theagency.png";
 import lplFinancialLogo from "@/assets/logos/lplfinancial.png";
 
-const clients = [
-{ name: "Netflix", logo: netflixLogo },
-{ name: "Disney", logo: disneyLogo },
-{ name: "Rolls Royce", logo: rollsroyceLogo },
-{ name: "Morgan Stanley", logo: morganstanleyLogo },
-{ name: "LPL Financial", logo: lplFinancialLogo },
-{ name: "YouTube", logo: youtubeLogo },
-{ name: "Hyatt", logo: hyattLogo },
-{ name: "The Beverly Hilton", logo: beverlyHiltonLogo },
-{ name: "Soho House", logo: sohohouseLogo },
-{ name: "Rivian", logo: rivianLogo },
-{ name: "Paramount", logo: paramountLogo },
-{ name: "Olivia Rodrigo", logo: oliviarodrigoLogo },
-{ name: "Taittinger", logo: taittingerLogo },
-{ name: "Lionsgate", logo: lionsgateLogo },
-{ name: "Pistola", logo: pistolaLogo },
-{ name: "Compass", logo: compassLogo },
-{ name: "The Agency", logo: theAgencyLogo },
-{ name: "Gravitas Beverly Hills", logo: gravitasLogo },
-{ name: "The Magic Castle", logo: magicCastleLogo },
-{ name: "America's Got Talent", logo: agtLogo },
+// `scale` visually normalizes logos whose intrinsic artwork padding makes them
+// render smaller or larger than neighbors at the same container height.
+const clients: { name: string; logo: string; scale?: number }[] = [
+{ name: "Netflix", logo: netflixLogo, scale: 1.0 },
+{ name: "Disney", logo: disneyLogo, scale: 1.15 },
+{ name: "Rolls Royce", logo: rollsroyceLogo, scale: 1.5 },
+{ name: "Morgan Stanley", logo: morganstanleyLogo, scale: 1.0 },
+{ name: "LPL Financial", logo: lplFinancialLogo, scale: 1.1 },
+{ name: "YouTube", logo: youtubeLogo, scale: 1.0 },
+{ name: "Hyatt", logo: hyattLogo, scale: 1.05 },
+{ name: "The Beverly Hilton", logo: beverlyHiltonLogo, scale: 1.25 },
+{ name: "Soho House", logo: sohohouseLogo, scale: 1.35 },
+{ name: "Rivian", logo: rivianLogo, scale: 1.0 },
+{ name: "Paramount", logo: paramountLogo, scale: 1.4 },
+{ name: "Olivia Rodrigo", logo: oliviarodrigoLogo, scale: 1.1 },
+{ name: "Taittinger", logo: taittingerLogo, scale: 1.15 },
+{ name: "Lionsgate", logo: lionsgateLogo, scale: 1.05 },
+{ name: "Pistola", logo: pistolaLogo, scale: 1.0 },
+{ name: "Compass", logo: compassLogo, scale: 1.0 },
+{ name: "The Agency", logo: theAgencyLogo, scale: 1.0 },
+{ name: "Gravitas Beverly Hills", logo: gravitasLogo, scale: 1.1 },
+{ name: "The Magic Castle", logo: magicCastleLogo, scale: 1.5 },
+{ name: "America's Got Talent", logo: agtLogo, scale: 1.3 },
 ];
 
 
