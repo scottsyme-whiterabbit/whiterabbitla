@@ -279,7 +279,7 @@ const About = () => {
       <AnimatedSection>
         <section className="py-12 text-center">
           <div className="max-w-2xl mx-auto px-6">
-            <h2 className="font-serif text-4xl text-foreground mb-6">Let's Create Something Extraordinary</h2>
+            <h2 className="font-serif text-4xl text-foreground mb-6">An evening like this begins with a conversation.</h2>
             <Link
               to="/contact"
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors">

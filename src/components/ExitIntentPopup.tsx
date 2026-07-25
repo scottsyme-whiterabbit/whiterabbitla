@@ -252,7 +252,7 @@ const ExitIntentPopup = () => {
               className="w-full max-w-xs mx-auto flex items-center justify-center gap-2 font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-3.5 hover:bg-accent/80 transition-colors mb-3"
             >
               <CalendarCheck size={14} strokeWidth={1.5} />
-              Book Now
+              Inquire
             </button>
             <button
               onClick={dismiss}

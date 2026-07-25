@@ -169,11 +169,14 @@ const Experience = () => {
             <p className="font-sans text-base text-cream/70 mb-10">
               Let Scott transform your next event into an atmosphere of wonder, joy, and genuine connection.
             </p>
+            <p className="font-sans text-xs text-cream/60 mb-6 italic max-w-md mx-auto">
+              Scott takes a limited number of engagements each month. Dates for fall and the holiday season are filling.
+            </p>
             <button
               onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors"
             >
-              Book Now
+              Inquire
             </button>
           </div>
         </section>

@@ -55,8 +55,8 @@ const Contact = () => {
       // GA4: track contact form submission
       trackFormSubmit("Contact Form", formData.eventType || "General Inquiry");
       toast({
-        title: "Inquiry Sent!",
-        description: "He usually replies within a few hours.",
+        title: "Inquiry sent",
+        description: "Scott replies personally, usually the same day.",
       });
       setFormData({ name: "", email: "", phone: "", eventType: "", date: "", location: "", message: "", clientType: "", referralSource: "" });
     } catch (err) {
@@ -82,7 +82,7 @@ const Contact = () => {
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <AnimatedSection>
-            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">Book Now</p>
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">Inquire</p>
             <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-cream mb-6">
               Let's Create Magic
             </h1>
@@ -242,7 +242,7 @@ const Contact = () => {
                   disabled={isSubmitting}
                   className="font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-6 hover:bg-primary/90"
                 >
-                  {isSubmitting ? "Sending..." : "Send Inquiry"}
+                  {isSubmitting ? "Sending..." : "Begin the Conversation"}
                 </Button>
                 <GoogleReviewsBadge variant="light" />
               </div>
@@ -255,7 +255,7 @@ const Contact = () => {
               <div>
                 <h3 className="font-serif text-2xl text-foreground mb-4">Get in Touch</h3>
                 <p className="font-sans text-sm text-muted-foreground leading-relaxed">
-                  For booking inquiries or questions, reach out to Scott directly. He usually replies within a few hours.
+                  For booking inquiries or questions, reach out to Scott directly. He replies personally, usually the same day.
                 </p>
               </div>
               <div className="space-y-4">
