@@ -395,18 +395,18 @@ const Index = () => {
                 className="flex items-center gap-16 md:gap-20 w-max animate-marquee-logos group-hover:[animation-play-state:paused]"
               >
                 {[...clients, ...clients].map((client, i) => (
-                  <div key={`${client.name}-${i}`} className="flex items-center justify-center flex-shrink-0 h-10 md:h-12">
+                  <div key={`${client.name}-${i}`} className="flex items-center justify-center flex-shrink-0 h-10">
                     <img
                       src={client.logo}
                       alt={`${client.name} logo, White Rabbit client`}
                       loading="lazy"
                       decoding="async"
-                      className="max-h-full w-auto object-contain opacity-55 hover:opacity-80 transition-opacity"
                       style={{
+                        height: `${client.h}px`,
+                        width: "auto",
                         filter: "brightness(0) saturate(100%) invert(24%) sepia(9%) saturate(1200%) hue-rotate(70deg) brightness(95%) contrast(85%)",
-                        transform: `scale(${client.scale ?? 1})`,
-                        transformOrigin: "center",
                       }}
+                      className="object-contain opacity-55 hover:opacity-80 transition-opacity"
                     />
                   </div>
                 ))}
