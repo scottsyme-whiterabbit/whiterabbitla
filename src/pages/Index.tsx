@@ -264,6 +264,14 @@ const Index = () => {
           >
             Some evenings are catered. Some are staged. The best are conjured.
           </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.95 }}
+            className="relative mt-4 md:mt-5 font-sans text-[10px] md:text-[11px] tracking-[0.35em] uppercase text-cream/60 drop-shadow-md"
+          >
+            Los Angeles · Aspen · Jackson Hole · The Hamptons · Miami
+          </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -272,7 +280,7 @@ const Index = () => {
             <button
               onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-10 py-4 hover:bg-accent hover:text-accent-foreground transition-colors">
-              Book an Experience
+              Inquire
             </button>
           </motion.div>
         </div>
@@ -337,6 +345,14 @@ const Index = () => {
         >
           Some evenings are catered. Some are staged. The best are conjured.
         </motion.p>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.75 }}
+          className="text-center mt-4 font-sans text-[10px] tracking-[0.35em] uppercase text-muted-foreground/80"
+        >
+          Los Angeles · Aspen · Jackson Hole · The Hamptons · Miami
+        </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -345,7 +361,7 @@ const Index = () => {
           <button
             onClick={openQuiz}
             className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-accent px-6 py-2 hover:bg-accent hover:text-accent-foreground transition-colors max-w-[280px] w-full text-center">
-            Book an Experience
+            Inquire
           </button>
         </motion.div>
       </section>
