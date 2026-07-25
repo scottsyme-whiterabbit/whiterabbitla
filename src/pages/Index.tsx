@@ -388,7 +388,7 @@ const Index = () => {
         <section className="bg-gradient-to-b from-[#F8F5F0] to-[#F0E8D8] py-14 md:py-16">
           <div className="max-w-6xl mx-auto px-6">
             <p className="text-center font-sans text-[11px] tracking-[0.4em] uppercase text-gold mb-8">
-              Trusted By World Class Brands
+              IN GOOD COMPANY
             </p>
             <div className="relative overflow-hidden group" style={{ maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)" }}>
               <div
