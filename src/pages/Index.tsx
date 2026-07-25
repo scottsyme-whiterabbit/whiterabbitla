@@ -107,25 +107,7 @@ const Index = () => {
   const [heroReviewIndex, setHeroReviewIndex] = useState(0);
   const [heroRotation, setHeroRotation] = useState(0);
   const [heroFading, setHeroFading] = useState(false);
-  const [logoPage, setLogoPage] = useState(0);
-  const namesPage = {
-    entertained: ["Don Cheadle", "Dolph Lundgren", "Richard Jefferson", "Peter Farrelly", "Muse", "Brittany Broski", "Adam Ray"],
-    consulting: ["AGT Champion Dustin Tavella", "Olivia Rodrigo", "Disney Channel"],
-  };
-  const logoPages: Array<{ type: "logos"; items: typeof clients } | { type: "names" }> = [
-    { type: "logos", items: clients.slice(0, 10) },
-    { type: "logos", items: clients.slice(10) },
-    { type: "names" },
-  ];
 
-  useEffect(() => {
-    // Preload all logos so crossfades are instant
-    clients.forEach((c) => { const img = new Image(); img.src = c.logo; });
-    const interval = setInterval(() => {
-      setLogoPage((p) => (p + 1) % logoPages.length);
-    }, 6000);
-    return () => clearInterval(interval);
-  }, [logoPages.length]);
 
 
 
