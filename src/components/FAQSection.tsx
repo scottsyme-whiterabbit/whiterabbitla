@@ -86,7 +86,7 @@ const FAQSection = ({
                 <AccordionTrigger className="font-sans text-sm md:text-base text-foreground text-left py-6 hover:no-underline hover:text-accent transition-colors">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent forceMount className="font-sans text-sm text-muted-foreground leading-relaxed pb-6">
+                <AccordionContent className="font-sans text-sm text-muted-foreground leading-relaxed pb-6">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
