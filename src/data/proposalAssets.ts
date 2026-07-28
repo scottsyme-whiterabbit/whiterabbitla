@@ -129,6 +129,53 @@ export const BRAND_PHOTOS: BrandPhoto[] = [
   { key: "ladies-1647", src: ladies1647, label: "Luncheon Sharpie Reveal" },
 ];
 
+// Photos uploaded to the official gallery (stored in the `gallery-uploads`
+// bucket). They are streamed through the public `upload` endpoint of the
+// drive-photos function, so <img src> resolves without an admin token.
+const UPLOAD_IMAGE_BASE = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/drive-photos?action=upload&path=`;
+
+const uploadPhoto = (path: string, label: string): BrandPhoto => ({
+  key: `upload:${path}`,
+  src: UPLOAD_IMAGE_BASE + encodeURIComponent(path),
+  label,
+});
+
+// New gallery-page photos, now selectable inside proposals.
+export const GALLERY_UPLOAD_PHOTOS: BrandPhoto[] = [
+  uploadPhoto("a71549f0-8a6c-44ee-bd48-4d3469a7f67d-IMG_0557.JPG", "Green Tux — Table Moment"),
+  uploadPhoto("2946cda0-2837-46e5-bc66-b2415fc66488-IMG_0548.JPG", "Green Tux — Performing 1"),
+  uploadPhoto("c1fe490d-8a38-4e14-89fa-1171552d90ec-IMG_0549.JPG", "Green Tux — Performing 2"),
+  uploadPhoto("cbad12dc-3531-4ffd-a979-77522df5e9a5-IMG_0550.JPG", "Green Tux — Performing 3"),
+  uploadPhoto("ada73250-5d52-4175-bc7d-eba963e26b7c-IMG_0553.JPG", "Green Tux — Reaction 1"),
+  uploadPhoto("42d64743-184c-41f5-a51e-7f7f2d6f0608-IMG_0554.JPG", "Green Tux — Reaction 2"),
+  uploadPhoto("9afc1ab6-45dc-4ebd-b3e8-f6a6b4ed9cec-IMG_0555.JPG", "Green Tux — Reaction 3"),
+  uploadPhoto("9d494b5a-29b4-4610-81fc-06c94db1bb0f-IMG_0556.JPG", "Green Tux — Reaction 4"),
+  uploadPhoto("c8e6e9c1-4d5e-4b6a-9ba2-8449c58ef3a4-IMG_9169_2.JPG", "Event Photo 1"),
+  uploadPhoto("47c0c269-7c8b-47fe-97b1-03817f8fa082-IMG_9170_2.JPG", "Event Photo 2"),
+  uploadPhoto("d60cda7e-be69-4be4-b2a4-355f708e1c72-IMG_9171_2.JPG", "Event Photo 3"),
+  uploadPhoto("6e714c63-8dbd-4545-877f-475ac637685d-IMG_9172_2.JPG", "Event Photo 4"),
+  uploadPhoto("bf0dd628-1023-4b78-82d0-faee014b3f95-IMG_9173_2.JPG", "Event Photo 5"),
+  uploadPhoto("4cc495d3-af40-4834-8482-9259312522e8-IMG_9178_2.JPG", "Event Photo 6"),
+  uploadPhoto("scott-green-cards-doorway.jpg", "Green Cards — Doorway"),
+  uploadPhoto("scott-green-cards-outdoor.jpg", "Green Cards — Outdoor"),
+  uploadPhoto("scott-with-alec.jpg", "With a Guest"),
+  uploadPhoto("scott-bw-walking.jpg", "B&W Walking"),
+  uploadPhoto("scott-desert-cards-toss.jpg", "Desert — Cards Toss"),
+  uploadPhoto("scott-desert-walking.jpg", "Desert — Walking"),
+  uploadPhoto("scott-desert-wave.jpg", "Desert — Wave"),
+  uploadPhoto("scott-desert-laughing.jpg", "Desert — Laughing"),
+  uploadPhoto("scott-desert-standing.jpg", "Desert — Standing"),
+  uploadPhoto("desert-phh-184.jpg", "Desert Shoot 184"),
+  uploadPhoto("desert-phh-186.jpg", "Desert Shoot 186"),
+  uploadPhoto("desert-phh-385.jpg", "Desert Shoot 385"),
+  uploadPhoto("desert-phh-423.jpg", "Desert Shoot 423"),
+  uploadPhoto("desert-phh-425.jpg", "Desert Shoot 425"),
+  uploadPhoto("desert-phh-432.jpg", "Desert Shoot 432"),
+  uploadPhoto("desert-tezza-4035.jpg", "Desert Shoot — Tezza"),
+];
+
+BRAND_PHOTOS.push(...GALLERY_UPLOAD_PHOTOS);
+
 // Drive-backed photo keys use the format `drive:<fileId>` and are streamed
 // through the drive-photos edge function. The /image endpoint is public so
 // <img src> tags can resolve them without an admin token.
@@ -136,9 +183,11 @@ const DRIVE_IMAGE_BASE = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/driv
 
 export const photoKeyToSrc = (key: string): string | null => {
   if (key.startsWith("drive:")) return DRIVE_IMAGE_BASE + encodeURIComponent(key.slice(6));
+  if (key.startsWith("upload:")) return UPLOAD_IMAGE_BASE + encodeURIComponent(key.slice(7));
   const p = BRAND_PHOTOS.find((b) => b.key === key);
   return p ? p.src : null;
 };
+
 
 // Default photo grid (10 keys) — used when proposal.gallery_photos is empty
 export const DEFAULT_GALLERY_KEYS = [
