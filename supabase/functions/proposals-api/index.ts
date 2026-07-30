@@ -145,6 +145,42 @@ Deno.serve(async (req) => {
         } catch (e) { console.error("auto-book failed", e); }
       }
 
+      // Auto-create the payment invoice (50% deposit or pay-in-full) and email it
+      // to the client alongside the agreement. Daily reminders are handled by
+      // the invoice-reminders function.
+      let invoiceLink = "";
+      try {
+        const cents = parsePriceToCents(tier_price);
+        if (cents) {
+          const payToken = crypto.randomUUID().replace(/-/g, "").slice(0, 24);
+          const isoDate = (() => {
+            if (!event_date) return null;
+            const d = new Date(event_date);
+            return isFinite(d.getTime()) ? d.toISOString().slice(0, 10) : null;
+          })();
+          const { data: inv } = await supabase.from("event_invoices").insert({
+            agreement_id: data.id,
+            deal_id: linkedDealId,
+            pay_token: payToken,
+            client_name: trim(client_name, 200),
+            client_email: trim(client_email, 200),
+            event_type: trim(event_type, 200),
+            event_date: isoDate,
+            venue: trim(venue, 300),
+            tier_name: trim(tier_name, 200),
+            total_cents: cents,
+            deposit_percent: 50,
+          }).select().single();
+          if (inv) {
+            invoiceLink = payUrl(inv as Invoice);
+            if (inv.client_email) {
+              const { subject, html } = invoiceEmail(inv as Invoice);
+              await sendEmail(inv.client_email, subject, html);
+            }
+          }
+        }
+      } catch (e) { console.error("invoice creation failed", e); }
+
       // Notify Scott + client (best-effort)
       if (RESEND_API_KEY) {
         const subject = `Signed: ${tier_name} — ${client_name}`;
@@ -158,7 +194,7 @@ Signed at: ${new Date().toISOString()}
 ${agreement_text}
 --- END AGREEMENT ---
 
-Copy the block above into the Square invoice notes.`;
+${invoiceLink ? `Invoice sent automatically: ${invoiceLink}\nDaily reminders will run until the deposit or full amount is paid.` : "No invoice was created automatically — the tier price could not be read. Create one from the Payments tab."}`;
         const htmlBody = `<pre style="font-family:Georgia,serif;font-size:14px;line-height:1.6;white-space:pre-wrap;color:#223D34;background:#F8F5F0;padding:24px;border-radius:4px;">${plain.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</pre>`;
         try {
           await fetch("https://api.resend.com/emails", {
