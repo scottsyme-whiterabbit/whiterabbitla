@@ -105,6 +105,8 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
   const [agreed, setAgreed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [payInfo, setPayInfo] = useState<PayInfo | null>(null);
+  const [payOption, setPayOption] = useState<"deposit" | "full" | null>(null);
   const [arrivalTime, setArrivalTime] = useState(() =>
     tier ? detectDefaultArrival(tier) : "30 minutes before show time"
   );
