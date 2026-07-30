@@ -98,15 +98,22 @@ Deno.serve(async (req) => {
       const fwd = req.headers.get("x-forwarded-for") || "";
       const ip = fwd.split(",")[0].trim();
 
-      // Look up linked deal (via proposal_id or proposal_slug) so signing auto-books it
+      // Look up linked deal (via proposal_id or proposal_slug) so signing auto-books it.
+      // We also pull the stored `tiers` so the invoice amount is derived server-side
+      // and never trusted from the request body.
       let linkedDealId: string | null = null;
+      let storedProposalFound = false;
+      let storedTiers: any[] = [];
       if (proposal_id || proposal_slug) {
-        const q = supabase.from("proposals").select("deal_id");
+        const q = supabase.from("proposals").select("deal_id, tiers");
         const { data: prop } = proposal_id
           ? await q.eq("id", proposal_id).maybeSingle()
           : await q.eq("slug", proposal_slug).maybeSingle();
         linkedDealId = prop?.deal_id || null;
+        storedProposalFound = !!prop;
+        storedTiers = Array.isArray(prop?.tiers) ? (prop!.tiers as any[]) : [];
       }
+
 
       const { data, error } = await supabase.from("signed_agreements").insert({
         proposal_id: proposal_id || null,
@@ -149,9 +156,21 @@ Deno.serve(async (req) => {
       // Auto-create the payment invoice (50% deposit or pay-in-full) and email it
       // to the client alongside the agreement. Daily reminders are handled by
       // the invoice-reminders function.
+      //
+      // SECURITY: the amount is resolved from the STORED proposal's tiers, never
+      // from the client-supplied tier_price. The client value is only used when
+      // there is no stored proposal at all (preview / ad-hoc signature).
       let invoiceLink = "";
+      let createdInvoice: Invoice | null = null;
+      const norm = (s: any) => (typeof s === "string" ? s.trim().toLowerCase() : "");
+      const matchedTier = storedProposalFound
+        ? storedTiers.find((t) => norm(t?.name) === norm(tier_name))
+        : null;
+      const authoritativeCents = storedProposalFound
+        ? (matchedTier ? parsePriceToCents(matchedTier.price) : null)
+        : parsePriceToCents(tier_price);
       try {
-        const cents = parsePriceToCents(tier_price);
+        const cents = authoritativeCents;
         if (cents) {
           const payToken = crypto.randomUUID().replace(/-/g, "").slice(0, 24);
           const isoDate = (() => {
@@ -173,6 +192,7 @@ Deno.serve(async (req) => {
             deposit_percent: 50,
           }).select().single();
           if (inv) {
+            createdInvoice = inv as Invoice;
             invoiceLink = payUrl(inv as Invoice);
             if (inv.client_email) {
               const { subject, html } = invoiceEmail(inv as Invoice);
@@ -181,6 +201,7 @@ Deno.serve(async (req) => {
           }
         }
       } catch (e) { console.error("invoice creation failed", e); }
+
 
       // Notify Scott + client (best-effort)
       if (RESEND_API_KEY) {
@@ -195,7 +216,7 @@ Signed at: ${new Date().toISOString()}
 ${agreement_text}
 --- END AGREEMENT ---
 
-${invoiceLink ? `Invoice sent automatically: ${invoiceLink}\nDaily reminders will run until the deposit or full amount is paid.` : "No invoice was created automatically — the tier price could not be read. Create one from the Payments tab."}`;
+${invoiceLink ? `Invoice sent automatically: ${invoiceLink}\nDaily reminders will run until the deposit or full amount is paid.` : "Invoice NOT auto-created — tier price could not be resolved from the stored proposal; create manually from the Payments tab."}`;
         const htmlBody = `<pre style="font-family:Georgia,serif;font-size:14px;line-height:1.6;white-space:pre-wrap;color:#223D34;background:#F8F5F0;padding:24px;border-radius:4px;">${plain.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</pre>`;
         try {
           await fetch("https://api.resend.com/emails", {
@@ -240,7 +261,17 @@ White Rabbit LA`,
         }
       }
 
-      return json({ ok: true, agreement: data });
+      if (createdInvoice) {
+        return json({
+          ok: true,
+          agreement: data,
+          pay_token: createdInvoice.pay_token,
+          total_cents: createdInvoice.total_cents,
+          deposit_cents: Math.round(createdInvoice.total_cents * 0.5),
+          pay_url: payUrl(createdInvoice),
+        });
+      }
+      return json({ ok: true, agreement: data, pay_token: null });
     }
 
     // ADMIN actions below
