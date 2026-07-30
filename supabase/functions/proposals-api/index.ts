@@ -216,7 +216,7 @@ Signed at: ${new Date().toISOString()}
 ${agreement_text}
 --- END AGREEMENT ---
 
-${invoiceLink ? `Invoice sent automatically: ${invoiceLink}\nDaily reminders will run until the deposit or full amount is paid.` : "No invoice was created automatically — the tier price could not be read. Create one from the Payments tab."}`;
+${invoiceLink ? `Invoice sent automatically: ${invoiceLink}\nDaily reminders will run until the deposit or full amount is paid.` : "Invoice NOT auto-created — tier price could not be resolved from the stored proposal; create manually from the Payments tab."}`;
         const htmlBody = `<pre style="font-family:Georgia,serif;font-size:14px;line-height:1.6;white-space:pre-wrap;color:#223D34;background:#F8F5F0;padding:24px;border-radius:4px;">${plain.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</pre>`;
         try {
           await fetch("https://api.resend.com/emails", {
