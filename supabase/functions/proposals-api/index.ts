@@ -222,7 +222,7 @@ ${invoiceLink ? `Invoice sent automatically: ${invoiceLink}\nDaily reminders wil
                 subject: `Your White Rabbit LA agreement — ${tier_name}`,
                 text: `${client_name},
 
-Thank you for choosing the ${tier_name} option. A copy of the agreement you just signed is below for your records.${invoiceLink ? `\n\nYour invoice is ready here: ${invoiceLink}\nYou can secure the date with the 50% deposit, or pay in full.` : ""}
+Thank you for choosing the ${tier_name} option. A copy of the agreement you just signed is below for your records.${invoiceLink ? `\n\nYour date is held the moment payment is received. Your invoice is ready here:\n${invoiceLink}\n\nYou can secure the date with the 50% deposit, or pay in full — whichever you prefer. A separate email with the same link is on its way, so keep an eye out for it in case you'd rather pay from there.` : `\n\nNext, keep an eye out for a second email from me with your invoice and payment link — that's what holds the date. It should land within the hour.`}
 
 --- AGREEMENT ---
 ${agreement_text}
