@@ -175,6 +175,12 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
       });
       const j = await res.json();
       if (!res.ok) throw new Error(j.error || "Sign failed");
+      setPayInfo({
+        pay_token: j.pay_token ?? null,
+        total_cents: j.total_cents ?? null,
+        deposit_cents: j.deposit_cents ?? null,
+        pay_url: j.pay_url ?? null,
+      });
       setDone(true);
       toast.success("Agreement signed — check your email for a copy.");
     } catch (e) {
