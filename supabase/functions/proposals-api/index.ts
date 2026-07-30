@@ -98,15 +98,22 @@ Deno.serve(async (req) => {
       const fwd = req.headers.get("x-forwarded-for") || "";
       const ip = fwd.split(",")[0].trim();
 
-      // Look up linked deal (via proposal_id or proposal_slug) so signing auto-books it
+      // Look up linked deal (via proposal_id or proposal_slug) so signing auto-books it.
+      // We also pull the stored `tiers` so the invoice amount is derived server-side
+      // and never trusted from the request body.
       let linkedDealId: string | null = null;
+      let storedProposalFound = false;
+      let storedTiers: any[] = [];
       if (proposal_id || proposal_slug) {
-        const q = supabase.from("proposals").select("deal_id");
+        const q = supabase.from("proposals").select("deal_id, tiers");
         const { data: prop } = proposal_id
           ? await q.eq("id", proposal_id).maybeSingle()
           : await q.eq("slug", proposal_slug).maybeSingle();
         linkedDealId = prop?.deal_id || null;
+        storedProposalFound = !!prop;
+        storedTiers = Array.isArray(prop?.tiers) ? (prop!.tiers as any[]) : [];
       }
+
 
       const { data, error } = await supabase.from("signed_agreements").insert({
         proposal_id: proposal_id || null,
