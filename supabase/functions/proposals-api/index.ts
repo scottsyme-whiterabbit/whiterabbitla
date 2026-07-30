@@ -1,5 +1,12 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-import { type Invoice, invoiceEmail, parsePriceToCents, payUrl, sendEmail } from "../_shared/invoice-email.ts";
+import {
+  type Invoice,
+  depositCents,
+  emailShell,
+  money,
+  parsePriceToCents,
+  payUrl,
+} from "../_shared/invoice-email.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -36,6 +43,111 @@ const isAdmin = (req: Request) => {
   const pw = req.headers.get("x-admin-password") || "";
   return ADMIN_PASSWORD && pw === ADMIN_PASSWORD;
 };
+
+const esc = (s: unknown) =>
+  String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+/** Same visual language as the shared invoice-email detailsBlock. */
+const signDetailsBlock = (inv: Invoice) => {
+  const rows: string[] = [];
+  if (inv.tier_name) rows.push(`<strong>Experience:</strong> ${esc(inv.tier_name)}`);
+  if (inv.event_type) rows.push(`<strong>Occasion:</strong> ${esc(inv.event_type)}`);
+  if (inv.event_date) rows.push(`<strong>Date:</strong> ${esc(inv.event_date)}`);
+  if (inv.venue) rows.push(`<strong>Venue:</strong> ${esc(inv.venue)}`);
+  rows.push(`<strong>Total:</strong> ${money(inv.total_cents)}`);
+  return `<div style="background:#ffffff;border:1px solid #e3ddd3;padding:20px 22px;margin:24px 0;font-family:Montserrat,Arial,sans-serif;font-size:14px;line-height:1.9;">
+    ${rows.join("<br/>")}
+  </div>`;
+};
+
+/** The single combined agreement + invoice email sent to the client on signing. */
+function agreementInvoiceEmail(inv: Invoice, agreementText: string) {
+  const first = (inv.client_name || "").trim().split(/\s+/)[0] || "there";
+  const body = `<h1 style="font-family:Georgia,'Times New Roman',serif;font-size:28px;font-weight:normal;color:#223D34;text-align:center;margin:0 0 26px;">Agreement &amp; Reservation Invoice</h1>
+  <p>${esc(first)}, your agreement is signed and your date is being held. This is everything in one place — your reservation, your invoice, and a copy of the agreement for your records.</p>
+  <p>Reserve your date with the 50% deposit of <strong>${money(depositCents(inv))}</strong>, or settle the full <strong>${money(inv.total_cents)}</strong> now — whichever you prefer. The moment payment lands, the date is locked and I take it from there.</p>
+  ${signDetailsBlock(inv)}`;
+  const agreementHtml = `<p style="font-family:Montserrat,Arial,sans-serif;font-size:13px;color:#6c7a72;margin-top:8px;">Your signed agreement is attached as a PDF, and included below for your records:</p>
+  <div style="background:#ffffff;border:1px solid #e3ddd3;padding:22px;font-family:Georgia,'Times New Roman',serif;font-size:13px;line-height:1.7;color:#223D34;white-space:pre-wrap;">${esc(agreementText)}</div>`;
+  const shell = emailShell(body, payUrl(inv), "Reserve Your Date");
+  // Insert the agreement block just above the signature footer.
+  const html = shell.replace(
+    '<div style="border-top:1px solid #e3ddd3;',
+    `${agreementHtml}<div style="border-top:1px solid #e3ddd3;`,
+  );
+  return {
+    subject: `Your White Rabbit Agreement & Reservation Invoice — ${inv.tier_name || "your evening"}`,
+    html,
+  };
+}
+
+/** Render the signed agreement to a PDF. Returns base64, or null on any failure. */
+async function buildAgreementPdf(inv: Invoice, agreementText: string): Promise<string | null> {
+  try {
+    const { PDFDocument, StandardFonts, rgb } = await import("https://esm.sh/pdf-lib@1.17.1");
+    const doc = await PDFDocument.create();
+    const serif = await doc.embedFont(StandardFonts.TimesRoman);
+    const serifBold = await doc.embedFont(StandardFonts.TimesRomanBold);
+    const ink = rgb(0.13, 0.24, 0.20);
+
+    const W = 612, H = 792, M = 56;
+    const maxW = W - M * 2;
+    let page = doc.addPage([W, H]);
+    let y = H - M;
+
+    const wrap = (text: string, font: any, size: number) => {
+      const out: string[] = [];
+      for (const raw of String(text ?? "").split("\n")) {
+        const words = raw.replace(/\r/g, "").split(/\s+/).filter(Boolean);
+        if (!words.length) { out.push(""); continue; }
+        let line = "";
+        for (const w of words) {
+          const test = line ? `${line} ${w}` : w;
+          if (font.widthOfTextAtSize(test, size) > maxW) { out.push(line); line = w; }
+          else line = test;
+        }
+        if (line) out.push(line);
+      }
+      return out;
+    };
+
+    const draw = (text: string, size: number, font: any, gap = 4) => {
+      for (const line of wrap(text, font, size)) {
+        if (y < M + size) { page = doc.addPage([W, H]); y = H - M; }
+        // pdf-lib's standard fonts are WinAnsi-only; strip anything they can't encode.
+        const safe = line.replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"')
+          .replace(/[\u2013\u2014]/g, "-").replace(/[^\x20-\x7E\xA0-\xFF]/g, "");
+        page.drawText(safe, { x: M, y, size, font, color: ink });
+        y -= size + gap;
+      }
+    };
+
+    draw("White Rabbit Agreement & Reservation Invoice", 17, serifBold, 10);
+    y -= 6;
+    const meta = [
+      `Client: ${inv.client_name || "-"}`,
+      `Event: ${inv.event_type || "-"}`,
+      `Date: ${inv.event_date || "-"}`,
+      `Venue: ${inv.venue || "-"}`,
+      `Experience: ${inv.tier_name || "-"}`,
+      `Total: ${money(inv.total_cents)}`,
+    ];
+    for (const m of meta) draw(m, 11, serif, 3);
+    y -= 12;
+    draw(agreementText, 10.5, serif, 3);
+
+    const bytes = await doc.save();
+    let bin = "";
+    const chunk = 0x8000;
+    for (let i = 0; i < bytes.length; i += chunk) {
+      bin += String.fromCharCode(...bytes.subarray(i, i + chunk));
+    }
+    return btoa(bin);
+  } catch (e) {
+    console.error("agreement PDF generation failed", e);
+    return null;
+  }
+}
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -194,10 +306,8 @@ Deno.serve(async (req) => {
           if (inv) {
             createdInvoice = inv as Invoice;
             invoiceLink = payUrl(inv as Invoice);
-            if (inv.client_email) {
-              const { subject, html } = invoiceEmail(inv as Invoice);
-              await sendEmail(inv.client_email, subject, html);
-            }
+            // The client email is sent below as ONE combined
+            // agreement + invoice message (with PDF attachment).
           }
         }
       } catch (e) { console.error("invoice creation failed", e); }
@@ -232,7 +342,35 @@ ${invoiceLink ? `Invoice sent automatically: ${invoiceLink}\nDaily reminders wil
             }),
           });
         } catch {}
-        if (client_email) {
+        if (client_email && createdInvoice) {
+          // ONE combined "White Rabbit Agreement & Reservation Invoice" email,
+          // with the signed agreement attached as a PDF (best-effort).
+          try {
+            const { subject: cSubject, html: cHtml } = agreementInvoiceEmail(createdInvoice, agreement_text);
+            const pdfB64 = await buildAgreementPdf(createdInvoice, agreement_text);
+            const lastName = (client_name || "client").trim().split(/\s+/).pop() || "client";
+            const fileSafe = lastName.replace(/[^A-Za-z0-9-]/g, "") || "client";
+            const payload: Record<string, unknown> = {
+              from: "Scott Syme <scott.syme@whiterabbitla.com>",
+              to: [client_email],
+              subject: cSubject,
+              html: cHtml,
+              reply_to: "scott.syme@whiterabbitla.com",
+            };
+            if (pdfB64) {
+              payload.attachments = [{
+                filename: `White-Rabbit-Agreement-${fileSafe}.pdf`,
+                content: pdfB64,
+              }];
+            }
+            await fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+          } catch (e) { console.error("combined client email failed", e); }
+        } else if (client_email) {
+          // No invoice could be created — send the agreement copy on its own.
           try {
             await fetch("https://api.resend.com/emails", {
               method: "POST",
@@ -243,7 +381,9 @@ ${invoiceLink ? `Invoice sent automatically: ${invoiceLink}\nDaily reminders wil
                 subject: `Your White Rabbit LA agreement — ${tier_name}`,
                 text: `${client_name},
 
-Thank you for choosing the ${tier_name} option. A copy of the agreement you just signed is below for your records.${invoiceLink ? `\n\nYour date is held the moment payment is received. Your invoice is ready here:\n${invoiceLink}\n\nYou can secure the date with the 50% deposit, or pay in full — whichever you prefer. A separate email with the same link is on its way, so keep an eye out for it in case you'd rather pay from there.` : `\n\nNext, keep an eye out for a second email from me with your invoice and payment link — that's what holds the date. It should land within the hour.`}
+Thank you for choosing the ${tier_name} option. A copy of the agreement you just signed is below for your records.
+
+Next, keep an eye out for a second email from me with your invoice and payment link — that's what holds the date. It should land within the hour.
 
 --- AGREEMENT ---
 ${agreement_text}
