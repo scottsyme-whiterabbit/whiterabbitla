@@ -1,9 +1,21 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { X, Loader2, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
+import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
+import { getStripe, getStripeEnvironment } from "@/lib/stripe";
 import type { Tier, ProposalData } from "@/pages/ProposalTemplate";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+
+type PayInfo = {
+  pay_token: string | null;
+  total_cents: number | null;
+  deposit_cents: number | null;
+  pay_url: string | null;
+};
+
+const money = (cents: number) =>
+  `$${(cents / 100).toLocaleString("en-US", { maximumFractionDigits: 2 })}`;
 
 interface Props {
   open: boolean;
@@ -93,6 +105,8 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
   const [agreed, setAgreed] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const [payInfo, setPayInfo] = useState<PayInfo | null>(null);
+  const [payOption, setPayOption] = useState<"deposit" | "full" | null>(null);
   const [arrivalTime, setArrivalTime] = useState(() =>
     tier ? detectDefaultArrival(tier) : "30 minutes before show time"
   );
@@ -108,6 +122,22 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
       }),
     [open]
   );
+
+  const fetchClientSecret = useCallback(async (): Promise<string> => {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/invoice-api?action=checkout`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token: payInfo?.pay_token,
+        option: payOption,
+        environment: getStripeEnvironment(),
+        returnUrl: `${window.location.origin}/pay/${payInfo?.pay_token}?session_id={CHECKOUT_SESSION_ID}`,
+      }),
+    });
+    const data = await res.json();
+    if (!data.clientSecret) throw new Error(data.error || "Could not start checkout.");
+    return data.clientSecret as string;
+  }, [payInfo, payOption]);
 
   if (!open || !tier) return null;
 
@@ -145,6 +175,12 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
       });
       const j = await res.json();
       if (!res.ok) throw new Error(j.error || "Sign failed");
+      setPayInfo({
+        pay_token: j.pay_token ?? null,
+        total_cents: j.total_cents ?? null,
+        deposit_cents: j.deposit_cents ?? null,
+        pay_url: j.pay_url ?? null,
+      });
       setDone(true);
       toast.success("Agreement signed — check your email for a copy.");
     } catch (e) {
@@ -164,13 +200,56 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
           <X className="w-5 h-5" />
         </button>
 
-        {done ? (
+        {done && payInfo?.pay_token && !payOption ? (
           <div className="p-10 text-center">
             <CheckCircle2 className="w-14 h-14 text-gold mx-auto mb-5" />
-            <h2 className="font-serif text-3xl mb-3">Signed.</h2>
+            <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-3">Agreement Signed</p>
+            <h2 className="font-serif font-light text-3xl mb-3">Now, let's hold your date.</h2>
+            <p className="text-sm text-forest-dark/70 mb-7 max-w-md mx-auto">
+              A copy of your agreement is on its way to your inbox. Securing your date takes about
+              a minute — by bank transfer or card, whichever you prefer. The moment it lands, the
+              evening is yours.
+            </p>
+            <div className="space-y-3 max-w-sm mx-auto">
+              <button
+                onClick={() => setPayOption("deposit")}
+                className="w-full bg-gold text-forest-dark py-3.5 text-xs tracking-[0.2em] uppercase hover:opacity-90"
+              >
+                Reserve with 50% deposit — {money(payInfo.deposit_cents ?? 0)}
+              </button>
+              <button
+                onClick={() => setPayOption("full")}
+                className="w-full border border-forest-dark/30 py-3.5 text-xs tracking-[0.2em] uppercase hover:bg-white"
+              >
+                Pay in full — {money(payInfo.total_cents ?? 0)}
+              </button>
+            </div>
+            <p className="mt-5 text-[11px] text-forest-dark/50">
+              Prefer to pay later? The same link is waiting in your email.
+            </p>
+          </div>
+        ) : done && payInfo?.pay_token && payOption ? (
+          <div className="p-6 md:p-8">
+            <button
+              onClick={() => setPayOption(null)}
+              className="mb-4 text-xs tracking-[0.12em] uppercase text-forest-dark/60 hover:text-forest-dark"
+            >
+              ← Choose a different amount
+            </button>
+            <div id="checkout">
+              <EmbeddedCheckoutProvider stripe={getStripe()} options={{ fetchClientSecret }}>
+                <EmbeddedCheckout />
+              </EmbeddedCheckoutProvider>
+            </div>
+          </div>
+        ) : done ? (
+          <div className="p-10 text-center">
+            <CheckCircle2 className="w-14 h-14 text-gold mx-auto mb-5" />
+            <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-3">Agreement Signed</p>
+            <h2 className="font-serif font-light text-3xl mb-3">Signed.</h2>
             <p className="text-sm text-forest-dark/70 mb-6 max-w-md mx-auto">
-              A copy of the agreement has been emailed to you. Scott will send a Square invoice
-              for the 50% retainer shortly to lock in your date.
+              A copy of your agreement is in your inbox. I'll follow up shortly with your invoice
+              to lock the date. — Scott
             </p>
             <button
               onClick={onClose}
@@ -179,6 +258,7 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
               Close
             </button>
           </div>
+
         ) : (
           <div className="p-6 md:p-8">
             <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-3">Agreement</p>
