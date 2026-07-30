@@ -1055,6 +1055,101 @@ export type Database = {
         }
         Relationships: []
       }
+      event_invoices: {
+        Row: {
+          agreement_id: string | null
+          amount_paid_cents: number
+          balance_reminders_sent: number
+          client_email: string | null
+          client_name: string | null
+          created_at: string
+          deal_id: string | null
+          deposit_paid_at: string | null
+          deposit_percent: number
+          environment: string
+          event_date: string | null
+          event_type: string | null
+          id: string
+          initial_reminders_sent: number
+          last_balance_reminder_at: string | null
+          last_reminder_at: string | null
+          paid_in_full_at: string | null
+          pay_token: string
+          sent_at: string | null
+          status: string
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string | null
+          tier_name: string | null
+          total_cents: number
+          updated_at: string
+          venue: string | null
+        }
+        Insert: {
+          agreement_id?: string | null
+          amount_paid_cents?: number
+          balance_reminders_sent?: number
+          client_email?: string | null
+          client_name?: string | null
+          created_at?: string
+          deal_id?: string | null
+          deposit_paid_at?: string | null
+          deposit_percent?: number
+          environment?: string
+          event_date?: string | null
+          event_type?: string | null
+          id?: string
+          initial_reminders_sent?: number
+          last_balance_reminder_at?: string | null
+          last_reminder_at?: string | null
+          paid_in_full_at?: string | null
+          pay_token: string
+          sent_at?: string | null
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          tier_name?: string | null
+          total_cents: number
+          updated_at?: string
+          venue?: string | null
+        }
+        Update: {
+          agreement_id?: string | null
+          amount_paid_cents?: number
+          balance_reminders_sent?: number
+          client_email?: string | null
+          client_name?: string | null
+          created_at?: string
+          deal_id?: string | null
+          deposit_paid_at?: string | null
+          deposit_percent?: number
+          environment?: string
+          event_date?: string | null
+          event_type?: string | null
+          id?: string
+          initial_reminders_sent?: number
+          last_balance_reminder_at?: string | null
+          last_reminder_at?: string | null
+          paid_in_full_at?: string | null
+          pay_token?: string
+          sent_at?: string | null
+          status?: string
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          tier_name?: string | null
+          total_cents?: number
+          updated_at?: string
+          venue?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_invoices_agreement_id_fkey"
+            columns: ["agreement_id"]
+            isOneToOne: false
+            referencedRelation: "signed_agreements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       gallery_order: {
         Row: {
           ref: string
