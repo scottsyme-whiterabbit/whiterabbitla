@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { type Invoice, invoiceEmail, parsePriceToCents, payUrl, sendEmail } from "../_shared/invoice-email.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -221,7 +222,7 @@ ${invoiceLink ? `Invoice sent automatically: ${invoiceLink}\nDaily reminders wil
                 subject: `Your White Rabbit LA agreement — ${tier_name}`,
                 text: `${client_name},
 
-Thank you for choosing the ${tier_name} option. A copy of the agreement you just signed is below for your records. I'll follow up shortly with a Square invoice for the deposit to hold your date.
+Thank you for choosing the ${tier_name} option. A copy of the agreement you just signed is below for your records.${invoiceLink ? `\n\nYour invoice is ready here: ${invoiceLink}\nYou can secure the date with the 50% deposit, or pay in full.` : ""}
 
 --- AGREEMENT ---
 ${agreement_text}
