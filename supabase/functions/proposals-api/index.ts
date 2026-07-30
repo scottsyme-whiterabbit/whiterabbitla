@@ -156,9 +156,21 @@ Deno.serve(async (req) => {
       // Auto-create the payment invoice (50% deposit or pay-in-full) and email it
       // to the client alongside the agreement. Daily reminders are handled by
       // the invoice-reminders function.
+      //
+      // SECURITY: the amount is resolved from the STORED proposal's tiers, never
+      // from the client-supplied tier_price. The client value is only used when
+      // there is no stored proposal at all (preview / ad-hoc signature).
       let invoiceLink = "";
+      let createdInvoice: Invoice | null = null;
+      const norm = (s: any) => (typeof s === "string" ? s.trim().toLowerCase() : "");
+      const matchedTier = storedProposalFound
+        ? storedTiers.find((t) => norm(t?.name) === norm(tier_name))
+        : null;
+      const authoritativeCents = storedProposalFound
+        ? (matchedTier ? parsePriceToCents(matchedTier.price) : null)
+        : parsePriceToCents(tier_price);
       try {
-        const cents = parsePriceToCents(tier_price);
+        const cents = authoritativeCents;
         if (cents) {
           const payToken = crypto.randomUUID().replace(/-/g, "").slice(0, 24);
           const isoDate = (() => {
@@ -180,6 +192,7 @@ Deno.serve(async (req) => {
             deposit_percent: 50,
           }).select().single();
           if (inv) {
+            createdInvoice = inv as Invoice;
             invoiceLink = payUrl(inv as Invoice);
             if (inv.client_email) {
               const { subject, html } = invoiceEmail(inv as Invoice);
@@ -188,6 +201,7 @@ Deno.serve(async (req) => {
           }
         }
       } catch (e) { console.error("invoice creation failed", e); }
+
 
       // Notify Scott + client (best-effort)
       if (RESEND_API_KEY) {
