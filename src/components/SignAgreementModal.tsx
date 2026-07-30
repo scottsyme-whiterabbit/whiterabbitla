@@ -1,9 +1,21 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { X, Loader2, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
+import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
+import { getStripe, getStripeEnvironment } from "@/lib/stripe";
 import type { Tier, ProposalData } from "@/pages/ProposalTemplate";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+
+type PayInfo = {
+  pay_token: string | null;
+  total_cents: number | null;
+  deposit_cents: number | null;
+  pay_url: string | null;
+};
+
+const money = (cents: number) =>
+  `$${(cents / 100).toLocaleString("en-US", { maximumFractionDigits: 2 })}`;
 
 interface Props {
   open: boolean;
