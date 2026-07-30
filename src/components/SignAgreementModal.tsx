@@ -123,6 +123,22 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
     [open]
   );
 
+  const fetchClientSecret = useCallback(async (): Promise<string> => {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/invoice-api?action=checkout`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        token: payInfo?.pay_token,
+        option: payOption,
+        environment: getStripeEnvironment(),
+        returnUrl: `${window.location.origin}/pay/${payInfo?.pay_token}?session_id={CHECKOUT_SESSION_ID}`,
+      }),
+    });
+    const data = await res.json();
+    if (!data.clientSecret) throw new Error(data.error || "Could not start checkout.");
+    return data.clientSecret as string;
+  }, [payInfo, payOption]);
+
   if (!open || !tier) return null;
 
   const agreementText = buildAgreement({
