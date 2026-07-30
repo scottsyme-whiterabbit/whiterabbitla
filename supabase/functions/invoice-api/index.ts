@@ -99,6 +99,8 @@ Deno.serve(async (req) => {
           quantity: 1,
         }],
         mode: "payment",
+        // ACH bank transfer first, card as the fallback.
+        payment_method_types: ["us_bank_account", "card"],
         ui_mode: "embedded_page",
         return_url: returnUrl || `https://whiterabbitla.com/pay/${inv.pay_token}?session_id={CHECKOUT_SESSION_ID}`,
         ...(inv.client_email ? { customer_email: inv.client_email } : {}),
