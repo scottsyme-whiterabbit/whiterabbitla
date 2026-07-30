@@ -38,6 +38,7 @@ import ReviewGate from "./pages/ReviewGate";
 import TermsOfService from "./pages/TermsOfService";
 import PitchDeck from "./pages/PitchDeck";
 import Refer from "./pages/Refer";
+import PayInvoice from "./pages/PayInvoice";
 import Unsubscribe from "./pages/Unsubscribe";
 import ServiceAreas from "./pages/ServiceAreas";
 import ServiceAreaDetail from "./pages/ServiceAreaDetail";
@@ -123,6 +124,7 @@ const App = () => (
             <Route path="/residency/template" element={<ResidencyTemplate preview />} />
             <Route path="/residency/:slug" element={<ResidencyTemplate />} />
             <Route path="/admin/proposals" element={<AdminProposals />} />
+            <Route path="/pay/:token" element={<PayInvoice />} />
             <Route path="/*" element={<AppContent />} />
           </Routes>
         </BrowserRouter>

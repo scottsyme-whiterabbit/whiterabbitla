@@ -46,8 +46,18 @@ serve(async (req) => {
     });
     const bounceResults = { status: bounceCheck.status, body: await bounceCheck.json().catch(() => bounceCheck.statusText) };
 
+    // Invoice reminders run DAILY (not limited to the Tue-Thu send window):
+    // unpaid invoices get 4 daily nudges, deposit-paid ones get 3 pre-event
+    // balance reminders.
+    const invoiceRun = await fetch(`${FUNCTIONS_BASE}/invoice-reminders`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-cron-secret": cronSecretEnv },
+      body: "{}",
+    });
+    const invoiceResults = { status: invoiceRun.status, body: await invoiceRun.json().catch(() => invoiceRun.statusText) };
+
     if (!inSendWindow) {
-      return new Response(JSON.stringify({ success: true, skipped: true, message: `Skipped sends: ${pacificDay} outside Tue-Thu window`, "bounce-threshold-check": bounceResults }), {
+      return new Response(JSON.stringify({ success: true, skipped: true, message: `Skipped sends: ${pacificDay} outside Tue-Thu window`, "bounce-threshold-check": bounceResults, "invoice-reminders": invoiceResults }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -131,7 +141,7 @@ serve(async (req) => {
     });
     results["seasonal-campaign-process"] = { status: r8.status, body: await r8.json().catch(() => r8.statusText) };
 
-    return new Response(JSON.stringify({ success: true, "bounce-threshold-check": bounceResults, results }), {
+    return new Response(JSON.stringify({ success: true, "bounce-threshold-check": bounceResults, "invoice-reminders": invoiceResults, results }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
