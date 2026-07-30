@@ -141,7 +141,7 @@ serve(async (req) => {
     });
     results["seasonal-campaign-process"] = { status: r8.status, body: await r8.json().catch(() => r8.statusText) };
 
-    return new Response(JSON.stringify({ success: true, "bounce-threshold-check": bounceResults, results }), {
+    return new Response(JSON.stringify({ success: true, "bounce-threshold-check": bounceResults, "invoice-reminders": invoiceResults, results }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
