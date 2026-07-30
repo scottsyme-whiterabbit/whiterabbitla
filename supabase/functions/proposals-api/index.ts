@@ -261,7 +261,17 @@ White Rabbit LA`,
         }
       }
 
-      return json({ ok: true, agreement: data });
+      if (createdInvoice) {
+        return json({
+          ok: true,
+          agreement: data,
+          pay_token: createdInvoice.pay_token,
+          total_cents: createdInvoice.total_cents,
+          deposit_cents: Math.round(createdInvoice.total_cents * 0.5),
+          pay_url: payUrl(createdInvoice),
+        });
+      }
+      return json({ ok: true, agreement: data, pay_token: null });
     }
 
     // ADMIN actions below
