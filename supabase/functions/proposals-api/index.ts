@@ -342,7 +342,35 @@ ${invoiceLink ? `Invoice sent automatically: ${invoiceLink}\nDaily reminders wil
             }),
           });
         } catch {}
-        if (client_email) {
+        if (client_email && createdInvoice) {
+          // ONE combined "White Rabbit Agreement & Reservation Invoice" email,
+          // with the signed agreement attached as a PDF (best-effort).
+          try {
+            const { subject: cSubject, html: cHtml } = agreementInvoiceEmail(createdInvoice, agreement_text);
+            const pdfB64 = await buildAgreementPdf(createdInvoice, agreement_text);
+            const lastName = (client_name || "client").trim().split(/\s+/).pop() || "client";
+            const fileSafe = lastName.replace(/[^A-Za-z0-9-]/g, "") || "client";
+            const payload: Record<string, unknown> = {
+              from: "Scott Syme <scott.syme@whiterabbitla.com>",
+              to: [client_email],
+              subject: cSubject,
+              html: cHtml,
+              reply_to: "scott.syme@whiterabbitla.com",
+            };
+            if (pdfB64) {
+              payload.attachments = [{
+                filename: `White-Rabbit-Agreement-${fileSafe}.pdf`,
+                content: pdfB64,
+              }];
+            }
+            await fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            });
+          } catch (e) { console.error("combined client email failed", e); }
+        } else if (client_email) {
+          // No invoice could be created — send the agreement copy on its own.
           try {
             await fetch("https://api.resend.com/emails", {
               method: "POST",
@@ -353,7 +381,9 @@ ${invoiceLink ? `Invoice sent automatically: ${invoiceLink}\nDaily reminders wil
                 subject: `Your White Rabbit LA agreement — ${tier_name}`,
                 text: `${client_name},
 
-Thank you for choosing the ${tier_name} option. A copy of the agreement you just signed is below for your records.${invoiceLink ? `\n\nYour date is held the moment payment is received. Your invoice is ready here:\n${invoiceLink}\n\nYou can secure the date with the 50% deposit, or pay in full — whichever you prefer. A separate email with the same link is on its way, so keep an eye out for it in case you'd rather pay from there.` : `\n\nNext, keep an eye out for a second email from me with your invoice and payment link — that's what holds the date. It should land within the hour.`}
+Thank you for choosing the ${tier_name} option. A copy of the agreement you just signed is below for your records.
+
+Next, keep an eye out for a second email from me with your invoice and payment link — that's what holds the date. It should land within the hour.
 
 --- AGREEMENT ---
 ${agreement_text}
