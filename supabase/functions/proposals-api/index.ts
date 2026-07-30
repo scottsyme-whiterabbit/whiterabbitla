@@ -306,10 +306,8 @@ Deno.serve(async (req) => {
           if (inv) {
             createdInvoice = inv as Invoice;
             invoiceLink = payUrl(inv as Invoice);
-            if (inv.client_email) {
-              const { subject, html } = invoiceEmail(inv as Invoice);
-              await sendEmail(inv.client_email, subject, html);
-            }
+            // The client email is sent below as ONE combined
+            // agreement + invoice message (with PDF attachment).
           }
         }
       } catch (e) { console.error("invoice creation failed", e); }
