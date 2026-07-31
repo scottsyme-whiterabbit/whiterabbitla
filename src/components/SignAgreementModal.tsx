@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 import { X, Loader2, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
-import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
-import { getStripe, getStripeEnvironment } from "@/lib/stripe";
+import { getStripeEnvironment } from "@/lib/stripe";
+
 import type { Tier, ProposalData } from "@/pages/ProposalTemplate";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
