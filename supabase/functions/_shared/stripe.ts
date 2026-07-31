@@ -1,4 +1,15 @@
-import { encode } from "https://deno.land/std@0.168.0/encoding/hex.ts";
+// Stripe shared utilities — Bring-Your-Own-Key (BYOK) mode.
+//
+// This project connects an EXISTING Stripe account via its secret key
+// (STRIPE_SECRET_KEY). Calls go directly to api.stripe.com — no Lovable
+// connector gateway is involved. Webhook signatures are verified with
+// STRIPE_WEBHOOK_SECRET (the whsec_... value from the Stripe dashboard
+// webhook endpoint).
+//
+// The Stripe environment (sandbox/test vs live) is derived from the
+// secret key prefix so callers don't have to track two parallel configs.
+
+import { encodeHex } from "https://deno.land/std@0.168.0/encoding/hex.ts";
 import Stripe from "https://esm.sh/stripe@22.0.2";
 
 const getEnv = (key: string): string => {
@@ -9,62 +20,57 @@ const getEnv = (key: string): string => {
 
 export type StripeEnv = "sandbox" | "live";
 
-const GATEWAY_STRIPE_BASE = "https://connector-gateway.lovable.dev/stripe";
-
-export function getConnectionApiKey(env: StripeEnv): string {
-  return env === "sandbox"
-    ? getEnv("STRIPE_SANDBOX_API_KEY")
-    : getEnv("STRIPE_LIVE_API_KEY");
+/** Derive the Stripe environment from the configured secret key prefix. */
+export function stripeEnvironment(): StripeEnv {
+  const key = Deno.env.get("STRIPE_SECRET_KEY") || "";
+  if (key.startsWith("sk_live")) return "live";
+  return "sandbox"; // sk_test_ (and any unknown) defaults to test
 }
 
-// Routes api.stripe.com requests through the connector gateway.
-export function createStripeClient(env: StripeEnv): Stripe {
-  const connectionApiKey = getConnectionApiKey(env);
-  const lovableApiKey = getEnv("LOVABLE_API_KEY");
-
-  return new Stripe(connectionApiKey, {
+/**
+ * Create a Stripe client bound to the project's single STRIPE_SECRET_KEY.
+ * The `env` argument is accepted for call-site compatibility but is no
+ * longer used to select between keys — there is only one account key now.
+ */
+export function createStripeClient(_env?: StripeEnv): Stripe {
+  return new Stripe(getEnv("STRIPE_SECRET_KEY"), {
     apiVersion: "2026-03-25.dahlia",
-    httpClient: Stripe.createFetchHttpClient((input, init) => {
-      const stripeUrl = input instanceof Request ? input.url : input.toString();
-      const gatewayUrl = stripeUrl.replace("https://api.stripe.com", GATEWAY_STRIPE_BASE);
-      return fetch(gatewayUrl, {
-        ...init,
-        headers: {
-          ...Object.fromEntries(
-            new Headers(init?.headers ?? (input instanceof Request ? input.headers : undefined)).entries(),
-          ),
-          "X-Connection-Api-Key": connectionApiKey,
-          "Lovable-API-Key": lovableApiKey,
-        },
-      });
-    }),
   });
 }
 
-export async function verifyWebhook(
-  req: Request,
-  env: StripeEnv,
-): Promise<{ type: string; data: { object: any } }> {
-  const signature = req.headers.get("stripe-signature");
-  const body = await req.text();
-  const secret = env === "sandbox"
-    ? getEnv("PAYMENTS_SANDBOX_WEBHOOK_SECRET")
-    : getEnv("PAYMENTS_LIVE_WEBHOOK_SECRET");
+// ---------------------------------------------------------------------------
+// Webhook signature verification (Stripe-Signature header).
+// Uses STRIPE_WEBHOOK_SECRET (the whsec_... signing secret from the Stripe
+// dashboard webhook endpoint).
+// ---------------------------------------------------------------------------
 
-  if (!signature || !body) throw new Error("Missing signature or body");
+type StripeWebhookEvent = {
+  id: string;
+  type: string;
+  data: { object: Record<string, unknown> };
+};
 
-  let timestamp: string | undefined;
-  const v1Signatures: string[] = [];
-  for (const part of signature.split(",")) {
-    const [key, value] = part.split("=", 2);
-    if (key === "t") timestamp = value;
-    if (key === "v1") v1Signatures.push(value);
+async function verifySignature(
+  payload: string,
+  header: string,
+  secret: string,
+): Promise<StripeWebhookEvent> {
+  const parts = header.split(",").reduce<Record<string, string>>((acc, p) => {
+    const [k, v] = p.split("=");
+    acc[k.trim()] = v.trim();
+    return acc;
+  }, {});
+  const timestamp = parseInt(parts["t"] || "0", 10);
+  const signatures = parts["v1"] ? [parts["v1"]] : [];
+  if (!timestamp || signatures.length === 0) {
+    throw new Error("Invalid Stripe-Signature header");
   }
-  if (!timestamp || v1Signatures.length === 0) throw new Error("Invalid signature format");
 
-  const age = Math.abs(Date.now() / 1000 - Number(timestamp));
-  if (age > 300) throw new Error("Webhook timestamp too old");
+  // Reject replays older than 5 minutes.
+  const age = Math.floor(Date.now() / 1000) - timestamp;
+  if (age > 300) throw new Error("Stripe webhook timestamp too old");
 
+  const signedPayload = `${timestamp}.${payload}`;
   const key = await crypto.subtle.importKey(
     "raw",
     new TextEncoder().encode(secret),
@@ -72,13 +78,21 @@ export async function verifyWebhook(
     false,
     ["sign"],
   );
-  const signed = await crypto.subtle.sign(
-    "HMAC",
-    key,
-    new TextEncoder().encode(`${timestamp}.${body}`),
+  const expected = encodeHex(
+    new Uint8Array(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(signedPayload))),
   );
-  const expected = new TextDecoder().decode(encode(new Uint8Array(signed)));
-  if (!v1Signatures.includes(expected)) throw new Error("Invalid webhook signature");
+  if (!signatures.includes(expected)) throw new Error("Stripe webhook signature mismatch");
 
-  return JSON.parse(body);
+  return JSON.parse(payload) as StripeWebhookEvent;
+}
+
+export async function verifyWebhook(
+  req: Request,
+  _env?: StripeEnv,
+): Promise<StripeWebhookEvent> {
+  const signature = req.headers.get("stripe-signature");
+  if (!signature) throw new Error("Missing Stripe-Signature header");
+  const body = await req.text();
+  const secret = getEnv("STRIPE_WEBHOOK_SECRET");
+  return verifySignature(body, signature, secret);
 }
