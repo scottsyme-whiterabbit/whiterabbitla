@@ -107,6 +107,8 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
   const [done, setDone] = useState(false);
   const [payInfo, setPayInfo] = useState<PayInfo | null>(null);
   const [payOption, setPayOption] = useState<"deposit" | "full" | null>(null);
+  const [redirecting, setRedirecting] = useState(false);
+
   const [arrivalTime, setArrivalTime] = useState(() =>
     tier ? detectDefaultArrival(tier) : "30 minutes before show time"
   );
@@ -123,21 +125,30 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
     [open]
   );
 
-  const fetchClientSecret = useCallback(async (): Promise<string> => {
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/invoice-api?action=checkout`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        token: payInfo?.pay_token,
-        option: payOption,
-        environment: getStripeEnvironment(),
-        returnUrl: `${window.location.origin}/pay/${payInfo?.pay_token}?session_id={CHECKOUT_SESSION_ID}`,
-      }),
-    });
-    const data = await res.json();
-    if (!data.clientSecret) throw new Error(data.error || "Could not start checkout.");
-    return data.clientSecret as string;
-  }, [payInfo, payOption]);
+  const startCheckout = useCallback(async (option: "deposit" | "full") => {
+    setPayOption(option);
+    setRedirecting(true);
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/invoice-api?action=checkout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: payInfo?.pay_token,
+          option,
+          environment: getStripeEnvironment(),
+          origin: window.location.origin,
+        }),
+      });
+      const data = await res.json();
+      if (!data.url) throw new Error(data.error || "Could not start checkout.");
+      window.location.href = data.url as string;
+    } catch (e) {
+      toast.error((e as Error).message);
+      setRedirecting(false);
+      setPayOption(null);
+    }
+  }, [payInfo]);
+
 
   if (!open || !tier) return null;
 
