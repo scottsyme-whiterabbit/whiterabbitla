@@ -60,12 +60,16 @@ Deno.serve(async (req) => {
 
     // PUBLIC: start an embedded checkout session for this invoice
     if (action === "checkout" && req.method === "POST") {
-      const { token, option, environment, returnUrl } = body || {};
+      const { token, option, environment, origin } = body || {};
       if (!token) return json({ error: "Missing token" }, 400);
       if (environment !== "sandbox" && environment !== "live") {
         return json({ error: "Invalid environment" }, 400);
       }
       const env = environment as StripeEnv;
+      const baseUrl = typeof origin === "string" && origin.startsWith("http")
+        ? origin.replace(/\/$/, "")
+        : "https://whiterabbitla.com";
+
 
       const { data } = await supabase.from("event_invoices").select("*").eq("pay_token", token).maybeSingle();
       if (!data) return json({ error: "Invoice not found" }, 404);
@@ -101,15 +105,16 @@ Deno.serve(async (req) => {
         mode: "payment",
         // ACH bank transfer first, card as the fallback.
         payment_method_types: ["us_bank_account", "card"],
-        ui_mode: "embedded_page",
-        return_url: returnUrl || `https://whiterabbitla.com/pay/${inv.pay_token}?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${baseUrl}/pay/${inv.pay_token}?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${baseUrl}/pay/${inv.pay_token}`,
         ...(inv.client_email ? { customer_email: inv.client_email } : {}),
         payment_intent_data: { description: label },
         metadata: { invoice_id: inv.id, kind, amount_cents: String(amount) },
       });
 
-      return json({ clientSecret: session.client_secret });
+      return json({ url: session.url });
     }
+
 
     // ---- ADMIN ----
     if (!isAdmin(req, body)) return json({ error: "Unauthorized" }, 401);

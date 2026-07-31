@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
-import { getStripe, getStripeEnvironment } from "@/lib/stripe";
+import { getStripeEnvironment } from "@/lib/stripe";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
+
 
 const FUNCTIONS_BASE = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1`;
 
@@ -47,21 +47,28 @@ export default function PayInvoice() {
     return () => { cancelled = true; };
   }, [token]);
 
-  const fetchClientSecret = useCallback(async (): Promise<string> => {
-    const res = await fetch(`${FUNCTIONS_BASE}/invoice-api?action=checkout`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        token,
-        option,
-        environment: getStripeEnvironment(),
-        returnUrl: `${window.location.origin}/pay/${token}?session_id={CHECKOUT_SESSION_ID}`,
-      }),
-    });
-    const data = await res.json();
-    if (!data.clientSecret) throw new Error(data.error || "Could not start checkout.");
-    return data.clientSecret as string;
-  }, [token, option]);
+  const startCheckout = useCallback(async (choice: "deposit" | "full") => {
+    setOption(choice);
+    try {
+      const res = await fetch(`${FUNCTIONS_BASE}/invoice-api?action=checkout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token,
+          option: choice,
+          environment: getStripeEnvironment(),
+          origin: window.location.origin,
+        }),
+      });
+      const data = await res.json();
+      if (!data.url) throw new Error(data.error || "Could not start checkout.");
+      window.location.href = data.url as string;
+    } catch (e) {
+      setError((e as Error).message);
+      setOption(null);
+    }
+  }, [token]);
+
 
   const paidInFull = invoice?.status === "paid";
   const hasDeposit = (invoice?.amount_paid_cents || 0) > 0 && !paidInFull;
@@ -103,7 +110,7 @@ export default function PayInvoice() {
               <div className="mt-8 space-y-3">
                 {hasDeposit ? (
                   <button
-                    onClick={() => setOption("full")}
+                    onClick={() => startCheckout("full")}
                     className="w-full bg-[#C9A3A8] px-6 py-4 text-xs uppercase tracking-[0.16em] text-[#223D34]"
                   >
                     Pay remaining balance — {money(invoice.balance_cents)}
@@ -111,13 +118,13 @@ export default function PayInvoice() {
                 ) : (
                   <>
                     <button
-                      onClick={() => setOption("deposit")}
+                      onClick={() => startCheckout("deposit")}
                       className="w-full bg-[#C9A3A8] px-6 py-4 text-xs uppercase tracking-[0.16em] text-[#223D34]"
                     >
                       Pay {invoice.deposit_percent}% deposit — {money(invoice.deposit_cents)}
                     </button>
                     <button
-                      onClick={() => setOption("full")}
+                      onClick={() => startCheckout("full")}
                       className="w-full border border-[#223D34] px-6 py-4 text-xs uppercase tracking-[0.16em]"
                     >
                       Pay in full — {money(invoice.total_cents)}
@@ -126,12 +133,9 @@ export default function PayInvoice() {
                 )}
               </div>
             ) : (
-              <div className="mt-8" id="checkout">
-                <EmbeddedCheckoutProvider stripe={getStripe()} options={{ fetchClientSecret }}>
-                  <EmbeddedCheckout />
-                </EmbeddedCheckoutProvider>
-              </div>
+              <p className="mt-8 text-center text-sm opacity-70">Redirecting to secure checkout…</p>
             )}
+
 
             <p className="mt-10 text-center text-xs opacity-70">
               Questions? Reply to the invoice email or call (424) 394-1850.

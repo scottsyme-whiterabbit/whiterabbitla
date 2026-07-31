@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from "react";
 import { X, Loader2, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
-import { EmbeddedCheckoutProvider, EmbeddedCheckout } from "@stripe/react-stripe-js";
-import { getStripe, getStripeEnvironment } from "@/lib/stripe";
+import { getStripeEnvironment } from "@/lib/stripe";
+
 import type { Tier, ProposalData } from "@/pages/ProposalTemplate";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -107,6 +107,8 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
   const [done, setDone] = useState(false);
   const [payInfo, setPayInfo] = useState<PayInfo | null>(null);
   const [payOption, setPayOption] = useState<"deposit" | "full" | null>(null);
+  const [redirecting, setRedirecting] = useState(false);
+
   const [arrivalTime, setArrivalTime] = useState(() =>
     tier ? detectDefaultArrival(tier) : "30 minutes before show time"
   );
@@ -123,21 +125,30 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
     [open]
   );
 
-  const fetchClientSecret = useCallback(async (): Promise<string> => {
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/invoice-api?action=checkout`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        token: payInfo?.pay_token,
-        option: payOption,
-        environment: getStripeEnvironment(),
-        returnUrl: `${window.location.origin}/pay/${payInfo?.pay_token}?session_id={CHECKOUT_SESSION_ID}`,
-      }),
-    });
-    const data = await res.json();
-    if (!data.clientSecret) throw new Error(data.error || "Could not start checkout.");
-    return data.clientSecret as string;
-  }, [payInfo, payOption]);
+  const startCheckout = useCallback(async (option: "deposit" | "full") => {
+    setPayOption(option);
+    setRedirecting(true);
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/invoice-api?action=checkout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: payInfo?.pay_token,
+          option,
+          environment: getStripeEnvironment(),
+          origin: window.location.origin,
+        }),
+      });
+      const data = await res.json();
+      if (!data.url) throw new Error(data.error || "Could not start checkout.");
+      window.location.href = data.url as string;
+    } catch (e) {
+      toast.error((e as Error).message);
+      setRedirecting(false);
+      setPayOption(null);
+    }
+  }, [payInfo]);
+
 
   if (!open || !tier) return null;
 
@@ -212,13 +223,13 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
             </p>
             <div className="space-y-3 max-w-sm mx-auto">
               <button
-                onClick={() => setPayOption("deposit")}
+                onClick={() => startCheckout("deposit")}
                 className="w-full bg-gold text-forest-dark py-3.5 text-xs tracking-[0.2em] uppercase hover:opacity-90"
               >
                 Reserve with 50% deposit — {money(payInfo.deposit_cents ?? 0)}
               </button>
               <button
-                onClick={() => setPayOption("full")}
+                onClick={() => startCheckout("full")}
                 className="w-full border border-forest-dark/30 py-3.5 text-xs tracking-[0.2em] uppercase hover:bg-white"
               >
                 Pay in full — {money(payInfo.total_cents ?? 0)}
@@ -229,19 +240,11 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
             </p>
           </div>
         ) : done && payInfo?.pay_token && payOption ? (
-          <div className="p-6 md:p-8">
-            <button
-              onClick={() => setPayOption(null)}
-              className="mb-4 text-xs tracking-[0.12em] uppercase text-forest-dark/60 hover:text-forest-dark"
-            >
-              ← Choose a different amount
-            </button>
-            <div id="checkout">
-              <EmbeddedCheckoutProvider stripe={getStripe()} options={{ fetchClientSecret }}>
-                <EmbeddedCheckout />
-              </EmbeddedCheckoutProvider>
-            </div>
+          <div className="p-10 text-center">
+            <Loader2 className="w-8 h-8 text-gold mx-auto mb-4 animate-spin" />
+            <p className="text-sm text-forest-dark/70">Redirecting to secure checkout…</p>
           </div>
+
         ) : done ? (
           <div className="p-10 text-center">
             <CheckCircle2 className="w-14 h-14 text-gold mx-auto mb-5" />
