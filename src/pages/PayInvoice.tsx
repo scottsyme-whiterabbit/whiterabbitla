@@ -47,21 +47,28 @@ export default function PayInvoice() {
     return () => { cancelled = true; };
   }, [token]);
 
-  const fetchClientSecret = useCallback(async (): Promise<string> => {
-    const res = await fetch(`${FUNCTIONS_BASE}/invoice-api?action=checkout`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        token,
-        option,
-        environment: getStripeEnvironment(),
-        returnUrl: `${window.location.origin}/pay/${token}?session_id={CHECKOUT_SESSION_ID}`,
-      }),
-    });
-    const data = await res.json();
-    if (!data.clientSecret) throw new Error(data.error || "Could not start checkout.");
-    return data.clientSecret as string;
-  }, [token, option]);
+  const startCheckout = useCallback(async (choice: "deposit" | "full") => {
+    setOption(choice);
+    try {
+      const res = await fetch(`${FUNCTIONS_BASE}/invoice-api?action=checkout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token,
+          option: choice,
+          environment: getStripeEnvironment(),
+          origin: window.location.origin,
+        }),
+      });
+      const data = await res.json();
+      if (!data.url) throw new Error(data.error || "Could not start checkout.");
+      window.location.href = data.url as string;
+    } catch (e) {
+      setError((e as Error).message);
+      setOption(null);
+    }
+  }, [token]);
+
 
   const paidInFull = invoice?.status === "paid";
   const hasDeposit = (invoice?.amount_paid_cents || 0) > 0 && !paidInFull;
