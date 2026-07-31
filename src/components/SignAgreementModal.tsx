@@ -223,13 +223,13 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
             </p>
             <div className="space-y-3 max-w-sm mx-auto">
               <button
-                onClick={() => setPayOption("deposit")}
+                onClick={() => startCheckout("deposit")}
                 className="w-full bg-gold text-forest-dark py-3.5 text-xs tracking-[0.2em] uppercase hover:opacity-90"
               >
                 Reserve with 50% deposit — {money(payInfo.deposit_cents ?? 0)}
               </button>
               <button
-                onClick={() => setPayOption("full")}
+                onClick={() => startCheckout("full")}
                 className="w-full border border-forest-dark/30 py-3.5 text-xs tracking-[0.2em] uppercase hover:bg-white"
               >
                 Pay in full — {money(payInfo.total_cents ?? 0)}
@@ -240,19 +240,11 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
             </p>
           </div>
         ) : done && payInfo?.pay_token && payOption ? (
-          <div className="p-6 md:p-8">
-            <button
-              onClick={() => setPayOption(null)}
-              className="mb-4 text-xs tracking-[0.12em] uppercase text-forest-dark/60 hover:text-forest-dark"
-            >
-              ← Choose a different amount
-            </button>
-            <div id="checkout">
-              <EmbeddedCheckoutProvider stripe={getStripe()} options={{ fetchClientSecret }}>
-                <EmbeddedCheckout />
-              </EmbeddedCheckoutProvider>
-            </div>
+          <div className="p-10 text-center">
+            <Loader2 className="w-8 h-8 text-gold mx-auto mb-4 animate-spin" />
+            <p className="text-sm text-forest-dark/70">Redirecting to secure checkout…</p>
           </div>
+
         ) : done ? (
           <div className="p-10 text-center">
             <CheckCircle2 className="w-14 h-14 text-gold mx-auto mb-5" />
