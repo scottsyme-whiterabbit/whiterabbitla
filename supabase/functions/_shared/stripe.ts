@@ -9,7 +9,7 @@
 // The Stripe environment (sandbox/test vs live) is derived from the
 // secret key prefix so callers don't have to track two parallel configs.
 
-import { encodeHex } from "https://deno.land/std@0.168.0/encoding/hex.ts";
+import { encodeHex } from "https://deno.land/std@0.224.0/encoding/hex.ts";
 import Stripe from "https://esm.sh/stripe@22.0.2";
 
 const getEnv = (key: string): string => {
