@@ -1,5 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
-import { type StripeEnv, verifyWebhook } from "../_shared/stripe.ts";
+import { type StripeEnv, stripeEnvironment, verifyWebhook } from "../_shared/stripe.ts";
 import { type Invoice, receiptEmail, sendEmail } from "../_shared/invoice-email.ts";
 
 let _supabase: ReturnType<typeof createClient> | null = null;
@@ -52,15 +52,11 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
 Deno.serve(async (req) => {
   if (req.method !== "POST") return new Response("Method not allowed", { status: 405 });
 
+  // In BYOK mode there is a single account key, so the environment is derived
+  // from the secret key prefix. The `?env=` query param still overrides it
+  // (the Stripe dashboard webhook URL can omit it entirely).
   const rawEnv = new URL(req.url).searchParams.get("env");
-  if (rawEnv !== "sandbox" && rawEnv !== "live") {
-    console.error("Webhook received with invalid env:", rawEnv);
-    return new Response(JSON.stringify({ received: true, ignored: "invalid env" }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
-  const env: StripeEnv = rawEnv;
+  const env: StripeEnv = rawEnv === "live" ? "live" : rawEnv === "sandbox" ? "sandbox" : stripeEnvironment();
 
   try {
     const event = await verifyWebhook(req, env);
