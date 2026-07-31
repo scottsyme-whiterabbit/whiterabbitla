@@ -110,7 +110,7 @@ export default function PayInvoice() {
               <div className="mt-8 space-y-3">
                 {hasDeposit ? (
                   <button
-                    onClick={() => setOption("full")}
+                    onClick={() => startCheckout("full")}
                     className="w-full bg-[#C9A3A8] px-6 py-4 text-xs uppercase tracking-[0.16em] text-[#223D34]"
                   >
                     Pay remaining balance — {money(invoice.balance_cents)}
@@ -118,13 +118,13 @@ export default function PayInvoice() {
                 ) : (
                   <>
                     <button
-                      onClick={() => setOption("deposit")}
+                      onClick={() => startCheckout("deposit")}
                       className="w-full bg-[#C9A3A8] px-6 py-4 text-xs uppercase tracking-[0.16em] text-[#223D34]"
                     >
                       Pay {invoice.deposit_percent}% deposit — {money(invoice.deposit_cents)}
                     </button>
                     <button
-                      onClick={() => setOption("full")}
+                      onClick={() => startCheckout("full")}
                       className="w-full border border-[#223D34] px-6 py-4 text-xs uppercase tracking-[0.16em]"
                     >
                       Pay in full — {money(invoice.total_cents)}
@@ -133,12 +133,9 @@ export default function PayInvoice() {
                 )}
               </div>
             ) : (
-              <div className="mt-8" id="checkout">
-                <EmbeddedCheckoutProvider stripe={getStripe()} options={{ fetchClientSecret }}>
-                  <EmbeddedCheckout />
-                </EmbeddedCheckoutProvider>
-              </div>
+              <p className="mt-8 text-center text-sm opacity-70">Redirecting to secure checkout…</p>
             )}
+
 
             <p className="mt-10 text-center text-xs opacity-70">
               Questions? Reply to the invoice email or call (424) 394-1850.
