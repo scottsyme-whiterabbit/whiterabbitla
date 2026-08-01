@@ -93,6 +93,12 @@ serve(async (req) => {
 
     const redirectUrl = decodeURIComponent(redirect);
 
+    // Open-redirect guard: only allow our own domain and known booking hosts.
+    if (!isAllowedRedirect(redirectUrl)) {
+      return new Response("Forbidden redirect target", { status: 403 });
+    }
+
+
     // Process click tracking (don't block the redirect)
     if (contactId && step) {
       const supabase = createClient(
