@@ -1,9 +1,27 @@
+const HOME_URL = "https://whiterabbitla.com";
+
+/** Allowlist of hosts this share page is willing to redirect to. */
+const ALLOWED_HOSTS = ["whiterabbitla.com", "calendar.app.google", "google.com"];
+function safeTarget(raw: string | null): string {
+  if (!raw) return HOME_URL;
+  try {
+    const u = new URL(raw);
+    if (u.protocol !== "https:" && u.protocol !== "http:") return HOME_URL;
+    const host = u.hostname.toLowerCase();
+    const ok = ALLOWED_HOSTS.some((h) => host === h || host.endsWith(`.${h}`));
+    return ok ? u.toString() : HOME_URL;
+  } catch {
+    return HOME_URL;
+  }
+}
+
 Deno.serve(async (req) => {
   const url = new URL(req.url);
-  const targetUrl = url.searchParams.get("url") || "https://whiterabbitla.com";
+  const targetUrl = safeTarget(url.searchParams.get("url"));
   const title = url.searchParams.get("t") || "White Rabbit LA | Luxury Magic Entertainment";
   const description = url.searchParams.get("d") || "Bespoke magical experiences for the world's most discerning audiences.";
   const image = url.searchParams.get("i") || "https://whiterabbitla.com/og-image.jpg";
+
 
   const esc = (s: string) =>
     s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
