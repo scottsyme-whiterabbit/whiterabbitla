@@ -131,32 +131,32 @@ export function balanceReminderEmail(inv: Invoice, daysOut: number) {
   };
 }
 
-/** Pre-event anticipation note. Non-transactional — no CTA, no amounts. Format-agnostic. */
+/** Pre-event anticipation note. Non-transactional — no CTA, no amounts. Format-agnostic and time-of-day agnostic. */
 export function anticipationEmail(inv: Invoice, daysOut: number) {
   const name = inv.client_name?.split(" ")[0] || "there";
   const when = inv.event_date ? `<div style="font-family:Montserrat,Arial,sans-serif;font-size:13px;color:#6c7a72;margin:22px 0;letter-spacing:.04em;">${esc(inv.event_date)}${inv.venue ? ` &nbsp;·&nbsp; ${esc(inv.venue)}` : ""}</div>` : "";
 
   if (daysOut >= 7) {
     const body = `<p>${esc(name)},</p>
-    <p>Your evening is a little under two weeks away now, and I couldn't be more excited for it.</p>
-    <p>I wanted to reach out for no reason other than to say I'm genuinely looking forward to spending it with you and your guests. When the night comes, my whole focus is on the people in your room, making them feel looked after, surprised, and completely present. That's the part I love most.</p>
+    <p>Your event is a little under two weeks away now, and I couldn't be more excited for it.</p>
+    <p>I wanted to reach out for no reason other than to say I'm genuinely looking forward to spending it with you and your guests. When I'm there, my whole focus is on the people in the room, making them feel looked after, surprised, and completely present. That's the part I love most.</p>
     ${when}
-    <p>If anything about the evening has changed, whether the timing or the location or the plans, just reply here and I'll take care of it. Otherwise there's nothing to do but look forward to it. I certainly am.</p>
+    <p>If anything has changed, whether the timing or the location or the plans, just reply here and I'll take care of it. Otherwise there's nothing to do but look forward to it. I certainly am.</p>
     <p style="margin-top:26px;">Scott</p>`;
     return {
-      subject: `Two weeks until your White Rabbit evening`,
+      subject: `Two weeks to go`,
       html: emailShell(body),
     };
   }
 
   const body = `<p>${esc(name)},</p>
-  <p>Tomorrow's the evening, and I'm looking forward to it.</p>
+  <p>Tomorrow's the day, and I'm looking forward to it.</p>
   <p>I'll arrive early and get everything set before your guests do, so that by the time you're all together the room is ready and so am I. All you have to do is enjoy it.</p>
   ${when}
-  <p>Nothing is needed from you tonight. Rest easy, I have every detail handled. See you tomorrow.</p>
+  <p>Nothing is needed from you between now and then. Rest easy, I have every detail handled. See you tomorrow.</p>
   <p style="margin-top:26px;">Scott</p>`;
   return {
-    subject: `Tomorrow evening`,
+    subject: `See you tomorrow`,
     html: emailShell(body),
   };
 }
