@@ -187,7 +187,9 @@ const CampaignCalendarTab = ({ adminPassword }: Props) => {
         body: {
           timeMin: start.toISOString(),
           timeMax: end.toISOString(),
+          adminPassword,
         },
+
       });
       if (error) {
         console.error("Google Calendar fetch error:", error);
