@@ -86,7 +86,8 @@ Liability & Conduct:
 Contact Information:
 For any questions, modifications, or special requests, please contact White Rabbit Entertainment at:
 Email: scott.syme@whiterabbitla.com
-Phone: (424) 394-1850 / (650) 678-9428
+Office: (424) 394-1850
+Cell: (650) 678-9428
 
 By paying the deposit invoice, the client acknowledges and agrees to the terms outlined in this agreement.
 
