@@ -128,6 +128,38 @@ export function balanceReminderEmail(inv: Invoice, daysOut: number) {
   };
 }
 
+/** Pre-event anticipation note. Non-transactional — no CTA, no amounts. */
+export function anticipationEmail(inv: Invoice, daysOut: number) {
+  const name = inv.client_name?.split(" ")[0] || "there";
+  const when = inv.event_date ? `<div style="font-family:Montserrat,Arial,sans-serif;font-size:13px;color:#6c7a72;margin:22px 0;letter-spacing:.04em;">${esc(inv.event_date)}${inv.venue ? ` &nbsp;·&nbsp; ${esc(inv.venue)}` : ""}</div>` : "";
+
+  if (daysOut >= 7) {
+    const body = `<p>${esc(name)},</p>
+    <p>Your evening is a little under two weeks away now, and it's already on my mind.</p>
+    <p>I wanted to reach out — not about anything you need to do, but simply to say I'm looking forward to it. When I arrive that evening, the room begins to change before the first card is ever touched: the music, the light, the small details on the table. By the time your guests are settled, they won't feel like an audience. They'll feel like they've been let in on something.</p>
+    ${when}
+    <p>If anything about the evening has shifted — the timing, the space, who I'll be surprising — just reply here and I'll take care of it. Otherwise there's nothing to do but look forward to it. I certainly am.</p>
+    <p style="margin-top:26px;">Scott</p>`;
+    return {
+      subject: `Two weeks out — your White Rabbit evening`,
+      html: emailShell(body),
+    };
+  }
+
+  const body = `<p>${esc(name)},</p>
+  <p>Tomorrow's the evening.</p>
+  <p>I'll arrive early and quietly build the room before anyone sees it — that's half the magic, honestly, the part no one watches. By the time you and your guests are together, everything will be ready, and I'll be there to meet each of them.</p>
+  ${when}
+  <p>Nothing is needed from you tonight. Rest easy — I have every detail. See you tomorrow.</p>
+  <p style="margin-top:26px;">Scott</p>`;
+  return {
+    subject: `Tomorrow evening`,
+    html: emailShell(body),
+  };
+}
+
+
+
 /** Receipt after a payment clears. */
 export function receiptEmail(inv: Invoice, paidCents: number, fullyPaid: boolean) {
   const name = inv.client_name?.split(" ")[0] || "there";
