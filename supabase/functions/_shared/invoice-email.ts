@@ -45,14 +45,17 @@ export function parsePriceToCents(raw: unknown): number | null {
 const esc = (s: unknown) =>
   String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-export function emailShell(bodyHtml: string, ctaUrl: string, ctaLabel: string) {
+export function emailShell(bodyHtml: string, ctaUrl?: string | null, ctaLabel?: string | null) {
+  const cta = ctaUrl
+    ? `<div style="text-align:center;margin:34px 0 30px;">
+      <a href="${ctaUrl}" style="display:inline-block;background:#C9A3A8;color:#223D34;text-decoration:none;padding:15px 34px;border-radius:2px;font-family:Montserrat,Arial,sans-serif;font-size:13px;letter-spacing:.16em;text-transform:uppercase;">${esc(ctaLabel)}</a>
+    </div>`
+    : "";
   return `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#F8F5F0;">
   <div style="max-width:600px;margin:0 auto;padding:40px 24px;font-family:Georgia,'Times New Roman',serif;color:#223D34;font-size:16px;line-height:1.7;">
     <div style="text-align:center;letter-spacing:.28em;font-size:12px;color:#D4A843;text-transform:uppercase;margin-bottom:28px;">White Rabbit LA</div>
     ${bodyHtml}
-    <div style="text-align:center;margin:34px 0 30px;">
-      <a href="${ctaUrl}" style="display:inline-block;background:#C9A3A8;color:#223D34;text-decoration:none;padding:15px 34px;border-radius:2px;font-family:Montserrat,Arial,sans-serif;font-size:13px;letter-spacing:.16em;text-transform:uppercase;">${esc(ctaLabel)}</a>
-    </div>
+    ${cta}
     <div style="border-top:1px solid #e3ddd3;padding-top:18px;font-family:Montserrat,Arial,sans-serif;font-size:12px;color:#6c7a72;line-height:1.6;">
       Scott Syme · White Rabbit LA<br/>
       (424) 394-1850 · <a href="mailto:${REPLY_TO}" style="color:#6c7a72;">${REPLY_TO}</a>
