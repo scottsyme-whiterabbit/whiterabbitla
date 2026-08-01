@@ -5,7 +5,7 @@
 //    (21, 10 and 3 days out).
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import {
-  type Invoice, balanceReminderEmail, reminderEmail, sendEmail,
+  type Invoice, anticipationEmail, balanceReminderEmail, reminderEmail, sendEmail,
 } from "../_shared/invoice-email.ts";
 
 const corsHeaders = {
