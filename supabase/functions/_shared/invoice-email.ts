@@ -53,7 +53,10 @@ export function emailShell(bodyHtml: string, ctaUrl?: string | null, ctaLabel?: 
     : "";
   return `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#F8F5F0;">
   <div style="max-width:600px;margin:0 auto;padding:40px 24px;font-family:Georgia,'Times New Roman',serif;color:#223D34;font-size:16px;line-height:1.7;">
-    <div style="text-align:center;letter-spacing:.28em;font-size:12px;color:#D4A843;text-transform:uppercase;margin-bottom:28px;">White Rabbit LA</div>
+    <div style="text-align:center;margin-bottom:24px;">
+      <img src="https://whiterabbitla.com/email-logo.png" alt="White Rabbit LA" width="46" height="64" style="display:inline-block;width:46px;height:64px;border:0;outline:none;text-decoration:none;" />
+      <div style="letter-spacing:.28em;font-size:12px;color:#D4A843;text-transform:uppercase;margin-top:12px;">White Rabbit LA</div>
+    </div>
     ${bodyHtml}
     ${cta}
     <div style="border-top:1px solid #e3ddd3;padding-top:18px;font-family:Montserrat,Arial,sans-serif;font-size:12px;color:#6c7a72;line-height:1.6;">
