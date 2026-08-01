@@ -66,6 +66,7 @@ Deno.serve(async (req) => {
     const inv = row as unknown as Invoice & {
       initial_reminders_sent: number; last_reminder_at: string | null;
       balance_reminders_sent: number; last_balance_reminder_at: string | null;
+      anticipation_sent: number; last_anticipation_at: string | null;
       sent_at: string | null;
     };
     if (!inv.client_email) { results.skipped++; continue; }
