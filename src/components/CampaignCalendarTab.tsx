@@ -36,6 +36,8 @@ interface Deal {
 interface Props {
   campaigns?: unknown[];
   sendLog?: unknown[];
+  /** Admin password — required for the calendar API to return event details. */
+  adminPassword?: string;
 }
 
 const HOLD_STAGES = ["new", "contacted", "negotiating", "proposal_sent"];
@@ -148,7 +150,7 @@ const downloadICS = (deal: Deal) => {
   URL.revokeObjectURL(url);
 };
 
-const CampaignCalendarTab = (_props: Props) => {
+const CampaignCalendarTab = ({ adminPassword }: Props) => {
   const [deals, setDeals] = useState<Deal[]>([]);
   const [gcalEvents, setGcalEvents] = useState<GoogleCalEvent[]>([]);
   const [loading, setLoading] = useState(true);

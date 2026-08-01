@@ -1353,7 +1353,7 @@ const AdminNewsletter = () => {
 
         {/* Campaign Calendar */}
         {activeTab === "calendar" && (
-          <CampaignCalendarTab campaigns={campaigns} sendLog={[]} />
+          <CampaignCalendarTab campaigns={campaigns} sendLog={[]} adminPassword={storedPassword} />
         )}
 
         {/* Analytics */}
