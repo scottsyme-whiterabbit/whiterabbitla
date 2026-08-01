@@ -6,6 +6,14 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+
+/** Escape user-supplied values before interpolating into notification HTML. */
+function escapeHtml(v: unknown): string {
+  return String(v ?? "")
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -119,8 +127,8 @@ serve(async (req) => {
     const notifyHtml = `
       <h2>🐇 New Lead Magnet Signup</h2>
       <table style="border-collapse:collapse;width:100%;max-width:500px;">
-        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Email</td><td style="padding:8px;border-bottom:1px solid #eee;">${email}</td></tr>
-        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Source Page</td><td style="padding:8px;border-bottom:1px solid #eee;">${sourcePage || "Unknown"}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Email</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(email)}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Source Page</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(sourcePage || "Unknown")}</td></tr>
         <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Time</td><td style="padding:8px;border-bottom:1px solid #eee;">${new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" })}</td></tr>
       </table>
     `;

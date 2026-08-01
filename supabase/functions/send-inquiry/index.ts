@@ -7,6 +7,14 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+
+/** Escape user-supplied values before interpolating into notification HTML. */
+function escapeHtml(v: unknown): string {
+  return String(v ?? "")
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -52,19 +60,19 @@ serve(async (req) => {
     const emailHtml = `
       <h2>New Booking Inquiry</h2>
       <table style="border-collapse:collapse;width:100%;max-width:600px;">
-        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Name</td><td style="padding:8px;border-bottom:1px solid #eee;">${name}</td></tr>
-        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Email</td><td style="padding:8px;border-bottom:1px solid #eee;">${email}</td></tr>
-        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Phone</td><td style="padding:8px;border-bottom:1px solid #eee;">${phone || "N/A"}</td></tr>
-        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Client Type</td><td style="padding:8px;border-bottom:1px solid #eee;">${clientType || "Not specified"}</td></tr>
-        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Event Type</td><td style="padding:8px;border-bottom:1px solid #eee;">${eventType}</td></tr>
-        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Date</td><td style="padding:8px;border-bottom:1px solid #eee;">${date}</td></tr>
-        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Guest Count</td><td style="padding:8px;border-bottom:1px solid #eee;">${guestCount || "Not specified"}</td></tr>
-        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Budget</td><td style="padding:8px;border-bottom:1px solid #eee;">${budget || "Not specified"}</td></tr>
-        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Location</td><td style="padding:8px;border-bottom:1px solid #eee;">${location}</td></tr>
-        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">How They Found Us</td><td style="padding:8px;border-bottom:1px solid #eee;color:#2a7d5f;font-weight:bold;">${formSource || "Not specified"}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Name</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(name)}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Email</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(email)}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Phone</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(phone || "N/A")}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Client Type</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(clientType || "Not specified")}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Event Type</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(eventType)}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Date</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(date)}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Guest Count</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(guestCount || "Not specified")}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Budget</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(budget || "Not specified")}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Location</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(location)}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">How They Found Us</td><td style="padding:8px;border-bottom:1px solid #eee;color:#2a7d5f;font-weight:bold;">${escapeHtml(formSource || "Not specified")}</td></tr>
       </table>
       <h3 style="margin-top:24px;">Message</h3>
-      <p style="white-space:pre-wrap;">${message}</p>
+      <p style="white-space:pre-wrap;">${escapeHtml(message)}</p>
     `;
 
     const firstName = name.split(" ")[0] || name;
