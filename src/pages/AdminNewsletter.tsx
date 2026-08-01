@@ -231,9 +231,12 @@ const AdminNewsletter = () => {
         setPassword(candidate);
         setStoredPassword(candidate);
         setAuthenticated(true);
-        const session = JSON.stringify({ pw: candidate, ts: Date.now() });
-        localStorage.setItem("wr_admin_session", session);
-        sessionStorage.setItem("wr_admin_session", session);
+        // Store only a short-lived session timestamp — never the password.
+        try {
+          sessionStorage.setItem("wr_admin_session", new Date().toISOString());
+          localStorage.removeItem("wr_admin_session");
+        } catch {}
+
         toast.success("Welcome back");
       } else {
         toast.error("Invalid password");
