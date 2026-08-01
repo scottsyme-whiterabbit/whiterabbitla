@@ -45,14 +45,17 @@ export function parsePriceToCents(raw: unknown): number | null {
 const esc = (s: unknown) =>
   String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-export function emailShell(bodyHtml: string, ctaUrl: string, ctaLabel: string) {
+export function emailShell(bodyHtml: string, ctaUrl?: string | null, ctaLabel?: string | null) {
+  const cta = ctaUrl
+    ? `<div style="text-align:center;margin:34px 0 30px;">
+      <a href="${ctaUrl}" style="display:inline-block;background:#C9A3A8;color:#223D34;text-decoration:none;padding:15px 34px;border-radius:2px;font-family:Montserrat,Arial,sans-serif;font-size:13px;letter-spacing:.16em;text-transform:uppercase;">${esc(ctaLabel)}</a>
+    </div>`
+    : "";
   return `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#F8F5F0;">
   <div style="max-width:600px;margin:0 auto;padding:40px 24px;font-family:Georgia,'Times New Roman',serif;color:#223D34;font-size:16px;line-height:1.7;">
     <div style="text-align:center;letter-spacing:.28em;font-size:12px;color:#D4A843;text-transform:uppercase;margin-bottom:28px;">White Rabbit LA</div>
     ${bodyHtml}
-    <div style="text-align:center;margin:34px 0 30px;">
-      <a href="${ctaUrl}" style="display:inline-block;background:#C9A3A8;color:#223D34;text-decoration:none;padding:15px 34px;border-radius:2px;font-family:Montserrat,Arial,sans-serif;font-size:13px;letter-spacing:.16em;text-transform:uppercase;">${esc(ctaLabel)}</a>
-    </div>
+    ${cta}
     <div style="border-top:1px solid #e3ddd3;padding-top:18px;font-family:Montserrat,Arial,sans-serif;font-size:12px;color:#6c7a72;line-height:1.6;">
       Scott Syme · White Rabbit LA<br/>
       (424) 394-1850 · <a href="mailto:${REPLY_TO}" style="color:#6c7a72;">${REPLY_TO}</a>
@@ -124,6 +127,38 @@ export function balanceReminderEmail(inv: Invoice, daysOut: number) {
     html: emailShell(body, payUrl(inv), "Pay balance"),
   };
 }
+
+/** Pre-event anticipation note. Non-transactional — no CTA, no amounts. */
+export function anticipationEmail(inv: Invoice, daysOut: number) {
+  const name = inv.client_name?.split(" ")[0] || "there";
+  const when = inv.event_date ? `<div style="font-family:Montserrat,Arial,sans-serif;font-size:13px;color:#6c7a72;margin:22px 0;letter-spacing:.04em;">${esc(inv.event_date)}${inv.venue ? ` &nbsp;·&nbsp; ${esc(inv.venue)}` : ""}</div>` : "";
+
+  if (daysOut >= 7) {
+    const body = `<p>${esc(name)},</p>
+    <p>Your evening is a little under two weeks away now, and it's already on my mind.</p>
+    <p>I wanted to reach out — not about anything you need to do, but simply to say I'm looking forward to it. When I arrive that evening, the room begins to change before the first card is ever touched: the music, the light, the small details on the table. By the time your guests are settled, they won't feel like an audience. They'll feel like they've been let in on something.</p>
+    ${when}
+    <p>If anything about the evening has shifted — the timing, the space, who I'll be surprising — just reply here and I'll take care of it. Otherwise there's nothing to do but look forward to it. I certainly am.</p>
+    <p style="margin-top:26px;">Scott</p>`;
+    return {
+      subject: `Two weeks out — your White Rabbit evening`,
+      html: emailShell(body),
+    };
+  }
+
+  const body = `<p>${esc(name)},</p>
+  <p>Tomorrow's the evening.</p>
+  <p>I'll arrive early and quietly build the room before anyone sees it — that's half the magic, honestly, the part no one watches. By the time you and your guests are together, everything will be ready, and I'll be there to meet each of them.</p>
+  ${when}
+  <p>Nothing is needed from you tonight. Rest easy — I have every detail. See you tomorrow.</p>
+  <p style="margin-top:26px;">Scott</p>`;
+  return {
+    subject: `Tomorrow evening`,
+    html: emailShell(body),
+  };
+}
+
+
 
 /** Receipt after a payment clears. */
 export function receiptEmail(inv: Invoice, paidCents: number, fullyPaid: boolean) {
