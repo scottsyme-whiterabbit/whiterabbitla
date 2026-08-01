@@ -1059,6 +1059,7 @@ export type Database = {
         Row: {
           agreement_id: string | null
           amount_paid_cents: number
+          anticipation_sent: number
           balance_reminders_sent: number
           client_email: string | null
           client_name: string | null
@@ -1071,6 +1072,7 @@ export type Database = {
           event_type: string | null
           id: string
           initial_reminders_sent: number
+          last_anticipation_at: string | null
           last_balance_reminder_at: string | null
           last_reminder_at: string | null
           paid_in_full_at: string | null
@@ -1087,6 +1089,7 @@ export type Database = {
         Insert: {
           agreement_id?: string | null
           amount_paid_cents?: number
+          anticipation_sent?: number
           balance_reminders_sent?: number
           client_email?: string | null
           client_name?: string | null
@@ -1099,6 +1102,7 @@ export type Database = {
           event_type?: string | null
           id?: string
           initial_reminders_sent?: number
+          last_anticipation_at?: string | null
           last_balance_reminder_at?: string | null
           last_reminder_at?: string | null
           paid_in_full_at?: string | null
@@ -1115,6 +1119,7 @@ export type Database = {
         Update: {
           agreement_id?: string | null
           amount_paid_cents?: number
+          anticipation_sent?: number
           balance_reminders_sent?: number
           client_email?: string | null
           client_name?: string | null
@@ -1127,6 +1132,7 @@ export type Database = {
           event_type?: string | null
           id?: string
           initial_reminders_sent?: number
+          last_anticipation_at?: string | null
           last_balance_reminder_at?: string | null
           last_reminder_at?: string | null
           paid_in_full_at?: string | null
