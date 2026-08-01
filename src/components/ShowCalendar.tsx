@@ -32,6 +32,8 @@ interface GoogleCalEvent {
 interface ShowCalendarProps {
   deals: BookedDeal[];
   onOpenDeal?: (dealId: string) => void;
+  /** Admin password — required for the calendar API to return event details. */
+  adminPassword?: string;
 }
 
 const HOLD_STAGES = ["new", "contacted", "negotiating", "proposal_sent"];
@@ -136,7 +138,7 @@ const downloadICS = (deal: BookedDeal) => {
   URL.revokeObjectURL(url);
 };
 
-const ShowCalendar = ({ deals, onOpenDeal }: ShowCalendarProps) => {
+const ShowCalendar = ({ deals, onOpenDeal, adminPassword }: ShowCalendarProps) => {
   const [currentMonth, setCurrentMonth] = useState(() => {
     const now = new Date();
     return { year: now.getFullYear(), month: now.getMonth() };
@@ -154,7 +156,7 @@ const ShowCalendar = ({ deals, onOpenDeal }: ShowCalendarProps) => {
         const start = new Date(year, month - 1, 1);
         const end = new Date(year, month + 2, 0);
         const { data, error } = await supabase.functions.invoke("google-calendar", {
-          body: { timeMin: start.toISOString(), timeMax: end.toISOString() },
+          body: { timeMin: start.toISOString(), timeMax: end.toISOString(), adminPassword },
         });
         if (error) {
           console.error("Google Calendar fetch error:", error);
@@ -166,7 +168,7 @@ const ShowCalendar = ({ deals, onOpenDeal }: ShowCalendarProps) => {
       }
     };
     fetchGcal();
-  }, [year, month]);
+  }, [year, month, adminPassword]);
 
   // Map gcal events by date
   const gcalDateMap = useMemo(() => {

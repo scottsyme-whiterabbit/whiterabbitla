@@ -12,11 +12,28 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    // Auth gate — required before any DB read or Resend send.
+    const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
+    const adminPasswordEnv = Deno.env.get("ADMIN_PASSWORD") ?? "";
+    let adminOk = false;
+    let cronOk = cronSecret.length > 0 && req.headers.get("x-cron-secret") === cronSecret;
+    if (req.method === "POST") {
+      const body = await req.json().catch(() => ({}));
+      adminOk = adminPasswordEnv.length > 0 && body.adminPassword === adminPasswordEnv;
+      cronOk = cronOk || (cronSecret.length > 0 && body.cron_secret === cronSecret);
+    }
+    if (!adminOk && !cronOk) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
     const RESEND_KEY = Deno.env.get("RESEND_API_KEY")!;
+
 
     const now = new Date();
     const todayPT = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Los_Angeles" }).format(now);

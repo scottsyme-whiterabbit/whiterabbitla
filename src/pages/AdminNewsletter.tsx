@@ -84,28 +84,16 @@ const AdminNewsletter = () => {
   const isMobile = useIsMobile();
   const [password, setPassword] = useState("");
   const [authenticated, setAuthenticated] = useState(() => {
-    // Check both localStorage and sessionStorage for session persistence
-    const saved = localStorage.getItem("wr_admin_session") || sessionStorage.getItem("wr_admin_session");
-    if (saved) {
-      try {
-        const { pw: _pw, ts } = JSON.parse(saved);
-        if (Date.now() - ts < 24 * 60 * 60 * 1000) return true;
-      } catch {}
+    // The admin password is never persisted. We only keep a short-lived
+    // session timestamp; the password itself lives in memory for this tab,
+    // so a reload requires signing in again (Face ID / Touch ID still works).
+    try {
       localStorage.removeItem("wr_admin_session");
-      sessionStorage.removeItem("wr_admin_session");
-    }
+    } catch {}
     return false;
   });
-  const [storedPassword, setStoredPassword] = useState(() => {
-    const saved = localStorage.getItem("wr_admin_session") || sessionStorage.getItem("wr_admin_session");
-    if (saved) {
-      try {
-        const { pw, ts } = JSON.parse(saved);
-        if (Date.now() - ts < 24 * 60 * 60 * 1000) return pw;
-      } catch {}
-    }
-    return "";
-  });
+  const [storedPassword, setStoredPassword] = useState("");
+
 
   const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "inbox" | "actions" | "followups" | "activity" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "email_analytics" | "planner" | "apartment" | "thankyou" | "cold" | "lead_attribution" | "castle">(() => {
     if (typeof window !== "undefined") {
@@ -243,9 +231,12 @@ const AdminNewsletter = () => {
         setPassword(candidate);
         setStoredPassword(candidate);
         setAuthenticated(true);
-        const session = JSON.stringify({ pw: candidate, ts: Date.now() });
-        localStorage.setItem("wr_admin_session", session);
-        sessionStorage.setItem("wr_admin_session", session);
+        // Store only a short-lived session timestamp — never the password.
+        try {
+          sessionStorage.setItem("wr_admin_session", new Date().toISOString());
+          localStorage.removeItem("wr_admin_session");
+        } catch {}
+
         toast.success("Welcome back");
       } else {
         toast.error("Invalid password");
@@ -1353,7 +1344,7 @@ const AdminNewsletter = () => {
 
         {/* Campaign Calendar */}
         {activeTab === "calendar" && (
-          <CampaignCalendarTab campaigns={campaigns} sendLog={[]} />
+          <CampaignCalendarTab campaigns={campaigns} sendLog={[]} adminPassword={storedPassword} />
         )}
 
         {/* Analytics */}

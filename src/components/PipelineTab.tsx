@@ -606,7 +606,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
       </div>
 
       {/* Show Calendar */}
-      <ShowCalendar deals={deals} onOpenDeal={openDealById} />
+      <ShowCalendar deals={deals} onOpenDeal={openDealById} adminPassword={adminPassword} />
 
       {/* Deal Form Modal */}
       <Dialog open={showForm} onOpenChange={setShowForm}>

@@ -172,6 +172,22 @@ serve(async (req) => {
   }
 
   try {
+    // Auth gate — mirrors cold-drip. The only scheduled caller is cron-runner,
+    // which forwards the x-import-token shared secret; Bearer CRON_SECRET is
+    // also accepted for direct scheduled invocation.
+    const importToken = Deno.env.get("EXTERNAL_IMPORT_TOKEN") ?? "";
+    const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
+    const provided = req.headers.get("x-import-token") ?? "";
+    const cronAuth = req.headers.get("authorization") ?? "";
+    const tokenOk = importToken.length > 0 && provided === importToken;
+    const cronOk = cronSecret.length > 0 &&
+      (cronAuth === `Bearer ${cronSecret}` || req.headers.get("x-cron-secret") === cronSecret);
+    if (!tokenOk && !cronOk) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     // Send window guard: only Tue/Wed/Thu PT
     const pacificDay = new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", weekday: "short" }).format(new Date());
     if (!["Tue", "Wed", "Thu"].includes(pacificDay)) {

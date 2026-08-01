@@ -152,17 +152,32 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    // Auth gate — required before any DB read/write or Resend send.
+    // Accepted: x-cron-secret header / body.cron_secret === CRON_SECRET,
+    // or body.adminPassword === ADMIN_PASSWORD.
+    const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
+    const adminPasswordEnv = Deno.env.get("ADMIN_PASSWORD") ?? "";
+    let dryRun = false;
+    let adminOk = false;
+    let cronOk = req.headers.get("x-cron-secret") === cronSecret && cronSecret.length > 0;
+    if (req.method === "POST") {
+      const body = await req.json().catch(() => ({}));
+      dryRun = !!body.dryRun;
+      adminOk = adminPasswordEnv.length > 0 && body.adminPassword === adminPasswordEnv;
+      cronOk = cronOk || (cronSecret.length > 0 && body.cron_secret === cronSecret);
+    }
+    if (!adminOk && !cronOk) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
     const RESEND_KEY = Deno.env.get("RESEND_API_KEY")!;
 
-    let dryRun = false;
-    if (req.method === "POST") {
-      const body = await req.json().catch(() => ({}));
-      dryRun = !!body.dryRun;
-    }
 
     // Send window guard: weekdays, after 10 AM PT
     const now = new Date();

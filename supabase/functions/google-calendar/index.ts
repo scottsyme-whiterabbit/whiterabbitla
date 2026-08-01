@@ -19,7 +19,15 @@ serve(async (req) => {
       throw new Error("GOOGLE_CALENDAR_API_KEY is not configured");
     }
 
-    const { timeMin, timeMax } = await req.json();
+    const body = await req.json().catch(() => ({}));
+    const { timeMin, timeMax, adminPassword } = body;
+
+    // This endpoint is reachable with only the publishable anon key, so the
+    // default response is PII-free: free/busy time blocks only. Titles,
+    // descriptions, locations and attendees are returned only to an
+    // admin-password-authenticated caller (the internal CRM calendars).
+    const ADMIN_PASSWORD = Deno.env.get("ADMIN_PASSWORD");
+    const detailed = !!ADMIN_PASSWORD && adminPassword === ADMIN_PASSWORD;
 
     if (!timeMin || !timeMax) {
       return new Response(JSON.stringify({ error: "timeMin and timeMax are required" }), {
@@ -48,18 +56,29 @@ serve(async (req) => {
     }
 
     // Map to simplified event objects
-    const events = (data.items || []).map((item: any) => ({
-      id: item.id,
-      summary: item.summary || "(No title)",
-      description: item.description || null,
-      location: item.location || null,
-      start: item.start?.dateTime || item.start?.date || null,
-      end: item.end?.dateTime || item.end?.date || null,
-      allDay: !item.start?.dateTime,
-      htmlLink: item.htmlLink || null,
-      status: item.status || "confirmed",
-      colorId: item.colorId || null,
-    }));
+    const events = (data.items || []).map((item: any) => {
+      const base = {
+        id: item.id,
+        start: item.start?.dateTime || item.start?.date || null,
+        end: item.end?.dateTime || item.end?.date || null,
+        allDay: !item.start?.dateTime,
+        status: item.status || "confirmed",
+        busy: item.transparency !== "transparent",
+      };
+      if (!detailed) {
+        // Free/busy only — no title, description, location, attendees or links.
+        return { ...base, summary: "(No title)", description: null, location: null, colorId: null };
+      }
+      return {
+        ...base,
+        summary: item.summary || "(No title)",
+        description: item.description || null,
+        location: item.location || null,
+        htmlLink: item.htmlLink || null,
+        colorId: item.colorId || null,
+      };
+    });
+
 
     return new Response(JSON.stringify({ events }), {
       status: 200,

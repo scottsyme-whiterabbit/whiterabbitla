@@ -24,13 +24,28 @@ serve(async (req) => {
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
     if (!GCAL_API_KEY) throw new Error("GOOGLE_CALENDAR_API_KEY_1 not configured");
 
+    // Auth gate (both GET and POST). Accepted callers:
+    //   - pg_cron job "calendar-sync-every-30min": POST body { cron_secret }
+    //   - newsletter-admin proxy: POST body { adminPassword }
+    // Anything else is rejected.
+    const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
+    const headerCron = req.headers.get("x-cron-secret") ?? "";
+    let bodyCron = "";
+    let bodyAdminPassword = "";
     if (req.method === "POST") {
       const b = await req.json().catch(() => ({}));
-      // No-op auth, this is admin-only via password or cron
-      if (b.adminPassword && b.adminPassword !== ADMIN_PASSWORD && b.cron_secret !== Deno.env.get("CRON_SECRET")) {
-        return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
-      }
+      bodyCron = b.cron_secret ?? "";
+      bodyAdminPassword = b.adminPassword ?? "";
     }
+    const adminOk = !!ADMIN_PASSWORD && bodyAdminPassword === ADMIN_PASSWORD;
+    const cronOk = cronSecret.length > 0 && (bodyCron === cronSecret || headerCron === cronSecret);
+    if (!adminOk && !cronOk) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
 
     const now = new Date();
     const timeMin = new Date(now.getTime() - 14 * 86400000).toISOString();
