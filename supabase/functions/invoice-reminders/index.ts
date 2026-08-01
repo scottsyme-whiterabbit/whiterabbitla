@@ -92,6 +92,34 @@ Deno.serve(async (req) => {
         continue;
       }
 
+      // --- Confirmed bookings (deposit paid or paid in full): pre-event anticipation notes ---
+      if (inv.status === "deposit_paid" || inv.status === "paid") {
+        const days = daysUntil(inv.event_date);
+        if (days !== null && days >= 0) {
+          const aSent = inv.anticipation_sent || 0;
+          if (aSent < ANTICIPATION_DAYS_OUT.length) {
+            const nextA = ANTICIPATION_DAYS_OUT[aSent];
+            if (days <= nextA && hoursSince(inv.last_anticipation_at) >= MIN_HOURS_BETWEEN) {
+              if (!dryRun) {
+                const { subject, html } = anticipationEmail(inv, days);
+                const ok = await sendEmail(inv.client_email, subject, html);
+                if (ok) {
+                  await supabase.from("event_invoices").update({
+                    anticipation_sent: aSent + 1,
+                    last_anticipation_at: new Date().toISOString(),
+                  }).eq("id", inv.id);
+                  results.anticipation_reminders++;
+                } else {
+                  results.errors.push(`anticipation send failed ${inv.id}`);
+                }
+              } else {
+                results.anticipation_reminders++;
+              }
+            }
+          }
+        }
+      }
+
       // --- Deposit paid: 3 pre-event balance reminders ---
       if (inv.status === "deposit_paid") {
         const days = daysUntil(inv.event_date);
