@@ -231,12 +231,27 @@ serve(async (req) => {
 
     let dealId: string | null = null;
     let isManual = false;
+    // Auth gate. Accepted callers:
+    //   - pg_cron job "gmail-sync-every-10min": POST body { cron_secret }
+    //   - newsletter-admin proxy: POST body { adminPassword }
+    const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
+    let adminOk = false;
+    let cronOk = false;
     if (req.method === "POST") {
       const body = await req.json().catch(() => ({}));
-      if (body.adminPassword && body.adminPassword === ADMIN_PASSWORD) isManual = true;
-      else if (body.cron_secret && body.cron_secret === Deno.env.get("CRON_SECRET")) isManual = false;
+      adminOk = !!ADMIN_PASSWORD && body.adminPassword === ADMIN_PASSWORD;
+      cronOk = cronSecret.length > 0 &&
+        (body.cron_secret === cronSecret || req.headers.get("x-cron-secret") === cronSecret);
+      isManual = adminOk;
       dealId = body.deal_id || null;
     }
+    if (!adminOk && !cronOk) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
 
     let dealsQuery = supabase
       .from("deals")
