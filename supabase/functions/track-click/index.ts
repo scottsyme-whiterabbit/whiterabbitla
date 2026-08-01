@@ -4,6 +4,20 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const SITE_URL = "https://whiterabbitla.com";
 const LOGO_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-email-logo.png";
 
+/** Allowlist of hosts we are willing to redirect an email click to. */
+const ALLOWED_REDIRECT_HOSTS = ["whiterabbitla.com", "calendar.app.google", "google.com"];
+function isAllowedRedirect(raw: string): boolean {
+  try {
+    const u = new URL(raw);
+    if (u.protocol !== "https:" && u.protocol !== "http:") return false;
+    const host = u.hostname.toLowerCase();
+    return ALLOWED_REDIRECT_HOSTS.some((h) => host === h || host.endsWith(`.${h}`));
+  } catch {
+    return false;
+  }
+}
+
+
 function extractFirstName(name: string | null | undefined): string {
   if (!name) return "there";
   if (name.includes(" and ") || name.includes(" & ")) return name;
