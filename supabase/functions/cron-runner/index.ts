@@ -71,7 +71,10 @@ serve(async (req) => {
       // cold-drip (and other token-gated drips) require x-import-token for any
       // non-preview action. Pass it here so the cron run is authorized.
       "x-import-token": importToken,
+      // nurture-drip / inquiry-followup / post-show-sequence require the cron secret.
+      "x-cron-secret": cronSecretEnv,
     };
+
 
     const results: Record<string, unknown> = {};
 
