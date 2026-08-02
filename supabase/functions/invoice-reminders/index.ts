@@ -20,7 +20,6 @@ const supabase = createClient(
 
 const MAX_INITIAL_REMINDERS = 4;
 const BALANCE_DAYS_OUT = [7, 3, 0];
-const ANTICIPATION_DAYS_OUT = [14, 1];
 const MIN_HOURS_BETWEEN = 20;
 
 const hoursSince = (ts: string | null) =>
