@@ -30,11 +30,11 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const cronSecret = Deno.env.get("CRON_SECRET");
+  const accepted = [Deno.env.get("CRON_SECRET"), Deno.env.get("CRON_SECRET_V2")].filter(Boolean);
   const provided =
     req.headers.get("x-cron-secret") ||
     (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
-  if (!cronSecret || provided !== cronSecret) {
+  if (accepted.length === 0 || !accepted.includes(provided)) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
