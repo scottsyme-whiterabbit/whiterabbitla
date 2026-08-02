@@ -388,7 +388,22 @@ serve(async (req) => {
   }
 
   try {
-    // Send window guard: only send on Tue/Wed/Thu Pacific
+    // Auth gate. Accepted callers:
+    //   - pg_cron job "post-show-tuewedthu": x-cron-secret header
+    //   - cron-runner: x-cron-secret header
+    //   - admin UI: { adminPassword } in the body
+    const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
+    const adminPasswordEnv = Deno.env.get("ADMIN_PASSWORD") ?? "";
+    const reqBody = req.method === "POST" ? await req.json().catch(() => ({} as any)) : ({} as any);
+    const cronOk = cronSecret.length > 0 && req.headers.get("x-cron-secret") === cronSecret;
+    const adminOk = adminPasswordEnv.length > 0 && reqBody?.adminPassword === adminPasswordEnv;
+    if (!cronOk && !adminOk) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+
     const pacificDay = new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", weekday: "short" }).format(new Date());
     if (!["Tue", "Wed", "Thu"].includes(pacificDay)) {
       return new Response(JSON.stringify({ sent: 0, message: `Skipped: ${pacificDay} is outside the Tue-Thu send window` }), {

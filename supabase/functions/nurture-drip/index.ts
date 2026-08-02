@@ -586,17 +586,18 @@ serve(async (req) => {
   }
 
   try {
-    // Handle preview requests
+    // Handle preview requests (admin UI, template rendering only, no sends/data)
+    let body: Record<string, unknown> = {};
     if (req.method === "POST") {
-      const body = await req.json();
+      body = await req.json().catch(() => ({}));
       if (body.action === "preview") {
-        const { category, step } = body;
+        const { category, step } = body as { category?: string; step?: number };
         if (!category || step === undefined) {
           return new Response(JSON.stringify({ error: "category and step required" }), {
             status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
           });
         }
-        const previewName = body.previewName || "Kevin";
+        const previewName = (body.previewName as string) || "Kevin";
         const template = getNurtureEmail(category as CampaignCategory, step, previewName, "preview");
         if (!template.subject) {
           return new Response(JSON.stringify({ error: "No template found" }), {
@@ -609,6 +610,21 @@ serve(async (req) => {
         });
       }
     }
+
+    // Auth gate for the sending path. Accepted callers:
+    //   - pg_cron job "nurture-drip-tue-wed-thu": x-cron-secret header
+    //   - cron-runner: x-cron-secret header
+    //   - admin UI: { adminPassword } in the body
+    const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
+    const adminPassword = Deno.env.get("ADMIN_PASSWORD") ?? "";
+    const cronOk = cronSecret.length > 0 && req.headers.get("x-cron-secret") === cronSecret;
+    const adminOk = adminPassword.length > 0 && body.adminPassword === adminPassword;
+    if (!cronOk && !adminOk) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
 
     // Send window guard: only send on Tue/Wed/Thu Pacific
     const pacificDay = new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", weekday: "short" }).format(new Date());
