@@ -617,7 +617,10 @@ serve(async (req) => {
     //   - admin UI: { adminPassword } in the body
     const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
     const adminPassword = Deno.env.get("ADMIN_PASSWORD") ?? "";
-    const cronOk = cronSecret.length > 0 && req.headers.get("x-cron-secret") === cronSecret;
+    const cronSecretV2 = Deno.env.get("CRON_SECRET_V2") ?? "";
+    const headerCron = req.headers.get("x-cron-secret") ?? "";
+    const cronOk = (cronSecret.length > 0 && headerCron === cronSecret) ||
+      (cronSecretV2.length > 0 && headerCron === cronSecretV2);
     const adminOk = adminPassword.length > 0 && body.adminPassword === adminPassword;
     if (!cronOk && !adminOk) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {

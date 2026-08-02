@@ -395,7 +395,10 @@ serve(async (req) => {
     const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
     const adminPasswordEnv = Deno.env.get("ADMIN_PASSWORD") ?? "";
     const reqBody = req.method === "POST" ? await req.json().catch(() => ({} as any)) : ({} as any);
-    const cronOk = cronSecret.length > 0 && req.headers.get("x-cron-secret") === cronSecret;
+    const cronSecretV2 = Deno.env.get("CRON_SECRET_V2") ?? "";
+    const headerCron = req.headers.get("x-cron-secret") ?? "";
+    const cronOk = (cronSecret.length > 0 && headerCron === cronSecret) ||
+      (cronSecretV2.length > 0 && headerCron === cronSecretV2);
     const adminOk = adminPasswordEnv.length > 0 && reqBody?.adminPassword === adminPasswordEnv;
     if (!cronOk && !adminOk) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
