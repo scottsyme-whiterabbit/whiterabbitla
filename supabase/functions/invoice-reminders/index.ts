@@ -20,7 +20,6 @@ const supabase = createClient(
 
 const MAX_INITIAL_REMINDERS = 4;
 const BALANCE_DAYS_OUT = [7, 3, 0];
-const ANTICIPATION_DAYS_OUT = [14, 1];
 const MIN_HOURS_BETWEEN = 20;
 
 const hoursSince = (ts: string | null) =>
@@ -92,33 +91,37 @@ Deno.serve(async (req) => {
         continue;
       }
 
-      // --- Confirmed bookings (deposit paid or paid in full): pre-event anticipation notes ---
+      // --- Confirmed bookings: pre-event anticipation notes (windowed) ---
       if (inv.status === "deposit_paid" || inv.status === "paid") {
         const days = daysUntil(inv.event_date);
-        if (days !== null && days >= 0) {
-          const aSent = inv.anticipation_sent || 0;
-          if (aSent < ANTICIPATION_DAYS_OUT.length) {
-            const nextA = ANTICIPATION_DAYS_OUT[aSent];
-            if (days <= nextA && hoursSince(inv.last_anticipation_at) >= MIN_HOURS_BETWEEN) {
-              if (!dryRun) {
-                const { subject, html } = anticipationEmail(inv, days);
-                const ok = await sendEmail(inv.client_email, subject, html);
-                if (ok) {
-                  await supabase.from("event_invoices").update({
-                    anticipation_sent: aSent + 1,
-                    last_anticipation_at: new Date().toISOString(),
-                  }).eq("id", inv.id);
-                  results.anticipation_reminders++;
-                } else {
-                  results.errors.push(`anticipation send failed ${inv.id}`);
-                }
-              } else {
+        if (days !== null && days >= 0 && hoursSince(inv.last_anticipation_at) >= MIN_HOURS_BETWEEN) {
+          const sent = inv.anticipation_sent || 0;
+          const FAR = 1, NEAR = 2;
+          let bit = 0;
+          // "Two weeks to go" note: only with real runway (8-14 days out)
+          if (!(sent & FAR) && days >= 8 && days <= 14) bit = FAR;
+          // "See you tomorrow" note: the day before (0-1 days out)
+          else if (!(sent & NEAR) && days <= 1) bit = NEAR;
+          if (bit) {
+            if (!dryRun) {
+              const { subject, html } = anticipationEmail(inv, days);
+              const ok = await sendEmail(inv.client_email, subject, html);
+              if (ok) {
+                await supabase.from("event_invoices").update({
+                  anticipation_sent: sent | bit,
+                  last_anticipation_at: new Date().toISOString(),
+                }).eq("id", inv.id);
                 results.anticipation_reminders++;
+              } else {
+                results.errors.push(`anticipation send failed ${inv.id}`);
               }
+            } else {
+              results.anticipation_reminders++;
             }
           }
         }
       }
+
 
       // --- Deposit paid: 3 pre-event balance reminders ---
       if (inv.status === "deposit_paid") {
