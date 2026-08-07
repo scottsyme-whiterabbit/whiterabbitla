@@ -20,20 +20,29 @@ const getEnv = (key: string): string => {
 
 export type StripeEnv = "sandbox" | "live";
 
-/** Derive the Stripe environment from the configured secret key prefix. */
+/**
+ * The secret key actually in use. STRIPE_SECRET_KEY_LIVE (added manually in
+ * Project Settings → Secrets) takes precedence; STRIPE_SECRET_KEY (the
+ * integration-managed test key) is the fallback.
+ */
+function secretKey(): string {
+  return Deno.env.get("STRIPE_SECRET_KEY_LIVE") || Deno.env.get("STRIPE_SECRET_KEY") || "";
+}
+
+/** Derive the Stripe environment from the prefix of the key actually in use. */
 export function stripeEnvironment(): StripeEnv {
-  const key = Deno.env.get("STRIPE_SECRET_KEY") || "";
-  if (key.startsWith("sk_live")) return "live";
-  return "sandbox"; // sk_test_ (and any unknown) defaults to test
+  return secretKey().startsWith("sk_live") ? "live" : "sandbox";
 }
 
 /**
- * Create a Stripe client bound to the project's single STRIPE_SECRET_KEY.
- * The `env` argument is accepted for call-site compatibility but is no
- * longer used to select between keys — there is only one account key now.
+ * Create a Stripe client bound to the secret key in use.
+ * The `env` argument is accepted for call-site compatibility but is not
+ * used to select between keys.
  */
 export function createStripeClient(_env?: StripeEnv): Stripe {
-  return new Stripe(getEnv("STRIPE_SECRET_KEY"), {
+  const key = secretKey();
+  if (!key) throw new Error("STRIPE_SECRET_KEY_LIVE / STRIPE_SECRET_KEY is not configured");
+  return new Stripe(key, {
     apiVersion: "2026-03-25.dahlia",
   });
 }
