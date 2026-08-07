@@ -100,11 +100,11 @@ export default function PayInvoice() {
 
             {paidInFull ? (
               <p className="mt-8 text-center text-sm">
-                Thank you — nothing further is due. I'll be in touch closer to the evening.
+                Thank you. Nothing further is due. I'll be in touch closer to the evening.
               </p>
             ) : returnedFromCheckout && !option ? (
               <p className="mt-8 text-center text-sm">
-                Payment submitted. A receipt is on its way — this page updates once it clears.
+                Payment submitted. A receipt is on its way, and this page updates once it clears.
               </p>
             ) : !option ? (
               <div className="mt-8 space-y-3">
@@ -113,7 +113,7 @@ export default function PayInvoice() {
                     onClick={() => startCheckout("full")}
                     className="w-full bg-[#C9A3A8] px-6 py-4 text-xs uppercase tracking-[0.16em] text-[#223D34]"
                   >
-                    Pay remaining balance — {money(invoice.balance_cents)}
+                    Pay remaining balance · {money(invoice.balance_cents)}
                   </button>
                 ) : (
                   <>
@@ -121,13 +121,13 @@ export default function PayInvoice() {
                       onClick={() => startCheckout("deposit")}
                       className="w-full bg-[#C9A3A8] px-6 py-4 text-xs uppercase tracking-[0.16em] text-[#223D34]"
                     >
-                      Pay {invoice.deposit_percent}% deposit — {money(invoice.deposit_cents)}
+                      Pay {invoice.deposit_percent}% deposit · {money(invoice.deposit_cents)}
                     </button>
                     <button
                       onClick={() => startCheckout("full")}
                       className="w-full border border-[#223D34] px-6 py-4 text-xs uppercase tracking-[0.16em]"
                     >
-                      Pay in full — {money(invoice.total_cents)}
+                      Pay in full · {money(invoice.total_cents)}
                     </button>
                   </>
                 )}
