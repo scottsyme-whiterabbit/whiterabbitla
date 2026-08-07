@@ -48,7 +48,7 @@ Deno.serve(async (req) => {
   }
 
   const dryRun = body?.dryRun === true;
-  const results = { unpaid_reminders: 0, balance_reminders: 0, anticipation_reminders: 0, skipped: 0, errors: [] as string[] };
+  const results = { unpaid_reminders: 0, balance_reminders: 0, anticipation_reminders: 0, stuck_payment_alerts: 0, skipped: 0, errors: [] as string[] };
 
   const { data, error } = await supabase
     .from("event_invoices")
