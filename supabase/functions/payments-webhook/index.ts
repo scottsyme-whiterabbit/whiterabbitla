@@ -203,11 +203,23 @@ Deno.serve(async (req) => {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object;
-        if (session.payment_status !== "unpaid") await handleCheckoutCompleted(session, env);
+        // ACH/bank transfers complete checkout while still "unpaid": lock the
+        // invoice now and record the money only once it settles.
+        if (session.payment_status === "unpaid") await setPendingLock(session);
+        else await handleCheckoutCompleted(session, env);
         break;
       }
+      case "checkout.session.processing":
+        await setPendingLock(event.data.object);
+        break;
       case "checkout.session.async_payment_succeeded":
         await handleCheckoutCompleted(event.data.object, env);
+        break;
+      case "checkout.session.async_payment_failed":
+        await handlePaymentFailed(event.data.object, "async_payment_failed");
+        break;
+      case "checkout.session.expired":
+        await handlePaymentFailed(event.data.object, "session_expired");
         break;
       default:
         console.log("Unhandled event:", event.type);
