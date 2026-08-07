@@ -106,6 +106,7 @@ const Consultation = () => {
 
   const { openQuiz } = useBookingQuiz();
   const [stickyVisible, setStickyVisible] = useState(false);
+  const [leadSource, setLeadSource] = useState("Consultation Page");
 
   useEffect(() => {
     const handleScroll = () => setStickyVisible(window.scrollY > 400);
@@ -114,7 +115,35 @@ const Consultation = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToForm = () => openQuiz("Facebook / Meta Ad");
+  useEffect(() => {
+    const detectSource = () => {
+      const params = new URLSearchParams(window.location.search);
+      const utmSource = params.get("utm_source")?.toLowerCase() || "";
+      const gclid = params.get("gclid");
+      const fbclid = params.get("fbclid");
+
+      if (gclid || utmSource.includes("google")) return "Google Ads";
+      if (
+        fbclid ||
+        ["facebook", "fb", "meta", "ig"].some((s) => utmSource.includes(s))
+      ) {
+        return "Facebook / Meta Ad";
+      }
+      return "Consultation Page";
+    };
+
+    const stored = sessionStorage.getItem("wr_consultation_source");
+    if (stored) {
+      setLeadSource(stored);
+      return;
+    }
+
+    const source = detectSource();
+    sessionStorage.setItem("wr_consultation_source", source);
+    setLeadSource(source);
+  }, []);
+
+  const scrollToForm = () => openQuiz(leadSource);
 
 
 
