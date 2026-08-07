@@ -157,14 +157,14 @@ const Consultation = () => {
         <>
           <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-forest-dark/95 backdrop-blur-md border-t border-accent/20 p-3">
             <button
-              onClick={() => { trackCTAClick("Book a Consultation", "consultation_sticky_mobile"); openQuiz("Facebook / Meta Ad"); }}
+              onClick={() => { trackCTAClick("Book a Consultation", "consultation_sticky_mobile"); openQuiz(leadSource); }}
               className="w-full font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground py-3.5 hover:bg-accent/80 transition-colors"
             >
               Book a Consultation
             </button>
           </div>
           <button
-            onClick={() => { trackCTAClick("Book a Consultation", "consultation_sticky_desktop"); openQuiz("Facebook / Meta Ad"); }}
+            onClick={() => { trackCTAClick("Book a Consultation", "consultation_sticky_desktop"); openQuiz(leadSource); }}
             className="hidden md:flex fixed bottom-8 right-8 z-50 items-center gap-2.5 bg-accent text-accent-foreground font-sans text-xs tracking-[0.2em] uppercase px-6 py-3.5 shadow-lg hover:bg-accent/90 hover:shadow-xl hover:scale-105 transition-all duration-300"
             aria-label="Book a Consultation"
           >
@@ -283,7 +283,7 @@ const Consultation = () => {
               dedicated his life to making people feel extraordinary.
             </p>
             <button
-              onClick={() => { trackCTAClick("Book a Consultation", "consultation_bio"); openQuiz("Facebook / Meta Ad"); }}
+              onClick={() => { trackCTAClick("Book a Consultation", "consultation_bio"); openQuiz(leadSource); }}
               className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors"
             >
               Book a Consultation
@@ -442,7 +442,7 @@ const Consultation = () => {
             Tell us about your event and we'll usually be in touch within a few hours with a custom recommendation.
           </p>
           <button
-            onClick={() => { trackCTAClick("Book a Consultation", "consultation_form_section"); openQuiz("Facebook / Meta Ad"); }}
+            onClick={() => { trackCTAClick("Book a Consultation", "consultation_form_section"); openQuiz(leadSource); }}
             className="w-full sm:w-auto bg-accent text-accent-foreground font-sans text-sm tracking-[0.2em] uppercase px-10 py-4 hover:bg-accent/85 transition-colors"
           >
             Book a Consultation
