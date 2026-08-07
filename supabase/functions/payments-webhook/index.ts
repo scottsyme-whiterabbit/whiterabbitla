@@ -116,6 +116,71 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
   }
 }
 
+/**
+ * A bank/ACH payment is in flight: lock the invoice so the client cannot start
+ * a second checkout while the transfer clears. Best-effort, never throws.
+ */
+async function setPendingLock(session: any) {
+  try {
+    const invoiceId = session.metadata?.invoice_id;
+    if (!invoiceId) return;
+    const supabase = getSupabase();
+    const { data } = await supabase
+      .from("event_invoices").select("id, pending_session_id").eq("id", invoiceId).maybeSingle();
+    if (!data) return;
+    if ((data as any).pending_session_id === session.id) return; // already locked to this session
+    const { error } = await supabase.from("event_invoices").update({
+      pending_session_id: session.id,
+      pending_since: new Date().toISOString(),
+      pending_alert_sent_at: null,
+    }).eq("id", invoiceId);
+    if (error) console.error("pending lock failed", invoiceId, error);
+    else console.log(`pending lock set on invoice ${invoiceId} for session ${session.id}`);
+  } catch (e) {
+    console.error("pending lock error (ignored):", e);
+  }
+}
+
+/**
+ * A bank payment failed or the session expired: unlock the invoice, record the
+ * failure, and let the client and Scott know. Best-effort, never throws.
+ */
+async function handlePaymentFailed(session: any, reason: string) {
+  try {
+    const invoiceId = session.metadata?.invoice_id;
+    if (!invoiceId) return;
+    const supabase = getSupabase();
+    const { data } = await supabase
+      .from("event_invoices").select("*").eq("id", invoiceId).maybeSingle();
+    if (!data) return;
+    const inv = data as unknown as Invoice;
+    if (inv.status === "paid") return; // nothing to unlock on a settled invoice
+
+    const { error } = await supabase.from("event_invoices").update({
+      pending_session_id: null,
+      pending_since: null,
+      pending_alert_sent_at: null,
+      last_payment_failed_at: new Date().toISOString(),
+    }).eq("id", invoiceId);
+    if (error) console.error("payment failure unlock failed", invoiceId, error);
+
+    const link = payUrl(inv);
+    if (inv.client_email) {
+      const { subject, html } = paymentFailedEmail(inv);
+      await sendEmail(inv.client_email, subject, html);
+    }
+    await sendEmail(
+      "scott.syme@whiterabbitla.com",
+      `[Payment failed] ${inv.client_name || "Client"} - ${inv.tier_name || "invoice"}, invoice still open`,
+      `<p>A payment did not go through (${reason}).</p><p>Client: ${inv.client_name || "unknown"}<br/>Experience: ${inv.tier_name || "n/a"}<br/>Invoice is still open.</p><p><a href="${link}">${link}</a></p>`,
+    );
+    console.log(`payment failure handled for invoice ${invoiceId} (${reason})`);
+  } catch (e) {
+    console.error("payment failure handler error (ignored):", e);
+  }
+}
+
+
 Deno.serve(async (req) => {
   if (req.method !== "POST") return new Response("Method not allowed", { status: 405 });
 
