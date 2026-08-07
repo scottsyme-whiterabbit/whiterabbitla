@@ -39,6 +39,7 @@ const publicView = (inv: Invoice) => ({
   balance_cents: balanceCents(inv),
   amount_paid_cents: inv.amount_paid_cents,
   status: inv.status,
+  is_processing: !!(inv as any).pending_session_id,
 });
 
 Deno.serve(async (req) => {
