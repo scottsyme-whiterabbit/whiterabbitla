@@ -76,6 +76,15 @@ Deno.serve(async (req) => {
       if (!data) return json({ error: "Invoice not found" }, 404);
       const inv = data as Invoice;
       if (inv.status === "paid") return json({ error: "This invoice is already paid in full." }, 400);
+      // A payment is already in flight (typically a bank transfer clearing):
+      // refuse a second checkout so the client cannot pay twice.
+      if ((data as any).pending_session_id) {
+        return json({
+          error: "A payment is already processing for this invoice. Please wait for it to clear.",
+          processing: true,
+        }, 409);
+      }
+
 
       const kind: "deposit" | "full" | "balance" =
         inv.amount_paid_cents > 0 ? "balance" : option === "full" ? "full" : "deposit";
