@@ -48,6 +48,10 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
     environment: env,
     stripe_session_id: session.id,
     stripe_payment_intent_id: typeof session.payment_intent === "string" ? session.payment_intent : null,
+    // A settled payment always leaves a clean state: drop any in-flight lock.
+    pending_session_id: null,
+    pending_since: null,
+    pending_alert_sent_at: null,
     ...(fullyPaid ? { paid_in_full_at: now } : { deposit_paid_at: inv.deposit_paid_at || now }),
   }).eq("id", inv.id);
 
