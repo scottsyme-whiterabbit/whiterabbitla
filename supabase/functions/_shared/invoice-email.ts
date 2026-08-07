@@ -82,11 +82,11 @@ function detailsBlock(inv: Invoice) {
 export function invoiceEmail(inv: Invoice) {
   const name = inv.client_name?.split(" ")[0] || "there";
   const body = `<p>${esc(name)},</p>
-  <p>Your agreement is signed and your date is being held. Below is the invoice — you can secure it with the ${inv.deposit_percent}% deposit of <strong>${money(depositCents(inv))}</strong>, or settle the full <strong>${money(inv.total_cents)}</strong> now and be done with it.</p>
+  <p>Your agreement is signed and your date is being held. Below is the invoice. You can secure it with the ${inv.deposit_percent}% deposit of <strong>${money(depositCents(inv))}</strong>, or settle the full <strong>${money(inv.total_cents)}</strong> now and be done with it.</p>
   ${detailsBlock(inv)}
   <p>Payment takes about a minute. Once it lands, the date is locked and I take it from there.</p>`;
   return {
-    subject: `Invoice — ${inv.tier_name || "Your White Rabbit LA evening"}`,
+    subject: `Invoice for ${inv.tier_name || "your White Rabbit LA evening"}`,
     html: emailShell(body, payUrl(inv), "View & pay invoice"),
   };
 }
