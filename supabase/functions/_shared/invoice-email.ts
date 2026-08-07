@@ -95,7 +95,7 @@ export function invoiceEmail(inv: Invoice) {
 export function reminderEmail(inv: Invoice, n: number) {
   const name = inv.client_name?.split(" ")[0] || "there";
   const lines = [
-    `Just making sure the invoice reached you — the date is held until the deposit lands.`,
+    `Just making sure the invoice reached you. The date is held until the deposit lands.`,
     `Following up on the invoice for your evening. Either the ${inv.deposit_percent}% deposit or payment in full will lock the date.`,
     `Your date is still being held, though I can only hold it so long. The invoice is one click away.`,
     `Last note from me on this one. If the timing has changed, tell me and I'll release the date with no hard feelings.`,
@@ -106,7 +106,7 @@ export function reminderEmail(inv: Invoice, n: number) {
   <p>Deposit: <strong>${money(depositCents(inv))}</strong> &nbsp;·&nbsp; Pay in full: <strong>${money(inv.total_cents)}</strong></p>`;
   return {
     subject: n >= 4
-      ? `Closing the loop — ${inv.tier_name || "your evening"}`
+      ? `Closing the loop on ${inv.tier_name || "your evening"}`
       : `Reminder: invoice for ${inv.tier_name || "your evening"}`,
     html: emailShell(body, payUrl(inv), "Pay invoice"),
   };
@@ -117,7 +117,7 @@ export function balanceReminderEmail(inv: Invoice, daysOut: number) {
   const name = inv.client_name?.split(" ")[0] || "there";
   const lead =
     daysOut <= 0
-      ? `Your event is today — the remaining balance of <strong>${money(balanceCents(inv))}</strong> is due.`
+      ? `Your event is today, and the remaining balance of <strong>${money(balanceCents(inv))}</strong> is due.`
       : `We're ${daysOut} ${daysOut === 1 ? "day" : "days"} out. The remaining balance of <strong>${money(balanceCents(inv))}</strong> is due before the performance.`;
   const body = `<p>${esc(name)},</p>
   <p>${lead}</p>
@@ -125,8 +125,8 @@ export function balanceReminderEmail(inv: Invoice, daysOut: number) {
   <p>Paid to date: ${money(inv.amount_paid_cents || 0)}. Everything else is handled on my end.</p>`;
   return {
     subject: daysOut <= 0
-      ? `Balance due today — ${inv.tier_name || "your evening"}`
-      : `Balance due — ${inv.event_date || inv.tier_name || "your evening"}`,
+      ? `Balance due today for ${inv.tier_name || "your evening"}`
+      : `Balance due for ${inv.event_date || inv.tier_name || "your evening"}`,
     html: emailShell(body, payUrl(inv), "Pay balance"),
   };
 }
@@ -167,11 +167,11 @@ export function anticipationEmail(inv: Invoice, daysOut: number) {
 export function receiptEmail(inv: Invoice, paidCents: number, fullyPaid: boolean) {
   const name = inv.client_name?.split(" ")[0] || "there";
   const body = `<p>${esc(name)},</p>
-  <p>Received — thank you. ${money(paidCents)} is in${fullyPaid ? " and you are paid in full." : `, leaving a balance of <strong>${money(balanceCents(inv))}</strong> due before the event.`}</p>
+  <p>Received, and thank you. ${money(paidCents)} is in${fullyPaid ? " and you are paid in full." : `, leaving a balance of <strong>${money(balanceCents(inv))}</strong> due before the event.`}</p>
   ${detailsBlock(inv)}
   <p>Your date is confirmed. I'll be in touch closer to the evening with timing.</p>`;
   return {
-    subject: fullyPaid ? `Paid in full — thank you` : `Deposit received — your date is confirmed`,
+    subject: fullyPaid ? `Paid in full. Thank you.` : `Deposit received, your date is confirmed`,
     html: emailShell(body, payUrl(inv), "View invoice"),
   };
 }
