@@ -64,6 +64,52 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
   }
   const { subject, html } = receiptEmail(updated, paid, fullyPaid);
   await sendEmail("scott.syme@whiterabbitla.com", `[Payment] ${inv.client_name || "Client"}: ${subject}`, html);
+
+  // Best-effort calendar safety net: a paid invoice (deposit or full) guarantees
+  // the linked deal is booked and synced to Google Calendar. Never throws.
+  try {
+    const dealId = (data as any).deal_id as string | null;
+    if (dealId) {
+      const { data: deal } = await supabase
+        .from("deals")
+        .select("event_date, location, event_type, stage")
+        .eq("id", dealId)
+        .maybeSingle();
+
+      if (deal) {
+        const backfill: Record<string, unknown> = {};
+        if (!deal.event_date && (inv as any).event_date) backfill.event_date = (inv as any).event_date;
+        if (!deal.location && (inv as any).venue) backfill.location = (inv as any).venue;
+        if (!deal.event_type && (inv as any).event_type) backfill.event_type = (inv as any).event_type;
+        if (Object.keys(backfill).length > 0) {
+          const { error: backfillError } = await supabase.from("deals").update(backfill).eq("id", dealId);
+          if (backfillError) console.error("deal backfill failed", dealId, backfillError);
+        }
+
+        const targetStage = deal.stage === "completed" ? "completed" : "booked";
+        const res = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/newsletter-admin`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            action: "update_deal_stage",
+            adminPassword: Deno.env.get("ADMIN_PASSWORD"),
+            dealId,
+            stage: targetStage,
+          }),
+        });
+        if (!res.ok) {
+          console.error(`calendar safety net failed for deal ${dealId} [${res.status}]: ${(await res.text()).slice(0, 300)}`);
+        } else {
+          console.log(`calendar safety net: deal ${dealId} set to ${targetStage} and synced after payment`);
+        }
+      }
+    }
+  } catch (e) {
+    console.error("calendar safety net error (ignored):", e);
+  }
 }
 
 Deno.serve(async (req) => {
