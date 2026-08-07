@@ -1074,9 +1074,13 @@ export type Database = {
           initial_reminders_sent: number
           last_anticipation_at: string | null
           last_balance_reminder_at: string | null
+          last_payment_failed_at: string | null
           last_reminder_at: string | null
           paid_in_full_at: string | null
           pay_token: string
+          pending_alert_sent_at: string | null
+          pending_session_id: string | null
+          pending_since: string | null
           sent_at: string | null
           status: string
           stripe_payment_intent_id: string | null
@@ -1104,9 +1108,13 @@ export type Database = {
           initial_reminders_sent?: number
           last_anticipation_at?: string | null
           last_balance_reminder_at?: string | null
+          last_payment_failed_at?: string | null
           last_reminder_at?: string | null
           paid_in_full_at?: string | null
           pay_token: string
+          pending_alert_sent_at?: string | null
+          pending_session_id?: string | null
+          pending_since?: string | null
           sent_at?: string | null
           status?: string
           stripe_payment_intent_id?: string | null
@@ -1134,9 +1142,13 @@ export type Database = {
           initial_reminders_sent?: number
           last_anticipation_at?: string | null
           last_balance_reminder_at?: string | null
+          last_payment_failed_at?: string | null
           last_reminder_at?: string | null
           paid_in_full_at?: string | null
           pay_token?: string
+          pending_alert_sent_at?: string | null
+          pending_session_id?: string | null
+          pending_since?: string | null
           sent_at?: string | null
           status?: string
           stripe_payment_intent_id?: string | null
