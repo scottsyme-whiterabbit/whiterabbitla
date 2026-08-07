@@ -48,7 +48,7 @@ Deno.serve(async (req) => {
   }
 
   const dryRun = body?.dryRun === true;
-  const results = { unpaid_reminders: 0, balance_reminders: 0, anticipation_reminders: 0, skipped: 0, errors: [] as string[] };
+  const results = { unpaid_reminders: 0, balance_reminders: 0, anticipation_reminders: 0, stuck_payment_alerts: 0, skipped: 0, errors: [] as string[] };
 
   const { data, error } = await supabase
     .from("event_invoices")
@@ -67,12 +67,44 @@ Deno.serve(async (req) => {
       balance_reminders_sent: number; last_balance_reminder_at: string | null;
       anticipation_sent: number; last_anticipation_at: string | null;
       sent_at: string | null;
+      pending_session_id: string | null; pending_since: string | null;
+      pending_alert_sent_at: string | null;
     };
+
+    // --- Stuck payment: a bank transfer still not cleared after 6 days ---
+    if (inv.pending_session_id && inv.pending_since && !inv.pending_alert_sent_at) {
+      const days = Math.floor(hoursSince(inv.pending_since) / 24);
+      if (days >= 6) {
+        try {
+          if (!dryRun) {
+            const link = `https://whiterabbitla.com/pay/${inv.pay_token}`;
+            const ok = await sendEmail(
+              "scott.syme@whiterabbitla.com",
+              `[Action needed] A payment has been processing for ${days} days`,
+              `<p>A payment has been processing for ${days} days.</p><p>Client: ${inv.client_name || "unknown"}<br/>Experience: ${inv.tier_name || "n/a"}</p><p>Check Stripe.</p><p><a href="${link}">${link}</a></p>`,
+            );
+            if (ok) {
+              await supabase.from("event_invoices").update({
+                pending_alert_sent_at: new Date().toISOString(),
+              }).eq("id", inv.id);
+              results.stuck_payment_alerts++;
+            }
+          } else {
+            results.stuck_payment_alerts++;
+          }
+        } catch (e) {
+          results.errors.push(`stuck alert ${inv.id}: ${(e as Error).message}`);
+        }
+      }
+    }
+
     if (!inv.client_email) { results.skipped++; continue; }
 
     try {
       // --- Unpaid: daily reminders, max 4 ---
       if (inv.status === "open") {
+        // Never nag while a payment is already clearing.
+        if (inv.pending_session_id) { results.skipped++; continue; }
         if (inv.initial_reminders_sent >= MAX_INITIAL_REMINDERS) { results.skipped++; continue; }
         const anchor = inv.last_reminder_at || inv.sent_at;
         if (hoursSince(anchor) < MIN_HOURS_BETWEEN) { results.skipped++; continue; }

@@ -19,6 +19,7 @@ type InvoiceView = {
   balance_cents: number;
   amount_paid_cents: number;
   status: string;
+  is_processing?: boolean;
 };
 
 const money = (cents: number) =>
@@ -29,26 +30,33 @@ export default function PayInvoice() {
   const [searchParams] = useSearchParams();
   const [invoice, setInvoice] = useState<InvoiceView | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const [option, setOption] = useState<"deposit" | "full" | null>(null);
 
   const returnedFromCheckout = Boolean(searchParams.get("session_id"));
 
+  const loadInvoice = useCallback(async () => {
+    const r = await fetch(
+      `${FUNCTIONS_BASE}/invoice-api?action=get&token=${encodeURIComponent(token || "")}`,
+    );
+    const d = await r.json();
+    if (d.error) setError(d.error);
+    else {
+      setError(null);
+      setInvoice(d.invoice);
+    }
+  }, [token]);
+
   useEffect(() => {
     document.title = "Invoice · White Rabbit LA";
     let cancelled = false;
-    fetch(`${FUNCTIONS_BASE}/invoice-api?action=get&token=${encodeURIComponent(token || "")}`)
-      .then((r) => r.json())
-      .then((d) => {
-        if (cancelled) return;
-        if (d.error) setError(d.error);
-        else setInvoice(d.invoice);
-      })
-      .catch(() => !cancelled && setError("Could not load this invoice."));
+    loadInvoice().catch(() => !cancelled && setError("Could not load this invoice."));
     return () => { cancelled = true; };
-  }, [token]);
+  }, [loadInvoice]);
 
   const startCheckout = useCallback(async (choice: "deposit" | "full") => {
     setOption(choice);
+    setNotice(null);
     try {
       const res = await fetch(`${FUNCTIONS_BASE}/invoice-api?action=checkout`, {
         method: "POST",
@@ -61,16 +69,24 @@ export default function PayInvoice() {
         }),
       });
       const data = await res.json();
+      if (res.status === 409 && data.processing) {
+        setOption(null);
+        setNotice("A payment is already processing for this invoice. Nothing more is needed from you.");
+        await loadInvoice().catch(() => undefined);
+        return;
+      }
       if (!data.url) throw new Error(data.error || "Could not start checkout.");
       window.location.href = data.url as string;
     } catch (e) {
       setError((e as Error).message);
       setOption(null);
     }
-  }, [token]);
+  }, [token, loadInvoice]);
+
 
 
   const paidInFull = invoice?.status === "paid";
+  const isProcessing = !paidInFull && invoice?.is_processing === true;
   const hasDeposit = (invoice?.amount_paid_cents || 0) > 0 && !paidInFull;
 
   return (
@@ -79,7 +95,13 @@ export default function PayInvoice() {
       <main className="mx-auto max-w-2xl px-6 py-16">
         <p className="text-center text-[11px] uppercase tracking-[0.3em] text-gold">White Rabbit LA</p>
         <h1 className="mt-6 text-center font-serif text-3xl">
-          {paidInFull ? "Paid in full" : hasDeposit ? "Remaining balance" : "Your invoice"}
+          {paidInFull
+            ? "Paid in full"
+            : isProcessing
+              ? "Payment processing"
+              : hasDeposit
+                ? "Remaining balance"
+                : "Your invoice"}
         </h1>
 
         {error && <p className="mt-10 text-center text-sm">{error}</p>}
@@ -98,9 +120,17 @@ export default function PayInvoice() {
               )}
             </div>
 
+            {notice && <p className="mt-8 text-center text-sm">{notice}</p>}
+
             {paidInFull ? (
               <p className="mt-8 text-center text-sm">
                 Thank you. Nothing further is due. I'll be in touch closer to the evening.
+              </p>
+            ) : isProcessing ? (
+              <p className="mt-8 text-center text-sm">
+                We've received your payment and it's clearing now. Bank transfers can take a few
+                business days. Nothing more is needed from you. I'll email your receipt the moment
+                it lands.
               </p>
             ) : returnedFromCheckout && !option ? (
               <p className="mt-8 text-center text-sm">
@@ -109,12 +139,17 @@ export default function PayInvoice() {
             ) : !option ? (
               <div className="mt-8 space-y-3">
                 {hasDeposit ? (
-                  <button
-                    onClick={() => startCheckout("full")}
-                    className="w-full bg-[#C9A3A8] px-6 py-4 text-xs uppercase tracking-[0.16em] text-[#223D34]"
-                  >
-                    Pay remaining balance · {money(invoice.balance_cents)}
-                  </button>
+                  <>
+                    <p className="text-center text-sm">
+                      Deposit received · {money(invoice.amount_paid_cents)}
+                    </p>
+                    <button
+                      onClick={() => startCheckout("full")}
+                      className="w-full bg-[#C9A3A8] px-6 py-4 text-xs uppercase tracking-[0.16em] text-[#223D34]"
+                    >
+                      Pay remaining balance · {money(invoice.balance_cents)}
+                    </button>
+                  </>
                 ) : (
                   <>
                     <button

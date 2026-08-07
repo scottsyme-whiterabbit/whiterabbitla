@@ -176,6 +176,20 @@ export function receiptEmail(inv: Invoice, paidCents: number, fullyPaid: boolean
   };
 }
 
+/** Sent to the client when a bank payment does not go through. */
+export function paymentFailedEmail(inv: Invoice) {
+  const name = inv.client_name?.split(" ")[0] || "there";
+  const body = `<p>${esc(name)},</p>
+  <p>A quick note: your bank payment did not go through. Nothing is wrong on your end that a second attempt will not fix, and your invoice is open again whenever you are ready.</p>
+  ${detailsBlock(inv)}
+  <p>If anything looks off, reply here and I'll sort it out with you.</p>`;
+  return {
+    subject: `Your payment did not go through`,
+    html: emailShell(body, payUrl(inv), "Try payment again"),
+  };
+}
+
+
 export async function sendEmail(to: string, subject: string, html: string) {
   const key = Deno.env.get("RESEND_API_KEY");
   if (!key || !to) return false;
