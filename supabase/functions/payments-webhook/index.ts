@@ -75,8 +75,16 @@ Deno.serve(async (req) => {
   const rawEnv = new URL(req.url).searchParams.get("env");
   const env: StripeEnv = rawEnv === "live" ? "live" : rawEnv === "sandbox" ? "sandbox" : stripeEnvironment();
 
+  let event: any;
   try {
-    const event = await verifyWebhook(req, env);
+    event = await verifyWebhook(req, env);
+  } catch (e) {
+    // Signature/parse failure: never retryable.
+    console.error("Webhook signature verification failed:", e);
+    return new Response("Webhook error", { status: 400 });
+  }
+
+  try {
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object;
@@ -94,7 +102,11 @@ Deno.serve(async (req) => {
       headers: { "Content-Type": "application/json" },
     });
   } catch (e) {
-    console.error("Webhook error:", e);
-    return new Response("Webhook error", { status: 400 });
+    // Processing failure: return 500 so Stripe retries the delivery.
+    console.error("Webhook processing error:", event?.id, e);
+    return new Response(JSON.stringify({ error: (e as Error).message }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 });
