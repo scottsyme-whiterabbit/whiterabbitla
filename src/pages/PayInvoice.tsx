@@ -86,6 +86,7 @@ export default function PayInvoice() {
 
 
   const paidInFull = invoice?.status === "paid";
+  const isProcessing = !paidInFull && invoice?.is_processing === true;
   const hasDeposit = (invoice?.amount_paid_cents || 0) > 0 && !paidInFull;
 
   return (
@@ -94,7 +95,13 @@ export default function PayInvoice() {
       <main className="mx-auto max-w-2xl px-6 py-16">
         <p className="text-center text-[11px] uppercase tracking-[0.3em] text-gold">White Rabbit LA</p>
         <h1 className="mt-6 text-center font-serif text-3xl">
-          {paidInFull ? "Paid in full" : hasDeposit ? "Remaining balance" : "Your invoice"}
+          {paidInFull
+            ? "Paid in full"
+            : isProcessing
+              ? "Payment processing"
+              : hasDeposit
+                ? "Remaining balance"
+                : "Your invoice"}
         </h1>
 
         {error && <p className="mt-10 text-center text-sm">{error}</p>}
@@ -113,9 +120,17 @@ export default function PayInvoice() {
               )}
             </div>
 
+            {notice && <p className="mt-8 text-center text-sm">{notice}</p>}
+
             {paidInFull ? (
               <p className="mt-8 text-center text-sm">
                 Thank you. Nothing further is due. I'll be in touch closer to the evening.
+              </p>
+            ) : isProcessing ? (
+              <p className="mt-8 text-center text-sm">
+                We've received your payment and it's clearing now. Bank transfers can take a few
+                business days. Nothing more is needed from you. I'll email your receipt the moment
+                it lands.
               </p>
             ) : returnedFromCheckout && !option ? (
               <p className="mt-8 text-center text-sm">
@@ -124,12 +139,17 @@ export default function PayInvoice() {
             ) : !option ? (
               <div className="mt-8 space-y-3">
                 {hasDeposit ? (
-                  <button
-                    onClick={() => startCheckout("full")}
-                    className="w-full bg-[#C9A3A8] px-6 py-4 text-xs uppercase tracking-[0.16em] text-[#223D34]"
-                  >
-                    Pay remaining balance · {money(invoice.balance_cents)}
-                  </button>
+                  <>
+                    <p className="text-center text-sm">
+                      Deposit received · {money(invoice.amount_paid_cents)}
+                    </p>
+                    <button
+                      onClick={() => startCheckout("full")}
+                      className="w-full bg-[#C9A3A8] px-6 py-4 text-xs uppercase tracking-[0.16em] text-[#223D34]"
+                    >
+                      Pay remaining balance · {money(invoice.balance_cents)}
+                    </button>
+                  </>
                 ) : (
                   <>
                     <button
