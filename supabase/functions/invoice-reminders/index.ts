@@ -103,6 +103,8 @@ Deno.serve(async (req) => {
     try {
       // --- Unpaid: daily reminders, max 4 ---
       if (inv.status === "open") {
+        // Never nag while a payment is already clearing.
+        if (inv.pending_session_id) { results.skipped++; continue; }
         if (inv.initial_reminders_sent >= MAX_INITIAL_REMINDERS) { results.skipped++; continue; }
         const anchor = inv.last_reminder_at || inv.sent_at;
         if (hoursSince(anchor) < MIN_HOURS_BETWEEN) { results.skipped++; continue; }
