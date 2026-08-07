@@ -191,11 +191,15 @@ const Consultation = () => {
                 alt="White Rabbit LA"
                 className="h-14 md:h-16 w-auto mb-6 opacity-90"
               />
+              <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">
+                Private Magic · Los Angeles &amp; Beyond
+              </p>
               <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-cream mb-3">
-                Make Your Next Event <span className="text-accent">Unforgettable</span>
+                Experience Magic<br />
+                <span className="block mt-2 md:mt-3">That Makes You Feel Truly Alive</span>
               </h1>
-              <p className="font-sans text-base text-cream/70 max-w-lg">
-                Luxury magic entertainment by Scott Syme — available nationwide for corporate events, weddings, private parties, and galas.
+              <p className="font-sans text-base text-cream/70 max-w-lg italic">
+                Some evenings are catered. Some are staged. The best are conjured.
               </p>
             </AnimatedSection>
           </div>
