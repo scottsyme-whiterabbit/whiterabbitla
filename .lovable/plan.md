@@ -1,55 +1,55 @@
-# Switching Stripe from TEST to LIVE — safe procedure
+# Client Context Panel on the Deals Board
 
-No changes have been made. This is the procedure and the risks.
+One panel per deal that shows the Gmail conversation, the invoice and payment status, and the two settlement controls, without leaving the pipeline.
 
-## Short answers
+## Gmail feasibility verdict: YES, confirmed working
 
-**1. Changing STRIPE_SECRET_KEY (sk_test to sk_live).**
-`STRIPE_SECRET_KEY` is flagged in this project as "cannot be deleted or updated via secrets tools" — it was created by the Stripe integration, so it is owned by that integration, not by the plain Secrets store. Neither I nor the Secrets UI can overwrite it in place. The intended path is exactly the one you named: **Payments → ... → Disconnect Stripe, then reconnect providing the live secret key.** Disconnect deletes the integration-owned key from the project (your Stripe account, products, customers, and payments are untouched), and reconnect writes the new value. There is no supported "edit in place" for an integration-managed secret.
+This is not theoretical. `supabase/functions/gmail-sync/index.ts` already reads Gmail through the connector gateway with exactly the credentials this panel needs:
 
-Fallback if you would rather not disconnect: switch the code to read a *different*, plain secret name (for example `STRIPE_SECRET_KEY_LIVE`) that you add yourself in Project Settings → Secrets, with `_shared/stripe.ts` preferring it and falling back to `STRIPE_SECRET_KEY`. This avoids touching the integration at all and is fully reversible by removing the new secret. It is a code change, so it only happens if you approve it.
+- Base URL `https://connector-gateway.lovable.dev/google_mail/gmail/v1`
+- Headers `Authorization: Bearer LOVABLE_API_KEY` and `X-Connection-Api-Key: GOOGLE_MAIL_API_KEY`
+- Calls `users/me/messages?q=(from:EMAIL OR to:EMAIL) newer_than:90d`, then `users/me/messages/{id}?format=full`, and parses From/To/Subject/Date headers plus the base64url body
 
-**2. Does disconnect/reconnect touch STRIPE_WEBHOOK_SECRET?**
-In this project the webhook is entirely manual: you created the LIVE endpoint in the Stripe dashboard yourself, and `STRIPE_WEBHOOK_SECRET` is listed as a **plain** secret (no "managed by connector" marker), i.e. it is not owned by the Stripe integration. Disconnect removes the integration's own key material; it does not create a Stripe webhook endpoint for you and does not manage a signing secret in this self-managed setup. So the expectation is that your live `whsec_...` survives.
+I ran a live read against Scott's Gmail connection during this investigation and it returned HTTP 200 with message ids. Both sent and received mail are covered, because the `from: OR to:` query searches the whole mailbox, and the sync already assigns `direction` by comparing the From address against `scott.syme@whiterabbitla.com`.
 
-Because that is an expectation and not something I can guarantee from inside the code, treat it as a verification step, not an assumption: after reconnecting, confirm `STRIPE_WEBHOOK_SECRET` is still present in Project Settings → Secrets, and be ready to re-paste the live signing secret from the Stripe dashboard endpoint page (Stripe shows it again on demand). Also confirm the reconnect flow did not silently register a second webhook endpoint in your Stripe dashboard — if it did, two endpoints means two different signing secrets and half your events would fail verification. Delete or disable any endpoint you did not create.
+Because messages are already synced into `deal_email_messages` and `deal_email_threads`, the panel does not need to hit Gmail on every open. It reads the stored thread instantly and offers a "Sync now" button that triggers the existing on-demand sync for that one deal.
 
-**3. The frontend publishable key.**
-It is not in Cloud → Secrets because it is a Vite build-time variable, not a runtime secret. It lives in two project files:
+## Current structure (what I found)
 
-- `.env` line 4: `VITE_STRIPE_PUBLISHABLE_KEY="pk_test_51TyiGT..."` — used for production builds and publish.
-- `.env.development` line 1: the same `pk_test_...` value — used only by the local/preview dev server, and it overrides `.env` there.
+- The deals board is `src/components/PipelineTab.tsx`, rendered inside `src/pages/AdminNewsletter.tsx`. Deals are Kanban cards grouped by the eight stages.
+- There are already two dialogs on that board: an Edit Deal form and a "Post-Show Emails" panel. Both are shadcn `Dialog`. Clicking a card body calls `openEdit(deal)`; a small mail icon calls `openEmailPanel(deal)`. So there is a place to hook into, but no unified client view yet.
+- A deal's client is `deals.contact_email`. Invoices link back through `event_invoices.deal_id`.
+- `src/components/DealInboxTab.tsx` already renders a two-way message list from the `get_deal_threads` admin action and can send a Gmail reply. That component is the working model for the thread UI; the panel reuses its shape rather than inventing one.
+- Payment controls already exist in `src/components/admin/PaymentsTab.tsx`, calling `invoice-api` with an `x-admin-password` header for `mark_paid` and `set_email_pause`.
 
-`src/lib/stripe.ts` reads `import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY` and derives the environment purely from the prefix: `pk_live_` yields `live`, `pk_test_` yields `sandbox`. That derived string is sent to the backend as the `environment` field from `PayInvoice.tsx` and `SignAgreementModal.tsx`, and it also drives the orange "test mode" banner.
+## Plan
 
-To go live: set `.env`'s `VITE_STRIPE_PUBLISHABLE_KEY` to your `pk_live_...`, leave `.env.development` on `pk_test_...` if you want preview to stay in test (see the mismatch risk below), then Publish. The key is baked into the bundle at build time, so **nothing changes on the live site until you publish again** — editing the file alone is not enough.
+### Phase 1: the panel, with payments
 
-**4. Is env alone sufficient to be live?**
-Yes on the backend. `supabase/functions/_shared/stripe.ts` reads `Deno.env.get("STRIPE_SECRET_KEY")` and `Deno.env.get("STRIPE_WEBHOOK_SECRET")` and nothing else — no gateway, no connection lookup. `stripeEnvironment()` derives live/sandbox from the `sk_live` prefix. So the moment those two env values are the live key and the live signing secret, every charge and every webhook verification is live, regardless of what the Lovable "connection" state says. The connection state only matters because it is what controls whether you can write `STRIPE_SECRET_KEY`.
+1. New action `get_deal_invoices` in `newsletter-admin`: given a `deal_id`, return that deal's `event_invoices` rows, and also match by `client_email` against the deal's `contact_email` so invoices created before the deal link existed still appear.
+2. New component `src/components/admin/ClientContextPanel.tsx`. A full-height dialog with the client name, email, stage and event details in the header, then three sections: Conversation, Payments, Actions.
+3. Payments section lists each invoice with total, amount paid, remaining balance, status, and the settled method ("Paid · Check", falling back to "Paid · Stripe"), plus an "Emails paused" badge.
+4. Actions: the "Mark paid outside Stripe" inline form (amount prefilled with the remaining balance, method dropdown, optional note) and the "Pause client emails" switch, both calling `invoice-api` with `x-admin-password`, same as the Payments tab does today.
+5. Open it from the deal card: the card body opens this panel instead of jumping straight to the edit form, and the panel keeps an "Edit deal details" button through to the existing form. Nothing existing is removed.
 
-Important consequence: the `environment` value the frontend posts to `invoice-api` is validated but **not** used to pick a key — `createStripeClient` ignores its argument. So a stale `pk_test_` frontend against an `sk_live_` backend will not fail loudly; it will quietly take real money while showing the orange "test mode" banner. The two sides must be flipped together.
+### Phase 2: the Gmail thread
 
-## Recommended order of operations
+6. Conversation section loads the stored thread via the existing `get_deal_threads` action: messages in chronological order, inbound and outbound visually distinct, showing from, to, date, subject and snippet, with the body expandable.
+7. A "Sync now" button calls the existing `trigger_gmail_sync` action with this `deal_id`, which runs the proven 90-day `from:/to:` search for just that contact and refreshes the panel when it returns.
+8. If the stored thread is empty on first open, auto-trigger one sync so the panel is never blank for a client who has real email history.
+9. Optional in this phase: a reply box, reusing the `send_gmail_reply` action that `DealInboxTab` already calls.
 
-1. In the Stripe dashboard (live mode), confirm exactly one webhook endpoint points at `/functions/v1/payments-webhook`, and that it subscribes to `checkout.session.completed` and `checkout.session.async_payment_succeeded`. Copy its `whsec_...` and keep it to hand.
-2. Make sure no invoice is mid-checkout. Anyone on a hosted Stripe page during the swap will be completing against the old key.
-3. Payments → ... → Disconnect Stripe.
-4. Reconnect with the live secret key (`sk_live_...`).
-5. Verify in Project Settings → Secrets that `STRIPE_WEBHOOK_SECRET` still holds the live `whsec_`; re-paste if it is gone or was replaced.
-6. Verify in the Stripe dashboard that no extra webhook endpoint was created.
-7. Update `VITE_STRIPE_PUBLISHABLE_KEY` in `.env` to `pk_live_...` (and decide on `.env.development`).
-8. Publish. Confirm the orange test-mode banner is gone on `/pay/<token>` in production.
-9. Smoke test with a real, small invoice (a $1 test invoice you refund) — a real card, since test cards are rejected by live keys. Confirm: hosted checkout opens, the webhook fires 200 in the Stripe dashboard's endpoint log, `event_invoices` records the payment, and the receipt email arrives.
+### Technical notes
 
-## Risks
+- New action, if a live pull is preferred over the stored one: `get_client_emails` in `newsletter-admin`, taking a contact email, running the same gateway query, and returning a normalized list of `{direction, from, to, date, subject, snippet}` without writing to the database. The stored-plus-sync route is the recommended default because it is faster and already battle-tested; this stays as a fallback.
+- Auth: the panel uses the same `adminPassword` prop the pipeline already threads through for `newsletter-admin`, and the `x-admin-password` header for `invoice-api`. No new auth surface.
+- No migration needed. Every column this uses already exists: `event_invoices.deal_id`, `payment_method`, `external_note`, `client_emails_paused`, and the `deal_email_*` tables.
+- Files changed: `src/components/PipelineTab.tsx` (open the panel), `supabase/functions/newsletter-admin/index.ts` (one new action). Files added: `src/components/admin/ClientContextPanel.tsx`.
 
-- **Window with no working key.** Between disconnect and reconnect, `getEnv("STRIPE_SECRET_KEY")` throws and `invoice-api` returns 500 on any checkout attempt. Do this off-hours; it should be minutes.
-- **Silent live charges under a test banner** if the publishable key is not flipped in the same window (see above).
-- **Webhook secret mismatch** is the most likely failure: signature verification throws, `payments-webhook` returns 400, Stripe retries, and invoices stay unpaid in the database even though the money moved. The Stripe endpoint log makes this obvious — check it during the smoke test.
-- **Test-mode data does not migrate.** Any `event_invoices` rows with sandbox `stripe_session_id` / `stripe_payment_intent_id` are now orphaned relative to the live account. Nothing breaks, but do not expect old test sessions to resolve.
-- **`.env.development` left on `pk_test_`** means preview still says sandbox while production is live. That is usually what you want, but the backend is single-key: a preview checkout would hit the live key with a live charge. If anyone tests in preview, keep this in mind — the safest choice is to stop taking real-money paths in preview entirely.
-- **ACH.** `us_bank_account` is the primary method; live ACH requires the payment method to be enabled on the live account and settles asynchronously via `checkout.session.async_payment_succeeded`. Confirm it is enabled in the live dashboard before the first real invoice.
+## Risks and unknowns
 
-## If you want the no-disconnect alternative instead
-
-Say so and I will plan the small change to `supabase/functions/_shared/stripe.ts` to prefer a self-added `STRIPE_SECRET_KEY_LIVE`, leaving the Stripe integration and its test key untouched and making rollback a single secret deletion.
+- **Gmail scope.** The read path is confirmed live, and a sync-only panel needs nothing more. Adding a reply button relies on `gmail-send`, which is already deployed, so it should be fine, but a missing send scope surfaces as HTTP 403 and would need a one-click reconnect.
+- **Matching by email address.** The `from:/to:` search misses a thread where the client wrote from a second address, or where Scott was only cc'd. Threads are also attributed to whichever deal shares that contact email, so two deals for the same person share one conversation.
+- **90-day window.** The existing sync only looks back 90 days. Older history will not appear unless that window is widened for on-demand panel syncs.
+- **Rate limits and speed.** A sync fetches each message individually, so a chatty client can mean twenty round trips and a few seconds of waiting. This is why the panel reads stored data first and treats syncing as an explicit action.
+- **Body rendering.** Stored bodies are plain text truncated at 20,000 characters, and quoted reply chains make long messages repetitive. The panel should collapse bodies by default.
