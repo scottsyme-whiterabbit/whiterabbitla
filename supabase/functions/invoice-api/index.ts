@@ -185,19 +185,105 @@ Deno.serve(async (req) => {
       return json({ ok: true });
     }
 
+    // Settle an invoice paid outside Stripe (cash, check, Venmo, Zelle, wire).
+    // Supports full or partial amounts and stays backward compatible: with no
+    // amount_cents it settles the whole remaining balance.
     if (action === "mark_paid" && req.method === "POST") {
-      const { id } = body || {};
+      const { id, amount_cents, method, note } = body || {};
       const { data } = await supabase.from("event_invoices").select("*").eq("id", id).maybeSingle();
       if (!data) return json({ error: "Not found" }, 404);
-      const inv = data as Invoice;
+      const inv = data as Invoice & {
+        deposit_paid_at: string | null;
+        external_note: string | null;
+      };
+
+      const alreadyPaid = inv.amount_paid_cents || 0;
+      const remaining = Math.max(inv.total_cents - alreadyPaid, 0);
+      const amount =
+        typeof amount_cents === "number" && amount_cents > 0
+          ? Math.round(amount_cents)
+          : remaining;
+      const newPaid = Math.min(alreadyPaid + amount, inv.total_cents);
+      const fullyPaid = newPaid >= inv.total_cents;
+      const now = new Date().toISOString();
+
       const { error } = await supabase.from("event_invoices").update({
-        status: "paid",
-        amount_paid_cents: inv.total_cents,
-        paid_in_full_at: new Date().toISOString(),
+        amount_paid_cents: newPaid,
+        status: fullyPaid ? "paid" : "deposit_paid",
+        payment_method: method || "manual",
+        external_note: note || inv.external_note || null,
+        // A manual settle ends any in-flight Stripe lock.
+        pending_session_id: null,
+        pending_since: null,
+        pending_alert_sent_at: null,
+        ...(fullyPaid
+          ? { paid_in_full_at: now }
+          : { deposit_paid_at: inv.deposit_paid_at || now }),
       }).eq("id", id);
       if (error) return json({ error: error.message }, 500);
-      return json({ ok: true, note: `Marked ${money(inv.total_cents)} paid.` });
+
+      // Best-effort calendar safety net, mirroring payments-webhook: an
+      // externally paid booking should still land on Google Calendar.
+      try {
+        const dealId = (inv as any).deal_id as string | null;
+        if (dealId) {
+          const { data: deal } = await supabase
+            .from("deals")
+            .select("event_date, location, event_type, stage")
+            .eq("id", dealId)
+            .maybeSingle();
+          if (deal) {
+            const backfill: Record<string, unknown> = {};
+            if (!deal.event_date && inv.event_date) backfill.event_date = inv.event_date;
+            if (!deal.location && inv.venue) backfill.location = inv.venue;
+            if (!deal.event_type && inv.event_type) backfill.event_type = inv.event_type;
+            if (Object.keys(backfill).length > 0) {
+              await supabase.from("deals").update(backfill).eq("id", dealId);
+            }
+            const targetStage = deal.stage === "completed" ? "completed" : "booked";
+            const res = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/newsletter-admin`, {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                action: "update_deal_stage",
+                adminPassword: Deno.env.get("ADMIN_PASSWORD"),
+                dealId,
+                stage: targetStage,
+              }),
+            });
+            if (!res.ok) {
+              console.error(`manual settle calendar sync failed for deal ${dealId} [${res.status}]`);
+            }
+          }
+        }
+      } catch (e) {
+        console.error("manual settle calendar sync error (ignored):", e);
+      }
+
+      // No client receipt here: Scott handles the offline payment conversation.
+      return json({
+        ok: true,
+        status: fullyPaid ? "paid" : "deposit_paid",
+        amount_paid_cents: newPaid,
+        fully_paid: fullyPaid,
+        note: `Recorded ${money(amount)} via ${method || "manual"}.`,
+      });
     }
+
+    if (action === "set_email_pause" && req.method === "POST") {
+      const { id, paused } = body || {};
+      if (typeof paused !== "boolean") return json({ error: "paused must be a boolean" }, 400);
+      const { error } = await supabase
+        .from("event_invoices")
+        .update({ client_emails_paused: paused })
+        .eq("id", id);
+      if (error) return json({ error: error.message }, 500);
+      return json({ ok: true, paused });
+    }
+
 
     return json({ error: "Unknown action" }, 400);
   } catch (e) {

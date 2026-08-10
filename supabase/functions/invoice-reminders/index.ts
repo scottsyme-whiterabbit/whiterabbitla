@@ -69,7 +69,9 @@ Deno.serve(async (req) => {
       sent_at: string | null;
       pending_session_id: string | null; pending_since: string | null;
       pending_alert_sent_at: string | null;
+      client_emails_paused: boolean | null;
     };
+
 
     // --- Stuck payment: a bank transfer still not cleared after 6 days ---
     if (inv.pending_session_id && inv.pending_since && !inv.pending_alert_sent_at) {
@@ -98,7 +100,12 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Client emails paused (typically settled outside Stripe): no client-facing
+    // sends at all. The Scott-facing stuck-payment alert above still runs.
+    if (inv.client_emails_paused) { results.skipped++; continue; }
+
     if (!inv.client_email) { results.skipped++; continue; }
+
 
     try {
       // --- Unpaid: daily reminders, max 4 ---

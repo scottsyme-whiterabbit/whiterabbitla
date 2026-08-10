@@ -1062,6 +1062,7 @@ export type Database = {
           anticipation_sent: number
           balance_reminders_sent: number
           client_email: string | null
+          client_emails_paused: boolean
           client_name: string | null
           created_at: string
           deal_id: string | null
@@ -1070,6 +1071,7 @@ export type Database = {
           environment: string
           event_date: string | null
           event_type: string | null
+          external_note: string | null
           id: string
           initial_reminders_sent: number
           last_anticipation_at: string | null
@@ -1078,6 +1080,7 @@ export type Database = {
           last_reminder_at: string | null
           paid_in_full_at: string | null
           pay_token: string
+          payment_method: string | null
           pending_alert_sent_at: string | null
           pending_session_id: string | null
           pending_since: string | null
@@ -1096,6 +1099,7 @@ export type Database = {
           anticipation_sent?: number
           balance_reminders_sent?: number
           client_email?: string | null
+          client_emails_paused?: boolean
           client_name?: string | null
           created_at?: string
           deal_id?: string | null
@@ -1104,6 +1108,7 @@ export type Database = {
           environment?: string
           event_date?: string | null
           event_type?: string | null
+          external_note?: string | null
           id?: string
           initial_reminders_sent?: number
           last_anticipation_at?: string | null
@@ -1112,6 +1117,7 @@ export type Database = {
           last_reminder_at?: string | null
           paid_in_full_at?: string | null
           pay_token: string
+          payment_method?: string | null
           pending_alert_sent_at?: string | null
           pending_session_id?: string | null
           pending_since?: string | null
@@ -1130,6 +1136,7 @@ export type Database = {
           anticipation_sent?: number
           balance_reminders_sent?: number
           client_email?: string | null
+          client_emails_paused?: boolean
           client_name?: string | null
           created_at?: string
           deal_id?: string | null
@@ -1138,6 +1145,7 @@ export type Database = {
           environment?: string
           event_date?: string | null
           event_type?: string | null
+          external_note?: string | null
           id?: string
           initial_reminders_sent?: number
           last_anticipation_at?: string | null
@@ -1146,6 +1154,7 @@ export type Database = {
           last_reminder_at?: string | null
           paid_in_full_at?: string | null
           pay_token?: string
+          payment_method?: string | null
           pending_alert_sent_at?: string | null
           pending_session_id?: string | null
           pending_since?: string | null

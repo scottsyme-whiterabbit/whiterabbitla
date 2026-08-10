@@ -7,6 +7,7 @@ import { DrivePhotoBank } from "@/components/DrivePhotoBank";
 import { BiometricUnlockButton, BiometricEnrollPrompt } from "@/components/BiometricUnlockButton";
 import ResidencyAdmin from "@/components/admin/ResidencyAdmin";
 import SignedAgreementsTab from "@/components/admin/SignedAgreementsTab";
+import PaymentsTab from "@/components/admin/PaymentsTab";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const FN = `${SUPABASE_URL}/functions/v1/proposals-api`;
@@ -56,7 +57,7 @@ const AdminProposals = () => {
   const [loading, setLoading] = useState(false);
   const [editing, setEditing] = useState<FullProposal | null>(null);
   const [showPreview, setShowPreview] = useState(false);
-  const [activeTab, setActiveTab] = useState<"client" | "residency" | "signed">("client");
+  const [activeTab, setActiveTab] = useState<"client" | "residency" | "signed" | "payments">("client");
 
   // Try saved session
   useEffect(() => {
@@ -323,12 +324,24 @@ const AdminProposals = () => {
           >
             Signed Agreements
           </button>
+          <button
+            onClick={() => setActiveTab("payments")}
+            className={`px-5 py-3 text-sm tracking-wider uppercase transition-colors ${
+              activeTab === "payments"
+                ? "border-b-2 border-forest-dark text-forest-dark font-medium"
+                : "text-forest-dark/50 hover:text-forest-dark"
+            }`}
+          >
+            Payments
+          </button>
         </div>
 
         {activeTab === "residency" ? (
           <ResidencyAdmin password={password} />
         ) : activeTab === "signed" ? (
           <SignedAgreementsTab password={password} />
+        ) : activeTab === "payments" ? (
+          <PaymentsTab password={password} />
         ) : (
           <>
         {/* Mobile-prominent New Proposal CTA */}
