@@ -262,6 +262,16 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
     loadEmailActivity(deal);
   };
 
+  // Full client context: conversation, payments, and settlement controls.
+  const openContext = (deal: Deal) => {
+    setContextDeal(deal);
+    setShowContext(true);
+    setShowForm(false);
+    setShowEmailPanel(false);
+  };
+
+
+
   // Stats
   const activeDeals = deals.filter(d => !["completed", "lost"].includes(d.stage));
   const pipelineValue = activeDeals.reduce((sum, d) => sum + (d.deal_value || 0), 0);
