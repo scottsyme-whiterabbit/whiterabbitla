@@ -324,12 +324,24 @@ const AdminProposals = () => {
           >
             Signed Agreements
           </button>
+          <button
+            onClick={() => setActiveTab("payments")}
+            className={`px-5 py-3 text-sm tracking-wider uppercase transition-colors ${
+              activeTab === "payments"
+                ? "border-b-2 border-forest-dark text-forest-dark font-medium"
+                : "text-forest-dark/50 hover:text-forest-dark"
+            }`}
+          >
+            Payments
+          </button>
         </div>
 
         {activeTab === "residency" ? (
           <ResidencyAdmin password={password} />
         ) : activeTab === "signed" ? (
           <SignedAgreementsTab password={password} />
+        ) : activeTab === "payments" ? (
+          <PaymentsTab password={password} />
         ) : (
           <>
         {/* Mobile-prominent New Proposal CTA */}
