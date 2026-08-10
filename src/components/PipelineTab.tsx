@@ -3,6 +3,8 @@ import { toast } from "sonner";
 import { Plus, DollarSign, TrendingUp, Calendar, BarChart3, ChevronDown, ChevronRight, Mail, Eye, MousePointerClick, Search, X } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import ShowCalendar from "@/components/ShowCalendar";
+import ClientContextPanel from "@/components/admin/ClientContextPanel";
+
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -119,6 +121,8 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
   const [emailActivity, setEmailActivity] = useState<{ clicks: any[]; opens: any[] } | null>(null);
   const [loadingActivity, setLoadingActivity] = useState(false);
   const [showEmailPanel, setShowEmailPanel] = useState(false);
+  const [contextDeal, setContextDeal] = useState<Deal | null>(null);
+  const [showContext, setShowContext] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [form, setForm] = useState({
@@ -257,6 +261,16 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
     setShowForm(false);
     loadEmailActivity(deal);
   };
+
+  // Full client context: conversation, payments, and settlement controls.
+  const openContext = (deal: Deal) => {
+    setContextDeal(deal);
+    setShowContext(true);
+    setShowForm(false);
+    setShowEmailPanel(false);
+  };
+
+
 
   // Stats
   const activeDeals = deals.filter(d => !["completed", "lost"].includes(d.stage));
@@ -544,15 +558,15 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
                         onDragStart={() => setDraggedId(deal.id)}
                         className={`border border-border border-l-4 ${followUpBorder[fuStatus]} bg-background p-3 cursor-pointer hover:bg-muted/20 transition-colors`}
                       >
-                        <div className="flex items-center gap-1.5 mb-1" onClick={() => openEdit(deal)}>
+                        <div className="flex items-center gap-1.5 mb-1" onClick={() => openContext(deal)}>
                           <span className="text-sm">{EVENT_EMOJIS[deal.event_type || "other"] || "✨"}</span>
                           <span className="font-sans text-xs text-foreground truncate">{deal.contact_name || deal.contact_email}</span>
                         </div>
                         {deal.event_date && (
-                          <p className="text-[10px] text-muted-foreground" onClick={() => openEdit(deal)}>{new Date(deal.event_date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</p>
+                          <p className="text-[10px] text-muted-foreground" onClick={() => openContext(deal)}>{new Date(deal.event_date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</p>
                         )}
                         <div className="flex items-center justify-between mt-1.5">
-                          <span className="font-mono text-xs text-accent" onClick={() => openEdit(deal)}>{formatCurrency(deal.deal_value)}</span>
+                          <span className="font-mono text-xs text-accent" onClick={() => openContext(deal)}>{formatCurrency(deal.deal_value)}</span>
                           <div className="flex items-center gap-2">
                             <a
                               href={`/admin/proposals?fromDeal=${deal.id}`}
@@ -891,6 +905,14 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
           </button>
         </DialogContent>
       </Dialog>
+
+      <ClientContextPanel
+        deal={contextDeal}
+        open={showContext}
+        onOpenChange={setShowContext}
+        adminPassword={adminPassword}
+        onEditDeal={(d) => openEdit(d as Deal)}
+      />
     </div>
   );
 };

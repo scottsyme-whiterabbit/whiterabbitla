@@ -1307,6 +1307,47 @@ serve(async (req) => {
         });
       }
 
+      case "get_deal_invoices": {
+        // Invoices for the client context panel. Matches on deal_id and also on
+        // client_email, so invoices raised before the deal link existed show up.
+        const { deal_id } = payload;
+        if (!deal_id) {
+          return new Response(JSON.stringify({ error: "deal_id required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const { data: deal } = await supabase
+          .from("deals")
+          .select("contact_email")
+          .eq("id", deal_id)
+          .maybeSingle();
+        const email = (deal?.contact_email || "").toLowerCase().trim();
+
+        const [byDeal, byEmail] = await Promise.all([
+          supabase.from("event_invoices").select("*").eq("deal_id", deal_id),
+          email
+            ? supabase.from("event_invoices").select("*").ilike("client_email", email)
+            : Promise.resolve({ data: [] as Record<string, unknown>[] }),
+        ]);
+
+        const seen = new Set<string>();
+        const invoices = [...(byDeal.data || []), ...((byEmail as { data: Record<string, unknown>[] }).data || [])]
+          .filter((inv) => {
+            const id = inv.id as string;
+            if (seen.has(id)) return false;
+            seen.add(id);
+            return true;
+          })
+          .sort((a, b) =>
+            String(b.created_at).localeCompare(String(a.created_at))
+          );
+
+        return new Response(JSON.stringify({ invoices }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+
       default:
         return new Response(JSON.stringify({ error: "Unknown action" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
