@@ -125,6 +125,12 @@ const reviews = [
   rating: 5
 },
 {
+  name: "Gina F.",
+  role: "18th Birthday Dinner",
+  text: "We hired Scott to perform at my son's 18th birthday dinner, and he was absolutely fantastic! He was right on time, professional, and entertaining. What really stood out was how naturally he connected with the teenagers, he had everyone engaged, laughing, and completely amazed by his magic. He was a great addition to the celebration and made the night even more memorable. We would definitely hire him again for our next event and highly recommend him!",
+  rating: 5
+},
+{
   name: "Jennie O.",
   role: "Private Show Guest",
   text: "Scott is a tremendously talented magician whose sleight of hand mastery is unmatched. He has a funny and charming personality that makes every moment enjoyable.",
