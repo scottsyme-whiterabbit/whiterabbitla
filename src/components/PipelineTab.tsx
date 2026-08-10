@@ -558,15 +558,15 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
                         onDragStart={() => setDraggedId(deal.id)}
                         className={`border border-border border-l-4 ${followUpBorder[fuStatus]} bg-background p-3 cursor-pointer hover:bg-muted/20 transition-colors`}
                       >
-                        <div className="flex items-center gap-1.5 mb-1" onClick={() => openEdit(deal)}>
+                        <div className="flex items-center gap-1.5 mb-1" onClick={() => openContext(deal)}>
                           <span className="text-sm">{EVENT_EMOJIS[deal.event_type || "other"] || "✨"}</span>
                           <span className="font-sans text-xs text-foreground truncate">{deal.contact_name || deal.contact_email}</span>
                         </div>
                         {deal.event_date && (
-                          <p className="text-[10px] text-muted-foreground" onClick={() => openEdit(deal)}>{new Date(deal.event_date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</p>
+                          <p className="text-[10px] text-muted-foreground" onClick={() => openContext(deal)}>{new Date(deal.event_date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</p>
                         )}
                         <div className="flex items-center justify-between mt-1.5">
-                          <span className="font-mono text-xs text-accent" onClick={() => openEdit(deal)}>{formatCurrency(deal.deal_value)}</span>
+                          <span className="font-mono text-xs text-accent" onClick={() => openContext(deal)}>{formatCurrency(deal.deal_value)}</span>
                           <div className="flex items-center gap-2">
                             <a
                               href={`/admin/proposals?fromDeal=${deal.id}`}
