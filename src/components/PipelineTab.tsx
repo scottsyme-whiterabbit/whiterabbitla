@@ -905,6 +905,14 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
           </button>
         </DialogContent>
       </Dialog>
+
+      <ClientContextPanel
+        deal={contextDeal}
+        open={showContext}
+        onOpenChange={setShowContext}
+        adminPassword={adminPassword}
+        onEditDeal={(d) => openEdit(d as Deal)}
+      />
     </div>
   );
 };
