@@ -7,6 +7,7 @@ import { DrivePhotoBank } from "@/components/DrivePhotoBank";
 import { BiometricUnlockButton, BiometricEnrollPrompt } from "@/components/BiometricUnlockButton";
 import ResidencyAdmin from "@/components/admin/ResidencyAdmin";
 import SignedAgreementsTab from "@/components/admin/SignedAgreementsTab";
+import PaymentsTab from "@/components/admin/PaymentsTab";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const FN = `${SUPABASE_URL}/functions/v1/proposals-api`;
