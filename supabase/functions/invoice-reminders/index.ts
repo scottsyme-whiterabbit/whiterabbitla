@@ -100,7 +100,12 @@ Deno.serve(async (req) => {
       }
     }
 
+    // Client emails paused (typically settled outside Stripe): no client-facing
+    // sends at all. The Scott-facing stuck-payment alert above still runs.
+    if (inv.client_emails_paused) { results.skipped++; continue; }
+
     if (!inv.client_email) { results.skipped++; continue; }
+
 
     try {
       // --- Unpaid: daily reminders, max 4 ---
