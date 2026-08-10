@@ -57,7 +57,7 @@ const AdminProposals = () => {
   const [loading, setLoading] = useState(false);
   const [editing, setEditing] = useState<FullProposal | null>(null);
   const [showPreview, setShowPreview] = useState(false);
-  const [activeTab, setActiveTab] = useState<"client" | "residency" | "signed">("client");
+  const [activeTab, setActiveTab] = useState<"client" | "residency" | "signed" | "payments">("client");
 
   // Try saved session
   useEffect(() => {
