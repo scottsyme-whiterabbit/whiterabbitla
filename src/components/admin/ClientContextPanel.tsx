@@ -196,7 +196,7 @@ const ClientContextPanel = ({ deal, open, onOpenChange, adminPassword, onEditDea
     if (!open || !deal) return;
     let cancelled = false;
     setLoading(true);
-    setTab("overview");
+    setTab(null);
     setMessages([]);
     setInvoices([]);
     setProposals([]);
