@@ -329,13 +329,51 @@ const ClientContextPanel = ({ deal, open, onOpenChange, adminPassword, onEditDea
               >
                 <Copy size={11} /> Copy email
               </button>
-            </section>
+          </section>
 
-            {/* Payments */}
-            <section className="border-t border-border pt-4">
-              <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent mb-3 flex items-center gap-1.5">
-                <BadgeDollarSign size={12} /> Payments
-              </p>
+          <button
+            onClick={() => { onOpenChange(false); onEditDeal(deal); }}
+            className="w-full border border-border py-2 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Edit deal details
+          </button>
+        </div>
+
+        {/* FOLDERS */}
+        <div className="flex border-b border-border">
+          {TABS.map((t) => {
+            const Icon = t.icon;
+            const active = tab === t.key;
+            return (
+              <button
+                key={t.key}
+                onClick={() => setTab(active ? null : t.key)}
+                className={`flex items-center gap-1.5 px-3 py-2 font-sans text-[10px] tracking-[0.15em] uppercase border-b-2 -mb-px transition-colors ${
+                  active ? "border-accent text-accent" : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Icon size={12} /> {t.label}
+                {t.count ? <span className="text-[9px] opacity-70">({t.count})</span> : null}
+              </button>
+            );
+          })}
+          {tab && (
+            <button
+              onClick={() => setTab(null)}
+              className="ml-auto px-3 py-2 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Close folder
+            </button>
+          )}
+        </div>
+
+        {/* PAYMENTS */}
+        {tab === "payments" && (
+          <section>
+            <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent mb-3 flex items-center gap-1.5">
+              <BadgeDollarSign size={12} /> Payments
+            </p>
+
               {invoices.length === 0 ? (
                 <p className="text-xs text-muted-foreground italic">No invoice raised for this client yet.</p>
               ) : (
