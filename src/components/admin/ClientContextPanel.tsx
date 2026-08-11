@@ -100,7 +100,7 @@ const statusLabel = (inv: Invoice) => {
 const fmtDate = (d: string | null) =>
   d ? new Date(d.length <= 10 ? `${d}T12:00:00` : d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : null;
 
-type TabKey = "overview" | "correspondence" | "proposal";
+type TabKey = "payments" | "correspondence" | "proposal";
 
 interface Props {
   deal: ContextDeal | null;
@@ -111,7 +111,7 @@ interface Props {
 }
 
 const ClientContextPanel = ({ deal, open, onOpenChange, adminPassword, onEditDeal }: Props) => {
-  const [tab, setTab] = useState<TabKey>("overview");
+  const [tab, setTab] = useState<TabKey | null>(null);
   const [messages, setMessages] = useState<ThreadMessage[]>([]);
   const [threadId, setThreadId] = useState<string | null>(null);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -196,7 +196,7 @@ const ClientContextPanel = ({ deal, open, onOpenChange, adminPassword, onEditDea
     if (!open || !deal) return;
     let cancelled = false;
     setLoading(true);
-    setTab("overview");
+    setTab(null);
     setMessages([]);
     setInvoices([]);
     setProposals([]);
@@ -285,7 +285,7 @@ const ClientContextPanel = ({ deal, open, onOpenChange, adminPassword, onEditDea
   if (!deal) return null;
 
   const TABS: { key: TabKey; label: string; icon: typeof User; count?: number }[] = [
-    { key: "overview", label: "Client", icon: User },
+    { key: "payments", label: "Payments", icon: BadgeDollarSign, count: invoices.length },
     { key: "correspondence", label: "Correspondence", icon: Mail, count: messages.length },
     { key: "proposal", label: "Proposal", icon: FileText, count: proposals.length },
   ];
@@ -302,30 +302,10 @@ const ClientContextPanel = ({ deal, open, onOpenChange, adminPassword, onEditDea
           </p>
         </DialogHeader>
 
-        {/* Tabs */}
-        <div className="flex border-b border-border -mt-1">
-          {TABS.map((t) => {
-            const Icon = t.icon;
-            const active = tab === t.key;
-            return (
-              <button
-                key={t.key}
-                onClick={() => setTab(t.key)}
-                className={`flex items-center gap-1.5 px-3 py-2 font-sans text-[10px] tracking-[0.15em] uppercase border-b-2 -mb-px transition-colors ${
-                  active ? "border-accent text-accent" : "border-transparent text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Icon size={12} /> {t.label}
-                {t.count ? <span className="text-[9px] opacity-70">({t.count})</span> : null}
-              </button>
-            );
-          })}
-        </div>
+        {/* DEAL DETAILS - always first */}
+        <div className="space-y-4">
+          <section className="border border-border p-4 space-y-2">
 
-        {/* CLIENT TILE */}
-        {tab === "overview" && (
-          <div className="space-y-4">
-            <section className="border border-border p-4 space-y-2">
               <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent mb-1">Client details</p>
               <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-xs">
                 {[
@@ -349,13 +329,51 @@ const ClientContextPanel = ({ deal, open, onOpenChange, adminPassword, onEditDea
               >
                 <Copy size={11} /> Copy email
               </button>
-            </section>
+          </section>
 
-            {/* Payments */}
-            <section className="border-t border-border pt-4">
-              <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent mb-3 flex items-center gap-1.5">
-                <BadgeDollarSign size={12} /> Payments
-              </p>
+          <button
+            onClick={() => { onOpenChange(false); onEditDeal(deal); }}
+            className="w-full border border-border py-2 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Edit deal details
+          </button>
+        </div>
+
+        {/* FOLDERS */}
+        <div className="flex border-b border-border">
+          {TABS.map((t) => {
+            const Icon = t.icon;
+            const active = tab === t.key;
+            return (
+              <button
+                key={t.key}
+                onClick={() => setTab(active ? null : t.key)}
+                className={`flex items-center gap-1.5 px-3 py-2 font-sans text-[10px] tracking-[0.15em] uppercase border-b-2 -mb-px transition-colors ${
+                  active ? "border-accent text-accent" : "border-transparent text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Icon size={12} /> {t.label}
+                {t.count ? <span className="text-[9px] opacity-70">({t.count})</span> : null}
+              </button>
+            );
+          })}
+          {tab && (
+            <button
+              onClick={() => setTab(null)}
+              className="ml-auto px-3 py-2 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Close folder
+            </button>
+          )}
+        </div>
+
+        {/* PAYMENTS */}
+        {tab === "payments" && (
+          <section>
+            <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent mb-3 flex items-center gap-1.5">
+              <BadgeDollarSign size={12} /> Payments
+            </p>
+
               {invoices.length === 0 ? (
                 <p className="text-xs text-muted-foreground italic">No invoice raised for this client yet.</p>
               ) : (
@@ -464,16 +482,9 @@ const ClientContextPanel = ({ deal, open, onOpenChange, adminPassword, onEditDea
                   })}
                 </div>
               )}
-            </section>
-
-            <button
-              onClick={() => { onOpenChange(false); onEditDeal(deal); }}
-              className="w-full border border-border py-2 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Edit deal details
-            </button>
-          </div>
+          </section>
         )}
+
 
         {/* CORRESPONDENCE */}
         {tab === "correspondence" && (
