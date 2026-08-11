@@ -1,3 +1,4 @@
+import { ArrowLeft } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -294,6 +295,12 @@ const ClientContextPanel = ({ deal, open, onOpenChange, adminPassword, onEditDea
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl bg-background border-border max-h-[92vh] overflow-y-auto">
         <DialogHeader>
+          <button
+            onClick={() => onOpenChange(false)}
+            className="self-start flex items-center gap-1.5 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors mb-2"
+          >
+            <ArrowLeft size={12} /> Back to main tile
+          </button>
           <DialogTitle className="font-serif text-xl">
             {deal.contact_name || deal.contact_email}
           </DialogTitle>
