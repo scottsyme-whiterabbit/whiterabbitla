@@ -100,7 +100,7 @@ const statusLabel = (inv: Invoice) => {
 const fmtDate = (d: string | null) =>
   d ? new Date(d.length <= 10 ? `${d}T12:00:00` : d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : null;
 
-type TabKey = "overview" | "correspondence" | "proposal";
+type TabKey = "payments" | "correspondence" | "proposal";
 
 interface Props {
   deal: ContextDeal | null;
@@ -111,7 +111,7 @@ interface Props {
 }
 
 const ClientContextPanel = ({ deal, open, onOpenChange, adminPassword, onEditDeal }: Props) => {
-  const [tab, setTab] = useState<TabKey>("overview");
+  const [tab, setTab] = useState<TabKey | null>(null);
   const [messages, setMessages] = useState<ThreadMessage[]>([]);
   const [threadId, setThreadId] = useState<string | null>(null);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
