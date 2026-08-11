@@ -1347,6 +1347,56 @@ serve(async (req) => {
         });
       }
 
+      case "get_deal_proposals": {
+        // Proposals + signed agreements for the client context panel.
+        const { deal_id } = payload;
+        if (!deal_id) {
+          return new Response(JSON.stringify({ error: "deal_id required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const { data: deal } = await supabase
+          .from("deals")
+          .select("contact_email")
+          .eq("id", deal_id)
+          .maybeSingle();
+        const email = (deal?.contact_email || "").toLowerCase().trim();
+
+        const propCols = "id, slug, first_name, last_name, recipient_email, event_type, event_date, venue, tiers, sent_at, created_at, deal_id, square_invoice_url";
+        const [byDeal, byEmail, agreements, views] = await Promise.all([
+          supabase.from("proposals").select(propCols).eq("deal_id", deal_id),
+          email
+            ? supabase.from("proposals").select(propCols).ilike("recipient_email", email)
+            : Promise.resolve({ data: [] as Record<string, unknown>[] }),
+          supabase.from("signed_agreements")
+            .select("id, proposal_id, proposal_slug, tier_name, tier_price, client_name, client_email, signed_at, deal_id")
+            .or(`deal_id.eq.${deal_id}${email ? `,client_email.ilike.${email}` : ""}`),
+          supabase.from("proposal_views").select("proposal_id, viewed_at"),
+        ]);
+
+        const seen = new Set<string>();
+        const proposals = [...(byDeal.data || []), ...((byEmail as { data: Record<string, unknown>[] }).data || [])]
+          .filter((p) => {
+            const id = p.id as string;
+            if (seen.has(id)) return false;
+            seen.add(id);
+            return true;
+          })
+          .map((p) => {
+            const pViews = (views.data || []).filter((v: { proposal_id: string | null }) => v.proposal_id === p.id);
+            const lastViewed = pViews
+              .map((v: { viewed_at: string }) => v.viewed_at)
+              .sort()
+              .pop() || null;
+            return { ...p, view_count: pViews.length, last_viewed_at: lastViewed };
+          })
+          .sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)));
+
+        return new Response(JSON.stringify({ proposals, agreements: agreements.data || [] }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
 
       default:
         return new Response(JSON.stringify({ error: "Unknown action" }), {
