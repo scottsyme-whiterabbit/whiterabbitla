@@ -482,16 +482,9 @@ const ClientContextPanel = ({ deal, open, onOpenChange, adminPassword, onEditDea
                   })}
                 </div>
               )}
-            </section>
-
-            <button
-              onClick={() => { onOpenChange(false); onEditDeal(deal); }}
-              className="w-full border border-border py-2 font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Edit deal details
-            </button>
-          </div>
+          </section>
         )}
+
 
         {/* CORRESPONDENCE */}
         {tab === "correspondence" && (
