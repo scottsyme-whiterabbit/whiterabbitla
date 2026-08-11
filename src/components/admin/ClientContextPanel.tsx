@@ -285,7 +285,7 @@ const ClientContextPanel = ({ deal, open, onOpenChange, adminPassword, onEditDea
   if (!deal) return null;
 
   const TABS: { key: TabKey; label: string; icon: typeof User; count?: number }[] = [
-    { key: "overview", label: "Client", icon: User },
+    { key: "payments", label: "Payments", icon: BadgeDollarSign, count: invoices.length },
     { key: "correspondence", label: "Correspondence", icon: Mail, count: messages.length },
     { key: "proposal", label: "Proposal", icon: FileText, count: proposals.length },
   ];
@@ -302,30 +302,10 @@ const ClientContextPanel = ({ deal, open, onOpenChange, adminPassword, onEditDea
           </p>
         </DialogHeader>
 
-        {/* Tabs */}
-        <div className="flex border-b border-border -mt-1">
-          {TABS.map((t) => {
-            const Icon = t.icon;
-            const active = tab === t.key;
-            return (
-              <button
-                key={t.key}
-                onClick={() => setTab(t.key)}
-                className={`flex items-center gap-1.5 px-3 py-2 font-sans text-[10px] tracking-[0.15em] uppercase border-b-2 -mb-px transition-colors ${
-                  active ? "border-accent text-accent" : "border-transparent text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <Icon size={12} /> {t.label}
-                {t.count ? <span className="text-[9px] opacity-70">({t.count})</span> : null}
-              </button>
-            );
-          })}
-        </div>
+        {/* DEAL DETAILS - always first */}
+        <div className="space-y-4">
+          <section className="border border-border p-4 space-y-2">
 
-        {/* CLIENT TILE */}
-        {tab === "overview" && (
-          <div className="space-y-4">
-            <section className="border border-border p-4 space-y-2">
               <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent mb-1">Client details</p>
               <div className="grid grid-cols-2 gap-y-2 gap-x-4 text-xs">
                 {[
