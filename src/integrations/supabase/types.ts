@@ -1714,6 +1714,42 @@ export type Database = {
         }
         Relationships: []
       }
+      seasonal_campaign_schedule: {
+        Row: {
+          active: boolean
+          campaign_key: string
+          created_at: string
+          ends_on: string
+          min_days_since_any_seasonal_send: number | null
+          min_days_since_prior_send: number | null
+          requires_prior_campaign_key: string | null
+          starts_on: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          campaign_key: string
+          created_at?: string
+          ends_on: string
+          min_days_since_any_seasonal_send?: number | null
+          min_days_since_prior_send?: number | null
+          requires_prior_campaign_key?: string | null
+          starts_on: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          campaign_key?: string
+          created_at?: string
+          ends_on?: string
+          min_days_since_any_seasonal_send?: number | null
+          min_days_since_prior_send?: number | null
+          requires_prior_campaign_key?: string | null
+          starts_on?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       seasonal_campaign_sends: {
         Row: {
           campaign_key: string
