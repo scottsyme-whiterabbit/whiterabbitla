@@ -114,6 +114,21 @@ interface Contact {
   last_email_sent_at: string | null;
 }
 
+interface ScheduleRow {
+  campaign_key: string;
+  starts_on: string;
+  ends_on: string;
+  requires_prior_campaign_key: string | null;
+  min_days_since_prior_send: number | null;
+  min_days_since_any_seasonal_send: number | null;
+  active: boolean;
+}
+
+const EXCLUDED_STATUSES =
+  "(bounced,suppressed,scrubbed_zerobounce,unsubscribed,replied,reserved_personal)";
+
+const daysAgoIso = (d: number) => new Date(Date.now() - d * 24 * 3600 * 1000).toISOString();
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -127,15 +142,12 @@ serve(async (req) => {
     }
 
     const body = await req.json().catch(() => ({}));
-    const campaignKey: string = body.campaign_key;
+    const campaignKey: string | undefined = body.campaign_key || undefined;
     const dryRun: boolean = body.dry_run === true;
-    const limit: number = Math.min(Math.max(parseInt(body.limit ?? String(DAILY_CAP), 10) || DAILY_CAP, 1), DAILY_CAP);
-
-    if (!campaignKey) {
-      return new Response(JSON.stringify({ error: "campaign_key required" }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
+    const requestedLimit: number = Math.min(
+      Math.max(parseInt(body.limit ?? String(DAILY_CAP), 10) || DAILY_CAP, 1),
+      DAILY_CAP,
+    );
 
     // Weekday guard (dry_run bypasses so counts can be inspected any day)
     const pacificDay = new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", weekday: "short" }).format(new Date());
@@ -151,182 +163,266 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
 
-    // Load copy for this campaign
-    const { data: copyRows, error: copyErr } = await supabase
-      .from("seasonal_campaign_copy")
-      .select("category, subject, paragraphs")
-      .eq("campaign_key", campaignKey)
-      .eq("active", true);
-    if (copyErr) throw copyErr;
-    const copyByCategory = new Map<string, CopyRow>();
-    (copyRows || []).forEach((r: any) => copyByCategory.set(r.category, r as CopyRow));
-
-    if (copyByCategory.size === 0) {
-      return new Response(JSON.stringify({ error: `No active copy rows for campaign_key=${campaignKey}` }), {
-        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    // ---- Resolve which campaigns to run ------------------------------------
+    let schedule: ScheduleRow[] = [];
+    if (campaignKey) {
+      // Explicit single-campaign mode (testing). Use its schedule extras if a
+      // row exists, otherwise run with no extra targeting.
+      const { data: row } = await supabase
+        .from("seasonal_campaign_schedule")
+        .select("*")
+        .eq("campaign_key", campaignKey)
+        .maybeSingle();
+      schedule = [
+        (row as ScheduleRow) ?? {
+          campaign_key: campaignKey,
+          starts_on: "", ends_on: "",
+          requires_prior_campaign_key: null,
+          min_days_since_prior_send: null,
+          min_days_since_any_seasonal_send: null,
+          active: true,
+        },
+      ];
+    } else {
+      const today = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Los_Angeles" }).format(new Date());
+      const { data: rows, error: schedErr } = await supabase
+        .from("seasonal_campaign_schedule")
+        .select("*")
+        .eq("active", true)
+        .lte("starts_on", today)
+        .gte("ends_on", today)
+        .order("starts_on", { ascending: true });
+      if (schedErr) throw schedErr;
+      schedule = (rows || []) as ScheduleRow[];
+      if (schedule.length === 0) {
+        return new Response(JSON.stringify({
+          schedule_driven: true, today, in_window: [], sent: 0,
+          message: "No seasonal campaigns in window today",
+        }, null, 2), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
     }
 
-    // Check daily cap (sends already made today for this campaign)
+    // ---- Shared data pulls (once for all campaigns) ------------------------
+    const { data: copyRows, error: copyErr } = await supabase
+      .from("seasonal_campaign_copy")
+      .select("campaign_key, category, subject, paragraphs")
+      .eq("active", true);
+    if (copyErr) throw copyErr;
+    const copyByKey = new Map<string, Map<string, CopyRow>>();
+    (copyRows || []).forEach((r: any) => {
+      if (!copyByKey.has(r.campaign_key)) copyByKey.set(r.campaign_key, new Map());
+      copyByKey.get(r.campaign_key)!.set(r.category, r as CopyRow);
+    });
+
+    // GLOBAL daily cap across all seasonal campaigns
     const startOfDay = new Date(); startOfDay.setUTCHours(0, 0, 0, 0);
     const { count: sentToday } = await supabase
       .from("seasonal_campaign_sends")
       .select("*", { count: "exact", head: true })
-      .eq("campaign_key", campaignKey)
       .gte("sent_at", startOfDay.toISOString());
-    const remaining = Math.max(0, DAILY_CAP - (sentToday || 0));
-    const effectiveLimit = Math.min(limit, dryRun ? DAILY_CAP : remaining);
+    let globalRemaining = Math.max(0, DAILY_CAP - (sentToday || 0));
 
-    // Already-sent contact IDs for this campaign (exclude)
-    const { data: sentRows } = await supabase
-      .from("seasonal_campaign_sends")
-      .select("contact_id")
-      .eq("campaign_key", campaignKey);
-    const sentIds = new Set<string>((sentRows || []).map((r: any) => r.contact_id));
+    // All seasonal sends (for dedup, prior-campaign gates, recency spacing)
+    const allSends: { campaign_key: string; contact_id: string; sent_at: string; status: string }[] = [];
+    {
+      const PAGE = 1000;
+      for (let from = 0; ; from += PAGE) {
+        const { data, error } = await supabase
+          .from("seasonal_campaign_sends")
+          .select("campaign_key, contact_id, sent_at, status")
+          .range(from, from + PAGE - 1);
+        if (error) throw error;
+        allSends.push(...((data || []) as any));
+        if (!data || data.length < PAGE) break;
+      }
+    }
+    const sentByKey = new Map<string, Set<string>>();
+    const lastSentByKeyContact = new Map<string, string>(); // `${key}|${contact}` -> sent_at
+    const lastAnySeasonal = new Map<string, string>();
+    for (const s of allSends) {
+      if (!sentByKey.has(s.campaign_key)) sentByKey.set(s.campaign_key, new Set());
+      sentByKey.get(s.campaign_key)!.add(s.contact_id);
+      if (s.status === "sent") {
+        const k = `${s.campaign_key}|${s.contact_id}`;
+        if (!lastSentByKeyContact.has(k) || s.sent_at > lastSentByKeyContact.get(k)!) {
+          lastSentByKeyContact.set(k, s.sent_at);
+        }
+      }
+      const prev = lastAnySeasonal.get(s.contact_id);
+      if (!prev || s.sent_at > prev) lastAnySeasonal.set(s.contact_id, s.sent_at);
+    }
 
-    // Suppression list
-    const { data: suppRows } = await supabase
-      .from("email_suppression_list")
-      .select("email");
+    const { data: suppRows } = await supabase.from("email_suppression_list").select("email");
     const suppressed = new Set<string>((suppRows || []).map((r: any) => (r.email || "").toLowerCase()));
 
-    // Recent step-email cutoff (5 days)
-    const fiveDaysAgo = new Date(Date.now() - 5 * 24 * 3600 * 1000).toISOString();
-    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
+    const fiveDaysAgo = daysAgoIso(5);
+    const sevenDaysAgo = daysAgoIso(7);
 
-    // Pull candidates. We fetch in a wide pass then filter in-code so we can
-    // apply the OR eligibility rule cleanly.
-    // Order: hot_tag desc, then completed first, then engagement_opens desc.
     const { data: candidates, error: candErr } = await supabase
       .from("cold_email_campaigns")
       .select("id, email, name, company, campaign_category, status, hot_tag, engagement_opens, current_step, last_email_sent_at")
-      .not("status", "in", "(bounced,suppressed,scrubbed_zerobounce,unsubscribed,replied)")
-      .order("hot_tag", { ascending: false, nullsFirst: false })
-      .order("status", { ascending: true }) // 'active' < 'completed' alphabetically — we re-sort below
-      .order("engagement_opens", { ascending: false, nullsFirst: false })
+      .not("status", "in", EXCLUDED_STATUSES)
       .limit(5000);
     if (candErr) throw candErr;
 
-    const eligible: Contact[] = [];
-    const skipReasons: Record<string, number> = {};
-    const bump = (k: string) => { skipReasons[k] = (skipReasons[k] || 0) + 1; };
-
-    for (const c of (candidates || []) as Contact[]) {
-      const email = (c.email || "").toLowerCase();
-      if (!email) { bump("no_email"); continue; }
-      if (suppressed.has(email)) { bump("suppressed"); continue; }
-      if (sentIds.has(c.id)) { bump("already_sent"); continue; }
-      if (c.last_email_sent_at && c.last_email_sent_at > fiveDaysAgo) { bump("recent_step_email"); continue; }
-      if (!copyByCategory.has(c.campaign_category)) { bump("no_copy_for_category"); continue; }
-
-      const isCompleted = c.status === "completed";
-      const isHot = c.hot_tag === true;
-      const isActiveMature =
-        c.status === "active" &&
-        (c.current_step ?? 0) >= 2 &&
-        (!c.last_email_sent_at || c.last_email_sent_at < sevenDaysAgo);
-
-      if (!(isCompleted || isHot || isActiveMature)) { bump("not_eligible"); continue; }
-
-      eligible.push(c);
-    }
-
-    // Re-sort: hot_tag desc, completed first, engagement_opens desc
-    eligible.sort((a, b) => {
-      const ah = a.hot_tag ? 1 : 0, bh = b.hot_tag ? 1 : 0;
-      if (ah !== bh) return bh - ah;
-      const ac = a.status === "completed" ? 1 : 0, bc = b.status === "completed" ? 1 : 0;
-      if (ac !== bc) return bc - ac;
-      return (b.engagement_opens || 0) - (a.engagement_opens || 0);
-    });
-
-    // Breakdown by category (of eligible pool)
-    const byCategory: Record<string, number> = {};
-    for (const c of eligible) byCategory[c.campaign_category] = (byCategory[c.campaign_category] || 0) + 1;
-
-    if (dryRun) {
-      const projectedDays = Math.ceil(eligible.length / DAILY_CAP);
-      return new Response(JSON.stringify({
-        dry_run: true,
-        campaign_key: campaignKey,
-        total_eligible: eligible.length,
-        by_category: byCategory,
-        daily_cap: DAILY_CAP,
-        sent_today: sentToday || 0,
-        remaining_today: remaining,
-        projected_send_days_at_cap: projectedDays,
-        projected_calendar_weeks_tue_thu: Math.ceil(projectedDays / 3),
-        skip_reasons: skipReasons,
-        copy_categories: Array.from(copyByCategory.keys()),
-      }, null, 2), {
-        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
-    // Real send
     const RESEND_KEY = Deno.env.get("RESEND_API_KEY");
-    if (!RESEND_KEY) {
+    if (!dryRun && !RESEND_KEY) {
       return new Response(JSON.stringify({ error: "RESEND_API_KEY missing" }), {
         status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    const toSend = eligible.slice(0, effectiveLimit);
-    let sent = 0, failed = 0;
-    const errors: string[] = [];
+    // ---- Per-campaign processing ------------------------------------------
+    const perCampaign: Record<string, unknown> = {};
+    let totalSent = 0;
 
-    for (const c of toSend) {
-      const copy = copyByCategory.get(c.campaign_category)!;
-      const first = extractFirstName(c.name);
-      const subject = renderMerge(copy.subject, first, c.company);
-      const paragraphsHtml = copy.paragraphs
-        .map((p) => `<p style="margin:0 0 18px">${renderMerge(p, first, c.company)}</p>`)
-        .join("\n");
-      const inner = paragraphsHtml + trackedCTA(c.id, campaignKey, c.campaign_category) + signoff();
-      const html = wrapEmail(subject, inner, c.email, c.id);
-      const oneClickUrl = `https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/unsubscribe-oneclick?email=${encodeURIComponent(c.email)}`;
+    for (const row of schedule) {
+      const key = row.campaign_key;
+      const copyByCategory = copyByKey.get(key);
+      if (!copyByCategory || copyByCategory.size === 0) {
+        perCampaign[key] = { error: `No active copy rows for campaign_key=${key}` };
+        continue;
+      }
 
-      const res = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_KEY}` },
-        body: JSON.stringify({
-          from: "Scott Syme <scott.syme@whiterabbitla.com>",
-          reply_to: "scott.syme@whiterabbitla.com",
-          to: c.email,
-          subject,
-          html,
-          headers: {
-            "List-Unsubscribe": `<mailto:unsubscribe@whiterabbitla.com?subject=unsubscribe>, <${oneClickUrl}>`,
-            "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
-          },
-        }),
+      const alreadySent = sentByKey.get(key) || new Set<string>();
+      const eligible: Contact[] = [];
+      const skipReasons: Record<string, number> = {};
+      const bump = (k: string) => { skipReasons[k] = (skipReasons[k] || 0) + 1; };
+
+      for (const c of (candidates || []) as Contact[]) {
+        const email = (c.email || "").toLowerCase();
+        if (!email) { bump("no_email"); continue; }
+        if (suppressed.has(email)) { bump("suppressed"); continue; }
+        if (alreadySent.has(c.id)) { bump("already_sent"); continue; }
+        if (c.last_email_sent_at && c.last_email_sent_at > fiveDaysAgo) { bump("recent_step_email"); continue; }
+        if (!copyByCategory.has(c.campaign_category)) { bump("no_copy_for_category"); continue; }
+
+        // Schedule targeting extras
+        if (row.requires_prior_campaign_key) {
+          const priorAt = lastSentByKeyContact.get(`${row.requires_prior_campaign_key}|${c.id}`);
+          if (!priorAt) { bump("missing_prior_campaign"); continue; }
+          if (row.min_days_since_prior_send != null &&
+              priorAt > daysAgoIso(row.min_days_since_prior_send)) {
+            bump("prior_send_too_recent"); continue;
+          }
+        }
+        if (row.min_days_since_any_seasonal_send != null) {
+          const anyAt = lastAnySeasonal.get(c.id);
+          if (anyAt && anyAt > daysAgoIso(row.min_days_since_any_seasonal_send)) {
+            bump("seasonal_send_too_recent"); continue;
+          }
+        }
+
+        const isCompleted = c.status === "completed";
+        const isHot = c.hot_tag === true;
+        const isActiveMature =
+          c.status === "active" &&
+          (c.current_step ?? 0) >= 2 &&
+          (!c.last_email_sent_at || c.last_email_sent_at < sevenDaysAgo);
+
+        if (!(isCompleted || isHot || isActiveMature)) { bump("not_eligible"); continue; }
+        eligible.push(c);
+      }
+
+      eligible.sort((a, b) => {
+        const ah = a.hot_tag ? 1 : 0, bh = b.hot_tag ? 1 : 0;
+        if (ah !== bh) return bh - ah;
+        const ac = a.status === "completed" ? 1 : 0, bc = b.status === "completed" ? 1 : 0;
+        if (ac !== bc) return bc - ac;
+        return (b.engagement_opens || 0) - (a.engagement_opens || 0);
       });
 
-      if (res.ok) {
-        await supabase.from("seasonal_campaign_sends").insert({
-          campaign_key: campaignKey, contact_id: c.id, status: "sent",
-        });
-        await supabase.from("newsletter_send_log").insert({
-          campaign_id: `${campaignKey.replace(/_/g, "")}-${c.campaign_category}`,
-          contact_id: c.id,
-          ab_variant: "A",
-        });
-        sent++;
-      } else {
-        failed++;
-        const t = await res.text();
-        errors.push(`${c.email}: ${res.status} ${t.slice(0, 200)}`);
-        // small delay before continuing to avoid burst issues
-        await new Promise((r) => setTimeout(r, 250));
+      const byCategory: Record<string, number> = {};
+      for (const c of eligible) byCategory[c.campaign_category] = (byCategory[c.campaign_category] || 0) + 1;
+
+      if (dryRun) {
+        perCampaign[key] = {
+          window: row.starts_on ? `${row.starts_on} to ${row.ends_on}` : "explicit",
+          total_eligible: eligible.length,
+          by_category: byCategory,
+          skip_reasons: skipReasons,
+          targeting: {
+            requires_prior_campaign_key: row.requires_prior_campaign_key,
+            min_days_since_prior_send: row.min_days_since_prior_send,
+            min_days_since_any_seasonal_send: row.min_days_since_any_seasonal_send,
+          },
+          projected_send_days_at_cap: Math.ceil(eligible.length / DAILY_CAP),
+        };
+        continue;
       }
+
+      const budget = Math.min(requestedLimit, globalRemaining);
+      const toSend = budget > 0 ? eligible.slice(0, budget) : [];
+      let sent = 0, failed = 0;
+      const errors: string[] = [];
+
+      for (const c of toSend) {
+        const copy = copyByCategory.get(c.campaign_category)!;
+        const first = extractFirstName(c.name);
+        const subject = renderMerge(copy.subject, first, c.company);
+        const paragraphsHtml = copy.paragraphs
+          .map((p) => `<p style="margin:0 0 18px">${renderMerge(p, first, c.company)}</p>`)
+          .join("\n");
+        const inner = paragraphsHtml + trackedCTA(c.id, key, c.campaign_category) + signoff();
+        const html = wrapEmail(subject, inner, c.email, c.id);
+        const oneClickUrl = `https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/unsubscribe-oneclick?email=${encodeURIComponent(c.email)}`;
+
+        const res = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_KEY}` },
+          body: JSON.stringify({
+            from: "Scott Syme <scott.syme@whiterabbitla.com>",
+            reply_to: "scott.syme@whiterabbitla.com",
+            to: c.email,
+            subject,
+            html,
+            headers: {
+              "List-Unsubscribe": `<mailto:unsubscribe@whiterabbitla.com?subject=unsubscribe>, <${oneClickUrl}>`,
+              "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+            },
+          }),
+        });
+
+        if (res.ok) {
+          await supabase.from("seasonal_campaign_sends").insert({
+            campaign_key: key, contact_id: c.id, status: "sent",
+          });
+          await supabase.from("newsletter_send_log").insert({
+            campaign_id: `${key.replace(/_/g, "")}-${c.campaign_category}`,
+            contact_id: c.id,
+            ab_variant: "A",
+          });
+          sent++;
+          globalRemaining--;
+          totalSent++;
+          // Keep in-memory spacing maps fresh for later campaigns in this run
+          const nowIso = new Date().toISOString();
+          lastAnySeasonal.set(c.id, nowIso);
+          lastSentByKeyContact.set(`${key}|${c.id}`, nowIso);
+          alreadySent.add(c.id);
+        } else {
+          failed++;
+          const t = await res.text();
+          errors.push(`${c.email}: ${res.status} ${t.slice(0, 200)}`);
+          await new Promise((r) => setTimeout(r, 250));
+        }
+      }
+
+      perCampaign[key] = {
+        sent, failed, candidates: eligible.length, attempted: toSend.length,
+        by_category: byCategory, errors: errors.slice(0, 10),
+      };
     }
 
     return new Response(JSON.stringify({
-      campaign_key: campaignKey, sent, failed,
-      candidates: eligible.length, attempted: toSend.length,
-      remaining_after: Math.max(0, remaining - sent),
-      by_category: byCategory,
-      errors: errors.slice(0, 10),
+      schedule_driven: !campaignKey,
+      dry_run: dryRun,
+      in_window: schedule.map((s) => s.campaign_key),
+      daily_cap_global: DAILY_CAP,
+      sent_today_before_run: sentToday || 0,
+      remaining_today: globalRemaining,
+      total_sent: totalSent,
+      campaigns: perCampaign,
     }, null, 2), {
       status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
