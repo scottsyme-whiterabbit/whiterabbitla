@@ -594,12 +594,70 @@ const AdminNewsletter = () => {
 
   // Mobile bottom nav tabs
   const MOBILE_NAV_TABS = [
-    { key: "dashboard" as const, icon: LayoutGrid, label: "Dashboard" },
+    { key: "dashboard" as const, icon: LayoutGrid, label: "Insights" },
     { key: "pipeline" as const, icon: FileText, label: "Pipeline" },
     { key: "actions" as const, icon: ClipboardList, label: "Actions", badge: actionBadge },
     { key: "revenue" as const, icon: DollarSign, label: "Revenue" },
-    { key: "contacts" as const, icon: Users, label: "Contacts" },
+    { key: "cold" as const, icon: Users, label: "Outreach" },
   ];
+
+  // Grouped navigation — five sections instead of nineteen flat tabs
+  type TabKey = typeof activeTab;
+  const TAB_GROUPS: { key: string; label: string; tabs: { key: TabKey; label: string }[] }[] = [
+    {
+      key: "pipeline",
+      label: "Pipeline",
+      tabs: [
+        { key: "pipeline", label: "Deals" },
+        { key: "inbox", label: "Inbox" },
+        { key: "actions", label: "Action List" },
+        { key: "followups", label: "AI Follow-Ups" },
+      ],
+    },
+    {
+      key: "money",
+      label: "Money",
+      tabs: [
+        { key: "revenue", label: "Revenue & Payments" },
+      ],
+    },
+    {
+      key: "outreach",
+      label: "Outreach",
+      tabs: [
+        { key: "cold", label: "Cold Drips" },
+        { key: "planner", label: "Planner Drip" },
+        { key: "apartment", label: "Resident Drip" },
+        { key: "compose", label: "Compose" },
+        { key: "campaigns", label: "Campaigns" },
+        { key: "calendar", label: "Send Calendar" },
+        { key: "thankyou", label: "Thank You" },
+      ],
+    },
+    {
+      key: "insights",
+      label: "What's Working",
+      tabs: [
+        { key: "dashboard", label: "Scorecard" },
+        { key: "lead_attribution", label: "Where Leads Come From" },
+        { key: "analytics", label: "Channel Performance" },
+        { key: "email_analytics", label: "Email Deep Dive" },
+      ],
+    },
+    {
+      key: "data",
+      label: "Data",
+      tabs: [
+        { key: "contacts", label: "Contacts" },
+        { key: "activity", label: "Activity Log" },
+        { key: "castle", label: "Castle Invites" },
+      ],
+    },
+  ];
+
+  const activeGroup = TAB_GROUPS.find(g => g.tabs.some(t => t.key === activeTab)) || TAB_GROUPS[0];
+  const groupBadge = (groupKey: string) => (groupKey === "pipeline" ? actionBadge : 0);
+
 
   
 
