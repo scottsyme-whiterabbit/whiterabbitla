@@ -73,6 +73,7 @@ const AppContent = () => {
       <StickyMobileCTA />
       <Routes>
         <Route path="/" element={<Index />} />
+        <Route path="/home" element={<Navigate to="/" replace />} />
         <Route path="/experience" element={<Experience />} />
         <Route path="/experience/gallery" element={<ExperienceGallery />} />
         <Route path="/about" element={<About />} />
