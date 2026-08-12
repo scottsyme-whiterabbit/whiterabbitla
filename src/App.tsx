@@ -96,7 +96,7 @@ const AppContent = () => {
         <Route path="/areas/:citySlug" element={<ServiceAreaDetail />} />
         <Route path="/unsubscribe" element={<Unsubscribe />} />
         <Route path="/event-magician" element={<RemovedRouteRedirect to="/" />} />
-        <Route path="/home" element={<RemovedRouteRedirect to="/" />} />
+        <Route path="/home" element={<Navigate to="/" replace />} />
         <Route path="/blog/santa-barbara-halloween-party-magician" element={<RemovedRouteRedirect to="/areas/santa-barbara" />} />
         <Route path="/blog/dallas-resident-event-magician" element={<RemovedRouteRedirect to="/blog" />} />
         <Route path="/blog/napa-valley-resident-event-magician" element={<RemovedRouteRedirect to="/blog/napa-valley-corporate-event-magician" />} />

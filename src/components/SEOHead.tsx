@@ -42,7 +42,7 @@ const SEOHead = ({
   useEffect(() => {
     const url = canonical
       ? canonical.startsWith("http") ? canonical : `${BASE_URL}${canonical}`
-      : BASE_URL;
+      : `${BASE_URL}${window.location.pathname}`;
     const image = ogImage
       ? ogImage.startsWith("http") ? ogImage : `${BASE_URL}${ogImage}`
       : DEFAULT_IMAGE;
