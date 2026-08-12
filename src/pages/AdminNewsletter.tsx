@@ -747,49 +747,83 @@ const AdminNewsletter = () => {
           )}
         </div>
 
-        {/* Desktop Tabs — hidden on mobile */}
-        <div className="hidden md:flex gap-1 mb-8 border-b border-border overflow-x-auto">
-          {(["dashboard", "pipeline", "inbox", "actions", "followups", "activity", "revenue", "contacts", "cold", "castle", "compose", "campaigns", "calendar", "analytics", "email_analytics", "lead_attribution", "planner", "apartment", "thankyou"] as const).map(tab => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`relative px-4 py-2 font-sans text-sm tracking-wider uppercase transition-colors whitespace-nowrap ${
-                activeTab === tab ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {tab === "actions" ? "ACTION LIST" : tab === "followups" ? "✨ FOLLOW-UPS" : tab === "activity" ? "📜 ACTIVITY" : tab === "inbox" ? "📬 INBOX" : tab === "email_analytics" ? "📊 EMAIL ANALYTICS" : tab === "lead_attribution" ? "📈 ATTRIBUTION" : tab === "cold" ? "🎯 OUTREACH" : tab === "castle" ? "🏰 CASTLE" : tab}
-              {tab === "actions" && actionBadge > 0 && (
-                <span className="absolute -top-1 -right-1 bg-destructive text-destructive-foreground text-[9px] font-sans min-w-[16px] h-4 flex items-center justify-center rounded-full px-1">{actionBadge}</span>
-              )}
-            </button>
-          ))}
-        </div>
-
-        {/* Mobile "More" tabs — shown when more tabs overlay is open */}
-        {isMobile && showMoreTabs && (
-          <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex flex-col">
-            <div className="flex items-center justify-between p-4 border-b border-border">
-              <h2 className="font-sans text-sm tracking-[0.2em] uppercase text-foreground">All Tabs</h2>
-              <button onClick={() => setShowMoreTabs(false)} className="min-h-[44px] min-w-[44px] flex items-center justify-center text-muted-foreground">
-                <X size={20} />
-              </button>
-            </div>
-            <div className="flex-1 overflow-y-auto p-4 space-y-1">
-              {(["dashboard", "pipeline", "inbox", "actions", "followups", "activity", "revenue", "contacts", "cold", "castle", "compose", "campaigns", "calendar", "analytics", "email_analytics", "lead_attribution", "planner", "apartment", "thankyou"] as const).map(tab => (
+        {/* Desktop Nav — five sections, sub-tabs underneath */}
+        <div className="hidden md:block mb-8">
+          <div className="flex gap-1 border-b border-border overflow-x-auto">
+            {TAB_GROUPS.map(group => {
+              const isActive = activeGroup.key === group.key;
+              const badge = groupBadge(group.key);
+              return (
                 <button
-                  key={tab}
-                  onClick={() => { setActiveTab(tab); setShowMoreTabs(false); }}
-                  className={`w-full text-left px-4 py-3 font-sans text-sm tracking-wider uppercase transition-colors min-h-[44px] ${
-                    activeTab === tab ? "text-accent bg-accent/10" : "text-foreground hover:bg-muted/20"
+                  key={group.key}
+                  onClick={() => setActiveTab(group.tabs[0].key)}
+                  className={`relative px-5 py-2.5 font-sans text-sm tracking-[0.15em] uppercase transition-colors whitespace-nowrap ${
+                    isActive ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  {tab === "actions" ? "ACTION LIST" : tab === "followups" ? "✨ Follow-Ups" : tab === "activity" ? "📜 Activity Log" : tab === "inbox" ? "📬 Inbox" : tab === "email_analytics" ? "📊 Email Analytics" : tab === "lead_attribution" ? "📈 Lead Attribution" : tab === "cold" ? "🎯 Cold Outreach" : tab === "castle" ? "🏰 Castle Invites" : tab}
-                  {tab === "actions" && actionBadge > 0 && (
+                  {group.label}
+                  {badge > 0 && (
+                    <span className="absolute top-0.5 -right-0.5 bg-destructive text-destructive-foreground text-[9px] font-sans min-w-[16px] h-4 flex items-center justify-center rounded-full px-1">{badge}</span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+          {activeGroup.tabs.length > 1 && (
+            <div className="flex flex-wrap gap-2 mt-4">
+              {activeGroup.tabs.map(tab => (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  className={`relative px-3.5 py-1.5 font-sans text-[11px] tracking-[0.12em] uppercase border transition-colors ${
+                    activeTab === tab.key
+                      ? "border-accent text-accent bg-accent/10"
+                      : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/30"
+                  }`}
+                >
+                  {tab.label}
+                  {tab.key === "actions" && actionBadge > 0 && (
                     <span className="ml-2 bg-destructive text-destructive-foreground text-[9px] font-sans min-w-[16px] h-4 inline-flex items-center justify-center rounded-full px-1">{actionBadge}</span>
                   )}
                 </button>
               ))}
             </div>
+          )}
+        </div>
+
+        {/* Mobile "More" tabs — grouped */}
+        {isMobile && showMoreTabs && (
+          <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex flex-col">
+            <div className="flex items-center justify-between p-4 border-b border-border">
+              <h2 className="font-sans text-sm tracking-[0.2em] uppercase text-foreground">All Sections</h2>
+              <button onClick={() => setShowMoreTabs(false)} className="min-h-[44px] min-w-[44px] flex items-center justify-center text-muted-foreground">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="flex-1 overflow-y-auto p-4 space-y-5">
+              {TAB_GROUPS.map(group => (
+                <div key={group.key}>
+                  <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-accent mb-1.5 px-1">{group.label}</p>
+                  <div className="space-y-1">
+                    {group.tabs.map(tab => (
+                      <button
+                        key={tab.key}
+                        onClick={() => { setActiveTab(tab.key); setShowMoreTabs(false); }}
+                        className={`w-full text-left px-4 py-3 font-sans text-sm tracking-wider uppercase transition-colors min-h-[44px] ${
+                          activeTab === tab.key ? "text-accent bg-accent/10" : "text-foreground hover:bg-muted/20"
+                        }`}
+                      >
+                        {tab.label}
+                        {tab.key === "actions" && actionBadge > 0 && (
+                          <span className="ml-2 bg-destructive text-destructive-foreground text-[9px] font-sans min-w-[16px] h-4 inline-flex items-center justify-center rounded-full px-1">{actionBadge}</span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
           </div>
         )}
 
