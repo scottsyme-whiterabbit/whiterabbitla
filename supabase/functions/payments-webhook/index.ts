@@ -72,8 +72,9 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
   // Best-effort calendar safety net: a paid invoice (deposit or full) guarantees
   // the linked deal is booked and synced to Google Calendar. Never throws.
   try {
-    const dealId = (data as any).deal_id as string | null;
+    const dealId = await resolveDealId(inv);
     if (dealId) {
+
       const { data: deal } = await supabase
         .from("deals")
         .select("event_date, location, event_type, stage")
