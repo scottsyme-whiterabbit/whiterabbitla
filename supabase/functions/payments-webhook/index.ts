@@ -13,7 +13,65 @@ function getSupabase() {
   return _supabase;
 }
 
+/**
+ * A payment must always land in the pipeline, even when the invoice was made
+ * from a hand-built proposal that was never linked to a deal. Resolution order:
+ * invoice.deal_id -> agreement.deal_id -> proposal.deal_id -> existing deal with
+ * the same contact email -> create a new deal. The resolved id is written back
+ * to the invoice (and agreement) so later events skip this lookup.
+ */
+async function resolveDealId(inv: any): Promise<string | null> {
+  const supabase = getSupabase();
+  if (inv.deal_id) return inv.deal_id as string;
+
+  let dealId: string | null = null;
+
+  if (inv.agreement_id) {
+    const { data: agr } = await supabase
+      .from("signed_agreements").select("deal_id, proposal_id").eq("id", inv.agreement_id).maybeSingle();
+    dealId = (agr as any)?.deal_id || null;
+    if (!dealId && (agr as any)?.proposal_id) {
+      const { data: prop } = await supabase
+        .from("proposals").select("deal_id").eq("id", (agr as any).proposal_id).maybeSingle();
+      dealId = (prop as any)?.deal_id || null;
+    }
+  }
+
+  const email = (inv.client_email || "").trim().toLowerCase();
+  if (!dealId && email) {
+    const { data: existing } = await supabase
+      .from("deals").select("id").ilike("contact_email", email)
+      .order("created_at", { ascending: false }).limit(1);
+    dealId = (existing as any)?.[0]?.id || null;
+  }
+
+  if (!dealId && email) {
+    const { data: created, error: createError } = await supabase.from("deals").insert({
+      contact_email: email,
+      contact_name: inv.client_name || null,
+      event_type: inv.event_type || null,
+      event_date: inv.event_date || null,
+      location: inv.venue || null,
+      deal_value: inv.total_cents ? Math.round(inv.total_cents / 100) : null,
+      stage: "new",
+      source: "invoice_payment",
+      notes: "Auto-created from a paid invoice (no linked deal existed).",
+    }).select("id").maybeSingle();
+    if (createError) console.error("deal auto-create failed", createError);
+    dealId = (created as any)?.id || null;
+  }
+
+  if (dealId) {
+    await supabase.from("event_invoices").update({ deal_id: dealId }).eq("id", inv.id);
+    if (inv.agreement_id) {
+      await supabase.from("signed_agreements").update({ deal_id: dealId }).eq("id", inv.agreement_id);
+    }
+  }
+  return dealId;
+}
+
 async function handleCheckoutCompleted(session: any, env: StripeEnv) {
+
   const invoiceId = session.metadata?.invoice_id;
   if (!invoiceId) {
     console.warn("checkout session without metadata.invoice_id", session.id);
@@ -72,8 +130,9 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
   // Best-effort calendar safety net: a paid invoice (deposit or full) guarantees
   // the linked deal is booked and synced to Google Calendar. Never throws.
   try {
-    const dealId = (data as any).deal_id as string | null;
+    const dealId = await resolveDealId(inv);
     if (dealId) {
+
       const { data: deal } = await supabase
         .from("deals")
         .select("event_date, location, event_type, stage")
