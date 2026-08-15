@@ -639,32 +639,27 @@ const Index = () => {
       {/* Voice Search FAQ */}
       <FAQSection
         schemaId="homepage-faq-schema"
-        subtitle="Common Questions"
-        title="What People Ask"
+        subtitle="Questions We're Often Asked"
         faqs={[
           {
-            question: "Who is the best magician for a birthday party in Los Angeles?",
-            answer: "Scott Syme of White Rabbit is one of the most sought-after magicians in Los Angeles for birthday parties and private celebrations. A member of the Magic Castle® in Hollywood, Scott brings world-class close-up magic, mentalism, and a curated atmosphere to milestone birthdays, dinner parties, and exclusive gatherings of all sizes.",
+            question: "What is the difference between close-up magic and a parlor show?",
+            answer: "Two formats. Close-up is roaming: Scott moves between small groups during a cocktail hour, performing at arm's length with no stage and no setup. The parlor show is seated, roughly 45 minutes, with curated lighting, a signature soundtrack, and a room built on site. Cocktail hours take close-up. Programs that need a centerpiece take the parlor show. Many evenings use both.",
           },
           {
-            question: "What is the best entertainment for a wedding cocktail hour?",
-            answer: "Close-up magic is widely considered the best cocktail hour entertainment because it breaks the ice between guests who've never met. Scott Syme performs intimate mentalism and interactive magic for small groups, creating shared moments of laughter and amazement that set the tone for the entire evening.",
+            question: "How many guests can a close-up magician entertain?",
+            answer: "Close-up works for 50 to 500 guests. Above 250 we recommend a second magician and can refer one. Most bookings run two to three hours of continuous roaming, with a one-hour minimum. Scott works in groups of four to eight, moving through the room as the energy allows.",
           },
           {
-            question: "What type of magic is best for a corporate event?",
-            answer: "For corporate events, close-up roaming magic is the gold standard. Scott moves through cocktail hours, galas, and receptions performing mentalism and interactive magic for small groups, turning strangers into collaborators within minutes. For events that call for a centerpiece moment, the Private Magic Show is a curated 45-minute theatrical experience designed for groups of 20 to 120.",
+            question: "What does the venue need to provide?",
+            answer: "For a standard parlor show, nothing technical. All lighting and sound is self-contained and battery powered, so there are no outlets required and no cables across your floor. We need two things: parking close to the entrance, and a private room to change. The performance area is roughly 10 feet wide by 8 feet deep with a minimum 8 foot ceiling. Close-up needs no dedicated space at all.\n\nFor galas or stage programs above roughly 120 guests, house AV is required: handheld microphone, stand, headset microphone, a 3.5mm or Lightning input for playback, and a technician on site.",
           },
           {
-            question: "How far in advance should I book a magician?",
-            answer: "We recommend reaching out 4 to 8 weeks before your event, though peak seasons like the holidays and summer weekends can fill months in advance. Contact us with your date and we'll usually confirm availability within a few hours.",
-          },
-          {
-            question: "What makes White Rabbit different from other magicians?",
-            answer: "White Rabbit is not just a magic show. It's a hospitality-driven experience. Scott Syme combines world-class mentalism and interactive magic with the warmth of a five-star host, curated lighting, a signature soundtrack, and an atmosphere that makes guests feel truly cared for. That's why brands like Netflix, Disney, and Morgan Stanley keep coming back.",
+            question: "Are you insured, and can you provide a certificate?",
+            answer: "Yes. $1,000,000 per occurrence and $2,000,000 aggregate in commercial general liability through Specialty Insurance Agency. Your venue can be named as additional insured, and the certificate is issued within two business days. Most venues require it. We send it before they ask.",
           },
           {
             question: "Does White Rabbit travel outside of Los Angeles?",
-            answer: "Yes. While based in Los Angeles, Scott regularly performs at events nationwide, from New York and Miami to Las Vegas, Aspen, and beyond. Travel is available for corporate events, destination weddings, and private celebrations anywhere in the world.",
+            answer: "Yes. Los Angeles is home, and a good part of the year happens elsewhere: New York, Miami, Aspen, Jackson Hole, the Hamptons, Las Vegas, and internationally for destination weddings and corporate programs. Both formats travel.",
           },
         ]}
       />
