@@ -51,22 +51,12 @@ import netflixLogo from "@/assets/logos/normalized/netflix.png";
 import disneyLogo from "@/assets/logos/normalized/disney.png";
 import rollsroyceLogo from "@/assets/logos/normalized/rollsroyce.png";
 import morganstanleyLogo from "@/assets/logos/normalized/morganstanley.png";
-import youtubeLogo from "@/assets/logos/normalized/youtube.png";
-import hyattLogo from "@/assets/logos/normalized/hyatt.png";
 import rivianLogo from "@/assets/logos/normalized/rivian.png";
 import paramountLogo from "@/assets/logos/normalized/paramount.png";
 import oliviarodrigoLogo from "@/assets/logos/normalized/oliviarodrigo.png";
-import taittingerLogo from "@/assets/logos/normalized/taittinger.png";
-import pistolaLogo from "@/assets/logos/normalized/pistola.png";
 import lionsgateLogo from "@/assets/logos/normalized/lionsgate.png";
-import agtLogo from "@/assets/logos/normalized/agt.png";
 import beverlyHiltonLogo from "@/assets/logos/normalized/beverlyhilton.png";
-import sohohouseLogo from "@/assets/logos/normalized/sohohouse.png";
-import gravitasLogo from "@/assets/logos/normalized/gravitas.png";
 import magicCastleLogo from "@/assets/logos/normalized/magiccastle.png";
-import compassLogo from "@/assets/logos/normalized/compass.png";
-import theAgencyLogo from "@/assets/logos/normalized/theagency.png";
-import lplFinancialLogo from "@/assets/logos/normalized/lplfinancial.png";
 
 // Logos are pre-normalized (trimmed of baked padding, exported at 3x retina).
 // `h` is the render height in px, tiered by aspect ratio for optical balance:
