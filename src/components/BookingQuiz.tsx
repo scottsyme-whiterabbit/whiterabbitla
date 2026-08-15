@@ -27,8 +27,8 @@ const EVENT_TYPES = [
 
 const GUEST_COUNTS = [
   { id: "intimate", label: "Under 30", description: "Intimate dinner or VIP reception" },
-  { id: "medium", label: "30–75", description: "Private party or cocktail hour" },
-  { id: "large", label: "75–150", description: "Corporate event or gala" },
+  { id: "medium", label: "30 to 75", description: "Private party or cocktail hour" },
+  { id: "large", label: "75 to 150", description: "Corporate event or gala" },
   { id: "xlarge", label: "150+", description: "Grand affair, tournament, or festival" },
 ];
 

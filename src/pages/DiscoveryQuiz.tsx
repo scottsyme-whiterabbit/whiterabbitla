@@ -72,8 +72,8 @@ const questions = [
     subtitle: "This helps us recommend the right format.",
     options: [
       { value: "intimate", label: "Under 30", desc: "Intimate gathering" },
-      { value: "medium", label: "30–75", desc: "Medium-sized event" },
-      { value: "large", label: "75–200", desc: "Large event" },
+      { value: "medium", label: "30 to 75", desc: "Medium-sized event" },
+      { value: "large", label: "75 to 200", desc: "Large event" },
       { value: "grand", label: "200+", desc: "Grand-scale production" },
     ],
   },

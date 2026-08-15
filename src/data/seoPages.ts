@@ -805,7 +805,7 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
   const shared: FaqItem[] = [
     {
       question: `How far in advance should I book a magician in ${location}?`,
-      answer: `We recommend booking 2–4 weeks in advance, especially during peak event season (October–December and April–June). Popular dates fill quickly. Contact us as soon as you have a date in mind and we'll usually confirm availability within a few hours.`,
+      answer: `We recommend booking 2 to 4 weeks in advance, especially during peak event season (October to December and April to June). Popular dates fill quickly. Contact us as soon as you have a date in mind and we'll usually confirm availability within a few hours.`,
     },
     {
       question: `What makes White Rabbit different from other magicians in ${location}?`,
@@ -851,7 +851,7 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
       },
       {
         question: "How long does a close-up magic performance typically last?",
-        answer: "Most clients book 2–3 hours of roaming close-up magic for cocktail hours and receptions. Each small group gets about 8–10 minutes of dedicated performance. Custom timing is always available based on your event's needs.",
+        answer: "Most clients book 2 to 3 hours of roaming close-up magic for cocktail hours and receptions. Each small group gets about 8 to 10 minutes of dedicated performance. Custom timing is always available based on your event's needs.",
       },
     ],
     "private-magic-show": [
@@ -887,7 +887,7 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
     "holiday-party-magician": [
       {
         question: "How far in advance should we book for a holiday party?",
-        answer: "Holiday season (October through January) is by far the busiest time. We recommend booking at least 6–8 weeks in advance for December dates. Many companies rebook the following year's holiday party the week after the current one. Early planning is essential.",
+        answer: "Holiday season (October through January) is by far the busiest time. We recommend booking at least 6 to 8 weeks in advance for December dates. Many companies rebook the following year's holiday party the week after the current one. Early planning is essential.",
       },
       {
         question: "What makes a holiday party magician different from a regular DJ or band?",
@@ -911,7 +911,7 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
       },
       {
         question: "How long does the performance last at a rehearsal dinner?",
-        answer: "Most couples book 1–2 hours of roaming magic during cocktails and dinner. Scott moves table to table, creating personal moments for each group. It's subtle, elegant, and never interrupts the flow of the evening.",
+        answer: "Most couples book 1 to 2 hours of roaming magic during cocktails and dinner. Scott moves table to table, creating personal moments for each group. It's subtle, elegant, and never interrupts the flow of the evening.",
       },
     ],
     "halloween-party-magician": [
@@ -2852,7 +2852,7 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
         `But the entertainment can start on the course itself. One of the most effective formats is stationing a magician at a signature hole where groups inevitably back up. Instead of standing around for five minutes waiting for the group ahead to clear, your players get a close-up magic performance right at the tee box. It turns dead time into the most talked-about moment of the round, and players arrive at the 19th hole already buzzing about the entertainment.`,
         `Scott is a proud member of the world-famous Magic Castle® in Hollywood, and his style is perfectly calibrated for the country club environment. Sophisticated, conversational, whiskey-in-hand entertainment that feels like it belongs at a private club. No stage required. No cheesy props. Just a master craftsman moving through the room creating impossible moments that spark genuine connection.`,
         `Beyond the magic, Scott also serves as a professional MC and host, managing the flow from cocktail hour through dinner, awards, and auction. It's a hybrid offering that eliminates the need for a separate emcee while keeping energy high and pacing tight.`,
-        `Available for charity tournaments, corporate golf outings, member-guest events, and private club celebrations across ${location}. Limited dates during peak golf season (April–October). Inquire now.`,
+        `Available for charity tournaments, corporate golf outings, member-guest events, and private club celebrations across ${location}. Limited dates during peak golf season (April to October). Inquire now.`,
       ];
       break;
 
@@ -2865,7 +2865,7 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
         `The best galas don't just raise money. They create an emotional experience that makes donors feel proud, connected, and eager to give. That's where White Rabbit comes in. During cocktail hour, Scott moves through the room performing intimate close-up magic for small groups. By the time guests sit down for dinner, the energy in the room is electric. Strangers have bonded. The mood is generous. The ask lands differently when people feel that good.`,
         `Scott is a member of the world-famous Magic Castle® in Hollywood and has performed for Netflix, Disney, Morgan Stanley, and Rolls Royce. His presence at your gala signals to donors that this is a world-class event, the kind of evening where extraordinary things happen, including extraordinary generosity.`,
         `Scott can also perform a pre-auction parlor show that electrifies the room right before the live auction, creating a surge of energy that translates directly to higher bids. Every element of the performance is tailored to serve your fundraising goals.`,
-        `Available for nonprofit galas, charity auctions, philanthropic dinners, and fundraising events across ${location}. Dates during gala season (September–December) fill early. Reach out now.`,
+        `Available for nonprofit galas, charity auctions, philanthropic dinners, and fundraising events across ${location}. Dates during gala season (September to December) fill early. Reach out now.`,
       ];
       break;
 
@@ -2904,7 +2904,7 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
         `Here's what makes a rehearsal dinner uniquely special: it's the first time both families are in the same room, together, with no ceremony to attend and no schedule to follow. It's relaxed, emotional, and full of first introductions. Close-up magic is the perfect icebreaker. Within minutes of Scott arriving, your aunt is bonding with their grandmother over a card trick, and the best man is buying drinks for the maid of honor after a mind-reading routine that left them both speechless.`,
         `Scott is a proud member of the world-famous Magic Castle® in Hollywood, and his style is warm, intimate, and perfectly suited for the rehearsal dinner atmosphere. He moves table to table, creating personal moments for each group, never interrupting toasts, never pulling focus from the couple. Just elegant, conversational magic that makes the evening feel special.`,
         `The rehearsal dinner sets the tone for the entire wedding weekend. When guests arrive at the ceremony the next day, they're already connected, already energized, already talking about the incredible evening they shared. That's the White Rabbit effect.`,
-        `Available for rehearsal dinners, welcome parties, and wedding weekend events across ${location}. Wedding season dates (May–October) book quickly. Couples who book the rehearsal dinner often add White Rabbit to the wedding reception too. Inquire now.`,
+        `Available for rehearsal dinners, welcome parties, and wedding weekend events across ${location}. Wedding season dates (May to October) book quickly. Couples who book the rehearsal dinner often add White Rabbit to the wedding reception too. Inquire now.`,
       ];
       break;
 
@@ -2930,7 +2930,7 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
         `Christmas parties and New Year's Eve events share a common challenge: high expectations. People want the evening to feel special, festive, and genuinely memorable. A good playlist isn't enough. White Rabbit delivers the "wow" factor that turns your celebration from pleasant to legendary. Scott moves through the room performing intimate close-up magic that gives every guest their own personal moment of wonder.`,
         `A member of the world-famous Magic Castle® in Hollywood, Scott's style is warm, celebratory, and perfectly suited for the holiday atmosphere. A seated dinner where he visits each table, a cocktail party where he floats between groups, the magic creates the kind of shared joy that defines the holidays at their best.`,
         `For New Year's Eve, Scott can build toward a midnight crescendo, a grand finale of mentalism and magic that makes the countdown feel like the culmination of something extraordinary. It's the difference between watching the ball drop on a screen and being part of something you'll remember forever.`,
-        `December is our busiest month. Christmas party dates book 2–3 months in advance. New Year's Eve is a single-night event that fills first. If you're planning a holiday celebration in ${location}, reach out now to secure your date.`,
+        `December is our busiest month. Christmas party dates book 2 to 3 months in advance. New Year's Eve is a single-night event that fills first. If you're planning a holiday celebration in ${location}, reach out now to secure your date.`,
       ];
       break;
 

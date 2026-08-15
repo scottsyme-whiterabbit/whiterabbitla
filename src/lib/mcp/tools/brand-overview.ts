@@ -4,8 +4,8 @@ const OVERVIEW = `White Rabbit LA, luxury private magic and sophisticated event 
 Founder: Scott Syme. Based in Los Angeles, performs nationwide.
 Positioning: white-glove hospitality; magic performed WITH guests, never AT them.
 Signature offerings: Cocktail-hour close-up, Private Magic Show, Speakeasy sets, Magic Mondays residency.
-Booking lead time: 4–6 weeks (8–12 weeks peak season).
-Contact: scott.syme@whiterabbitla.com — https://whiterabbitla.com`;
+Booking lead time: 4 to 6 weeks (8 to 12 weeks peak season).
+Contact: scott.syme@whiterabbitla.com, https://whiterabbitla.com`;
 
 export default defineTool({
   name: "brand_overview",

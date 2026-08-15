@@ -61,12 +61,12 @@ const testimonials = [
 const experiences = [
   {
     title: "Close-Up Magic",
-    desc: "Intimate interactive magic during cocktail hours & receptions. Perfect for 20–200+ guests.",
+    desc: "Intimate interactive magic during cocktail hours & receptions. Perfect for 20 to 200+ guests.",
     image: closeupImg,
   },
   {
     title: "Private Magic Show",
-    desc: "A 45-minute theatrical experience with cinematic lighting, sound, and audience interaction. 20–100 guests.",
+    desc: "A 45-minute theatrical experience with cinematic lighting, sound, and audience interaction. 20 to 100 guests.",
     image: parlorImg,
   },
   {

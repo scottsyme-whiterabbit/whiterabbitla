@@ -131,7 +131,7 @@ export const DEFAULT_PROPOSAL: ProposalData = {
       name: "The White Rabbit Wedding Experience",
       tagline: "Parlor at rehearsal dinner + cocktail hour the next day",
       items: [
-        "40–45 minute parlor experience at rehearsal dinner the night before",
+        "40 to 45 minute parlor experience at rehearsal dinner the night before",
         "90 minutes of close-up at cocktail hour the next day",
         "Up to 150 guests across both events",
         "Full pre-event consultation with couple and planner",
@@ -146,7 +146,7 @@ export const DEFAULT_PROPOSAL: ProposalData = {
       name: "The Estate Wedding Experience",
       tagline: "Parlor + cocktail hour + post-reception speakeasy",
       items: [
-        "40–45 minute parlor at rehearsal dinner",
+        "40 to 45 minute parlor at rehearsal dinner",
         "2 hours of close-up at cocktail hour",
         "30-minute Speakeasy lounge moment after reception",
         "Up to 250 guests across all three events",

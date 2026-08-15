@@ -53,11 +53,11 @@ const stats = [
 const logistics = [
   { icon: Shield, title: "Insurance", detail: "Fully insured with general liability coverage. COI available on request." },
   { icon: Monitor, title: "Setup", detail: "Zero. No stage, no power, no AV, no backdrop. Scott integrates into your existing event flow." },
-  { icon: Clock, title: "Timing", detail: "2–3 hours for cocktail/roaming magic. 45–60 minutes for a private parlor show. Flexible to your run-of-show." },
+  { icon: Clock, title: "Timing", detail: "2 to 3 hours for cocktail/roaming magic. 45 to 60 minutes for a private parlor show. Flexible to your run-of-show." },
   { icon: MessageSquare, title: "Coordination", detail: "Scott communicates directly with your team, venue contact, timeline, room layout, guest count, VIP notes." },
   { icon: MapPin, title: "Travel", detail: "Based in Los Angeles. Available worldwide. Travel fees quoted per event, no surprises." },
   { icon: Shirt, title: "Attire", detail: "Black tie, business formal, themed, coordinated with your event's dress code." },
-  { icon: Users, title: "Capacity", detail: "Roaming close-up magic for 20–300+ guests. Private parlor shows for 20–100." },
+  { icon: Users, title: "Capacity", detail: "Roaming close-up magic for 20 to 300+ guests. Private parlor shows for 20 to 100." },
 ];
 
 const testimonials = [
@@ -284,7 +284,7 @@ const Planners = () => {
                     >
                       Inquire
                     </Link>
-                    <span className="font-sans text-xs text-muted-foreground">20–300+ guests</span>
+                    <span className="font-sans text-xs text-muted-foreground">20 to 300+ guests</span>
                   </div>
                 </div>
               </div>
@@ -316,7 +316,7 @@ const Planners = () => {
                     >
                       Inquire
                     </Link>
-                    <span className="font-sans text-xs text-muted-foreground">20–100 guests</span>
+                    <span className="font-sans text-xs text-muted-foreground">20 to 100 guests</span>
                   </div>
                 </div>
               </div>

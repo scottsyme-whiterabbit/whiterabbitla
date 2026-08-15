@@ -326,7 +326,7 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
                   value={performanceTime}
                   onChange={(e) => setPerformanceTime(e.target.value)}
                   className="mt-1 w-full border border-forest-dark/20 bg-white px-3 py-2.5 text-sm"
-                  placeholder="e.g. 7:30 – 9:00 PM or TBA"
+                  placeholder="e.g. 7:30 to 9:00 PM or TBA"
                   maxLength={120}
                 />
               </label>

@@ -59,7 +59,7 @@ const services: ServiceTile[] = [
     slug: "private-magic-show",
     title: "Private Magic Show",
     blurb:
-      "A 45-minute curated theatrical experience for 20–120 guests. Full production with lighting, sound, and emerald drapes.",
+      "A 45-minute curated theatrical experience for 20 to 120 guests. Full production with lighting, sound, and emerald drapes.",
     image: parlorImg,
   },
   {

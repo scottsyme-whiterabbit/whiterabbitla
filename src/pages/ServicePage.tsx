@@ -258,7 +258,7 @@ const servicePages: Record<string, ServiceData> = {
     ],
     faqs: [
       { question: "What is close-up magic?", answer: "Close-up magic happens right in your guests' hands: cards, coins, borrowed objects. Scott performs for small groups of 4 to 8 at a time, creating intimate, jaw-dropping moments. It's interactive, personal, and the most powerful form of live entertainment." },
-      { question: "How long does a close-up performance last?", answer: "Most clients book 2–3 hours of roaming close-up magic. Each small group gets about 8–10 minutes of dedicated performance. Custom timing is always available." },
+      { question: "How long does a close-up performance last?", answer: "Most clients book 2 to 3 hours of roaming close-up magic. Each small group gets about 8 to 10 minutes of dedicated performance. Custom timing is always available." },
       { question: "Does close-up magic work for large events?", answer: "Absolutely. Scott moves through events of any size, creating intimate moments within larger gatherings. For 150+ guests, we recommend pairing close-up magic with a Private Magic Show." },
       { question: "What's the difference between close-up magic and stage magic?", answer: "Close-up magic happens within arm's reach, using everyday objects. Stage magic uses bigger props and plays to a seated audience from a distance. Scott does both, but close-up is his specialty, it's more personal, more interactive, and the reactions are stronger because the magic is literally happening in your hands." },
       { question: "How long does each group get with Scott?", answer: "Two to four minutes per group. That's enough for one or two effects that leave a real impression without overstaying. In a 60-minute cocktail hour, he'll reach 15 to 20 groups, covering 80 to 120 guests." },
@@ -275,7 +275,7 @@ const servicePages: Record<string, ServiceData> = {
     slug: "private-magic-show",
     title: "Private Magic Show",
     metaTitle: "Private Magic Show | Theatrical Magic Experience | White Rabbit",
-    metaDescription: "Book a curated 45-minute theatrical magic show for 20–120 guests. Full production with lighting, sound, and staging. An unforgettable experience.",
+    metaDescription: "Book a curated 45-minute theatrical magic show for 20 to 120 guests. Full production with lighting, sound, and staging. An unforgettable experience.",
     heroHeadline: "The Private Magic Show",
     heroSub: "A curated 45-minute theatrical experience your guests will be buzzing about for months.",
     image: parlorImg,
@@ -948,7 +948,7 @@ const ServicePage = () => {
               Make Your Next Event Unforgettable
             </h2>
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-8">
-              Most clients book 2–4 weeks in advance · No obligation to inquire
+              Most clients book 2 to 4 weeks in advance · No obligation to inquire
             </p>
             <button
               onClick={openQuiz}
