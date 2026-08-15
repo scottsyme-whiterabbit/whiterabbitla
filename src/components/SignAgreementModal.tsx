@@ -83,6 +83,16 @@ Liability & Conduct:
 - White Rabbit Entertainment will not be held liable for any property damage, injuries, or unforeseen circumstances resulting from the performance. (White Rabbit does carry performer insurance.)
 - Performers will conduct themselves professionally and in accordance with the event's guidelines. In the event of inappropriate behavior from guests that compromises safety or disrupts the performance, White Rabbit Entertainment reserves the right to conclude the performance early without refund.
 
+Force Majeure:
+Neither party is liable for failure to perform due to fire, flood, earthquake, severe weather, power failure, venue closure, evacuation, public health order, or government restriction. We will work toward a rescheduled date within 12 months and apply the deposit to it. If no date can be agreed, the deposit is refunded less documented costs already incurred.
+
+Insurance:
+Commercial general liability at $1,000,000 per occurrence and $2,000,000 aggregate through Specialty Insurance Agency. Venue or client named as additional insured on request, certificate issued within two business days.
+
+Photography and Video:
+White Rabbit may photograph or film the performance and audience reactions for portfolio and promotional use. Opt out in writing before the event. Venue and host restrictions are honored, and guests who ask not to be filmed will not be.
+
+
 Contact Information:
 For any questions, modifications, or special requests, please contact White Rabbit Entertainment at:
 Email: scott.syme@whiterabbitla.com
