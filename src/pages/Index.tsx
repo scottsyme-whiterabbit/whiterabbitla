@@ -51,47 +51,27 @@ import netflixLogo from "@/assets/logos/normalized/netflix.png";
 import disneyLogo from "@/assets/logos/normalized/disney.png";
 import rollsroyceLogo from "@/assets/logos/normalized/rollsroyce.png";
 import morganstanleyLogo from "@/assets/logos/normalized/morganstanley.png";
-import youtubeLogo from "@/assets/logos/normalized/youtube.png";
-import hyattLogo from "@/assets/logos/normalized/hyatt.png";
 import rivianLogo from "@/assets/logos/normalized/rivian.png";
 import paramountLogo from "@/assets/logos/normalized/paramount.png";
 import oliviarodrigoLogo from "@/assets/logos/normalized/oliviarodrigo.png";
-import taittingerLogo from "@/assets/logos/normalized/taittinger.png";
-import pistolaLogo from "@/assets/logos/normalized/pistola.png";
 import lionsgateLogo from "@/assets/logos/normalized/lionsgate.png";
-import agtLogo from "@/assets/logos/normalized/agt.png";
 import beverlyHiltonLogo from "@/assets/logos/normalized/beverlyhilton.png";
-import sohohouseLogo from "@/assets/logos/normalized/sohohouse.png";
-import gravitasLogo from "@/assets/logos/normalized/gravitas.png";
 import magicCastleLogo from "@/assets/logos/normalized/magiccastle.png";
-import compassLogo from "@/assets/logos/normalized/compass.png";
-import theAgencyLogo from "@/assets/logos/normalized/theagency.png";
-import lplFinancialLogo from "@/assets/logos/normalized/lplfinancial.png";
 
 // Logos are pre-normalized (trimmed of baked padding, exported at 3x retina).
 // `h` is the render height in px, tiered by aspect ratio for optical balance:
 //   aspect > 2.5 → 20px, 1.5–2.5 → 26px, < 1.5 → 34px.
 const clients: { name: string; logo: string; h: number }[] = [
-{ name: "Netflix", logo: netflixLogo, h: 20 },
-{ name: "Disney", logo: disneyLogo, h: 20 },
-{ name: "Rolls Royce", logo: rollsroyceLogo, h: 34 },
-{ name: "Morgan Stanley", logo: morganstanleyLogo, h: 20 },
-{ name: "LPL Financial", logo: lplFinancialLogo, h: 26 },
-{ name: "YouTube", logo: youtubeLogo, h: 20 },
-{ name: "Hyatt", logo: hyattLogo, h: 20 },
-{ name: "The Beverly Hilton", logo: beverlyHiltonLogo, h: 20 },
-{ name: "Soho House", logo: sohohouseLogo, h: 26 },
-{ name: "Rivian", logo: rivianLogo, h: 34 },
-{ name: "Paramount", logo: paramountLogo, h: 34 },
-{ name: "Olivia Rodrigo", logo: oliviarodrigoLogo, h: 26 },
-{ name: "Taittinger", logo: taittingerLogo, h: 34 },
-{ name: "Lionsgate", logo: lionsgateLogo, h: 20 },
-{ name: "Pistola", logo: pistolaLogo, h: 20 },
-{ name: "Compass", logo: compassLogo, h: 20 },
-{ name: "The Agency", logo: theAgencyLogo, h: 26 },
-{ name: "Gravitas Beverly Hills", logo: gravitasLogo, h: 34 },
-{ name: "The Magic Castle", logo: magicCastleLogo, h: 34 },
-{ name: "America's Got Talent", logo: agtLogo, h: 20 },
+  { name: "Disney", logo: disneyLogo, h: 20 },
+  { name: "Rolls Royce", logo: rollsroyceLogo, h: 34 },
+  { name: "Lionsgate", logo: lionsgateLogo, h: 20 },
+  { name: "Paramount", logo: paramountLogo, h: 34 },
+  { name: "Netflix", logo: netflixLogo, h: 20 },
+  { name: "The Magic Castle", logo: magicCastleLogo, h: 34 },
+  { name: "Morgan Stanley", logo: morganstanleyLogo, h: 20 },
+  { name: "The Beverly Hilton", logo: beverlyHiltonLogo, h: 20 },
+  { name: "Rivian", logo: rivianLogo, h: 34 },
+  { name: "Olivia Rodrigo", logo: oliviarodrigoLogo, h: 26 },
 ];
 
 
@@ -383,34 +363,31 @@ const Index = () => {
         </div>
       </motion.div>
 
-      {/* Client Logos — auto-scrolling marquee */}
+      {/* Client Logos — static stacked block */}
       <AnimatedSection>
         <section className="bg-gradient-to-b from-[#F8F5F0] to-[#F0E8D8] py-14 md:py-16">
           <div className="max-w-6xl mx-auto px-6">
-            <p className="text-center font-sans text-[11px] tracking-[0.4em] uppercase text-gold mb-8">
+            <p className="text-center font-sans text-[11px] tracking-[0.4em] uppercase text-gold mb-10">
               IN GOOD COMPANY
             </p>
-            <div className="relative overflow-hidden group" style={{ maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)" }}>
-              <div
-                className="flex items-center gap-16 md:gap-20 w-max animate-marquee-logos group-hover:[animation-play-state:paused]"
-              >
-                {[...clients, ...clients].map((client, i) => (
-                  <div key={`${client.name}-${i}`} className="flex items-center justify-center flex-shrink-0 h-10">
-                    <img
-                      src={client.logo}
-                      alt={`${client.name} logo, White Rabbit client`}
-                      loading="lazy"
-                      decoding="async"
-                      style={{
-                        height: `${client.h}px`,
-                        width: "auto",
-                        filter: "brightness(0) saturate(100%) invert(24%) sepia(9%) saturate(1200%) hue-rotate(70deg) brightness(95%) contrast(85%)",
-                      }}
-                      className="object-contain opacity-55 hover:opacity-80 transition-opacity"
-                    />
-                  </div>
-                ))}
-              </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-x-8 gap-y-10 md:gap-x-12 md:gap-y-12 items-center justify-items-center">
+              {clients.map((client) => (
+                <div key={client.name} className="flex items-center justify-center h-10 md:h-12 w-full">
+                  <img
+                    src={client.logo}
+                    alt={`${client.name} logo, White Rabbit client`}
+                    loading="lazy"
+                    decoding="async"
+                    style={{
+                      height: `${client.h}px`,
+                      width: "auto",
+                      maxWidth: "100%",
+                      filter: "brightness(0) saturate(100%) invert(24%) sepia(9%) saturate(1200%) hue-rotate(70deg) brightness(95%) contrast(85%)",
+                    }}
+                    className="object-contain opacity-55 hover:opacity-80 transition-opacity"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </section>
