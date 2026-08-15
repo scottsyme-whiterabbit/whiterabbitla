@@ -375,7 +375,7 @@ const Index = () => {
             <p className="text-center font-sans text-[11px] tracking-[0.4em] uppercase text-gold mb-10">
               IN GOOD COMPANY
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-x-8 gap-y-10 md:gap-x-12 md:gap-y-12 items-center justify-items-center">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-x-8 gap-y-10 md:gap-x-12 md:gap-y-12 items-center justify-items-center">
               {clients.map((client) => (
                 <div key={client.name} className="flex items-center justify-center h-10 md:h-12 w-full">
                   <img
