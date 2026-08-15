@@ -19,10 +19,10 @@ const QuizCTA = ({ title = "Discover Your Magic Guest Persona" }: QuizCTAProps) 
             {title}
           </h2>
           <p className="font-sans text-base text-muted-foreground mb-3 max-w-lg mx-auto">
-            Take our quick quiz and discover your Magic Guest Persona — plus get a personalized, downloadable card to share.
+            Take our quick quiz and discover your Magic Guest Persona, plus get a personalized, downloadable card to share.
           </p>
           <p className="font-sans text-sm text-accent italic mb-8">
-            No commitment — just a fun reveal and a tailored recommendation.
+            No commitment, just a fun reveal and a tailored recommendation.
           </p>
           <Link
             to="/quiz"

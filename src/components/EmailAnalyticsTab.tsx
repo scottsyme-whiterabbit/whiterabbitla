@@ -358,7 +358,7 @@ const EmailAnalyticsTab = ({ storedPassword: passedPwd }: Props = {}) => {
       {/* Chart */}
       <div className="border border-border p-4 md:p-6">
         <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-4">
-          Opens & Clicks — Last 30 Days {dripFilter !== "all" && <span className="text-accent">· {dripFilter}</span>}
+          Opens & Clicks, Last 30 Days {dripFilter !== "all" && <span className="text-accent">· {dripFilter}</span>}
         </h3>
         <div className="h-[280px]">
           <ResponsiveContainer width="100%" height="100%">
@@ -407,11 +407,11 @@ const EmailAnalyticsTab = ({ storedPassword: passedPwd }: Props = {}) => {
                   return (
                     <tr key={b.id} className="border-b border-border/50">
                       <td className="px-4 py-3 text-foreground">{b.email}</td>
-                      <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">{contact?.name || "—"}</td>
+                      <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">{contact?.name || ""}</td>
                       <td className="px-4 py-3">
                         <span className={`text-[10px] tracking-wider uppercase font-medium ${b.bounce_type === "complained" ? "text-destructive" : "text-orange-400"}`}>{b.bounce_type}</span>
                       </td>
-                      <td className="px-4 py-3 text-muted-foreground text-xs hidden md:table-cell max-w-[300px] truncate">{b.reason || "—"}</td>
+                      <td className="px-4 py-3 text-muted-foreground text-xs hidden md:table-cell max-w-[300px] truncate">{b.reason || ""}</td>
                       <td className="px-4 py-3 text-muted-foreground text-xs">{format(parseISO(b.created_at), "MMM d, h:mm a")}</td>
                     </tr>
                   );
@@ -468,7 +468,7 @@ const EmailAnalyticsTab = ({ storedPassword: passedPwd }: Props = {}) => {
                     </td>
                     <td className="px-4 py-3 text-foreground">
                       <span className="flex items-center gap-2">
-                        {c.name || "—"}
+                        {c.name || ""}
                         {c.has_bounced && (
                           <span className="inline-flex items-center gap-0.5 bg-destructive/15 text-destructive text-[9px] tracking-wider uppercase font-medium px-1.5 py-0.5 rounded">
                             <AlertTriangle size={9} /> Bounced
@@ -477,7 +477,7 @@ const EmailAnalyticsTab = ({ storedPassword: passedPwd }: Props = {}) => {
                       </span>
                     </td>
                     <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">{c.email}</td>
-                    <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">{c.company || "—"}</td>
+                    <td className="px-4 py-3 text-muted-foreground hidden md:table-cell">{c.company || ""}</td>
                     <td className="px-4 py-3 text-muted-foreground hidden md:table-cell text-[11px]">{contactDripFamily(c.drip_campaign)}</td>
                     <td className="px-4 py-3">
                       <span className={`text-[10px] tracking-wider uppercase ${
@@ -490,7 +490,7 @@ const EmailAnalyticsTab = ({ storedPassword: passedPwd }: Props = {}) => {
                     <td className="px-4 py-3 text-center text-foreground font-medium">{c.opens_count}</td>
                     <td className="px-4 py-3 text-center text-foreground font-medium">{c.clicks_count}</td>
                     <td className="px-4 py-3 text-muted-foreground hidden md:table-cell text-xs">
-                      {c.last_activity ? format(parseISO(c.last_activity), "MMM d, h:mm a") : "—"}
+                      {c.last_activity ? format(parseISO(c.last_activity), "MMM d, h:mm a") : ""}
                     </td>
                   </tr>
                   {expandedContact === c.id && (
@@ -503,7 +503,7 @@ const EmailAnalyticsTab = ({ storedPassword: passedPwd }: Props = {}) => {
                               <div className="space-y-1 max-h-40 overflow-y-auto">
                                 {c.opens.map((o, i) => (
                                   <div key={i} className="text-xs text-muted-foreground">
-                                    Step {o.drip_step} — {format(parseISO(o.opened_at), "MMM d, yyyy h:mm a")}
+                                    Step {o.drip_step}, {format(parseISO(o.opened_at), "MMM d, yyyy h:mm a")}
                                   </div>
                                 ))}
                               </div>
@@ -515,7 +515,7 @@ const EmailAnalyticsTab = ({ storedPassword: passedPwd }: Props = {}) => {
                               <div className="space-y-1 max-h-40 overflow-y-auto">
                                 {c.clicks.map((cl, i) => (
                                   <div key={i} className="text-xs text-muted-foreground">
-                                    Step {cl.drip_step} — <span className="text-foreground">{cl.link_slug}</span> — {format(parseISO(cl.clicked_at), "MMM d, yyyy h:mm a")}
+                                    Step {cl.drip_step}, <span className="text-foreground">{cl.link_slug}</span> {format(parseISO(cl.clicked_at), "MMM d, yyyy h:mm a")}
                                   </div>
                                 ))}
                               </div>

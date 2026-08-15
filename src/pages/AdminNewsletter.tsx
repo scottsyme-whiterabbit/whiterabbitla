@@ -747,7 +747,7 @@ const AdminNewsletter = () => {
           )}
         </div>
 
-        {/* Desktop Nav — five sections, sub-tabs underneath */}
+        {/* Desktop Nav · five sections, sub-tabs underneath */}
         <div className="hidden md:block mb-8">
           <div className="flex gap-1 border-b border-border overflow-x-auto">
             {TAB_GROUPS.map(group => {
@@ -791,7 +791,7 @@ const AdminNewsletter = () => {
           )}
         </div>
 
-        {/* Mobile "More" tabs — grouped */}
+        {/* Mobile "More" tabs, grouped */}
         {isMobile && showMoreTabs && (
           <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex flex-col">
             <div className="flex items-center justify-between p-4 border-b border-border">
@@ -1279,9 +1279,9 @@ const AdminNewsletter = () => {
                   onChange={e => setDripStep(Number(e.target.value))}
                   className="bg-forest-dark/50 border border-border text-foreground px-4 py-2 font-sans text-sm focus:outline-none focus:border-accent"
                 >
-                  <option value={1}>Email 1 — Welcome (Day 0)</option>
-                  <option value={2}>Email 2 — Story & Desire (Day 7)</option>
-                  <option value={3}>Email 3 — Urgency & CTA (Day 14)</option>
+                  <option value={1}>Email 1, Welcome (Day 0)</option>
+                  <option value={2}>Email 2, Story & Desire (Day 7)</option>
+                  <option value={3}>Email 3, Urgency & CTA (Day 14)</option>
                 </select>
               </div>
             )}

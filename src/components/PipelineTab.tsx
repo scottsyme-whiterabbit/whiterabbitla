@@ -75,15 +75,15 @@ const POST_SHOW_SEQUENCE = [
 ];
 
 const HOLIDAY_EMAILS = [
-  { label: "Valentine's Day", window: "Jan 15 – Feb 14" },
-  { label: "4th of July", window: "Jun 4 – Jul 4" },
-  { label: "Halloween", window: "Oct 1 – Oct 31" },
-  { label: "Thanksgiving", window: "Oct 28 – Nov 27" },
-  { label: "Christmas / NYE", window: "Nov 25 – Dec 25" },
+  { label: "Valentine's Day", window: "Jan 15, Feb 14" },
+  { label: "4th of July", window: "Jun 4, Jul 4" },
+  { label: "Halloween", window: "Oct 1, Oct 31" },
+  { label: "Thanksgiving", window: "Oct 28, Nov 27" },
+  { label: "Christmas / NYE", window: "Nov 25, Dec 25" },
 ];
 
 const formatCurrency = (cents: number | null) => {
-  if (!cents) return "—";
+  if (!cents) return "";
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0 }).format(cents / 100);
 };
 
@@ -496,7 +496,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
                             )}
                           </div>
                           <span className="font-mono text-[10px] text-accent shrink-0 ml-2">
-                            {d.deal_value ? formatCurrency(d.deal_value) : "—"}
+                            {d.deal_value ? formatCurrency(d.deal_value) : ""}
                           </span>
                         </button>
                       ))}
@@ -721,7 +721,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
                   onChange={e => setForm(f => ({ ...f, lost_reason: e.target.value === "Other" ? (LOST_REASONS.includes(f.lost_reason) ? "" : f.lost_reason) : e.target.value }))}
                   className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent"
                 >
-                  <option value="">— Select reason —</option>
+                  <option value="">Select reason, </option>
                   {LOST_REASONS.map(r => <option key={r} value={r}>{r}</option>)}
                 </select>
                 {(!LOST_REASONS.includes(form.lost_reason) || form.lost_reason === "Other") && (
@@ -737,7 +737,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
             {form.stage === "completed" && (
               <label className="flex items-center gap-2 cursor-pointer py-1">
                 <input type="checkbox" checked={form.skip_thank_you} onChange={e => setForm(f => ({ ...f, skip_thank_you: e.target.checked }))} className="accent-accent" />
-                <span className="font-sans text-xs text-muted-foreground">Skip Thank You & Review emails (past client — start at Referral & Re-engage drips only)</span>
+                <span className="font-sans text-xs text-muted-foreground">Skip Thank You & Review emails (past client, start at Referral & Re-engage drips only)</span>
               </label>
             )}
             <div>
@@ -765,7 +765,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
                       <div className="mt-1">
                         <p className="font-sans text-[9px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Recent Opens</p>
                         {emailActivity.opens.slice(0, 5).map((o: any, i: number) => (
-                          <p key={i} className="text-[10px] text-muted-foreground">Step {o.drip_step} — {new Date(o.opened_at).toLocaleDateString()}</p>
+                          <p key={i} className="text-[10px] text-muted-foreground">Step {o.drip_step}, {new Date(o.opened_at).toLocaleDateString()}</p>
                         ))}
                       </div>
                     )}
@@ -773,7 +773,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
                       <div className="mt-1">
                         <p className="font-sans text-[9px] tracking-[0.15em] uppercase text-muted-foreground mb-1">Recent Clicks</p>
                         {emailActivity.clicks.slice(0, 5).map((c: any, i: number) => (
-                          <p key={i} className="text-[10px] text-muted-foreground">{c.link_slug} — {new Date(c.clicked_at).toLocaleDateString()}</p>
+                          <p key={i} className="text-[10px] text-muted-foreground">{c.link_slug}, {new Date(c.clicked_at).toLocaleDateString()}</p>
                         ))}
                       </div>
                     )}
@@ -873,7 +873,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
                     <div className="space-y-1">
                       {emailActivity.opens.slice(0, 10).map((o: any, i: number) => (
                         <div key={i} className="flex items-center justify-between text-[10px] border-b border-border/30 pb-1">
-                          <span className="text-foreground">Step {o.drip_step} — {POST_SHOW_SEQUENCE[o.drip_step]?.label || `Email ${o.drip_step}`}</span>
+                          <span className="text-foreground">Step {o.drip_step}, {POST_SHOW_SEQUENCE[o.drip_step]?.label || `Email ${o.drip_step}`}</span>
                           <span className="text-muted-foreground">{new Date(o.opened_at).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}</span>
                         </div>
                       ))}

@@ -53,11 +53,11 @@ const stats = [
 const logistics = [
   { icon: Shield, title: "Insurance", detail: "Fully insured with general liability coverage. COI available on request." },
   { icon: Monitor, title: "Setup", detail: "Zero. No stage, no power, no AV, no backdrop. Scott integrates into your existing event flow." },
-  { icon: Clock, title: "Timing", detail: "2–3 hours for cocktail/roaming magic. 45–60 minutes for a private parlor show. Flexible to your run-of-show." },
-  { icon: MessageSquare, title: "Coordination", detail: "Scott communicates directly with your team — venue contact, timeline, room layout, guest count, VIP notes." },
-  { icon: MapPin, title: "Travel", detail: "Based in Los Angeles. Available worldwide. Travel fees quoted per event — no surprises." },
-  { icon: Shirt, title: "Attire", detail: "Black tie, business formal, themed — coordinated with your event's dress code." },
-  { icon: Users, title: "Capacity", detail: "Roaming close-up magic for 20–300+ guests. Private parlor shows for 20–100." },
+  { icon: Clock, title: "Timing", detail: "2 to 3 hours for cocktail/roaming magic. 45 to 60 minutes for a private parlor show. Flexible to your run-of-show." },
+  { icon: MessageSquare, title: "Coordination", detail: "Scott communicates directly with your team, venue contact, timeline, room layout, guest count, VIP notes." },
+  { icon: MapPin, title: "Travel", detail: "Based in Los Angeles. Available worldwide. Travel fees quoted per event, no surprises." },
+  { icon: Shirt, title: "Attire", detail: "Black tie, business formal, themed, coordinated with your event's dress code." },
+  { icon: Users, title: "Capacity", detail: "Roaming close-up magic for 20 to 300+ guests. Private parlor shows for 20 to 100." },
 ];
 
 const testimonials = [
@@ -78,13 +78,13 @@ const testimonials = [
   },
 ];
 
-const SEND_TO_CLIENT_EMAIL = `Subject: Entertainment Idea for [EVENT NAME] — You'll Want to See This
+const SEND_TO_CLIENT_EMAIL = `Subject: Entertainment Idea for [EVENT NAME], You'll Want to See This
 
 Hi [NAME],
 
-I came across a luxury entertainment option I think would be perfect for [EVENT NAME]. His name is Scott Syme — he's the magician behind White Rabbit, and his client list includes Netflix, Morgan Stanley, Disney, Rolls Royce, and Hyatt.
+I came across a luxury entertainment option I think would be perfect for [EVENT NAME]. His name is Scott Syme, he's the magician behind White Rabbit, and his client list includes Netflix, Morgan Stanley, Disney, Rolls Royce, and Hyatt.
 
-He does close-up magic during cocktail hours and full private shows with cinematic production — emerald curtains, uplighting, curated soundtrack. It's more of an experience than a magic show. Every review is 5 stars.
+He does close-up magic during cocktail hours and full private shows with cinematic production, emerald curtains, uplighting, curated soundtrack. It's more of an experience than a magic show. Every review is 5 stars.
 
 Here's his lookbook so you can see for yourself:
 https://whiterabbitla.com/deck
@@ -117,18 +117,18 @@ const Planners = () => {
   return (
     <main id="main-content" className="pt-20">
       <SEOHead
-        title="For Event Planners & DMCs | White Rabbit Magic — Los Angeles"
+        title="For Event Planners & DMCs | White Rabbit Magic, Los Angeles"
         description="The magician event planners and DMCs trust for corporate events, galas, and weddings. Zero setup, full insurance, available nationwide. Check availability."
         canonical="/planners"
         ogImage={heroImg}
       />
 
-      {/* Hero — Full-bleed photo */}
+      {/* Hero · Full-bleed photo */}
       <section className="relative min-h-[75vh] flex items-end overflow-hidden">
         <div className="absolute inset-0">
           <img
             src={heroImg}
-            alt="White Rabbit private magic show — emerald curtains and cinematic uplighting at a luxury corporate event"
+            alt="White Rabbit private magic show, emerald curtains and cinematic uplighting at a luxury corporate event"
             width={1200}
             height={800}
             className="w-full h-full object-cover object-[center_30%]"
@@ -160,7 +160,7 @@ const Planners = () => {
                 Take the Quiz
               </button>
             </div>
-            <p className="font-sans text-sm text-cream/40 italic mt-6">35-second quiz — no commitment required</p>
+            <p className="font-sans text-sm text-cream/40 italic mt-6">35-second quiz, no commitment required</p>
           </AnimatedSection>
         </div>
       </section>
@@ -209,7 +209,7 @@ const Planners = () => {
         </section>
       </AnimatedSection>
 
-      {/* Why Planners Keep Rebooking — with photo */}
+      {/* Why Planners Keep Rebooking, with photo */}
       <section className="py-24 lg:py-28">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <AnimatedSection>
@@ -247,7 +247,7 @@ const Planners = () => {
         </div>
       </section>
 
-      {/* What Your Clients Experience — Photo-backed cards */}
+      {/* What Your Clients Experience, Photo-backed cards */}
       <section className="bg-card py-24 lg:py-28">
         <div className="max-w-6xl mx-auto px-6">
           <AnimatedSection>
@@ -275,7 +275,7 @@ const Planners = () => {
                   <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3">Most Booked by Planners</p>
                   <h3 className="font-serif text-2xl text-foreground mb-4">Close-Up Magic & Mentalism</h3>
                   <p className="font-sans text-sm text-muted-foreground leading-relaxed mb-6">
-                    Scott moves through the event approaching groups organically. Cards, borrowed objects, mind reading — performed inches from your guests' hands. The magic is the icebreaker that gets strangers talking and turns a well-planned event into one people actually remember.
+                    Scott moves through the event approaching groups organically. Cards, borrowed objects, mind reading, performed inches from your guests' hands. The magic is the icebreaker that gets strangers talking and turns a well-planned event into one people actually remember.
                   </p>
                   <div className="flex items-center gap-4">
                     <Link
@@ -284,7 +284,7 @@ const Planners = () => {
                     >
                       Inquire
                     </Link>
-                    <span className="font-sans text-xs text-muted-foreground">20–300+ guests</span>
+                    <span className="font-sans text-xs text-muted-foreground">20 to 300+ guests</span>
                   </div>
                 </div>
               </div>
@@ -316,7 +316,7 @@ const Planners = () => {
                     >
                       Inquire
                     </Link>
-                    <span className="font-sans text-xs text-muted-foreground">20–100 guests</span>
+                    <span className="font-sans text-xs text-muted-foreground">20 to 100 guests</span>
                   </div>
                 </div>
               </div>
@@ -413,7 +413,7 @@ const Planners = () => {
               A Reliable Vendor for Multi-Day Programs
             </h2>
             <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-2xl mx-auto">
-              If you coordinate entertainment for corporate groups visiting Los Angeles — or anywhere in the US — Scott is a reliable, repeatable vendor you can plug into multi-day programs. Fortune 500 client dinners, incentive trip receptions, and corporate retreat welcome events. No production complexity, no rider, no drama.
+              If you coordinate entertainment for corporate groups visiting Los Angeles, or anywhere in the US, Scott is a reliable, repeatable vendor you can plug into multi-day programs. Fortune 500 client dinners, incentive trip receptions, and corporate retreat welcome events. No production complexity, no rider, no drama.
             </p>
             <div className="inline-block border border-accent/20 px-8 py-4">
               <p className="font-sans text-sm text-accent">
@@ -424,7 +424,7 @@ const Planners = () => {
         </section>
       </AnimatedSection>
 
-      {/* Send to Client — Email Template */}
+      {/* Send to Client · Email Template */}
       <AnimatedSection>
         <section className="bg-card py-24">
           <div className="max-w-3xl mx-auto px-6">

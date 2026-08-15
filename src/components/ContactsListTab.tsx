@@ -382,9 +382,9 @@ const ContactsListTab = ({ storedPassword, initialFilter, initialCampaign }: Con
                       {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                     </td>
                     <td className="p-3 text-foreground font-mono text-xs">{c.email}</td>
-                    <td className="p-3 text-muted-foreground">{c.name || "—"}</td>
-                    <td className="p-3 text-muted-foreground">{c.company || "—"}</td>
-                    <td className="p-3 text-muted-foreground text-xs">{c.city || "—"}</td>
+                    <td className="p-3 text-muted-foreground">{c.name || ""}</td>
+                    <td className="p-3 text-muted-foreground">{c.company || ""}</td>
+                    <td className="p-3 text-muted-foreground text-xs">{c.city || ""}</td>
                     <td className="p-3">
                       <span className={`text-[10px] px-2 py-0.5 font-sans tracking-[0.15em] uppercase ${
                         c.drip_campaign.startsWith("planner")

@@ -212,7 +212,7 @@ const DealInboxTab = ({ storedPassword }: Props) => {
         {availResult && !availResult.available && (
           <ul className="mt-2 text-xs text-muted-foreground space-y-1">
             {availResult.busy.map((b, i) => (
-              <li key={i}>· {new Date(b.start).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })} – {new Date(b.end).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}</li>
+              <li key={i}>· {new Date(b.start).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}, {new Date(b.end).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}</li>
             ))}
           </ul>
         )}
@@ -250,7 +250,7 @@ const DealInboxTab = ({ storedPassword }: Props) => {
                     </div>
                     <p className="text-[10px] text-muted-foreground truncate">{d.contact_email}</p>
                     <p className="text-[10px] text-muted-foreground mt-0.5">
-                      {d.stage} · {d.event_type || "—"}{d.event_date ? ` · ${d.event_date}` : ""}
+                      {d.stage} · {d.event_type || ""}{d.event_date ? ` · ${d.event_date}` : ""}
                     </p>
                     {d.hot_reason && <p className="text-[10px] text-rose-400 mt-0.5">{d.hot_reason}</p>}
                   </div>

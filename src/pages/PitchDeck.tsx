@@ -61,12 +61,12 @@ const testimonials = [
 const experiences = [
   {
     title: "Close-Up Magic",
-    desc: "Intimate interactive magic during cocktail hours & receptions. Perfect for 20–200+ guests.",
+    desc: "Intimate interactive magic during cocktail hours & receptions. Perfect for 20 to 200+ guests.",
     image: closeupImg,
   },
   {
     title: "Private Magic Show",
-    desc: "A 45-minute theatrical experience with cinematic lighting, sound, and audience interaction. 20–100 guests.",
+    desc: "A 45-minute theatrical experience with cinematic lighting, sound, and audience interaction. 20 to 100 guests.",
     image: parlorImg,
   },
   {
@@ -83,13 +83,13 @@ const stats = [
   { icon: Sparkles, label: "Notable Clients", value: "50+" },
 ];
 
-const SEND_TO_CLIENT_EMAIL = `Subject: Entertainment Idea for [EVENT NAME] — You'll Want to See This
+const SEND_TO_CLIENT_EMAIL = `Subject: Entertainment Idea for [EVENT NAME], You'll Want to See This
 
 Hi [NAME],
 
-I came across a luxury entertainment option I think would be perfect for [EVENT NAME]. His name is Scott Syme — he's the magician behind White Rabbit, and his client list includes Netflix, Morgan Stanley, Disney, Rolls Royce, and Hyatt.
+I came across a luxury entertainment option I think would be perfect for [EVENT NAME]. His name is Scott Syme, he's the magician behind White Rabbit, and his client list includes Netflix, Morgan Stanley, Disney, Rolls Royce, and Hyatt.
 
-He does close-up magic during cocktail hours and full private shows with cinematic production — emerald curtains, uplighting, curated soundtrack. It's more of an experience than a magic show. Every review is 5 stars.
+He does close-up magic during cocktail hours and full private shows with cinematic production, emerald curtains, uplighting, curated soundtrack. It's more of an experience than a magic show. Every review is 5 stars.
 
 Here's his lookbook so you can see for yourself:
 https://whiterabbitla.com/deck
@@ -107,7 +107,7 @@ const PitchDeck = () => {
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
 
-  const seoTitle = "White Rabbit Lookbook | Luxury Magic Entertainment — Los Angeles";
+  const seoTitle = "White Rabbit Lookbook | Luxury Magic Entertainment, Los Angeles";
   const seoDescription = "Explore White Rabbit's digital lookbook: credentials, photos, testimonials, and booking details for luxury magic entertainment by Scott Syme.";
 
   const handleCopyEmail = async () => {
@@ -196,7 +196,7 @@ const PitchDeck = () => {
               <div className="space-y-4 font-sans text-base text-muted-foreground leading-relaxed">
                 <p>
                   Scott Syme believes every great event deserves a moment that makes the room feel
-                  truly alive — for the guests and the host alike. That's the mission behind White
+                  truly alive, for the guests and the host alike. That's the mission behind White
                   Rabbit: to create an experience so personal and unexpected that people talk about
                   it for years. A proud member of the world-famous Magic Castle® in Hollywood and
                   the International Brotherhood of Magicians, Scott travels nationwide to bring
@@ -207,7 +207,7 @@ const PitchDeck = () => {
                   He has consulted for America's Got Talent, coached performers for Disney Channel,
                   and entertained guests for Netflix, Morgan Stanley, Rolls Royce, and dozens of
                   Fortune 500 brands. With a background in high-net-worth client services, Scott
-                  brings a white-glove hospitality approach to every performance — guests don't just
+                  brings a white-glove hospitality approach to every performance. Guests don't just
                   watch a show, they feel genuinely cared for from the moment the evening begins.
                 </p>
               </div>
@@ -336,7 +336,7 @@ const PitchDeck = () => {
         </div>
       </section>
 
-      {/* Send to Your Client — Email Template */}
+      {/* Send to Your Client, Email Template */}
       <AnimatedSection>
         <section className="bg-card py-24">
           <div className="max-w-3xl mx-auto px-6">

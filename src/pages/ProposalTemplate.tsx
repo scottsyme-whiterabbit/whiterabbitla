@@ -86,7 +86,7 @@ export interface ProposalData {
   closing_quote?: string | null;
   closing_attribution?: string | null;
   gallery_photos?: string[]; // optional: brand-photo keys to override default gallery grid
-  square_invoice_url?: string | null; // single Square invoice URL — fills every Reserve button if set
+  square_invoice_url?: string | null; // single Square invoice URL, fills every Reserve button if set
 }
 
 interface Props {
@@ -131,7 +131,7 @@ export const DEFAULT_PROPOSAL: ProposalData = {
       name: "The White Rabbit Wedding Experience",
       tagline: "Parlor at rehearsal dinner + cocktail hour the next day",
       items: [
-        "40–45 minute parlor experience at rehearsal dinner the night before",
+        "40 to 45 minute parlor experience at rehearsal dinner the night before",
         "90 minutes of close-up at cocktail hour the next day",
         "Up to 150 guests across both events",
         "Full pre-event consultation with couple and planner",
@@ -146,7 +146,7 @@ export const DEFAULT_PROPOSAL: ProposalData = {
       name: "The Estate Wedding Experience",
       tagline: "Parlor + cocktail hour + post-reception speakeasy",
       items: [
-        "40–45 minute parlor at rehearsal dinner",
+        "40 to 45 minute parlor at rehearsal dinner",
         "2 hours of close-up at cocktail hour",
         "30-minute Speakeasy lounge moment after reception",
         "Up to 250 guests across all three events",
@@ -275,7 +275,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         </section>
       )}
 
-      {/* PHOTO BREAK 2 — gallery (overridable per-proposal) */}
+      {/* PHOTO BREAK 2, gallery (overridable per-proposal) */}
       {(() => {
         const keys = (data.gallery_photos && data.gallery_photos.length > 0)
           ? data.gallery_photos
@@ -625,7 +625,7 @@ const ProposalTemplate = ({ data: dataProp, preview }: Props) => {
 
   useEffect(() => {
     if (data) {
-      document.title = `Proposal — ${data.first_name} ${data.last_name} — White Rabbit LA`;
+      document.title = `Proposal, ${data.first_name} ${data.last_name}, White Rabbit LA`;
     }
   }, [data]);
 

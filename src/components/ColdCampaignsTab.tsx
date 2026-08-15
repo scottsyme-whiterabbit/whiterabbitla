@@ -245,7 +245,7 @@ const ColdCampaignsTab = ({ adminPassword }: ColdCampaignsTabProps) => {
                     </span>
                   </div>
                   <div className="text-[11px] text-muted-foreground">
-                    {c.last_email_sent_at ? new Date(c.last_email_sent_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "—"}
+                    {c.last_email_sent_at ? new Date(c.last_email_sent_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : ""}
                   </div>
                   <div className="flex gap-1">
                     {c.status === "active" && (

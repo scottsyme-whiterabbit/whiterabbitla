@@ -124,7 +124,7 @@ export default function ActivityLogTab({ adminPassword }: Props) {
             <Activity className="text-accent" size={20} /> Activity Log
           </h2>
           <p className="text-xs text-muted-foreground">
-            Every action you take, plus every open, click, and reply — organized per contact.
+            Every action you take, plus every open, click, and reply, organized per contact.
           </p>
         </div>
         <div className="flex gap-2">

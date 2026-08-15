@@ -13,32 +13,32 @@ const HostsPlaybook = () => {
     {
       number: "01",
       title: "The #1 Mistake Hosts Make When Booking Entertainment",
-      content: `Most hosts wait until two weeks before their event to think about entertainment. By then, the best performers are booked and you're left choosing from whoever's available — not whoever's best.\n\nThe secret? Start your search 2–4 weeks out. This gives you time to vet performers, check references, and ensure the act is tailored to your specific event. The hosts who create legendary nights always plan entertainment as early as they plan the venue.`,
+      content: `Most hosts wait until two weeks before their event to think about entertainment. By then, the best performers are booked and you're left choosing from whoever's available, not whoever's best.\n\nThe secret? Start your search 2 to 4 weeks out. This gives you time to vet performers, check references, and ensure the act is tailored to your specific event. The hosts who create legendary nights always plan entertainment as early as they plan the venue.`,
     },
     {
       number: "02",
       title: "How to Match the Right Performer to Your Event Format",
-      content: `A 200-person corporate gala requires a completely different act than a 20-person dinner party. Here's the framework:\n\n**Cocktail receptions (20–100 guests)** work best with close-up, roaming magic. The performer moves through the crowd, creating intimate moments in small groups.\n\n**Seated dinners (10–50 guests)** call for table-side performances between courses. Each table gets a private 5–8 minute show.\n\n**Stage events (50–500+ guests)** shine with a curated parlor show featuring a dedicated performance space, sound, and lighting.\n\nThe best entertainers adapt their act to your format — not the other way around.`,
+      content: `A 200-person corporate gala requires a completely different act than a 20-person dinner party. Here's the framework:\n\n**Cocktail receptions (20 to 100 guests)** work best with close-up, roaming magic. The performer moves through the crowd, creating intimate moments in small groups.\n\n**Seated dinners (10 to 50 guests)** call for table-side performances between courses. Each table gets a private 5 to 8 minute show.\n\n**Stage events (50 to 500+ guests)** shine with a curated parlor show featuring a dedicated performance space, sound, and lighting.\n\nThe best entertainers adapt their act to your format, not the other way around.`,
     },
     {
       number: "03",
       title: "The Cocktail Hour Trick That Transforms Guest Energy",
-      content: `The first 20 minutes of any event set the tone for the entire night. If guests are standing around making small talk, the energy stays flat.\n\nHere's what luxury event planners know: booking a close-up magician for cocktail hour creates instant conversation, breaks the ice between strangers, and generates the kind of buzz that carries through the rest of the evening.\n\nOne Morgan Stanley event planner told us: "Scott performed at a 200-person event and the guests absolutely LOVED him." That energy didn't happen by accident — it was engineered during the first 20 minutes.`,
+      content: `The first 20 minutes of any event set the tone for the entire night. If guests are standing around making small talk, the energy stays flat.\n\nHere's what luxury event planners know: booking a close-up magician for cocktail hour creates instant conversation, breaks the ice between strangers, and generates the kind of buzz that carries through the rest of the evening.\n\nOne Morgan Stanley event planner told us: "Scott performed at a 200-person event and the guests absolutely LOVED him." That energy didn't happen by accident. It was engineered during the first 20 minutes.`,
     },
     {
       number: "04",
       title: "What Luxury Brands Look for in an Entertainer",
-      content: `When companies like Netflix, Rolls-Royce, and Morgan Stanley hire entertainment, they're not just looking for tricks. They evaluate four key areas.\n\n**Presentation** — does the performer match the sophistication of the event? **Adaptability** — can they read the room and adjust in real-time? **Discretion** — are they professional enough for high-profile guests? **Storytelling** — does the act create a narrative, or is it just a series of tricks?\n\nThe difference between a good magician and a great one isn't the tricks — it's the experience they create around them.`,
+      content: `When companies like Netflix, Rolls-Royce, and Morgan Stanley hire entertainment, they're not just looking for tricks. They evaluate four key areas.\n\n**Presentation**, does the performer match the sophistication of the event? **Adaptability**, can they read the room and adjust in real-time? **Discretion**, are they professional enough for high-profile guests? **Storytelling**, does the act create a narrative, or is it just a series of tricks?\n\nThe difference between a good magician and a great one isn't the tricks, it's the experience they create around them.`,
     },
     {
       number: "05",
       title: "How to Create a 'Moment' Your Guests Will Talk About for Years",
-      content: `Every legendary event has a moment — a single experience that guests bring up months later. The secret is intentional surprise.\n\nDon't announce the entertainment. Let it unfold organically. When a magician approaches a group during cocktails and creates an impossible moment with a borrowed ring or a signed playing card, the surprise amplifies the impact tenfold.\n\nOne birthday host shared: "Scott completely stole the show! His magic tricks were absolutely mind-blowing, leaving everyone in awe." That's the kind of moment you can't manufacture with a DJ or a photo booth.`,
+      content: `Every legendary event has a moment, a single experience that guests bring up months later. The secret is intentional surprise.\n\nDon't announce the entertainment. Let it unfold organically. When a magician approaches a group during cocktails and creates an impossible moment with a borrowed ring or a signed playing card, the surprise amplifies the impact tenfold.\n\nOne birthday host shared: "Scott completely stole the show! His magic tricks were absolutely mind-blowing, leaving everyone in awe." That's the kind of moment you can't manufacture with a DJ or a photo booth.`,
     },
     {
       number: "06",
       title: "The Venue Checklist: Setting Up for Maximum Impact",
-      content: `Your venue affects the entertainment more than you think. Before booking, consider these essentials.\n\n**Lighting** — can it be dimmed for a parlor show? Is there enough light for close-up magic during cocktails? **Sound** — for stage shows, is there a house system or do you need to provide one? **Flow** — where will guests naturally gather? Position the performer there. **Timing** — build the entertainment into the event timeline, not as an afterthought. The best results happen when the performer coordinates with your event planner or venue manager.`,
+      content: `Your venue affects the entertainment more than you think. Before booking, consider these essentials.\n\n**Lighting**, can it be dimmed for a parlor show? Is there enough light for close-up magic during cocktails? **Sound**, for stage shows, is there a house system or do you need to provide one? **Flow**, where will guests naturally gather? Position the performer there. **Timing**, build the entertainment into the event timeline, not as an afterthought. The best results happen when the performer coordinates with your event planner or venue manager.`,
     },
     {
       number: "07",

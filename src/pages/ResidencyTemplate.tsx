@@ -80,8 +80,8 @@ export const DEFAULT_VENUE_PITCH: VenuePitchData = {
   hero_subhead:
     "One night a week. Every booth. Two hours. No microphone. No spectacle.",
   intro_paragraphs: [
-    "There are a handful of rooms in Los Angeles where the evening already feels like an occasion before anything happens. Your Venue is one of them. The booths along the back wall, the bar at nine on a Thursday — that's a room where a magician moving quietly between tables doesn't add noise. It adds a story your guests tell on the way home.",
-    "This is a proposal for a four-week residency. One night a week, two hours, table to table. You pick the night. Your guests don't watch a show — they become the show.",
+    "There are a handful of rooms in Los Angeles where the evening already feels like an occasion before anything happens. Your Venue is one of them. The booths along the back wall, the bar at nine on a Thursday, that's a room where a magician moving quietly between tables doesn't add noise. It adds a story your guests tell on the way home.",
+    "This is a proposal for a four-week residency. One night a week, two hours, table to table. You pick the night. Your guests don't watch a show. They become the show.",
   ],
   pilot_weeks: 4,
   nights_per_week: 1,
@@ -158,12 +158,12 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
             The White Rabbit Guarantee
           </p>
           <p className="font-serif text-xl md:text-2xl text-forest-dark leading-relaxed">
-            "If after four weeks you haven't seen it — in the tables that linger, the checks, the tags — we shake hands and part as friends. No retainer. No lock-in. The first night is on me."
+            "If after four weeks you haven't seen it, in the tables that linger, the checks, the tags. We shake hands and part as friends. No retainer. No lock-in. The first night is on me."
           </p>
         </div>
       </section>
 
-      {/* SECTION 1 — THE INVITATION */}
+      {/* SECTION 1, THE INVITATION */}
       <section className="relative bg-cream py-20 md:py-28 px-6">
         <div className="max-w-2xl mx-auto">
           <OrnamentalDivider />
@@ -172,10 +172,10 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
               {data.first_name || data.gm_name},
             </p>
             <p className="whitespace-pre-wrap">
-              There are a handful of rooms in Los Angeles where the evening already feels like an occasion before anything happens. {data.venue_name} is one of them. {data.room_detail || "The booths along the back wall, the bar at nine on a Thursday"} — that's a room where a magician moving quietly between tables doesn't add noise. It adds a story your guests tell on the way home.
+              There are a handful of rooms in Los Angeles where the evening already feels like an occasion before anything happens. {data.venue_name} is one of them. {data.room_detail || "The booths along the back wall, the bar at nine on a Thursday"}, that's a room where a magician moving quietly between tables doesn't add noise. It adds a story your guests tell on the way home.
             </p>
             <p className="whitespace-pre-wrap">
-              This is a proposal for a four-week residency. One night a week, two hours, table to table. You pick the night. Your guests don't watch a show — they become the show.
+              This is a proposal for a four-week residency. One night a week, two hours, table to table. You pick the night. Your guests don't watch a show. They become the show.
             </p>
           </div>
 
@@ -186,7 +186,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
             </p>
           </div>
 
-          <p className="font-serif text-2xl pl-2 mt-10 text-forest">— Scott</p>
+          <p className="font-serif text-2xl pl-2 mt-10 text-forest">Scott</p>
         </div>
       </section>
 
@@ -214,7 +214,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
       </section>
 
 
-      {/* SECTION 2 — WHY A RESIDENCY WORKS */}
+      {/* SECTION 2, WHY A RESIDENCY WORKS */}
       <section className="relative bg-cream py-20 md:py-28 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">
@@ -254,7 +254,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
                   {s.caption}
                 </p>
                 <p className="font-sans text-[11px] tracking-[0.15em] uppercase text-forest-dark/50">
-                  — {s.source}
+{s.source}
                 </p>
               </div>
             ))}
@@ -268,7 +268,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
         </div>
       </section>
 
-      {/* SECTION 3 — WHAT THE NIGHT LOOKS LIKE */}
+      {/* SECTION 3, WHAT THE NIGHT LOOKS LIKE */}
       <section className="relative bg-cream pb-16 md:pb-24 px-6">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-10">
@@ -312,7 +312,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
         </div>
       </section>
 
-      {/* SECTION 3.25 — THIS ALREADY WORKS IN A ROOM LIKE YOURS */}
+      {/* SECTION 3.25. THIS ALREADY WORKS IN A ROOM LIKE YOURS */}
       <section className="relative bg-cream py-20 md:py-28 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-3">
@@ -353,7 +353,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
         </div>
       </section>
 
-      {/* SECTION 3.5 — ONE PATH. THREE STEPS. */}
+      {/* SECTION 3.5, ONE PATH. THREE STEPS. */}
       <section className="relative bg-cream pb-20 md:pb-24 px-6">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
@@ -367,7 +367,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
             {/* STEP ONE */}
             <div className="border border-forest-dark/15 bg-white p-8 md:p-10">
               <p className="text-[11px] tracking-[0.3em] uppercase text-gold mb-4">
-                Step One — The Audition
+                Step One · The Audition
               </p>
               <h3 className="font-serif text-2xl md:text-3xl text-forest-dark mb-4 leading-snug">
                 Tuesday, 5:30, before service.
@@ -385,7 +385,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
               </a>
             </div>
 
-            {/* STEP TWO — emphasized */}
+            {/* STEP TWO, emphasized */}
             <div className="relative border border-gold/60 bg-forest-dark text-cream p-8 md:p-10">
               <span className="absolute top-0 left-0 w-4 h-px bg-gold/70" />
               <span className="absolute top-0 left-0 w-px h-4 bg-gold/70" />
@@ -397,10 +397,10 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
               <span className="absolute bottom-0 right-0 w-px h-4 bg-gold/70" />
 
               <p className="text-[11px] tracking-[0.3em] uppercase text-gold mb-4">
-                Step Two — The Four-Week Pilot
+                Step Two · The Four-Week Pilot
               </p>
               <h3 className="font-serif text-2xl md:text-3xl text-cream mb-4 leading-snug">
-                $300 per night — founding-venue rate.
+                $300 per night, founding-venue rate.
               </h3>
               <p className="font-sans text-base text-cream/85 leading-relaxed mb-6">
                 One night a week for four weeks. Every booth, every two-top. A walkthrough with your team before night one. A custom moment for any VIP table. Content from each night, delivered to your marketing inbox. If after four weeks you haven't seen it, we shake hands. No retainer.
@@ -418,13 +418,13 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
             {/* STEP THREE */}
             <div className="border border-forest-dark/15 bg-white p-8 md:p-10">
               <p className="text-[11px] tracking-[0.3em] uppercase text-gold mb-4">
-                Step Three — The Residency
+                Step Three · The Residency
               </p>
               <h3 className="font-serif text-2xl md:text-3xl text-forest-dark mb-4 leading-snug">
                 The night becomes yours.
               </h3>
               <p className="font-sans text-base text-forest-dark/80 leading-relaxed mb-6">
-                A magician in residence, part of how {data.venue_name} does {data.night_of_week || "Thursday"}s. $300 per night, month to month, never locked in. One residency per neighborhood — when the night is taken, it's taken.
+                A magician in residence, part of how {data.venue_name} does {data.night_of_week || "Thursday"}s. $300 per night, month to month, never locked in. One residency per neighborhood, when the night is taken, it's taken.
               </p>
               <a
                 href={`mailto:scott.syme@whiterabbitla.com?subject=${encodeURIComponent(
@@ -439,7 +439,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
         </div>
       </section>
 
-      {/* SECTION 5 — ABOUT THE WORK */}
+      {/* SECTION 5, ABOUT THE WORK */}
       <section className="relative bg-cream py-20 md:py-28 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">
@@ -452,7 +452,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
           </h2>
           <p className="font-sans text-base md:text-lg text-forest-dark/85 leading-relaxed mb-4">
             The show isn't about me. It's about the people at the table.
-            They're not watching a performance — they're inside one.
+            They're not watching a performance, they're inside one.
           </p>
           {data.press_line && (
             <p className="font-sans text-sm text-forest-dark/65 mt-6">
@@ -533,11 +533,11 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
             {[
               {
                 title: "The Magic Castle",
-                detail: "Performing member and consultant at the Academy of Magical Arts in Hollywood — the most selective magic society in the world.",
+                detail: "Performing member and consultant at the Academy of Magical Arts in Hollywood, the most selective magic society in the world.",
               },
               {
                 title: "Hyatt Hotels",
-                detail: "Strolling close-up magic across Hyatt properties — lobby bars and private events, never disrupting the room.",
+                detail: "Strolling close-up magic across Hyatt properties, lobby bars and private events, never disrupting the room.",
               },
               {
                 title: "Rideu at Arden, West Hollywood",
@@ -580,7 +580,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
                 attribution: "Private Event, Beverly Hills",
               },
               {
-                quote: "He read the room perfectly — quiet, elegant, never in the way. Exactly what we wanted.",
+                quote: "He read the room perfectly, quiet, elegant, never in the way. Exactly what we wanted.",
                 attribution: "Hotel General Manager",
               },
               {
@@ -596,7 +596,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
                   {t.quote}
                 </p>
                 <p className="font-sans text-xs tracking-[0.15em] uppercase text-forest-dark/60">
-                  — {t.attribution}
+{t.attribution}
                 </p>
               </div>
             ))}
@@ -642,7 +642,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
         );
       })()}
 
-      {/* IN GOOD COMPANY — logos */}
+      {/* IN GOOD COMPANY, logos */}
       <section className="relative bg-cream py-16 md:py-20 px-6">
         <div className="max-w-5xl mx-auto text-center">
           <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">In Good Company</p>
@@ -679,7 +679,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
         <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/40 via-transparent to-forest-dark" />
       </section>
 
-      {/* SECTION 6 — TESTIMONIALS */}
+      {/* SECTION 6, TESTIMONIALS */}
       {realTestimonials.length > 0 && (
         <section className="relative bg-cream py-20 md:py-28 px-6">
           <div className="max-w-4xl mx-auto">
@@ -699,7 +699,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
                     {t.quote}
                   </p>
                   <p className="font-sans text-xs tracking-[0.15em] uppercase text-forest-dark/60">
-                    — {t.attribution}
+{t.attribution}
                   </p>
                 </div>
               ))}
@@ -715,15 +715,15 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
             For Your Ownership Group
           </p>
           <p className="font-sans text-base text-forest-dark/80 leading-relaxed mb-6">
-            If this needs a yes from above you, here is the whole thing in four sentences — forward it as is.
+            If this needs a yes from above you, here is the whole thing in four sentences, forward it as is.
           </p>
           <div className="relative border border-forest-dark/15 bg-white p-8 md:p-10">
             <p className="font-sans text-base text-forest-dark/85 leading-relaxed">
-              "A close-up magician in residence, one night a week, moving table to table — no stage, no microphone, nothing that touches service. $300 a night, month to month, and the first night is a free audition we watch ourselves. He's a Magic Castle performing member who already works a West Hollywood supper-club room. Worst case: one interesting Tuesday."
+              "A close-up magician in residence, one night a week, moving table to table, no stage, no microphone, nothing that touches service. $300 a night, month to month, and the first night is a free audition we watch ourselves. He's a Magic Castle performing member who already works a West Hollywood supper-club room. Worst case: one interesting Tuesday."
             </p>
             <button
               onClick={() => {
-                const text = 'A close-up magician in residence, one night a week, moving table to table — no stage, no microphone, nothing that touches service. $300 a night, month to month, and the first night is a free audition we watch ourselves. He\'s a Magic Castle performing member who already works a West Hollywood supper-club room. Worst case: one interesting Tuesday.';
+                const text = 'A close-up magician in residence, one night a week, moving table to table, no stage, no microphone, nothing that touches service. $300 a night, month to month, and the first night is a free audition we watch ourselves. He\'s a Magic Castle performing member who already works a West Hollywood supper-club room. Worst case: one interesting Tuesday.';
                 navigator.clipboard.writeText(text);
                 setCopied(true);
                 setTimeout(() => setCopied(false), 2000);
@@ -737,7 +737,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
         </div>
       </section>
 
-      {/* SECTION 7 — LET'S WALK THE ROOM */}
+      {/* SECTION 7, LET'S WALK THE ROOM */}
       <section className="relative bg-forest-dark text-cream py-20 md:py-28 px-6 text-center overflow-hidden">
         <div className="max-w-3xl mx-auto relative">
           <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">
@@ -752,7 +752,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
             <span className="w-10 h-px bg-gold/60" />
           </div>
           <p className="font-sans text-base md:text-lg leading-relaxed text-cream/85 max-w-2xl mx-auto mb-10">
-            Before any of this becomes real, I'd like to stand in the room with you. Twenty minutes at {data.venue_name} — see the space, meet the team, watch me work two tables if you like. If it doesn't feel right after that, no proposal goes forward and we part as friends.
+            Before any of this becomes real, I'd like to stand in the room with you. Twenty minutes at {data.venue_name}, see the space, meet the team, watch me work two tables if you like. If it doesn't feel right after that, no proposal goes forward and we part as friends.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto">
@@ -764,7 +764,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
                 className="inline-flex items-center justify-center gap-2 bg-gold text-forest-dark py-4 px-6 text-xs tracking-[0.2em] uppercase font-medium hover:opacity-90 transition-opacity"
               >
                 <Calendar className="w-4 h-4" />
-                Book the audition — 20 minutes
+                Book the audition, 20 minutes
               </a>
             ) : (
               <a
@@ -774,7 +774,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
                 className="inline-flex items-center justify-center gap-2 bg-gold text-forest-dark py-4 px-6 text-xs tracking-[0.2em] uppercase font-medium hover:opacity-90 transition-opacity"
               >
                 <Calendar className="w-4 h-4" />
-                Book the audition — 20 minutes
+                Book the audition, 20 minutes
               </a>
             )}
             <a
@@ -782,7 +782,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
               className="inline-flex items-center justify-center gap-2 border border-cream/40 text-cream py-4 px-6 text-xs tracking-[0.2em] uppercase font-medium hover:border-gold hover:text-gold transition-colors"
             >
               <Phone className="w-4 h-4" />
-              Call Scott — (424) 394-1850
+              Call Scott · (424) 394-1850
             </a>
           </div>
         </div>
@@ -851,7 +851,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
           />
         </div>
 
-        {/* Private positioning line — residency proposals only */}
+        {/* Private positioning line, residency proposals only */}
         {data.closing_private_line && (
           <p className="font-sans text-sm text-forest-dark/45 mt-10 max-w-md mx-auto leading-relaxed">
             {data.closing_private_line}
@@ -924,7 +924,7 @@ const ResidencyTemplate = ({ data: dataProp, preview }: Props) => {
 
   useEffect(() => {
     if (data) {
-      document.title = `Residency Proposal — ${data.venue_name} · White Rabbit LA`;
+      document.title = `Residency Proposal · ${data.venue_name} · White Rabbit LA`;
     }
   }, [data]);
 

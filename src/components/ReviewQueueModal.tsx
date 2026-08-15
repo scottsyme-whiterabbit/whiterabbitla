@@ -220,7 +220,7 @@ export default function ReviewQueueModal({ open, onClose, adminPassword, contact
             {needsTouch && (
               <div className="flex items-start gap-2 border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-[11px] text-amber-300">
                 <AlertTriangle size={14} className="mt-0.5 shrink-0" />
-                <span><span className="font-semibold uppercase tracking-wider">Needs personal touch</span> — AI lacked a strong hook. Edit before sending or skip.</span>
+                <span><span className="font-semibold uppercase tracking-wider">Needs personal touch</span> AI lacked a strong hook. Edit before sending or skip.</span>
               </div>
             )}
 
@@ -250,7 +250,7 @@ export default function ReviewQueueModal({ open, onClose, adminPassword, contact
                         className="w-full bg-muted/20 border border-border px-3 py-2 text-sm focus:outline-none focus:border-accent" />
                     </div>
                     <div>
-                      <label className="text-[10px] uppercase tracking-wider text-muted-foreground block mb-1">Body — editable</label>
+                      <label className="text-[10px] uppercase tracking-wider text-muted-foreground block mb-1">Body, editable</label>
                       <textarea value={current.body} onChange={e => updateField("body", e.target.value)} onBlur={saveEdits} rows={10}
                         className="w-full bg-muted/20 border border-border px-3 py-2 text-sm font-sans leading-relaxed focus:outline-none focus:border-accent resize-y" />
                     </div>
@@ -285,7 +285,7 @@ export default function ReviewQueueModal({ open, onClose, adminPassword, contact
                 <X size={14} />
               </button>
             </div>
-            <p className="text-[10px] text-muted-foreground text-center">Sends from scott.syme@whiterabbitla.com — threaded & logged to the deal.</p>
+            <p className="text-[10px] text-muted-foreground text-center">Sends from scott.syme@whiterabbitla.com, threaded & logged to the deal.</p>
           </div>
         )}
       </DialogContent>

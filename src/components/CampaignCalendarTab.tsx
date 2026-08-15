@@ -36,7 +36,7 @@ interface Deal {
 interface Props {
   campaigns?: unknown[];
   sendLog?: unknown[];
-  /** Admin password — required for the calendar API to return event details. */
+  /** Admin password, required for the calendar API to return event details. */
   adminPassword?: string;
 }
 
@@ -569,7 +569,7 @@ const CampaignCalendarTab = ({ adminPassword }: Props) => {
                         <div>
                           <p className="font-sans text-sm text-foreground font-medium">{displayName}</p>
                           <p className="text-[11px] text-muted-foreground">
-                            {time}{endTime && ` – ${endTime}`}
+                            {time}{endTime && ` ${endTime}`}
                             {isUntitled && " · Details hidden"}
                           </p>
                         </div>

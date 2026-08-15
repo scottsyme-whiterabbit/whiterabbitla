@@ -47,7 +47,7 @@ const SignedAgreementsTab = ({ password }: { password: string }) => {
 
   const copy = async (text: string) => {
     await navigator.clipboard.writeText(text);
-    toast.success("Agreement copied — paste into the Square invoice notes.");
+    toast.success("Agreement copied, paste into the Square invoice notes.");
   };
 
   const markInvoiced = async (id: string) => {

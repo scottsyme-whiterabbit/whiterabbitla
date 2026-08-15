@@ -46,7 +46,7 @@ const questions = [
   {
     id: "vibe",
     question: "What vibe are you going for?",
-    subtitle: "There's no wrong answer — every event has a sweet spot.",
+    subtitle: "There's no wrong answer, every event has a sweet spot.",
     options: [
       { value: "elegant", label: "Elegant & Sophisticated", desc: "Think candlelit, curated, luxurious" },
       { value: "fun", label: "Fun & High-Energy", desc: "Laughter, interaction, unforgettable moments" },
@@ -57,13 +57,13 @@ const questions = [
   {
     id: "concern",
     question: "What's your biggest hesitation about hiring a magician?",
-    subtitle: "Be honest — we've heard it all, and we get it.",
+    subtitle: "Be honest, we've heard it all, and we get it.",
     options: [
       { value: "cheesy", label: "I'm worried it'll feel cheesy", desc: "Top hats and rabbits aren't my thing" },
       { value: "audience", label: "My guests are hard to impress", desc: "They've seen everything" },
       { value: "fit", label: "I'm not sure it fits my event", desc: "Is magic even right for this crowd?" },
       { value: "budget", label: "I'm unsure about the investment", desc: "Is it worth the budget?" },
-      { value: "none", label: "No hesitation — just curious!", desc: "Show me what you've got" },
+      { value: "none", label: "No hesitation, just curious!", desc: "Show me what you've got" },
     ],
   },
   {
@@ -72,8 +72,8 @@ const questions = [
     subtitle: "This helps us recommend the right format.",
     options: [
       { value: "intimate", label: "Under 30", desc: "Intimate gathering" },
-      { value: "medium", label: "30–75", desc: "Medium-sized event" },
-      { value: "large", label: "75–200", desc: "Large event" },
+      { value: "medium", label: "30 to 75", desc: "Medium-sized event" },
+      { value: "large", label: "75 to 200", desc: "Large event" },
       { value: "grand", label: "200+", desc: "Grand-scale production" },
     ],
   },
@@ -85,7 +85,7 @@ const questions = [
       { value: "memorable", label: "Making it unforgettable", desc: "I want guests talking about this for years" },
       { value: "engagement", label: "Guest engagement", desc: "I want everyone involved, not just watching" },
       { value: "seamless", label: "Seamless integration", desc: "It should feel effortless and natural" },
-      { value: "unique", label: "Something truly unique", desc: "Nothing generic — I want a one-of-a-kind moment" },
+      { value: "unique", label: "Something truly unique", desc: "Nothing generic. I want a one-of-a-kind moment" },
     ],
   },
 ];
@@ -105,7 +105,7 @@ const recommendations: Record<RecommendationKey, Recommendation> = {
     title: "Close-Up Magic Experience",
     subtitle: "Intimate. Interactive. Impossible.",
     description:
-      "This is magic that happens in your guests' hands. No stage, no distance — just breathtaking sleight of hand performed inches away. It's the most personal, most talked-about form of entertainment you can offer.",
+      "This is magic that happens in your guests' hands. No stage, no distance, just breathtaking sleight of hand performed inches away. It's the most personal, most talked-about form of entertainment you can offer.",
     ideal: [
       "Cocktail hours and receptions",
       "Intimate dinners and private parties",
@@ -119,7 +119,7 @@ const recommendations: Record<RecommendationKey, Recommendation> = {
     title: "Parlor Show Experience",
     subtitle: "A curated performance for a captivated room.",
     description:
-      "A 30–45 minute seated show designed for groups of 20–80 guests. Think of it as a private theatrical experience — intimate enough that everyone feels the magic, grand enough to feel like an event within your event.",
+      "A 30 to 45 minute seated show designed for groups of 20 to 80 guests. Think of it as a private theatrical experience, intimate enough that everyone feels the magic, grand enough to feel like an event within your event.",
     ideal: [
       "Rehearsal dinners and wedding receptions",
       "Corporate retreats and team events",
@@ -147,7 +147,7 @@ const recommendations: Record<RecommendationKey, Recommendation> = {
     title: "Cocktail Hour Magic",
     subtitle: "The ultimate icebreaker for any gathering.",
     description:
-      "Scott mingles with guests during cocktail hour, performing impossible moments at each table or group. It creates organic conversation, breaks the ice, and sets an extraordinary tone for the rest of the evening. No setup needed — just seamless magic.",
+      "Scott mingles with guests during cocktail hour, performing impossible moments at each table or group. It creates organic conversation, breaks the ice, and sets an extraordinary tone for the rest of the evening. No setup needed, just seamless magic.",
     ideal: [
       "Pre-dinner cocktail receptions",
       "Networking events and mixers",
@@ -270,7 +270,7 @@ const DiscoveryQuiz = () => {
 
   return (
     <main className="min-h-screen bg-forest-dark text-cream pt-24 pb-16">
-      <SEOHead title="Get a Custom Magic Quote in 60 Seconds | White Rabbit LA" description="Tell us about your event in 60 seconds for a custom magic entertainment quote. Magic Castle pro Scott Syme — LA-based, available for events nationwide." canonical="/quiz" />
+      <SEOHead title="Get a Custom Magic Quote in 60 Seconds | White Rabbit LA" description="Tell us about your event in 60 seconds for a custom magic entertainment quote. Magic Castle pro Scott Syme, LA-based, available for events nationwide." canonical="/quiz" />
       <div className="max-w-2xl mx-auto px-6">
         <AnimatePresence mode="wait">
           {!showResult ? (
@@ -336,7 +336,7 @@ const DiscoveryQuiz = () => {
                         <div className="mt-3 ml-1 flex flex-col sm:flex-row sm:items-end gap-3">
                           <div className="flex-1">
                             <label className="font-sans text-xs tracking-[0.15em] uppercase text-cream/50 mb-2 block">
-                              Optional — exact guest count
+                              Optional · exact guest count
                             </label>
                             <input
                               type="number"
@@ -474,7 +474,7 @@ const DiscoveryQuiz = () => {
 
                 </div>
 
-                {/* Persona reveal + card — Zoltar-style dramatic reveal */}
+                {/* Persona reveal + card, Zoltar-style dramatic reveal */}
                 <motion.div
                   className="border-t border-cream/10 pt-10 relative overflow-hidden"
                   initial={{ opacity: 0 }}

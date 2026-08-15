@@ -19,16 +19,16 @@ var echo_default = defineTool({
 
 // src/lib/mcp/tools/brand-overview.ts
 import { defineTool as defineTool2 } from "npm:@lovable.dev/mcp-js@0.20.0";
-var OVERVIEW = `White Rabbit LA \u2014 luxury private magic and sophisticated event entertainment.
+var OVERVIEW = `White Rabbit LA, luxury private magic and sophisticated event entertainment.
 Founder: Scott Syme. Based in Los Angeles, performs nationwide.
 Positioning: white-glove hospitality; magic performed WITH guests, never AT them.
 Signature offerings: Cocktail-hour close-up, Private Magic Show, Speakeasy sets, Magic Mondays residency.
-Booking lead time: 4\u20136 weeks (8\u201312 weeks peak season).
-Contact: scott.syme@whiterabbitla.com \u2014 https://whiterabbitla.com`;
+Booking lead time: 4 to 6 weeks (8 to 12 weeks peak season).
+Contact: scott.syme@whiterabbitla.com, https://whiterabbitla.com`;
 var brand_overview_default = defineTool2({
   name: "brand_overview",
   title: "Brand overview",
-  description: "Returns a concise overview of White Rabbit LA \u2014 positioning, offerings, and contact info.",
+  description: "Returns a concise overview of White Rabbit LA, positioning, offerings, and contact info.",
   inputSchema: {},
   annotations: { readOnlyHint: true, idempotentHint: true, openWorldHint: false },
   handler: () => ({ content: [{ type: "text", text: OVERVIEW }] })
@@ -94,7 +94,7 @@ var ContactSchema = z2.object({
 var import_contacts_default = defineTool3({
   name: "import_contacts",
   title: "Import cold-outreach contacts",
-  description: "Upload contacts scraped from Apollo (or similar) into a specific drip campaign category. Dedupes by email + apollo_id against existing campaigns, skips role-based addresses (info@, hello@, etc.) and anything on the suppression list. Contacts are inserted PAUSED by default \u2014 set start_immediately=true to enroll them in the drip right away. Returns a full breakdown of inserted vs skipped counts.",
+  description: "Upload contacts scraped from Apollo (or similar) into a specific drip campaign category. Dedupes by email + apollo_id against existing campaigns, skips role-based addresses (info@, hello@, etc.) and anything on the suppression list. Contacts are inserted PAUSED by default, set start_immediately=true to enroll them in the drip right away. Returns a full breakdown of inserted vs skipped counts.",
   inputSchema: {
     campaign_category: z2.enum(VALID_CATEGORIES).describe("Which drip campaign these contacts belong to."),
     contacts: z2.array(ContactSchema).min(1).max(500).describe("Array of contacts (max 500 per call)."),

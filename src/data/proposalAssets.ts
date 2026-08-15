@@ -142,36 +142,36 @@ const uploadPhoto = (path: string, label: string): BrandPhoto => ({
 
 // New gallery-page photos, now selectable inside proposals.
 export const GALLERY_UPLOAD_PHOTOS: BrandPhoto[] = [
-  uploadPhoto("a71549f0-8a6c-44ee-bd48-4d3469a7f67d-IMG_0557.JPG", "Green Tux — Table Moment"),
-  uploadPhoto("2946cda0-2837-46e5-bc66-b2415fc66488-IMG_0548.JPG", "Green Tux — Performing 1"),
-  uploadPhoto("c1fe490d-8a38-4e14-89fa-1171552d90ec-IMG_0549.JPG", "Green Tux — Performing 2"),
-  uploadPhoto("cbad12dc-3531-4ffd-a979-77522df5e9a5-IMG_0550.JPG", "Green Tux — Performing 3"),
-  uploadPhoto("ada73250-5d52-4175-bc7d-eba963e26b7c-IMG_0553.JPG", "Green Tux — Reaction 1"),
-  uploadPhoto("42d64743-184c-41f5-a51e-7f7f2d6f0608-IMG_0554.JPG", "Green Tux — Reaction 2"),
-  uploadPhoto("9afc1ab6-45dc-4ebd-b3e8-f6a6b4ed9cec-IMG_0555.JPG", "Green Tux — Reaction 3"),
-  uploadPhoto("9d494b5a-29b4-4610-81fc-06c94db1bb0f-IMG_0556.JPG", "Green Tux — Reaction 4"),
+  uploadPhoto("a71549f0-8a6c-44ee-bd48-4d3469a7f67d-IMG_0557.JPG", "Green Tux · Table Moment"),
+  uploadPhoto("2946cda0-2837-46e5-bc66-b2415fc66488-IMG_0548.JPG", "Green Tux · Performing 1"),
+  uploadPhoto("c1fe490d-8a38-4e14-89fa-1171552d90ec-IMG_0549.JPG", "Green Tux · Performing 2"),
+  uploadPhoto("cbad12dc-3531-4ffd-a979-77522df5e9a5-IMG_0550.JPG", "Green Tux · Performing 3"),
+  uploadPhoto("ada73250-5d52-4175-bc7d-eba963e26b7c-IMG_0553.JPG", "Green Tux · Reaction 1"),
+  uploadPhoto("42d64743-184c-41f5-a51e-7f7f2d6f0608-IMG_0554.JPG", "Green Tux · Reaction 2"),
+  uploadPhoto("9afc1ab6-45dc-4ebd-b3e8-f6a6b4ed9cec-IMG_0555.JPG", "Green Tux · Reaction 3"),
+  uploadPhoto("9d494b5a-29b4-4610-81fc-06c94db1bb0f-IMG_0556.JPG", "Green Tux · Reaction 4"),
   uploadPhoto("c8e6e9c1-4d5e-4b6a-9ba2-8449c58ef3a4-IMG_9169_2.JPG", "Event Photo 1"),
   uploadPhoto("47c0c269-7c8b-47fe-97b1-03817f8fa082-IMG_9170_2.JPG", "Event Photo 2"),
   uploadPhoto("d60cda7e-be69-4be4-b2a4-355f708e1c72-IMG_9171_2.JPG", "Event Photo 3"),
   uploadPhoto("6e714c63-8dbd-4545-877f-475ac637685d-IMG_9172_2.JPG", "Event Photo 4"),
   uploadPhoto("bf0dd628-1023-4b78-82d0-faee014b3f95-IMG_9173_2.JPG", "Event Photo 5"),
   uploadPhoto("4cc495d3-af40-4834-8482-9259312522e8-IMG_9178_2.JPG", "Event Photo 6"),
-  uploadPhoto("scott-green-cards-doorway.jpg", "Green Cards — Doorway"),
-  uploadPhoto("scott-green-cards-outdoor.jpg", "Green Cards — Outdoor"),
+  uploadPhoto("scott-green-cards-doorway.jpg", "Green Cards · Doorway"),
+  uploadPhoto("scott-green-cards-outdoor.jpg", "Green Cards · Outdoor"),
   uploadPhoto("scott-with-alec.jpg", "With a Guest"),
   uploadPhoto("scott-bw-walking.jpg", "B&W Walking"),
-  uploadPhoto("scott-desert-cards-toss.jpg", "Desert — Cards Toss"),
-  uploadPhoto("scott-desert-walking.jpg", "Desert — Walking"),
-  uploadPhoto("scott-desert-wave.jpg", "Desert — Wave"),
-  uploadPhoto("scott-desert-laughing.jpg", "Desert — Laughing"),
-  uploadPhoto("scott-desert-standing.jpg", "Desert — Standing"),
+  uploadPhoto("scott-desert-cards-toss.jpg", "Desert, Cards Toss"),
+  uploadPhoto("scott-desert-walking.jpg", "Desert, Walking"),
+  uploadPhoto("scott-desert-wave.jpg", "Desert, Wave"),
+  uploadPhoto("scott-desert-laughing.jpg", "Desert, Laughing"),
+  uploadPhoto("scott-desert-standing.jpg", "Desert, Standing"),
   uploadPhoto("desert-phh-184.jpg", "Desert Shoot 184"),
   uploadPhoto("desert-phh-186.jpg", "Desert Shoot 186"),
   uploadPhoto("desert-phh-385.jpg", "Desert Shoot 385"),
   uploadPhoto("desert-phh-423.jpg", "Desert Shoot 423"),
   uploadPhoto("desert-phh-425.jpg", "Desert Shoot 425"),
   uploadPhoto("desert-phh-432.jpg", "Desert Shoot 432"),
-  uploadPhoto("desert-tezza-4035.jpg", "Desert Shoot — Tezza"),
+  uploadPhoto("desert-tezza-4035.jpg", "Desert Shoot · Tezza"),
 ];
 
 BRAND_PHOTOS.push(...GALLERY_UPLOAD_PHOTOS);
@@ -226,24 +226,24 @@ export interface ProposalTemplate {
 }
 
 const COMMON_FAQS: { q: string; a: string }[] = [
-  { q: "How much space do you need?", a: "For close-up walk-around, none — I move through the room. For the parlor experience, anywhere a host can comfortably gather their guests works. I'll walk you through setup a week ahead." },
+  { q: "How much space do you need?", a: "For close-up walk-around, none. I move through the room. For the parlor experience, anywhere a host can comfortably gather their guests works. I'll walk you through setup a week ahead." },
   { q: "What if a guest doesn't want to participate?", a: "No one is ever pulled in who doesn't want to be. The night is built around making your guests feel hosted, not put on the spot." },
-  { q: "Do you need a stage, microphone, or special lighting?", a: "For most rooms, no. I bring everything I need — including soft lighting and a discreet sound system if the space calls for it." },
-  { q: "How early do you arrive?", a: "For close-up walk-around, a half hour before guests is all I need. For the parlor magic stage show (a 45-minute set), I arrive earlier to quietly set the room — typically 60–90 minutes before." },
+  { q: "Do you need a stage, microphone, or special lighting?", a: "For most rooms, no. I bring everything I need, including soft lighting and a discreet sound system if the space calls for it." },
+  { q: "How early do you arrive?", a: "For close-up walk-around, a half hour before guests is all I need. For the parlor magic stage show (a 45-minute set), I arrive earlier to quietly set the room, typically 60 to 90 minutes before." },
   { q: "Do you travel?", a: "Yes. Standard pricing covers Los Angeles County. For destination events, travel and lodging are added." },
   { q: "What happens after I reserve the date?", a: "A 50% deposit holds your date. The remaining 50% is due the day before. Two weeks before, we hop on a final call to walk through the night together." },
 ];
 
 export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
   Wedding: {
-    letter_intro: "Thank you for the time on the phone — I enjoyed it more than you know.",
+    letter_intro: "Thank you for the time on the phone. I enjoyed it more than you know.",
     intro_paragraph:
-      "What you described isn't a magic act dropped into your evening — it's an entire texture woven through the night. Quiet conversation that turns into wide-eyed silence, then laughter, then the kind of story your guests will still be telling on Monday.",
+      "What you described isn't a magic act dropped into your evening, it's an entire texture woven through the night. Quiet conversation that turns into wide-eyed silence, then laughter, then the kind of story your guests will still be telling on Monday.",
     hero_image: "wedding",
     timeline: [
       { time: "5:30 PM", desc: "I arrive, set quietly, full environment built before guests arrive." },
       { time: "6:00 PM", desc: "Greeting every guest as they walk in to cocktail hour." },
-      { time: "7:00 PM", desc: "Guests move to dinner — I step away." },
+      { time: "7:00 PM", desc: "Guests move to dinner. I step away." },
       { time: "9:30 PM", desc: "Optional Speakeasy lounge moment after the reception." },
     ],
     tiers: [
@@ -264,7 +264,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
         name: "The White Rabbit Wedding Experience",
         tagline: "Parlor at rehearsal dinner + cocktail hour the next day",
         items: [
-          "40–45 minute parlor experience at rehearsal dinner the night before",
+          "40 to 45 minute parlor experience at rehearsal dinner the night before",
           "90 minutes of close-up at cocktail hour the next day",
           "Up to 150 guests across both events",
           "Full pre-event consultation with couple and planner",
@@ -279,7 +279,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
         name: "The Estate Wedding Experience",
         tagline: "Parlor + cocktail hour + post-reception speakeasy",
         items: [
-          "40–45 minute parlor at rehearsal dinner",
+          "40 to 45 minute parlor at rehearsal dinner",
           "2 hours of close-up at cocktail hour",
           "30-minute Speakeasy lounge moment after reception",
           "Up to 250 guests across all three events",
@@ -300,9 +300,9 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
   },
 
   "Corporate Event": {
-    letter_intro: "Thank you for the time today — I enjoyed hearing about what you're building.",
+    letter_intro: "Thank you for the time today. I enjoyed hearing about what you're building.",
     intro_paragraph:
-      "Your guests have been to a hundred corporate dinners. What they haven't been to is the one they're still telling stories about on Monday. That's the night we build together — quiet wonder during cocktails, then a parlor moment after dinner that resets the whole room.",
+      "Your guests have been to a hundred corporate dinners. What they haven't been to is the one they're still telling stories about on Monday. That's the night we build together, quiet wonder during cocktails, then a parlor moment after dinner that resets the whole room.",
     hero_image: "corporate",
     timeline: [
       { time: "5:30 PM", desc: "Arrive, set up discreetly before guests." },
@@ -329,7 +329,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
         tagline: "Cocktail hour + after-dinner parlor experience",
         items: [
           "90 minutes of close-up at cocktail reception",
-          "40–45 minute parlor experience after dinner",
+          "40 to 45 minute parlor experience after dinner",
           "Up to 150 guests",
           "Full pre-event consultation with planner & exec sponsor",
           "Custom branded moment for the company",
@@ -356,7 +356,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
       },
     ],
     faqs: [
-      { q: "Can the show be tied to our brand or messaging?", a: "Yes — the parlor moment can be lightly woven around a product launch, milestone, or message. We'll talk through what feels natural and what would feel forced." },
+      { q: "Can the show be tied to our brand or messaging?", a: "Yes, the parlor moment can be lightly woven around a product launch, milestone, or message. We'll talk through what feels natural and what would feel forced." },
       { q: "Will this work in a hotel ballroom?", a: "Yes. I've performed in everything from intimate suites to 300-person ballrooms. The room shape changes the staging, never the experience." },
       ...COMMON_FAQS,
     ],
@@ -365,9 +365,9 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
   },
 
   "Private Event": {
-    letter_intro: "Thank you for reaching out — I enjoyed our conversation.",
+    letter_intro: "Thank you for reaching out. I enjoyed our conversation.",
     intro_paragraph:
-      "A private evening should feel like a secret kept beautifully. What we're building together isn't an act inserted into your night — it's a thread that runs through it, drawing your guests closer to one another and to the room.",
+      "A private evening should feel like a secret kept beautifully. What we're building together isn't an act inserted into your night, it's a thread that runs through it, drawing your guests closer to one another and to the room.",
     hero_image: "private",
     timeline: [
       { time: "6:30 PM", desc: "Arrive and set up before guests." },
@@ -394,7 +394,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
         tagline: "Cocktail hour + parlor experience after dinner",
         items: [
           "90 minutes of close-up at cocktail hour",
-          "40–45 minute parlor experience after dinner",
+          "40 to 45 minute parlor experience after dinner",
           "Up to 80 guests",
           "Pre-event consultation with host",
           "Custom moment built for the guest of honor",
@@ -426,9 +426,9 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
   },
 
   Fundraiser: {
-    letter_intro: "Thank you for the time — and for the work you're doing.",
+    letter_intro: "Thank you for the time, and for the work you're doing.",
     intro_paragraph:
-      "Galas live and die by energy. Magic resets the room, breaks the ice between strangers, and gives your donors a moment they'll attach to your cause for years. The goal isn't a show — it's atmosphere that opens wallets.",
+      "Galas live and die by energy. Magic resets the room, breaks the ice between strangers, and gives your donors a moment they'll attach to your cause for years. The goal isn't a show, it's atmosphere that opens wallets.",
     hero_image: "corporate",
     timeline: [
       { time: "5:30 PM", desc: "Arrive, set up discreetly before doors." },
@@ -467,17 +467,17 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
       },
     ],
     faqs: [
-      { q: "Can the show tie back to our mission?", a: "Yes — done with care. The strongest moments are ones where the magic illustrates something true about your cause without overplaying it." },
+      { q: "Can the show tie back to our mission?", a: "Yes, done with care. The strongest moments are ones where the magic illustrates something true about your cause without overplaying it." },
       ...COMMON_FAQS,
     ],
-    closing_quote: "Atmosphere that opens hearts — and wallets.",
+    closing_quote: "Atmosphere that opens hearts, and wallets.",
     closing_attribution: "",
   },
 
   Birthday: {
-    letter_intro: "Thank you for thinking of us for this — sounds like a special one.",
+    letter_intro: "Thank you for thinking of us for this, sounds like a special one.",
     intro_paragraph:
-      "Birthdays are the easiest night to phone in and the hardest to get right. The version your guest of honor will remember isn't bigger — it's more personal. Quiet wonder, woven into the room, with a moment built just for them.",
+      "Birthdays are the easiest night to phone in and the hardest to get right. The version your guest of honor will remember isn't bigger, it's more personal. Quiet wonder, woven into the room, with a moment built just for them.",
     hero_image: "private",
     timeline: [
       { time: "6:30 PM", desc: "Arrive, set up before guests." },
@@ -521,7 +521,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
   "Holiday Party": {
     letter_intro: "Thanks for thinking of us for the holidays.",
     intro_paragraph:
-      "Holiday parties are crowded, generous, and easy to forget. The ones people remember are the ones where something quiet and unexpected happened. Magic during cocktails resets the room — strangers turn into friends, phones go down, and the night actually starts.",
+      "Holiday parties are crowded, generous, and easy to forget. The ones people remember are the ones where something quiet and unexpected happened. Magic during cocktails resets the room, strangers turn into friends, phones go down, and the night actually starts.",
     hero_image: "corporate",
     timeline: [
       { time: "5:30 PM", desc: "Arrive, set up before guests." },

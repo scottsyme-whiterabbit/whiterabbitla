@@ -41,7 +41,7 @@ export default function ShareButton({ shareSlug }: ShareButtonProps) {
     try {
       await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
-      toast({ title: "Link copied", description: "Paste it in a text — the preview will show the correct title and photo." });
+      toast({ title: "Link copied", description: "Paste it in a text, the preview will show the correct title and photo." });
       setTimeout(() => setCopied(false), 2000);
     } catch {
       toast({ title: "Couldn't copy", description: "Please try again.", variant: "destructive" });

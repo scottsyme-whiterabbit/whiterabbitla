@@ -8,8 +8,8 @@ import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
 const ServiceAreas = () => {
-  const seoTitle = "Service Areas | White Rabbit Magic — Luxury Entertainment Nationwide";
-  const seoDescription = "White Rabbit brings world-class close-up magic and parlor shows to luxury events across 70+ cities — from Los Angeles to New York, Aspen to Miami.";
+  const seoTitle = "Service Areas | White Rabbit Magic, Luxury Entertainment Nationwide";
+  const seoDescription = "White Rabbit brings world-class close-up magic and parlor shows to luxury events across 70+ cities, from Los Angeles to New York, Aspen to Miami.";
   useWebPageSchema({
     name: "Service Areas",
     description: "Luxury magic entertainment in 70+ cities nationwide.",
@@ -66,7 +66,7 @@ const ServiceAreas = () => {
                     >
                       <img
                         src={area.photo}
-                        alt={`${area.city}, ${area.region} — magician for luxury events`}
+                        alt={`${area.city}, ${area.region}, magician for luxury events`}
                         width={600}
                         height={400}
                         className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"

@@ -25,7 +25,7 @@ const ValueProposition = () => {
   return (
     <section className="py-24 lg:py-36 bg-card">
       <div className="max-w-3xl mx-auto px-6 lg:px-8">
-        {/* The Evening — slow vertical ritual */}
+        {/* The Evening · slow vertical ritual */}
         <AnimatedSection>
           <div className="text-center mb-20">
             <p className="font-sans text-xs tracking-[0.4em] uppercase text-accent mb-5">The Ritual</p>

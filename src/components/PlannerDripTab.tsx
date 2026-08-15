@@ -309,7 +309,7 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
         </div>
       </div>
 
-      {/* Stats Row 2 — Engagement */}
+      {/* Stats Row 2, Engagement */}
       <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
         <button onClick={() => onNavigateToContacts?.("hot")} className="border border-border p-5 text-left hover:border-accent/50 transition-colors cursor-pointer">
           <div className="flex items-center gap-2 mb-1">
@@ -407,11 +407,11 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
         </div>
       </div>
 
-      {/* Planner Pulse — Twice-Monthly Newsletter */}
+      {/* Planner Pulse · Twice-Monthly Newsletter */}
       <div>
         <h3 className="font-sans text-sm tracking-[0.2em] uppercase text-muted-foreground mb-4 flex items-center gap-2">
           <Mail size={16} className="text-accent" />
-          Planner Pulse — Twice Monthly
+          Planner Pulse · Twice Monthly
           <span className="text-xs text-muted-foreground/50 normal-case tracking-normal">(after drip/nurture completes · {(stats as any).pulseActive || 0} active)</span>
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
@@ -458,7 +458,7 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
                   const rateB = ab.sentB > 0 ? Math.round((ab.openedB / ab.sentB) * 100) : 0;
                   const winner = ab.sentA >= 3 && ab.sentB >= 3
                     ? rateA > rateB ? "A" : rateB > rateA ? "B" : "Tie"
-                    : "—";
+                    : "";
                   return (
                     <tr key={key} className="border-b border-border/50">
                       <td className="px-4 py-3 font-sans text-xs text-muted-foreground">Day {d.day}</td>
@@ -498,10 +498,10 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
               <h3 className="font-sans text-sm text-foreground">
                 <Eye size={14} className="inline mr-2" />
                 {previewCampaign === "planner-pulse"
-                  ? `Preview: Pulse ${previewStep + 1} — "${PULSE_LABELS[previewStep]?.subjectA}"`
+                  ? `Preview: Pulse ${previewStep + 1}, "${PULSE_LABELS[previewStep]?.subjectA}"`
                   : previewCampaign === "planner-warm"
-                  ? `Preview: Nurture ${previewStep + 1} — "${WARM_LABELS[previewStep]?.subjectA}"`
-                  : `Preview: Email ${previewStep + 1} — "${DRIP_LABELS[previewStep]?.subjectA}"`
+                  ? `Preview: Nurture ${previewStep + 1}, "${WARM_LABELS[previewStep]?.subjectA}"`
+                  : `Preview: Email ${previewStep + 1}, "${DRIP_LABELS[previewStep]?.subjectA}"`
                 }
               </h3>
               <p className="text-xs text-muted-foreground mt-1">
@@ -580,11 +580,11 @@ const PlannerDripTab = ({ storedPassword, onNavigateToContacts }: PlannerDripTab
                           {expandedContact === c.id ? <ChevronDown size={14} className="text-muted-foreground" /> : <ChevronRight size={14} className="text-muted-foreground" />}
                         </td>
                         <td className="px-4 py-2.5">
-                          <p className="text-foreground">{c.name || "—"}</p>
+                          <p className="text-foreground">{c.name || ""}</p>
                           <p className="text-xs text-muted-foreground">{c.email}</p>
                         </td>
-                        <td className="px-4 py-2.5 text-muted-foreground hidden md:table-cell">{c.company || "—"}</td>
-                        <td className="px-4 py-2.5 text-muted-foreground hidden md:table-cell">{c.city || "—"}</td>
+                        <td className="px-4 py-2.5 text-muted-foreground hidden md:table-cell">{c.company || ""}</td>
+                        <td className="px-4 py-2.5 text-muted-foreground hidden md:table-cell">{c.city || ""}</td>
                         <td className="px-4 py-2.5 text-muted-foreground">
                           {c.drip_campaign === "planner-done" ? "Done" : `${c.drip_step + 1}/5`}
                         </td>

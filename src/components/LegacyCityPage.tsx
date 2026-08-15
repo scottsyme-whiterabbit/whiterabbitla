@@ -41,7 +41,7 @@ const LegacyCityPage = ({ area, citySlug }: Props) => {
       <section className="relative h-[50vh] min-h-[400px]">
         <img
           src={area.photo.replace("w=600&h=400", "w=1600&h=900")}
-          alt={`${area.city}, ${area.region} — luxury event entertainment destination`}
+          alt={`${area.city}, ${area.region}, luxury event entertainment destination`}
           width={1600}
           height={900}
           className="absolute inset-0 w-full h-full object-cover"
@@ -126,7 +126,7 @@ const LegacyCityPage = ({ area, citySlug }: Props) => {
         </section>
       )}
 
-      {/* Insights & Guides — city-specific editorial articles */}
+      {/* Insights & Guides · city-specific editorial articles */}
       {(() => {
         const insightArticles = getArticleSlugsForCity(citySlug)
           .map((s) => getBlogArticleBySlug(s))

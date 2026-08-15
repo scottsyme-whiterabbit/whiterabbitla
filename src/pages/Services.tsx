@@ -59,7 +59,7 @@ const services: ServiceTile[] = [
     slug: "private-magic-show",
     title: "Private Magic Show",
     blurb:
-      "A 45-minute curated theatrical experience for 20–120 guests. Full production with lighting, sound, and emerald drapes.",
+      "A 45-minute curated theatrical experience for 20 to 120 guests. Full production with lighting, sound, and emerald drapes.",
     image: parlorImg,
   },
   {
@@ -111,7 +111,7 @@ const ServicesHub = () => {
 
   const seoTitle = "Services | Magician for Corporate, Weddings, Galas & More | White Rabbit LA";
   const seoDescription =
-    "All 11 White Rabbit LA magic services in one place. Corporate, weddings, galas, trade shows, golf tournaments, DMC programs, and more — across LA and 80+ US markets.";
+    "All 11 White Rabbit LA magic services in one place. Corporate, weddings, galas, trade shows, golf tournaments, DMC programs, and more, across LA and 80+ US markets.";
 
   useWebPageSchema({
     name: "Services",
@@ -173,7 +173,7 @@ const ServicesHub = () => {
             </h1>
             <p className="font-sans text-lg text-cream/80 max-w-2xl mx-auto mb-8">
               Eleven dedicated magic services for corporate events, weddings, galas, trade shows, tournaments, DMC
-              programs, and residential communities — across Los Angeles and 80+ luxury markets nationwide.
+              programs, and residential communities, across Los Angeles and 80+ luxury markets nationwide.
             </p>
             <button
               onClick={openQuiz}
@@ -207,7 +207,7 @@ const ServicesHub = () => {
                   <div className="aspect-[16/9] overflow-hidden">
                     <img
                       src={service.image}
-                      alt={`${service.title} — White Rabbit LA`}
+                      alt={`${service.title}, White Rabbit LA`}
                       width={600}
                       height={338}
                       loading="lazy"
@@ -285,7 +285,7 @@ const ServicesHub = () => {
               Ready to talk about your event?
             </h2>
             <p className="font-sans text-base text-muted-foreground mb-8">
-              Tell us your date, guest count, and vibe — we'll usually confirm availability within a few hours.
+              Tell us your date, guest count, and vibe, we'll usually confirm availability within a few hours.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <button

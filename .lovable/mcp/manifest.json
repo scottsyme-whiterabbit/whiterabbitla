@@ -41,7 +41,7 @@
       {
         "name": "brand_overview",
         "title": "Brand overview",
-        "description": "Returns a concise overview of White Rabbit LA — positioning, offerings, and contact info.",
+        "description": "Returns a concise overview of White Rabbit LA, positioning, offerings, and contact info.",
         "annotations": {
           "readOnlyHint": true,
           "idempotentHint": true,
@@ -57,7 +57,7 @@
       {
         "name": "import_contacts",
         "title": "Import cold-outreach contacts",
-        "description": "Upload contacts scraped from Apollo (or similar) into a specific drip campaign category. Dedupes by email + apollo_id against existing campaigns, skips role-based addresses (info@, hello@, etc.) and anything on the suppression list. Contacts are inserted PAUSED by default — set start_immediately=true to enroll them in the drip right away. Returns a full breakdown of inserted vs skipped counts.",
+        "description": "Upload contacts scraped from Apollo (or similar) into a specific drip campaign category. Dedupes by email + apollo_id against existing campaigns, skips role-based addresses (info@, hello@, etc.) and anything on the suppression list. Contacts are inserted PAUSED by default, set start_immediately=true to enroll them in the drip right away. Returns a full breakdown of inserted vs skipped counts.",
         "annotations": {
           "readOnlyHint": false,
           "idempotentHint": false,

@@ -199,7 +199,7 @@ const ExitIntentPopup = () => {
                 Where Should We Send It?
               </h3>
               <p className="font-serif text-sm text-cream/40 italic mb-5">
-                The Host's Playbook — 7 Secrets Inside
+                The Host's Playbook · 7 Secrets Inside
               </p>
               <div className="space-y-2 mb-6">
                 {[
@@ -245,7 +245,7 @@ const ExitIntentPopup = () => {
               Check Your Inbox ✨
             </h3>
             <p className="font-sans text-sm text-cream/60 leading-relaxed mb-6 max-w-sm mx-auto">
-              The Host's Playbook is on its way. While you wait — want to see if your date is available?
+              The Host's Playbook is on its way. While you wait, want to see if your date is available?
             </p>
             <button
               onClick={handleCheckAvailability}

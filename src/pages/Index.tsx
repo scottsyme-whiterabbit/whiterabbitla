@@ -121,7 +121,7 @@ const Index = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const seoTitle = "White Rabbit LA — Private Magic, by Appointment";
+  const seoTitle = "White Rabbit LA, Private Magic, by Appointment";
   const seoDescription = "Close-up magic and mentalism for private events in Los Angeles and select destinations. Magic Castle member trusted by Netflix, Disney, and Morgan Stanley.";
 
   // Homepage Person schema
@@ -206,7 +206,7 @@ const Index = () => {
           <div className="hero-wisp hero-wisp-4 hidden md:block" />
         </div>
 
-        {/* Text overlaid — bottom-left aligned (desktop only) */}
+        {/* Text overlaid, bottom-left aligned (desktop only) */}
         <div className="hidden md:flex absolute inset-0 z-10 flex-col items-start justify-end pb-28 md:pb-24 pl-6 md:pl-[10vw] pr-6 text-left">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -255,7 +255,7 @@ const Index = () => {
           </motion.div>
         </div>
 
-        {/* Rolling reviews — pinned to bottom of hero (desktop only) */}
+        {/* Rolling reviews, pinned to bottom of hero (desktop only) */}
         <motion.div
           className="hidden md:block absolute bottom-0 left-0 right-0 z-20 bg-forest-dark/80 backdrop-blur-sm py-4 border-t border-accent/10"
           initial={{ opacity: 0 }}
@@ -280,7 +280,7 @@ const Index = () => {
                   "{heroReviews[heroReviewIndex].text}"
                 </p>
                 <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-cream/60 whitespace-nowrap">
-                  — {heroReviews[heroReviewIndex].name}{heroReviews[heroReviewIndex].role ? `, ${heroReviews[heroReviewIndex].role}` : ""}
+{heroReviews[heroReviewIndex].name}{heroReviews[heroReviewIndex].role ? `, ${heroReviews[heroReviewIndex].role}` : ""}
                 </p>
               </motion.div>
             </AnimatePresence>
@@ -336,7 +336,7 @@ const Index = () => {
         </motion.div>
       </section>
 
-      {/* Rolling reviews — mobile placement after text section */}
+      {/* Rolling reviews, mobile placement after text section */}
       <motion.div
         className="md:hidden bg-forest-dark/80 backdrop-blur-sm py-4 border-t border-accent/10"
         initial={{ opacity: 0 }}
@@ -361,14 +361,14 @@ const Index = () => {
                 "{heroReviews[heroReviewIndex].text}"
               </p>
               <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-cream/60 whitespace-nowrap">
-                — {heroReviews[heroReviewIndex].name}{heroReviews[heroReviewIndex].role ? `, ${heroReviews[heroReviewIndex].role}` : ""}
+{heroReviews[heroReviewIndex].name}{heroReviews[heroReviewIndex].role ? `, ${heroReviews[heroReviewIndex].role}` : ""}
               </p>
             </motion.div>
           </AnimatePresence>
         </div>
       </motion.div>
 
-      {/* Client Logos — static stacked block */}
+      {/* Client Logos · static stacked block */}
       <AnimatedSection>
         <section className="bg-gradient-to-b from-[#F8F5F0] to-[#F0E8D8] py-14 md:py-16">
           <div className="max-w-6xl mx-auto px-6">
@@ -421,8 +421,8 @@ const Index = () => {
               <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 leading-tight">
                 More Than Magic.<br />A Feeling.
               </h2>
-              <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">Scott Syme is the magician behind White Rabbit. A member of the Magic Castle® and consultant to performers on America's Got Talent and Disney Channel, Scott has spent years going deeper into a single question than most people think to ask — what makes someone feel genuinely alive in a room full of people?</p>
-              <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">Everything about White Rabbit is built around the answer. Nothing is accidental. Scott blends interactive magic, mentalism, and impossible coincidences with the warmth of a seasoned host, transforming any room into something cinematic, intimate, and utterly alive. Curated lighting, a signature soundtrack, and moments so close you can feel them. Your guests don't watch — they're in it, fully present. That is White Rabbit.
+              <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">Scott Syme is the magician behind White Rabbit. A member of the Magic Castle® and consultant to performers on America's Got Talent and Disney Channel, Scott has spent years going deeper into a single question than most people think to ask. What makes someone feel genuinely alive in a room full of people?</p>
+              <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">Everything about White Rabbit is built around the answer. Nothing is accidental. Scott blends interactive magic, mentalism, and impossible coincidences with the warmth of a seasoned host, transforming any room into something cinematic, intimate, and utterly alive. Curated lighting, a signature soundtrack, and moments so close you can feel them. Your guests don't watch. They're in it, fully present. That is White Rabbit.
 
 
 
@@ -462,7 +462,7 @@ const Index = () => {
         <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-14 w-auto opacity-50" />
       </div>
 
-      {/* What Clients Are Saying — Testimonial Carousel */}
+      {/* What Clients Are Saying, Testimonial Carousel */}
       <AnimatedSection>
         <div className="relative">
           {/* Ambient warm glow behind testimonials */}

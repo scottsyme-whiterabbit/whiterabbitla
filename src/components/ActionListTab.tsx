@@ -141,7 +141,7 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 const formatCurrency = (cents: number | null) => {
-  if (!cents) return "—";
+  if (!cents) return "";
   return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0 }).format(cents / 100);
 };
 type TimelineItem = {
@@ -182,7 +182,7 @@ const ActivityTimeline = ({ email, items, loading }: { email: string; items: Tim
         <div className="space-y-1 max-h-80 overflow-y-auto pr-1">
           {items.map(it => (
             <div key={it.id} className={`flex gap-2 text-[11px] border-l-2 pl-3 py-1.5 ${SOURCE_COLOR[it.source].split(" ")[1] || "border-border"}`}>
-              <span className="text-muted-foreground w-20 shrink-0">{it.at ? format(new Date(it.at), "MMM d, h:mma") : "—"}</span>
+              <span className="text-muted-foreground w-20 shrink-0">{it.at ? format(new Date(it.at), "MMM d, h:mma") : ""}</span>
               <span className={`shrink-0 uppercase tracking-wider px-1.5 ${SOURCE_COLOR[it.source].split(" ")[0]}`}>{SOURCE_LABEL[it.source]}</span>
               <div className="min-w-0 flex-1">
                 {it.subject && <p className="text-foreground font-medium truncate">{it.subject}</p>}
@@ -436,7 +436,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
       if (lead.event_date) {
         try { engagement += `${engagement ? ", " : ""}${format(new Date(lead.event_date + "T00:00:00"), "MMM d")}`; } catch { /* skip */ }
       }
-      if (lead.message) engagement += `${engagement ? " — " : ""}"${lead.message.slice(0, 80)}${lead.message.length > 80 ? "…" : ""}"`;
+      if (lead.message) engagement += `${engagement ? " " : ""}"${lead.message.slice(0, 80)}${lead.message.length > 80 ? "…" : ""}"`;
       if (!engagement) engagement = "Inbound inquiry";
 
       items.push({
@@ -597,7 +597,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
 
   const openReviewQueue = () => {
     const withDrafts = filtered.filter(i => freshDraftEmails.has(i.email.toLowerCase()));
-    if (withDrafts.length === 0) { toast.info("No fresh drafts to review — click 'Generate All Drafts' first."); return; }
+    if (withDrafts.length === 0) { toast.info("No fresh drafts to review, click 'Generate All Drafts' first."); return; }
     setReviewQueueContacts(withDrafts.map(contextFromItem));
     setReviewQueueOpen(true);
   };
@@ -874,7 +874,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                           <div key={log.id} className="flex gap-2 text-[10px] py-0.5 border-b border-border/50 last:border-0">
                             <span className="text-muted-foreground w-12 shrink-0">{format(new Date(log.created_at), "MMM d")}</span>
                             <span className="text-accent w-14 shrink-0 uppercase">{log.action_type}</span>
-                            <span className="text-foreground truncate">{log.notes || log.outcome || "—"}</span>
+                            <span className="text-foreground truncate">{log.notes || log.outcome || ""}</span>
                           </div>
                         ))}
                       </div>
@@ -901,7 +901,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                     </button>
                   </div>
                   <div className="text-[11px] text-muted-foreground">
-                    {item.lastOutreach ? `${format(new Date(item.lastOutreach.created_at), "MMM d")} — ${item.lastOutreach.action_type}` : "Never"}
+                    {item.lastOutreach ? `${format(new Date(item.lastOutreach.created_at), "MMM d")}, ${item.lastOutreach.action_type}` : "Never"}
                   </div>
                 </div>
 
@@ -910,14 +910,14 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                   <div className="bg-muted/10 border-b border-border px-6 py-4 space-y-3">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                       <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Email</span>{item.email}</div>
-                      <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Phone</span>{item.phone ? <a href={gvCallUrl(item.phone)} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">{item.phone}</a> : "—"}</div>
-                      <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Company</span>{item.company || "—"}</div>
+                      <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Phone</span>{item.phone ? <a href={gvCallUrl(item.phone)} target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">{item.phone}</a> : ""}</div>
+                      <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Company</span>{item.company || ""}</div>
                       {item.deal && (
                         <>
-                          <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Event</span>{item.deal.event_type || "—"}</div>
-                          <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Date</span>{item.deal.event_date ? format(new Date(item.deal.event_date + "T00:00:00"), "MMM d, yyyy") : "—"}</div>
-                          <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Location</span>{item.deal.location || "—"}</div>
-                          <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Guests</span>{item.deal.guest_count || "—"}</div>
+                          <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Event</span>{item.deal.event_type || ""}</div>
+                          <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Date</span>{item.deal.event_date ? format(new Date(item.deal.event_date + "T00:00:00"), "MMM d, yyyy") : ""}</div>
+                          <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Location</span>{item.deal.location || ""}</div>
+                          <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Guests</span>{item.deal.guest_count || ""}</div>
                           <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Deal Value</span>{formatCurrency(item.deal.deal_value)}</div>
                           <div><span className="text-muted-foreground text-[10px] uppercase tracking-wider block">Pipeline Stage</span>{item.deal.stage}</div>
                         </>
@@ -950,7 +950,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
             const cardBg = item.outreachStatus === "booked" ? "bg-emerald-500/5" : item.outreachStatus === "not_interested" ? "bg-muted/30 opacity-60" : "bg-background";
             return (
             <div key={item.email} className={`border border-border overflow-hidden ${cardBg}`}>
-              {/* Card Header — always visible, tappable */}
+              {/* Card Header · always visible, tappable */}
               <button
                 type="button"
                 onClick={(e) => {
@@ -977,7 +977,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
               {/* Expanded Detail Panel */}
               {isExpanded && (
                 <div className="border-t border-border px-4 pb-4 pt-3 space-y-4">
-                  {/* Call Button — Google Voice */}
+                  {/* Call Button · Google Voice */}
                   {item.phone ? (
                     <a
                       href={gvCallUrl(item.phone)}
@@ -1036,7 +1036,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
 
                   {/* Contact Details Grid */}
                   <div className="grid grid-cols-2 gap-3 text-sm">
-                    <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block mb-0.5">Phone</span><span className="text-foreground">{item.phone || "—"}</span></div>
+                    <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block mb-0.5">Phone</span><span className="text-foreground">{item.phone || ""}</span></div>
                     <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block mb-0.5">Source</span><span className="text-foreground">{item.source}</span></div>
                     {item.deal?.event_type && <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block mb-0.5">Event</span><span className="text-foreground">{item.deal.event_type}</span></div>}
                     {item.deal?.event_date && <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block mb-0.5">Date</span><span className="text-foreground">{format(new Date(item.deal.event_date + "T00:00:00"), "MMM d, yyyy")}</span></div>}

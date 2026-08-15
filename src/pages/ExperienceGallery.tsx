@@ -34,7 +34,7 @@ const ExperienceGallery = () => {
   usePageMeta({
     title: "Gallery | White Rabbit LA",
     description:
-      "A look inside White Rabbit LA — photos and films from private salons, luxury weddings, and corporate events.",
+      "A look inside White Rabbit LA, photos and films from private salons, luxury weddings, and corporate events.",
     path: "/experience/gallery",
   });
 
@@ -132,7 +132,7 @@ const ExperienceGallery = () => {
           </p>
           <h1 className="font-ogg text-4xl md:text-6xl mb-5">Moments, captured.</h1>
           <p className="max-w-2xl mx-auto text-forest-dark/70 leading-relaxed">
-            A small archive of the rooms we've been invited into — private salons,
+            A small archive of the rooms we've been invited into, private salons,
             weddings, and brand evenings where wonder was the point of the night.
           </p>
         </header>

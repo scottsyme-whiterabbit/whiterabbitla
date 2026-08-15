@@ -38,7 +38,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* Quiz Nudge — above the fold */}
+      {/* Quiz Nudge · above the fold */}
       <QuizNudge />
 
       {/* Bio */}
@@ -105,7 +105,7 @@ const About = () => {
         <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-12 w-auto opacity-50" />
       </div>
 
-      {/* Featured In — Press & Authority */}
+      {/* Featured In · Press & Authority */}
       <AnimatedSection>
         <section className="py-16 bg-card">
           <div className="max-w-3xl mx-auto px-6 text-center">
@@ -178,7 +178,7 @@ const About = () => {
         </section>
       </AnimatedSection>
 
-      {/* Overheard — Celebrity Reactions */}
+      {/* Overheard · Celebrity Reactions */}
       <section className="py-20 lg:py-28">
         <div className="max-w-4xl mx-auto px-6">
           <AnimatedSection>
@@ -210,7 +210,7 @@ const About = () => {
         <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-12 w-auto opacity-50" />
       </div>
 
-      {/* What Scott Offers — links to Experience */}
+      {/* What Scott Offers · links to Experience */}
       <section className="py-24 lg:py-32">
         <div className="max-w-4xl mx-auto px-6">
           <AnimatedSection>

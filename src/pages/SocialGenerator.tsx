@@ -995,7 +995,7 @@ const SocialGenerator = () => {
             {/* RIGHT: Preview + Download */}
             <div>
               <p className="font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">
-                Live Preview — {dim.label} ({dim.w}×{dim.h})
+                Live Preview · {dim.label} ({dim.w}×{dim.h})
               </p>
 
               {/* Scaled preview */}

@@ -24,7 +24,7 @@ export const serviceAreaRegions = [
 
 const cityData: { city: string; region: string; photo: string; tagline: string }[] = [
   // Southern California
-  { city: "Los Angeles", region: "Southern California", photo: "https://images.unsplash.com/photo-1534190760961-74e8c1c5c3da?w=600&h=400&fit=crop", tagline: "Home base — from Hollywood premieres to Bel Air estates" },
+  { city: "Los Angeles", region: "Southern California", photo: "https://images.unsplash.com/photo-1534190760961-74e8c1c5c3da?w=600&h=400&fit=crop", tagline: "Home base, from Hollywood premieres to Bel Air estates" },
   { city: "Beverly Hills", region: "Southern California", photo: "/areas/beverly-hills.jpg", tagline: "Rodeo Drive galas and private estate soirées" },
   { city: "Hollywood", region: "Southern California", photo: "https://images.unsplash.com/photo-1506184106046-1e6e90c0222d?w=600&h=400&fit=crop", tagline: "Studio events, wrap parties and red carpet nights" },
   { city: "Santa Monica", region: "Southern California", photo: "https://images.unsplash.com/photo-1514321648849-f4e1d5da98dc?w=600&h=400&fit=crop", tagline: "Oceanfront receptions and beachside celebrations" },

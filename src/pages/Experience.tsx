@@ -81,7 +81,7 @@ const Experience = () => {
         </div>
       </section>
 
-      {/* Quiz Nudge — above the fold */}
+      {/* Quiz Nudge · above the fold */}
       <QuizNudge />
 
       {/* Services */}
@@ -122,7 +122,7 @@ const Experience = () => {
         <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-12 w-auto opacity-50" />
       </div>
 
-      {/* Value Proposition — Hormozi-style offer */}
+      {/* Value Proposition · Hormozi-style offer */}
       <ValueProposition />
 
       {/* Quiz CTA - after services */}

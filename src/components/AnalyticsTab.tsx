@@ -52,16 +52,16 @@ const channelLabel = (src: string | null): string => {
   if (!src) return "Unknown";
   const s = src.toLowerCase();
   if (s.includes("referral")) return "Referral";
-  if (s.includes("planner") && s.includes("drip")) return "Email — Planner Drip";
-  if (s.includes("resident") && s.includes("drip")) return "Email — Resident Drip";
-  if (s.includes("cold") && s.includes("drip")) return "Email — Cold Outreach";
-  if (s.includes("post-show") || s.includes("post_show")) return "Email — Post-Show";
-  if (s.includes("inquiry") || s.includes("nurture")) return "Email — Inquiry Nurture";
-  if (s.includes("drip") || s.includes("newsletter") || s.includes("email")) return "Email — Other";
+  if (s.includes("planner") && s.includes("drip")) return "Email, Planner Drip";
+  if (s.includes("resident") && s.includes("drip")) return "Email, Resident Drip";
+  if (s.includes("cold") && s.includes("drip")) return "Email, Cold Outreach";
+  if (s.includes("post-show") || s.includes("post_show")) return "Email, Post-Show";
+  if (s.includes("inquiry") || s.includes("nurture")) return "Email, Inquiry Nurture";
+  if (s.includes("drip") || s.includes("newsletter") || s.includes("email")) return "Email, Other";
   if (s.includes("meta") || s.includes("facebook") || s.includes("instagram") || s.includes("ad")) return "Meta Ads";
-  if (s.includes("quiz")) return "Site — Discovery Quiz";
-  if (s.includes("contact") || s.includes("form") || s.includes("inbound")) return "Site — Contact Form";
-  if (s.includes("consultation")) return "Site — Consultation Form";
+  if (s.includes("quiz")) return "Site, Discovery Quiz";
+  if (s.includes("contact") || s.includes("form") || s.includes("inbound")) return "Site, Contact Form";
+  if (s.includes("consultation")) return "Site, Consultation Form";
   if (s.includes("magic castle") || s.includes("castle")) return "Magic Castle";
   if (s.includes("apollo") || s.includes("outreach")) return "Manual Outreach";
   if (s.includes("manual") || s.includes("square")) return "Manual / Imported";
@@ -288,7 +288,7 @@ const AnalyticsTab = ({ storedPassword }: Props) => {
           <div>
             <p className="font-sans text-sm text-foreground font-medium">Open Rate Drop Detected</p>
             <p className="font-sans text-xs text-muted-foreground mt-1">
-              Open rate dropped {anomaly.dropPercent}% — from {anomaly.priorRate}% (prior week) to {anomaly.lastRate}% (this week). Review subject lines or sending frequency.
+              Open rate dropped {anomaly.dropPercent}%, from {anomaly.priorRate}% (prior week) to {anomaly.lastRate}% (this week). Review subject lines or sending frequency.
             </p>
           </div>
         </div>
@@ -301,7 +301,7 @@ const AnalyticsTab = ({ storedPassword }: Props) => {
           {[
             { icon: Target, label: "Bookings Won", value: totalBooked.toString(), sub: `${cleanDeals.length} total leads` },
             { icon: DollarSign, label: "Booked Revenue", value: formatCurrency(totalRevenue), sub: "Booked + Completed" },
-            { icon: TrendingUp, label: "Top Channel", value: topChannel?.channel || "—", sub: topChannel ? `${topChannel.booked} bookings · ${topChannel.convRate}% conv` : "No bookings yet" },
+            { icon: TrendingUp, label: "Top Channel", value: topChannel?.channel || "", sub: topChannel ? `${topChannel.booked} bookings · ${topChannel.convRate}% conv` : "No bookings yet" },
             { icon: Mail, label: "Drip Open Rate", value: `${overallDrip.openRate}%`, sub: `${overallDrip.sends.toLocaleString()} sends · ${overallDrip.clickRate}% CTR` },
           ].map(stat => (
             <div key={stat.label} className="border border-border p-4">
@@ -320,7 +320,7 @@ const AnalyticsTab = ({ storedPassword }: Props) => {
       <div className="border border-border p-6">
         <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-accent mb-1">Where Bookings Come From</h3>
         <p className="font-sans text-[10px] text-muted-foreground mb-4">
-          Every closed deal grouped by its source channel — sorted by bookings won.
+          Every closed deal grouped by its source channel, sorted by bookings won.
         </p>
         {attribution.length > 0 ? (
           <div className="overflow-x-auto">
@@ -405,7 +405,7 @@ const AnalyticsTab = ({ storedPassword }: Props) => {
                   <td className="py-2.5 px-3 font-sans text-xs text-foreground font-medium">All Drips</td>
                   <td className="py-2.5 px-3 font-mono text-xs text-foreground">{overallDrip.sends.toLocaleString()}</td>
                   <td className="py-2.5 px-3 font-mono text-xs text-foreground">{overallDrip.opens.toLocaleString()}</td>
-                  <td className="py-2.5 px-3 font-mono text-xs text-muted-foreground">—</td>
+                  <td className="py-2.5 px-3 font-mono text-xs text-muted-foreground"></td>
                   <td className="py-2.5 px-3 font-mono text-xs text-accent">{overallDrip.openRate}%</td>
                   <td className="py-2.5 px-3 font-mono text-xs text-foreground">{overallDrip.clicks.toLocaleString()}</td>
                   <td className="py-2.5 px-3 font-mono text-xs text-accent">{overallDrip.clickRate}%</td>
@@ -420,7 +420,7 @@ const AnalyticsTab = ({ storedPassword }: Props) => {
 
       {/* === 30-day Trend === */}
       <div className="border border-border p-6">
-        <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-accent mb-4">Sends, Opens & Clicks — Last 30 Days</h3>
+        <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-accent mb-4">Sends, Opens & Clicks, Last 30 Days</h3>
         <ResponsiveContainer width="100%" height={220}>
           <LineChart data={sendsOverTime}>
             <XAxis dataKey="date" tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />

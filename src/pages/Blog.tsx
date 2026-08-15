@@ -20,7 +20,7 @@ const formatDate = (dateStr: string) => {
 };
 
 const Blog = () => {
-  const seoTitle = "Insights & Guides | White Rabbit Magic — Los Angeles";
+  const seoTitle = "Insights & Guides | White Rabbit Magic, Los Angeles";
   const seoDescription = "Explore guides on luxury magic entertainment, from corporate galas to intimate private celebrations across Southern California and beyond.";
   useWebPageSchema({ name: "Insights & Guides", description: "Explore guides on luxury magic entertainment, from corporate galas to intimate private celebrations.", path: "/blog", type: "CollectionPage" });
 

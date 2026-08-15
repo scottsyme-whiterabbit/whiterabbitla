@@ -200,7 +200,7 @@ export function DrivePhotoBank({
     });
     if (!r.ok) { toast.error("Clear failed"); return; }
     setPickerSelected(new Set());
-    toast.success("Cleared — whole folder will show.");
+    toast.success("Cleared, whole folder will show.");
   };
 
 
@@ -224,7 +224,7 @@ export function DrivePhotoBank({
           </button>
         ))}
         {folders.length === 0 && !loadingFolders && (
-          <span className="text-xs text-forest-dark/50">No Drive folders configured yet — add one below.</span>
+          <span className="text-xs text-forest-dark/50">No Drive folders configured yet, add one below.</span>
         )}
         <button
           type="button"
@@ -355,7 +355,7 @@ export function DrivePhotoBank({
                 <div className="font-ogg text-xl text-forest-dark">{pickerFolder.label}</div>
                 <div className="text-[11px] text-forest-dark/60 mt-0.5">
                   {pickerSelected.size === 0
-                    ? "No picks yet — the entire folder will show on the gallery."
+                    ? "No picks yet, the entire folder will show on the gallery."
                     : `${pickerSelected.size} item${pickerSelected.size === 1 ? "" : "s"} will show on the gallery.`}
                 </div>
               </div>

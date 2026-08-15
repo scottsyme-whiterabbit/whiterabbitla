@@ -38,7 +38,7 @@ const WhiteRabbitPromise = ({ variant = "light" }: Props) => {
         </h2>
         <p className={`font-serif text-base md:text-lg leading-relaxed ${body}`}>
           Every booking is protected by a simple promise: if the performance isn't everything we
-          discussed, your deposit is returned — no questions, no friction. It has never been needed.
+          discussed, your deposit is returned, no questions, no friction. It has never been needed.
           But a well-hosted evening means the guest never carries the risk, and neither should you.
         </p>
       </div>
