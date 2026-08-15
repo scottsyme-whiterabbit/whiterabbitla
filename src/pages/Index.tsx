@@ -57,21 +57,26 @@ import oliviarodrigoLogo from "@/assets/logos/normalized/oliviarodrigo.png";
 import lionsgateLogo from "@/assets/logos/normalized/lionsgate.png";
 import beverlyHiltonLogo from "@/assets/logos/normalized/beverlyhilton.png";
 import magicCastleLogo from "@/assets/logos/normalized/magiccastle.png";
+import sohohouseLogo from "@/assets/logos/normalized/sohohouse.png";
+import agtLogo from "@/assets/logos/normalized/agt.png";
 
 // Logos are pre-normalized (trimmed of baked padding, exported at 3x retina).
 // `h` is the render height in px, tiered by aspect ratio for optical balance:
 //   aspect > 2.5 → 20px, 1.5–2.5 → 26px, < 1.5 → 34px.
+// Magic Castle is intentionally scaled up as a featured brand mark.
 const clients: { name: string; logo: string; h: number }[] = [
   { name: "Disney", logo: disneyLogo, h: 20 },
   { name: "Rolls Royce", logo: rollsroyceLogo, h: 34 },
   { name: "Lionsgate", logo: lionsgateLogo, h: 20 },
   { name: "Paramount", logo: paramountLogo, h: 34 },
   { name: "Netflix", logo: netflixLogo, h: 20 },
-  { name: "The Magic Castle", logo: magicCastleLogo, h: 34 },
+  { name: "The Magic Castle", logo: magicCastleLogo, h: 40 },
   { name: "Morgan Stanley", logo: morganstanleyLogo, h: 20 },
   { name: "The Beverly Hilton", logo: beverlyHiltonLogo, h: 20 },
   { name: "Rivian", logo: rivianLogo, h: 34 },
   { name: "Olivia Rodrigo", logo: oliviarodrigoLogo, h: 26 },
+  { name: "Soho House", logo: sohohouseLogo, h: 34 },
+  { name: "America's Got Talent", logo: agtLogo, h: 26 },
 ];
 
 
