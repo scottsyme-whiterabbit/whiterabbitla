@@ -72,7 +72,7 @@ const clients: { name: string; logo: string; h: number }[] = [
   { name: "Netflix", logo: netflixLogo, h: 20 },
   { name: "The Magic Castle", logo: magicCastleLogo, h: 40 },
   { name: "Morgan Stanley", logo: morganstanleyLogo, h: 20 },
-  { name: "The Beverly Hilton", logo: beverlyHiltonLogo, h: 20 },
+  { name: "The Beverly Hilton", logo: beverlyHiltonLogo, h: 26 },
   { name: "Rivian", logo: rivianLogo, h: 34 },
   { name: "Olivia Rodrigo", logo: oliviarodrigoLogo, h: 26 },
   { name: "Soho House", logo: sohohouseLogo, h: 34 },
