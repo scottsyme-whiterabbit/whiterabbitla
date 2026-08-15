@@ -72,26 +72,16 @@ import lplFinancialLogo from "@/assets/logos/normalized/lplfinancial.png";
 // `h` is the render height in px, tiered by aspect ratio for optical balance:
 //   aspect > 2.5 → 20px, 1.5–2.5 → 26px, < 1.5 → 34px.
 const clients: { name: string; logo: string; h: number }[] = [
-{ name: "Netflix", logo: netflixLogo, h: 20 },
-{ name: "Disney", logo: disneyLogo, h: 20 },
-{ name: "Rolls Royce", logo: rollsroyceLogo, h: 34 },
-{ name: "Morgan Stanley", logo: morganstanleyLogo, h: 20 },
-{ name: "LPL Financial", logo: lplFinancialLogo, h: 26 },
-{ name: "YouTube", logo: youtubeLogo, h: 20 },
-{ name: "Hyatt", logo: hyattLogo, h: 20 },
-{ name: "The Beverly Hilton", logo: beverlyHiltonLogo, h: 20 },
-{ name: "Soho House", logo: sohohouseLogo, h: 26 },
-{ name: "Rivian", logo: rivianLogo, h: 34 },
-{ name: "Paramount", logo: paramountLogo, h: 34 },
-{ name: "Olivia Rodrigo", logo: oliviarodrigoLogo, h: 26 },
-{ name: "Taittinger", logo: taittingerLogo, h: 34 },
-{ name: "Lionsgate", logo: lionsgateLogo, h: 20 },
-{ name: "Pistola", logo: pistolaLogo, h: 20 },
-{ name: "Compass", logo: compassLogo, h: 20 },
-{ name: "The Agency", logo: theAgencyLogo, h: 26 },
-{ name: "Gravitas Beverly Hills", logo: gravitasLogo, h: 34 },
-{ name: "The Magic Castle", logo: magicCastleLogo, h: 34 },
-{ name: "America's Got Talent", logo: agtLogo, h: 20 },
+  { name: "Disney", logo: disneyLogo, h: 20 },
+  { name: "Rolls Royce", logo: rollsroyceLogo, h: 34 },
+  { name: "Lionsgate", logo: lionsgateLogo, h: 20 },
+  { name: "Paramount", logo: paramountLogo, h: 34 },
+  { name: "Netflix", logo: netflixLogo, h: 20 },
+  { name: "The Magic Castle", logo: magicCastleLogo, h: 34 },
+  { name: "Morgan Stanley", logo: morganstanleyLogo, h: 20 },
+  { name: "The Beverly Hilton", logo: beverlyHiltonLogo, h: 20 },
+  { name: "Rivian", logo: rivianLogo, h: 34 },
+  { name: "Olivia Rodrigo", logo: oliviarodrigoLogo, h: 26 },
 ];
 
 
