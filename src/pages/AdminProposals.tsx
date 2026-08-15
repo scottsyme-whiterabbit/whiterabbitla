@@ -202,9 +202,9 @@ const AdminProposals = () => {
   const sendEmail = async (proposal: FullProposal | ProposalRow) => {
     const to = prompt("Recipient email:", proposal.recipient_email || "");
     if (!to) return;
-    const subject = prompt("Subject:", `Your White Rabbit LA Proposal — ${proposal.first_name}`);
+    const subject = prompt("Subject:", `Your White Rabbit LA Proposal, ${proposal.first_name}`);
     if (!subject) return;
-    const message = prompt("Personal message (greeting and signature are added automatically):", `Here's the proposal we discussed. Take your time with it — call me anytime.\n\nBest,\n-Scott`);
+    const message = prompt("Personal message (greeting and signature are added automatically):", `Here's the proposal we discussed. Take your time with it, call me anytime.\n\nBest,\n-Scott`);
     if (message === null) return;
     const link = `${window.location.origin}/proposal/${proposal.slug}`;
     try {
@@ -456,7 +456,7 @@ const ProposalEditor = ({
     });
     setContactQuery("");
     setContactResults([]);
-    toast.success(`Loaded ${c.name || c.email}${c.source === "deal" ? " — linked to deal" : ""}`);
+    toast.success(`Loaded ${c.name || c.email}${c.source === "deal" ? " linked to deal" : ""}`);
   };
 
 
@@ -484,7 +484,7 @@ const ProposalEditor = ({
       // Clone everything except identity fields
       const { id, slug, sent_at, created_at, ...rest } = src as any;
       onChange({ ...proposal, ...rest });
-      toast.success("Cloned — update name, date, and venue");
+      toast.success("Cloned, update name, date, and venue");
     } catch (e) { toast.error((e as Error).message); }
   };
 
@@ -527,7 +527,7 @@ const ProposalEditor = ({
         closing_quote: tpl?.closing_quote ?? proposal.closing_quote,
       });
 
-      toast.success("Draft ready — review and tweak");
+      toast.success("Draft ready, review and tweak");
       setInquiryText("");
     } catch (e) { toast.error((e as Error).message); }
     setAiLoading(false);
@@ -599,13 +599,13 @@ const ProposalEditor = ({
           {proposal.slug && <span className="ml-3 text-sm text-forest-dark/50 font-sans">/proposal/{proposal.slug}</span>}
         </h1>
 
-        {/* QUICK START — only on new proposals */}
+        {/* QUICK START, only on new proposals */}
         {isNew && (
           <div className="bg-forest-dark/5 border border-forest-dark/15 p-6 mb-6">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="w-4 h-4 text-gold" />
               <h2 className="font-serif text-xl text-forest-dark">Quick Start</h2>
-              <span className="text-xs text-forest-dark/50">— pick one to skip the blank page</span>
+              <span className="text-xs text-forest-dark/50">pick one to skip the blank page</span>
             </div>
             {/* Contact search */}
             <div className="mb-5 pb-5 border-b border-forest-dark/10">
@@ -646,7 +646,7 @@ const ProposalEditor = ({
                 </div>
               )}
               {proposal.deal_id && (
-                <p className="text-xs text-emerald-700 mt-2">✓ Linked to pipeline deal — signing this proposal will auto-move it to Booked.</p>
+                <p className="text-xs text-emerald-700 mt-2">✓ Linked to pipeline deal, signing this proposal will auto-move it to Booked.</p>
               )}
             </div>
 
@@ -688,7 +688,7 @@ const ProposalEditor = ({
                 <label className={labelCls}>Or duplicate from a previous proposal</label>
                 <div className="flex gap-2">
                   <select className={inputCls} value={duplicateSlug} onChange={(e) => setDuplicateSlug(e.target.value)}>
-                    <option value="">— pick a proposal —</option>
+                    <option value="">pick a proposal, </option>
                     {list.map((p) => (
                       <option key={p.id} value={p.slug}>
                         {p.first_name} {p.last_name} · {p.event_type}
@@ -736,7 +736,7 @@ const ProposalEditor = ({
           </div>
           <p className="text-xs text-forest-dark/60 mb-4">
             {proposal.gallery_photos && proposal.gallery_photos.length > 0
-              ? `Custom selection — ${proposal.gallery_photos.length} photo${proposal.gallery_photos.length === 1 ? "" : "s"} chosen.`
+              ? `Custom selection, ${proposal.gallery_photos.length} photo${proposal.gallery_photos.length === 1 ? "" : "s"} chosen.`
               : "Using the default gallery. Click any photo to start a custom selection for this proposal."}
           </p>
 
@@ -798,7 +798,7 @@ const ProposalEditor = ({
           <p className="text-xs text-forest-dark/60 mb-3">Optional opening line after their name. Leave blank to skip.</p>
           <textarea
             className={inputCls + " min-h-[80px]"}
-            placeholder="Thank you for the time on the phone — I enjoyed it more than you know."
+            placeholder="Thank you for the time on the phone. I enjoyed it more than you know."
             value={proposal.letter_intro || ""}
             onChange={(e) => update({ letter_intro: e.target.value })}
           />

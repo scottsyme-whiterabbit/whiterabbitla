@@ -453,7 +453,7 @@ const ResidencyEditor = ({
             The Invitation Letter
           </h2>
           <p className="text-xs text-forest-dark/60 mb-3">
-            Each paragraph is a separate block. Keep them short — like a letter,
+            Each paragraph is a separate block. Keep them short, like a letter,
             not a brochure.
           </p>
           {pitch.intro_paragraphs.map((p, i) => (
@@ -616,7 +616,7 @@ const ResidencyEditor = ({
             </div>
             <div>
               <label className={labelCls}>
-                Private closing line (residency pages only — leave default
+                Private closing line (residency pages only, leave default
                 unless you have reason)
               </label>
               <input

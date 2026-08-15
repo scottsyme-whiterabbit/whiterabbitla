@@ -275,7 +275,7 @@ const BlogArticle = () => {
         </section>
       )}
 
-      {/* Quiz Nudge — above the fold */}
+      {/* Quiz Nudge · above the fold */}
       <QuizNudge />
 
       {/* Lede / Excerpt */}

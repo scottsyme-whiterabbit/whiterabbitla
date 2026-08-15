@@ -138,7 +138,7 @@ export default function FollowupQueueTab({ adminPassword }: Props) {
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h2 className="font-serif text-2xl text-foreground flex items-center gap-2"><Sparkles className="text-accent" size={20} /> AI Follow-Ups</h2>
-          <p className="text-xs text-muted-foreground">AI-drafted, on-brand replies — edit, approve, send from scott.syme@whiterabbitla.com</p>
+          <p className="text-xs text-muted-foreground">AI-drafted, on-brand replies, edit, approve, send from scott.syme@whiterabbitla.com</p>
         </div>
         <div className="flex gap-2">
           <button onClick={load} className="px-3 py-2 border border-border text-[10px] uppercase tracking-wider hover:bg-muted/20 flex items-center gap-1">

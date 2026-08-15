@@ -56,7 +56,7 @@ Event Location: ${eventLocation || "TBA"}
 Performance Time: ${performanceTime || "TBA"}
 Arrival Time: ${arrivalTime}
 
-Package Selected: ${tier.name} — ${tier.price}
+Package Selected: ${tier.name}, ${tier.price}
 
 Services Provided:
 White Rabbit Entertainment agrees to provide professional entertainment for the above-referenced event. The services include:
@@ -194,7 +194,7 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
         pay_url: j.pay_url ?? null,
       });
       setDone(true);
-      toast.success("Agreement signed — check your email for a copy.");
+      toast.success("Agreement signed, check your email for a copy.");
     } catch (e) {
       toast.error((e as Error).message);
     }
@@ -219,7 +219,7 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
             <h2 className="font-serif font-light text-3xl mb-3">Now, let's hold your date.</h2>
             <p className="text-sm text-forest-dark/70 mb-7 max-w-md mx-auto">
               A copy of your agreement is on its way to your inbox. Securing your date takes about
-              a minute — by bank transfer or card, whichever you prefer. The moment it lands, the
+              a minute, by bank transfer or card, whichever you prefer. The moment it lands, the
               evening is yours.
             </p>
             <div className="space-y-3 max-w-sm mx-auto">
@@ -227,13 +227,13 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
                 onClick={() => startCheckout("deposit")}
                 className="w-full bg-gold text-forest-dark py-3.5 text-xs tracking-[0.2em] uppercase hover:opacity-90"
               >
-                Reserve with 50% deposit — {money(payInfo.deposit_cents ?? 0)}
+                Reserve with 50% deposit, {money(payInfo.deposit_cents ?? 0)}
               </button>
               <button
                 onClick={() => startCheckout("full")}
                 className="w-full border border-forest-dark/30 py-3.5 text-xs tracking-[0.2em] uppercase hover:bg-white"
               >
-                Pay in full — {money(payInfo.total_cents ?? 0)}
+                Pay in full, {money(payInfo.total_cents ?? 0)}
               </button>
             </div>
             <p className="mt-5 text-[11px] text-forest-dark/50">
@@ -253,7 +253,7 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
             <h2 className="font-serif font-light text-3xl mb-3">Signed.</h2>
             <p className="text-sm text-forest-dark/70 mb-6 max-w-md mx-auto">
               A copy of your agreement is in your inbox. I'll follow up shortly with your invoice
-              to lock the date. — Scott
+              to lock the date., Scott
             </p>
             <button
               onClick={onClose}
@@ -376,7 +376,7 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
                 className="flex-1 bg-forest-dark text-cream py-3.5 text-xs tracking-[0.2em] uppercase hover:opacity-90 disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
-                Sign & Reserve — {tier.price}
+                Sign & Reserve · {tier.price}
               </button>
               <button
                 onClick={onClose}

@@ -371,7 +371,7 @@ const BookingQuiz = () => {
                             {g.id === "intimate" && (
                               <div className={`mt-3 ml-1 transition-all duration-300 overflow-hidden ${data.guestCount === "intimate" ? "max-h-40 opacity-100" : "max-h-0 opacity-0"}`}>
                                 <label className="font-sans text-xs tracking-[0.15em] uppercase text-muted-foreground mb-2 block">
-                                  Optional — exact guest count
+                                  Optional · exact guest count
                                 </label>
                                 <Input
                                   type="number"

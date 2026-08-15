@@ -15,7 +15,7 @@ TEL;TYPE=CELL:+14243941850
 EMAIL:events@whiterabbitla.com
 URL:https://whiterabbitla.com
 ADR;TYPE=WORK:;;Los Angeles;CA;;US
-NOTE:Luxury event magician — corporate, private, weddings.
+NOTE:Luxury event magician, corporate, private, weddings.
 END:VCARD`;
 
 const handleSaveContact = () => {
@@ -63,7 +63,7 @@ const DigitalCard = () => {
 
   return (
     <main className="min-h-screen bg-forest-dark flex items-center justify-center p-4 pt-24 pb-12">
-      <SEOHead title="Scott Syme | Digital Business Card — White Rabbit Magic" description="Digital business card for Scott Syme, founder and magician at White Rabbit Entertainment in Los Angeles." canonical="/card" noIndex />
+      <SEOHead title="Scott Syme | Digital Business Card. White Rabbit Magic" description="Digital business card for Scott Syme, founder and magician at White Rabbit Entertainment in Los Angeles." canonical="/card" noIndex />
       <div className="w-full max-w-md">
         {/* Card Container */}
         <div className="bg-background rounded-2xl shadow-2xl overflow-hidden">
@@ -97,7 +97,7 @@ const DigitalCard = () => {
               <MapPin size={12} /> Los Angeles, CA
             </p>
             <p className="font-sans text-xs text-muted-foreground/70 mt-3 italic leading-relaxed max-w-[260px] mx-auto">
-              Thank you for sharing the moment — it means more than you know.
+              Thank you for sharing the moment. It means more than you know.
             </p>
           </div>
 

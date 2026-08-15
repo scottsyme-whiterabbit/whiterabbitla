@@ -526,7 +526,7 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
                 </p>
               )}
               <p className="font-sans text-xs text-muted-foreground">
-                <span className="text-muted-foreground">To:</span> Kevin (test preview — real emails will use each contact's first name)
+                <span className="text-muted-foreground">To:</span> Kevin (test preview, real emails will use each contact's first name)
               </p>
             </div>
             <div className="p-4 max-h-[600px] overflow-y-auto">
@@ -618,7 +618,7 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
                         <p className="text-foreground">{c.name || c.email.split("@")[0]}</p>
                         <p className="text-xs text-muted-foreground">{c.email}</p>
                       </td>
-                      <td className="px-4 py-2.5 text-muted-foreground hidden md:table-cell">{c.company || "—"}</td>
+                      <td className="px-4 py-2.5 text-muted-foreground hidden md:table-cell">{c.company || ""}</td>
                       <td className="px-4 py-2.5">
                         <div className="flex gap-0.5 mb-1">
                           {Array.from({ length: (CAMPAIGN_DATA[c.campaign_category]?.emails.length || 4) }, (_, s) => (
@@ -633,7 +633,7 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
                         </span>
                       </td>
                       <td className="px-4 py-2.5 text-[11px] text-muted-foreground hidden md:table-cell">
-                        {c.last_email_sent_at ? new Date(c.last_email_sent_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "—"}
+                        {c.last_email_sent_at ? new Date(c.last_email_sent_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : ""}
                       </td>
                       <td className="px-4 py-2.5">
                         <div className="flex gap-1">
@@ -851,7 +851,7 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
                             <p className="text-foreground">{c.name || c.email.split("@")[0]}</p>
                             <p className="text-xs text-muted-foreground">{c.email}</p>
                           </td>
-                          <td className="px-4 py-2.5 text-muted-foreground hidden md:table-cell">{c.company || "—"}</td>
+                          <td className="px-4 py-2.5 text-muted-foreground hidden md:table-cell">{c.company || ""}</td>
                           <td className="px-4 py-2.5">
                             <div className="flex gap-0.5 mb-1">
                               {[0, 1, 2, 3].map(s => (
@@ -872,7 +872,7 @@ const ColdDripCampaignTab = ({ category, storedPassword }: ColdDripCampaignTabPr
                             </span>
                           </td>
                           <td className="px-4 py-2.5 text-[11px] text-muted-foreground hidden md:table-cell">
-                            {c.nurture_last_sent_at ? new Date(c.nurture_last_sent_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "—"}
+                            {c.nurture_last_sent_at ? new Date(c.nurture_last_sent_at).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : ""}
                           </td>
                         </tr>
                       ))}

@@ -88,7 +88,7 @@ const faqs = [
   },
   {
     question: "Does Scott travel outside of Los Angeles?",
-    answer: "Yes. While based in Los Angeles, Scott regularly performs at events nationwide — from New York and Miami to Las Vegas, Aspen, and beyond. Travel is available for corporate events, destination weddings, and private celebrations anywhere in the world.",
+    answer: "Yes. While based in Los Angeles, Scott regularly performs at events nationwide, from New York and Miami to Las Vegas, Aspen, and beyond. Travel is available for corporate events, destination weddings, and private celebrations anywhere in the world.",
   },
   {
     question: "What is close-up magic and is it right for my event?",
@@ -96,13 +96,13 @@ const faqs = [
   },
   {
     question: "What makes White Rabbit different from other magicians?",
-    answer: "White Rabbit is not just a magic show — it's a hospitality-driven experience. Scott combines world-class mentalism and interactive magic with the warmth of a five-star host, curated lighting, a signature soundtrack, and an atmosphere that makes guests feel truly cared for. That's why brands like Netflix, Disney, and Morgan Stanley keep coming back.",
+    answer: "White Rabbit is not just a magic show, it's a hospitality-driven experience. Scott combines world-class mentalism and interactive magic with the warmth of a five-star host, curated lighting, a signature soundtrack, and an atmosphere that makes guests feel truly cared for. That's why brands like Netflix, Disney, and Morgan Stanley keep coming back.",
   },
 ];
 
 const Consultation = () => {
-  const seoTitle = "Free Consultation | White Rabbit LA — Luxury Event Magician";
-  const seoDescription = "Book a free consultation with America's premier close-up magician. Corporate events, weddings, private parties and galas — nationwide.";
+  const seoTitle = "Free Consultation | White Rabbit LA, Luxury Event Magician";
+  const seoDescription = "Book a free consultation with America's premier close-up magician. Corporate events, weddings, private parties and galas, nationwide.";
 
   const { openQuiz } = useBookingQuiz();
   const [stickyVisible, setStickyVisible] = useState(false);
@@ -152,7 +152,7 @@ const Consultation = () => {
       <SEOHead title={seoTitle} description={seoDescription} canonical="/consultation" />
       <BookingQuiz />
 
-      {/* Sticky CTA — mobile bottom bar + desktop floating pill */}
+      {/* Sticky CTA, mobile bottom bar + desktop floating pill */}
       {stickyVisible && (
         <>
           <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-forest-dark/95 backdrop-blur-md border-t border-accent/20 p-3">
@@ -173,7 +173,7 @@ const Consultation = () => {
           </button>
         </>
       )}
-      {/* HERO — full-bleed photo */}
+      {/* HERO, full-bleed photo */}
       <section className="relative h-[50vh] min-h-[400px]">
         <img
           src={heroImg}
@@ -206,12 +206,12 @@ const Consultation = () => {
         </div>
       </section>
 
-      {/* INTRO — Opening paragraph */}
+      {/* INTRO, Opening paragraph */}
       <section className="py-16">
         <div className="max-w-3xl mx-auto px-6">
           <AnimatedSection>
             <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8">
-              Scott Syme is the creative force behind White Rabbit — a luxury magic experience built on a simple belief: the best entertainment makes people feel truly alive. A proud member of the world-famous Magic Castle® in Hollywood and consultant to performers on America's Got Talent and Disney Channel, Scott brings both elite craft and warm showmanship to every performance. Fortune 500 companies, charitable organizations, and the most discerning private clients trust White Rabbit with their most important events.
+              Scott Syme is the creative force behind White Rabbit, a luxury magic experience built on a simple belief: the best entertainment makes people feel truly alive. A proud member of the world-famous Magic Castle® in Hollywood and consultant to performers on America's Got Talent and Disney Channel, Scott brings both elite craft and warm showmanship to every performance. Fortune 500 companies, charitable organizations, and the most discerning private clients trust White Rabbit with their most important events.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <button
@@ -255,7 +255,7 @@ const Consultation = () => {
         </div>
       </section>
 
-      {/* ABOUT SCOTT — B&W Photo + Bio */}
+      {/* ABOUT SCOTT, B&W Photo + Bio */}
       <section className="py-20 lg:py-28">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <AnimatedSection>
@@ -275,14 +275,14 @@ const Consultation = () => {
               Scott Syme
             </h2>
             <p className="font-sans text-base text-muted-foreground leading-relaxed mb-6">
-              Based in Los Angeles, Scott is the creative force behind White Rabbit — a luxury magic experience
+              Based in Los Angeles, Scott is the creative force behind White Rabbit, a luxury magic experience
               built on a simple belief: the best entertainment makes people feel truly alive. A proud member
               of the world-famous Magic Castle® in Hollywood and consultant to performers on America's Got
               Talent and Disney Channel, Scott brings both elite craft and warm showmanship to every performance.
             </p>
             <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8">
               Fortune 500 companies, charitable organizations, and the most discerning private clients
-              — Netflix, Disney, Rolls Royce, Morgan Stanley — trust Scott with their most important events.
+Netflix, Disney, Rolls Royce, Morgan Stanley, trust Scott with their most important events.
               When you hire White Rabbit, you're not just booking a magician. You're hiring someone who has
               dedicated his life to making people feel extraordinary.
             </p>
@@ -312,7 +312,7 @@ const Consultation = () => {
               </h2>
               <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">
                 Scott blends interactive magic, mentalism, and impossible coincidences with the warmth
-                of a seasoned host — transforming any room into something cinematic, intimate, and utterly
+                of a seasoned host, transforming any room into something cinematic, intimate, and utterly
                 alive. Curated lighting, a signature soundtrack, and moments so close you can feel them.
                 This isn't a magic show. It's a White Rabbit experience.
               </p>
@@ -338,7 +338,7 @@ const Consultation = () => {
         </div>
       </section>
 
-      {/* EVENT TYPES — CityPage style grid */}
+      {/* EVENT TYPES, CityPage style grid */}
       <section className="py-16 border-t border-border bg-muted/30">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
@@ -371,13 +371,13 @@ const Consultation = () => {
               "{testimonials[0].quote}"
             </blockquote>
             <p className="font-sans text-sm tracking-[0.2em] uppercase text-cream/50">
-              — {testimonials[0].source}
+{testimonials[0].source}
             </p>
           </div>
         </section>
       </AnimatedSection>
 
-      {/* PHOTO GALLERY — Guest reactions */}
+      {/* PHOTO GALLERY, Guest reactions */}
       <section className="py-20">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection>
@@ -416,7 +416,7 @@ const Consultation = () => {
                   </div>
                   <p className="font-serif text-base md:text-lg text-foreground leading-relaxed">"{t.quote}"</p>
                   <p className="font-sans text-xs tracking-[0.2em] uppercase text-accent/80">
-                    — {t.source}
+{t.source}
                   </p>
                 </div>
               </AnimatedSection>

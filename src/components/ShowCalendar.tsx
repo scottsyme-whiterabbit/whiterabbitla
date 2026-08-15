@@ -32,7 +32,7 @@ interface GoogleCalEvent {
 interface ShowCalendarProps {
   deals: BookedDeal[];
   onOpenDeal?: (dealId: string) => void;
-  /** Admin password — required for the calendar API to return event details. */
+  /** Admin password, required for the calendar API to return event details. */
   adminPassword?: string;
 }
 

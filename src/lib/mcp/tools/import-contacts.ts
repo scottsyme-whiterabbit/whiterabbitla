@@ -51,7 +51,7 @@ export default defineTool({
   name: "import_contacts",
   title: "Import cold-outreach contacts",
   description:
-    "Upload contacts scraped from Apollo (or similar) into a specific drip campaign category. Dedupes by email + apollo_id against existing campaigns, skips role-based addresses (info@, hello@, etc.) and anything on the suppression list. Contacts are inserted PAUSED by default — set start_immediately=true to enroll them in the drip right away. Returns a full breakdown of inserted vs skipped counts.",
+    "Upload contacts scraped from Apollo (or similar) into a specific drip campaign category. Dedupes by email + apollo_id against existing campaigns, skips role-based addresses (info@, hello@, etc.) and anything on the suppression list. Contacts are inserted PAUSED by default, set start_immediately=true to enroll them in the drip right away. Returns a full breakdown of inserted vs skipped counts.",
   inputSchema: {
     campaign_category: z
       .enum(VALID_CATEGORIES)

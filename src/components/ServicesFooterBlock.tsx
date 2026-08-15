@@ -51,7 +51,7 @@ const ServicesFooterBlock = ({ className = "", variant = "light" }: ServicesFoot
             isDark ? "text-cream/70" : "text-muted-foreground"
           }`}
         >
-          From corporate galas and weddings to trade shows, charity galas, and DMC programs — explore every White
+          From corporate galas and weddings to trade shows, charity galas, and DMC programs, explore every White
           Rabbit experience.
         </p>
         <div className="flex flex-wrap justify-center gap-2">

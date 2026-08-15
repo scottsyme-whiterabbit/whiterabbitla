@@ -65,7 +65,7 @@ const Refer = () => {
             <p className="font-sans text-base text-cream/70 max-w-xl mx-auto leading-relaxed">
               Know someone planning an event in Los Angeles? Refer them to White Rabbit.
               When they book, you'll receive a complimentary 30-minute close-up magic experience
-              at your next LA event — on us.
+              at your next LA event, on us.
             </p>
           </AnimatedSection>
         </div>

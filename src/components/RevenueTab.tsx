@@ -285,7 +285,7 @@ const RevenueTab = ({ adminPassword }: Props) => {
         ))}
       </div>
 
-      {/* Revenue Summary Cards — Booked vs Gross */}
+      {/* Revenue Summary Cards · Booked vs Gross */}
       <div>
         <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-accent mb-4">Revenue Overview</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

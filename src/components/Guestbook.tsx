@@ -109,7 +109,7 @@ const Guestbook = () => {
                     <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-accent/30 z-10" />
                     <img
                       src={card.image}
-                      alt={`${card.city} — White Rabbit private magic destination`}
+                      alt={`${card.city}, White Rabbit private magic destination`}
                       width={600}
                       height={450}
                       loading="lazy"

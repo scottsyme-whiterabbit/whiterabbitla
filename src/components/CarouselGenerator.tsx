@@ -411,7 +411,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
     setBlindSpot(paras[0] ? firstSentence(paras[0]) : firstSentence(a.excerpt));
     setReframe(paras[1] ? firstSentence(paras[1]) : firstSentence(a.excerpt));
     setProof(paras[2] ? firstSentence(paras[2]) : (paras[0] ? firstSentence(paras[0]) : ""));
-    setProofCred(`— ${a.category}`);
+    setProofCred(`${a.category}`);
     setCtaQuestion(`Want the full read on ${a.title.toLowerCase().replace(/[.?!]+$/, "")}?`);
     setUrl(`whiterabbitla.com/blog/${a.slug}`);
   };
@@ -616,7 +616,7 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
                 onChange={(e) => applyArticle(e.target.value)}
                 className="w-full bg-background border border-border text-foreground font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent"
               >
-                <option value="">— Custom copy —</option>
+                <option value="">Custom copy, </option>
                 {blogArticles.map((a) => (
                   <option key={a.slug} value={a.slug}>{a.category} · {a.title}</option>
                 ))}
@@ -634,13 +634,13 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
 
             {/* Copy fields */}
             {[
-              { label: "Panel 1 — Article Title", value: articleTitle, set: setArticleTitle, rows: 2 },
-              { label: "Panel 2 — Hook", value: hook, set: setHook, rows: 3 },
-              { label: "Panel 3 — Blind Spot", value: blindSpot, set: setBlindSpot, rows: 3 },
-              { label: "Panel 4 — Reframe (quotable)", value: reframe, set: setReframe, rows: 3 },
-              { label: "Panel 5 — Proof", value: proof, set: setProof, rows: 3 },
-              { label: "Panel 5 — Credibility line (optional)", value: proofCred, set: setProofCred, rows: 2 },
-              { label: "Panel 6 — CTA Question", value: ctaQuestion, set: setCtaQuestion, rows: 3 },
+              { label: "Panel 1, Article Title", value: articleTitle, set: setArticleTitle, rows: 2 },
+              { label: "Panel 2, Hook", value: hook, set: setHook, rows: 3 },
+              { label: "Panel 3, Blind Spot", value: blindSpot, set: setBlindSpot, rows: 3 },
+              { label: "Panel 4, Reframe (quotable)", value: reframe, set: setReframe, rows: 3 },
+              { label: "Panel 5, Proof", value: proof, set: setProof, rows: 3 },
+              { label: "Panel 5, Credibility line (optional)", value: proofCred, set: setProofCred, rows: 2 },
+              { label: "Panel 6, CTA Question", value: ctaQuestion, set: setCtaQuestion, rows: 3 },
             ].map((f) => (
               <div key={f.label}>
                 <label className="block font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground mb-2">{f.label}</label>
@@ -824,10 +824,10 @@ const CarouselGenerator = ({ brandPhotos, password }: Props) => {
 
           {/* RIGHT: Previews */}
           <div className="space-y-6">
-            <p className="font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground">Live Previews — 1080×1350</p>
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-muted-foreground">Live Previews, 1080×1350</p>
             {panels.map((kind, i) => (
               <div key={kind} className="space-y-2">
-                <button onClick={() => setActivePanel(i)} className={`font-sans text-[10px] tracking-[0.25em] uppercase ${activePanel === i ? "text-accent" : "text-muted-foreground"}`}>Panel {i + 1} — {PANEL_LABELS[kind]} {activePanel === i ? "•" : ""}</button>
+                <button onClick={() => setActivePanel(i)} className={`font-sans text-[10px] tracking-[0.25em] uppercase ${activePanel === i ? "text-accent" : "text-muted-foreground"}`}>Panel {i + 1}, {PANEL_LABELS[kind]} {activePanel === i ? "•" : ""}</button>
                 <div className={`border overflow-hidden mx-auto ${activePanel === i ? "border-accent" : "border-border"}`} style={{ aspectRatio: "4 / 5", maxWidth: 360 }}>
                   <div style={{ width: W, height: H, transform: `scale(${360 / W})`, transformOrigin: "top left" }}>
                     {renderPanel(panelProps(kind, i, false))}

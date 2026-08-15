@@ -115,7 +115,7 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
 
   return (
     <div className="space-y-8">
-      {/* SECTION 1 — Log a Booking */}
+      {/* SECTION 1, Log a Booking */}
       <div className="border border-border p-6 space-y-4">
         <div className="flex items-center justify-between">
           <div>
@@ -221,7 +221,7 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
         )}
       </div>
 
-      {/* SECTION 2 — Bookings Table */}
+      {/* SECTION 2, Bookings Table */}
       <div className="border border-border p-6">
         <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-accent mb-4">All Bookings</h3>
         {closedDeals.length > 0 ? (
@@ -241,24 +241,24 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
               <tbody>
                 {closedDeals.map(d => (
                   <tr key={d.id} className="border-b border-border/50 hover:bg-muted/10 transition-colors">
-                    <td className="py-2.5 pr-4 text-foreground">{d.contact_name || "—"}</td>
-                    <td className="py-2.5 pr-4 text-muted-foreground">{d.event_date || "—"}</td>
-                    <td className="py-2.5 pr-4 text-muted-foreground">{d.event_type || "—"}</td>
+                    <td className="py-2.5 pr-4 text-foreground">{d.contact_name || ""}</td>
+                    <td className="py-2.5 pr-4 text-muted-foreground">{d.event_date || ""}</td>
+                    <td className="py-2.5 pr-4 text-muted-foreground">{d.event_type || ""}</td>
                     <td className="py-2.5 pr-4">
                       <span className="inline-block px-2 py-0.5 bg-accent/10 text-accent text-[10px] tracking-wider uppercase rounded">
-                        {d.location || "—"}
+                        {d.location || ""}
                       </span>
                     </td>
                     <td className="py-2.5 pr-4">
                       <span className="inline-block px-2 py-0.5 bg-primary/10 text-primary text-[10px] tracking-wider uppercase rounded">
-                        {d.source || "—"}
+                        {d.source || ""}
                       </span>
                     </td>
                     <td className="py-2.5 pr-4 text-foreground text-right font-medium">
-                      {d.deal_value ? `$${Number(d.deal_value).toLocaleString()}` : "—"}
+                      {d.deal_value ? `$${Number(d.deal_value).toLocaleString()}` : ""}
                     </td>
                     <td className="py-2.5 text-muted-foreground text-xs max-w-[200px] truncate">
-                      {d.notes || "—"}
+                      {d.notes || ""}
                     </td>
                   </tr>
                 ))}

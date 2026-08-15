@@ -17,7 +17,7 @@ import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
 import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
 const Contact = () => {
-  const seoTitle = "Contact & Booking | White Rabbit Magic — Los Angeles";
+  const seoTitle = "Contact & Booking | White Rabbit Magic, Los Angeles";
   const seoDescription = "Book Scott Syme for your next corporate event, wedding, or private celebration. Check availability and get a personalized quote.";
   useWebPageSchema({ name: "Contact & Booking", description: "Book Scott Syme for your next corporate event, wedding, or private celebration.", path: "/contact", type: "ContactPage" });
   const { toast } = useToast();
@@ -288,7 +288,7 @@ const Contact = () => {
       {/* Thin gold rule */}
       <div className="max-w-xs mx-auto border-t border-accent/20 my-4" />
 
-      {/* The White Rabbit Promise — quiet guarantee near the booking CTA */}
+      {/* The White Rabbit Promise, quiet guarantee near the booking CTA */}
       <WhiteRabbitPromise />
 
       {/* Quiz CTA */}

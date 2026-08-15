@@ -77,7 +77,7 @@ const TestimonialCarousel = () => {
                 "{testimonials[current].text}"
               </blockquote>
               <p className="font-sans text-sm tracking-[0.2em] uppercase text-cream/50">
-                {testimonials[current].name} — {testimonials[current].role}
+                {testimonials[current].name}, {testimonials[current].role}
               </p>
             </motion.div>
           </AnimatePresence>

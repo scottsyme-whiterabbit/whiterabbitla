@@ -214,13 +214,13 @@ const CastleInvitesTab = () => {
         <div>
           <h3 className="font-serif text-lg text-foreground mb-3">Email Preview (Newsletter Tier)</h3>
           <div className="border border-border bg-white text-black p-6 max-w-2xl text-sm leading-relaxed space-y-3">
-            <p className="font-semibold">Subject: [First] — the Castle on me this summer?</p>
+            <p className="font-semibold">Subject: [First], the Castle on me this summer?</p>
             <hr />
             <p>[First],</p>
-            <p>Wanted to extend you a real invitation. A few nights a month I host guests — usually planners, agents, PR folks, fundraisers, people who work in the same world you do — at the Magic Castle in Hollywood. Yes, this is partly business; if we hit it off and an event comes up, I&apos;d hope to be on your shortlist. But the night itself has zero strings. The point is a real evening together, some magic, and meeting other people doing interesting work in the city.</p>
-            <p>You and up to one guest come on my pass — no $45 door fee, no required dinner reservations, no pressure to spend a dollar inside. The Castle is members-only, so this is the cleanest way to get in.</p>
+            <p>Wanted to extend you a real invitation. A few nights a month I host guests, usually planners, agents, PR folks, fundraisers, people who work in the same world you do, at the Magic Castle in Hollywood. Yes, this is partly business; if we hit it off and an event comes up, I&apos;d hope to be on your shortlist. But the night itself has zero strings. The point is a real evening together, some magic, and meeting other people doing interesting work in the city.</p>
+            <p>You and up to one guest come on my pass, no $45 door fee, no required dinner reservations, no pressure to spend a dollar inside. The Castle is members-only, so this is the cleanest way to get in.</p>
             <p>Here&apos;s the night:</p>
-            <p>You arrive. I meet you at the door, tour you through The Magic Castle — the bars, the Parlour of Prestidigitation, the Palace. Then I&apos;ll perform a highlight version of my show for you in the Museum Theater (small, intimate, close-up at conversation distance). We&apos;ll catch other shows around the Castle for a few hours and connect along the way.</p>
+            <p>You arrive. I meet you at the door, tour you through The Magic Castle, the bars, the Parlour of Prestidigitation, the Palace. Then I&apos;ll perform a highlight version of my show for you in the Museum Theater (small, intimate, close-up at conversation distance). We&apos;ll catch other shows around the Castle for a few hours and connect along the way.</p>
             <p>If a Castle night sounds like a fit, send me two or three weekday evenings that work for you this summer and I&apos;ll lock one of them in.</p>
             <p className="pt-2">Scott Syme<br/>Magician<br/>(424) 394-1850<br/>whiterabbitla.com</p>
           </div>

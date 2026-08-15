@@ -25,7 +25,7 @@ const reviews = [
 {
   name: "Meridith F.",
   role: "40th Birthday Party",
-  text: "Scott performed up close magic for small groups at my 40th birthday party and was OUTSTANDING. I can't tell you how many guests told me he was the highlight of the evening and his magic/mentalism was out of this world good. I cannot recommend him enough — hire him. You will not be disappointed.",
+  text: "Scott performed up close magic for small groups at my 40th birthday party and was OUTSTANDING. I can't tell you how many guests told me he was the highlight of the evening and his magic/mentalism was out of this world good. I cannot recommend him enough, hire him. You will not be disappointed.",
   rating: 5
 },
 {
@@ -43,7 +43,7 @@ const reviews = [
 {
   name: "Shaahin J.",
   role: "35th Birthday Celebration",
-  text: "Scott & White Rabbit made my birthday one I will never forget. The show left my friends in awe — I was getting messages for two days after from friends telling me how great it was. I highly recommend!",
+  text: "Scott & White Rabbit made my birthday one I will never forget. The show left my friends in awe. I was getting messages for two days after from friends telling me how great it was. I highly recommend!",
   rating: 5
 },
 {
@@ -224,7 +224,7 @@ const reviews = [
 
 const Reviews = () => {
   useScrollDepth("reviews");
-  const seoTitle = "Client Reviews | White Rabbit Magic — 5-Star Rated Los Angeles Magician";
+  const seoTitle = "Client Reviews | White Rabbit Magic, 5-Star Rated Los Angeles Magician";
   const seoDescription = "Read 50+ five-star reviews from corporate planners, brides, and private event hosts. See why White Rabbit is LA's most trusted luxury magic entertainment.";
   useBreadcrumbSchema([{ name: "Home", path: "/" }, { name: "Reviews", path: "/reviews" }]);
   useSpeakableSchema({ name: "Client Reviews", path: "/reviews" });

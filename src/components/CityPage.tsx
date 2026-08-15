@@ -34,15 +34,15 @@ interface CityPageProps {
 // Per-city SEO meta overrides for pages ranking on Google
 const cityMetaOverrides: Record<string, { title: string; description: string }> = {
   "beverly-hills": {
-    title: "Beverly Hills Magician — Magic Castle Pro | White Rabbit LA",
+    title: "Beverly Hills Magician, Magic Castle Pro | White Rabbit LA",
     description: "Hire White Rabbit LA for luxury close-up magic in Beverly Hills. Magic Castle member, trusted by Netflix, Disney & Morgan Stanley. Book your event today.",
   },
   "pasadena": {
-    title: "Pasadena Magician — Luxury Close-Up Magic | White Rabbit LA",
+    title: "Pasadena Magician, Luxury Close-Up Magic | White Rabbit LA",
     description: "Hire a luxury magician for your Pasadena wedding, corporate event, or private party. Magic Castle member trusted by Disney, Netflix, and Morgan Stanley.",
   },
   "denver": {
-    title: "Denver Magician — Magic Castle Pro for Luxury Events",
+    title: "Denver Magician · Magic Castle Pro for Luxury Events",
     description: "Book White Rabbit LA for close-up magic at your Denver wedding, corporate event, or private celebration. Magic Castle member, 5-star Google rated.",
   },
 };
@@ -95,7 +95,7 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
       <section className="relative h-[50vh] min-h-[400px]">
         <img
           src={areaPhoto.replace("w=600&h=400", "w=1600&h=900")}
-          alt={`${cityName}, ${stateFullName} — luxury event entertainment destination`}
+          alt={`${cityName}, ${stateFullName}, luxury event entertainment destination`}
           width={1600}
           height={900}
           className="absolute inset-0 w-full h-full object-cover"
@@ -108,7 +108,7 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
                 ← All Service Areas
               </Link>
               <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-cream mb-3">
-                Magician in {cityName} — Luxury Event Entertainment
+                Magician in {cityName}, Luxury Event Entertainment
               </h1>
               <p className="font-sans text-base text-cream/70 max-w-lg">{areaTagline}</p>
             </AnimatedSection>
@@ -118,12 +118,12 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
 
       <QuizNudge />
 
-      {/* Opening paragraph — LLM-extractable */}
+      {/* Opening paragraph, LLM-extractable */}
       <section className="py-16">
         <div className="max-w-3xl mx-auto px-6">
           <AnimatedSection>
             <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8" data-speakable="true">
-              White Rabbit LA provides luxury close-up magic and mentalism entertainment for private events in {cityName}, {stateFullName}. Performed by Scott Syme — a member of the Magic Castle in Hollywood and consultant to performers on America's Got Talent and Disney Channel — every show is tailored to your event, whether it's a corporate gala, wedding reception, private party, or fundraiser. 5-star rated on Google with clients including Netflix, Disney, Paramount, and Hyatt.
+              White Rabbit LA provides luxury close-up magic and mentalism entertainment for private events in {cityName}, {stateFullName}. Performed by Scott Syme, a member of the Magic Castle in Hollywood and consultant to performers on America's Got Talent and Disney Channel, every show is tailored to your event, whether it's a corporate gala, wedding reception, private party, or fundraiser. 5-star rated on Google with clients including Netflix, Disney, Paramount, and Hyatt.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <button onClick={openQuiz} className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors">
@@ -243,7 +243,7 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
         </section>
       )}
 
-      {/* Insights & Guides — city-specific editorial articles */}
+      {/* Insights & Guides · city-specific editorial articles */}
       {(() => {
         const insightArticles = getArticleSlugsForCity(citySlug)
           .map((s) => getBlogArticleBySlug(s))
@@ -278,7 +278,7 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
       <FAQSection
         schemaId={`city-faq-${citySlug}`}
         subtitle="Common Questions"
-        title={`Frequently Asked Questions — ${cityName}`}
+        title={`Frequently Asked Questions · ${cityName}`}
         faqs={faqs}
       />
 
@@ -315,7 +315,7 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
               {nearbyAreas.map((area, i) => (
                 <AnimatedSection key={area!.slug} delay={Math.min(i * 0.08, 0.3)}>
                   <Link to={`/areas/${area!.slug}`} className="group block relative overflow-hidden aspect-[3/2] rounded-sm">
-                    <img src={area!.photo} alt={`${area!.city} — magician for luxury events`} width={600} height={400} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+                    <img src={area!.photo} alt={`${area!.city}, magician for luxury events`} width={600} height={400} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-3">
                       <h3 className="font-serif text-sm text-cream leading-tight">{area!.city}</h3>
