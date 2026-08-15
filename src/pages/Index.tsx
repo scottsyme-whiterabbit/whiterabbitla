@@ -373,34 +373,31 @@ const Index = () => {
         </div>
       </motion.div>
 
-      {/* Client Logos — auto-scrolling marquee */}
+      {/* Client Logos — static stacked block */}
       <AnimatedSection>
         <section className="bg-gradient-to-b from-[#F8F5F0] to-[#F0E8D8] py-14 md:py-16">
           <div className="max-w-6xl mx-auto px-6">
-            <p className="text-center font-sans text-[11px] tracking-[0.4em] uppercase text-gold mb-8">
+            <p className="text-center font-sans text-[11px] tracking-[0.4em] uppercase text-gold mb-10">
               IN GOOD COMPANY
             </p>
-            <div className="relative overflow-hidden group" style={{ maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)" }}>
-              <div
-                className="flex items-center gap-16 md:gap-20 w-max animate-marquee-logos group-hover:[animation-play-state:paused]"
-              >
-                {[...clients, ...clients].map((client, i) => (
-                  <div key={`${client.name}-${i}`} className="flex items-center justify-center flex-shrink-0 h-10">
-                    <img
-                      src={client.logo}
-                      alt={`${client.name} logo, White Rabbit client`}
-                      loading="lazy"
-                      decoding="async"
-                      style={{
-                        height: `${client.h}px`,
-                        width: "auto",
-                        filter: "brightness(0) saturate(100%) invert(24%) sepia(9%) saturate(1200%) hue-rotate(70deg) brightness(95%) contrast(85%)",
-                      }}
-                      className="object-contain opacity-55 hover:opacity-80 transition-opacity"
-                    />
-                  </div>
-                ))}
-              </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-x-8 gap-y-10 md:gap-x-12 md:gap-y-12 items-center justify-items-center">
+              {clients.map((client) => (
+                <div key={client.name} className="flex items-center justify-center h-10 md:h-12 w-full">
+                  <img
+                    src={client.logo}
+                    alt={`${client.name} logo, White Rabbit client`}
+                    loading="lazy"
+                    decoding="async"
+                    style={{
+                      height: `${client.h}px`,
+                      width: "auto",
+                      maxWidth: "100%",
+                      filter: "brightness(0) saturate(100%) invert(24%) sepia(9%) saturate(1200%) hue-rotate(70deg) brightness(95%) contrast(85%)",
+                    }}
+                    className="object-contain opacity-55 hover:opacity-80 transition-opacity"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </section>
