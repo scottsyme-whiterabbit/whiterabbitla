@@ -48,15 +48,26 @@ async function resolveDealId(inv: any): Promise<string | null> {
         .from("proposals").select("deal_id").eq("id", (agr as any).proposal_id).maybeSingle();
       dealId = (prop as any)?.deal_id || null;
     }
+    // Same guard: reject an inherited deal that belongs to a different client.
+    if (dealId && invEmail) {
+      const { data: cand } = await supabase
+        .from("deals").select("contact_email").eq("id", dealId).maybeSingle();
+      const candEmail = ((cand as any)?.contact_email || "").trim().toLowerCase();
+      if (!cand || candEmail !== invEmail) {
+        console.warn(`agreement/proposal deal ${dealId} does not match invoice client ${invEmail}; ignoring`);
+        dealId = null;
+      }
+    }
   }
 
-  const email = (inv.client_email || "").trim().toLowerCase();
+  const email = invEmail;
   if (!dealId && email) {
     const { data: existing } = await supabase
       .from("deals").select("id").ilike("contact_email", email)
       .order("created_at", { ascending: false }).limit(1);
     dealId = (existing as any)?.[0]?.id || null;
   }
+
 
   if (!dealId && email) {
     const { data: created, error: createError } = await supabase.from("deals").insert({
