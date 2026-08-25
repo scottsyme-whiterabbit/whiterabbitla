@@ -22,9 +22,22 @@ function getSupabase() {
  */
 async function resolveDealId(inv: any): Promise<string | null> {
   const supabase = getSupabase();
-  if (inv.deal_id) return inv.deal_id as string;
+  const invEmail = (inv.client_email || "").trim().toLowerCase();
+
+  // Guard: a hand-built proposal can be attached to the wrong deal. Only trust a
+  // pre-linked deal when its contact email matches the invoice's client email.
+  if (inv.deal_id) {
+    const { data: linked } = await supabase
+      .from("deals").select("id, contact_email").eq("id", inv.deal_id).maybeSingle();
+    const linkedEmail = ((linked as any)?.contact_email || "").trim().toLowerCase();
+    if (linked && (!invEmail || linkedEmail === invEmail)) return inv.deal_id as string;
+    console.warn(
+      `invoice ${inv.id} is linked to deal ${inv.deal_id} with a different client email; re-resolving`,
+    );
+  }
 
   let dealId: string | null = null;
+
 
   if (inv.agreement_id) {
     const { data: agr } = await supabase
