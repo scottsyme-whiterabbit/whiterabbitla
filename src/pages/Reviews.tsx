@@ -71,6 +71,12 @@ const reviews = [
   rating: 5
 },
 {
+  name: "Maya L.",
+  role: "Wedding in San Marcos",
+  text: "We had Scott perform at our wedding. Our guests LOVED him! Actual quotes from my guests: \"what's up?! good morning! I can't stop thinking about how great Scott the magician was.\" \"my mind was BLOWN!!\" He also performed magic for us (bride/groom) and left us curious how the tricks worked. Very smooth with sleight of hand and misdirection. Would hire him again in a heartbeat!",
+  rating: 5
+},
+{
   name: "Andres O.",
   role: "Black Tie Event",
   text: "We had Scott perform magic for a black tie event recently. Scott absolutely did an amazing job engaging with everyone.",
