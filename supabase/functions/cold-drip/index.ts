@@ -50,7 +50,7 @@ interface ColdCampaign {
 // ═══════════════════════════════════════════════
 
 // Canonical signature — exact format required for compliance.
-// Scott Syme / Magician / (424) 394-1850 / whiterabbitla.com
+// Scott Syme / White Rabbit LA / (424) 394-1850 / whiterabbitla.com
 function signoff(): string {
   return `<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
 Scott Syme<br/>
