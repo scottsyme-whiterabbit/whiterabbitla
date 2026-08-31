@@ -7,7 +7,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 User-agent: Bingbot
 Allow: /
@@ -17,7 +18,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 # Social Media Crawlers
 User-agent: Twitterbot
@@ -28,7 +30,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 User-agent: facebookexternalhit
 Allow: /
@@ -38,7 +41,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 # AI / LLM Crawlers — OpenAI
 User-agent: GPTBot
@@ -49,7 +53,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 User-agent: ChatGPT-User
 Allow: /
@@ -59,7 +64,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 User-agent: OAI-SearchBot
 Allow: /
@@ -69,7 +75,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 # AI / LLM Crawlers — Google
 User-agent: Google-Extended
@@ -80,7 +87,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 # AI / LLM Crawlers — Anthropic (Claude)
 User-agent: ClaudeBot
@@ -91,7 +99,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 User-agent: anthropic-ai
 Allow: /
@@ -101,7 +110,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 # AI / LLM Crawlers — Perplexity
 User-agent: PerplexityBot
@@ -112,7 +122,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 # AI / LLM Crawlers — xAI (Grok)
 User-agent: Grok
@@ -123,7 +134,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 User-agent: xai-grok
 Allow: /
@@ -133,7 +145,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 # AI / LLM Crawlers — DeepSeek
 User-agent: Deepseek
@@ -144,7 +157,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 User-agent: DeepSeekBot
 Allow: /
@@ -154,7 +168,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 # AI / LLM Crawlers — Apple Intelligence
 User-agent: Applebot
@@ -165,7 +180,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 User-agent: Applebot-Extended
 Allow: /
@@ -175,7 +191,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 # AI / LLM Crawlers — Meta AI
 User-agent: meta-externalagent
@@ -186,7 +203,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 User-agent: FacebookBot
 Allow: /
@@ -196,7 +214,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 # AI / LLM Crawlers — Amazon
 User-agent: Amazonbot
@@ -207,7 +226,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 # AI / LLM Crawlers — You.com
 User-agent: YouBot
@@ -218,7 +238,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 # AI / LLM Crawlers — Cohere
 User-agent: cohere-ai
@@ -229,7 +250,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 # AI / LLM Crawlers — ByteDance
 User-agent: Bytespider
@@ -240,7 +262,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 # AI / LLM Crawlers — Common Crawl (training data for many models)
 User-agent: CCBot
@@ -251,7 +274,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 # AI / LLM Crawlers — Mistral
 User-agent: MistralBot
@@ -262,7 +286,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 # AI / LLM Crawlers — Microsoft Copilot
 User-agent: CopilotBot
@@ -273,7 +298,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 # Default
 User-agent: *
@@ -284,7 +310,8 @@ Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
 Disallow: /review
-Disallow: /unsubscribe/
+Disallow: /unsubscribe
+
 
 Sitemap: https://whiterabbitla.com/sitemap.xml
 Llms-txt: https://whiterabbitla.com/llms.txt
