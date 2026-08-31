@@ -71,7 +71,7 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   // ---- Auth: x-cron-secret, Authorization: Bearer <CRON_SECRET>, or x-import-token ----
-  const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
+  const cronSecret = Deno.env.get("CRON_SECRET") ?? Deno.env.get("CRON_SECRET_V2") ?? "";
   const importToken = Deno.env.get("EXTERNAL_IMPORT_TOKEN") ?? "";
   const headerCron = req.headers.get("x-cron-secret") ?? "";
   const authHeader = req.headers.get("authorization") ?? "";
