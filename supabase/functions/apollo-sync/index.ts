@@ -75,7 +75,7 @@ serve(async (req) => {
       Deno.env.get("CRON_SECRET"),
       Deno.env.get("CRON_SECRET_V2"),
       Deno.env.get("EXTERNAL_IMPORT_TOKEN"),
-    ].filter((s) => s.length > 0);
+    ].filter((s): s is string => typeof s === "string" && s.length > 0);
 
     const presented = [
       req.headers.get("x-cron-secret") ?? "",
