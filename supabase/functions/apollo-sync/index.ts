@@ -71,17 +71,23 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   // ---- Auth: x-cron-secret, Authorization: Bearer <CRON_SECRET>, or x-import-token ----
-  const cronSecret = Deno.env.get("CRON_SECRET") ?? Deno.env.get("CRON_SECRET_V2") ?? "";
-  const importToken = Deno.env.get("EXTERNAL_IMPORT_TOKEN") ?? "";
-  const headerCron = req.headers.get("x-cron-secret") ?? "";
-  const authHeader = req.headers.get("authorization") ?? "";
-  const headerImport = req.headers.get("x-import-token") ?? "";
+  const accepted = [
+      Deno.env.get("CRON_SECRET"),
+      Deno.env.get("CRON_SECRET_V2"),
+      Deno.env.get("EXTERNAL_IMPORT_TOKEN"),
+    ].filter((s) => s.length > 0);
 
-  const cronOk =
-    cronSecret.length > 0 && (headerCron === cronSecret || authHeader === `Bearer ${cronSecret}`);
-  const importOk = importToken.length > 0 && headerImport === importToken;
-  if (!cronOk && !importOk) return json({ error: "Unauthorized" }, 401);
+    const presented = [
+      req.headers.get("x-cron-secret") ?? "",
+      req.headers.get("x-import-token"),
+      (req.headers.get("authorization") ?? "").replace(/^Bearer\\s+/i, ""),
+    ].filter((p) => p.length > 0);
 
+    const authorized = presented.some((p) => accepted.includes(p));
+
+    if (!authorized) {
+      return json({ error: "Unauthorized" }, 401);
+    }
   const apolloKey = Deno.env.get("APOLLO_API_KEY");
   if (!apolloKey) return json({ error: "APOLLO_API_KEY is not configured" }, 500);
 
