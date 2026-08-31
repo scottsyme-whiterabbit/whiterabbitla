@@ -50,11 +50,11 @@ interface ColdCampaign {
 // ═══════════════════════════════════════════════
 
 // Canonical signature — exact format required for compliance.
-// Scott Syme / Magician / (424) 394-1850 / whiterabbitla.com
+// Scott Syme / White Rabbit LA / (424) 394-1850 / whiterabbitla.com
 function signoff(): string {
   return `<p style="margin:0; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);">
 Scott Syme<br/>
-<span style="font-size:13px; color:rgba(245,240,232,0.5);">Magician</span><br/>
+<span style="font-size:13px; color:rgba(245,240,232,0.5);">White Rabbit LA</span><br/>
 <span style="font-size:12px; color:rgba(245,240,232,0.35);"><a href="tel:+14243941850" style="color:rgba(245,240,232,0.35); text-decoration:none;">(424) 394-1850</a></span><br/>
 <span style="font-size:12px;"><a href="https://whiterabbitla.com" style="color:rgba(245,240,232,0.35); text-decoration:none;">whiterabbitla.com</a></span>
 </p>`;
@@ -154,7 +154,7 @@ function plainCalendarSentence(contactId: string, step: number, campaign: string
 function plainSignature(): string {
   return `<p class="sig">
 Scott Syme<br>
-Magician<br>
+White Rabbit LA<br>
 <a href="tel:+14243941850" class="plain">(424) 394-1850</a><br>
 <a href="https://whiterabbitla.com" class="plain">whiterabbitla.com</a>
 </p>`;
