@@ -1,101 +1,263 @@
 # Search Engine Crawlers
 User-agent: Googlebot
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 User-agent: Bingbot
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 # Social Media Crawlers
 User-agent: Twitterbot
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 User-agent: facebookexternalhit
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 # AI / LLM Crawlers — OpenAI
 User-agent: GPTBot
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 User-agent: OAI-SearchBot
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 # AI / LLM Crawlers — Google
 User-agent: Google-Extended
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 # AI / LLM Crawlers — Anthropic (Claude)
 User-agent: ClaudeBot
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 User-agent: anthropic-ai
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 # AI / LLM Crawlers — Perplexity
 User-agent: PerplexityBot
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 # AI / LLM Crawlers — xAI (Grok)
 User-agent: Grok
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 User-agent: xai-grok
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 # AI / LLM Crawlers — DeepSeek
 User-agent: Deepseek
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 User-agent: DeepSeekBot
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 # AI / LLM Crawlers — Apple Intelligence
 User-agent: Applebot
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 User-agent: Applebot-Extended
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 # AI / LLM Crawlers — Meta AI
 User-agent: meta-externalagent
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 User-agent: FacebookBot
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 # AI / LLM Crawlers — Amazon
 User-agent: Amazonbot
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 # AI / LLM Crawlers — You.com
 User-agent: YouBot
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 # AI / LLM Crawlers — Cohere
 User-agent: cohere-ai
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 # AI / LLM Crawlers — ByteDance
 User-agent: Bytespider
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 # AI / LLM Crawlers — Common Crawl (training data for many models)
 User-agent: CCBot
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 # AI / LLM Crawlers — Mistral
 User-agent: MistralBot
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 # AI / LLM Crawlers — Microsoft Copilot
 User-agent: CopilotBot
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 # Default
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /pay/
+Disallow: /proposal/
+Disallow: /proposals/
+Disallow: /review/
+Disallow: /unsubscribe/
 
 Sitemap: https://whiterabbitla.com/sitemap.xml
 Llms-txt: https://whiterabbitla.com/llms.txt
