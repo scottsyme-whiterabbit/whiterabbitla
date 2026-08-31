@@ -79,7 +79,7 @@ serve(async (req) => {
 
     const presented = [
       req.headers.get("x-cron-secret") ?? "",
-      req.headers.get("x-import-token"),
+      req.headers.get("x-import-token") ?? "",
       (req.headers.get("authorization") ?? "").replace(/^Bearer\\s+/i, ""),
     ].filter((p) => p.length > 0);
 
