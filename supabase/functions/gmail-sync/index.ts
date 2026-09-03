@@ -234,14 +234,17 @@ serve(async (req) => {
     // Auth gate. Accepted callers:
     //   - pg_cron job "gmail-sync-every-10min": POST body { cron_secret }
     //   - newsletter-admin proxy: POST body { adminPassword }
-    const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
+    // Accept either the current or the legacy cron secret, matching the pattern
+    // used by bounce-threshold-check / nurture-drip / inquiry-followup.
+    const acceptedCronSecrets = [Deno.env.get("CRON_SECRET"), Deno.env.get("CRON_SECRET_V2")]
+      .filter((s): s is string => !!s && s.length > 0);
     let adminOk = false;
     let cronOk = false;
     if (req.method === "POST") {
       const body = await req.json().catch(() => ({}));
       adminOk = !!ADMIN_PASSWORD && body.adminPassword === ADMIN_PASSWORD;
-      cronOk = cronSecret.length > 0 &&
-        (body.cron_secret === cronSecret || req.headers.get("x-cron-secret") === cronSecret);
+      const provided = body.cron_secret || req.headers.get("x-cron-secret") || "";
+      cronOk = acceptedCronSecrets.length > 0 && acceptedCronSecrets.includes(provided);
       isManual = adminOk;
       dealId = body.deal_id || null;
     }
@@ -260,7 +263,7 @@ serve(async (req) => {
       .not("stage", "in", "(completed,lost)")
       .order("updated_at", { ascending: false });
     if (dealId) dealsQuery = dealsQuery.eq("id", dealId);
-    else dealsQuery = dealsQuery.limit(isManual ? 100 : 40);
+    else dealsQuery = dealsQuery.limit(isManual ? 100 : 150);
 
     const { data: deals, error } = await dealsQuery;
     if (error) throw error;

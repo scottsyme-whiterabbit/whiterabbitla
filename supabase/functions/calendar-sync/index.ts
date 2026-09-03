@@ -28,8 +28,10 @@ serve(async (req) => {
     //   - pg_cron job "calendar-sync-every-30min": POST body { cron_secret }
     //   - newsletter-admin proxy: POST body { adminPassword }
     // Anything else is rejected.
-    const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
-    const headerCron = req.headers.get("x-cron-secret") ?? "";
+    // Accept either the current or the legacy cron secret, matching the pattern
+    // used by bounce-threshold-check / nurture-drip / inquiry-followup.
+    const acceptedCronSecrets = [Deno.env.get("CRON_SECRET"), Deno.env.get("CRON_SECRET_V2")]
+      .filter((s): s is string => !!s && s.length > 0);
     let bodyCron = "";
     let bodyAdminPassword = "";
     if (req.method === "POST") {
@@ -38,7 +40,8 @@ serve(async (req) => {
       bodyAdminPassword = b.adminPassword ?? "";
     }
     const adminOk = !!ADMIN_PASSWORD && bodyAdminPassword === ADMIN_PASSWORD;
-    const cronOk = cronSecret.length > 0 && (bodyCron === cronSecret || headerCron === cronSecret);
+    const provided = bodyCron || req.headers.get("x-cron-secret") || "";
+    const cronOk = acceptedCronSecrets.length > 0 && acceptedCronSecrets.includes(provided);
     if (!adminOk && !cronOk) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
