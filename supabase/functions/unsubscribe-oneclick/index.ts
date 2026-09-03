@@ -134,7 +134,7 @@ serve(async (req) => {
 
   try {
     const url = new URL(req.url);
-    const email = url.searchParams.get("email") || "";
+    let email = url.searchParams.get("email") || "";
     const source = "list_unsubscribe_header";
 
     // Gmail/Yahoo one-click POSTs with body "List-Unsubscribe=One-Click" — email
