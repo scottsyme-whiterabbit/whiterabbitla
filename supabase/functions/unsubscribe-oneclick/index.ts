@@ -54,6 +54,26 @@ function htmlConfirmation(email: string): string {
 </body></html>`;
 }
 
+function htmlConfirmPrompt(email: string): string {
+  return `<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unsubscribe from White Rabbit LA?</title>
+</head>
+<body style="margin:0; padding:0; background:#f8f5f0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; color:#223D34;">
+  <div style="max-width:520px; margin:80px auto; padding:40px 32px; background:#ffffff; border-radius:6px;">
+    <h1 style="margin:0 0 16px; font-size:22px; font-weight:600;">Unsubscribe from White Rabbit LA?</h1>
+    <p style="margin:0 0 24px; font-size:15px; line-height:1.6;">
+      ${email ? `<strong>${email.replace(/[<>&"']/g, "")}</strong> will be removed from all White Rabbit LA emails.` : "Your email will be removed from all White Rabbit LA emails."}
+    </p>
+    <form method="POST" action="?email=${encodeURIComponent(email)}">
+      <button type="submit" style="display:inline-block; background:#223D34; color:#f8f5f0; text-transform:uppercase; letter-spacing:0.15em; padding:14px 28px; border:none; border-radius:6px; font-size:13px; cursor:pointer;">Yes, unsubscribe me</button>
+    </form>
+  </div>
+</body></html>`;
+}
+
 async function processUnsubscribe(rawEmail: string, source: string, userAgent: string | null): Promise<{ ok: boolean; rowsTouched: number; error?: string }> {
   const email = rawEmail.trim().toLowerCase();
   if (!email || !EMAIL_RE.test(email)) {
