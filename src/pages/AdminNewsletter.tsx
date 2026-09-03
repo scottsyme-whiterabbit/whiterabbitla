@@ -489,8 +489,11 @@ const AdminNewsletter = () => {
     }
   };
 
+  const [segment, setSegment] = useState("planner-pulse");
+  const [maxSends, setMaxSends] = useState(200);
+
   const handleApproveAndSend = async (campaignId: string) => {
-    if (!confirm(`Send this email to ${stats.subscribers} subscribers?`)) return;
+    if (!confirm(`Send up to ${maxSends} emails to the "${segment}" segment now?`)) return;
     setSending(true);
     try {
       // First approve
@@ -504,11 +507,11 @@ const AdminNewsletter = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${SUPABASE_KEY}`,
         },
-        body: JSON.stringify({ campaignId, adminPassword: storedPassword }),
+        body: JSON.stringify({ campaignId, adminPassword: storedPassword, segment, maxSends }),
       });
       const data = await res.json();
       if (res.ok) {
-        toast.success(`Sent to ${data.sent} of ${data.total} contacts`);
+        toast.success("Sent " + data.sent + ". Remaining in this segment: " + data.remaining);
         loadData();
         resetCompose();
       } else {
@@ -1382,7 +1385,30 @@ const AdminNewsletter = () => {
                   </div>
                 )}
 
-                <div className="p-4 border-t border-border flex gap-3">
+                <div className="p-4 border-t border-border flex gap-3 flex-wrap items-center">
+                  <label className="flex items-center gap-2 text-xs uppercase tracking-[0.15em] text-muted-foreground">
+                    Segment
+                    <select
+                      value={segment}
+                      onChange={e => setSegment(e.target.value)}
+                      className="bg-forest-dark/50 border border-border text-foreground px-3 py-2 font-sans text-sm focus:outline-none focus:border-accent"
+                    >
+                      <option value="all">All subscribers</option>
+                      {["planner-pulse","resident-paused","cold_corporate","welcome","cold_wedding","cold_pr","cold_spirits","cold_nonprofit","cold_talent","cold_country_club","cold_restaurant"].map(s => (
+                        <option key={s} value={s}>{s}</option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="flex items-center gap-2 text-xs uppercase tracking-[0.15em] text-muted-foreground">
+                    Max this run
+                    <input
+                      type="number"
+                      min={1}
+                      value={maxSends}
+                      onChange={e => setMaxSends(Number(e.target.value))}
+                      className="w-24 bg-forest-dark/50 border border-border text-foreground px-3 py-2 font-sans text-sm focus:outline-none focus:border-accent"
+                    />
+                  </label>
                   <button
                     onClick={handleSaveDraft}
                     className="border border-border text-foreground px-5 py-2 font-sans text-sm tracking-[0.2em] uppercase hover:border-accent transition-colors"
