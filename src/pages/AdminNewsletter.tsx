@@ -521,6 +521,29 @@ const AdminNewsletter = () => {
     }
   };
 
+  const [testEmail, setTestEmail] = useState("scott.syme@whiterabbitla.com");
+
+  const handleSendTest = async (campaignId: string) => {
+    setSending(true);
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/send-newsletter`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+        },
+        body: JSON.stringify({ campaignId, adminPassword: storedPassword, testEmail }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Test send failed");
+      toast.success(`Test sent to ${testEmail}`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Test send failed");
+    } finally {
+      setSending(false);
+    }
+  };
+
   const handleDeleteCampaign = async (id: string) => {
     if (!confirm("Delete this campaign?")) return;
     try {
@@ -1374,6 +1397,24 @@ const AdminNewsletter = () => {
                     >
                       <Send size={14} />
                       {sending ? "Sending..." : `Send to ${stats.subscribers} Subscribers`}
+                    </button>
+                  )}
+                  {editedCampaignId && (
+                    <input
+                      type="email"
+                      value={testEmail}
+                      onChange={e => setTestEmail(e.target.value)}
+                      placeholder="test@example.com"
+                      className="bg-forest-dark/50 border border-border text-foreground px-3 py-2 font-sans text-sm focus:outline-none focus:border-accent"
+                    />
+                  )}
+                  {editedCampaignId && (
+                    <button
+                      onClick={() => handleSendTest(editedCampaignId)}
+                      disabled={sending}
+                      className="border border-border text-foreground px-5 py-2 font-sans text-sm tracking-[0.2em] uppercase hover:border-accent transition-colors disabled:opacity-50"
+                    >
+                      Send test
                     </button>
                   )}
                   <button onClick={resetCompose} className="text-muted-foreground hover:text-foreground px-3 py-2 text-sm">
