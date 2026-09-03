@@ -7,6 +7,15 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+// Resend delivers recipients as either "user@example.com" or
+// "Display Name <user@example.com>". Always extract the bare address.
+function parseEmail(raw: unknown): string | null {
+  if (typeof raw !== "string") return null;
+  const angle = raw.match(/<([^>]+)>/);
+  const candidate = (angle ? angle[1] : raw).trim().toLowerCase();
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(candidate) ? candidate : null;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -56,7 +65,7 @@ serve(async (req) => {
 
     // Handle complaint (spam) events — auto-unsubscribe + log bounce
     if (eventType === "email.complained") {
-      const recipientEmail = body.data?.to?.[0] || body.data?.email;
+      const recipientEmail = parseEmail(body.data?.to?.[0]) ?? parseEmail(body.data?.email);
       if (recipientEmail) {
         const contact = await getContactByEmail(recipientEmail);
         await supabase
@@ -80,7 +89,7 @@ serve(async (req) => {
 
     // Handle manual unsubscribe from the website
     if (eventType === "unsubscribe_manual") {
-      const recipientEmail = body.data?.email_address;
+      const recipientEmail = parseEmail(body.data?.email_address);
       if (recipientEmail) {
         await supabase
           .from("newsletter_contacts")
@@ -92,7 +101,7 @@ serve(async (req) => {
 
     // Handle bounce events — auto-unsubscribe + log bounce
     if (eventType === "email.bounced" || eventType === "email.delivery_delayed") {
-      const recipientEmail = body.data?.to?.[0] || body.data?.email;
+      const recipientEmail = parseEmail(body.data?.to?.[0]) ?? parseEmail(body.data?.email);
       if (recipientEmail) {
         const contact = await getContactByEmail(recipientEmail);
 
@@ -137,7 +146,7 @@ serve(async (req) => {
 
     // Handle opened events — persist row + bump engagement based on total opens
     if (eventType === "email.opened") {
-      const recipientEmail = body.data?.to?.[0] || body.data?.email;
+      const recipientEmail = parseEmail(body.data?.to?.[0]) ?? parseEmail(body.data?.email);
       if (recipientEmail) {
         const contact = await getContactByEmail(recipientEmail);
         const coldContact = !contact ? await getColdContactByEmail(recipientEmail) : null;
@@ -199,7 +208,7 @@ serve(async (req) => {
 
     // Handle click events — mark as hot lead + notify
     if (eventType === "email.clicked") {
-      const recipientEmail = body.data?.to?.[0] || body.data?.email;
+      const recipientEmail = parseEmail(body.data?.to?.[0]) ?? parseEmail(body.data?.email);
       if (recipientEmail) {
         const contact = await getContactByEmail(recipientEmail);
 

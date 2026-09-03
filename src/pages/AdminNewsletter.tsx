@@ -1422,7 +1422,7 @@ const AdminNewsletter = () => {
                       className="bg-accent text-accent-foreground px-5 py-2 font-sans text-sm tracking-[0.2em] uppercase hover:bg-accent/80 transition-colors disabled:opacity-50 flex items-center gap-2"
                     >
                       <Send size={14} />
-                      {sending ? "Sending..." : `Send to ${stats.subscribers} Subscribers`}
+                      {sending ? "Sending..." : `Send ${maxSends} to "${segment}"`}
                     </button>
                   )}
                   {editedCampaignId && (
