@@ -85,8 +85,11 @@ serve(async (req) => {
           subject: `[TEST] ${campaign.subject}`,
           html: testHtml,
           text: `${campaign.subject}\n\nView this email in your browser. If you'd like to unsubscribe, visit: https://whiterabbitla.com/unsubscribe?email=${encodeURIComponent(testEmail)}\n\nWhite Rabbit · Los Angeles\n7393 W. Manchester Ave #209, Los Angeles, CA 90045`,
+          // RFC 8058 one-click unsubscribe must point at the edge function,
+          // not the SPA route (same pattern as cold-drip).
+          const oneClickUrl = `https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/unsubscribe-oneclick?email=${encodeURIComponent(testEmail)}`;
           headers: {
-            "List-Unsubscribe": `<https://whiterabbitla.com/unsubscribe?email=${encodeURIComponent(testEmail)}>, <mailto:events@whiterabbitla.com?subject=Unsubscribe>`,
+            "List-Unsubscribe": `<mailto:unsubscribe@whiterabbitla.com?subject=unsubscribe>, <${oneClickUrl}>`,
             "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
           },
         }),
@@ -213,8 +216,11 @@ serve(async (req) => {
               subject: campaign.subject,
               html,
               text: `${campaign.subject}\n\nView this email in your browser. If you'd like to unsubscribe, visit: https://whiterabbitla.com/unsubscribe?email=${encodeURIComponent(contact.email)}\n\nWhite Rabbit · Los Angeles\n7393 W. Manchester Ave #209, Los Angeles, CA 90045`,
+              // RFC 8058 one-click unsubscribe must point at the edge function,
+              // not the SPA route (same pattern as cold-drip).
+              const oneClickUrl = `https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/unsubscribe-oneclick?email=${encodeURIComponent(contact.email)}`;
               headers: {
-                "List-Unsubscribe": `<https://whiterabbitla.com/unsubscribe?email=${encodeURIComponent(contact.email)}>, <mailto:events@whiterabbitla.com?subject=Unsubscribe>`,
+                "List-Unsubscribe": `<mailto:unsubscribe@whiterabbitla.com?subject=unsubscribe>, <${oneClickUrl}>`,
                 "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
               },
             }),
