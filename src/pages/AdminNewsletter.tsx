@@ -521,6 +521,29 @@ const AdminNewsletter = () => {
     }
   };
 
+  const [testEmail, setTestEmail] = useState("scott.syme@whiterabbitla.com");
+
+  const handleSendTest = async (campaignId: string) => {
+    setSending(true);
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/send-newsletter`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+        },
+        body: JSON.stringify({ campaignId, adminPassword: storedPassword, testEmail }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Test send failed");
+      toast.success(`Test sent to ${testEmail}`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Test send failed");
+    } finally {
+      setSending(false);
+    }
+  };
+
   const handleDeleteCampaign = async (id: string) => {
     if (!confirm("Delete this campaign?")) return;
     try {
