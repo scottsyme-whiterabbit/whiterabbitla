@@ -65,7 +65,7 @@ serve(async (req) => {
 
     // Handle complaint (spam) events — auto-unsubscribe + log bounce
     if (eventType === "email.complained") {
-      const recipientEmail = body.data?.to?.[0] || body.data?.email;
+      const recipientEmail = parseEmail(body.data?.to?.[0]) ?? parseEmail(body.data?.email);
       if (recipientEmail) {
         const contact = await getContactByEmail(recipientEmail);
         await supabase
@@ -89,7 +89,7 @@ serve(async (req) => {
 
     // Handle manual unsubscribe from the website
     if (eventType === "unsubscribe_manual") {
-      const recipientEmail = body.data?.email_address;
+      const recipientEmail = parseEmail(body.data?.email_address);
       if (recipientEmail) {
         await supabase
           .from("newsletter_contacts")
@@ -101,7 +101,7 @@ serve(async (req) => {
 
     // Handle bounce events — auto-unsubscribe + log bounce
     if (eventType === "email.bounced" || eventType === "email.delivery_delayed") {
-      const recipientEmail = body.data?.to?.[0] || body.data?.email;
+      const recipientEmail = parseEmail(body.data?.to?.[0]) ?? parseEmail(body.data?.email);
       if (recipientEmail) {
         const contact = await getContactByEmail(recipientEmail);
 
@@ -146,7 +146,7 @@ serve(async (req) => {
 
     // Handle opened events — persist row + bump engagement based on total opens
     if (eventType === "email.opened") {
-      const recipientEmail = body.data?.to?.[0] || body.data?.email;
+      const recipientEmail = parseEmail(body.data?.to?.[0]) ?? parseEmail(body.data?.email);
       if (recipientEmail) {
         const contact = await getContactByEmail(recipientEmail);
         const coldContact = !contact ? await getColdContactByEmail(recipientEmail) : null;
@@ -208,7 +208,7 @@ serve(async (req) => {
 
     // Handle click events — mark as hot lead + notify
     if (eventType === "email.clicked") {
-      const recipientEmail = body.data?.to?.[0] || body.data?.email;
+      const recipientEmail = parseEmail(body.data?.to?.[0]) ?? parseEmail(body.data?.email);
       if (recipientEmail) {
         const contact = await getContactByEmail(recipientEmail);
 
