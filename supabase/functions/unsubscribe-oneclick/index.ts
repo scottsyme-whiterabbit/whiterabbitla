@@ -134,8 +134,8 @@ serve(async (req) => {
 
   try {
     const url = new URL(req.url);
-    let email = url.searchParams.get("email") || "";
-    let source = "list_unsubscribe_header";
+    const email = url.searchParams.get("email") || "";
+    const source = "list_unsubscribe_header";
 
     // Gmail/Yahoo one-click POSTs with body "List-Unsubscribe=One-Click" — email
     // typically lives in the URL query param, but accept POST body fallback.
@@ -155,10 +155,6 @@ serve(async (req) => {
       }
     }
 
-    if (req.method === "GET") {
-      source = "list_unsubscribe_header_get";
-    }
-
     if (!email) {
       // RFC 8058 expects 200 even on bad input for one-click POST so the mail
       // client doesn't retry. But return a useful body for GET.
@@ -171,19 +167,30 @@ serve(async (req) => {
       });
     }
 
+    // GET must be safe: it only renders the confirmation page and never
+    // unsubscribes. Link prefetchers (corporate security scanners) use GET, and
+    // RFC 8058 deliberately uses POST so prefetching cannot cause a state change.
+    if (req.method === "GET") {
+      return new Response(htmlConfirmPrompt(email), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
+      });
+    }
+
     const ua = req.headers.get("user-agent");
     const result = await processUnsubscribe(email, source, ua);
 
-    if (req.method === "POST") {
-      // Gmail/Yahoo only need 200/204 with no body
-      return new Response(null, { status: 200, headers: corsHeaders });
+    // A browser form POST (Accept includes text/html) gets the confirmation page;
+    // the Gmail/Yahoo machine POST still gets an empty 200.
+    const accept = req.headers.get("accept") || "";
+    if (result.ok && accept.includes("text/html")) {
+      return new Response(htmlConfirmation(email), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
+      });
     }
-
-    // GET → human-friendly HTML page
-    return new Response(htmlConfirmation(result.ok ? email : ""), {
-      status: 200,
-      headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
-    });
+    // Mail clients only need 200/204 with no body
+    return new Response(null, { status: 200, headers: corsHeaders });
   } catch (error) {
     console.error("unsubscribe-oneclick error:", error);
     // Even on error, return 200 for POST so mail clients don't retry
