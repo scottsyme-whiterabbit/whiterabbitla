@@ -7,6 +7,19 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+function firstNameFor(raw: string | null): string {
+  const n = (raw || "").trim();
+  if (!n) return "there";
+  // Organisation-style names get a neutral greeting
+  if (/(\bteam\b|\bevents?\b|\bgroup\b|\bllc\b|\binc\b|\bco\b|\bstudio\b|\bagency\b|\bmanagement\b|\bproperties\b|\bresidences\b|\bapartments\b|&|^the\s)/i.test(n)) {
+    return "there";
+  }
+  // Otherwise take the first token, stripped of trailing punctuation
+  const first = n.split(/\s+/)[0].replace(/[^\p{L}\p{M}'-]/gu, "");
+  if (first.length < 2) return "there";
+  return first.charAt(0).toUpperCase() + first.slice(1);
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -181,7 +194,7 @@ serve(async (req) => {
         try {
           // Personalize the email
           let html = campaign.body_html
-            .replace(/\{\{NAME\}\}/g, contact.name || "there")
+            .replace(/\{\{NAME\}\}/g, firstNameFor(contact.name))
             .replace(/\{\{UNSUBSCRIBE_LINK\}\}/g, `https://whiterabbitla.com/unsubscribe?email=${encodeURIComponent(contact.email)}`);
 
           // Inject UTM params into all whiterabbitla.com links for GA4 attribution
