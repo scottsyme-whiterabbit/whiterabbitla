@@ -1399,6 +1399,24 @@ const AdminNewsletter = () => {
                       {sending ? "Sending..." : `Send to ${stats.subscribers} Subscribers`}
                     </button>
                   )}
+                  {editedCampaignId && (
+                    <input
+                      type="email"
+                      value={testEmail}
+                      onChange={e => setTestEmail(e.target.value)}
+                      placeholder="test@example.com"
+                      className="bg-forest-dark/50 border border-border text-foreground px-3 py-2 font-sans text-sm focus:outline-none focus:border-accent"
+                    />
+                  )}
+                  {editedCampaignId && (
+                    <button
+                      onClick={() => handleSendTest(editedCampaignId)}
+                      disabled={sending}
+                      className="border border-border text-foreground px-5 py-2 font-sans text-sm tracking-[0.2em] uppercase hover:border-accent transition-colors disabled:opacity-50"
+                    >
+                      Send test
+                    </button>
+                  )}
                   <button onClick={resetCompose} className="text-muted-foreground hover:text-foreground px-3 py-2 text-sm">
                     Reset
                   </button>
