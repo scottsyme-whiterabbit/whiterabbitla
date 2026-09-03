@@ -247,15 +247,25 @@ serve(async (req) => {
       }
     }
 
-    // Update campaign status
+    // How many eligible recipients remain after this run
+    let remaining = 0;
+    try {
+      remaining = (await fetchEligible()).length;
+    } catch (_e) {
+      remaining = 0;
+    }
+    const totalLogged = await countSendLog();
+
     await supabase.from("newsletter_campaigns").update({
-      status: "sent",
-      sent_count: sentCount,
+      status: remaining === 0 ? "sent" : "draft",
+      sent_count: totalLogged,
     }).eq("id", campaignId);
 
     return new Response(JSON.stringify({
       success: true,
       sent: sentCount,
+      remaining,
+      segment: segmentKey || "all",
       total: contacts.length,
       errors: errors.length > 0 ? errors : undefined,
     }), {
