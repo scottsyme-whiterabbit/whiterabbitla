@@ -4,7 +4,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
+    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version, x-cron-secret",
 };
 
 function greetingFor(raw: string | null): string {
@@ -42,11 +42,36 @@ serve(async (req) => {
   try {
     const { campaignId, adminPassword, testEmail, segment, maxSends } = await req.json();
     
-    // Simple password check
-    if (adminPassword !== Deno.env.get("ADMIN_PASSWORD")) {
+    // Auth: either the admin password (browser / manual send from /admin)
+    // or a valid x-cron-secret header (scheduled send from pg_cron).
+    const cronAccepted = [Deno.env.get("CRON_SECRET"), Deno.env.get("CRON_SECRET_V2")].filter(Boolean);
+    const cronProvided = req.headers.get("x-cron-secret") || "";
+    const isCron = cronAccepted.length > 0 && cronAccepted.includes(cronProvided);
+    const isAdmin = adminPassword === Deno.env.get("ADMIN_PASSWORD");
+
+    if (!isCron && !isAdmin) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
+    }
+
+    // A scheduled run must never fire a test email or an unsegmented blast.
+    if (isCron && !isAdmin) {
+      if (testEmail) {
+        return new Response(JSON.stringify({ error: "Cron runs cannot send test emails" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (!segment || segment === "all") {
+        return new Response(JSON.stringify({ error: "Cron runs require an explicit segment" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (typeof maxSends !== "number" || maxSends <= 0 || maxSends > 500) {
+        return new Response(JSON.stringify({ error: "Cron runs require maxSends between 1 and 500" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
     }
 
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
