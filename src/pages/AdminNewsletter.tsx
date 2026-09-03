@@ -490,7 +490,7 @@ const AdminNewsletter = () => {
   };
 
   const handleApproveAndSend = async (campaignId: string) => {
-    if (!confirm(`Send this email to ${stats.subscribers} subscribers?`)) return;
+    if (!confirm(`Send up to ${maxSends} emails to the "${segment}" segment now?`)) return;
     setSending(true);
     try {
       // First approve
@@ -504,11 +504,11 @@ const AdminNewsletter = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${SUPABASE_KEY}`,
         },
-        body: JSON.stringify({ campaignId, adminPassword: storedPassword }),
+        body: JSON.stringify({ campaignId, adminPassword: storedPassword, segment, maxSends }),
       });
       const data = await res.json();
       if (res.ok) {
-        toast.success(`Sent to ${data.sent} of ${data.total} contacts`);
+        toast.success("Sent " + data.sent + ". Remaining in this segment: " + data.remaining);
         loadData();
         resetCompose();
       } else {
