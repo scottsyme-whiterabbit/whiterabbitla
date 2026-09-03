@@ -13,7 +13,7 @@ serve(async (req) => {
   }
 
   try {
-    const { campaignId, adminPassword, testEmail } = await req.json();
+    const { campaignId, adminPassword, testEmail, segment, maxSends } = await req.json();
     
     // Simple password check
     if (adminPassword !== Deno.env.get("ADMIN_PASSWORD")) {
@@ -104,27 +104,68 @@ serve(async (req) => {
       });
     }
 
-    if (campaign.status === "sent" || campaign.status === "sending") {
+    if (campaign.status === "sent") {
       return new Response(JSON.stringify({ error: `Campaign already ${campaign.status}` }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
+    const segmentKey: string = segment && segment !== "all" ? segment : "";
+
+    // Helper: eligible recipients = subscribed (optionally segmented) minus anyone already in the send log
+    const fetchEligible = async () => {
+      let q = supabase.from("newsletter_contacts").select("id, email, name").eq("subscribed", true);
+      if (segmentKey) q = q.eq("drip_campaign", segmentKey);
+      const { data: all, error: err } = await q;
+      if (err) throw err;
+
+      const sentIds = new Set<string>();
+      let from = 0;
+      while (true) {
+        const { data: logRows, error: logErr } = await supabase
+          .from("newsletter_send_log")
+          .select("contact_id")
+          .eq("campaign_id", campaignId)
+          .range(from, from + 999);
+        if (logErr) throw logErr;
+        (logRows || []).forEach((r: { contact_id: string }) => sentIds.add(r.contact_id));
+        if (!logRows || logRows.length < 1000) break;
+        from += 1000;
+      }
+
+      return (all || []).filter((c) => !sentIds.has(c.id));
+    };
+
+    const countSendLog = async () => {
+      const { count } = await supabase
+        .from("newsletter_send_log")
+        .select("id", { count: "exact", head: true })
+        .eq("campaign_id", campaignId);
+      return count || 0;
+    };
+
     // Mark as sending
     await supabase.from("newsletter_campaigns").update({ status: "sending" }).eq("id", campaignId);
 
-    // Get subscribed contacts
-    const { data: contacts, error: contactsError } = await supabase
-      .from("newsletter_contacts")
-      .select("id, email, name")
-      .eq("subscribed", true);
+    let eligible: Array<{ id: string; email: string; name: string | null }> = [];
+    try {
+      eligible = await fetchEligible();
+    } catch (_e) {
+      await supabase.from("newsletter_campaigns").update({ status: "draft" }).eq("id", campaignId);
+      return new Response(JSON.stringify({ error: "Failed to load recipients" }), {
+        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
-    if (contactsError || !contacts?.length) {
+    if (!eligible.length) {
       await supabase.from("newsletter_campaigns").update({ status: "draft" }).eq("id", campaignId);
       return new Response(JSON.stringify({ error: "No subscribed contacts found" }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
+    const limit = typeof maxSends === "number" && maxSends > 0 ? maxSends : 0;
+    const contacts = limit ? eligible.slice(0, limit) : eligible;
 
     let sentCount = 0;
     const errors: string[] = [];
