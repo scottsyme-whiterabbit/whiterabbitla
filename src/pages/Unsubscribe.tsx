@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import AnimatedSection from "@/components/AnimatedSection";
 import SEOHead from "@/components/SEOHead";
+
+const UNSUBSCRIBE_FN_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/unsubscribe-oneclick";
 
 const Unsubscribe = () => {
   const seoTitle = "Unsubscribed | White Rabbit Magic";
@@ -20,20 +21,20 @@ const Unsubscribe = () => {
 
     const unsubscribe = async () => {
       try {
-        const { error } = await supabase.functions.invoke("email-webhook", {
-          body: {
-            type: "unsubscribe_manual",
-            data: { email_address: email },
-          },
+        // Hit the unsubscribe-oneclick edge function directly (GET): it
+        // unsubscribes from both newsletter contacts and cold campaigns,
+        // halts nurture, and writes an audit row.
+        const res = await fetch(`${UNSUBSCRIBE_FN_URL}?email=${encodeURIComponent(email)}`, {
+          method: "GET",
         });
 
-        if (error) throw error;
+        if (!res.ok) {
+          throw new Error(`Unsubscribe request failed: ${res.status}`);
+        }
         setStatus("success");
       } catch (err) {
         console.error("Unsubscribe error:", err);
-        // Even if the backend call fails, show success to the user
-        // (the email may not exist in our list, which is fine)
-        setStatus("success");
+        setStatus("error");
       }
     };
 
