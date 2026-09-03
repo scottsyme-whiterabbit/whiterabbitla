@@ -7,17 +7,31 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-function firstNameFor(raw: string | null): string {
+function greetingFor(raw: string | null): string {
+  const clean = (s: string) => s.replace(/[^\p{L}\p{M}'-]/gu, "").trim();
+  const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
   const n = (raw || "").trim();
   if (!n) return "there";
-  // Organisation-style names get a neutral greeting
-  if (/(\bteam\b|\bevents?\b|\bgroup\b|\bllc\b|\binc\b|\bco\b|\bstudio\b|\bagency\b|\bmanagement\b|\bproperties\b|\bresidences\b|\bapartments\b|&|^the\s)/i.test(n)) {
-    return "there";
+
+  // Organisations and venues get a warm collective greeting
+  const ORG = /(\bteam\b|\bevents?\b|\bgroup\b|\bllc\b|\binc\b|\bco\b|\bstudio\b|\bagency\b|\bmanagement\b|\bproperties\b|\bresidences\b|\bapartments\b|\bclub\b|\bwedding\b|\bdestination\b|\bcollective\b|\bhotel\b|^the\s)/i;
+  if (ORG.test(n)) return "team";
+
+  // Two-person pairs: "Aleah & Nick" or "Jodi and Sarah" -> "Aleah and Nick"
+  const parts = n.split(/\s*(?:&|\band\b)\s*/i);
+  if (parts.length === 2) {
+    const a = clean(parts[0]);
+    const b = clean(parts[1]);
+    if (a.length >= 2 && b.length >= 2 && !parts[0].trim().includes(" ") && !parts[1].trim().includes(" ")) {
+      return `${cap(a)} and ${cap(b)}`;
+    }
   }
-  // Otherwise take the first token, stripped of trailing punctuation
-  const first = n.split(/\s+/)[0].replace(/[^\p{L}\p{M}'-]/gu, "");
+
+  // Otherwise first name only
+  const first = clean(n.split(/\s+/)[0]);
   if (first.length < 2) return "there";
-  return first.charAt(0).toUpperCase() + first.slice(1);
+  return cap(first);
 }
 
 serve(async (req) => {
@@ -194,7 +208,7 @@ serve(async (req) => {
         try {
           // Personalize the email
           let html = campaign.body_html
-            .replace(/\{\{NAME\}\}/g, firstNameFor(contact.name))
+            .replace(/\{\{NAME\}\}/g, greetingFor(contact.name))
             .replace(/\{\{UNSUBSCRIBE_LINK\}\}/g, `https://whiterabbitla.com/unsubscribe?email=${encodeURIComponent(contact.email)}`);
 
           // Inject UTM params into all whiterabbitla.com links for GA4 attribution
