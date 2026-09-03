@@ -489,6 +489,9 @@ const AdminNewsletter = () => {
     }
   };
 
+  const [segment, setSegment] = useState("planner-pulse");
+  const [maxSends, setMaxSends] = useState(200);
+
   const handleApproveAndSend = async (campaignId: string) => {
     if (!confirm(`Send up to ${maxSends} emails to the "${segment}" segment now?`)) return;
     setSending(true);
