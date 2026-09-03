@@ -2,15 +2,25 @@
 // Compliant with RFC 8058 (Gmail / Yahoo bulk sender requirements as of Feb 2024).
 //
 // Endpoints:
-//   POST /unsubscribe-oneclick?email=foo@bar.com   → marks unsubscribed, returns 204
-//   GET  /unsubscribe-oneclick?email=foo@bar.com   → marks unsubscribed, returns simple HTML
-//                                                    (fallback if a human follows the link)
+//   POST /unsubscribe-oneclick?email=foo@bar.com   → unsubscribes. A POST is the only
+//                                                    way state changes: mail clients
+//                                                    (Gmail / Apple Mail native button)
+//                                                    and the browser confirmation form
+//                                                    both POST here.
+//   GET  /unsubscribe-oneclick?email=foo@bar.com   → shows a confirmation page with a
+//                                                    form that POSTs back. GET NEVER
+//                                                    unsubscribes — link prefetchers
+//                                                    (corporate security scanners like
+//                                                    Proofpoint / Mimecast URL defense)
+//                                                    use GET, and RFC 8058 deliberately
+//                                                    uses POST so prefetching a link
+//                                                    cannot cause a state change.
 //
 // Behavior:
-//   1. Sets status='unsubscribed' + unsubscribed_at=now() on every matching row in
+//   1. POST: Sets status='unsubscribed' + unsubscribed_at=now() on every matching row in
 //      cold_email_campaigns (one email may have multiple category rows).
-//   2. Halts nurture sequence for the same rows (nurture_status='unsubscribed').
-//   3. Adds an immutable audit row to email_unsubscribes.
+//   2. POST: Halts nurture sequence for the same rows (nurture_status='unsubscribed').
+//   3. POST: Adds an immutable audit row to email_unsubscribes.
 //   4. Idempotent — re-POSTing the same email is a no-op success.
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
