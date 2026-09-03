@@ -2,15 +2,25 @@
 // Compliant with RFC 8058 (Gmail / Yahoo bulk sender requirements as of Feb 2024).
 //
 // Endpoints:
-//   POST /unsubscribe-oneclick?email=foo@bar.com   → marks unsubscribed, returns 204
-//   GET  /unsubscribe-oneclick?email=foo@bar.com   → marks unsubscribed, returns simple HTML
-//                                                    (fallback if a human follows the link)
+//   POST /unsubscribe-oneclick?email=foo@bar.com   → unsubscribes. A POST is the only
+//                                                    way state changes: mail clients
+//                                                    (Gmail / Apple Mail native button)
+//                                                    and the browser confirmation form
+//                                                    both POST here.
+//   GET  /unsubscribe-oneclick?email=foo@bar.com   → shows a confirmation page with a
+//                                                    form that POSTs back. GET NEVER
+//                                                    unsubscribes — link prefetchers
+//                                                    (corporate security scanners like
+//                                                    Proofpoint / Mimecast URL defense)
+//                                                    use GET, and RFC 8058 deliberately
+//                                                    uses POST so prefetching a link
+//                                                    cannot cause a state change.
 //
 // Behavior:
-//   1. Sets status='unsubscribed' + unsubscribed_at=now() on every matching row in
+//   1. POST: Sets status='unsubscribed' + unsubscribed_at=now() on every matching row in
 //      cold_email_campaigns (one email may have multiple category rows).
-//   2. Halts nurture sequence for the same rows (nurture_status='unsubscribed').
-//   3. Adds an immutable audit row to email_unsubscribes.
+//   2. POST: Halts nurture sequence for the same rows (nurture_status='unsubscribed').
+//   3. POST: Adds an immutable audit row to email_unsubscribes.
 //   4. Idempotent — re-POSTing the same email is a no-op success.
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
@@ -40,6 +50,26 @@ function htmlConfirmation(email: string): string {
     </p>
     <p style="margin:0 0 24px; font-size:15px; line-height:1.6;">Sorry to see you go.</p>
     <p style="margin:0; font-size:14px; color:#555;">— Scott</p>
+  </div>
+</body></html>`;
+}
+
+function htmlConfirmPrompt(email: string): string {
+  return `<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unsubscribe from White Rabbit LA?</title>
+</head>
+<body style="margin:0; padding:0; background:#f8f5f0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; color:#223D34;">
+  <div style="max-width:520px; margin:80px auto; padding:40px 32px; background:#ffffff; border-radius:6px;">
+    <h1 style="margin:0 0 16px; font-size:22px; font-weight:600;">Unsubscribe from White Rabbit LA?</h1>
+    <p style="margin:0 0 24px; font-size:15px; line-height:1.6;">
+      ${email ? `<strong>${email.replace(/[<>&"']/g, "")}</strong> will be removed from all White Rabbit LA emails.` : "Your email will be removed from all White Rabbit LA emails."}
+    </p>
+    <form method="POST" action="?email=${encodeURIComponent(email)}">
+      <button type="submit" style="display:inline-block; background:#223D34; color:#f8f5f0; text-transform:uppercase; letter-spacing:0.15em; padding:14px 28px; border:none; border-radius:6px; font-size:13px; cursor:pointer;">Yes, unsubscribe me</button>
+    </form>
   </div>
 </body></html>`;
 }
@@ -105,7 +135,7 @@ serve(async (req) => {
   try {
     const url = new URL(req.url);
     let email = url.searchParams.get("email") || "";
-    let source = "list_unsubscribe_header";
+    const source = "list_unsubscribe_header";
 
     // Gmail/Yahoo one-click POSTs with body "List-Unsubscribe=One-Click" — email
     // typically lives in the URL query param, but accept POST body fallback.
@@ -125,10 +155,6 @@ serve(async (req) => {
       }
     }
 
-    if (req.method === "GET") {
-      source = "list_unsubscribe_header_get";
-    }
-
     if (!email) {
       // RFC 8058 expects 200 even on bad input for one-click POST so the mail
       // client doesn't retry. But return a useful body for GET.
@@ -141,19 +167,30 @@ serve(async (req) => {
       });
     }
 
+    // GET must be safe: it only renders the confirmation page and never
+    // unsubscribes. Link prefetchers (corporate security scanners) use GET, and
+    // RFC 8058 deliberately uses POST so prefetching cannot cause a state change.
+    if (req.method === "GET") {
+      return new Response(htmlConfirmPrompt(email), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
+      });
+    }
+
     const ua = req.headers.get("user-agent");
     const result = await processUnsubscribe(email, source, ua);
 
-    if (req.method === "POST") {
-      // Gmail/Yahoo only need 200/204 with no body
-      return new Response(null, { status: 200, headers: corsHeaders });
+    // A browser form POST (Accept includes text/html) gets the confirmation page;
+    // the Gmail/Yahoo machine POST still gets an empty 200.
+    const accept = req.headers.get("accept") || "";
+    if (result.ok && accept.includes("text/html")) {
+      return new Response(htmlConfirmation(email), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
+      });
     }
-
-    // GET → human-friendly HTML page
-    return new Response(htmlConfirmation(result.ok ? email : ""), {
-      status: 200,
-      headers: { ...corsHeaders, "Content-Type": "text/html; charset=utf-8" },
-    });
+    // Mail clients only need 200/204 with no body
+    return new Response(null, { status: 200, headers: corsHeaders });
   } catch (error) {
     console.error("unsubscribe-oneclick error:", error);
     // Even on error, return 200 for POST so mail clients don't retry
