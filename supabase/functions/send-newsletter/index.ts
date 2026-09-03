@@ -47,6 +47,63 @@ serve(async (req) => {
       });
     }
 
+    // TEST EMAIL PATH: send one copy to testEmail without touching status,
+    // contacts, send log, or sent_count.
+    if (testEmail) {
+      const testContactId = "test";
+      let testHtml = campaign.body_html
+        .replace(/\{\{NAME\}\}/g, "Scott")
+        .replace(/\{\{UNSUBSCRIBE_LINK\}\}/g, `https://whiterabbitla.com/unsubscribe?email=${encodeURIComponent(testEmail)}`);
+
+      const campaignSlug = (campaign.campaign_type || "newsletter").replace(/\s+/g, "-").toLowerCase();
+      testHtml = testHtml.replace(
+        /href="(https:\/\/whiterabbitla\.com[^"]*?)"/g,
+        (_match: string, url: string) => {
+          if (url.includes("utm_source") || url.includes("/unsubscribe")) return `href="${url}"`;
+          const sep = url.includes("?") ? "&" : "?";
+          return `href="${url}${sep}utm_source=email&utm_medium=newsletter&utm_campaign=${encodeURIComponent(campaignSlug)}&utm_content=${encodeURIComponent(campaignId)}"`;
+        }
+      );
+
+      const openPixel = `<img src="https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-open?cid=${testContactId}&step=0&cam=${campaignId}" width="1" height="1" style="display:block;width:1px;height:1px;border:0;" alt="" />`;
+      if (testHtml.includes("</body>")) {
+        testHtml = testHtml.replace("</body>", `${openPixel}</body>`);
+      } else {
+        testHtml += openPixel;
+      }
+
+      const testRes = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${RESEND_API_KEY}`,
+        },
+        body: JSON.stringify({
+          from: "White Rabbit <scott.syme@whiterabbitla.com>",
+          to: [testEmail],
+          reply_to: "events@whiterabbitla.com",
+          subject: `[TEST] ${campaign.subject}`,
+          html: testHtml,
+          text: `${campaign.subject}\n\nView this email in your browser. If you'd like to unsubscribe, visit: https://whiterabbitla.com/unsubscribe?email=${encodeURIComponent(testEmail)}\n\nWhite Rabbit · Los Angeles\n7393 W. Manchester Ave #209, Los Angeles, CA 90045`,
+          headers: {
+            "List-Unsubscribe": `<https://whiterabbitla.com/unsubscribe?email=${encodeURIComponent(testEmail)}>, <mailto:events@whiterabbitla.com?subject=Unsubscribe>`,
+            "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+          },
+        }),
+      });
+
+      if (!testRes.ok) {
+        const errData = await testRes.json();
+        return new Response(JSON.stringify({ error: errData.message || JSON.stringify(errData) }), {
+          status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      return new Response(JSON.stringify({ success: true, test: true, sentTo: testEmail }), {
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     if (campaign.status === "sent" || campaign.status === "sending") {
       return new Response(JSON.stringify({ error: `Campaign already ${campaign.status}` }), {
         status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
