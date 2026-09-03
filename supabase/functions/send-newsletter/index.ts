@@ -13,7 +13,7 @@ serve(async (req) => {
   }
 
   try {
-    const { campaignId, adminPassword } = await req.json();
+    const { campaignId, adminPassword, testEmail } = await req.json();
     
     // Simple password check
     if (adminPassword !== Deno.env.get("ADMIN_PASSWORD")) {
