@@ -194,7 +194,7 @@ serve(async (req) => {
         try {
           // Personalize the email
           let html = campaign.body_html
-            .replace(/\{\{NAME\}\}/g, contact.name || "there")
+            .replace(/\{\{NAME\}\}/g, firstNameFor(contact.name))
             .replace(/\{\{UNSUBSCRIBE_LINK\}\}/g, `https://whiterabbitla.com/unsubscribe?email=${encodeURIComponent(contact.email)}`);
 
           // Inject UTM params into all whiterabbitla.com links for GA4 attribution
