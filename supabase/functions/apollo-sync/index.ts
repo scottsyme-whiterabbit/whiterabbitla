@@ -42,7 +42,15 @@ const LABEL_MAP: { category: string; labels: string[] }[] = [
       "69dfaaa95ef01f0019e0ff27",
     ],
   },
-  { category: "corporate_planner", labels: ["69b98e15e97baf001973ad4d", "69ca9292035c670011a33a96"] },
+  {
+    category: "corporate_planner",
+    labels: [
+      "69b98e15e97baf001973ad4d", // Corporate
+      "69ca9292035c670011a33a96", // corporate
+      "69b34aaf41e83b000c97420a", // Events Planners (141 contacts)
+      "69b34ab941e83b000c974247", // DMC Planners (144 contacts)
+    ],
+  },
 ];
 
 const ROLE_PREFIXES = new Set([
