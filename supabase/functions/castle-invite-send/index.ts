@@ -155,17 +155,20 @@ serve(async (req) => {
     // Auth gate — required before any DB read/write or Resend send.
     // Accepted: x-cron-secret header / body.cron_secret === CRON_SECRET,
     // or body.adminPassword === ADMIN_PASSWORD.
-    const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
+    const acceptedCronSecrets = [Deno.env.get("CRON_SECRET"), Deno.env.get("CRON_SECRET_V2")]
+      .filter((s): s is string => !!s && s.length > 0);
     const adminPasswordEnv = Deno.env.get("ADMIN_PASSWORD") ?? "";
     let dryRun = false;
     let adminOk = false;
-    let cronOk = req.headers.get("x-cron-secret") === cronSecret && cronSecret.length > 0;
+    let provided = req.headers.get("x-cron-secret")
+      || (req.headers.get("authorization") ?? "").replace(/^Bearer\s+/i, "");
     if (req.method === "POST") {
       const body = await req.json().catch(() => ({}));
       dryRun = !!body.dryRun;
       adminOk = adminPasswordEnv.length > 0 && body.adminPassword === adminPasswordEnv;
-      cronOk = cronOk || (cronSecret.length > 0 && body.cron_secret === cronSecret);
+      provided = provided || body.cron_secret || "";
     }
+    const cronOk = acceptedCronSecrets.length > 0 && acceptedCronSecrets.includes(provided || "");
     if (!adminOk && !cronOk) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
