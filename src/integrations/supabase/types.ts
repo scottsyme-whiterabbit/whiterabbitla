@@ -2015,7 +2015,9 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      deals_awaiting_reply: { Args: never; Returns: Json }
       get_resident_opens_stats: { Args: never; Returns: Json }
+      system_health: { Args: never; Returns: Json }
     }
     Enums: {
       [_ in never]: never
