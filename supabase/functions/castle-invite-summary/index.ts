@@ -13,15 +13,18 @@ serve(async (req) => {
 
   try {
     // Auth gate — required before any DB read or Resend send.
-    const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
+    const acceptedCronSecrets = [Deno.env.get("CRON_SECRET"), Deno.env.get("CRON_SECRET_V2")]
+      .filter((s): s is string => !!s && s.length > 0);
     const adminPasswordEnv = Deno.env.get("ADMIN_PASSWORD") ?? "";
     let adminOk = false;
-    let cronOk = cronSecret.length > 0 && req.headers.get("x-cron-secret") === cronSecret;
+    let provided = req.headers.get("x-cron-secret")
+      || (req.headers.get("authorization") ?? "").replace(/^Bearer\s+/i, "");
     if (req.method === "POST") {
       const body = await req.json().catch(() => ({}));
       adminOk = adminPasswordEnv.length > 0 && body.adminPassword === adminPasswordEnv;
-      cronOk = cronOk || (cronSecret.length > 0 && body.cron_secret === cronSecret);
+      provided = provided || body.cron_secret || "";
     }
+    const cronOk = acceptedCronSecrets.length > 0 && acceptedCronSecrets.includes(provided || "");
     if (!adminOk && !cronOk) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
