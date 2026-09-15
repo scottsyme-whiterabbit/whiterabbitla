@@ -47,11 +47,34 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
 
     const { data: deal } = await supabase
       .from("deals")
-      .select("id, stage, event_type, event_date, event_time, location, contact_name, contact_email, company, guest_count, deal_value, notes, calendar_event_id")
+      .select("id, stage, event_type, event_date, event_time, location, contact_name, contact_email, phone, company, guest_count, deal_value, notes, next_follow_up, calendar_event_id")
       .eq("id", dealId)
       .maybeSingle();
     if (!deal) return;
-    if (!GCAL_BOOKED_STAGES.has(deal.stage)) return;
+
+    const isBooked = GCAL_BOOKED_STAGES.has(deal.stage);
+    const isHold = GCAL_HOLD_STAGES.has(deal.stage);
+
+    // Deal died: pull the hold off the calendar so the night frees up again.
+    if (GCAL_CANCEL_STAGES.has(deal.stage) && deal.calendar_event_id) {
+      await fetch(
+        `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(deal.calendar_event_id)}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${LOVABLE_API_KEY}`,
+            "X-Connection-Api-Key": GCAL_API_KEY,
+          },
+        },
+      ).catch(() => {});
+      await supabase.from("deals").update({
+        calendar_event_id: null,
+        last_calendar_sync_at: new Date().toISOString(),
+      }).eq("id", deal.id);
+      return;
+    }
+
+    if (!isBooked && !isHold) return;
     if (!deal.event_date) return;
 
     const times = computeEventTimes(deal.event_date, deal.event_time);
@@ -64,21 +87,79 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
       other: "Event",
     };
     const eventLabel = eventTypeLabels[deal.event_type || "other"] || "Event";
-    const summary = `🎩 BOOKED — ${eventLabel}: ${who}${deal.company ? ` (${deal.company})` : ""}`;
+    const stageLabels: Record<string, string> = {
+      proposal_sent: "Proposal sent, awaiting signature",
+      negotiating: "In conversation",
+      on_hold: "On hold",
+      booked: "Booked and confirmed",
+      completed: "Completed",
+    };
+
+    // The proposal (if any) gives us the tier, the pricing and a link to open.
+    let proposalSlug: string | null = null;
+    let proposalTiers: Array<{ name?: string; price?: string; recommended?: boolean }> = [];
+    let signedTier: string | null = null;
+    try {
+      const { data: prop } = await supabase
+        .from("proposals")
+        .select("slug, tiers, sent_at, created_at")
+        .eq("deal_id", deal.id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (prop) {
+        proposalSlug = prop.slug || null;
+        proposalTiers = Array.isArray(prop.tiers) ? prop.tiers : [];
+      }
+      const { data: agreement } = await supabase
+        .from("signed_agreements")
+        .select("tier_name, tier_price, signed_at")
+        .eq("deal_id", deal.id)
+        .order("signed_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (agreement) signedTier = [agreement.tier_name, agreement.tier_price].filter(Boolean).join(" ") || null;
+    } catch (_e) { /* enrichment is best effort */ }
+
+    const summary = `${isBooked ? "🎩 BOOKED" : "🎩 HOLD"}: ${eventLabel} for ${who}${deal.company ? ` (${deal.company})` : ""}`;
+    const proposalLine = proposalSlug ? `Proposal: https://whiterabbitla.com/proposal/${proposalSlug}` : null;
+    const tierLine = signedTier
+      ? `Experience: ${signedTier}`
+      : proposalTiers.length
+        ? `Quoted: ${proposalTiers.map((t) => `${t?.name || "Option"}${t?.price ? ` ${t.price}` : ""}`).join(" / ")}`
+        : null;
+
     const descLines = [
+      isBooked
+        ? "Confirmed show. Everything below is pulled live from the White Rabbit CRM."
+        : "Tentative hold while the proposal is out. This becomes BOOKED automatically once they sign and the deposit lands.",
+      "",
+      `Status: ${stageLabels[deal.stage] || deal.stage}`,
+      `Occasion: ${eventLabel}`,
+      deal.event_time ? `Start time: ${String(deal.event_time).slice(0, 5)}` : "Start time: to be confirmed",
+      deal.location ? `Venue: ${deal.location}` : "Venue: to be confirmed",
+      deal.guest_count ? `Guests: ${deal.guest_count}` : null,
+      "",
       `Client: ${who}`,
       deal.contact_email ? `Email: ${deal.contact_email}` : null,
+      deal.phone ? `Phone: ${deal.phone}` : null,
       deal.company ? `Company: ${deal.company}` : null,
-      deal.guest_count ? `Guests: ${deal.guest_count}` : null,
+      "",
+      tierLine,
       deal.deal_value ? `Value: $${(deal.deal_value / 100).toLocaleString()}` : null,
+      proposalLine,
+      deal.next_follow_up ? `Next follow up: ${deal.next_follow_up}` : null,
       deal.notes ? `\nNotes:\n${deal.notes}` : null,
-      `\n— White Rabbit CRM deal ${deal.id}`,
-    ].filter(Boolean).join("\n");
+      `\nWhite Rabbit CRM deal ${deal.id}`,
+    ].filter((l) => l !== null && l !== undefined).join("\n");
 
-    const body = {
+    const body: Record<string, unknown> = {
       summary,
       location: deal.location || undefined,
       description: descLines,
+      colorId: isBooked ? "10" : "5",
+      transparency: isBooked ? "opaque" : "tentative" === "tentative" ? "opaque" : "opaque",
+      status: isBooked ? "confirmed" : "tentative",
       ...times,
     };
 
