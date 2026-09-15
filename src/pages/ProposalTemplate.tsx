@@ -5,7 +5,7 @@ import OrnamentalDivider from "@/components/OrnamentalDivider";
 import SignAgreementModal from "@/components/SignAgreementModal";
 import threeStars from "@/assets/three-stars-gold.png";
 import wrScriptLogo from "@/assets/wr-wordmark-cream.png";
-import { DEFAULT_GALLERY_KEYS, photoKeyToSrc } from "@/data/proposalAssets";
+import { DEFAULT_GALLERY_KEYS, photoKeyToSrc, reviewsForEventType } from "@/data/proposalAssets";
 
 import netflixLogo from "@/assets/logos/netflix.png";
 import disneyLogo from "@/assets/logos/disney.png";
@@ -371,23 +371,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
             <h2 className="font-serif font-light text-3xl md:text-4xl text-forest-dark mt-6">A Few Words From the Room</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-5 md:gap-6">
-            {[
-              {
-                text: "That was well worth it.",
-                name: "Don Cheadle",
-                role: "Actor",
-              },
-              {
-                text: "Beyond magnificent. Scott is mesmerizing and my guests were in awe the entire time. I was truly blown away and will most definitely be booking him for future events.",
-                name: "Farnaz F.",
-                role: "40th Birthday, Gravitas Beverly Hills",
-              },
-              {
-                text: "Scott performed at a 200-person event for us this week and the guests absolutely LOVED him. I could not recommend him more. We can't wait to have him back.",
-                name: "Jamie I.",
-                role: "Morgan Stanley",
-              },
-            ].map((r, i) => (
+            {reviewsForEventType(data.event_type).map((r, i) => (
               <figure key={i} className="relative bg-cream border border-forest-dark/10 p-6 md:p-7 flex flex-col">
                 <span className="absolute top-0 left-0 w-4 h-px bg-gold/70" />
                 <span className="absolute top-0 left-0 w-px h-4 bg-gold/70" />
