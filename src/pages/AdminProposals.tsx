@@ -735,7 +735,7 @@ const ProposalEditor = ({
                   <li key={r.name} className="text-xs text-forest-dark/80">
                     <span className="font-medium">{r.name}</span>
                     <span className="text-forest-dark/50"> · {r.role} · </span>
-                    <span className="italic">"{r.text.length > 90 ? r.text.slice(0, 90) + "…" : r.text}"</span>
+                    <span>"{r.text.length > 90 ? r.text.slice(0, 90) + "…" : r.text}"</span>
                   </li>
                 ))}
               </ul>
