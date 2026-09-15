@@ -158,7 +158,7 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
       location: deal.location || undefined,
       description: descLines,
       colorId: isBooked ? "10" : "5",
-      transparency: isBooked ? "opaque" : "tentative" === "tentative" ? "opaque" : "opaque",
+      transparency: "opaque",
       status: isBooked ? "confirmed" : "tentative",
       ...times,
     };
