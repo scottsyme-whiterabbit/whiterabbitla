@@ -612,6 +612,33 @@ White Rabbit LA`,
         .select()
         .single();
       if (error) return json({ error: error.message }, 500);
+
+      // If the date, venue or occasion moved, keep the calendar hold in step.
+      try {
+        if (data?.deal_id && (updates.event_date || updates.venue || updates.event_type)) {
+          const dealPatch: Record<string, unknown> = {};
+          if (updates.event_date) {
+            const d = new Date(updates.event_date);
+            if (!isNaN(d.getTime())) dealPatch.event_date = d.toISOString().slice(0, 10);
+          }
+          if (updates.venue) dealPatch.location = updates.venue;
+          if (updates.event_type) dealPatch.event_type = updates.event_type;
+          if (Object.keys(dealPatch).length) {
+            await supabase.from("deals").update(dealPatch).eq("id", data.deal_id);
+          }
+          await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${SERVICE_KEY}` },
+            body: JSON.stringify({
+              action: "sync_deal_calendar",
+              adminPassword: ADMIN_PASSWORD,
+              dealId: data.deal_id,
+            }),
+          }).catch(() => {});
+        }
+      } catch (e) {
+        console.error("calendar hold refresh failed:", (e as Error).message);
+      }
       return json({ proposal: data });
     }
 
@@ -907,15 +934,18 @@ White Rabbit LA · 7393 W. Manchester Ave #209, Los Angeles, CA 90045`;
               .select("id, stage")
               .eq("contact_email", prop.recipient_email.toLowerCase())
               .maybeSingle();
+            let dealId: string | null = existing?.id || null;
             if (existing) {
-              const updates: any = { stage: "proposal_sent", source_id: prop.id, source: "proposal" };
+              const updates: any = { source_id: prop.id, source: "proposal" };
+              // Never demote a deal that is already booked or completed.
+              if (!["booked", "completed"].includes(existing.stage)) updates.stage = "proposal_sent";
               if (eventDate) updates.event_date = eventDate;
               if (prop.venue) updates.location = prop.venue;
               if (prop.event_type) updates.event_type = prop.event_type;
               if (contactName) updates.contact_name = contactName;
               await supabase.from("deals").update(updates).eq("id", existing.id);
             } else {
-              await supabase.from("deals").insert({
+              const { data: createdDeal } = await supabase.from("deals").insert({
                 contact_email: prop.recipient_email.toLowerCase(),
                 contact_name: contactName,
                 event_type: prop.event_type || null,
@@ -925,7 +955,29 @@ White Rabbit LA · 7393 W. Manchester Ave #209, Los Angeles, CA 90045`;
                 source: "proposal",
                 source_id: prop.id,
                 notes: `Auto-created when proposal sent on ${new Date().toLocaleDateString()}`,
-              });
+              }).select("id").maybeSingle();
+              dealId = createdDeal?.id || null;
+            }
+
+            // Link the proposal to the deal, then place a tentative 🎩 HOLD on the
+            // calendar for the event date. It is upgraded in place to 🎩 BOOKED
+            // when the client signs.
+            if (dealId) {
+              await supabase.from("proposals").update({ deal_id: dealId }).eq("id", prop.id);
+              if (eventDate) {
+                await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${SERVICE_KEY}`,
+                  },
+                  body: JSON.stringify({
+                    action: "sync_deal_calendar",
+                    adminPassword: ADMIN_PASSWORD,
+                    dealId,
+                  }),
+                }).catch(() => {});
+              }
             }
           }
         } catch (e) {
