@@ -562,3 +562,95 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
     closing_attribution: "",
   },
 };
+
+// ── PROPOSAL REVIEWS BY EVENT TYPE ──
+// The Don Cheadle line leads every proposal. The two that follow are matched
+// to the event type so a wedding host reads wedding words, a corporate host
+// reads corporate words. Unknown types fall back to the private-event set.
+export interface ProposalReview { text: string; name: string; role: string; }
+
+export const ANCHOR_REVIEW: ProposalReview = {
+  text: "That was well worth it.",
+  name: "Don Cheadle",
+  role: "Actor",
+};
+
+const REVIEWS_BY_TYPE: Record<string, ProposalReview[]> = {
+  Wedding: [
+    {
+      text: "We had Scott perform at our wedding. Our guests LOVED him. Actual quotes from my guests: \"I can't stop thinking about how great Scott the magician was.\" \"My mind was BLOWN.\" Very smooth with sleight of hand and misdirection. Would hire him again in a heartbeat.",
+      name: "Maya L.",
+      role: "Wedding in San Marcos",
+    },
+    {
+      text: "Look no further if you want a magician at your next event. Scott performed at our wedding cocktail hour and the next day, he's all anyone could talk about. Scott kept our 100+ guests thoroughly entertained.",
+      name: "John H.",
+      role: "Wedding in Pasadena",
+    },
+  ],
+  "Corporate Event": [
+    {
+      text: "Scott performed at a 200-person event for us this week and the guests absolutely LOVED him. I could not recommend him more. We can't wait to have him back.",
+      name: "Jamie I.",
+      role: "Morgan Stanley",
+    },
+    {
+      text: "Scott is an amazing magician. We had him showcase his skills at a company holiday luncheon. He is a true professional.",
+      name: "Tim C.",
+      role: "Company Holiday Luncheon",
+    },
+  ],
+  "Holiday Party": [
+    {
+      text: "Scott put on an amazing show at our holiday party. All the guests loved him and were blown away by his magic. Second year in a row hiring him and he knocks it out of the park both times.",
+      name: "Taylor R.",
+      role: "Corporate Holiday Party",
+    },
+    {
+      text: "My company hosted a holiday dinner last Friday, and we had the pleasure of experiencing Scott's magic show. He is incredible and had the whole room captivated.",
+      name: "Grace G.",
+      role: "Corporate Holiday Dinner",
+    },
+  ],
+  Fundraiser: [
+    {
+      text: "We had Scott perform magic for a black tie event recently. Scott absolutely did an amazing job engaging with everyone.",
+      name: "Andres O.",
+      role: "Black Tie Event",
+    },
+    {
+      text: "Scott performed at a 200-person event for us this week and the guests absolutely LOVED him. I could not recommend him more.",
+      name: "Jamie I.",
+      role: "Morgan Stanley",
+    },
+  ],
+  Birthday: [
+    {
+      text: "Beyond magnificent. Scott is mesmerizing and my guests were in awe the entire time. I was truly blown away and will most definitely be booking him for future events.",
+      name: "Farnaz F.",
+      role: "40th Birthday, Gravitas Beverly Hills",
+    },
+    {
+      text: "Scott performed up close magic for small groups at my 40th birthday party and was OUTSTANDING. I can't tell you how many guests told me he was the highlight of the evening.",
+      name: "Meridith F.",
+      role: "40th Birthday Party",
+    },
+  ],
+  "Private Event": [
+    {
+      text: "Beyond magnificent. Scott is mesmerizing and my guests were in awe the entire time. I was truly blown away and will most definitely be booking him for future events.",
+      name: "Farnaz F.",
+      role: "40th Birthday, Gravitas Beverly Hills",
+    },
+    {
+      text: "Scott is a great entertainer who does an excellent job customizing the performance to the specific space and event.",
+      name: "Chris R.",
+      role: "Private Event",
+    },
+  ],
+};
+
+export const reviewsForEventType = (eventType?: string): ProposalReview[] => [
+  ANCHOR_REVIEW,
+  ...(REVIEWS_BY_TYPE[eventType || ""] || REVIEWS_BY_TYPE["Private Event"]),
+];
