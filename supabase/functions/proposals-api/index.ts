@@ -149,6 +149,61 @@ async function buildAgreementPdf(inv: Invoice, agreementText: string): Promise<s
   }
 }
 
+const BOT_UA = /bot|crawler|spider|preview|monitor|slurp|facebookexternalhit|headless|curl|wget|python-requests|okhttp|whatsapp|linkedinbot|bingpreview|google-|proofpoint|barracuda|mimecast|scan/i;
+
+/**
+ * Alert Scott when a client opens their proposal.
+ * Fires on the first ever view, and again on a return visit after 12 quiet hours.
+ */
+async function notifyProposalView(p: any, ua: string, lastViewedAt: string | null) {
+  if (!RESEND_API_KEY) return;
+  if (!ua || BOT_UA.test(ua)) return;
+  if (lastViewedAt) {
+    const hours = (Date.now() - new Date(lastViewedAt).getTime()) / 36e5;
+    if (hours < 12) return;
+  }
+  const name = `${p.first_name || ""} ${p.last_name || ""}`.trim() || "A client";
+  const first = (p.first_name || "").trim() || name;
+  const isFirst = !lastViewedAt;
+  const link = `https://whiterabbitla.com/proposal/${p.slug}`;
+  const rows = [
+    p.event_type ? `<strong>Occasion:</strong> ${esc(p.event_type)}` : "",
+    p.event_date ? `<strong>Date:</strong> ${esc(p.event_date)}` : "",
+    p.venue ? `<strong>Venue:</strong> ${esc(p.venue)}` : "",
+    p.recipient_email ? `<strong>Email:</strong> ${esc(p.recipient_email)}` : "",
+  ].filter(Boolean).join("<br/>");
+  const html = `<div style="background:#F8F6F1;padding:28px;font-family:Helvetica,Arial,sans-serif;color:#223932;">
+    <div style="max-width:600px;margin:0 auto;background:#ffffff;border:1px solid #e3ddd3;padding:26px;">
+      <p style="font-family:Georgia,serif;font-size:22px;margin:0 0 6px;">${esc(first)} ${isFirst ? "just opened" : "came back to"} the proposal</p>
+      <div style="height:2px;background:#DDA73C;width:48px;margin:14px 0 18px;"></div>
+      <p style="font-size:14px;line-height:1.8;margin:0 0 16px;">${rows || "No event details on file."}</p>
+      <p style="font-size:13px;color:#5C7069;line-height:1.7;margin:0 0 20px;">
+        ${isFirst
+          ? "This is the first time it has been opened. A short, warm note within the hour lands well."
+          : "They have read it before and are back for another look. Worth a gentle nudge."}
+      </p>
+      <a href="${link}" style="display:inline-block;background:#223932;color:#F8F6F1;text-decoration:none;padding:12px 22px;font-size:12px;letter-spacing:2px;text-transform:uppercase;">View Proposal</a>
+      <p style="font-size:11px;color:#5C7069;margin:22px 0 0;">White Rabbit LA</p>
+    </div>
+  </div>`;
+  try {
+    await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: "White Rabbit System <alerts@whiterabbitla.com>",
+        to: ["scott.syme@whiterabbitla.com"],
+        reply_to: "scott.syme@whiterabbitla.com",
+        subject: `${name} ${isFirst ? "opened" : "reopened"} their proposal`,
+        html,
+      }),
+    });
+  } catch (e) {
+    console.error("proposal view notification failed", e);
+  }
+}
+
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
@@ -166,12 +221,27 @@ Deno.serve(async (req) => {
       if (!isAdmin(req)) {
         const ua = req.headers.get("user-agent") || "";
         const ref = req.headers.get("referer") || "";
-        supabase.from("proposal_views").insert({
-          proposal_id: data.id,
-          user_agent: ua.slice(0, 500),
-          referrer: ref.slice(0, 500),
-        }).then(() => {});
+        // Record the view, then decide whether this is worth an alert.
+        (async () => {
+          try {
+            const { data: prior } = await supabase
+              .from("proposal_views")
+              .select("viewed_at")
+              .eq("proposal_id", data.id)
+              .order("viewed_at", { ascending: false })
+              .limit(1);
+            await supabase.from("proposal_views").insert({
+              proposal_id: data.id,
+              user_agent: ua.slice(0, 500),
+              referrer: ref.slice(0, 500),
+            });
+            await notifyProposalView(data, ua, prior?.[0]?.viewed_at || null);
+          } catch (e) {
+            console.error("view logging failed", e);
+          }
+        })();
       }
+
       return json({ proposal: data });
     }
 
