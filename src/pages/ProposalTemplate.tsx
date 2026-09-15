@@ -87,6 +87,9 @@ export interface ProposalData {
   closing_attribution?: string | null;
   gallery_photos?: string[]; // optional: brand-photo keys to override default gallery grid
   square_invoice_url?: string | null; // single Square invoice URL, fills every Reserve button if set
+  sent_at?: string | null;
+  created_at?: string | null;
+
 }
 
 interface Props {
@@ -177,6 +180,17 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
   const heroSrc = HERO_MAP[data.hero_image] || HERO_MAP.wedding;
   const fullName = `${data.first_name} ${data.last_name}`.trim();
   const reserveLabel = "Sign & Reserve";
+
+  // The date is held for 7 days from the day the proposal went out.
+  const holdUntil = (() => {
+    const base = data.sent_at || data.created_at;
+    if (!base) return null;
+    const d = new Date(base);
+    if (isNaN(d.getTime())) return null;
+    d.setDate(d.getDate() + 7);
+    return d.toLocaleDateString("en-US", { month: "long", day: "numeric" });
+  })();
+
 
   // Corner flourishes — currently disabled
   const Flourishes = (_: { tone?: "gold" | "cream"; size?: "sm" | "md" | "lg" }) => null;
@@ -346,6 +360,68 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         </div>
       </section>
 
+      {/* WHAT HAPPENS NEXT */}
+      <section className="relative bg-cream py-14 md:py-20 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">What Happens Next</p>
+          <OrnamentalDivider />
+          <div className="grid md:grid-cols-3 gap-6 md:gap-8 mt-10 text-left">
+            {[
+              { n: "One", t: "Choose your evening", d: "Pick the experience that fits your night. One click opens the agreement, already filled in." },
+              { n: "Two", t: "Sign in a minute", d: "Read it, type your name, done. Your copy arrives by email the moment you sign." },
+              { n: "Three", t: "Deposit holds the date", d: "A 50% deposit locks it in. The balance is due the day before, and I take it from there." },
+            ].map((s) => (
+              <div key={s.n} className="relative border border-forest-dark/10 p-6 bg-cream">
+                <span className="absolute top-0 left-0 w-4 h-px bg-gold/70" />
+                <span className="absolute top-0 left-0 w-px h-4 bg-gold/70" />
+                <span className="absolute bottom-0 right-0 w-4 h-px bg-gold/70" />
+                <span className="absolute bottom-0 right-0 w-px h-4 bg-gold/70" />
+                <p className="text-[10px] tracking-[0.35em] uppercase text-gold mb-3">Step {s.n}</p>
+                <h3 className="font-serif text-xl md:text-2xl text-forest-dark mb-2">{s.t}</h3>
+                <p className="font-sans text-sm text-forest-dark/75 leading-relaxed">{s.d}</p>
+              </div>
+            ))}
+          </div>
+          {holdUntil && (
+            <p className="font-sans text-sm text-forest-dark/70 mt-8 max-w-2xl mx-auto">
+              Your date is held through <span className="text-forest-dark font-medium">{holdUntil}</span>. If you need longer, just say so, in writing or on a call, and I will extend the hold.
+            </p>
+          )}
+        </div>
+      </section>
+
+      {/* FOR PLANNERS */}
+      <section className="relative bg-forest-dark text-cream py-14 md:py-20 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">For Planners and Producers</p>
+          <h2 className="font-serif font-light text-3xl md:text-4xl mb-6">Nothing For You To Manage</h2>
+          <div className="flex items-center justify-center gap-3 mb-8">
+            <span className="w-10 h-px bg-gold/60" />
+            <span className="text-gold text-xs">✦</span>
+            <span className="w-10 h-px bg-gold/60" />
+          </div>
+          <p className="font-sans text-base text-cream/80 leading-relaxed max-w-2xl mx-auto mb-10">
+            I book easily and I make the person who booked me look good. Everything below is handled before I walk in.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-x-8 gap-y-4 text-left max-w-2xl mx-auto">
+            {[
+              "$2 million liability insurance, certificate on request",
+              "Fully self-contained, I bring my own lighting, drapes and sound",
+              "W-9, COI and vendor forms returned same day",
+              "Load in, set and strike handled without your crew",
+              "Elegant attire, matched to your dress code",
+              "One pre-event call so your run of show is exact",
+            ].map((line) => (
+              <div key={line} className="flex gap-3 font-sans text-sm text-cream/85 leading-relaxed">
+                <span className="text-gold mt-1 text-[10px]">✦</span>
+                <span>{line}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
       {/* PROOF */}
       <section className="relative bg-cream py-16 md:py-20 px-6">
         <div className="max-w-5xl mx-auto text-center">
@@ -487,7 +563,10 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           </div>
           <div className="font-sans text-base leading-relaxed text-cream/80 max-w-2xl mx-auto space-y-4">
             <p>A 50% deposit holds your date and locks the booking. The remaining 50% is due the day before the event.</p>
-            <p>This proposal, and the date, is held for 14 days from today.</p>
+            <p>{holdUntil
+              ? `This proposal, and your date, is held through ${holdUntil}, seven days from the day I sent it.`
+              : "This proposal, and your date, is held for seven days from the day I sent it."} If you need more time, tell me in writing or on a call and I will happily extend the hold.</p>
+
           </div>
           <div className="grid md:grid-cols-3 gap-3 mt-10 max-w-4xl mx-auto">
             {data.tiers.map((tier, i) => {
