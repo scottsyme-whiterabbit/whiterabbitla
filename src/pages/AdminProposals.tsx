@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2, ArrowLeft, ArrowUp, ArrowDown } from "lucide-react";
 import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type Tier, type TimelineItem, type FaqItem } from "./ProposalTemplate";
-import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, PROPOSAL_TEMPLATES } from "@/data/proposalAssets";
+import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, PROPOSAL_TEMPLATES, STANDARD_TIER_LINES } from "@/data/proposalAssets";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
 import { BiometricUnlockButton, BiometricEnrollPrompt } from "@/components/BiometricUnlockButton";
 import ResidencyAdmin from "@/components/admin/ResidencyAdmin";
@@ -932,9 +932,29 @@ const TierEditor = ({ tier, onChange, onRemove, index }: { tier: Tier; onChange:
             </label>
           </div>
           <div className="md:col-span-2">
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
               <label className={labelCls}>What's included</label>
-              <button onClick={addItem} className="text-xs text-forest-dark/70 hover:text-forest-dark flex items-center gap-1"><Plus className="w-3 h-3" /> Add line</button>
+              <div className="flex items-center gap-2">
+                <select
+                  className="border border-forest-dark/20 px-2 py-1 bg-white text-xs text-forest-dark max-w-[260px]"
+                  value=""
+                  onChange={(e) => {
+                    const line = e.target.value;
+                    if (line && !tier.items.includes(line)) onChange({ items: [...tier.items, line] });
+                    e.target.value = "";
+                  }}
+                >
+                  <option value="">+ Standard line...</option>
+                  {Array.from(new Set(STANDARD_TIER_LINES.map((l) => l.group))).map((group) => (
+                    <optgroup key={group} label={group}>
+                      {STANDARD_TIER_LINES.filter((l) => l.group === group).map((l) => (
+                        <option key={l.text} value={l.text}>{l.text}</option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+                <button onClick={addItem} className="text-xs text-forest-dark/70 hover:text-forest-dark flex items-center gap-1"><Plus className="w-3 h-3" /> Add line</button>
+              </div>
             </div>
             {tier.items.map((it, i) => (
               <div key={i} className="flex gap-2 mb-2 items-center">
