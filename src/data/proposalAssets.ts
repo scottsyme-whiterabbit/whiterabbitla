@@ -654,3 +654,40 @@ export const reviewsForEventType = (eventType?: string): ProposalReview[] => [
   ANCHOR_REVIEW,
   ...(REVIEWS_BY_TYPE[eventType || ""] || REVIEWS_BY_TYPE["Private Event"]),
 ];
+
+// ── STANDARD TIER LINES ──
+// The detail lines Scott reaches for again and again when quoting packages,
+// distilled from the wording across every proposal he has sent. Grouped so the
+// admin builder can offer them as one-click inserts inside the tier editor.
+export interface StandardLine { group: string; text: string; }
+
+export const STANDARD_TIER_LINES: StandardLine[] = [
+  // Consultation
+  { group: "Consultation", text: "Pre-event call with couple and/or planner" },
+  { group: "Consultation", text: "Full pre-event consultation with couple and planner" },
+  { group: "Consultation", text: "Pre-event call with planner" },
+  { group: "Consultation", text: "Pre-event call with host" },
+  { group: "Consultation", text: "Full pre-event consultation with planner and executive sponsor" },
+  // The Magic
+  { group: "The Magic", text: "Mind reading, mentalism, sleight of hand card magic, and magic with borrowed phones and rings" },
+  { group: "The Magic", text: "All effects are high energy and interactive" },
+  { group: "The Magic", text: "Scott weaves through guests, performing up close for small groups" },
+  { group: "The Magic", text: "Custom narrative woven through the night" },
+  // Presentation & Attire
+  { group: "Presentation & Attire", text: "Scott Syme dressed in elegant evening attire to match the atmosphere of the event" },
+  { group: "Presentation & Attire", text: "Scott Syme dressed in an elegant suit or tuxedo" },
+  // Travel
+  { group: "Travel", text: "All travel included in the reservation investment" },
+  { group: "Travel", text: "Travel and lodging included" },
+  { group: "Travel", text: "Standard LA County" },
+  // Production
+  { group: "Production", text: "Emerald Lobby drapes, cinematic lighting, and full show soundtrack provided by White Rabbit LA" },
+  { group: "Production", text: "Portable sound system providing the soundtrack for the full show" },
+  { group: "Production", text: "Full environment build for the parlor moment" },
+  // Signature Touches
+  { group: "Signature Touches", text: "Custom moment built for the guest of honor" },
+  { group: "Signature Touches", text: "Custom moment for the bride and groom" },
+  { group: "Signature Touches", text: "Personal guest invitation list to the Magic Castle on a set date after the wedding" },
+  { group: "Signature Touches", text: "Custom branded moment for the company" },
+  { group: "Signature Touches", text: "Two vetted Magic Castle magicians: Scott Syme plus a second approved magician" },
+];
