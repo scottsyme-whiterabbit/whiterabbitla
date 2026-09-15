@@ -612,6 +612,33 @@ White Rabbit LA`,
         .select()
         .single();
       if (error) return json({ error: error.message }, 500);
+
+      // If the date, venue or occasion moved, keep the calendar hold in step.
+      try {
+        if (data?.deal_id && (updates.event_date || updates.venue || updates.event_type)) {
+          const dealPatch: Record<string, unknown> = {};
+          if (updates.event_date) {
+            const d = new Date(updates.event_date);
+            if (!isNaN(d.getTime())) dealPatch.event_date = d.toISOString().slice(0, 10);
+          }
+          if (updates.venue) dealPatch.location = updates.venue;
+          if (updates.event_type) dealPatch.event_type = updates.event_type;
+          if (Object.keys(dealPatch).length) {
+            await supabase.from("deals").update(dealPatch).eq("id", data.deal_id);
+          }
+          await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${SERVICE_KEY}` },
+            body: JSON.stringify({
+              action: "sync_deal_calendar",
+              adminPassword: ADMIN_PASSWORD,
+              dealId: data.deal_id,
+            }),
+          }).catch(() => {});
+        }
+      } catch (e) {
+        console.error("calendar hold refresh failed:", (e as Error).message);
+      }
       return json({ proposal: data });
     }
 
