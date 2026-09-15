@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2, ArrowLeft, ArrowUp, ArrowDown } from "lucide-react";
 import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type Tier, type TimelineItem, type FaqItem } from "./ProposalTemplate";
-import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, PROPOSAL_TEMPLATES, STANDARD_TIER_LINES } from "@/data/proposalAssets";
+import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, PROPOSAL_TEMPLATES, STANDARD_TIER_LINES, reviewsForEventType } from "@/data/proposalAssets";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
 import { BiometricUnlockButton, BiometricEnrollPrompt } from "@/components/BiometricUnlockButton";
 import ResidencyAdmin from "@/components/admin/ResidencyAdmin";
@@ -713,9 +713,33 @@ const ProposalEditor = ({
             <div><label className={labelCls}>Recipient email</label><input className={inputCls} value={proposal.recipient_email || ""} onChange={(e) => update({ recipient_email: e.target.value })} /></div>
             <div>
               <label className={labelCls}>Event type</label>
-              <select className={inputCls} value={proposal.event_type} onChange={(e) => update({ event_type: e.target.value })}>
+              <select
+                className={inputCls}
+                value={proposal.event_type}
+                onChange={(e) => {
+                  const t = e.target.value;
+                  const tpl = PROPOSAL_TEMPLATES[t];
+                  update({
+                    event_type: t,
+                    ...(tpl ? { closing_quote: tpl.closing_quote || "", closing_attribution: tpl.closing_attribution || "" } : {}),
+                  });
+                }}
+              >
                 {EVENT_TYPES.map((t) => <option key={t}>{t}</option>)}
               </select>
+            </div>
+            <div className="md:col-span-2 rounded-md border border-forest-dark/10 bg-cream/60 p-3">
+              <p className={labelCls + " mb-2"}>Quotes shown on this proposal</p>
+              <ul className="space-y-1.5">
+                {reviewsForEventType(proposal.event_type).map((r) => (
+                  <li key={r.name} className="text-xs text-forest-dark/80">
+                    <span className="font-medium">{r.name}</span>
+                    <span className="text-forest-dark/50"> · {r.role} · </span>
+                    <span>"{r.text.length > 90 ? r.text.slice(0, 90) + "…" : r.text}"</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-[11px] text-forest-dark/50 mt-2">Don Cheadle leads every proposal. The other two follow the event type.</p>
             </div>
             <div><label className={labelCls}>Event date (display)</label><input className={inputCls} placeholder="June 14, 2026" value={proposal.event_date} onChange={(e) => update({ event_date: e.target.value })} /></div>
             <div><label className={labelCls}>Venue</label><input className={inputCls} value={proposal.venue || ""} onChange={(e) => update({ venue: e.target.value })} /></div>
