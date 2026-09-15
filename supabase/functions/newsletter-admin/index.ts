@@ -11,6 +11,10 @@ const corsHeaders = {
 const GCAL_GATEWAY = "https://connector-gateway.lovable.dev/google_calendar/calendar/v3";
 const GCAL_TZ = "America/Los_Angeles";
 const GCAL_BOOKED_STAGES = new Set(["booked", "completed"]);
+// Tentative holds: a proposal is out with a date on it, so the night is blocked
+// with a 🎩 HOLD event that gets upgraded in place to 🎩 BOOKED once they sign.
+const GCAL_HOLD_STAGES = new Set(["proposal_sent", "negotiating", "on_hold"]);
+const GCAL_CANCEL_STAGES = new Set(["lost"]);
 
 function computeEventTimes(eventDate: string, eventTime: string | null) {
   // Returns { start, end } as {dateTime,timeZone} or {date} pair.
