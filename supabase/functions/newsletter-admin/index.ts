@@ -695,6 +695,14 @@ serve(async (req) => {
         });
       }
 
+      case "sync_deal_calendar": {
+        const { dealId } = payload;
+        await syncDealToGoogleCalendar(supabase, dealId);
+        return new Response(JSON.stringify({ success: true }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       case "update_deal_stage": {
         const { dealId, stage } = payload;
         const { error } = await supabase
