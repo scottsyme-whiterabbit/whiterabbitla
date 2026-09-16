@@ -273,6 +273,21 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Clear a payment recorded by mistake and put the invoice back to open.
+    if (action === "undo_payment" && req.method === "POST") {
+      const { id } = body || {};
+      if (!id) return json({ error: "Missing id" }, 400);
+      const { error } = await supabase.from("event_invoices").update({
+        amount_paid_cents: 0,
+        payment_method: null,
+        paid_in_full_at: null,
+        deposit_paid_at: null,
+        status: "open",
+      }).eq("id", id);
+      if (error) return json({ error: error.message }, 500);
+      return json({ ok: true });
+    }
+
     if (action === "set_email_pause" && req.method === "POST") {
       const { id, paused } = body || {};
       if (typeof paused !== "boolean") return json({ error: "paused must be a boolean" }, 400);
