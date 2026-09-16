@@ -106,7 +106,6 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
     if (!isBooked && !isHold) return;
     if (!deal.event_date) return;
 
-    const times = computeEventTimes(deal.event_date, deal.event_time);
     const who = deal.contact_name || deal.contact_email || "Client";
     const eventTypeLabels: Record<string, string> = {
       corporate: "Corporate Event",
@@ -128,6 +127,14 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
     let proposalSlug: string | null = null;
     let proposalTiers: Array<{ name?: string; price?: string; recommended?: boolean }> = [];
     let signedTier: string | null = null;
+    let performanceTime: string | null = null;
+    let arrivalTime: string | null = null;
+    let invoice: {
+      total_cents: number;
+      amount_paid_cents: number;
+      status: string;
+      payment_method: string | null;
+    } | null = null;
     try {
       const { data: prop } = await supabase
         .from("proposals")
