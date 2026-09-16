@@ -233,13 +233,21 @@ const PaymentsTab = ({ password }: { password: string }) => {
                   </div>
 
                   <div className="flex flex-wrap gap-2 items-center">
-                    {!fullyPaid && inv.status !== "canceled" && (
+                    {inv.status !== "canceled" && (
                       <button
                         onClick={() => (formOpen ? setOpenForm(null) : startSettle(inv))}
                         className="inline-flex items-center gap-2 bg-forest-dark text-cream px-4 py-2 text-xs tracking-wider uppercase hover:opacity-90"
                       >
                         <BadgeDollarSign className="w-4 h-4" />
                         {formOpen ? "Close" : "Mark paid outside Stripe"}
+                      </button>
+                    )}
+                    {hasPayment && (
+                      <button
+                        onClick={() => undoPayment(inv)}
+                        className="inline-flex items-center gap-2 border border-forest-dark/25 px-4 py-2 text-xs tracking-wider uppercase hover:bg-cream"
+                      >
+                        <Undo2 className="w-4 h-4" /> Undo payment
                       </button>
                     )}
                     <button
