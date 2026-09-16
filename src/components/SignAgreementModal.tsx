@@ -80,14 +80,16 @@ Cancellation & Rescheduling:
 - In the unlikely event that White Rabbit Entertainment is unable to perform due to unforeseen circumstances (e.g., illness, emergency), reasonable efforts will be made to provide a suitable replacement or issue a full refund.
 
 Liability & Conduct:
-- White Rabbit Entertainment will not be held liable for any property damage, injuries, or unforeseen circumstances resulting from the performance. (White Rabbit does carry performer insurance.)
-- Performers will conduct themselves professionally and in accordance with the event's guidelines. In the event of inappropriate behavior from guests that compromises safety or disrupts the performance, White Rabbit Entertainment reserves the right to conclude the performance early without refund.
+- White Rabbit Entertainment carries the insurance described below and is responsible for loss or injury caused by its own negligence, up to the limits of that coverage.
+- Client is responsible for loss or injury arising from the venue itself, the client's own acts, or the acts of guests and other vendors.
+- Except for a party's own negligence or willful misconduct, neither party's liability under this agreement exceeds the total fee paid, and neither party is liable for indirect or consequential damages.
+- Performers will conduct themselves professionally and in accordance with the event's guidelines. If guest behavior compromises safety or disrupts the performance, White Rabbit Entertainment may conclude the performance early without refund.
 
 Force Majeure:
 Neither party is liable for failure to perform due to fire, flood, earthquake, severe weather, power failure, venue closure, evacuation, public health order, or government restriction. We will work toward a rescheduled date within 12 months and apply the deposit to it. If no date can be agreed, the deposit is refunded less documented costs already incurred.
 
 Insurance:
-Commercial general liability at $1,000,000 per occurrence and $2,000,000 aggregate through Specialty Insurance Agency. Venue or client named as additional insured on request, certificate issued within two business days.
+Commercial general liability of $1,000,000 per occurrence and $2,000,000 general aggregate, with $300,000 damage to rented premises, written by Evanston Insurance Company (Markel) and placed through Specialty Insurance Agency. A blanket additional insured endorsement is in force: your venue or organization can be named on request, with a certificate issued within two business days.
 
 Photography and Video:
 White Rabbit may photograph or film the performance and audience reactions for portfolio and promotional use. Opt out in writing before the event. Venue and host restrictions are honored, and guests who ask not to be filmed will not be.
