@@ -197,13 +197,13 @@ Deno.serve(async (req) => {
         external_note: string | null;
       };
 
-      const alreadyPaid = inv.amount_paid_cents || 0;
-      const remaining = Math.max(inv.total_cents - alreadyPaid, 0);
+      // The submitted amount is the total recorded on this invoice, not an
+      // addition, so a mistyped payment can be corrected by resubmitting.
       const amount =
         typeof amount_cents === "number" && amount_cents > 0
           ? Math.round(amount_cents)
-          : remaining;
-      const newPaid = Math.min(alreadyPaid + amount, inv.total_cents);
+          : inv.total_cents;
+      const newPaid = Math.min(amount, inv.total_cents);
       const fullyPaid = newPaid >= inv.total_cents;
       const now = new Date().toISOString();
 
@@ -211,7 +211,7 @@ Deno.serve(async (req) => {
         amount_paid_cents: newPaid,
         status: fullyPaid ? "paid" : "deposit_paid",
         payment_method: method || "manual",
-        external_note: note || inv.external_note || null,
+        external_note: note ?? inv.external_note ?? null,
         // A manual settle ends any in-flight Stripe lock.
         pending_session_id: null,
         pending_since: null,
