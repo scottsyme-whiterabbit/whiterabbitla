@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { RefreshCw, Loader2, Send, XCircle, BadgeDollarSign } from "lucide-react";
+import { RefreshCw, Loader2, Send, XCircle, BadgeDollarSign, Undo2 } from "lucide-react";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const FN = `${SUPABASE_URL}/functions/v1/invoice-api`;
@@ -191,6 +191,7 @@ const PaymentsTab = ({ password }: { password: string }) => {
             const paid = inv.amount_paid_cents || 0;
             const remaining = Math.max(inv.total_cents - paid, 0);
             const fullyPaid = inv.status === "paid" || remaining === 0;
+            const hasPayment = paid > 0 || inv.status === "paid" || inv.status === "deposit_paid";
             const formOpen = openForm === inv.id;
             return (
               <div key={inv.id} className="bg-white border border-forest-dark/10 p-5">
@@ -256,7 +257,7 @@ const PaymentsTab = ({ password }: { password: string }) => {
                     >
                       <Send className="w-4 h-4" /> Resend
                     </button>
-                    {inv.status !== "canceled" && !fullyPaid && (
+                    {inv.status !== "canceled" && (
                       <button
                         onClick={() => cancel(inv)}
                         className="inline-flex items-center gap-2 border border-forest-dark/25 px-4 py-2 text-xs tracking-wider uppercase hover:bg-cream"
