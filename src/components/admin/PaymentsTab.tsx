@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { RefreshCw, Loader2, Send, XCircle, BadgeDollarSign } from "lucide-react";
+import { RefreshCw, Loader2, Send, XCircle, BadgeDollarSign, Undo2 } from "lucide-react";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const FN = `${SUPABASE_URL}/functions/v1/invoice-api`;
@@ -82,11 +82,30 @@ const PaymentsTab = ({ password }: { password: string }) => {
   }, []);
 
   const startSettle = (inv: Invoice) => {
-    const remaining = Math.max(inv.total_cents - (inv.amount_paid_cents || 0), 0);
-    setAmount((remaining / 100).toFixed(2));
-    setMethod("check");
-    setNote("");
+    const paid = inv.amount_paid_cents || 0;
+    if (paid > 0) {
+      // Editing a payment already on the books: show what is recorded today.
+      setAmount((paid / 100).toFixed(2));
+      setMethod(inv.payment_method && inv.payment_method !== "stripe" ? inv.payment_method : "check");
+      setNote(inv.external_note || "");
+    } else {
+      const remaining = Math.max(inv.total_cents - paid, 0);
+      setAmount((remaining / 100).toFixed(2));
+      setMethod("check");
+      setNote("");
+    }
     setOpenForm(inv.id);
+  };
+
+  const undoPayment = async (inv: Invoice) => {
+    if (!confirm("Clear the recorded payment on this invoice?")) return;
+    try {
+      await post("undo_payment", { id: inv.id });
+      toast.success("Recorded payment cleared");
+      load();
+    } catch (e) {
+      toast.error((e as Error).message);
+    }
   };
 
   const submitSettle = async (inv: Invoice) => {
@@ -172,6 +191,7 @@ const PaymentsTab = ({ password }: { password: string }) => {
             const paid = inv.amount_paid_cents || 0;
             const remaining = Math.max(inv.total_cents - paid, 0);
             const fullyPaid = inv.status === "paid" || remaining === 0;
+            const hasPayment = paid > 0 || inv.status === "paid" || inv.status === "deposit_paid";
             const formOpen = openForm === inv.id;
             return (
               <div key={inv.id} className="bg-white border border-forest-dark/10 p-5">
@@ -214,7 +234,7 @@ const PaymentsTab = ({ password }: { password: string }) => {
                   </div>
 
                   <div className="flex flex-wrap gap-2 items-center">
-                    {!fullyPaid && inv.status !== "canceled" && (
+                    {inv.status !== "canceled" && (
                       <button
                         onClick={() => (formOpen ? setOpenForm(null) : startSettle(inv))}
                         className="inline-flex items-center gap-2 bg-forest-dark text-cream px-4 py-2 text-xs tracking-wider uppercase hover:opacity-90"
@@ -223,13 +243,21 @@ const PaymentsTab = ({ password }: { password: string }) => {
                         {formOpen ? "Close" : "Mark paid outside Stripe"}
                       </button>
                     )}
+                    {hasPayment && (
+                      <button
+                        onClick={() => undoPayment(inv)}
+                        className="inline-flex items-center gap-2 border border-forest-dark/25 px-4 py-2 text-xs tracking-wider uppercase hover:bg-cream"
+                      >
+                        <Undo2 className="w-4 h-4" /> Undo payment
+                      </button>
+                    )}
                     <button
                       onClick={() => resend(inv)}
                       className="inline-flex items-center gap-2 border border-forest-dark/25 px-4 py-2 text-xs tracking-wider uppercase hover:bg-cream"
                     >
                       <Send className="w-4 h-4" /> Resend
                     </button>
-                    {inv.status !== "canceled" && !fullyPaid && (
+                    {inv.status !== "canceled" && (
                       <button
                         onClick={() => cancel(inv)}
                         className="inline-flex items-center gap-2 border border-forest-dark/25 px-4 py-2 text-xs tracking-wider uppercase hover:bg-cream"
@@ -295,7 +323,7 @@ const PaymentsTab = ({ password }: { password: string }) => {
                         onClick={() => submitSettle(inv)}
                         className="w-full bg-forest-dark text-cream px-4 py-2 text-xs tracking-wider uppercase hover:opacity-90 disabled:opacity-50"
                       >
-                        {busy ? "Saving" : "Record payment"}
+                        {busy ? "Saving" : hasPayment ? "Update payment" : "Record payment"}
                       </button>
                     </div>
                   </div>

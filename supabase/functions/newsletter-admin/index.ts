@@ -16,12 +16,41 @@ const GCAL_BOOKED_STAGES = new Set(["booked", "completed"]);
 const GCAL_HOLD_STAGES = new Set(["proposal_sent", "negotiating", "on_hold"]);
 const GCAL_CANCEL_STAGES = new Set(["lost"]);
 
-function computeEventTimes(eventDate: string, eventTime: string | null) {
+// Pulls an end time out of free text the client typed, such as "6:00-9:00"
+// or "7:30 to 9:00 PM". Returns minutes from midnight, or null when unsure.
+function parsePerformanceEndMinutes(text: string | null): number | null {
+  if (!text) return null;
+  const tokens = [...text.matchAll(/(\d{1,2})(?::(\d{2}))?\s*(am|pm|a\.m\.|p\.m\.)?/gi)]
+    .map((m) => ({
+      hour: parseInt(m[1], 10),
+      minute: m[2] ? parseInt(m[2], 10) : 0,
+      meridiem: m[3] ? m[3].toLowerCase().replace(/\./g, "").charAt(0) : null,
+    }))
+    .filter((t) => t.hour >= 1 && t.hour <= 23 && t.minute < 60);
+  if (tokens.length < 2) return null;
+  const end = tokens[tokens.length - 1];
+  let hour = end.hour;
+  const meridiem = end.meridiem
+    || tokens.map((t) => t.meridiem).filter(Boolean).pop()
+    || (hour >= 1 && hour <= 11 ? "p" : null);
+  if (meridiem === "p" && hour < 12) hour += 12;
+  if (meridiem === "a" && hour === 12) hour = 0;
+  if (hour > 23) return null;
+  return hour * 60 + end.minute;
+}
+
+function computeEventTimes(eventDate: string, eventTime: string | null, performanceTime?: string | null) {
   // Returns { start, end } as {dateTime,timeZone} or {date} pair.
   if (eventTime && /^\d{2}:\d{2}/.test(eventTime)) {
     const startISO = `${eventDate}T${eventTime.length === 5 ? eventTime + ":00" : eventTime}`;
     const startDt = new Date(`${startISO}`);
-    const endDt = new Date(startDt.getTime() + 2 * 60 * 60 * 1000); // default 2h
+    let endDt = new Date(startDt.getTime() + 2 * 60 * 60 * 1000); // default 2h
+    const endMinutes = parsePerformanceEndMinutes(performanceTime ?? null);
+    if (endMinutes !== null) {
+      const candidate = new Date(startDt);
+      candidate.setHours(Math.floor(endMinutes / 60), endMinutes % 60, 0, 0);
+      if (candidate.getTime() > startDt.getTime()) endDt = candidate;
+    }
     const pad = (n: number) => n.toString().padStart(2, "0");
     const fmt = (d: Date) =>
       `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:00`;
@@ -77,7 +106,6 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
     if (!isBooked && !isHold) return;
     if (!deal.event_date) return;
 
-    const times = computeEventTimes(deal.event_date, deal.event_time);
     const who = deal.contact_name || deal.contact_email || "Client";
     const eventTypeLabels: Record<string, string> = {
       corporate: "Corporate Event",
@@ -99,6 +127,14 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
     let proposalSlug: string | null = null;
     let proposalTiers: Array<{ name?: string; price?: string; recommended?: boolean }> = [];
     let signedTier: string | null = null;
+    let performanceTime: string | null = null;
+    let arrivalTime: string | null = null;
+    let invoice: {
+      total_cents: number;
+      amount_paid_cents: number;
+      status: string;
+      payment_method: string | null;
+    } | null = null;
     try {
       const { data: prop } = await supabase
         .from("proposals")
@@ -113,13 +149,38 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
       }
       const { data: agreement } = await supabase
         .from("signed_agreements")
-        .select("tier_name, tier_price, signed_at")
+        .select("tier_name, tier_price, signed_at, performance_time, arrival_time")
         .eq("deal_id", deal.id)
         .order("signed_at", { ascending: false })
         .limit(1)
         .maybeSingle();
-      if (agreement) signedTier = [agreement.tier_name, agreement.tier_price].filter(Boolean).join(" ") || null;
+      if (agreement) {
+        signedTier = [agreement.tier_name, agreement.tier_price].filter(Boolean).join(" ") || null;
+        performanceTime = agreement.performance_time || null;
+        arrivalTime = agreement.arrival_time || null;
+      }
+      const { data: inv } = await supabase
+        .from("event_invoices")
+        .select("total_cents, amount_paid_cents, status, payment_method")
+        .eq("deal_id", deal.id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (inv) invoice = inv;
     } catch (_e) { /* enrichment is best effort */ }
+
+    const times = computeEventTimes(deal.event_date, deal.event_time, performanceTime);
+    const dollars = (cents: number) => `$${Math.round((cents || 0) / 100).toLocaleString()}`;
+    const paymentLines = invoice
+      ? [
+        "",
+        "Payment",
+        `Total: ${dollars(invoice.total_cents)}`,
+        `Paid: ${dollars(invoice.amount_paid_cents)}`,
+        `Balance: ${dollars(Math.max((invoice.total_cents || 0) - (invoice.amount_paid_cents || 0), 0))}`,
+        `Status: ${invoice.status}${invoice.payment_method ? `, ${invoice.payment_method}` : ""}`,
+      ]
+      : [];
 
     const summary = `${isBooked ? "🎩 BOOKED" : "🎩 HOLD"}: ${eventLabel} for ${who}${deal.company ? ` (${deal.company})` : ""}`;
     const proposalLine = proposalSlug ? `Proposal: https://whiterabbitla.com/proposal/${proposalSlug}` : null;
@@ -137,6 +198,8 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
       `Status: ${stageLabels[deal.stage] || deal.stage}`,
       `Occasion: ${eventLabel}`,
       deal.event_time ? `Start time: ${String(deal.event_time).slice(0, 5)}` : "Start time: to be confirmed",
+      performanceTime ? `Performance: ${performanceTime}` : null,
+      arrivalTime ? `Arrival: ${arrivalTime}` : null,
       deal.location ? `Venue: ${deal.location}` : "Venue: to be confirmed",
       deal.guest_count ? `Guests: ${deal.guest_count}` : null,
       "",
@@ -147,6 +210,8 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
       "",
       tierLine,
       deal.deal_value ? `Value: $${(deal.deal_value / 100).toLocaleString()}` : null,
+      ...paymentLines,
+      invoice ? "" : null,
       proposalLine,
       deal.next_follow_up ? `Next follow up: ${deal.next_follow_up}` : null,
       deal.notes ? `\nNotes:\n${deal.notes}` : null,

@@ -76,7 +76,8 @@ async function resolveDealId(inv: any): Promise<string | null> {
       event_type: inv.event_type || null,
       event_date: inv.event_date || null,
       location: inv.venue || null,
-      deal_value: inv.total_cents ? Math.round(inv.total_cents / 100) : null,
+      // Stored in cents: every reader (calendar helper, admin UI) divides by 100.
+      deal_value: inv.total_cents || null,
       stage: "new",
       source: "invoice_payment",
       notes: "Auto-created from a paid invoice (no linked deal existed).",

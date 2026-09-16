@@ -197,6 +197,8 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
           event_date: proposal.event_date,
           venue: proposal.venue,
           agreement_text: agreementText,
+          performance_time: performanceTime.trim() || null,
+          arrival_time: arrivalTime.trim() || detectDefaultArrival(tier),
         }),
       });
       const j = await res.json();
