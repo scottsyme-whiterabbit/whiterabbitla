@@ -269,7 +269,7 @@ Deno.serve(async (req) => {
       const {
         proposal_id, proposal_slug, tier_name, tier_price,
         client_name, client_email, event_type, event_date, venue,
-        agreement_text,
+        agreement_text, performance_time, arrival_time,
       } = body || {};
       if (!tier_name || !client_name || !agreement_text) {
         return json({ error: "Missing required fields" }, 400);
@@ -309,6 +309,8 @@ Deno.serve(async (req) => {
         event_date: trim(event_date, 200),
         venue: trim(venue, 300),
         agreement_text: trim(agreement_text, 20000),
+        performance_time: trim(performance_time, 120),
+        arrival_time: trim(arrival_time, 120),
         user_agent: ua.slice(0, 500),
         signer_ip: ip.slice(0, 64),
       }).select().single();
