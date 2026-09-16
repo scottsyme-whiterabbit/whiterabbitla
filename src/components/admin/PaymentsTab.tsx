@@ -82,11 +82,30 @@ const PaymentsTab = ({ password }: { password: string }) => {
   }, []);
 
   const startSettle = (inv: Invoice) => {
-    const remaining = Math.max(inv.total_cents - (inv.amount_paid_cents || 0), 0);
-    setAmount((remaining / 100).toFixed(2));
-    setMethod("check");
-    setNote("");
+    const paid = inv.amount_paid_cents || 0;
+    if (paid > 0) {
+      // Editing a payment already on the books: show what is recorded today.
+      setAmount((paid / 100).toFixed(2));
+      setMethod(inv.payment_method && inv.payment_method !== "stripe" ? inv.payment_method : "check");
+      setNote(inv.external_note || "");
+    } else {
+      const remaining = Math.max(inv.total_cents - paid, 0);
+      setAmount((remaining / 100).toFixed(2));
+      setMethod("check");
+      setNote("");
+    }
     setOpenForm(inv.id);
+  };
+
+  const undoPayment = async (inv: Invoice) => {
+    if (!confirm("Clear the recorded payment on this invoice?")) return;
+    try {
+      await post("undo_payment", { id: inv.id });
+      toast.success("Recorded payment cleared");
+      load();
+    } catch (e) {
+      toast.error((e as Error).message);
+    }
   };
 
   const submitSettle = async (inv: Invoice) => {
