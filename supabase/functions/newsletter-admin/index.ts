@@ -198,6 +198,8 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
       `Status: ${stageLabels[deal.stage] || deal.stage}`,
       `Occasion: ${eventLabel}`,
       deal.event_time ? `Start time: ${String(deal.event_time).slice(0, 5)}` : "Start time: to be confirmed",
+      performanceTime ? `Performance: ${performanceTime}` : null,
+      arrivalTime ? `Arrival: ${arrivalTime}` : null,
       deal.location ? `Venue: ${deal.location}` : "Venue: to be confirmed",
       deal.guest_count ? `Guests: ${deal.guest_count}` : null,
       "",
