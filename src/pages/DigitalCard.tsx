@@ -9,7 +9,7 @@ const VCARD = `BEGIN:VCARD
 VERSION:3.0
 FN:Scott Syme
 N:Syme;Scott;;;
-ORG:White Rabbit Entertainment
+ORG:White Rabbit LA
 TITLE:Founder & Magician
 TEL;TYPE=CELL:+14243941850
 EMAIL:events@whiterabbitla.com

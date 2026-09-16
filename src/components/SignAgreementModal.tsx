@@ -47,7 +47,9 @@ const buildAgreement = (opts: {
   const eventType = proposal.event_type || "Event";
   const services = tier.items.map((i) => `- ${i}`).join("\n");
 
-  return `WHITE RABBIT ENTERTAINMENT PERFORMANCE AGREEMENT
+  return `WHITE RABBIT LA PERFORMANCE AGREEMENT
+
+This agreement is between White Rabbit Entertainment Productions LLC, d/b/a White Rabbit LA ("White Rabbit LA"), and the client named below.
 
 Client Name: ${clientName}${clientEmail ? ` <${clientEmail}>` : ""}
 Event Name: ${eventType}
