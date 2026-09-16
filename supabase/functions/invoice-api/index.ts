@@ -277,14 +277,23 @@ Deno.serve(async (req) => {
     if (action === "undo_payment" && req.method === "POST") {
       const { id } = body || {};
       if (!id) return json({ error: "Missing id" }, 400);
-      const { error } = await supabase.from("event_invoices").update({
+      // Never touch a canceled invoice: undoing must not resurrect it into the
+      // reminder cycle or re-enable its public checkout page.
+      const { data, error } = await supabase.from("event_invoices").update({
         amount_paid_cents: 0,
         payment_method: null,
         paid_in_full_at: null,
         deposit_paid_at: null,
         status: "open",
-      }).eq("id", id);
+        external_note: null,
+        stripe_session_id: null,
+        stripe_payment_intent_id: null,
+        pending_session_id: null,
+        pending_since: null,
+        pending_alert_sent_at: null,
+      }).eq("id", id).neq("status", "canceled").select("id");
       if (error) return json({ error: error.message }, 500);
+      if (!data || data.length === 0) return json({ ok: false, error: "Invoice is canceled" }, 400);
       return json({ ok: true });
     }
 

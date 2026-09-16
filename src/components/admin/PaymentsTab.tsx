@@ -243,7 +243,7 @@ const PaymentsTab = ({ password }: { password: string }) => {
                         {formOpen ? "Close" : "Mark paid outside Stripe"}
                       </button>
                     )}
-                    {hasPayment && (
+                    {hasPayment && inv.status !== "canceled" && (
                       <button
                         onClick={() => undoPayment(inv)}
                         className="inline-flex items-center gap-2 border border-forest-dark/25 px-4 py-2 text-xs tracking-wider uppercase hover:bg-cream"
@@ -281,16 +281,33 @@ const PaymentsTab = ({ password }: { password: string }) => {
                   <div className="mt-4 border-t border-forest-dark/10 pt-4 grid gap-3 sm:grid-cols-4">
                     <div>
                       <label className="block text-xs uppercase tracking-wider text-forest-dark/50 mb-1">
-                        Amount received
+                        Total received to date
                       </label>
-                      <input
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        className="w-full border border-forest-dark/20 px-3 py-2 text-sm bg-cream/40"
-                      />
+                      {inv.payment_method === "stripe" && paid > 0 && (
+                        <p className="text-xs text-amber-700 mb-1">
+                          Stripe has already recorded {money(paid)} on this invoice. The total you enter here replaces that.
+                        </p>
+                      )}
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          step="0.01"
+                          min="0"
+                          value={amount}
+                          onChange={(e) => setAmount(e.target.value)}
+                          className="w-full border border-forest-dark/20 px-3 py-2 text-sm bg-cream/40"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setAmount((inv.total_cents / 100).toFixed(2))}
+                          className="shrink-0 border border-forest-dark/25 px-2 py-2 text-xs hover:bg-cream"
+                        >
+                          Full amount
+                        </button>
+                      </div>
+                      <p className="text-xs text-forest-dark/50 mt-1">
+                        This replaces the recorded total, it is not added to it.
+                      </p>
                     </div>
                     <div>
                       <label className="block text-xs uppercase tracking-wider text-forest-dark/50 mb-1">
