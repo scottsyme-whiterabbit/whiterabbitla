@@ -47,7 +47,9 @@ const buildAgreement = (opts: {
   const eventType = proposal.event_type || "Event";
   const services = tier.items.map((i) => `- ${i}`).join("\n");
 
-  return `WHITE RABBIT ENTERTAINMENT PERFORMANCE AGREEMENT
+  return `WHITE RABBIT LA PERFORMANCE AGREEMENT
+
+This agreement is between White Rabbit Entertainment Productions LLC, d/b/a White Rabbit LA ("White Rabbit LA"), and the client named below.
 
 Client Name: ${clientName}${clientEmail ? ` <${clientEmail}>` : ""}
 Event Name: ${eventType}
@@ -59,7 +61,7 @@ Arrival Time: ${arrivalTime}
 Package Selected: ${tier.name}, ${tier.price}
 
 Services Provided:
-White Rabbit Entertainment agrees to provide professional entertainment for the above-referenced event. The services include:
+White Rabbit LA agrees to provide professional entertainment for the above-referenced event. The services include:
 ${services}
 - Pre-event consultation with the client and/or planner to confirm flow of the evening and any special moments.
 
@@ -76,14 +78,14 @@ Payment & Booking Confirmation:
 - If the final balance is not paid within 7 days of the agreed balance-due date, a late fee of $200 will be added to the total amount owed.
 
 Cancellation & Rescheduling:
-- If the client needs to cancel or reschedule, a written notice must be provided at least 7 days before the event. Deposits are non-refundable but may be applied toward a rescheduled event at White Rabbit Entertainment's discretion.
-- In the unlikely event that White Rabbit Entertainment is unable to perform due to unforeseen circumstances (e.g., illness, emergency), reasonable efforts will be made to provide a suitable replacement or issue a full refund.
+- If the client needs to cancel or reschedule, a written notice must be provided at least 7 days before the event. Deposits are non-refundable but may be applied toward a rescheduled event at White Rabbit LA's discretion.
+- In the unlikely event that White Rabbit LA is unable to perform due to unforeseen circumstances (e.g., illness, emergency), reasonable efforts will be made to provide a suitable replacement or issue a full refund.
 
 Liability & Conduct:
-- White Rabbit Entertainment carries the insurance described below and is responsible for loss or injury caused by its own negligence, up to the limits of that coverage.
+- White Rabbit LA carries the insurance described below and is responsible for loss or injury caused by its own negligence, up to the limits of that coverage.
 - Client is responsible for loss or injury arising from the venue itself, the client's own acts, or the acts of guests and other vendors.
 - Except for a party's own negligence or willful misconduct, neither party's liability under this agreement exceeds the total fee paid, and neither party is liable for indirect or consequential damages.
-- Performers will conduct themselves professionally and in accordance with the event's guidelines. If guest behavior compromises safety or disrupts the performance, White Rabbit Entertainment may conclude the performance early without refund.
+- Performers will conduct themselves professionally and in accordance with the event's guidelines. If guest behavior compromises safety or disrupts the performance, White Rabbit LA may conclude the performance early without refund.
 
 Force Majeure:
 Neither party is liable for failure to perform due to fire, flood, earthquake, severe weather, power failure, venue closure, evacuation, public health order, or government restriction. We will work toward a rescheduled date within 12 months and apply the deposit to it. If no date can be agreed, the deposit is refunded less documented costs already incurred.
@@ -92,18 +94,18 @@ Insurance:
 Commercial general liability of $1,000,000 per occurrence and $2,000,000 general aggregate, with $300,000 damage to rented premises, written by Evanston Insurance Company (Markel) and placed through Specialty Insurance Agency. A blanket additional insured endorsement is in force: your venue or organization can be named on request, with a certificate issued within two business days.
 
 Photography and Video:
-White Rabbit may photograph or film the performance and audience reactions for portfolio and promotional use. Opt out in writing before the event. Venue and host restrictions are honored, and guests who ask not to be filmed will not be.
+White Rabbit LA may photograph or film the performance and audience reactions for portfolio and promotional use. Opt out in writing before the event. Venue and host restrictions are honored, and guests who ask not to be filmed will not be.
 
 
 Contact Information:
-For any questions, modifications, or special requests, please contact White Rabbit Entertainment at:
+For any questions, modifications, or special requests, please contact White Rabbit LA at:
 Email: scott.syme@whiterabbitla.com
 Office: (424) 394-1850
 Cell: (650) 678-9428
 
 By paying the deposit invoice, the client acknowledges and agrees to the terms outlined in this agreement.
 
-Thank you for choosing White Rabbit Entertainment!
+Thank you for choosing White Rabbit LA!
 
 CLIENT SIGNATURE: ${clientName}
 DATE: ${signedDate}
