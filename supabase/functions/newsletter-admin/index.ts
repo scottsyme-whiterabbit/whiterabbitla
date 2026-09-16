@@ -149,13 +149,38 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
       }
       const { data: agreement } = await supabase
         .from("signed_agreements")
-        .select("tier_name, tier_price, signed_at")
+        .select("tier_name, tier_price, signed_at, performance_time, arrival_time")
         .eq("deal_id", deal.id)
         .order("signed_at", { ascending: false })
         .limit(1)
         .maybeSingle();
-      if (agreement) signedTier = [agreement.tier_name, agreement.tier_price].filter(Boolean).join(" ") || null;
+      if (agreement) {
+        signedTier = [agreement.tier_name, agreement.tier_price].filter(Boolean).join(" ") || null;
+        performanceTime = agreement.performance_time || null;
+        arrivalTime = agreement.arrival_time || null;
+      }
+      const { data: inv } = await supabase
+        .from("event_invoices")
+        .select("total_cents, amount_paid_cents, status, payment_method")
+        .eq("deal_id", deal.id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (inv) invoice = inv;
     } catch (_e) { /* enrichment is best effort */ }
+
+    const times = computeEventTimes(deal.event_date, deal.event_time, performanceTime);
+    const dollars = (cents: number) => `$${Math.round((cents || 0) / 100).toLocaleString()}`;
+    const paymentLines = invoice
+      ? [
+        "",
+        "Payment",
+        `Total: ${dollars(invoice.total_cents)}`,
+        `Paid: ${dollars(invoice.amount_paid_cents)}`,
+        `Balance: ${dollars(Math.max((invoice.total_cents || 0) - (invoice.amount_paid_cents || 0), 0))}`,
+        `Status: ${invoice.status}${invoice.payment_method ? `, ${invoice.payment_method}` : ""}`,
+      ]
+      : [];
 
     const summary = `${isBooked ? "🎩 BOOKED" : "🎩 HOLD"}: ${eventLabel} for ${who}${deal.company ? ` (${deal.company})` : ""}`;
     const proposalLine = proposalSlug ? `Proposal: https://whiterabbitla.com/proposal/${proposalSlug}` : null;
