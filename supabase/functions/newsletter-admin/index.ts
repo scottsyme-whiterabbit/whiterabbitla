@@ -16,12 +16,41 @@ const GCAL_BOOKED_STAGES = new Set(["booked", "completed"]);
 const GCAL_HOLD_STAGES = new Set(["proposal_sent", "negotiating", "on_hold"]);
 const GCAL_CANCEL_STAGES = new Set(["lost"]);
 
-function computeEventTimes(eventDate: string, eventTime: string | null) {
+// Pulls an end time out of free text the client typed, such as "6:00-9:00"
+// or "7:30 to 9:00 PM". Returns minutes from midnight, or null when unsure.
+function parsePerformanceEndMinutes(text: string | null): number | null {
+  if (!text) return null;
+  const tokens = [...text.matchAll(/(\d{1,2})(?::(\d{2}))?\s*(am|pm|a\.m\.|p\.m\.)?/gi)]
+    .map((m) => ({
+      hour: parseInt(m[1], 10),
+      minute: m[2] ? parseInt(m[2], 10) : 0,
+      meridiem: m[3] ? m[3].toLowerCase().replace(/\./g, "").charAt(0) : null,
+    }))
+    .filter((t) => t.hour >= 1 && t.hour <= 23 && t.minute < 60);
+  if (tokens.length < 2) return null;
+  const end = tokens[tokens.length - 1];
+  let hour = end.hour;
+  const meridiem = end.meridiem
+    || tokens.map((t) => t.meridiem).filter(Boolean).pop()
+    || (hour >= 1 && hour <= 11 ? "p" : null);
+  if (meridiem === "p" && hour < 12) hour += 12;
+  if (meridiem === "a" && hour === 12) hour = 0;
+  if (hour > 23) return null;
+  return hour * 60 + end.minute;
+}
+
+function computeEventTimes(eventDate: string, eventTime: string | null, performanceTime?: string | null) {
   // Returns { start, end } as {dateTime,timeZone} or {date} pair.
   if (eventTime && /^\d{2}:\d{2}/.test(eventTime)) {
     const startISO = `${eventDate}T${eventTime.length === 5 ? eventTime + ":00" : eventTime}`;
     const startDt = new Date(`${startISO}`);
-    const endDt = new Date(startDt.getTime() + 2 * 60 * 60 * 1000); // default 2h
+    let endDt = new Date(startDt.getTime() + 2 * 60 * 60 * 1000); // default 2h
+    const endMinutes = parsePerformanceEndMinutes(performanceTime ?? null);
+    if (endMinutes !== null) {
+      const candidate = new Date(startDt);
+      candidate.setHours(Math.floor(endMinutes / 60), endMinutes % 60, 0, 0);
+      if (candidate.getTime() > startDt.getTime()) endDt = candidate;
+    }
     const pad = (n: number) => n.toString().padStart(2, "0");
     const fmt = (d: Date) =>
       `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:00`;
