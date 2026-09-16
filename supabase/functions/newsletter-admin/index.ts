@@ -211,7 +211,7 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
       tierLine,
       deal.deal_value ? `Value: $${(deal.deal_value / 100).toLocaleString()}` : null,
       ...paymentLines,
-      "",
+      invoice ? "" : null,
       proposalLine,
       deal.next_follow_up ? `Next follow up: ${deal.next_follow_up}` : null,
       deal.notes ? `\nNotes:\n${deal.notes}` : null,
