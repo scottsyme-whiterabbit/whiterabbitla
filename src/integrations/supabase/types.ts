@@ -1785,6 +1785,7 @@ export type Database = {
       signed_agreements: {
         Row: {
           agreement_text: string
+          arrival_time: string | null
           client_email: string | null
           client_name: string
           created_at: string
@@ -1793,6 +1794,7 @@ export type Database = {
           event_type: string | null
           id: string
           invoice_sent_at: string | null
+          performance_time: string | null
           proposal_id: string | null
           proposal_slug: string | null
           signed_at: string
@@ -1804,6 +1806,7 @@ export type Database = {
         }
         Insert: {
           agreement_text: string
+          arrival_time?: string | null
           client_email?: string | null
           client_name: string
           created_at?: string
@@ -1812,6 +1815,7 @@ export type Database = {
           event_type?: string | null
           id?: string
           invoice_sent_at?: string | null
+          performance_time?: string | null
           proposal_id?: string | null
           proposal_slug?: string | null
           signed_at?: string
@@ -1823,6 +1827,7 @@ export type Database = {
         }
         Update: {
           agreement_text?: string
+          arrival_time?: string | null
           client_email?: string | null
           client_name?: string
           created_at?: string
@@ -1831,6 +1836,7 @@ export type Database = {
           event_type?: string | null
           id?: string
           invoice_sent_at?: string | null
+          performance_time?: string | null
           proposal_id?: string | null
           proposal_slug?: string | null
           signed_at?: string
