@@ -323,7 +323,7 @@ const PaymentsTab = ({ password }: { password: string }) => {
                         onClick={() => submitSettle(inv)}
                         className="w-full bg-forest-dark text-cream px-4 py-2 text-xs tracking-wider uppercase hover:opacity-90 disabled:opacity-50"
                       >
-                        {busy ? "Saving" : "Record payment"}
+                        {busy ? "Saving" : hasPayment ? "Update payment" : "Record payment"}
                       </button>
                     </div>
                   </div>
