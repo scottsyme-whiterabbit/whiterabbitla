@@ -1188,7 +1188,7 @@ serve(async (req) => {
           company: company as string || null,
           event_type: event_type as string || null,
           event_date: event_date as string || null,
-          deal_value: deal_value ? Number(deal_value) : null,
+          deal_value: deal_value ? Math.round(Number(deal_value) * 100) : null,
           source: source as string,
           location: location as string || null,
           notes: notes as string || null,
