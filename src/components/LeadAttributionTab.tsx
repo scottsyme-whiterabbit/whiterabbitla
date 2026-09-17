@@ -255,7 +255,7 @@ const LeadAttributionTab = ({ storedPassword }: Props) => {
                       </span>
                     </td>
                     <td className="py-2.5 pr-4 text-foreground text-right font-medium">
-                      {d.deal_value ? `$${Number(d.deal_value).toLocaleString()}` : ""}
+                      {d.deal_value ? `$${(Number(d.deal_value) / 100).toLocaleString()}` : ""}
                     </td>
                     <td className="py-2.5 text-muted-foreground text-xs max-w-[200px] truncate">
                       {d.notes || ""}
