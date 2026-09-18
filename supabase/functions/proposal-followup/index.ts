@@ -16,7 +16,6 @@ const supabase = createClient(
 
 /* ---------- assets (swap these when the files change) ---------- */
 const LOGO_URL = "https://whiterabbitla.com/email-assets/wr-logo-stars.png";
-const CLOSEUP_URL = "https://whiterabbitla.com/email-assets/wr-closeup-bw.jpg";
 
 /* ---------- brand ---------- */
 const GROUND = "#283932";
