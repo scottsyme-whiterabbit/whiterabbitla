@@ -25,6 +25,9 @@ interface ProposalRow {
   created_at: string;
   view_count?: number;
   last_viewed_at?: string | null;
+  followup_step?: number;
+  followup_paused?: boolean;
+  last_followup_at?: string | null;
 }
 
 interface FullProposal extends ProposalData {
