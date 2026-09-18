@@ -16,7 +16,6 @@ const supabase = createClient(
 
 /* ---------- assets (swap these when the files change) ---------- */
 const LOGO_URL = "https://whiterabbitla.com/email-assets/wr-logo-stars.png";
-const HERO_URL = "https://whiterabbitla.com/email-assets/wr-drapes.jpg";
 const CLOSEUP_URL = "https://whiterabbitla.com/email-assets/wr-closeup-bw.jpg";
 
 /* ---------- brand ---------- */
@@ -101,7 +100,7 @@ const p = (text: string) =>
   `<p style="margin:0 0 18px;font-family:${BODY_FONT};font-size:15px;line-height:1.75;color:${CREAM};">${text}</p>`;
 
 const photo = (src: string, alt: string) =>
-  `<div style="text-align:center;margin:0 0 28px;"><img src="${src}" alt="${esc(alt)}" width="430" style="width:430px;max-width:100%;height:auto;display:block;margin:0 auto;border:0;outline:none;text-decoration:none;" /></div>`;
+  `<div style="text-align:center;margin:0 0 28px;"><img src="${src}" alt="${esc(alt)}" width="420" style="width:420px;max-width:100%;height:auto;display:block;margin:0 auto;border:0;outline:none;text-decoration:none;border-radius:4px;" /></div>`;
 
 const button = (url: string, label: string) =>
   `<div style="text-align:center;margin:30px 0 26px;"><a href="${url}" style="display:inline-block;background:${GOLD};color:${GROUND};text-decoration:none;padding:15px 32px;font-family:${BODY_FONT};font-size:12px;letter-spacing:.16em;text-transform:uppercase;">${esc(label)}</a></div>`;
@@ -162,7 +161,7 @@ function buildEmail(prop: Proposal, step: 1 | 2 | 3) {
     const sentDate = fmtDate(prop.sent_at);
     const subject = `${name}, just wanted to make sure this found you`;
     const html = shell(
-      photo(HERO_URL, "White Rabbit LA") +
+      photo(CLOSEUP_URL, "Close up magic") +
         p(`${nameE},`) +
         p(`I sent your proposal over on ${esc(sentDate)}. Just making sure it landed, since email has a way of burying things.`) +
         p("No rush on it. If anything in there needs adjusting, or you want to talk a detail through before you decide, call me anytime.") +
@@ -197,8 +196,7 @@ whiterabbitla.com`;
         p("You are the one building that evening. I am there to help your guests feel alive inside it.") +
         `<p style="margin:0 0 18px;font-family:${HEAD_FONT};font-style:italic;font-size:19px;line-height:1.6;color:${SAND};">${esc(keyLine)}</p>` +
         p("Whenever you are ready.") +
-        signature() +
-        `<div style="margin-top:32px;">${photo(HERO_URL, "White Rabbit LA")}</div>`,
+        signature(),
     );
     const text = `${name},
 
