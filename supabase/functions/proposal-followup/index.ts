@@ -350,12 +350,26 @@ Deno.serve(async (req) => {
           continue;
         }
 
-        const ok = await sendEmail(email, subject, html, text);
-        if (!ok) { results.errors.push(`send failed ${prop.id}`); continue; }
-        await supabase
+        // Atomically claim the step before sending: only the invocation whose
+        // conditional update returns a row proceeds; concurrent losers skip.
+        const { data: claimed } = await supabase
           .from("proposals")
           .update({ followup_step: next, last_followup_at: new Date().toISOString() })
-          .eq("id", prop.id);
+          .eq("id", prop.id)
+          .eq("followup_step", step)
+          .select("id");
+        if (!claimed || claimed.length === 0) { results.skipped++; continue; }
+
+        const ok = await sendEmail(email, subject, html, text);
+        if (!ok) {
+          // Roll the claim back so the email is retried tomorrow.
+          await supabase
+            .from("proposals")
+            .update({ followup_step: step, last_followup_at: prop.last_followup_at })
+            .eq("id", prop.id);
+          results.errors.push(`send failed ${prop.id}`);
+          continue;
+        }
         results.sent++;
         results.detail.push({ id: prop.id, slug: prop.slug, step: next, subject });
       } catch (e) {
