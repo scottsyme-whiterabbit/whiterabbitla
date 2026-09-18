@@ -286,6 +286,42 @@ Deno.serve(async (req) => {
     const dryRun = body?.dryRun === true;
     const results = { sent: 0, skipped: 0, errors: [] as string[], detail: [] as unknown[] };
 
+    // ---- Test mode: render one or more of the three emails with sample details
+    // and send only to the given address. Touches no proposal rows at all.
+    const testEmail = typeof body?.testEmail === "string" ? body.testEmail.trim() : "";
+    if (testEmail) {
+      const steps: (1 | 2 | 3)[] = Array.isArray(body?.steps) && body.steps.length
+        ? body.steps.filter((s: unknown) => s === 1 || s === 2 || s === 3)
+        : [1, 2, 3];
+      if (steps.length === 0) return json({ error: "steps must be 1, 2 or 3" }, 400);
+
+      const sample: Proposal = {
+        id: "00000000-0000-0000-0000-000000000000",
+        slug: typeof body?.slug === "string" && body.slug ? body.slug : "sample",
+        first_name: "Sample",
+        last_name: "Client",
+        recipient_email: testEmail,
+        event_type: typeof body?.event_type === "string" ? body.event_type : "Wedding",
+        event_date: "2026-11-14",
+        venue: "The Ebell of Los Angeles",
+        tiers: [{ name: "Parlor Show", recommended: true, items: ["Seated parlor show"] }],
+        sent_at: new Date(Date.now() - 2 * 864e5).toISOString(),
+        followup_step: 0,
+        last_followup_at: null,
+        followup_paused: false,
+      };
+
+      for (const step of steps) {
+        const { subject, html, text } = buildEmail(sample, step);
+        const ok = await sendEmail(testEmail, `[TEST ${step}/3] ${subject}`, html, text);
+        if (ok) results.sent++;
+        else results.errors.push(`test send failed for step ${step}`);
+        results.detail.push({ test: true, step, to: testEmail, subject });
+      }
+      return json({ success: results.errors.length === 0, test: true, ...results }, results.errors.length ? 500 : 200);
+    }
+
+
     const { data, error } = await supabase
       .from("proposals")
       .select(
