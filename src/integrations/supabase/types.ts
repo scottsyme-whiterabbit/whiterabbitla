@@ -1563,10 +1563,13 @@ export type Database = {
           event_type: string
           faqs: Json
           first_name: string
+          followup_paused: boolean
+          followup_step: number
           gallery_photos: Json
           hero_image: string
           id: string
           intro_paragraph: string
+          last_followup_at: string | null
           last_name: string
           letter_intro: string
           recipient_email: string | null
@@ -1587,10 +1590,13 @@ export type Database = {
           event_type?: string
           faqs?: Json
           first_name?: string
+          followup_paused?: boolean
+          followup_step?: number
           gallery_photos?: Json
           hero_image?: string
           id?: string
           intro_paragraph?: string
+          last_followup_at?: string | null
           last_name?: string
           letter_intro?: string
           recipient_email?: string | null
@@ -1611,10 +1617,13 @@ export type Database = {
           event_type?: string
           faqs?: Json
           first_name?: string
+          followup_paused?: boolean
+          followup_step?: number
           gallery_photos?: Json
           hero_image?: string
           id?: string
           intro_paragraph?: string
+          last_followup_at?: string | null
           last_name?: string
           letter_intro?: string
           recipient_email?: string | null
