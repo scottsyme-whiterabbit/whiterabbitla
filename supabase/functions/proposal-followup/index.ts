@@ -278,11 +278,16 @@ Deno.serve(async (req) => {
     });
 
   try {
-    const secret = Deno.env.get("CRON_SECRET") || "";
+    // CRON_SECRET was rotated to CRON_SECRET_V2; accept either.
+    const acceptedCronSecrets = [
+      Deno.env.get("CRON_SECRET"),
+      Deno.env.get("CRON_SECRET_V2"),
+    ].filter((s): s is string => !!s);
     const adminPassword = Deno.env.get("ADMIN_PASSWORD") || "";
     const body = await req.json().catch(() => ({} as any));
+    const provided = req.headers.get("x-cron-secret") || body?.cron_secret || "";
     const authorized =
-      (secret && req.headers.get("x-cron-secret") === secret) ||
+      (!!provided && acceptedCronSecrets.includes(provided)) ||
       (adminPassword && body?.adminPassword === adminPassword);
     if (!authorized) return json({ error: "Unauthorized" }, 401);
 
