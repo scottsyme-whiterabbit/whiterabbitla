@@ -550,7 +550,7 @@ White Rabbit LA`,
     if (action === "list") {
       const { data, error } = await supabase
         .from("proposals")
-        .select("id, slug, first_name, last_name, recipient_email, event_type, event_date, venue, sent_at, created_at, deal_id")
+        .select("id, slug, first_name, last_name, recipient_email, event_type, event_date, venue, sent_at, created_at, deal_id, followup_step, followup_paused, last_followup_at")
         .order("created_at", { ascending: false });
       if (error) return json({ error: error.message }, 500);
 
