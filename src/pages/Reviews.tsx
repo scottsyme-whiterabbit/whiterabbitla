@@ -11,6 +11,12 @@ import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
 const reviews = [
 {
+  name: "Joseph B.",
+  role: "50th Birthday Party",
+  text: "Scott met and exceeded every expectation I had for our event. It wasn't simple. We had loud music, lots of different spaces in the venue, and over a hundred people. However, Scott integrated into the event seamlessly and became the highlight. Nearly everyone I talked to mentioned how engaging Scott's work was. In fact, I had six people who planned to leave early, but stayed an additional hour and a half just because they were enjoying Scott so much.",
+  rating: 5
+},
+{
   name: "Farnaz F.",
   role: "40th Birthday at Gravitas Beverly Hills",
   text: "Beyond magnificent! Scott is mesmerizing and my guests were in awe the entire time. From booking him to seeing him live, I was truly blown away. I could not recommend him highly enough and will most definitely be booking him for future events. His tricks and magic are incredible!",
