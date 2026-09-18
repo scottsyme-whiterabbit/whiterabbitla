@@ -18,7 +18,7 @@ const reviews = [
 },
 {
   name: "John H.",
-  role: "Wedding in Pasadena",
+  role: "Wedding at The Langham Huntington Hotel, Pasadena",
   text: "Look no further if you want a magician at your next event. Scott performed at our wedding cocktail hour and the next day, he's all anyone could talk about. From card tricks to mentalism, illusions to comedic work, Scott kept our 100+ guests thoroughly entertained (not to mention mind-blown). We interviewed several magicians before landing with Scott, and we couldn't have been happier.",
   rating: 5
 },
