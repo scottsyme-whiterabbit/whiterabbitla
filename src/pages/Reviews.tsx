@@ -17,6 +17,12 @@ const reviews = [
   rating: 5
 },
 {
+  name: "John H.",
+  role: "Wedding in Pasadena",
+  text: "Look no further if you want a magician at your next event. Scott performed at our wedding cocktail hour and the next day, he's all anyone could talk about. From card tricks to mentalism, illusions to comedic work, Scott kept our 100+ guests thoroughly entertained (not to mention mind-blown). We interviewed several magicians before landing with Scott, and we couldn't have been happier.",
+  rating: 5
+},
+{
   name: "Farnaz F.",
   role: "40th Birthday at Gravitas Beverly Hills",
   text: "Beyond magnificent! Scott is mesmerizing and my guests were in awe the entire time. From booking him to seeing him live, I was truly blown away. I could not recommend him highly enough and will most definitely be booking him for future events. His tricks and magic are incredible!",
