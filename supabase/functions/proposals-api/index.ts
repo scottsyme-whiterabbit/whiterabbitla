@@ -644,6 +644,17 @@ White Rabbit LA`,
       return json({ proposal: data });
     }
 
+    if (action === "set_followup_pause" && req.method === "POST") {
+      const { id, paused } = await req.json();
+      if (!id) return json({ error: "Missing id" }, 400);
+      const { error } = await supabase
+        .from("proposals")
+        .update({ followup_paused: paused === true })
+        .eq("id", id);
+      if (error) return json({ error: error.message }, 500);
+      return json({ ok: true, paused: paused === true });
+    }
+
     if (action === "delete" && req.method === "POST") {
       const { id } = await req.json();
       const { error } = await supabase.from("proposals").delete().eq("id", id);
