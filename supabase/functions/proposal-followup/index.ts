@@ -98,8 +98,6 @@ const PRODUCTION_BLOCK =
 const p = (text: string) =>
   `<p style="margin:0 0 18px;font-family:${BODY_FONT};font-size:15px;line-height:1.75;color:${CREAM};">${text}</p>`;
 
-const photo = (src: string, alt: string) =>
-  `<div style="text-align:center;margin:0 0 28px;"><img src="${src}" alt="${esc(alt)}" width="420" style="width:420px;max-width:100%;height:auto;display:block;margin:0 auto;border:0;outline:none;text-decoration:none;border-radius:4px;" /></div>`;
 
 const button = (url: string, label: string) =>
   `<div style="text-align:center;margin:30px 0 26px;"><a href="${url}" style="display:inline-block;background:${GOLD};color:${GROUND};text-decoration:none;padding:15px 32px;font-family:${BODY_FONT};font-size:12px;letter-spacing:.16em;text-transform:uppercase;">${esc(label)}</a></div>`;
