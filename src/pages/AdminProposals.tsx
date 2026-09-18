@@ -392,9 +392,29 @@ const AdminProposals = () => {
                       </span>
                     ) : p.sent_at ? (
                       <span className="text-forest-dark/40">· Not yet opened</span>
-                    ) : null}
-                  </div>
-                </div>
+                     ) : null}
+                     {p.sent_at && (
+                       <span className="text-forest-dark/50">
+                         · {p.followup_paused
+                           ? "Follow-up paused"
+                           : (p.followup_step ?? 0) >= 3
+                             ? "Follow-up complete"
+                             : `Follow-up ${p.followup_step ?? 0} of 3`}
+                       </span>
+                     )}
+                   </div>
+                   {p.sent_at && (
+                     <label className="mt-2 inline-flex items-center gap-2 text-xs text-forest-dark/60 cursor-pointer">
+                       <input
+                         type="checkbox"
+                         checked={!!p.followup_paused}
+                         onChange={() => toggleFollowupPause(p)}
+                         className="accent-forest-dark"
+                       />
+                       Pause follow-up
+                     </label>
+                   )}
+                 </div>
                 <div className="flex items-center gap-2">
                   <button onClick={() => copyLink(p.slug)} title="Copy link" className="p-2 hover:bg-cream rounded"><Copy className="w-4 h-4 text-forest-dark" /></button>
                   <a href={`/proposal/${p.slug}`} target="_blank" rel="noopener noreferrer" title="View" className="p-2 hover:bg-cream rounded"><Eye className="w-4 h-4 text-forest-dark" /></a>
