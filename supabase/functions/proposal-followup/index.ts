@@ -184,15 +184,14 @@ whiterabbitla.com`;
     const showBlock = offersShow(prop.tiers) ? p(PRODUCTION_BLOCK) : "";
     const subject = "What your guests will actually remember";
     const html = shell(
-      photo(CLOSEUP_URL, "Close up magic") +
-        p(`${nameE},`) +
-        p("Nothing needed here. I wanted to tell you the part that does not fit in a proposal.") +
-        p("The magic happens close. Inches away, in your guests' own hands. A card they are holding. A ring they just took off. Their own phone. Close enough that there is nowhere for it to hide.") +
-        showBlock +
-        p("You are the one building that evening. I am there to help your guests feel alive inside it.") +
-        `<p style="margin:0 0 18px;font-family:${HEAD_FONT};font-style:italic;font-size:19px;line-height:1.6;color:${SAND};">${esc(keyLine)}</p>` +
-        p("Whenever you are ready.") +
-        signature(),
+      p(`${nameE},`) +
+      p("Nothing needed here. I wanted to tell you the part that does not fit in a proposal.") +
+      p("The magic happens close. Inches away, in your guests' own hands. A card they are holding. A ring they just took off. Their own phone. Close enough that there is nowhere for it to hide.") +
+      showBlock +
+      p("You are the one building that evening. I am there to help your guests feel alive inside it.") +
+      `<p style="margin:0 0 18px;font-family:${HEAD_FONT};font-style:italic;font-size:19px;line-height:1.6;color:${SAND};">${esc(keyLine)}</p>` +
+      p("Whenever you are ready.") +
+      signature(),
     );
     const text = `${name},
 
