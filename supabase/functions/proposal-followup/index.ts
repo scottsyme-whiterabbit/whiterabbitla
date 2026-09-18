@@ -158,12 +158,11 @@ function buildEmail(prop: Proposal, step: 1 | 2 | 3) {
     const sentDate = fmtDate(prop.sent_at);
     const subject = `${name}, just wanted to make sure this found you`;
     const html = shell(
-      photo(CLOSEUP_URL, "Close up magic") +
-        p(`${nameE},`) +
-        p(`I sent your proposal over on ${esc(sentDate)}. Just making sure it landed, since email has a way of burying things.`) +
-        p("No rush on it. If anything in there needs adjusting, or you want to talk a detail through before you decide, call me anytime.") +
-        button(url, "View your proposal") +
-        signature(),
+      p(`${nameE},`) +
+      p(`I sent your proposal over on ${esc(sentDate)}. Just making sure it landed, since email has a way of burying things.`) +
+      p("No rush on it. If anything in there needs adjusting, or you want to talk a detail through before you decide, call me anytime.") +
+      button(url, "View your proposal") +
+      signature(),
     );
     const text = `${name},
 
