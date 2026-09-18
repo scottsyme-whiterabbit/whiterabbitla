@@ -114,3 +114,6 @@ verify_jwt = false
 
 [functions.invoice-reminders]
 verify_jwt = false
+
+[functions.proposal-followup]
+verify_jwt = false

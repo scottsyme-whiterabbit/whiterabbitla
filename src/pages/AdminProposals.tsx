@@ -25,6 +25,9 @@ interface ProposalRow {
   created_at: string;
   view_count?: number;
   last_viewed_at?: string | null;
+  followup_step?: number;
+  followup_paused?: boolean;
+  last_followup_at?: string | null;
 }
 
 interface FullProposal extends ProposalData {
@@ -191,6 +194,18 @@ const AdminProposals = () => {
       toast.success("Deleted");
       loadList();
     } catch (e) { toast.error((e as Error).message); }
+  };
+
+  const toggleFollowupPause = async (p: ProposalRow) => {
+    const paused = !p.followup_paused;
+    setList((s) => s.map((r) => (r.id === p.id ? { ...r, followup_paused: paused } : r)));
+    try {
+      await apiCall("set_followup_pause", "POST", { id: p.id, paused });
+      toast.success(paused ? "Follow-up paused" : "Follow-up resumed");
+    } catch (e) {
+      toast.error((e as Error).message);
+      loadList();
+    }
   };
 
   const copyLink = (slug: string) => {
@@ -377,9 +392,29 @@ const AdminProposals = () => {
                       </span>
                     ) : p.sent_at ? (
                       <span className="text-forest-dark/40">· Not yet opened</span>
-                    ) : null}
-                  </div>
-                </div>
+                     ) : null}
+                     {p.sent_at && (
+                       <span className="text-forest-dark/50">
+                         · {p.followup_paused
+                           ? "Follow-up paused"
+                           : (p.followup_step ?? 0) >= 3
+                             ? "Follow-up complete"
+                             : `Follow-up ${p.followup_step ?? 0} of 3`}
+                       </span>
+                     )}
+                   </div>
+                   {p.sent_at && (
+                     <label className="mt-2 inline-flex items-center gap-2 text-xs text-forest-dark/60 cursor-pointer">
+                       <input
+                         type="checkbox"
+                         checked={!!p.followup_paused}
+                         onChange={() => toggleFollowupPause(p)}
+                         className="accent-forest-dark"
+                       />
+                       Pause follow-up
+                     </label>
+                   )}
+                 </div>
                 <div className="flex items-center gap-2">
                   <button onClick={() => copyLink(p.slug)} title="Copy link" className="p-2 hover:bg-cream rounded"><Copy className="w-4 h-4 text-forest-dark" /></button>
                   <a href={`/proposal/${p.slug}`} target="_blank" rel="noopener noreferrer" title="View" className="p-2 hover:bg-cream rounded"><Eye className="w-4 h-4 text-forest-dark" /></a>

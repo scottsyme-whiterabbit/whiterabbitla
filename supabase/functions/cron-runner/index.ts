@@ -56,8 +56,17 @@ serve(async (req) => {
     });
     const invoiceResults = { status: invoiceRun.status, body: await invoiceRun.json().catch(() => invoiceRun.statusText) };
 
+    // Proposal follow-up ladder also runs DAILY (day 2, 5 and 7 after a
+    // proposal is sent). It also has its own pg_cron job as a safety net.
+    const proposalRun = await fetch(`${FUNCTIONS_BASE}/proposal-followup`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-cron-secret": cronSecretEnv },
+      body: "{}",
+    });
+    const proposalResults = { status: proposalRun.status, body: await proposalRun.json().catch(() => proposalRun.statusText) };
+
     if (!inSendWindow) {
-      return new Response(JSON.stringify({ success: true, skipped: true, message: `Skipped sends: ${pacificDay} outside Tue-Thu window`, "bounce-threshold-check": bounceResults, "invoice-reminders": invoiceResults }), {
+      return new Response(JSON.stringify({ success: true, skipped: true, message: `Skipped sends: ${pacificDay} outside Tue-Thu window`, "bounce-threshold-check": bounceResults, "invoice-reminders": invoiceResults, "proposal-followup": proposalResults }), {
         status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -144,7 +153,7 @@ serve(async (req) => {
     });
     results["seasonal-campaign-process"] = { status: r8.status, body: await r8.json().catch(() => r8.statusText) };
 
-    return new Response(JSON.stringify({ success: true, "bounce-threshold-check": bounceResults, "invoice-reminders": invoiceResults, results }), {
+    return new Response(JSON.stringify({ success: true, "bounce-threshold-check": bounceResults, "invoice-reminders": invoiceResults, "proposal-followup": proposalResults, results }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

@@ -550,7 +550,7 @@ White Rabbit LA`,
     if (action === "list") {
       const { data, error } = await supabase
         .from("proposals")
-        .select("id, slug, first_name, last_name, recipient_email, event_type, event_date, venue, sent_at, created_at, deal_id")
+        .select("id, slug, first_name, last_name, recipient_email, event_type, event_date, venue, sent_at, created_at, deal_id, followup_step, followup_paused, last_followup_at")
         .order("created_at", { ascending: false });
       if (error) return json({ error: error.message }, 500);
 
@@ -642,6 +642,17 @@ White Rabbit LA`,
         console.error("calendar hold refresh failed:", (e as Error).message);
       }
       return json({ proposal: data });
+    }
+
+    if (action === "set_followup_pause" && req.method === "POST") {
+      const { id, paused } = await req.json();
+      if (!id) return json({ error: "Missing id" }, 400);
+      const { error } = await supabase
+        .from("proposals")
+        .update({ followup_paused: paused === true })
+        .eq("id", id);
+      if (error) return json({ error: error.message }, 500);
+      return json({ ok: true, paused: paused === true });
     }
 
     if (action === "delete" && req.method === "POST") {
