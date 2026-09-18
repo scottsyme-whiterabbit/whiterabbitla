@@ -196,6 +196,18 @@ const AdminProposals = () => {
     } catch (e) { toast.error((e as Error).message); }
   };
 
+  const toggleFollowupPause = async (p: ProposalRow) => {
+    const paused = !p.followup_paused;
+    setList((s) => s.map((r) => (r.id === p.id ? { ...r, followup_paused: paused } : r)));
+    try {
+      await apiCall("set_followup_pause", "POST", { id: p.id, paused });
+      toast.success(paused ? "Follow-up paused" : "Follow-up resumed");
+    } catch (e) {
+      toast.error((e as Error).message);
+      loadList();
+    }
+  };
+
   const copyLink = (slug: string) => {
     const url = `${window.location.origin}/proposal/${slug}`;
     navigator.clipboard.writeText(url);
