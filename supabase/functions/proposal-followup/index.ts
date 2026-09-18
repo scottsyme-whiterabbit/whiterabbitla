@@ -16,7 +16,6 @@ const supabase = createClient(
 
 /* ---------- assets (swap these when the files change) ---------- */
 const LOGO_URL = "https://whiterabbitla.com/email-assets/wr-logo-stars.png";
-const CLOSEUP_URL = "https://whiterabbitla.com/email-assets/wr-closeup-bw.jpg";
 
 /* ---------- brand ---------- */
 const GROUND = "#283932";
@@ -99,9 +98,6 @@ const PRODUCTION_BLOCK =
 const p = (text: string) =>
   `<p style="margin:0 0 18px;font-family:${BODY_FONT};font-size:15px;line-height:1.75;color:${CREAM};">${text}</p>`;
 
-const photo = (src: string, alt: string) =>
-  `<div style="text-align:center;margin:0 0 28px;"><img src="${src}" alt="${esc(alt)}" width="420" style="width:420px;max-width:100%;height:auto;display:block;margin:0 auto;border:0;outline:none;text-decoration:none;border-radius:4px;" /></div>`;
-
 const button = (url: string, label: string) =>
   `<div style="text-align:center;margin:30px 0 26px;"><a href="${url}" style="display:inline-block;background:${GOLD};color:${GROUND};text-decoration:none;padding:15px 32px;font-family:${BODY_FONT};font-size:12px;letter-spacing:.16em;text-transform:uppercase;">${esc(label)}</a></div>`;
 
@@ -161,12 +157,11 @@ function buildEmail(prop: Proposal, step: 1 | 2 | 3) {
     const sentDate = fmtDate(prop.sent_at);
     const subject = `${name}, just wanted to make sure this found you`;
     const html = shell(
-      photo(CLOSEUP_URL, "Close up magic") +
-        p(`${nameE},`) +
-        p(`I sent your proposal over on ${esc(sentDate)}. Just making sure it landed, since email has a way of burying things.`) +
-        p("No rush on it. If anything in there needs adjusting, or you want to talk a detail through before you decide, call me anytime.") +
-        button(url, "View your proposal") +
-        signature(),
+      p(`${nameE},`) +
+      p(`I sent your proposal over on ${esc(sentDate)}. Just making sure it landed, since email has a way of burying things.`) +
+      p("No rush on it. If anything in there needs adjusting, or you want to talk a detail through before you decide, call me anytime.") +
+      button(url, "View your proposal") +
+      signature(),
     );
     const text = `${name},
 
@@ -188,15 +183,14 @@ whiterabbitla.com`;
     const showBlock = offersShow(prop.tiers) ? p(PRODUCTION_BLOCK) : "";
     const subject = "What your guests will actually remember";
     const html = shell(
-      photo(CLOSEUP_URL, "Close up magic") +
-        p(`${nameE},`) +
-        p("Nothing needed here. I wanted to tell you the part that does not fit in a proposal.") +
-        p("The magic happens close. Inches away, in your guests' own hands. A card they are holding. A ring they just took off. Their own phone. Close enough that there is nowhere for it to hide.") +
-        showBlock +
-        p("You are the one building that evening. I am there to help your guests feel alive inside it.") +
-        `<p style="margin:0 0 18px;font-family:${HEAD_FONT};font-style:italic;font-size:19px;line-height:1.6;color:${SAND};">${esc(keyLine)}</p>` +
-        p("Whenever you are ready.") +
-        signature(),
+      p(`${nameE},`) +
+      p("Nothing needed here. I wanted to tell you the part that does not fit in a proposal.") +
+      p("The magic happens close. Inches away, in your guests' own hands. A card they are holding. A ring they just took off. Their own phone. Close enough that there is nowhere for it to hide.") +
+      showBlock +
+      p("You are the one building that evening. I am there to help your guests feel alive inside it.") +
+      `<p style="margin:0 0 18px;font-family:${HEAD_FONT};font-style:italic;font-size:19px;line-height:1.6;color:${SAND};">${esc(keyLine)}</p>` +
+      p("Whenever you are ready.") +
+      signature(),
     );
     const text = `${name},
 
