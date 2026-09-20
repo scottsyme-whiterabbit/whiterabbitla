@@ -280,6 +280,69 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
   }
 }
 
+// ---- Manually booked shows: give them the same client-facing emails ----
+// A show marked booked by hand (comped, settled outside Stripe, invoiced
+// elsewhere) has no event_invoices row, so the pre-event anticipation notes
+// never fire. This creates a settled booking record for it: status "paid" and
+// payment_method "external", so no payment nags or balance reminders can ever
+// go out, only the "two weeks to go" and "see you tomorrow" notes. Post-show
+// follow-up already runs off the calendar link, so it needs nothing here.
+async function ensureBookedClientEmails(supabase: any, dealId: string) {
+  try {
+    const { data: deal } = await supabase
+      .from("deals")
+      .select("id, stage, contact_email, contact_name, company, event_type, event_date, location, deal_value")
+      .eq("id", dealId)
+      .maybeSingle();
+    if (!deal) return;
+    if (deal.stage !== "booked") return;
+    if (!deal.event_date || !deal.contact_email) return;
+
+    const { data: existing } = await supabase
+      .from("event_invoices")
+      .select("id")
+      .eq("deal_id", deal.id)
+      .limit(1);
+    if (existing && existing.length) return;
+
+    const total = typeof deal.deal_value === "number" ? deal.deal_value : 0;
+    const nowIso = new Date().toISOString();
+    const { error } = await supabase.from("event_invoices").insert({
+      deal_id: deal.id,
+      pay_token: crypto.randomUUID().replace(/-/g, ""),
+      client_name: deal.contact_name || null,
+      client_email: deal.contact_email,
+      event_type: deal.event_type || null,
+      event_date: deal.event_date,
+      venue: deal.location || null,
+      tier_name: null,
+      total_cents: total,
+      deposit_percent: 0,
+      amount_paid_cents: total,
+      status: "paid",
+      environment: "external",
+      payment_method: "external",
+      external_note: "Marked booked manually in the pipeline; settled outside Stripe.",
+      client_emails_paused: false,
+      paid_in_full_at: nowIso,
+      sent_at: nowIso,
+    });
+    if (error) {
+      console.error("[booked-emails] insert failed:", error.message);
+      return;
+    }
+    await supabase.from("deal_activity").insert({
+      deal_id: deal.id,
+      type: "note",
+      title: "Marked booked manually — client emails enabled",
+      body: "Pre-event notes and post-show follow-up will run as for any signed client. No payment reminders.",
+      occurred_at: nowIso,
+    });
+  } catch (e) {
+    console.error("[booked-emails] unexpected error:", e);
+  }
+}
+
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -722,7 +785,10 @@ serve(async (req) => {
             { onConflict: "email", ignoreDuplicates: true }
           );
 
-        if (data?.id) await syncDealToGoogleCalendar(supabase, data.id);
+        if (data?.id) {
+          await syncDealToGoogleCalendar(supabase, data.id);
+          await ensureBookedClientEmails(supabase, data.id);
+        }
 
         return new Response(JSON.stringify({ deal: data }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -754,7 +820,10 @@ serve(async (req) => {
           .select()
           .single();
         if (error) throw error;
-        if (data?.id) await syncDealToGoogleCalendar(supabase, data.id);
+        if (data?.id) {
+          await syncDealToGoogleCalendar(supabase, data.id);
+          await ensureBookedClientEmails(supabase, data.id);
+        }
         return new Response(JSON.stringify({ deal: data }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -776,6 +845,7 @@ serve(async (req) => {
           .eq("id", dealId);
         if (error) throw error;
         await syncDealToGoogleCalendar(supabase, dealId);
+        await ensureBookedClientEmails(supabase, dealId);
         return new Response(JSON.stringify({ success: true }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
