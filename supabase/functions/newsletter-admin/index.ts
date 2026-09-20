@@ -785,7 +785,10 @@ serve(async (req) => {
             { onConflict: "email", ignoreDuplicates: true }
           );
 
-        if (data?.id) await syncDealToGoogleCalendar(supabase, data.id);
+        if (data?.id) {
+          await syncDealToGoogleCalendar(supabase, data.id);
+          await ensureBookedClientEmails(supabase, data.id);
+        }
 
         return new Response(JSON.stringify({ deal: data }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -817,7 +820,10 @@ serve(async (req) => {
           .select()
           .single();
         if (error) throw error;
-        if (data?.id) await syncDealToGoogleCalendar(supabase, data.id);
+        if (data?.id) {
+          await syncDealToGoogleCalendar(supabase, data.id);
+          await ensureBookedClientEmails(supabase, data.id);
+        }
         return new Response(JSON.stringify({ deal: data }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -839,6 +845,7 @@ serve(async (req) => {
           .eq("id", dealId);
         if (error) throw error;
         await syncDealToGoogleCalendar(supabase, dealId);
+        await ensureBookedClientEmails(supabase, dealId);
         return new Response(JSON.stringify({ success: true }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
