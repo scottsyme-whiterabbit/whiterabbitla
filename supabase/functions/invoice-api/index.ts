@@ -3,6 +3,7 @@ import { type StripeEnv, createStripeClient } from "../_shared/stripe.ts";
 import {
   type Invoice, balanceCents, depositCents, invoiceEmail, money, sendEmail,
 } from "../_shared/invoice-email.ts";
+import { isAdminRequest } from "../_shared/require-admin.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -22,9 +23,8 @@ const json = (body: unknown, status = 200) =>
     headers: { ...corsHeaders, "Content-Type": "application/json" },
   });
 
-const isAdmin = (req: Request, body?: any) =>
-  ADMIN_PASSWORD.length > 0 &&
-  (req.headers.get("x-admin-password") === ADMIN_PASSWORD || body?.adminPassword === ADMIN_PASSWORD);
+// Admin = allowlisted Google user (Bearer token) OR the legacy admin password.
+const isAdmin = (req: Request, body?: any) => isAdminRequest(req, body);
 
 const publicView = (inv: Invoice) => ({
   pay_token: inv.pay_token,
@@ -127,7 +127,7 @@ Deno.serve(async (req) => {
 
 
     // ---- ADMIN ----
-    if (!isAdmin(req, body)) return json({ error: "Unauthorized" }, 401);
+    if (!(await isAdmin(req, body))) return json({ error: "Unauthorized" }, 401);
 
     if (action === "list") {
       const { data, error } = await supabase

@@ -3,6 +3,8 @@ import { blogArticles } from "@/data/blogArticles";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import AnimatedSection from "@/components/AnimatedSection";
+import { useAdminAuth } from "@/contexts/AdminAuthContext";
+import AdminGate from "@/components/admin/AdminGate";
 import { toPng } from "html-to-image";
 import wrSymbol from "@/assets/wr-symbol.png";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
@@ -199,8 +201,7 @@ function loadLibrary(): SavedAd[] {
 }
 
 const SocialGenerator = () => {
-  const [password, setPassword] = useState("");
-  const [authenticated, setAuthenticated] = useState(false);
+  const { password, authed: authenticated } = useAdminAuth();
 
   const [contentSource, setContentSource] = useState<ContentSource>("custom");
   const [selectedSlug, setSelectedSlug] = useState("");
@@ -239,24 +240,6 @@ const SocialGenerator = () => {
 
   const selectedArticle = blogArticles.find((a) => a.slug === selectedSlug);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${SUPABASE_KEY}` },
-        body: JSON.stringify({ action: "get_stats", adminPassword: password }),
-      });
-      if (res.ok) {
-        setAuthenticated(true);
-        toast({ title: "Welcome back" });
-      } else {
-        toast({ title: "Invalid password", variant: "destructive" });
-      }
-    } catch {
-      toast({ title: "Connection failed", variant: "destructive" });
-    }
-  };
 
   const handleArticleSelect = (slug: string) => {
     setSelectedSlug(slug);
@@ -564,33 +547,6 @@ const SocialGenerator = () => {
       </div>
     </>
   );
-
-  if (!authenticated) {
-    return (
-      <main id="main-content" className="pt-20 min-h-screen flex items-center justify-center">
-        <div className="max-w-sm w-full px-6">
-          <AnimatedSection>
-            <div className="text-center mb-8">
-              <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">Admin Access</p>
-              <h1 className="font-serif text-3xl text-foreground">Ad Generator</h1>
-            </div>
-            <form onSubmit={handleLogin} className="space-y-4">
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter admin password"
-                className="w-full bg-background border border-border text-foreground font-sans text-sm px-4 py-3 focus:outline-none focus:border-accent"
-              />
-              <button type="submit" className="w-full font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 py-3 hover:bg-accent/80 transition-colors">
-                Enter
-              </button>
-            </form>
-          </AnimatedSection>
-        </div>
-      </main>
-    );
-  }
 
   const activePreset = selectedAudience ? AUDIENCE_PRESETS[selectedAudience] : null;
 
@@ -1189,4 +1145,10 @@ const SocialGenerator = () => {
   );
 };
 
-export default SocialGenerator;
+const SocialGeneratorPage = () => (
+  <AdminGate>
+    <SocialGenerator />
+  </AdminGate>
+);
+
+export default SocialGeneratorPage;

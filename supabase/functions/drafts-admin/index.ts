@@ -2,6 +2,7 @@
 // Sending re-uses the gmail-send function so threading + deal_activity logging still work.
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
+import { isAdminRequest } from "../_shared/require-admin.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -92,7 +93,7 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: "Server misconfigured: ADMIN_PASSWORD not set" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
     const body = await req.json();
-    if (body.adminPassword !== ADMIN_PASSWORD) {
+    if (!(await isAdminRequest(req, body))) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
     const { action } = body;
@@ -172,7 +173,7 @@ serve(async (req) => {
         subject: overrideSubject !== undefined ? overrideSubject : draft.subject,
         body: overrideBody !== undefined ? overrideBody : draft.body,
       };
-      const result = await sendViaGmail(sendDraft, body.adminPassword);
+      const result = await sendViaGmail(sendDraft, ADMIN_PASSWORD!);
       const { data: updated } = await supabase.from("email_drafts").update({
         status: "sent",
         sent_at: new Date().toISOString(),
@@ -200,7 +201,7 @@ serve(async (req) => {
         try {
           const { data: draft } = await supabase.from("email_drafts").select("*").eq("id", id).maybeSingle();
           if (!draft || draft.status === "sent") { results.push({ id, ok: false, error: "not sendable" }); continue; }
-          const r = await sendViaGmail(draft, body.adminPassword);
+          const r = await sendViaGmail(draft, ADMIN_PASSWORD!);
           await supabase.from("email_drafts").update({ status: "sent", sent_at: new Date().toISOString(), sent_message_id: r.message_id || null }).eq("id", id);
           if (draft.generation_id) {
             await supabase.from("email_drafts").update({ status: "dismissed", dismissed_at: new Date().toISOString() })

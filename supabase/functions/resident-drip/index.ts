@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { isAdminRequest } from "../_shared/require-admin.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -579,7 +580,7 @@ serve(async (req) => {
 
     // ── Action: enroll ── Import contacts into resident drip
     if (action === "enroll") {
-      if (adminPassword !== ADMIN_PASSWORD) {
+      if (!(await isAdminRequest(req, { adminPassword }))) {
         return new Response(JSON.stringify({ error: "Unauthorized" }), {
           status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -891,7 +892,7 @@ serve(async (req) => {
 
     // ── Action: preview ── Preview a specific email template
     if (action === "preview") {
-      if (adminPassword !== ADMIN_PASSWORD) {
+      if (!(await isAdminRequest(req, { adminPassword }))) {
         return new Response(JSON.stringify({ error: "Unauthorized" }), {
           status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -927,7 +928,7 @@ serve(async (req) => {
 
     // ── Action: stats ── Get resident drip stats
     if (action === "stats") {
-      if (adminPassword !== ADMIN_PASSWORD) {
+      if (!(await isAdminRequest(req, { adminPassword }))) {
         return new Response(JSON.stringify({ error: "Unauthorized" }), {
           status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -994,7 +995,7 @@ serve(async (req) => {
 
     // ── Action: test-send ── Send a single test email
     if (action === "test-send") {
-      if (adminPassword !== ADMIN_PASSWORD) {
+      if (!(await isAdminRequest(req, { adminPassword }))) {
         return new Response(JSON.stringify({ error: "Unauthorized" }), {
           status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -1063,7 +1064,7 @@ serve(async (req) => {
 
     // ── Action: get_contact_activity ── Get clicks/opens for a contact
     if (action === "get_contact_activity") {
-      if (adminPassword !== ADMIN_PASSWORD) {
+      if (!(await isAdminRequest(req, { adminPassword }))) {
         return new Response(JSON.stringify({ error: "Unauthorized" }), {
           status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -1091,7 +1092,7 @@ serve(async (req) => {
 
     // ── Action: get_contacts ── List resident contacts
     if (action === "get_contacts") {
-      if (adminPassword !== ADMIN_PASSWORD) {
+      if (!(await isAdminRequest(req, { adminPassword }))) {
         return new Response(JSON.stringify({ error: "Unauthorized" }), {
           status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });

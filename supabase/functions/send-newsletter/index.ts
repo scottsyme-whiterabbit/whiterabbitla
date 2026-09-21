@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { isAdminRequest } from "../_shared/require-admin.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -47,7 +48,7 @@ serve(async (req) => {
     const cronAccepted = [Deno.env.get("CRON_SECRET"), Deno.env.get("CRON_SECRET_V2")].filter(Boolean);
     const cronProvided = req.headers.get("x-cron-secret") || "";
     const isCron = cronAccepted.length > 0 && cronAccepted.includes(cronProvided);
-    const isAdmin = adminPassword === Deno.env.get("ADMIN_PASSWORD");
+    const isAdmin = await isAdminRequest(req, { adminPassword });
 
     if (!isCron && !isAdmin) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {

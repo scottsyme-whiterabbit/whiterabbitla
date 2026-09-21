@@ -19,7 +19,8 @@ import DealInboxTab from "@/components/DealInboxTab";
 import FollowupQueueTab from "@/components/FollowupQueueTab";
 import ActivityLogTab from "@/components/ActivityLogTab";
 import CastleInvitesTab from "@/components/CastleInvitesTab";
-import { BiometricUnlockButton, BiometricEnrollPrompt } from "@/components/BiometricUnlockButton";
+import { useAdminAuth } from "@/contexts/AdminAuthContext";
+import AdminGate, { AdminSignOutButton } from "@/components/admin/AdminGate";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -82,17 +83,9 @@ interface Stats {
 
 const AdminNewsletter = () => {
   const isMobile = useIsMobile();
-  const [password, setPassword] = useState("");
-  const [authenticated, setAuthenticated] = useState(() => {
-    // The admin password is never persisted. We only keep a short-lived
-    // session timestamp; the password itself lives in memory for this tab,
-    // so a reload requires signing in again (Face ID / Touch ID still works).
-    try {
-      localStorage.removeItem("wr_admin_session");
-    } catch {}
-    return false;
-  });
-  const [storedPassword, setStoredPassword] = useState("");
+  // Admin auth is shared across every /admin page (Google sign-in, with the
+  // legacy password as a phase-1 fallback). The password is memory-only.
+  const { password: storedPassword, authed: authenticated } = useAdminAuth();
 
 
   const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "inbox" | "actions" | "followups" | "activity" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "email_analytics" | "planner" | "apartment" | "thankyou" | "cold" | "lead_attribution" | "castle">(() => {
@@ -178,8 +171,7 @@ const AdminNewsletter = () => {
   }, [storedPassword]);
 
   const loadData = useCallback(async () => {
-    if (!storedPassword) return;
-    setLoading(true);
+      setLoading(true);
     try {
       const [statsRes, contactsRes, campaignsRes, summaryRes] = await Promise.all([
         callAdmin("get_stats"),
@@ -214,37 +206,6 @@ const AdminNewsletter = () => {
   useEffect(() => {
     if (authenticated) loadData();
   }, [authenticated, loadData]);
-
-  const handleLogin = async (e?: React.FormEvent, pwOverride?: string) => {
-    if (e) e.preventDefault();
-    const candidate = pwOverride ?? password;
-    try {
-      const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${SUPABASE_KEY}`,
-        },
-        body: JSON.stringify({ action: "get_stats", adminPassword: candidate }),
-      });
-      if (res.ok) {
-        setPassword(candidate);
-        setStoredPassword(candidate);
-        setAuthenticated(true);
-        // Store only a short-lived session timestamp — never the password.
-        try {
-          sessionStorage.setItem("wr_admin_session", new Date().toISOString());
-          localStorage.removeItem("wr_admin_session");
-        } catch {}
-
-        toast.success("Welcome back");
-      } else {
-        toast.error("Invalid password");
-      }
-    } catch {
-      toast.error("Connection failed");
-    }
-  };
 
   // Smart CSV parser that handles quoted fields with commas/newlines
   const parseCSVRow = (row: string): string[] => {
@@ -567,32 +528,6 @@ const AdminNewsletter = () => {
     setPreviewMode(false);
   };
 
-  if (!authenticated) {
-    return (
-      <div className="min-h-screen bg-[hsl(var(--forest-dark))] flex items-center justify-center px-6">
-        <form onSubmit={handleLogin} className="w-full max-w-sm">
-          <h1 className="font-serif text-3xl text-cream mb-8 text-center">White Rabbit Concierge</h1>
-          <BiometricUnlockButton
-            namespace="newsletter"
-            variant="dark"
-            onUnlock={(pw) => handleLogin(undefined, pw)}
-          />
-          <input
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            placeholder="Enter admin password"
-            autoFocus
-            className="w-full bg-[hsl(var(--forest-dark))]/50 border border-cream/20 text-cream px-4 py-3 mb-4 font-sans text-base focus:outline-none focus:border-accent"
-          />
-          <button type="submit" className="w-full bg-accent text-accent-foreground py-3 font-sans text-sm tracking-[0.2em] uppercase hover:bg-accent/80 transition-colors min-h-[44px]">
-            Enter
-          </button>
-        </form>
-      </div>
-    );
-  }
-
   const handleQuickAddSave = async () => {
     if (!quickAddForm.name || !quickAddForm.email) { toast.error("Name and email required"); return; }
     setQuickAddSaving(true);
@@ -691,10 +626,10 @@ const AdminNewsletter = () => {
     <div className="min-h-screen bg-background pt-24 pb-16 md:pb-16" onClick={() => searchOpen && setSearchOpen(false)}>
       {/* Add bottom padding on mobile for the nav bar */}
       <div className={`max-w-6xl mx-auto px-4 md:px-6 ${isMobile ? 'pb-24' : ''}`}>
-        <BiometricEnrollPrompt namespace="newsletter" password={storedPassword} variant="light" />
         <div className="flex items-center justify-between mb-4 md:mb-6">
           <h1 className="font-serif text-2xl md:text-3xl text-foreground">White Rabbit Concierge</h1>
           <div className="flex items-center gap-2">
+            <AdminSignOutButton className="text-muted-foreground mr-1" />
             <a
               href="/admin/proposals"
               className="hidden md:inline-flex items-center gap-1.5 px-3 py-2 border border-border text-foreground hover:border-accent hover:text-accent transition-colors font-sans text-xs tracking-[0.15em] uppercase min-h-[44px]"
@@ -1720,4 +1655,10 @@ const AdminNewsletter = () => {
   );
 };
 
-export default AdminNewsletter;
+const AdminNewsletterPage = () => (
+  <AdminGate>
+    <AdminNewsletter />
+  </AdminGate>
+);
+
+export default AdminNewsletterPage;
