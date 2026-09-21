@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { isAdminRequest } from "../_shared/require-admin.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -16,7 +17,7 @@ serve(async (req) => {
 
     // Verify admin
     const ADMIN_PASSWORD = Deno.env.get("ADMIN_PASSWORD");
-    if (!adminPassword || adminPassword !== ADMIN_PASSWORD) {
+    if (!(await isAdminRequest(req, { adminPassword }))) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
