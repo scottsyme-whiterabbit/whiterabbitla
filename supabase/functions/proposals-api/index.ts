@@ -7,6 +7,7 @@ import {
   parsePriceToCents,
   payUrl,
 } from "../_shared/invoice-email.ts";
+import { isAdminRequest } from "../_shared/require-admin.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -39,10 +40,30 @@ const slugifyVenue = (venue: string) => {
   return `${base}-${rand}`;
 };
 
-const isAdmin = (req: Request) => {
-  const pw = req.headers.get("x-admin-password") || "";
-  return ADMIN_PASSWORD && pw === ADMIN_PASSWORD;
+// Admin = allowlisted Google user (Bearer token) OR the legacy admin password.
+const isAdmin = (req: Request, body?: any) => isAdminRequest(req, body);
+
+// --- Cheap abuse limit for the PUBLIC sign action -------------------------
+// In-memory per-isolate counter: 5 sign attempts per IP per hour. A real
+// client signs once, so this never touches a genuine signature.
+const SIGN_LIMIT = 5;
+const SIGN_WINDOW_MS = 60 * 60 * 1000;
+const signAttempts = new Map<string, number[]>();
+const signRateLimited = (ip: string) => {
+  if (!ip) return false;
+  const now = Date.now();
+  const hits = (signAttempts.get(ip) || []).filter((t) => now - t < SIGN_WINDOW_MS);
+  if (hits.length >= SIGN_LIMIT) {
+    signAttempts.set(ip, hits);
+    return true;
+  }
+  hits.push(now);
+  signAttempts.set(ip, hits);
+  return false;
 };
+
+const plausibleEmail = (s: unknown) =>
+  typeof s === "string" && /^[^\s@]+@[^\s@]+\.[A-Za-z]{2,}$/.test(s.trim()) && s.trim().length <= 200;
 
 const esc = (s: unknown) =>
   String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
