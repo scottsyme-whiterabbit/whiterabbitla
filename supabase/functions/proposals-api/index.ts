@@ -301,20 +301,70 @@ Deno.serve(async (req) => {
       const fwd = req.headers.get("x-forwarded-for") || "";
       const ip = fwd.split(",")[0].trim();
 
-      // Look up linked deal (via proposal_id or proposal_slug) so signing auto-books it.
-      // We also pull the stored `tiers` so the invoice amount is derived server-side
-      // and never trusted from the request body.
+      // Abuse limit: 5 sign attempts per IP per hour (in-memory).
+      if (signRateLimited(ip)) {
+        return json({ error: "Too many attempts. Please try again later." }, 429);
+      }
+
+      // An email address is optional, but if one is given it must be plausible
+      // before anything is sent to it.
+      if (client_email && !plausibleEmail(client_email)) {
+        return json({ error: "Please enter a valid email address." }, 400);
+      }
+
+      // Look up the STORED proposal (via proposal_id or proposal_slug). Nothing is
+      // written, invoiced or emailed unless a real stored proposal is found, and
+      // the invoice amount is always derived from its stored tiers.
       let linkedDealId: string | null = null;
-      let storedProposalFound = false;
       let storedTiers: any[] = [];
+      let storedProposalId: string | null = null;
       if (proposal_id || proposal_slug) {
-        const q = supabase.from("proposals").select("deal_id, tiers");
+        const q = supabase.from("proposals").select("id, deal_id, tiers");
         const { data: prop } = proposal_id
           ? await q.eq("id", proposal_id).maybeSingle()
           : await q.eq("slug", proposal_slug).maybeSingle();
-        linkedDealId = prop?.deal_id || null;
-        storedProposalFound = !!prop;
-        storedTiers = Array.isArray(prop?.tiers) ? (prop!.tiers as any[]) : [];
+        if (prop) {
+          linkedDealId = prop.deal_id || null;
+          storedProposalId = prop.id as string;
+          storedTiers = Array.isArray(prop.tiers) ? (prop.tiers as any[]) : [];
+        }
+      }
+      if (!storedProposalId) {
+        // Template preview or an unknown proposal: acknowledge with a success
+        // state, but store nothing, invoice nothing, send nothing.
+        return json({ ok: true, preview: true });
+      }
+
+      // Idempotent signing: an existing agreement for this proposal returns the
+      // same payment details instead of creating a second agreement/invoice.
+      {
+        const { data: existing } = await supabase
+          .from("signed_agreements")
+          .select("id")
+          .eq("proposal_id", storedProposalId)
+          .order("signed_at", { ascending: true })
+          .limit(1);
+        const prior = existing?.[0];
+        if (prior) {
+          const { data: priorInv } = await supabase
+            .from("event_invoices")
+            .select("*")
+            .eq("agreement_id", prior.id)
+            .order("created_at", { ascending: true })
+            .limit(1);
+          const inv = priorInv?.[0] as Invoice | undefined;
+          if (inv) {
+            return json({
+              ok: true,
+              already_signed: true,
+              pay_token: inv.pay_token,
+              total_cents: inv.total_cents,
+              deposit_cents: Math.round(inv.total_cents * 0.5),
+              pay_url: payUrl(inv),
+            });
+          }
+          return json({ ok: true, already_signed: true });
+        }
       }
 
 
