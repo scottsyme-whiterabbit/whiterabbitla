@@ -1,9 +1,9 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { type StripeEnv, createStripeClient } from "../_shared/stripe.ts";
 import {
-import { isAdminRequest } from "../_shared/require-admin.ts";
   type Invoice, balanceCents, depositCents, invoiceEmail, money, sendEmail,
 } from "../_shared/invoice-email.ts";
+import { isAdminRequest } from "../_shared/require-admin.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
