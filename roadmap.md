@@ -22,3 +22,10 @@
 
 ## Done
 - Proposal follow-up ladder, invoice reminders, manual-booked client emails, reviews page updates.
+
+## Admin Google sign-in (phase 1) — DONE 2026-09-21
+- Google provider enabled, open email signups off, ADMIN_EMAILS set.
+- _shared/require-admin.ts used by all browser-facing admin functions.
+- AdminAuthProvider + AdminGate on /admin/newsletter, /admin/proposals, /admin/social.
+- Password path kept in memory only; biometric unlock removed (it persisted the password).
+- Phase 2 (remove password path) pending Scott's confirmation on laptop + phone.
