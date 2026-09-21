@@ -412,9 +412,8 @@ Deno.serve(async (req) => {
       // to the client alongside the agreement. Daily reminders are handled by
       // the invoice-reminders function.
       //
-      // SECURITY: the amount is resolved from the STORED proposal's tiers, never
-      // from the client-supplied tier_price. The client value is only used when
-      // there is no stored proposal at all (preview / ad-hoc signature).
+      // SECURITY: the amount is resolved from the STORED proposal's tiers only.
+      // The client-supplied tier_price is never used for money.
       let invoiceLink = "";
       let createdInvoice: Invoice | null = null;
       const norm = (s: any) => (typeof s === "string" ? s.trim().toLowerCase() : "");
