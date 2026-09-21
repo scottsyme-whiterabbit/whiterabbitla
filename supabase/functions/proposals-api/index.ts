@@ -369,7 +369,7 @@ Deno.serve(async (req) => {
 
 
       const { data, error } = await supabase.from("signed_agreements").insert({
-        proposal_id: proposal_id || null,
+        proposal_id: storedProposalId,
         proposal_slug: trim(proposal_slug, 200),
         deal_id: linkedDealId,
         tier_name: trim(tier_name, 200),
@@ -418,12 +418,12 @@ Deno.serve(async (req) => {
       let invoiceLink = "";
       let createdInvoice: Invoice | null = null;
       const norm = (s: any) => (typeof s === "string" ? s.trim().toLowerCase() : "");
-      const matchedTier = storedProposalFound
+      const matchedTier = storedTiers.length
         ? storedTiers.find((t) => norm(t?.name) === norm(tier_name))
         : null;
-      const authoritativeCents = storedProposalFound
-        ? (matchedTier ? parsePriceToCents(matchedTier.price) : null)
-        : parsePriceToCents(tier_price);
+      // The amount comes ONLY from the stored proposal's tiers. There is no
+      // client-supplied price fallback.
+      const authoritativeCents = matchedTier ? parsePriceToCents(matchedTier.price) : null;
       try {
         const cents = authoritativeCents;
         if (cents) {
