@@ -239,7 +239,7 @@ Deno.serve(async (req) => {
       if (error) return json({ error: error.message }, 500);
       if (!data) return json({ error: "Not found" }, 404);
 
-      if (!isAdmin(req)) {
+      if (!(await isAdmin(req))) {
         const ua = req.headers.get("user-agent") || "";
         const ref = req.headers.get("referer") || "";
         // Record the view, then decide whether this is worth an alert.
@@ -272,7 +272,7 @@ Deno.serve(async (req) => {
       if (error) return json({ error: error.message }, 500);
       if (!data) return json({ error: "Not found" }, 404);
 
-      if (!isAdmin(req)) {
+      if (!(await isAdmin(req))) {
         const ua = req.headers.get("user-agent") || "";
         const ref = req.headers.get("referer") || "";
         supabase.from("proposal_views").insert({
@@ -508,7 +508,7 @@ White Rabbit LA`,
     }
 
     // ADMIN actions below
-    if (!isAdmin(req)) return json({ error: "Unauthorized" }, 401);
+    if (!(await isAdmin(req, adminBody))) return json({ error: "Unauthorized" }, 401);
 
     if (action === "list_signed") {
       const { data, error } = await supabase
