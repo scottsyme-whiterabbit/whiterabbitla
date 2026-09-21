@@ -199,8 +199,7 @@ function loadLibrary(): SavedAd[] {
 }
 
 const SocialGenerator = () => {
-  const [password, setPassword] = useState("");
-  const [authenticated, setAuthenticated] = useState(false);
+  const { password, authed: authenticated } = useAdminAuth();
 
   const [contentSource, setContentSource] = useState<ContentSource>("custom");
   const [selectedSlug, setSelectedSlug] = useState("");

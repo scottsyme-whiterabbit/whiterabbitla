@@ -4,7 +4,8 @@ import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loa
 import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type Tier, type TimelineItem, type FaqItem } from "./ProposalTemplate";
 import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, PROPOSAL_TEMPLATES, STANDARD_TIER_LINES, reviewsForEventType } from "@/data/proposalAssets";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
-import { BiometricUnlockButton, BiometricEnrollPrompt } from "@/components/BiometricUnlockButton";
+import { useAdminAuth } from "@/contexts/AdminAuthContext";
+import AdminGate, { AdminSignOutButton } from "@/components/admin/AdminGate";
 import ResidencyAdmin from "@/components/admin/ResidencyAdmin";
 import SignedAgreementsTab from "@/components/admin/SignedAgreementsTab";
 import PaymentsTab from "@/components/admin/PaymentsTab";
@@ -52,29 +53,14 @@ const formatRelative = (iso: string) => {
 };
 
 const AdminProposals = () => {
-  const [password, setPassword] = useState(() => localStorage.getItem("wr_admin_session_pw") || "");
-  const [authed, setAuthed] = useState(false);
-  const [pwInput, setPwInput] = useState("");
+  // Shared admin auth (Google sign-in, memory-only password fallback).
+  const { password, authed } = useAdminAuth();
 
   const [list, setList] = useState<ProposalRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [editing, setEditing] = useState<FullProposal | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [activeTab, setActiveTab] = useState<"client" | "residency" | "signed" | "payments">("client");
-
-  // Try saved session
-  useEffect(() => {
-    const saved = localStorage.getItem("wr_admin_session") || sessionStorage.getItem("wr_admin_session");
-    if (saved) {
-      try {
-        const { pw, ts } = JSON.parse(saved);
-        if (Date.now() - ts < 24 * 60 * 60 * 1000) {
-          setPassword(pw);
-          setAuthed(true);
-        }
-      } catch {}
-    }
-  }, []);
 
   useEffect(() => { if (authed) loadList(); }, [authed]);
 
@@ -130,20 +116,6 @@ const AdminProposals = () => {
     const j = await res.json();
     if (!res.ok) throw new Error(j.error || "Request failed");
     return j;
-  };
-
-  const tryLogin = async (pw?: string) => {
-    const candidate = pw ?? pwInput;
-    try {
-      const res = await fetch(`${FN}?action=list`, { headers: { "x-admin-password": candidate } });
-      if (!res.ok) throw new Error("Wrong password");
-      setPassword(candidate);
-      setAuthed(true);
-      const session = JSON.stringify({ pw: candidate, ts: Date.now() });
-      localStorage.setItem("wr_admin_session", session);
-    } catch (e) {
-      toast.error((e as Error).message);
-    }
   };
 
   const loadList = async () => {
@@ -229,32 +201,6 @@ const AdminProposals = () => {
     } catch (e) { toast.error((e as Error).message); }
   };
 
-  if (!authed) {
-    return (
-      <div className="min-h-screen bg-forest-dark flex items-center justify-center p-6">
-        <div className="bg-cream p-8 max-w-sm w-full">
-          <h1 className="font-serif text-2xl text-forest-dark mb-6">Proposals Admin</h1>
-          <BiometricUnlockButton
-            namespace="proposals"
-            variant="light"
-            onUnlock={(pw) => tryLogin(pw)}
-          />
-          <input
-            type="password"
-            value={pwInput}
-            onChange={(e) => setPwInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && tryLogin()}
-            placeholder="Admin password"
-            className="w-full border border-forest-dark/20 px-4 py-3 mb-4 bg-white"
-          />
-          <button onClick={() => tryLogin()} className="w-full bg-forest-dark text-cream py-3 hover:opacity-90">
-            Sign in
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   if (showPreview && editing) {
     return (
       <div className="min-h-screen bg-cream">
@@ -276,7 +222,6 @@ const AdminProposals = () => {
   return (
     <div className="min-h-screen bg-cream p-6 md:p-10">
       <div className="max-w-6xl mx-auto">
-        <BiometricEnrollPrompt namespace="proposals" password={password} variant="light" />
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-3">
             <a
@@ -1031,4 +976,10 @@ const TierEditor = ({ tier, onChange, onRemove, index }: { tier: Tier; onChange:
   );
 };
 
-export default AdminProposals;
+const AdminProposalsPage = () => (
+  <AdminGate>
+    <AdminProposals />
+  </AdminGate>
+);
+
+export default AdminProposalsPage;
