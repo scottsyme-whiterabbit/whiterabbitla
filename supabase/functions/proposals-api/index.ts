@@ -508,7 +508,7 @@ White Rabbit LA`,
     }
 
     // ADMIN actions below
-    if (!(await isAdmin(req, adminBody))) return json({ error: "Unauthorized" }, 401);
+    if (!(await isAdmin(req))) return json({ error: "Unauthorized" }, 401);
 
     if (action === "list_signed") {
       const { data, error } = await supabase
