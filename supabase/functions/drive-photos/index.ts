@@ -34,7 +34,7 @@ function gwHeaders(extra: Record<string, string> = {}) {
   };
 }
 
-function isAdmin(req: Request) {
+async function isAdmin(req: Request) {
   return await isAdminRequest(req);
 }
 
@@ -243,7 +243,7 @@ Deno.serve(async (req) => {
 
 
     // Admin-only beyond this point
-    if (!isAdmin(req)) return json({ error: "unauthorized" }, 401);
+    if (!(await isAdmin(req))) return json({ error: "unauthorized" }, 401);
 
     if (req.method === "GET" && action === "folders") {
       const { data, error } = await sb
