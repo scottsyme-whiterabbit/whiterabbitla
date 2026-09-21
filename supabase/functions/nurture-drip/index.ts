@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { isAdminRequest } from "../_shared/require-admin.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -621,7 +622,7 @@ serve(async (req) => {
     const headerCron = req.headers.get("x-cron-secret") ?? "";
     const cronOk = (cronSecret.length > 0 && headerCron === cronSecret) ||
       (cronSecretV2.length > 0 && headerCron === cronSecretV2);
-    const adminOk = adminPassword.length > 0 && body.adminPassword === adminPassword;
+    const adminOk = await isAdminRequest(req, body);
     if (!cronOk && !adminOk) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
