@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { isAdminRequest } from "../_shared/require-admin.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -352,7 +353,7 @@ serve(async (req) => {
   try {
     const { action, adminPassword, ...payload } = await req.json();
 
-    if (adminPassword !== Deno.env.get("ADMIN_PASSWORD")) {
+    if (!(await isAdminRequest(req, { adminPassword }))) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -1489,7 +1490,7 @@ serve(async (req) => {
         const r = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/gmail-sync`, {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}` },
-          body: JSON.stringify({ adminPassword, deal_id }),
+          body: JSON.stringify({ adminPassword: Deno.env.get("ADMIN_PASSWORD"), deal_id }),
         });
         const data = await r.json();
         return new Response(JSON.stringify(data), {
@@ -1501,7 +1502,7 @@ serve(async (req) => {
         const r = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/calendar-sync`, {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}` },
-          body: JSON.stringify({ adminPassword }),
+          body: JSON.stringify({ adminPassword: Deno.env.get("ADMIN_PASSWORD") }),
         });
         const data = await r.json();
         return new Response(JSON.stringify(data), {
@@ -1527,7 +1528,7 @@ serve(async (req) => {
         const r = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/gmail-send`, {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}` },
-          body: JSON.stringify({ adminPassword, deal_id, to, subject, body_text, gmail_thread_id }),
+          body: JSON.stringify({ adminPassword: Deno.env.get("ADMIN_PASSWORD"), deal_id, to, subject, body_text, gmail_thread_id }),
         });
         const data = await r.json();
         return new Response(JSON.stringify(data), {

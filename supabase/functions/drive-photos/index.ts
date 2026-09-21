@@ -7,6 +7,7 @@
 //   POST { op:"remove", id }                      → remove folder (admin token)
 //   POST { op:"reorder", items:[{id,sort_order}]} → reorder (admin token)
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
+import { isAdminRequest } from "../_shared/require-admin.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -34,8 +35,7 @@ function gwHeaders(extra: Record<string, string> = {}) {
 }
 
 function isAdmin(req: Request) {
-  const t = req.headers.get("x-admin-password") ?? "";
-  return ADMIN_PASSWORD.length > 0 && t === ADMIN_PASSWORD;
+  return await isAdminRequest(req);
 }
 
 Deno.serve(async (req) => {

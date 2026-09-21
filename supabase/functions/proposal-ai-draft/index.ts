@@ -1,4 +1,5 @@
 // Drafts a proposal from a pasted inquiry email/notes using Lovable AI Gateway.
+import { isAdminRequest } from "../_shared/require-admin.ts";
 // Returns: { first_name, last_name, recipient_email, event_type, event_date,
 //            venue, letter_intro, intro_paragraph }
 
@@ -22,8 +23,7 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "POST only" }, 405);
 
-  const pw = req.headers.get("x-admin-password") || "";
-  if (!ADMIN_PASSWORD || pw !== ADMIN_PASSWORD) return json({ error: "Unauthorized" }, 401);
+  if (!(await isAdminRequest(req))) return json({ error: "Unauthorized" }, 401);
   if (!LOVABLE_API_KEY) return json({ error: "AI gateway not configured" }, 500);
 
   try {
