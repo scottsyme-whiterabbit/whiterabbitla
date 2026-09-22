@@ -1,12 +1,12 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 import {
   getAccessToken,
   installAdminFetch,
   setAdminPassword,
   setAdminSignedIn,
 } from "@/lib/adminAuth";
+
 
 /**
  * One shared admin auth layer for every /admin page.
@@ -19,17 +19,22 @@ import {
  * in memory only, never in localStorage or sessionStorage.
  */
 
-type Mode = "none" | "google" | "password";
+type Mode = "none" | "magiclink" | "password";
+
+/** Mirrors the server-side ADMIN_EMAILS allowlist. The server is the real lock. */
+const ADMIN_ALLOWLIST = ["scott.syme@whiterabbitla.com"];
 
 interface AdminAuthValue {
   ready: boolean;
   authed: boolean;
   mode: Mode;
   email: string | null;
-  /** Memory-only admin password, empty string when signed in with Google. */
+  /** Memory-only admin password, empty string when signed in with a magic link. */
   password: string;
   error: string | null;
-  signInWithGoogle: () => Promise<void>;
+  /** True once a sign-in link has been emailed. */
+  linkSent: boolean;
+  sendMagicLink: (email: string) => Promise<boolean>;
   signInWithPassword: (pw: string) => Promise<boolean>;
   signOut: () => Promise<void>;
   getToken: () => Promise<string | null>;
@@ -39,6 +44,20 @@ const AdminAuthContext = createContext<AdminAuthValue | null>(null);
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
+
+/**
+ * Magic links may only return to an allow-listed origin. The Lovable preview
+ * and published hosts are allow-listed; anywhere else we send the user to the
+ * published admin instead of producing a dead link.
+ */
+const redirectBase = (): string => {
+  const host = window.location.hostname;
+  if (/(^|\.)lovable\.app$/.test(host) || /(^|\.)lovableproject\.com$/.test(host)) {
+    return window.location.origin;
+  }
+  return "https://whiterabbitla.lovable.app";
+};
+
 
 export const AdminAuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [ready, setReady] = useState(false);
