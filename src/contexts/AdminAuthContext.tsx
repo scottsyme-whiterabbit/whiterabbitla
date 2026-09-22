@@ -198,6 +198,7 @@ export const AdminAuthProvider = ({ children }: { children: React.ReactNode }) =
     setPassword("");
     setMode("none");
     setEmail(null);
+    setLinkSent(false);
     try {
       await supabase.auth.signOut();
     } catch {}
@@ -211,13 +212,15 @@ export const AdminAuthProvider = ({ children }: { children: React.ReactNode }) =
       email,
       password,
       error,
-      signInWithGoogle,
+      linkSent,
+      sendMagicLink,
       signInWithPassword,
       signOut,
       getToken: getAccessToken,
     }),
-    [ready, mode, email, password, error, signInWithGoogle, signInWithPassword, signOut],
+    [ready, mode, email, password, error, linkSent, sendMagicLink, signInWithPassword, signOut],
   );
+
 
   return <AdminAuthContext.Provider value={value}>{children}</AdminAuthContext.Provider>;
 };
