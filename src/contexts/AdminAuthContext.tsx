@@ -1,12 +1,12 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable/index";
 import {
   getAccessToken,
   installAdminFetch,
   setAdminPassword,
   setAdminSignedIn,
 } from "@/lib/adminAuth";
+
 
 /**
  * One shared admin auth layer for every /admin page.
@@ -19,17 +19,22 @@ import {
  * in memory only, never in localStorage or sessionStorage.
  */
 
-type Mode = "none" | "google" | "password";
+type Mode = "none" | "magiclink" | "password";
+
+/** Mirrors the server-side ADMIN_EMAILS allowlist. The server is the real lock. */
+const ADMIN_ALLOWLIST = ["scott.syme@whiterabbitla.com"];
 
 interface AdminAuthValue {
   ready: boolean;
   authed: boolean;
   mode: Mode;
   email: string | null;
-  /** Memory-only admin password, empty string when signed in with Google. */
+  /** Memory-only admin password, empty string when signed in with a magic link. */
   password: string;
   error: string | null;
-  signInWithGoogle: () => Promise<void>;
+  /** True once a sign-in link has been emailed. */
+  linkSent: boolean;
+  sendMagicLink: (email: string) => Promise<boolean>;
   signInWithPassword: (pw: string) => Promise<boolean>;
   signOut: () => Promise<void>;
   getToken: () => Promise<string | null>;
@@ -40,12 +45,28 @@ const AdminAuthContext = createContext<AdminAuthValue | null>(null);
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
 
+/**
+ * Magic links may only return to an allow-listed origin. The Lovable preview
+ * and published hosts are allow-listed; anywhere else we send the user to the
+ * published admin instead of producing a dead link.
+ */
+const redirectBase = (): string => {
+  const host = window.location.hostname;
+  if (/(^|\.)lovable\.app$/.test(host) || /(^|\.)lovableproject\.com$/.test(host)) {
+    return window.location.origin;
+  }
+  return "https://whiterabbitla.lovable.app";
+};
+
+
 export const AdminAuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [ready, setReady] = useState(false);
   const [mode, setMode] = useState<Mode>("none");
   const [email, setEmail] = useState<string | null>(null);
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [linkSent, setLinkSent] = useState(false);
+
 
   installAdminFetch();
 
@@ -77,8 +98,9 @@ export const AdminAuthProvider = ({ children }: { children: React.ReactNode }) =
         return false;
       }
       setEmail(sessionEmail);
-      setMode("google");
+      setMode("magiclink");
       setError(null);
+
       return true;
     },
     [verifyUser],
@@ -99,8 +121,12 @@ export const AdminAuthProvider = ({ children }: { children: React.ReactNode }) =
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_OUT") {
         setAdminSignedIn(false);
-        setMode((m) => (m === "google" ? "none" : m));
+        setMode((m) => (m === "magiclink" ? "none" : m));
         setEmail(null);
+      }
+      if (event === "SIGNED_IN" && session?.user?.email) {
+        setLinkSent(false);
+        void applySession(session.user.email);
       }
       if (event === "TOKEN_REFRESHED" && session?.user?.email) {
         setEmail(session.user.email);
@@ -112,19 +138,34 @@ export const AdminAuthProvider = ({ children }: { children: React.ReactNode }) =
     };
   }, [applySession]);
 
-  const signInWithGoogle = useCallback(async () => {
+  /**
+   * Emails a one-time sign-in link. Only allow-listed addresses are accepted,
+   * so nothing is ever sent to an address that could not sign in anyway.
+   */
+  const sendMagicLink = useCallback(async (raw: string) => {
     setError(null);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if ((result as any)?.error) {
-      setError((result as any).error.message || "Sign in failed.");
-      return;
+    setLinkSent(false);
+    const addr = (raw || "").trim().toLowerCase();
+    if (!addr) return false;
+    if (!ADMIN_ALLOWLIST.includes(addr)) {
+      setError("This account does not have access.");
+      return false;
     }
-    if ((result as any)?.redirected) return;
-    const { data } = await supabase.auth.getSession();
-    await applySession(data.session?.user?.email || null);
-  }, [applySession]);
+    const next = window.location.pathname.startsWith("/admin")
+      ? window.location.pathname
+      : "/admin/newsletter";
+    const { error: err } = await supabase.auth.signInWithOtp({
+      email: addr,
+      options: { emailRedirectTo: `${redirectBase()}${next}`, shouldCreateUser: true },
+    });
+    if (err) {
+      setError(err.message || "Could not send the sign-in link.");
+      return false;
+    }
+    setLinkSent(true);
+    return true;
+  }, []);
+
 
   const signInWithPassword = useCallback(async (pw: string) => {
     setError(null);
@@ -157,6 +198,7 @@ export const AdminAuthProvider = ({ children }: { children: React.ReactNode }) =
     setPassword("");
     setMode("none");
     setEmail(null);
+    setLinkSent(false);
     try {
       await supabase.auth.signOut();
     } catch {}
@@ -170,13 +212,15 @@ export const AdminAuthProvider = ({ children }: { children: React.ReactNode }) =
       email,
       password,
       error,
-      signInWithGoogle,
+      linkSent,
+      sendMagicLink,
       signInWithPassword,
       signOut,
       getToken: getAccessToken,
     }),
-    [ready, mode, email, password, error, signInWithGoogle, signInWithPassword, signOut],
+    [ready, mode, email, password, error, linkSent, sendMagicLink, signInWithPassword, signOut],
   );
+
 
   return <AdminAuthContext.Provider value={value}>{children}</AdminAuthContext.Provider>;
 };
