@@ -46,17 +46,23 @@ const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string;
 
 /**
- * Magic links may only return to an allow-listed origin. The Lovable preview
- * and published hosts are allow-listed; anywhere else we send the user to the
- * published admin instead of producing a dead link.
+ * Magic links may only return to an allow-listed origin, and a browser session
+ * belongs to one origin only. So the link must come back to the exact origin
+ * the person started from: the custom domain (with or without www), the
+ * published host, or a Lovable preview host. Anything else falls back to the
+ * custom domain rather than producing a dead link.
  */
 const redirectBase = (): string => {
   const host = window.location.hostname;
-  if (/(^|\.)lovable\.app$/.test(host) || /(^|\.)lovableproject\.com$/.test(host)) {
-    return window.location.origin;
-  }
-  return "https://whiterabbitla.lovable.app";
+  const allowed =
+    host === "whiterabbitla.com" ||
+    host === "www.whiterabbitla.com" ||
+    /(^|\.)lovable\.app$/.test(host) ||
+    /(^|\.)lovableproject\.com$/.test(host);
+  if (allowed) return window.location.origin;
+  return "https://whiterabbitla.com";
 };
+
 
 
 export const AdminAuthProvider = ({ children }: { children: React.ReactNode }) => {
