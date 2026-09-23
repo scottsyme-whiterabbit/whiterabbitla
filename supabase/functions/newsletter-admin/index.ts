@@ -1744,6 +1744,165 @@ serve(async (req) => {
       }
 
 
+      /* ---- "Still interested?" re-engagement, chosen by hand ---- */
+      case "get_reengage_candidates": {
+        const cutoff = new Date(Date.now() - 21 * 864e5).toISOString();
+        const [inqRes, propRes, unsubRes, suppRes] = await Promise.all([
+          supabase
+            .from("contact_inquiries")
+            .select("id, name, email, event_type, created_at, reengaged_at")
+            .lt("created_at", cutoff)
+            .is("reengaged_at", null)
+            .order("created_at", { ascending: true }),
+          supabase.from("proposals").select("recipient_email").not("sent_at", "is", null),
+          supabase.from("email_unsubscribes").select("email"),
+          supabase.from("email_suppression_list").select("email"),
+        ]);
+
+        const blocked = new Set<string>();
+        for (const r of propRes.data || []) {
+          const e = (r.recipient_email || "").toLowerCase().trim();
+          if (e) blocked.add(e);
+        }
+        for (const r of [...(unsubRes.data || []), ...(suppRes.data || [])]) {
+          const e = (r.email || "").toLowerCase().trim();
+          if (e) blocked.add(e);
+        }
+
+        const seen = new Set<string>();
+        const candidates = (inqRes.data || []).filter((i) => {
+          const e = (i.email || "").toLowerCase().trim();
+          if (!e || blocked.has(e) || seen.has(e)) return false;
+          seen.add(e);
+          return true;
+        });
+
+        return new Response(JSON.stringify({ candidates }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "preview_reengage": {
+        const { id } = payload;
+        if (!id) {
+          return new Response(JSON.stringify({ error: "id required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const { data: inq } = await supabase
+          .from("contact_inquiries")
+          .select("id, name, email, event_type, created_at")
+          .eq("id", id)
+          .maybeSingle();
+        if (!inq) {
+          return new Response(JSON.stringify({ error: "Inquiry not found" }), {
+            status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const built = buildReengageEmail(inq);
+        return new Response(JSON.stringify({ ...built, to: inq.email }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      case "send_reengage": {
+        // Never selects recipients on its own: an explicit id list is required.
+        const { ids, testEmail } = payload;
+
+        if (testEmail) {
+          const sample = {
+            name: "Scott",
+            event_type: "50th birthday party",
+            created_at: new Date(Date.now() - 60 * 864e5).toISOString(),
+          };
+          const built = buildReengageEmail(sample);
+          const ok = await sendReengageEmail(
+            String(testEmail),
+            `[TEST] ${built.subject}`,
+            built.html,
+            built.text,
+          );
+          return new Response(JSON.stringify({ test: true, sent: ok, marked: 0 }), {
+            status: ok ? 200 : 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+
+        if (!Array.isArray(ids) || ids.length === 0) {
+          return new Response(JSON.stringify({ error: "An explicit list of inquiry ids is required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        if (ids.length > 40) {
+          return new Response(JSON.stringify({ error: "A single batch is capped at 40 recipients" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+
+        const { data: rows, error: rowsErr } = await supabase
+          .from("contact_inquiries")
+          .select("id, name, email, event_type, created_at, reengaged_at")
+          .in("id", ids);
+        if (rowsErr) {
+          return new Response(JSON.stringify({ error: rowsErr.message }), {
+            status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+
+        const emails = (rows || []).map((r) => (r.email || "").toLowerCase().trim()).filter(Boolean);
+        const [unsubRes, suppRes] = await Promise.all([
+          supabase.from("email_unsubscribes").select("email").in("email", emails),
+          supabase.from("email_suppression_list").select("email").in("email", emails),
+        ]);
+        const blocked = new Set<string>();
+        for (const r of [...(unsubRes.data || []), ...(suppRes.data || [])]) {
+          const e = (r.email || "").toLowerCase().trim();
+          if (e) blocked.add(e);
+        }
+
+        const results: { id: string; email: string; status: string; reason?: string }[] = [];
+        for (const inq of rows || []) {
+          const email = (inq.email || "").toLowerCase().trim();
+          if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            results.push({ id: inq.id, email, status: "skipped", reason: "invalid email" });
+            continue;
+          }
+          if (inq.reengaged_at) {
+            results.push({ id: inq.id, email, status: "skipped", reason: "already re-engaged" });
+            continue;
+          }
+          if (blocked.has(email)) {
+            results.push({ id: inq.id, email, status: "skipped", reason: "unsubscribed or suppressed" });
+            continue;
+          }
+
+          const built = buildReengageEmail(inq);
+          const ok = await sendReengageEmail(email, built.subject, built.html, built.text);
+          if (!ok) {
+            results.push({ id: inq.id, email, status: "failed", reason: "send failed" });
+            continue;
+          }
+          await supabase
+            .from("contact_inquiries")
+            .update({ reengaged_at: new Date().toISOString() })
+            .eq("id", inq.id);
+          await supabase.from("newsletter_send_log").insert({
+            campaign_id: "reengage-1",
+            contact_id: inq.id,
+            status: "sent",
+          });
+          results.push({ id: inq.id, email, status: "sent" });
+        }
+
+        return new Response(JSON.stringify({
+          sent: results.filter((r) => r.status === "sent").length,
+          skipped: results.filter((r) => r.status === "skipped").length,
+          failed: results.filter((r) => r.status === "failed").length,
+          results,
+        }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       default:
         return new Response(JSON.stringify({ error: "Unknown action" }), {
           status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
