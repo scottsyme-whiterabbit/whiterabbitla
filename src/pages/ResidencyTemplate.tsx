@@ -18,6 +18,7 @@ import rollsroyceLogo from "@/assets/logos/rollsroyce.png";
 import paramountLogo from "@/assets/logos/paramount.png";
 import sohohouseLogo from "@/assets/logos/sohohouse-new.png";
 import beverlyHiltonLogo from "@/assets/logos/beverlyhilton.png";
+import { adminViewHeaders } from "@/lib/adminAuth";
 
 const galleryPhotos: { src: string; mirror?: boolean }[] = [
   { src: proposalCardsBw },

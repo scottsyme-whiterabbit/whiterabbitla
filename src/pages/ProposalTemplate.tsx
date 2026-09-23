@@ -6,6 +6,7 @@ import SignAgreementModal from "@/components/SignAgreementModal";
 import threeStars from "@/assets/three-stars-gold.png";
 import wrScriptLogo from "@/assets/wr-wordmark-cream.png";
 import { DEFAULT_GALLERY_KEYS, photoKeyToSrc, reviewsForEventType } from "@/data/proposalAssets";
+import { adminViewHeaders } from "@/lib/adminAuth";
 
 import netflixLogo from "@/assets/logos/netflix.png";
 import disneyLogo from "@/assets/logos/disney.png";
