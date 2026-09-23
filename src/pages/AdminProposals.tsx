@@ -154,7 +154,10 @@ const AdminProposals = () => {
 
   const startEdit = async (slug: string) => {
     try {
-      const res = await fetch(`${FN}?action=get&slug=${slug}`);
+      // Identify ourselves as admin so this edit fetch is not logged as a client view.
+      const res = await fetch(`${FN}?action=get&slug=${slug}`, {
+        headers: { "x-admin-password": password },
+      });
       const j = await res.json();
       if (!res.ok) throw new Error(j.error);
       setEditing(j.proposal);
