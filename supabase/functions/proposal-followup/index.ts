@@ -310,6 +310,7 @@ Deno.serve(async (req) => {
         followup_step: 0,
         last_followup_at: null,
         followup_paused: false,
+        hold_until: null,
       };
 
       for (const step of steps) {
@@ -326,7 +327,7 @@ Deno.serve(async (req) => {
     const { data, error } = await supabase
       .from("proposals")
       .select(
-        "id, slug, first_name, last_name, recipient_email, event_type, event_date, venue, tiers, sent_at, followup_step, last_followup_at, followup_paused",
+        "id, slug, first_name, last_name, recipient_email, event_type, event_date, venue, tiers, sent_at, followup_step, last_followup_at, followup_paused, hold_until",
       )
       .not("sent_at", "is", null)
       .not("recipient_email", "is", null)
