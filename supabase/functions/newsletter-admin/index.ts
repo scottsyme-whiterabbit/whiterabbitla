@@ -348,6 +348,120 @@ async function ensureBookedClientEmails(supabase: any, dealId: string) {
 }
 
 
+/* ==========================================================================
+   "Still interested?" re-engagement email.
+   Same shell as proposal-followup. Sent only from an explicit list of ids
+   chosen by hand in the dashboard. No cron, no automatic recipient selection.
+   ========================================================================== */
+
+const RE_LOGO_URL = "https://whiterabbitla.com/email-assets/wr-logo-stars.png";
+const RE_GROUND = "#283932";
+const RE_GOLD = "#C79A54";
+const RE_CREAM = "#F8F6F1";
+const RE_CREAM_SOFT = "#EDE9E1";
+const RE_SAND = "#DDCEB1";
+const RE_SAGE = "#7E9188";
+const RE_BODY_FONT = "'Montserrat', Helvetica, Arial, sans-serif";
+const RE_SITE_URL = "https://whiterabbitla.com";
+const RE_FROM = "Scott Syme <scott.syme@whiterabbitla.com>";
+const RE_REPLY_TO = "scott.syme@whiterabbitla.com";
+
+const reEsc = (s: unknown) =>
+  String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
+const reFirstName = (name: string | null) =>
+  (name || "there").trim().split(/\s+/)[0] || "there";
+
+const reInquiryMonth = (iso: string | null) =>
+  iso
+    ? new Date(iso).toLocaleDateString("en-US", { month: "long", timeZone: "America/Los_Angeles" })
+    : "";
+
+function buildReengageEmail(inq: { name: string | null; event_type: string | null; created_at: string | null }) {
+  const first = reFirstName(inq.name);
+  const type = (inq.event_type || "").trim();
+  const subject = type
+    ? `${first}, is the ${type} still happening?`
+    : `${first}, is your event still happening?`;
+  const thing = type || "your event";
+  const month = reInquiryMonth(inq.created_at);
+
+  const paras = [
+    `${first},`,
+    `You reached out back in ${month} about ${thing}, and I never want to be the person emailing into silence, so this is a straight question rather than a nudge.`,
+    `Is that evening still happening?`,
+    `If you have already found someone, say so and I will close the file with no hard feelings. If the date moved, or the plan changed, or it just went quiet for a while, all of that is normal and I would still love to be part of it.`,
+    `Either way, one line is enough.`,
+  ];
+
+  const p = (t: string) =>
+    `<p style="margin:0 0 18px;font-family:${RE_BODY_FONT};font-size:15px;line-height:1.75;color:${RE_CREAM};">${reEsc(t)}</p>`;
+
+  const signature = `<div style="margin:30px 0 0;font-family:${RE_BODY_FONT};font-size:14px;line-height:1.7;color:${RE_CREAM_SOFT};">
+    Scott Syme<br/>
+    Magician<br/>
+    (424) 394-1850<br/>
+    <a href="${RE_SITE_URL}" style="color:${RE_SAND};text-decoration:none;">whiterabbitla.com</a>
+  </div>`;
+
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:${RE_GROUND};">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${RE_GROUND};">
+    <tr><td align="center" style="padding:32px 12px;">
+      <table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="width:560px;max-width:100%;background:${RE_GROUND};">
+        <tr><td style="padding:24px 40px 28px;text-align:center;">
+          <img src="${RE_LOGO_URL}" alt="White Rabbit LA" width="150" style="width:150px;max-width:60%;height:auto;display:block;margin:0 auto;border:0;outline:none;text-decoration:none;" />
+        </td></tr>
+        <tr><td style="padding:0 40px 36px;">${paras.map(p).join("")}${signature}</td></tr>
+        <tr><td style="padding:0 40px 36px;text-align:center;">
+          <div style="height:1px;background:${RE_GOLD};opacity:.5;margin:0 0 16px;"></div>
+          <div style="font-family:${RE_BODY_FONT};font-size:11px;color:${RE_SAGE};line-height:1.6;">
+            White Rabbit LA &middot; Los Angeles, CA<br/>
+            7393 W. Manchester Ave #209, Los Angeles, CA 90045
+          </div>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body></html>`;
+
+  const text = `${paras.join("\n\n")}
+
+Scott Syme
+Magician
+(424) 394-1850
+whiterabbitla.com`;
+
+  return { subject, html, text };
+}
+
+async function sendReengageEmail(to: string, subject: string, html: string, text: string) {
+  const key = Deno.env.get("RESEND_API_KEY");
+  if (!key || !to) return false;
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from: RE_FROM,
+      to: [to],
+      subject,
+      html,
+      text,
+      reply_to: RE_REPLY_TO,
+      headers: {
+        "List-Unsubscribe": `<${RE_SITE_URL}/unsubscribe?email=${encodeURIComponent(to)}>`,
+        "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+      },
+    }),
+  });
+  if (!res.ok) console.error("[reengage] Resend failed", res.status, await res.text().catch(() => ""));
+  return res.ok;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
