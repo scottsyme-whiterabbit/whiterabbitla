@@ -473,6 +473,7 @@ export type Database = {
           nurture_step: number
           phone: string | null
           recommendation: string | null
+          reengaged_at: string | null
           source: string
         }
         Insert: {
@@ -493,6 +494,7 @@ export type Database = {
           nurture_step?: number
           phone?: string | null
           recommendation?: string | null
+          reengaged_at?: string | null
           source?: string
         }
         Update: {
@@ -513,6 +515,7 @@ export type Database = {
           nurture_step?: number
           phone?: string | null
           recommendation?: string | null
+          reengaged_at?: string | null
           source?: string
         }
         Relationships: []
