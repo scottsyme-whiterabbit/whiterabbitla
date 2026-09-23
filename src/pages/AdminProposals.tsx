@@ -201,6 +201,23 @@ const AdminProposals = () => {
     }
   };
 
+  const setHold = async (p: ProposalRow, date: string) => {
+    if (!date) return;
+    const prev = p.hold_until || null;
+    setList((s) => s.map((r) => (r.id === p.id ? { ...r, hold_until: date } : r)));
+    try {
+      const j = await apiCall("set_hold", "POST", { id: p.id, hold_until: date });
+      toast.success(
+        j?.notified
+          ? `Hold moved to ${formatHold(date)}, client notified`
+          : `Hold moved to ${formatHold(date)}`,
+      );
+    } catch (e) {
+      setList((s) => s.map((r) => (r.id === p.id ? { ...r, hold_until: prev } : r)));
+      toast.error((e as Error).message);
+    }
+  };
+
   const copyLink = (slug: string) => {
     const url = `${window.location.origin}/proposal/${slug}`;
     navigator.clipboard.writeText(url);
@@ -368,17 +385,50 @@ const AdminProposals = () => {
                              : `Follow-up ${p.followup_step ?? 0} of 3`}
                        </span>
                      )}
+                     {p.sent_at && p.hold_until && (
+                       <span className={p.hold_until < todayISO() ? "text-red-500/80" : "text-forest-dark/60"}>
+                         · {p.hold_until < todayISO()
+                           ? "Hold expired"
+                           : `Hold expires ${formatHold(p.hold_until)}`}
+                       </span>
+                     )}
                    </div>
                    {p.sent_at && (
-                     <label className="mt-2 inline-flex items-center gap-2 text-xs text-forest-dark/60 cursor-pointer">
-                       <input
-                         type="checkbox"
-                         checked={!!p.followup_paused}
-                         onChange={() => toggleFollowupPause(p)}
-                         className="accent-forest-dark"
-                       />
-                       Pause follow-up
-                     </label>
+                     <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
+                       <label className="inline-flex items-center gap-2 text-xs text-forest-dark/60 cursor-pointer">
+                         <input
+                           type="checkbox"
+                           checked={!!p.followup_paused}
+                           onChange={() => toggleFollowupPause(p)}
+                           className="accent-forest-dark"
+                         />
+                         Pause follow-up
+                       </label>
+                       <div className="inline-flex flex-wrap items-center gap-2 text-xs text-forest-dark/60">
+                         <span className="uppercase tracking-wide">Extend hold</span>
+                         <input
+                           type="date"
+                           value={p.hold_until || ""}
+                           min={addDaysISO(todayISO(), 1)}
+                           onChange={(e) => setHold(p, e.target.value)}
+                           className="border border-forest-dark/20 px-2 py-2 text-xs bg-white min-h-[40px]"
+                         />
+                         <button
+                           onClick={() => setHold(p, addDaysISO(
+                             p.hold_until && p.hold_until > todayISO() ? p.hold_until : todayISO(), 7))}
+                           className="px-3 py-2 min-h-[40px] border border-forest-dark/20 hover:bg-cream"
+                         >
+                           +7 days
+                         </button>
+                         <button
+                           onClick={() => setHold(p, addDaysISO(
+                             p.hold_until && p.hold_until > todayISO() ? p.hold_until : todayISO(), 14))}
+                           className="px-3 py-2 min-h-[40px] border border-forest-dark/20 hover:bg-cream"
+                         >
+                           +14 days
+                         </button>
+                       </div>
+                     </div>
                    )}
                  </div>
                 <div className="flex items-center gap-2">
