@@ -672,8 +672,11 @@ const ProposalTemplate = ({ data: dataProp, preview }: Props) => {
     }
     (async () => {
       try {
+        // If Scott is signed in (or holds the admin password in memory) the
+        // server recognises him and skips the view row and the alert email.
+        const admin = await adminViewHeaders();
         const res = await fetch(`${SUPABASE_URL}/functions/v1/proposals-api?action=get&slug=${encodeURIComponent(slug)}`, {
-          headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
+          headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}`, ...admin },
         });
         const j = await res.json();
         if (!res.ok) throw new Error(j.error || "Failed to load");

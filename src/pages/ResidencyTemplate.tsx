@@ -902,12 +902,14 @@ const ResidencyTemplate = ({ data: dataProp, preview }: Props) => {
     }
     (async () => {
       try {
+        const admin = await adminViewHeaders();
         const res = await fetch(
           `${SUPABASE_URL}/functions/v1/proposals-api?action=get_venue&slug=${encodeURIComponent(slug)}`,
           {
             headers: {
               apikey: SUPABASE_KEY,
               Authorization: `Bearer ${SUPABASE_KEY}`,
+              ...admin,
             },
           }
         );
