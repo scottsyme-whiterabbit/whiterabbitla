@@ -145,6 +145,7 @@ type Proposal = {
   followup_step: number;
   last_followup_at: string | null;
   followup_paused: boolean;
+  hold_until: string | null;
 };
 
 function buildEmail(prop: Proposal, step: 1 | 2 | 3) {
@@ -375,7 +376,15 @@ Deno.serve(async (req) => {
         const step = prop.followup_step || 0;
         const offset = FOLLOWUP_OFFSETS[step];
         if (offset === undefined) { results.skipped++; continue; }
-        if (daysSince(prop.sent_at) < offset) { results.skipped++; continue; }
+        if (step === 2 && prop.hold_until) {
+          // Step 3 is the hold lapsing, so it keys off the real hold date,
+          // which Scott can move. Step 2 having gone out is implied by step === 2.
+          const today = new Date().toISOString().slice(0, 10);
+          if (prop.hold_until > today) { results.skipped++; continue; }
+        } else {
+          // Six hour tolerance: a proposal sent at 09:32 is due on the 09:00 run.
+          if (daysSince(prop.sent_at) < offset - 0.25) { results.skipped++; continue; }
+        }
 
         const next = (step + 1) as 1 | 2 | 3;
         const { subject, html, text } = buildEmail(prop, next);
