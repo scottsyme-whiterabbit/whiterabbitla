@@ -29,6 +29,7 @@ interface ProposalRow {
   followup_step?: number;
   followup_paused?: boolean;
   last_followup_at?: string | null;
+  hold_until?: string | null;
 }
 
 interface FullProposal extends ProposalData {
@@ -50,6 +51,26 @@ const formatRelative = (iso: string) => {
   const d = Math.floor(h / 24);
   if (d < 30) return `${d}d ago`;
   return new Date(iso).toLocaleDateString();
+};
+
+/** Today in YYYY-MM-DD, local. */
+const todayISO = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+};
+
+/** "Fri 26 Sept" from a YYYY-MM-DD date. */
+const formatHold = (d: string) =>
+  new Date(`${d}T12:00:00`).toLocaleDateString("en-GB", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
+
+const addDaysISO = (d: string, days: number) => {
+  const base = new Date(`${d}T12:00:00`);
+  base.setDate(base.getDate() + days);
+  return `${base.getFullYear()}-${String(base.getMonth() + 1).padStart(2, "0")}-${String(base.getDate()).padStart(2, "0")}`;
 };
 
 const AdminProposals = () => {
