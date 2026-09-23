@@ -34,6 +34,120 @@ const slugify = (first: string, last: string) => {
   return `${base}-${rand}`;
 };
 
+/* ---------- hold extension note (same shell as proposal-followup) ---------- */
+const HOLD_LOGO_URL = "https://whiterabbitla.com/email-assets/wr-logo-stars.png";
+const HOLD_GROUND = "#283932";
+const HOLD_GOLD = "#C79A54";
+const HOLD_CREAM = "#F8F6F1";
+const HOLD_CREAM_SOFT = "#EDE9E1";
+const HOLD_SAND = "#DDCEB1";
+const HOLD_SAGE = "#7E9188";
+const HOLD_BODY_FONT = "'Montserrat', Helvetica, Arial, sans-serif";
+
+const escHtml = (s: unknown) =>
+  String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
+/** "Tuesday, September 30" from a YYYY-MM-DD date. */
+const holdLongDate = (d: string) =>
+  new Date(`${d}T12:00:00Z`).toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+
+/** "September 30" from a YYYY-MM-DD date. */
+const holdShortDate = (d: string) =>
+  new Date(`${d}T12:00:00Z`).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+
+async function sendHoldExtensionEmail(opts: {
+  to: string;
+  firstName: string;
+  eventDate: string;
+  holdUntil: string;
+}): Promise<boolean> {
+  if (!RESEND_API_KEY || !opts.to) return false;
+  const { to, firstName, holdUntil } = opts;
+  const eventDate = opts.eventDate || "your date";
+  const through = holdLongDate(holdUntil);
+  const subject = `${firstName}, your date is held through ${holdShortDate(holdUntil)}`;
+
+  const p = (text: string) =>
+    `<p style="margin:0 0 18px;font-family:${HOLD_BODY_FONT};font-size:15px;line-height:1.75;color:${HOLD_CREAM};">${text}</p>`;
+
+  const inner =
+    p(`${escHtml(firstName)},`) +
+    p(
+      `Just so you have it in writing: I am holding ${escHtml(eventDate)} for you through ${escHtml(through)}.`,
+    ) +
+    p("Nothing needed before then. If the timing shifts on your end, tell me and I will work around it.") +
+    `<div style="margin:30px 0 0;font-family:${HOLD_BODY_FONT};font-size:14px;line-height:1.7;color:${HOLD_CREAM_SOFT};">
+      Scott Syme<br/>
+      Magician<br/>
+      (424) 394-1850<br/>
+      <a href="https://whiterabbitla.com" style="color:${HOLD_SAND};text-decoration:none;">whiterabbitla.com</a>
+    </div>`;
+
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:${HOLD_GROUND};">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${HOLD_GROUND};">
+    <tr><td align="center" style="padding:32px 12px;">
+      <table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="width:560px;max-width:100%;background:${HOLD_GROUND};">
+        <tr><td style="padding:24px 40px 28px;text-align:center;">
+          <img src="${HOLD_LOGO_URL}" alt="White Rabbit LA" width="150" style="width:150px;max-width:60%;height:auto;display:block;margin:0 auto;border:0;outline:none;text-decoration:none;" />
+        </td></tr>
+        <tr><td style="padding:0 40px 36px;">${inner}</td></tr>
+        <tr><td style="padding:0 40px 36px;text-align:center;">
+          <div style="height:1px;background:${HOLD_GOLD};opacity:.5;margin:0 0 16px;"></div>
+          <div style="font-family:${HOLD_BODY_FONT};font-size:11px;color:${HOLD_SAGE};line-height:1.6;">
+            White Rabbit LA &middot; Los Angeles, CA<br/>
+            7393 W. Manchester Ave #209, Los Angeles, CA 90045
+          </div>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body></html>`;
+
+  const text = `${firstName},
+
+Just so you have it in writing: I am holding ${eventDate} for you through ${through}.
+
+Nothing needed before then. If the timing shifts on your end, tell me and I will work around it.
+
+Scott Syme
+Magician
+(424) 394-1850
+whiterabbitla.com`;
+
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from: "Scott Syme <scott.syme@whiterabbitla.com>",
+      to: [to],
+      subject,
+      html,
+      text,
+      reply_to: "scott.syme@whiterabbitla.com",
+      headers: {
+        "List-Unsubscribe": `<https://whiterabbitla.com/unsubscribe?email=${encodeURIComponent(to)}>`,
+        "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+      },
+    }),
+  });
+  if (!res.ok) console.error("hold extension email failed", res.status, await res.text().catch(() => ""));
+  return res.ok;
+}
+
 const slugifyVenue = (venue: string) => {
   const base = (venue || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "residency";
   const rand = Math.random().toString(36).slice(2, 8);
