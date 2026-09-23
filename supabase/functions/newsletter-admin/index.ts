@@ -126,6 +126,7 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
 
     // The proposal (if any) gives us the tier, the pricing and a link to open.
     let proposalSlug: string | null = null;
+    let proposalHoldUntil: string | null = null;
     let proposalTiers: Array<{ name?: string; price?: string; recommended?: boolean }> = [];
     let signedTier: string | null = null;
     let performanceTime: string | null = null;
@@ -139,7 +140,7 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
     try {
       const { data: prop } = await supabase
         .from("proposals")
-        .select("slug, tiers, sent_at, created_at")
+        .select("slug, tiers, sent_at, created_at, hold_until")
         .eq("deal_id", deal.id)
         .order("created_at", { ascending: false })
         .limit(1)
@@ -147,6 +148,7 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
       if (prop) {
         proposalSlug = prop.slug || null;
         proposalTiers = Array.isArray(prop.tiers) ? prop.tiers : [];
+        proposalHoldUntil = prop.hold_until || null;
       }
       const { data: agreement } = await supabase
         .from("signed_agreements")
@@ -197,6 +199,7 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
         : "Tentative hold while the proposal is out. This becomes BOOKED automatically once they sign and the deposit lands.",
       "",
       `Status: ${stageLabels[deal.stage] || deal.stage}`,
+      !isBooked && proposalHoldUntil ? `Hold expires: ${proposalHoldUntil}` : null,
       `Occasion: ${eventLabel}`,
       deal.event_time ? `Start time: ${String(deal.event_time).slice(0, 5)}` : "Start time: to be confirmed",
       performanceTime ? `Performance: ${performanceTime}` : null,
