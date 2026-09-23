@@ -1567,6 +1567,7 @@ export type Database = {
           followup_step: number
           gallery_photos: Json
           hero_image: string
+          hold_until: string | null
           id: string
           intro_paragraph: string
           last_followup_at: string | null
@@ -1594,6 +1595,7 @@ export type Database = {
           followup_step?: number
           gallery_photos?: Json
           hero_image?: string
+          hold_until?: string | null
           id?: string
           intro_paragraph?: string
           last_followup_at?: string | null
@@ -1621,6 +1623,7 @@ export type Database = {
           followup_step?: number
           gallery_photos?: Json
           hero_image?: string
+          hold_until?: string | null
           id?: string
           intro_paragraph?: string
           last_followup_at?: string | null
