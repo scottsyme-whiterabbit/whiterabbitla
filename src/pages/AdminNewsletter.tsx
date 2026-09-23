@@ -19,6 +19,7 @@ import DealInboxTab from "@/components/DealInboxTab";
 import FollowupQueueTab from "@/components/FollowupQueueTab";
 import ActivityLogTab from "@/components/ActivityLogTab";
 import CastleInvitesTab from "@/components/CastleInvitesTab";
+import ReengageTab from "@/components/ReengageTab";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import AdminGate, { AdminSignOutButton } from "@/components/admin/AdminGate";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -88,7 +89,7 @@ const AdminNewsletter = () => {
   const { password: storedPassword, authed: authenticated } = useAdminAuth();
 
 
-  const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "inbox" | "actions" | "followups" | "activity" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "email_analytics" | "planner" | "apartment" | "thankyou" | "cold" | "lead_attribution" | "castle">(() => {
+  const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "inbox" | "actions" | "followups" | "activity" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "email_analytics" | "planner" | "apartment" | "thankyou" | "cold" | "lead_attribution" | "castle" | "reengage">(() => {
     if (typeof window !== "undefined") {
       const t = new URLSearchParams(window.location.search).get("tab");
       const allowed = ["dashboard","pipeline","inbox","actions","followups","activity","revenue","contacts","compose","campaigns","calendar","analytics","email_analytics","planner","apartment","thankyou","cold","lead_attribution","castle"];
@@ -593,6 +594,7 @@ const AdminNewsletter = () => {
         { key: "campaigns", label: "Campaigns" },
         { key: "calendar", label: "Send Calendar" },
         { key: "thankyou", label: "Thank You" },
+        { key: "reengage", label: "Re-engage" },
       ],
     },
     {
@@ -1470,6 +1472,9 @@ const AdminNewsletter = () => {
         )}
         {activeTab === "castle" && (
           <CastleInvitesTab />
+        )}
+        {activeTab === "reengage" && (
+          <ReengageTab storedPassword={storedPassword} />
         )}
 
         {activeTab === "cold" && (

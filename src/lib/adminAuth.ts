@@ -30,6 +30,25 @@ export const getAccessToken = async (): Promise<string | null> => {
 };
 
 /**
+ * Headers that let the server recognise Scott on an otherwise public page (the
+ * proposal and residency pages he opens from the dashboard), so his own clicks
+ * are not recorded as client views and no "just opened" alert is sent.
+ *
+ * A real client has neither a session nor the in-memory password, so nothing is
+ * added and the page behaves exactly as before.
+ */
+export const adminViewHeaders = async (): Promise<Record<string, string>> => {
+  const headers: Record<string, string> = {};
+  const token = await getAccessToken();
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+    headers.apikey = SUPABASE_KEY;
+  }
+  if (adminPassword) headers["x-admin-password"] = adminPassword;
+  return headers;
+};
+
+/**
  * Every admin edge-function call must carry the signed-in user's access token.
  * Rather than touching several hundred existing fetch call sites, we install a
  * single wrapper that upgrades requests to our own edge functions: the user's

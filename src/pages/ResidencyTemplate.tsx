@@ -18,6 +18,7 @@ import rollsroyceLogo from "@/assets/logos/rollsroyce.png";
 import paramountLogo from "@/assets/logos/paramount.png";
 import sohohouseLogo from "@/assets/logos/sohohouse-new.png";
 import beverlyHiltonLogo from "@/assets/logos/beverlyhilton.png";
+import { adminViewHeaders } from "@/lib/adminAuth";
 
 const galleryPhotos: { src: string; mirror?: boolean }[] = [
   { src: proposalCardsBw },
@@ -902,12 +903,14 @@ const ResidencyTemplate = ({ data: dataProp, preview }: Props) => {
     }
     (async () => {
       try {
+        const admin = await adminViewHeaders();
         const res = await fetch(
           `${SUPABASE_URL}/functions/v1/proposals-api?action=get_venue&slug=${encodeURIComponent(slug)}`,
           {
             headers: {
               apikey: SUPABASE_KEY,
               Authorization: `Bearer ${SUPABASE_KEY}`,
+              ...admin,
             },
           }
         );

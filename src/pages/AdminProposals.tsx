@@ -154,7 +154,10 @@ const AdminProposals = () => {
 
   const startEdit = async (slug: string) => {
     try {
-      const res = await fetch(`${FN}?action=get&slug=${slug}`);
+      // Identify ourselves as admin so this edit fetch is not logged as a client view.
+      const res = await fetch(`${FN}?action=get&slug=${slug}`, {
+        headers: { "x-admin-password": password },
+      });
       const j = await res.json();
       if (!res.ok) throw new Error(j.error);
       setEditing(j.proposal);
@@ -254,7 +257,7 @@ const AdminProposals = () => {
   }
 
   if (editing) {
-    return <ProposalEditor proposal={editing} onChange={setEditing} onSave={save} onCancel={() => setEditing(null)} onPreview={() => setShowPreview(true)} list={list} password={password} loadFullProposal={async (slug) => { const res = await fetch(`${FN}?action=get&slug=${slug}`); const j = await res.json(); if (!res.ok) throw new Error(j.error); return j.proposal; }} />;
+    return <ProposalEditor proposal={editing} onChange={setEditing} onSave={save} onCancel={() => setEditing(null)} onPreview={() => setShowPreview(true)} list={list} password={password} loadFullProposal={async (slug) => { const res = await fetch(`${FN}?action=get&slug=${slug}`, { headers: { "x-admin-password": password } }); const j = await res.json(); if (!res.ok) throw new Error(j.error); return j.proposal; }} />;
   }
 
   return (
