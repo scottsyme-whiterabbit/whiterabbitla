@@ -620,7 +620,7 @@ White Rabbit LA`,
     if (action === "list") {
       const { data, error } = await supabase
         .from("proposals")
-        .select("id, slug, first_name, last_name, recipient_email, event_type, event_date, venue, sent_at, created_at, deal_id, followup_step, followup_paused, last_followup_at")
+        .select("id, slug, first_name, last_name, recipient_email, event_type, event_date, venue, sent_at, created_at, deal_id, followup_step, followup_paused, last_followup_at, hold_until")
         .order("created_at", { ascending: false });
       if (error) return json({ error: error.message }, 500);
 
@@ -723,6 +723,46 @@ White Rabbit LA`,
         .eq("id", id);
       if (error) return json({ error: error.message }, 500);
       return json({ ok: true, paused: paused === true });
+    }
+
+    if (action === "set_hold" && req.method === "POST") {
+      const { id, hold_until } = await req.json();
+      if (!id || typeof hold_until !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(hold_until)) {
+        return json({ error: "Missing or malformed hold_until (expected YYYY-MM-DD)" }, 400);
+      }
+      const target = new Date(`${hold_until}T12:00:00Z`);
+      if (!isFinite(target.getTime())) return json({ error: "Invalid date" }, 400);
+      const todayStr = new Date().toISOString().slice(0, 10);
+      if (hold_until <= todayStr) return json({ error: "Hold date must be in the future" }, 400);
+      const maxStr = new Date(Date.now() + 365 * 864e5).toISOString().slice(0, 10);
+      if (hold_until > maxStr) return json({ error: "Hold date cannot be more than 365 days out" }, 400);
+
+      const { data: prop } = await supabase
+        .from("proposals")
+        .select("id, first_name, recipient_email, event_date, hold_until")
+        .eq("id", id)
+        .maybeSingle();
+      if (!prop) return json({ error: "Proposal not found" }, 404);
+
+      const previous: string | null = prop.hold_until || null;
+      const { error } = await supabase
+        .from("proposals")
+        .update({ hold_until })
+        .eq("id", id);
+      if (error) return json({ error: error.message }, 500);
+
+      // Only a genuine extension earns a note to the client.
+      let notified = false;
+      const isLater = !previous || hold_until > previous;
+      if (isLater && prop.recipient_email) {
+        notified = await sendHoldExtensionEmail({
+          to: prop.recipient_email,
+          firstName: (prop.first_name || "there").trim().split(/\s+/)[0] || "there",
+          eventDate: (prop.event_date || "").trim(),
+          holdUntil: hold_until,
+        });
+      }
+      return json({ ok: true, hold_until, previous, notified });
     }
 
     if (action === "delete" && req.method === "POST") {
@@ -996,6 +1036,16 @@ White Rabbit LA · 7393 W. Manchester Ave #209, Los Angeles, CA 90045`;
       }
       if (id) {
         await supabase.from("proposals").update({ sent_at: new Date().toISOString() }).eq("id", id);
+        // Start the seven day hold at send time, but never overwrite one Scott
+        // has already set or extended by hand.
+        {
+          const hold = new Date(Date.now() + 7 * 864e5).toISOString().slice(0, 10);
+          await supabase
+            .from("proposals")
+            .update({ hold_until: hold })
+            .eq("id", id)
+            .is("hold_until", null);
+        }
 
         // Auto-create / update CRM deal in "proposal_sent" stage
         try {
