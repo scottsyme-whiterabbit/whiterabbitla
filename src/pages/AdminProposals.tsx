@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ClientFileProvider } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
 import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2, ArrowLeft, ArrowUp, ArrowDown } from "lucide-react";
 import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type Tier, type TimelineItem, type FaqItem } from "./ProposalTemplate";
@@ -1060,7 +1061,9 @@ const TierEditor = ({ tier, onChange, onRemove, index }: { tier: Tier; onChange:
 
 const AdminProposalsPage = () => (
   <AdminGate>
-    <AdminProposals />
+    <ClientFileProvider>
+      <AdminProposals />
+    </ClientFileProvider>
   </AdminGate>
 );
 
