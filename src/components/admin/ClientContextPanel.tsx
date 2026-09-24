@@ -387,11 +387,17 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onEdit
     }
     for (const p of proposals) {
       const step = p.followup_step || 0;
+      const which = proposals.length > 1 && p.sent_at ? ` (proposal sent ${fmtDate(p.sent_at)})` : "";
+      if (step > 0 && !p.last_followup_at) {
+        // Marked complete when the follow-up system launched; nothing was actually sent.
+        sent.push({ key: `pf-${p.id}-none`, at: p.sent_at, label: `No proposal follow-ups sent${which}: this proposal went out before automatic follow-ups began` });
+        continue;
+      }
       for (let i = 1; i <= Math.min(step, 3); i++) {
         sent.push({
           key: `pf-${p.id}-${i}`,
           at: i === step ? p.last_followup_at : null,
-          label: `Proposal follow-up ${i} of 3`,
+          label: `Proposal follow-up ${i} of 3${which}`,
         });
       }
     }
