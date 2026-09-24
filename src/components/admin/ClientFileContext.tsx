@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState, type ReactNode, type MouseEvent } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode, type MouseEvent } from "react";
 import ClientContextPanel, { type ClientTarget } from "@/components/admin/ClientContextPanel";
 
 type OpenFn = (t: ClientTarget) => void;
@@ -13,6 +13,19 @@ export const ClientFileProvider = ({ children }: { children: ReactNode }) => {
     setTarget({ ...t });
     setOpen(true);
   }, []);
+  // Phone back gesture closes the client file instead of leaving the page.
+  const pushed = useRef(false);
+  useEffect(() => {
+    if (!open) return;
+    window.history.pushState({ clientFile: true }, "");
+    pushed.current = true;
+    const onPop = () => { pushed.current = false; setOpen(false); };
+    window.addEventListener("popstate", onPop);
+    return () => {
+      window.removeEventListener("popstate", onPop);
+      if (pushed.current) { pushed.current = false; window.history.back(); }
+    };
+  }, [open]);
   return (
     <Ctx.Provider value={openClient}>
       {children}

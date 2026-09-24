@@ -34,6 +34,8 @@ export interface ClientTarget {
   email: string;
   name?: string | null;
   dealId?: string | null;
+  /** Folder to open first (e.g. from the Today screen). */
+  folder?: "payments" | "email" | "documents" | "correspondence" | "proposal" | null;
 }
 
 interface ThreadMessage {
@@ -246,7 +248,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onEdit
     if (!open || !email) return;
     let cancelled = false;
     setLoading(true);
-    setTab(null);
+    setTab(target?.folder ?? null);
     setFile(null);
     setCreatedDeal(null);
     setMessages([]);
