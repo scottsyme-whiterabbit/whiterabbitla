@@ -68,14 +68,18 @@ function findPart(payload: any, mime: string): string | null {
 }
 
 // Prefer text/plain; fall back to text/html converted to readable plain text.
-function extractBody(payload: any): string {
-  if (!payload) return "";
+// Preserve the selected original MIME part separately for reversible cleanup.
+function extractBody(payload: any): { raw: string; text: string } {
+  if (!payload) return { raw: "", text: "" };
   const plain = findPart(payload, "text/plain");
-  if (plain) return cleanEmailBody(plain, false);
+  if (plain) return { raw: plain, text: cleanEmailBody(plain, false) };
   const html = findPart(payload, "text/html");
-  if (html) return cleanEmailBody(html, true);
-  if (payload.body?.data) return cleanEmailBody(decodeB64Url(payload.body.data));
-  return "";
+  if (html) return { raw: html, text: cleanEmailBody(html, true) };
+  if (payload.body?.data) {
+    const raw = decodeB64Url(payload.body.data);
+    return { raw, text: cleanEmailBody(raw) };
+  }
+  return { raw: "", text: "" };
 }
 
 async function syncDeal(deal: any) {
@@ -119,7 +123,8 @@ async function syncDeal(deal: any) {
     const dateStr = header(headers, "Date");
     const sentAt = dateStr ? new Date(dateStr).toISOString() : new Date(parseInt(full.internalDate || `${Date.now()}`)).toISOString();
     const direction = from === OWNER_EMAIL.toLowerCase() ? "outbound" : (from === email ? "inbound" : (to === OWNER_EMAIL.toLowerCase() ? "inbound" : "outbound"));
-    const bodyText = extractBody(full.payload).slice(0, 20000);
+    const body = extractBody(full.payload);
+    const bodyText = body.text.slice(0, 20000);
     const snippet = (full.snippet || "").slice(0, 500);
     const threadId = full.threadId;
     primaryThreadId = primaryThreadId || threadId;
@@ -149,6 +154,7 @@ async function syncDeal(deal: any) {
       subject,
       snippet,
       body_text: bodyText,
+      body_raw: body.raw.slice(0, 20000),
       sent_at: sentAt,
     });
 
