@@ -85,6 +85,14 @@ const AdminProposals = () => {
 
   useEffect(() => { if (authed) loadList(); }, [authed]);
 
+  // Handle ?edit=<slug> — open a proposal straight from the Today screen
+  useEffect(() => {
+    if (!authed) return;
+    const slug = new URLSearchParams(window.location.search).get("edit");
+    if (slug) startEdit(slug);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [authed]);
+
   // Handle ?fromDeal=<id> — pre-fill a new proposal from a pipeline deal
   useEffect(() => {
     if (!authed) return;
