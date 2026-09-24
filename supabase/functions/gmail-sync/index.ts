@@ -2,6 +2,7 @@
 // store threads + messages, detect inbound replies → halt drips, advance stage, log activity.
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
+import { cleanEmailBody } from "../_shared/htmlToText.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -54,18 +55,26 @@ function decodeB64Url(s: string): string {
   }
 }
 
-function extractBody(payload: any): string {
-  if (!payload) return "";
-  if (payload.body?.data) return decodeB64Url(payload.body.data);
+function findPart(payload: any, mime: string): string | null {
+  if (!payload) return null;
+  if (payload.mimeType === mime && payload.body?.data) return decodeB64Url(payload.body.data);
   if (Array.isArray(payload.parts)) {
     for (const p of payload.parts) {
-      if (p.mimeType === "text/plain" && p.body?.data) return decodeB64Url(p.body.data);
-    }
-    for (const p of payload.parts) {
-      const nested = extractBody(p);
-      if (nested) return nested;
+      const found = findPart(p, mime);
+      if (found) return found;
     }
   }
+  return null;
+}
+
+// Prefer text/plain; fall back to text/html converted to readable plain text.
+function extractBody(payload: any): string {
+  if (!payload) return "";
+  const plain = findPart(payload, "text/plain");
+  if (plain) return cleanEmailBody(plain, false);
+  const html = findPart(payload, "text/html");
+  if (html) return cleanEmailBody(html, true);
+  if (payload.body?.data) return cleanEmailBody(decodeB64Url(payload.body.data));
   return "";
 }
 
