@@ -1743,6 +1743,62 @@ serve(async (req) => {
         });
       }
 
+      /* ---- Today screen (read-only summary) ---- */
+      case "get_today": {
+        const now = Date.now();
+        const since7 = new Date(now - 7 * 864e5).toISOString();
+        const since45 = new Date(now - 45 * 864e5).toISOString();
+        const la = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Los_Angeles" });
+        const today = la.format(new Date(now));
+        const in14 = la.format(new Date(now + 14 * 864e5));
+        const [callRes, propRes, sigRes, invRes, dealRes] = await Promise.all([
+          supabase.from("contact_inquiries")
+            .select("id, name, email, phone, event_type, date, message, created_at")
+            .gte("created_at", since7).is("called_at", null)
+            .order("created_at", { ascending: false }),
+          supabase.from("proposals")
+            .select("id, slug, first_name, last_name, event_type, event_date, sent_at, hold_until, followup_step, followup_paused")
+            .not("sent_at", "is", null).gte("sent_at", since45),
+          supabase.from("signed_agreements").select("proposal_id").not("proposal_id", "is", null),
+          supabase.from("event_invoices")
+            .select("id, client_name, total_cents, amount_paid_cents, status, event_date, created_at")
+            .in("status", ["open", "deposit_paid"])
+            .order("created_at", { ascending: true }),
+          supabase.from("deals")
+            .select("id, contact_name, contact_email, event_type, event_date, event_time, location")
+            .eq("stage", "booked").gte("event_date", today).lte("event_date", in14)
+            .order("event_date", { ascending: true }),
+        ]);
+        const err = callRes.error || propRes.error || sigRes.error || invRes.error || dealRes.error;
+        if (err) throw new Error(err.message);
+        const signed = new Set((sigRes.data || []).map((r) => r.proposal_id));
+        const waiting = (propRes.data || [])
+          .filter((p) => !signed.has(p.id))
+          .sort((a, b) => (a.hold_until || "9999").localeCompare(b.hold_until || "9999"));
+        return new Response(JSON.stringify({
+          today,
+          call: callRes.data || [],
+          waiting,
+          money: invRes.data || [],
+          upcoming: dealRes.data || [],
+        }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+
+      case "mark_called": {
+        const { id, undo } = payload;
+        if (!id || typeof id !== "string") {
+          return new Response(JSON.stringify({ error: "id required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const { error } = await supabase.from("contact_inquiries")
+          .update({ called_at: undo ? null : new Date().toISOString() })
+          .eq("id", id);
+        if (error) throw new Error(error.message);
+        return new Response(JSON.stringify({ ok: true }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
 
       /* ---- "Still interested?" re-engagement, chosen by hand ---- */
       case "get_reengage_candidates": {
