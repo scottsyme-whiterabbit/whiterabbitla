@@ -530,15 +530,15 @@ const ClientContextPanel = ({ deal, open, onOpenChange, adminPassword, onEditDea
                         <span className="text-[10px] text-muted-foreground">{new Date(m.sent_at).toLocaleString()}</span>
                       </div>
                       <p className="text-xs text-foreground mt-1 font-medium">{m.subject}</p>
-                      <p className={`text-xs text-muted-foreground mt-1 whitespace-pre-wrap ${isOpen ? "" : "line-clamp-3"}`}>
-                        {full}
+                      <p className="text-xs text-muted-foreground mt-1 whitespace-pre-wrap break-words">
+                        {isOpen || full.length <= 600 ? full : `${full.slice(0, 600).trimEnd()}…`}
                       </p>
-                      {full.length > 200 && (
+                      {full.length > 600 && (
                         <button
                           onClick={() => setExpanded((p) => ({ ...p, [m.id]: !isOpen }))}
                           className="text-[10px] text-accent hover:text-accent/80 mt-1 transition-colors"
                         >
-                          {isOpen ? "Show less" : "Show more"}
+                          {isOpen ? "Show less" : "Show full message"}
                         </button>
                       )}
                     </div>

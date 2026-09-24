@@ -1,0 +1,1 @@
+ALTER TABLE public.deal_email_messages ADD COLUMN IF NOT EXISTS body_raw text;

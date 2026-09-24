@@ -555,6 +555,7 @@ export type Database = {
       }
       deal_email_messages: {
         Row: {
+          body_raw: string | null
           body_text: string | null
           created_at: string
           deal_id: string
@@ -569,6 +570,7 @@ export type Database = {
           to_email: string | null
         }
         Insert: {
+          body_raw?: string | null
           body_text?: string | null
           created_at?: string
           deal_id: string
@@ -583,6 +585,7 @@ export type Database = {
           to_email?: string | null
         }
         Update: {
+          body_raw?: string | null
           body_text?: string | null
           created_at?: string
           deal_id?: string
