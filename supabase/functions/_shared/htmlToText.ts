@@ -63,6 +63,7 @@ export function htmlToText(input: string): string {
   s = s.replace(/<(p|div|tr|h[1-6]|blockquote|table)\b[^>]*>/gi, "\n");
   s = s.replace(/<\/t[dh]\s*>/gi, " ");
   s = s.replace(/<[^>]+>/g, "");
+  s = s.replace(/<[a-z!\/][^>]*$/i, ""); // unclosed tag left by truncation
   s = decodeEntities(s);
   return s;
 }
@@ -83,5 +84,7 @@ export function cleanEmailBody(raw: string, isHtml?: boolean): string {
   let s = raw;
   if (looksQuotedPrintable(s)) s = decodeQuotedPrintable(s);
   if (isHtml || looksHtml(s)) s = htmlToText(s);
+  // Entity-encoded markup (&lt;td ...&gt;) only appears after decoding: run once more.
+  if (looksHtml(s)) s = htmlToText(s);
   return tidy(s);
 }
