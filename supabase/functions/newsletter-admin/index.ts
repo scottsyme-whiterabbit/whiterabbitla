@@ -1743,6 +1743,122 @@ serve(async (req) => {
         });
       }
 
+      /* ---- Client file (read-only, resolved by email) ---- */
+      case "get_client_file": {
+        const email = String(payload.email || "").toLowerCase().trim();
+        if (!email || !email.includes("@")) {
+          return new Response(JSON.stringify({ error: "email required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const like = email.replace(/[\\%_]/g, (c) => `\\${c}`);
+        const [dealsRes, inqRes, consultRes, nlRes, coldRes] = await Promise.all([
+          supabase.from("deals").select("*").ilike("contact_email", like).order("updated_at", { ascending: false }),
+          supabase.from("contact_inquiries").select("id, name, email, phone, event_type, date, location, guest_count, message, created_at").ilike("email", like).order("created_at", { ascending: false }),
+          supabase.from("consultation_leads").select("id, name, email, phone, event_type, event_date, description, created_at").ilike("email", like).order("created_at", { ascending: false }),
+          supabase.from("newsletter_contacts").select("id, name, phone, company").ilike("email", like),
+          supabase.from("cold_email_campaigns").select("id, name, phone, company").ilike("email", like),
+        ]);
+        const deals = dealsRes.data || [];
+        const dealIds = deals.map((d) => d.id);
+        const inList = (ids: string[]) => ids.length ? ids : ["00000000-0000-0000-0000-000000000000"];
+
+        const propCols = "id, slug, first_name, last_name, recipient_email, event_type, event_date, venue, sent_at, created_at, deal_id, followup_step, last_followup_at, followup_paused, hold_until";
+        const [invEmail, invDeal, propEmail, propDeal] = await Promise.all([
+          supabase.from("event_invoices").select("*").ilike("client_email", like),
+          supabase.from("event_invoices").select("*").in("deal_id", inList(dealIds)),
+          supabase.from("proposals").select(propCols).ilike("recipient_email", like),
+          supabase.from("proposals").select(propCols).in("deal_id", inList(dealIds)),
+        ]);
+        const uniq = <T extends { id: string }>(rows: T[]) => {
+          const seen = new Set<string>();
+          return rows.filter((r) => (seen.has(r.id) ? false : (seen.add(r.id), true)));
+        };
+        const invoices = uniq([...(invEmail.data || []), ...(invDeal.data || [])])
+          .sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)));
+        const proposalsRaw = uniq([...(propEmail.data || []), ...(propDeal.data || [])]);
+        const propIds = proposalsRaw.map((p) => p.id);
+        const agreementIds = invoices.map((i) => i.agreement_id).filter(Boolean) as string[];
+
+        const agrCols = "id, proposal_id, proposal_slug, tier_name, tier_price, client_name, client_email, event_type, event_date, venue, agreement_text, signed_at, signer_ip, deal_id";
+        const contactIds = [
+          ...dealIds,
+          ...(inqRes.data || []).map((r) => r.id),
+          ...(nlRes.data || []).map((r) => r.id),
+          ...(coldRes.data || []).map((r) => r.id),
+        ];
+        const [agrEmail, agrProp, agrDeal, agrInv, views, sends, seasonal] = await Promise.all([
+          supabase.from("signed_agreements").select(agrCols).ilike("client_email", like),
+          supabase.from("signed_agreements").select(agrCols).in("proposal_id", inList(propIds)),
+          supabase.from("signed_agreements").select(agrCols).in("deal_id", inList(dealIds)),
+          supabase.from("signed_agreements").select(agrCols).in("id", inList(agreementIds)),
+          supabase.from("proposal_views").select("proposal_id, viewed_at").in("proposal_id", inList(propIds)),
+          supabase.from("newsletter_send_log").select("id, campaign_id, sent_at, status").in("contact_id", inList(contactIds)).order("sent_at", { ascending: false }).limit(500),
+          supabase.from("seasonal_campaign_sends").select("id, campaign_key, sent_at, status").in("contact_id", inList((coldRes.data || []).map((r) => r.id))),
+        ]);
+        const agreements = uniq([...(agrEmail.data || []), ...(agrProp.data || []), ...(agrDeal.data || []), ...(agrInv.data || [])])
+          .sort((a, b) => String(b.signed_at).localeCompare(String(a.signed_at)));
+
+        const proposals = proposalsRaw.map((p) => {
+          const v = (views.data || []).filter((x) => x.proposal_id === p.id).map((x) => x.viewed_at).sort();
+          return { ...p, view_count: v.length, last_viewed_at: v.pop() || null };
+        }).sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)));
+
+        // Human campaign names for newsletter campaigns stored by uuid.
+        const uuidIds = [...new Set((sends.data || []).map((s) => s.campaign_id).filter((c) => /^[0-9a-f-]{36}$/i.test(c)))];
+        const { data: camps } = uuidIds.length
+          ? await supabase.from("newsletter_campaigns").select("id, subject").in("id", uuidIds)
+          : { data: [] as { id: string; subject: string }[] };
+        const campName = new Map((camps || []).map((c) => [c.id, c.subject]));
+
+        const emailLog = [
+          ...(sends.data || []).map((s) => ({ id: s.id, campaign_id: s.campaign_id, campaign_subject: campName.get(s.campaign_id) || null, sent_at: s.sent_at, status: s.status })),
+          ...(seasonal.data || []).map((s) => ({ id: s.id, campaign_id: `${s.campaign_key}-seasonal`, campaign_subject: null, sent_at: s.sent_at, status: s.status })),
+        ];
+
+        const known = [...(inqRes.data || []), ...(nlRes.data || []), ...(coldRes.data || [])];
+        return new Response(JSON.stringify({
+          email,
+          deal: deals[0] || null,
+          inquiries: inqRes.data || [],
+          consultations: consultRes.data || [],
+          known: {
+            name: known.find((k) => k.name)?.name || (consultRes.data || [])[0]?.name || null,
+            phone: known.find((k) => k.phone)?.phone || (consultRes.data || [])[0]?.phone || null,
+            company: [...(nlRes.data || []), ...(coldRes.data || [])].find((k) => k.company)?.company || null,
+          },
+          invoices,
+          proposals,
+          agreements,
+          emailLog,
+        }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+
+      case "agreement_pdf": {
+        const { agreement_id } = payload;
+        if (!agreement_id || typeof agreement_id !== "string") {
+          return new Response(JSON.stringify({ error: "agreement_id required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const { data: a } = await supabase.from("signed_agreements").select("*").eq("id", agreement_id).maybeSingle();
+        if (!a) {
+          return new Response(JSON.stringify({ error: "Agreement not found" }), {
+            status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const { data: inv } = await supabase.from("event_invoices").select("*").eq("agreement_id", agreement_id).maybeSingle();
+        const { buildAgreementPdf } = await import("../_shared/agreement-pdf.ts");
+        const pdf = await buildAgreementPdf((inv || {
+          client_name: a.client_name, event_type: a.event_type, event_date: a.event_date,
+          venue: a.venue, tier_name: a.tier_name, total_cents: 0,
+        }) as any, a.agreement_text);
+        if (!pdf) throw new Error("Could not build the PDF");
+        return new Response(JSON.stringify({ pdf_base64: pdf, filename: `White-Rabbit-Agreement-${String(a.client_name || "client").replace(/[^a-z0-9]+/gi, "-")}.pdf` }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       /* ---- Today screen (read-only summary) ---- */
       case "get_today": {
         const now = Date.now();
@@ -1757,11 +1873,11 @@ serve(async (req) => {
             .gte("created_at", since7).is("called_at", null)
             .order("created_at", { ascending: false }),
           supabase.from("proposals")
-            .select("id, slug, first_name, last_name, event_type, event_date, sent_at, hold_until, followup_step, followup_paused")
+            .select("id, slug, first_name, last_name, recipient_email, event_type, event_date, sent_at, hold_until, followup_step, followup_paused")
             .not("sent_at", "is", null).gte("sent_at", since45),
           supabase.from("signed_agreements").select("proposal_id").not("proposal_id", "is", null),
           supabase.from("event_invoices")
-            .select("id, client_name, total_cents, amount_paid_cents, status, event_date, created_at")
+            .select("id, client_name, client_email, total_cents, amount_paid_cents, status, event_date, created_at")
             .in("status", ["open", "deposit_paid"])
             .order("created_at", { ascending: true }),
           supabase.from("deals")

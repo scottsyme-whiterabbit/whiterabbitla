@@ -1,14 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { ClientName } from "@/components/admin/ClientFileContext";
+import { getAdminPassword } from "@/lib/adminAuth";
 import { Phone, Check, RefreshCw, ChevronDown, ChevronUp } from "lucide-react";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 interface CallRow { id: string; name: string | null; email: string; phone: string | null; event_type: string | null; date: string | null; message: string | null; created_at: string; }
-interface WaitRow { id: string; slug: string; first_name: string; last_name: string; event_type: string; event_date: string; sent_at: string; hold_until: string | null; followup_step: number; followup_paused: boolean; }
-interface MoneyRow { id: string; client_name: string | null; total_cents: number; amount_paid_cents: number; status: string; event_date: string | null; created_at: string; }
+interface WaitRow { id: string; slug: string; first_name: string; last_name: string; recipient_email?: string | null; event_type: string; event_date: string; sent_at: string; hold_until: string | null; followup_step: number; followup_paused: boolean; }
+interface MoneyRow { id: string; client_name: string | null; client_email?: string | null; total_cents: number; amount_paid_cents: number; status: string; event_date: string | null; created_at: string; }
 interface DealRow { id: string; contact_name: string | null; contact_email: string; event_type: string | null; event_date: string; location: string | null; }
 
 const ago = (iso: string) => {
@@ -53,7 +55,7 @@ const TodayTab = ({ storedPassword, onOpenMoney }: { storedPassword: string; onO
     const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${SUPABASE_KEY}` },
-      body: JSON.stringify({ action, adminPassword: storedPassword, ...payload }),
+      body: JSON.stringify({ action, adminPassword: storedPassword || getAdminPassword(), ...payload }),
     });
     const j = await res.json();
     if (!res.ok) throw new Error(j.error || "Request failed");
@@ -125,7 +127,7 @@ const TodayTab = ({ storedPassword, onOpenMoney }: { storedPassword: string; onO
           <div key={r.id} className="border border-border bg-background p-4">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
               <div className="min-w-0">
-                <p className="font-sans text-base text-foreground">{r.name || r.email}</p>
+                <p className="font-sans text-base text-foreground"><ClientName email={r.email} name={r.name}>{r.name || r.email}</ClientName></p>
                 <p className="font-sans text-xs text-muted-foreground mt-0.5">
                   {[r.event_type, r.date].filter(Boolean).join(" · ") || "No event details"} · {ago(r.created_at)}
                 </p>
@@ -159,8 +161,8 @@ const TodayTab = ({ storedPassword, onOpenMoney }: { storedPassword: string; onO
         {waiting.map((p) => {
           const expired = p.hold_until && today && p.hold_until < today;
           return (
-            <a key={p.id} href={`/admin/proposals?edit=${encodeURIComponent(p.slug)}`} className="block border border-border p-4 hover:border-accent transition-colors min-h-[48px]">
-              <p className="font-sans text-base text-foreground">{p.first_name} {p.last_name}</p>
+            <div key={p.id} className="border border-border p-4 hover:border-accent transition-colors min-h-[48px]">
+              <p className="font-sans text-base text-foreground"><ClientName email={p.recipient_email} name={`${p.first_name} ${p.last_name}`}>{p.first_name} {p.last_name}</ClientName></p>
               <p className="font-sans text-xs text-muted-foreground mt-0.5">{[p.event_type, p.event_date].filter(Boolean).join(" · ")}</p>
               <p className="font-sans text-xs mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
                 <span className="text-muted-foreground">Sent {plural(daysSince(p.sent_at), "day")} ago</span>
@@ -169,30 +171,32 @@ const TodayTab = ({ storedPassword, onOpenMoney }: { storedPassword: string; onO
                   ? <span className="text-destructive/70">Hold expired</span>
                   : <span className="text-foreground">Hold expires {fmtDay(p.hold_until)}</span>)}
               </p>
-            </a>
+              <a href={`/admin/proposals?edit=${encodeURIComponent(p.slug)}`} className="inline-flex items-center min-h-[40px] font-sans text-xs tracking-[0.15em] uppercase text-accent">Edit proposal</a>
+            </div>
           );
         })}
       </Block>
 
       <Block title="Money out" count={owed.length} empty="Nothing outstanding.">
         {owed.map((i) => (
-          <button key={i.id} onClick={onOpenMoney} className="w-full text-left block border border-border p-4 hover:border-accent transition-colors">
+          <div key={i.id} className="w-full text-left block border border-border p-4 hover:border-accent transition-colors">
             <div className="flex items-baseline justify-between gap-3">
-              <p className="font-sans text-base text-foreground truncate">{i.client_name || "Unnamed client"}</p>
+              <p className="font-sans text-base text-foreground truncate"><ClientName email={i.client_email} name={i.client_name}>{i.client_name || "Unnamed client"}</ClientName></p>
               <p className="font-sans text-base text-accent whitespace-nowrap">{money(Math.max(0, i.total_cents - i.amount_paid_cents))}</p>
             </div>
             <p className="font-sans text-xs text-muted-foreground mt-1">
               {i.status === "deposit_paid" ? "Deposit paid, balance due" : "Nothing paid yet"}
               {i.event_date ? ` · Event ${fmtDay(i.event_date)}` : ""} · Invoiced {plural(daysSince(i.created_at), "day")} ago
             </p>
-          </button>
+            <button onClick={onOpenMoney} className="inline-flex items-center min-h-[40px] font-sans text-xs tracking-[0.15em] uppercase text-accent">Open Money</button>
+          </div>
         ))}
       </Block>
 
       <Block title="Coming up" count={upcoming.length} empty="Nothing in the next two weeks.">
         {upcoming.map((d) => (
           <div key={d.id} className="border border-border p-4">
-            <p className="font-sans text-base text-foreground">{d.contact_name || d.contact_email}</p>
+            <p className="font-sans text-base text-foreground"><ClientName email={d.contact_email} name={d.contact_name} dealId={d.id}>{d.contact_name || d.contact_email}</ClientName></p>
             <p className="font-sans text-xs text-muted-foreground mt-0.5">
               {fmtDay(d.event_date)}{d.event_type ? ` · ${d.event_type}` : ""}{d.location ? ` · ${d.location}` : ""}
             </p>

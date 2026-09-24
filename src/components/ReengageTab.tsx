@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { ClientName } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
 import { RefreshCw, Send, Mail, X } from "lucide-react";
 
@@ -183,7 +184,7 @@ const ReengageTab = ({ storedPassword }: { storedPassword: string }) => {
               />
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-baseline gap-x-2">
-                  <span className="text-sm text-foreground font-medium">{r.name || "No name"}</span>
+                  <ClientName email={r.email} name={r.name} className="text-sm text-foreground font-medium">{r.name || "No name"}</ClientName>
                   <span className="text-xs text-muted-foreground break-all">{r.email}</span>
                 </div>
                 <div className="text-xs text-muted-foreground mt-0.5">

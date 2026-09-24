@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { ClientName } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
 import { Mail, Flame, RefreshCw, Send, Calendar as CalIcon, CheckCircle2, XCircle, ChevronRight } from "lucide-react";
 
@@ -244,7 +245,7 @@ const DealInboxTab = ({ storedPassword }: Props) => {
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5 flex-wrap">
                       {d.hot_signal && <Flame size={12} className="text-rose-500 shrink-0" />}
-                      <span className="text-sm text-foreground truncate">{d.contact_name || d.contact_email}</span>
+                      <ClientName email={d.contact_email} name={d.contact_name} dealId={d.id} className="text-sm text-foreground truncate">{d.contact_name || d.contact_email}</ClientName>
                       {d.calendar_event_id && <CalIcon size={11} className="text-emerald-500 shrink-0" />}
                       {d.gmail_thread_id && <Mail size={11} className="text-accent shrink-0" />}
                     </div>
@@ -275,7 +276,7 @@ const DealInboxTab = ({ storedPassword }: Props) => {
           ) : (
             <div className="space-y-4">
               <div>
-                <h4 className="font-serif text-lg text-foreground">{selected.contact_name || selected.contact_email}</h4>
+                <h4 className="font-serif text-lg text-foreground"><ClientName email={selected.contact_email} name={selected.contact_name} dealId={selected.id}>{selected.contact_name || selected.contact_email}</ClientName></h4>
                 <p className="text-xs text-muted-foreground">{selected.contact_email} · {selected.stage}</p>
               </div>
 

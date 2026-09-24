@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { ClientName } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
 import { Sparkles, Send, X, Edit3, CheckCircle2, Loader2, RefreshCw } from "lucide-react";
 import { format } from "date-fns";
@@ -174,7 +175,7 @@ export default function FollowupQueueTab({ adminPassword }: Props) {
               <div key={first.id} className="border border-border bg-background">
                 <div className="px-4 py-2 bg-muted/10 border-b border-border flex items-center justify-between flex-wrap gap-2">
                   <div className="min-w-0">
-                    <p className="text-sm font-medium">{first.contact_name || first.contact_email.split("@")[0]}</p>
+                    <p className="text-sm font-medium"><ClientName email={first.contact_email} name={first.contact_name}>{first.contact_name || first.contact_email.split("@")[0]}</ClientName></p>
                     <p className="text-[10px] text-muted-foreground">{first.contact_email}{first.company ? ` · ${first.company}` : ""}{first.vertical ? ` · ${first.vertical}` : ""}</p>
                   </div>
                   <p className="text-[10px] text-muted-foreground">{format(new Date(first.created_at), "MMM d, h:mm a")}</p>

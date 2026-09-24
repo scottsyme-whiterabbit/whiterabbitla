@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { ClientName } from "@/components/admin/ClientFileContext";
 import { Search, Users, Flame, ThermometerSun, Snowflake, UserX, ChevronDown, ChevronUp, MousePointerClick, Eye, Trash2 } from "lucide-react";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
@@ -382,7 +383,7 @@ const ContactsListTab = ({ storedPassword, initialFilter, initialCampaign }: Con
                       {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                     </td>
                     <td className="p-3 text-foreground font-mono text-xs">{c.email}</td>
-                    <td className="p-3 text-muted-foreground">{c.name || ""}</td>
+                    <td className="p-3 text-muted-foreground"><ClientName email={c.email} name={c.name}>{c.name || "Open file"}</ClientName></td>
                     <td className="p-3 text-muted-foreground">{c.company || ""}</td>
                     <td className="p-3 text-muted-foreground text-xs">{c.city || ""}</td>
                     <td className="p-3">
