@@ -1873,11 +1873,11 @@ serve(async (req) => {
             .gte("created_at", since7).is("called_at", null)
             .order("created_at", { ascending: false }),
           supabase.from("proposals")
-            .select("id, slug, first_name, last_name, event_type, event_date, sent_at, hold_until, followup_step, followup_paused")
+            .select("id, slug, first_name, last_name, recipient_email, event_type, event_date, sent_at, hold_until, followup_step, followup_paused")
             .not("sent_at", "is", null).gte("sent_at", since45),
           supabase.from("signed_agreements").select("proposal_id").not("proposal_id", "is", null),
           supabase.from("event_invoices")
-            .select("id, client_name, total_cents, amount_paid_cents, status, event_date, created_at")
+            .select("id, client_name, client_email, total_cents, amount_paid_cents, status, event_date, created_at")
             .in("status", ["open", "deposit_paid"])
             .order("created_at", { ascending: true }),
           supabase.from("deals")
