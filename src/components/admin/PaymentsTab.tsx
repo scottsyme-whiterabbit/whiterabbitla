@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ClientName } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
 import { RefreshCw, Loader2, Send, XCircle, BadgeDollarSign, Undo2 } from "lucide-react";
 
@@ -198,7 +199,7 @@ const PaymentsTab = ({ password }: { password: string }) => {
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex-1 min-w-[240px]">
                     <div className="font-serif text-lg text-forest-dark">
-                      {inv.client_name || "Client"}{" "}
+                      <ClientName email={inv.client_email} name={inv.client_name}>{inv.client_name || "Client"}</ClientName>{" "}
                       <span className="text-forest-dark/50 text-sm font-sans">
                         · {money(inv.total_cents)}
                         {inv.tier_name ? ` · ${inv.tier_name}` : ""}

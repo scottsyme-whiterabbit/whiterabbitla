@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { ClientName } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
@@ -545,7 +546,7 @@ const RevenueTab = ({ adminPassword }: Props) => {
             <div className="space-y-1">
               {followUpHealth.overdue.slice(0, 8).map(d => (
                 <div key={d.id} className="flex items-center justify-between border border-border/50 px-3 py-2">
-                  <span className="font-sans text-xs text-foreground">{d.contact_name || d.contact_email}</span>
+                  <ClientName email={d.contact_email} name={d.contact_name} dealId={d.id} className="font-sans text-xs text-foreground">{d.contact_name || d.contact_email}</ClientName>
                   <div className="flex items-center gap-3">
                     <span className="font-sans text-[10px] text-muted-foreground">{STAGE_LABELS[d.stage]}</span>
                     <span className="font-mono text-[10px] text-red-500">{d.next_follow_up}</span>

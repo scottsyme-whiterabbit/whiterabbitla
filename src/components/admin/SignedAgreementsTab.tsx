@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ClientName } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
 import { Copy, CheckCircle2, RefreshCw, Loader2 } from "lucide-react";
 
@@ -97,7 +98,7 @@ const SignedAgreementsTab = ({ password }: { password: string }) => {
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex-1 min-w-[240px]">
                     <div className="font-serif text-lg text-forest-dark">
-                      {a.client_name}{" "}
+                      <ClientName email={a.client_email} name={a.client_name}>{a.client_name}</ClientName>{" "}
                       <span className="text-forest-dark/50 text-sm font-sans">
                         · {a.tier_name}
                         {a.tier_price ? ` · ${a.tier_price}` : ""}

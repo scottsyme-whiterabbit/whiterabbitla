@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { ClientName } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
 import { Phone, PhoneOutgoing, Mail, ChevronDown, ChevronUp, Search, Flame, Clock, CheckCircle, TrendingUp, ClipboardList, Pencil, Sparkles, Zap, ListChecks } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -699,7 +700,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                       {isOverdue ? "Overdue" : "Today"}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="font-sans text-sm text-foreground truncate">{item.name || item.email.split("@")[0]}</p>
+                      <p className="font-sans text-sm text-foreground truncate"><ClientName email={item.email} name={item.name} dealId={item.deal?.id}>{item.name || item.email.split("@")[0]}</ClientName></p>
                       <p className="font-sans text-[10px] text-muted-foreground truncate">
                         {item.deal?.next_follow_up && format(new Date(item.deal.next_follow_up + "T00:00:00"), "MMM d")}
                         {item.deal?.event_type && ` · ${item.deal.event_type}`}
@@ -811,10 +812,12 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                 <div className={`grid grid-cols-[80px_1.3fr_90px_1.1fr_150px_220px_120px] gap-3 px-4 py-3 border-b border-border items-center transition-colors ${rowBg}`}>
                   <div>{priorityBadge(item.priority)}</div>
                   <div className="min-w-0">
-                    <button onClick={() => toggleExpanded(item.email, item.deal?.id)} className="text-left flex items-center gap-1">
-                      <span className="font-sans text-sm text-foreground font-medium truncate">{item.name || item.email.split("@")[0]}</span>
-                      {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
-                    </button>
+                    <div className="flex items-center gap-1">
+                      <ClientName email={item.email} name={item.name} dealId={item.deal?.id} className="font-sans text-sm text-foreground font-medium truncate">{item.name || item.email.split("@")[0]}</ClientName>
+                      <button onClick={() => toggleExpanded(item.email, item.deal?.id)} aria-label="Show details" className="p-1 text-muted-foreground hover:text-foreground">
+                        {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                      </button>
+                    </div>
                     <p className="text-[11px] text-muted-foreground truncate">{item.email}</p>
                     {item.company && <p className="text-[10px] text-muted-foreground">{item.company}</p>}
                   </div>
@@ -968,7 +971,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                     {isExpanded ? <ChevronUp size={18} className="text-accent" /> : <ChevronDown size={18} className="text-muted-foreground" />}
                   </div>
                 </div>
-                <p className="font-sans text-sm text-foreground font-medium">{item.name || item.email.split("@")[0]}</p>
+                <p className="font-sans text-sm text-foreground font-medium"><ClientName email={item.email} name={item.name} dealId={item.deal?.id}>{item.name || item.email.split("@")[0]}</ClientName></p>
                 <p className="text-[11px] text-muted-foreground">{item.email}</p>
                 {item.company && <p className="text-[10px] text-muted-foreground mt-0.5">{item.company}</p>}
                 <p className="text-[10px] text-muted-foreground mt-1">{item.engagement}</p>

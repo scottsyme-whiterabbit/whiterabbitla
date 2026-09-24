@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { ClientName } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
 import { Activity, RefreshCw, Sparkles, Send, CheckCircle2, X, Edit3, Eye, MousePointerClick, MessageSquare, Mail, User, ChevronLeft, ListPlus } from "lucide-react";
 import { format, formatDistanceToNow } from "date-fns";
@@ -196,7 +197,7 @@ export default function ActivityLogTab({ adminPassword }: Props) {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <p className="text-sm font-medium truncate">{g.name || g.email.split("@")[0]}</p>
+                      <p className="text-sm font-medium truncate"><ClientName email={g.email} name={g.name}>{g.name || g.email.split("@")[0]}</ClientName></p>
                       <span className="text-[10px] text-muted-foreground whitespace-nowrap">
                         {formatDistanceToNow(new Date(g.lastAt), { addSuffix: true })}
                       </span>
@@ -234,7 +235,7 @@ export default function ActivityLogTab({ adminPassword }: Props) {
             return (
               <div className="p-3 border-b border-border bg-muted/10 flex items-center justify-between flex-wrap gap-2">
                 <div>
-                  <p className="text-sm font-medium">{g.name || g.email.split("@")[0]}</p>
+                  <p className="text-sm font-medium"><ClientName email={g.email} name={g.name}>{g.name || g.email.split("@")[0]}</ClientName></p>
                   <p className="text-[10px] text-muted-foreground">{g.email} · {g.entries.length} events</p>
                 </div>
                 <button onClick={() => openDraftFor(g)}
@@ -256,10 +257,11 @@ export default function ActivityLogTab({ adminPassword }: Props) {
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className={`px-2 py-0.5 border text-[9px] uppercase tracking-wider ${meta.color}`}>{meta.label}</span>
                     {e.contact_email && (
-                      <button onClick={() => { setView("by_contact"); setSelectedContact(e.contact_email!); }}
-                        className="text-xs text-foreground truncate hover:text-accent text-left">
-                        {e.contact_name ? `${e.contact_name} · ` : ""}{e.contact_email}
-                      </button>
+                      <span className="text-xs text-foreground truncate text-left">
+                        <ClientName email={e.contact_email} name={e.contact_name}>{e.contact_name || e.contact_email}</ClientName>
+                        <button onClick={() => { setView("by_contact"); setSelectedContact(e.contact_email!); }}
+                          className="ml-2 text-muted-foreground hover:text-accent">{e.contact_name ? e.contact_email : "timeline"}</button>
+                      </span>
                     )}
                     <span className="text-[10px] text-muted-foreground ml-auto whitespace-nowrap">
                       {format(new Date(e.occurred_at), "MMM d, h:mm a")}
