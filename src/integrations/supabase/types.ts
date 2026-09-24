@@ -457,6 +457,7 @@ export type Database = {
       contact_inquiries: {
         Row: {
           budget: string | null
+          called_at: string | null
           client_type: string | null
           created_at: string
           date: string | null
@@ -478,6 +479,7 @@ export type Database = {
         }
         Insert: {
           budget?: string | null
+          called_at?: string | null
           client_type?: string | null
           created_at?: string
           date?: string | null
@@ -499,6 +501,7 @@ export type Database = {
         }
         Update: {
           budget?: string | null
+          called_at?: string | null
           client_type?: string | null
           created_at?: string
           date?: string | null

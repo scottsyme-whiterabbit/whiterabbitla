@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { toast } from "sonner";
-import { Upload, Send, FileText, Flame, ThermometerSun, RefreshCw, Trash2, Eye, Heart, Download, LayoutGrid, DollarSign, Users, MoreHorizontal, Plus, X, ClipboardList, Search, AlertTriangle, CalendarCheck, ShieldAlert, UserMinus, Mail, ArrowRight } from "lucide-react";
+import { Upload, Send, FileText, Flame, ThermometerSun, RefreshCw, Trash2, Eye, Heart, Download, LayoutGrid, DollarSign, Users, MoreHorizontal, Plus, X, ClipboardList, Search, AlertTriangle, CalendarCheck, ShieldAlert, UserMinus, Mail, ArrowRight, Sun, ChevronDown } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import PlannerDripTab from "@/components/PlannerDripTab";
 import ResidentDripTab from "@/components/ResidentDripTab";
@@ -20,6 +20,7 @@ import FollowupQueueTab from "@/components/FollowupQueueTab";
 import ActivityLogTab from "@/components/ActivityLogTab";
 import CastleInvitesTab from "@/components/CastleInvitesTab";
 import ReengageTab from "@/components/ReengageTab";
+import TodayTab from "@/components/TodayTab";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import AdminGate, { AdminSignOutButton } from "@/components/admin/AdminGate";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -89,13 +90,13 @@ const AdminNewsletter = () => {
   const { password: storedPassword, authed: authenticated } = useAdminAuth();
 
 
-  const [activeTab, setActiveTab] = useState<"dashboard" | "pipeline" | "inbox" | "actions" | "followups" | "activity" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "email_analytics" | "planner" | "apartment" | "thankyou" | "cold" | "lead_attribution" | "castle" | "reengage">(() => {
+  const [activeTab, setActiveTab] = useState<"today" | "dashboard" | "pipeline" | "inbox" | "actions" | "followups" | "activity" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "email_analytics" | "planner" | "apartment" | "thankyou" | "cold" | "lead_attribution" | "castle" | "reengage">(() => {
     if (typeof window !== "undefined") {
       const t = new URLSearchParams(window.location.search).get("tab");
-      const allowed = ["dashboard","pipeline","inbox","actions","followups","activity","revenue","contacts","compose","campaigns","calendar","analytics","email_analytics","planner","apartment","thankyou","cold","lead_attribution","castle"];
+      const allowed = ["today","reengage","dashboard","pipeline","inbox","actions","followups","activity","revenue","contacts","compose","campaigns","calendar","analytics","email_analytics","planner","apartment","thankyou","cold","lead_attribution","castle"];
       if (t && allowed.includes(t)) return t as any;
     }
-    return "dashboard";
+    return "today";
   });
   const [coldCategory, setColdCategory] = useState<string>("corporate_planner");
   const [actionBadge, setActionBadge] = useState(0);
@@ -555,13 +556,15 @@ const AdminNewsletter = () => {
   };
 
   // Mobile bottom nav tabs
-  const MOBILE_NAV_TABS = [
-    { key: "dashboard" as const, icon: LayoutGrid, label: "Insights" },
-    { key: "pipeline" as const, icon: FileText, label: "Pipeline" },
-    { key: "actions" as const, icon: ClipboardList, label: "Actions", badge: actionBadge },
-    { key: "revenue" as const, icon: DollarSign, label: "Revenue" },
-    { key: "cold" as const, icon: Users, label: "Outreach" },
+  // Primary navigation: five tabs. Everything else lives under More.
+  const PRIMARY_TABS = [
+    { key: "today" as const, icon: Sun, label: "Today", short: "Today" },
+    { key: "pipeline" as const, icon: LayoutGrid, label: "Pipeline", short: "Pipeline" },
+    { key: "proposals" as const, icon: FileText, label: "Proposals", short: "Proposal", href: "/admin/proposals" },
+    { key: "revenue" as const, icon: DollarSign, label: "Money", short: "Money" },
+    { key: "contacts" as const, icon: Users, label: "Contacts", short: "Contacts" },
   ];
+  const PRIMARY_KEYS = new Set<string>(["today", "pipeline", "revenue", "contacts"]);
 
   // Grouped navigation — five sections instead of nineteen flat tabs
   type TabKey = typeof activeTab;
@@ -618,8 +621,10 @@ const AdminNewsletter = () => {
     },
   ];
 
-  const activeGroup = TAB_GROUPS.find(g => g.tabs.some(t => t.key === activeTab)) || TAB_GROUPS[0];
-  const groupBadge = (groupKey: string) => (groupKey === "pipeline" ? actionBadge : 0);
+  const MORE_GROUPS = TAB_GROUPS
+    .map(g => ({ ...g, tabs: g.tabs.filter(t => !PRIMARY_KEYS.has(t.key)) }))
+    .filter(g => g.tabs.length > 0);
+  const activeMoreTab = MORE_GROUPS.flatMap(g => g.tabs).find(t => t.key === activeTab);
 
 
   
@@ -644,14 +649,6 @@ const AdminNewsletter = () => {
             </button>
           </div>
         </div>
-
-        {/* Mobile-prominent Proposals CTA */}
-        <a
-          href="/admin/proposals"
-          className="md:hidden w-full bg-forest-dark text-cream px-5 py-4 flex items-center justify-center gap-2 hover:opacity-90 shadow-md mb-4 text-base font-medium tracking-wide"
-        >
-          <FileText size={18} /> Open Proposals
-        </a>
 
         {/* Global Search Bar */}
         <div className="relative mb-6">
@@ -710,61 +707,42 @@ const AdminNewsletter = () => {
           )}
         </div>
 
-        {/* Desktop Nav · five sections, sub-tabs underneath */}
+        {/* Desktop Nav · five primary tabs plus More */}
         <div className="hidden md:block mb-8">
-          <div className="flex gap-1 border-b border-border overflow-x-auto">
-            {TAB_GROUPS.map(group => {
-              const isActive = activeGroup.key === group.key;
-              const badge = groupBadge(group.key);
-              return (
-                <button
-                  key={group.key}
-                  onClick={() => setActiveTab(group.tabs[0].key)}
-                  className={`relative px-5 py-2.5 font-sans text-sm tracking-[0.15em] uppercase transition-colors whitespace-nowrap ${
-                    isActive ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {group.label}
-                  {badge > 0 && (
-                    <span className="absolute top-0.5 -right-0.5 bg-destructive text-destructive-foreground text-[9px] font-sans min-w-[16px] h-4 flex items-center justify-center rounded-full px-1">{badge}</span>
-                  )}
-                </button>
-              );
+          <div className="flex gap-1 border-b border-border">
+            {PRIMARY_TABS.map(tab => {
+              const cls = `relative px-5 py-2.5 font-sans text-sm tracking-[0.15em] uppercase transition-colors whitespace-nowrap ${
+                activeTab === tab.key ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"
+              }`;
+              return tab.href
+                ? <a key={tab.key} href={tab.href} className={cls}>{tab.label}</a>
+                : <button key={tab.key} onClick={() => setActiveTab(tab.key as TabKey)} className={cls}>{tab.label}</button>;
             })}
+            <button
+              onClick={() => setShowMoreTabs(true)}
+              className={`relative px-5 py-2.5 font-sans text-sm tracking-[0.15em] uppercase transition-colors whitespace-nowrap flex items-center gap-1 ${
+                activeMoreTab ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {activeMoreTab ? `More · ${activeMoreTab.label}` : "More"} <ChevronDown size={14} />
+              {actionBadge > 0 && (
+                <span className="absolute top-0.5 -right-0.5 bg-destructive text-destructive-foreground text-[9px] font-sans min-w-[16px] h-4 flex items-center justify-center rounded-full px-1">{actionBadge}</span>
+              )}
+            </button>
           </div>
-          {activeGroup.tabs.length > 1 && (
-            <div className="flex flex-wrap gap-2 mt-4">
-              {activeGroup.tabs.map(tab => (
-                <button
-                  key={tab.key}
-                  onClick={() => setActiveTab(tab.key)}
-                  className={`relative px-3.5 py-1.5 font-sans text-[11px] tracking-[0.12em] uppercase border transition-colors ${
-                    activeTab === tab.key
-                      ? "border-accent text-accent bg-accent/10"
-                      : "border-border text-muted-foreground hover:text-foreground hover:border-foreground/30"
-                  }`}
-                >
-                  {tab.label}
-                  {tab.key === "actions" && actionBadge > 0 && (
-                    <span className="ml-2 bg-destructive text-destructive-foreground text-[9px] font-sans min-w-[16px] h-4 inline-flex items-center justify-center rounded-full px-1">{actionBadge}</span>
-                  )}
-                </button>
-              ))}
-            </div>
-          )}
         </div>
 
         {/* Mobile "More" tabs, grouped */}
-        {isMobile && showMoreTabs && (
+        {showMoreTabs && (
           <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex flex-col">
             <div className="flex items-center justify-between p-4 border-b border-border">
-              <h2 className="font-sans text-sm tracking-[0.2em] uppercase text-foreground">All Sections</h2>
+              <h2 className="font-sans text-sm tracking-[0.2em] uppercase text-foreground">More</h2>
               <button onClick={() => setShowMoreTabs(false)} className="min-h-[44px] min-w-[44px] flex items-center justify-center text-muted-foreground">
                 <X size={20} />
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto p-4 space-y-5">
-              {TAB_GROUPS.map(group => (
+            <div className="flex-1 overflow-y-auto p-4 space-y-5 w-full max-w-xl mx-auto">
+              {MORE_GROUPS.map(group => (
                 <div key={group.key}>
                   <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-accent mb-1.5 px-1">{group.label}</p>
                   <div className="space-y-1">
@@ -845,6 +823,9 @@ const AdminNewsletter = () => {
         )}
 
         {/* Pipeline */}
+        {activeTab === "today" && (
+          <TodayTab storedPassword={storedPassword} onOpenMoney={() => setActiveTab("revenue")} />
+        )}
         {activeTab === "pipeline" && (
           <PipelineTab adminPassword={storedPassword} />
         )}
@@ -1628,27 +1609,17 @@ const AdminNewsletter = () => {
 
           {/* Bottom Nav Bar */}
           <nav className="fixed bottom-0 left-0 right-0 z-40 bg-background border-t border-border h-[60px] flex items-center justify-around px-1 safe-area-pb">
-            {MOBILE_NAV_TABS.map(tab => {
+            {PRIMARY_TABS.map(tab => {
               const isActive = activeTab === tab.key;
-              return (
-                <button
-                  key={tab.key}
-                  onClick={() => setActiveTab(tab.key)}
-                  className={`relative flex flex-col items-center justify-center gap-0.5 min-h-[44px] min-w-[44px] px-2 transition-colors ${
-                    isActive ? "text-accent" : "text-muted-foreground"
-                  }`}
-                >
-                  <tab.icon size={20} />
-                  <span className="text-[9px] font-sans tracking-wider uppercase">{tab.label}</span>
-                  {tab.badge && tab.badge > 0 && (
-                    <span className="absolute -top-0.5 right-0 bg-destructive text-destructive-foreground text-[8px] font-sans min-w-[14px] h-3.5 flex items-center justify-center rounded-full px-0.5">{tab.badge}</span>
-                  )}
-                </button>
-              );
+              const cls = `relative flex flex-1 flex-col items-center justify-center gap-0.5 min-h-[48px] min-w-0 px-0.5 transition-colors ${isActive ? "text-accent" : "text-muted-foreground"}`;
+              const inner = (<><tab.icon size={20} /><span className="text-[9px] font-sans tracking-normal uppercase truncate max-w-full">{tab.short}</span></>);
+              return tab.href
+                ? <a key={tab.key} href={tab.href} className={cls}>{inner}</a>
+                : <button key={tab.key} onClick={() => setActiveTab(tab.key as TabKey)} className={cls}>{inner}</button>;
             })}
             <button
               onClick={() => setShowMoreTabs(true)}
-              className={`flex flex-col items-center justify-center gap-0.5 min-h-[44px] min-w-[44px] px-2 transition-colors text-muted-foreground`}
+              className={`relative flex flex-1 flex-col items-center justify-center gap-0.5 min-h-[48px] min-w-0 px-0.5 transition-colors ${activeMoreTab ? "text-accent" : "text-muted-foreground"}`}
             >
               <MoreHorizontal size={20} />
               <span className="text-[9px] font-sans tracking-wider uppercase">More</span>
