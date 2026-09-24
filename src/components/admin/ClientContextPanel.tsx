@@ -220,7 +220,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onEdit
     const res = (await callAdmin("get_client_file", { email, dealId: dealProp?.id || target?.dealId || undefined })) as ClientFile;
     setFile(res);
     return res;
-  }, [callAdmin, email]);
+  }, [callAdmin, email, dealProp?.id, target?.dealId]);
 
   const loadThread = useCallback(async (dealId: string) => {
     const res = await callAdmin("get_deal_threads", { deal_id: dealId });
