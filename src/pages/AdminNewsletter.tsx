@@ -560,7 +560,7 @@ const AdminNewsletter = () => {
   const PRIMARY_TABS = [
     { key: "today" as const, icon: Sun, label: "Today", short: "Today" },
     { key: "pipeline" as const, icon: LayoutGrid, label: "Pipeline", short: "Pipeline" },
-    { key: "proposals" as const, icon: FileText, label: "Proposals", short: "Proposals", href: "/admin/proposals" },
+    { key: "proposals" as const, icon: FileText, label: "Proposals", short: "Proposal", href: "/admin/proposals" },
     { key: "revenue" as const, icon: DollarSign, label: "Money", short: "Money" },
     { key: "contacts" as const, icon: Users, label: "Contacts", short: "Contacts" },
   ];
@@ -1612,7 +1612,7 @@ const AdminNewsletter = () => {
             {PRIMARY_TABS.map(tab => {
               const isActive = activeTab === tab.key;
               const cls = `relative flex flex-1 flex-col items-center justify-center gap-0.5 min-h-[48px] min-w-0 px-0.5 transition-colors ${isActive ? "text-accent" : "text-muted-foreground"}`;
-              const inner = (<><tab.icon size={20} /><span className="text-[9px] font-sans tracking-wide uppercase truncate max-w-full">{tab.short}</span></>);
+              const inner = (<><tab.icon size={20} /><span className="text-[9px] font-sans tracking-normal uppercase truncate max-w-full">{tab.short}</span></>);
               return tab.href
                 ? <a key={tab.key} href={tab.href} className={cls}>{inner}</a>
                 : <button key={tab.key} onClick={() => setActiveTab(tab.key as TabKey)} className={cls}>{inner}</button>;

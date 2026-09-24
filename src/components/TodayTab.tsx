@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import { Phone, Check, RefreshCw, ChevronDown, ChevronUp } from "lucide-react";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -69,6 +70,11 @@ const TodayTab = ({ storedPassword, onOpenMoney }: { storedPassword: string; onO
   }, [api]);
 
   useEffect(() => { load(); }, [load]);
+  // The first request can race the saved sign-in being restored; reload once it is.
+  useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange((evt) => { if (evt === "INITIAL_SESSION" || evt === "SIGNED_IN") load(); });
+    return () => data.subscription.unsubscribe();
+  }, [load]);
   useEffect(() => () => { if (undoTimer.current) clearTimeout(undoTimer.current); }, []);
 
   const markCalled = async (row: CallRow) => {
