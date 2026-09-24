@@ -44,10 +44,19 @@ export function looksHtml(s: string): boolean {
   return /<div|<table|<!doctype|style=|<p[\s>]|<br|<html|<span|<a\s/i.test(s);
 }
 
+function stripHiddenHtml(input: string): string {
+  return input
+    // Outlook conditional comments can contain complete alternate documents.
+    .replace(/<!--\s*\[if[\s\S]*?<!\s*\[endif\]\s*-->/gi, "")
+    .replace(/<!--\s*\[if[\s\S]*?\[endif\]\s*-->/gi, "")
+    // Remove ordinary comments before processing any visible markup.
+    .replace(/<!--[\s\S]*?-->/g, "")
+    // Remove non-visible containers and all of their contents before tags are stripped.
+    .replace(/<(script|style|head|title|noscript)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, "");
+}
+
 export function htmlToText(input: string): string {
-  let s = input;
-  s = s.replace(/<!--[\s\S]*?-->/g, "");
-  s = s.replace(/<(script|style|head|title|noscript)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, "");
+  let s = stripHiddenHtml(input);
   s = s.replace(/<a\b[^>]*?href\s*=\s*("([^"]*)"|'([^']*)'|([^\s>]+))[^>]*>([\s\S]*?)<\/a\s*>/gi,
     (_m, _q, h1, h2, h3, label) => {
       const href = decodeEntities((h1 ?? h2 ?? h3 ?? "").trim());
@@ -68,10 +77,20 @@ export function htmlToText(input: string): string {
   return s;
 }
 
+// Repairs legacy rows whose HTML tags were stripped before their style contents.
+// New messages never need this path because stripHiddenHtml runs first.
+function stripLegacyStylePreamble(input: string): string {
+  if (!/(@media|@font-face|font-family\s*:|\/\*\*)/i.test(input)) return input;
+  const markers = ["Your shifts for the week", "View in Web Browser"];
+  const starts = markers.map((marker) => input.indexOf(marker)).filter((index) => index >= 0);
+  if (starts.length === 0) return input;
+  return input.slice(Math.min(...starts));
+}
+
 function tidy(s: string): string {
   return s
     .replace(/\r\n?/g, "\n")
-    .replace(/[\u00A0\u200B\u200C\u034F\uFEFF]/g, (c) => (c === "\u00A0" ? " " : ""))
+    .replace(/[\u00A0\u200B\u200C\u200D\u2060\u034F\uFEFF]/g, (c) => (c === "\u00A0" ? " " : ""))
     .replace(/[ \t]+/g, " ")
     .split("\n").map((l) => l.trim()).join("\n")
     .replace(/\n{3,}/g, "\n\n")
@@ -86,5 +105,6 @@ export function cleanEmailBody(raw: string, isHtml?: boolean): string {
   if (isHtml || looksHtml(s)) s = htmlToText(s);
   // Entity-encoded markup (&lt;td ...&gt;) only appears after decoding: run once more.
   if (looksHtml(s)) s = htmlToText(s);
+  s = stripLegacyStylePreamble(s);
   return tidy(s);
 }
