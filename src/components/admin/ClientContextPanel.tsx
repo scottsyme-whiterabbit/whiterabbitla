@@ -34,6 +34,8 @@ export interface ClientTarget {
   email: string;
   name?: string | null;
   dealId?: string | null;
+  /** Folder to open first (e.g. from the Today screen). */
+  folder?: "payments" | "email" | "documents" | "correspondence" | "proposal" | null;
 }
 
 interface ThreadMessage {
@@ -215,10 +217,10 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onEdit
 
   const loadFile = useCallback(async () => {
     if (!email) return null;
-    const res = (await callAdmin("get_client_file", { email })) as ClientFile;
+    const res = (await callAdmin("get_client_file", { email, dealId: dealProp?.id || target?.dealId || undefined })) as ClientFile;
     setFile(res);
     return res;
-  }, [callAdmin, email]);
+  }, [callAdmin, email, dealProp?.id, target?.dealId]);
 
   const loadThread = useCallback(async (dealId: string) => {
     const res = await callAdmin("get_deal_threads", { deal_id: dealId });
@@ -246,7 +248,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onEdit
     if (!open || !email) return;
     let cancelled = false;
     setLoading(true);
-    setTab(null);
+    setTab(target?.folder ?? null);
     setFile(null);
     setCreatedDeal(null);
     setMessages([]);

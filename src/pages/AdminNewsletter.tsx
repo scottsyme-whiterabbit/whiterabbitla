@@ -825,7 +825,7 @@ const AdminNewsletter = () => {
 
         {/* Pipeline */}
         {activeTab === "today" && (
-          <TodayTab storedPassword={storedPassword} onOpenMoney={() => setActiveTab("revenue")} />
+          <TodayTab storedPassword={storedPassword} />
         )}
         {activeTab === "pipeline" && (
           <PipelineTab adminPassword={storedPassword} />
