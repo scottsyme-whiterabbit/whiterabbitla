@@ -10,8 +10,8 @@ const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 interface CallRow { id: string; name: string | null; email: string; phone: string | null; event_type: string | null; date: string | null; message: string | null; created_at: string; }
-interface WaitRow { id: string; slug: string; first_name: string; last_name: string; recipient_email?: string | null; event_type: string; event_date: string; sent_at: string; hold_until: string | null; followup_step: number; followup_paused: boolean; }
-interface MoneyRow { id: string; client_name: string | null; client_email?: string | null; total_cents: number; amount_paid_cents: number; status: string; event_date: string | null; created_at: string; }
+interface WaitRow { id: string; slug: string; first_name: string; last_name: string; recipient_email?: string | null; deal_id?: string | null; event_type: string; event_date: string; sent_at: string; hold_until: string | null; followup_step: number; followup_paused: boolean; }
+interface MoneyRow { id: string; client_name: string | null; client_email?: string | null; deal_id?: string | null; total_cents: number; amount_paid_cents: number; status: string; event_date: string | null; created_at: string; }
 interface DealRow { id: string; contact_name: string | null; contact_email: string; event_type: string | null; event_date: string; location: string | null; }
 
 const ago = (iso: string) => {
@@ -171,7 +171,7 @@ const TodayTab = ({ storedPassword }: { storedPassword: string; onOpenMoney?: ()
         {waiting.map((p) => {
           const expired = p.hold_until && today && p.hold_until < today;
           return (
-            <div key={p.id} {...rowProps({ email: p.recipient_email || "", name: `${p.first_name} ${p.last_name}`, folder: "proposal" })} className="border border-border p-4 hover:border-accent transition-colors min-h-[48px] cursor-pointer">
+            <div key={p.id} {...rowProps({ email: p.recipient_email || "", name: `${p.first_name} ${p.last_name}`, dealId: p.deal_id, folder: "proposal" })} className="border border-border p-4 hover:border-accent transition-colors min-h-[48px] cursor-pointer">
               <p className="font-sans text-base text-foreground">{p.first_name} {p.last_name}</p>
               <p className="font-sans text-xs text-muted-foreground mt-0.5">{[p.event_type, p.event_date].filter(Boolean).join(" · ")}</p>
               <p className="font-sans text-xs mt-1.5 flex flex-wrap gap-x-3 gap-y-1">
@@ -188,7 +188,7 @@ const TodayTab = ({ storedPassword }: { storedPassword: string; onOpenMoney?: ()
 
       <Block title="Money out" count={owed.length} empty="Nothing outstanding.">
         {owed.map((i) => (
-          <div key={i.id} {...rowProps({ email: i.client_email || "", name: i.client_name, folder: "payments" })} className="w-full text-left block border border-border p-4 hover:border-accent transition-colors cursor-pointer">
+          <div key={i.id} {...rowProps({ email: i.client_email || "", name: i.client_name, dealId: i.deal_id, folder: "payments" })} className="w-full text-left block border border-border p-4 hover:border-accent transition-colors cursor-pointer">
             <div className="flex items-baseline justify-between gap-3">
               <p className="font-sans text-base text-foreground truncate">{i.client_name || "Unnamed client"}</p>
               <p className="font-sans text-base text-accent whitespace-nowrap">{money(Math.max(0, i.total_cents - i.amount_paid_cents))}</p>

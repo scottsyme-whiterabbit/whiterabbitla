@@ -217,7 +217,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onEdit
 
   const loadFile = useCallback(async () => {
     if (!email) return null;
-    const res = (await callAdmin("get_client_file", { email })) as ClientFile;
+    const res = (await callAdmin("get_client_file", { email, dealId: dealProp?.id || target?.dealId || undefined })) as ClientFile;
     setFile(res);
     return res;
   }, [callAdmin, email]);

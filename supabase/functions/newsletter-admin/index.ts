@@ -1760,6 +1760,16 @@ serve(async (req) => {
           supabase.from("cold_email_campaigns").select("id, name, phone, company").ilike("email", like),
         ]);
         const deals = dealsRes.data || [];
+        // Prefer the deal the caller already knows (e.g. a proposal or invoice's deal_id).
+        const wantDeal = typeof payload.dealId === "string" ? payload.dealId : "";
+        if (wantDeal) {
+          const i = deals.findIndex((d) => d.id === wantDeal);
+          if (i > 0) deals.unshift(...deals.splice(i, 1));
+          else if (i < 0) {
+            const { data: extra } = await supabase.from("deals").select("*").eq("id", wantDeal).maybeSingle();
+            if (extra) deals.unshift(extra);
+          }
+        }
         const dealIds = deals.map((d) => d.id);
         const inList = (ids: string[]) => ids.length ? ids : ["00000000-0000-0000-0000-000000000000"];
 
@@ -1873,11 +1883,11 @@ serve(async (req) => {
             .gte("created_at", since7).is("called_at", null)
             .order("created_at", { ascending: false }),
           supabase.from("proposals")
-            .select("id, slug, first_name, last_name, recipient_email, event_type, event_date, sent_at, hold_until, followup_step, followup_paused")
+            .select("id, slug, deal_id, first_name, last_name, recipient_email, event_type, event_date, sent_at, hold_until, followup_step, followup_paused")
             .not("sent_at", "is", null).gte("sent_at", since45),
           supabase.from("signed_agreements").select("proposal_id").not("proposal_id", "is", null),
           supabase.from("event_invoices")
-            .select("id, client_name, client_email, total_cents, amount_paid_cents, status, event_date, created_at")
+            .select("id, deal_id, client_name, client_email, total_cents, amount_paid_cents, status, event_date, created_at")
             .in("status", ["open", "deposit_paid"])
             .order("created_at", { ascending: true }),
           supabase.from("deals")
