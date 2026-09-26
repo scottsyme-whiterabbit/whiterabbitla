@@ -178,6 +178,7 @@ const Index = () => {
                     style={{ opacity: heroFading ? 0.35 : 1 }}
                     onLoadedMetadata={(e) => {
                       const v = e.currentTarget;
+                      v.playbackRate = 0.85;
                       if (v.duration && isFinite(v.duration)) {
                         v.currentTime = clip.offset % v.duration;
                       }
