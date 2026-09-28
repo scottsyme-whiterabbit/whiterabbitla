@@ -72,14 +72,14 @@ const clients: { name: string; logo: string; h: number }[] = [
   { name: "Disney", logo: disneyLogo, h: 20 },
   { name: "Rolls Royce", logo: rollsroyceLogo, h: 34 },
   { name: "Lionsgate", logo: lionsgateLogo, h: 20 },
-  { name: "Create & Cultivate", logo: createAndCultivateLogo, h: 30 },
+  { name: "Create & Cultivate", logo: createAndCultivateLogo, h: 36 },
   { name: "Netflix", logo: netflixLogo, h: 20 },
-  { name: "The Magic Castle", logo: magicCastleLogo, h: 40 },
+  { name: "The Magic Castle", logo: magicCastleLogo, h: 46 },
   { name: "Morgan Stanley", logo: morganstanleyLogo, h: 20 },
   { name: "The Beverly Hilton", logo: beverlyHiltonLogo, h: 26 },
-  { name: "Rivian", logo: rivianLogo, h: 34 },
+  { name: "Rivian", logo: rivianLogo, h: 40 },
   { name: "Olivia Rodrigo", logo: oliviarodrigoLogo, h: 26 },
-  { name: "Soho House", logo: sohohouseLogo, h: 34 },
+  { name: "Soho House", logo: sohohouseLogo, h: 40 },
   { name: "America's Got Talent", logo: agtLogo, h: 26 },
 ];
 
@@ -382,7 +382,7 @@ const Index = () => {
             </p>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-x-5 gap-y-6 sm:gap-x-8 sm:gap-y-10 md:gap-x-12 md:gap-y-12 items-center justify-items-center">
               {clients.map((client) => (
-                <div key={client.name} className="flex items-center justify-center h-10 md:h-12 w-full">
+                <div key={client.name} className="flex items-center justify-center h-12 md:h-14 w-full">
                   <img
                     src={client.logo}
                     alt={`${client.name} logo, White Rabbit client`}
