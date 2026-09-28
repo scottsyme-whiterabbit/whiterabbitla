@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Phone, Calendar, Sparkles, Building2, HelpCircle, ArrowRight } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
+import { getCityHeroVideo } from "@/data/cityHeroVideos";
 import QuizCTA from "@/components/QuizCTA";
 import QuizNudge from "@/components/QuizNudge";
 import FAQSection from "@/components/FAQSection";
@@ -51,6 +53,17 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
   const { openQuiz } = useBookingQuiz();
   const { cityName, citySlug, state, stateFullName, region, venues, nearbyLinks, uniqueContent } = content;
 
+  const heroVideo = getCityHeroVideo(citySlug);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  const showHeroVideo = Boolean(heroVideo) && !prefersReducedMotion;
+
   const metaOverride = cityMetaOverrides[citySlug];
   const seoTitle = metaOverride?.title || `${cityName} Magician for Hire | White Rabbit LA`;
   const seoDescription = metaOverride?.description || `Hire a world-class close-up magician for corporate events, weddings, and private parties in ${cityName}. Magic Castle member. 5-star rated on Google.`;
@@ -93,13 +106,33 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
       <SEOHead title={seoTitle} description={seoDescription} canonical={`/areas/${citySlug}`} />
       {/* Hero */}
       <section className="relative h-[50vh] min-h-[400px]">
-        <img
-          src={areaPhoto.replace("w=600&h=400", "w=1600&h=900")}
-          alt={`${cityName}, ${stateFullName}, luxury event entertainment destination`}
-          width={1600}
-          height={900}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        {showHeroVideo && heroVideo ? (
+          <video
+            key={citySlug}
+            src={heroVideo.video}
+            poster={heroVideo.poster}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            width={1280}
+            height={720}
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover"
+            onLoadedMetadata={(e) => {
+              e.currentTarget.playbackRate = 0.85;
+            }}
+          />
+        ) : (
+          <img
+            src={heroVideo ? heroVideo.poster : areaPhoto.replace("w=600&h=400", "w=1600&h=900")}
+            alt={`${cityName}, ${stateFullName}, luxury event entertainment destination`}
+            width={1600}
+            height={900}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
         <div className="absolute inset-0 flex items-end">
           <div className="max-w-4xl mx-auto px-6 pb-12 w-full">
