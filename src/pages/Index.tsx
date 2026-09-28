@@ -629,7 +629,7 @@ const Index = () => {
                 <div className="absolute bottom-0 left-0 right-0 p-8">
                   <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Private</p>
                   <h3 className="font-serif text-2xl text-cream mb-3">Private Evenings</h3>
-                  <p className="font-sans text-sm text-cream/60 mb-4">Milestones, dinners and parlor shows at home, for ten to 120 guests.</p>
+                  <p className="font-sans text-sm text-cream/60 mb-4">Milestones, dinners and parlor shows at home, for twenty to 120 guests.</p>
                   <span className="inline-flex items-center gap-2 font-sans text-sm tracking-[0.2em] uppercase text-cream/80 group-hover:text-accent transition-colors">
                     Explore <ArrowRight size={14} />
                   </span>
