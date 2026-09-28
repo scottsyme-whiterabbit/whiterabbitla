@@ -1,9 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import {
-  CALENDAR_URL, FALLBACK_ACK_LINE, extractClientNote, inquiryFirstName, pacificParts,
-  parseFutureInquiryDate, validAckLine, validEmail,
-} from "../_shared/inquiry-email.ts";
+import { CALENDAR_URL, inquiryFirstName, pacificParts, validEmail } from "../_shared/inquiry-email.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -25,42 +22,10 @@ interface Inquiry {
   created_at: string;
 }
 
-const ACK_PROMPT = "You are writing one sentence in the voice of Scott Syme, a close-up magician in Los Angeles, replying to someone who just enquired about his show. Below is what they wrote. Write ONE sentence, maximum 25 words, that shows you read it by naming a concrete detail they mentioned: the venue, the theme, the occasion, the format, the kind of room. Warm and plain. Do not greet them. Do not use their name. Do not ask a question. Do not mention price, packages, availability or links. Do not promise anything. Do not use dashes of any kind. Do not use the words 'thrilled', 'delighted', 'perfect', 'amazing' or 'absolutely'. Output only the sentence.";
-
 const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), {
   status,
   headers: { ...corsHeaders, "Content-Type": "application/json" },
 });
-
-// Same provider and auth pattern as proposal-ai-draft. Never throws; falls back on any problem.
-async function generateAckLine(note: string, clientEmail: string): Promise<string> {
-  const key = Deno.env.get("LOVABLE_API_KEY") || "";
-  if (!key) return FALLBACK_ACK_LINE;
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 8000);
-  try {
-    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      signal: controller.signal,
-      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [
-          { role: "system", content: ACK_PROMPT },
-          { role: "user", content: note.slice(0, 3000) },
-        ],
-      }),
-    });
-    if (!res.ok) return FALLBACK_ACK_LINE;
-    const data = await res.json();
-    const line = String(data?.choices?.[0]?.message?.content || "").trim().replace(/^["']|["']$/g, "").trim();
-    return validAckLine(line, clientEmail) ? line : FALLBACK_ACK_LINE;
-  } catch {
-    return FALLBACK_ACK_LINE;
-  } finally {
-    clearTimeout(timer);
-  }
-}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -94,8 +59,9 @@ serve(async (req) => {
     if (inquiryIds.length) {
       query = query.in("id", inquiryIds);
     } else {
-      const cutoff = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString();
-      query = query.is("instant_reply_sent_at", null).is("sequence_stopped_at", null).gt("created_at", cutoff);
+      const oldest = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString();
+      const newest = new Date(Date.now() - 6 * 60 * 1000).toISOString();
+      query = query.is("instant_reply_sent_at", null).is("sequence_stopped_at", null).gt("created_at", oldest).lt("created_at", newest);
     }
     const { data: inquiries, error: fetchError } = await query;
     if (fetchError) throw fetchError;
@@ -133,41 +99,12 @@ serve(async (req) => {
           if (outboundIds.some((id) => !automatedIds.has(id))) { skip(inquiry, email, "scott_already_replied"); continue; }
         }
 
-        const parsedDate = parseFutureInquiryDate(inquiry.date);
-        let dateIsFree = false;
-        if (parsedDate) {
-          const { data: bookedDate } = await supabase.from("deals").select("id").eq("stage", "booked").eq("event_date", parsedDate.iso).limit(1);
-          dateIsFree = !bookedDate?.length;
-        }
         const firstName = inquiryFirstName(inquiry.name);
-        const opening = parsedDate && dateIsFree
-          ? `Your note just came through. ${parsedDate.monthDayOrdinal} is open on my calendar and I'd love to hear more about the evening.`
-          : "Your note just came through. I'd love to hear more about the evening you're planning.";
         const callLine = lateOrBookedToday
           ? `It's late here so I won't ring you tonight. I'll call you in the morning from (424) 394-1850. If you'd rather pick a time yourself, here's my calendar: ${CALENDAR_URL}`
           : `I'll give you a call today from (424) 394-1850. If you see that number come up, it's me. If you'd rather pick a time yourself, here's my calendar: ${CALENDAR_URL}`;
-        const matchText = `${inquiry.event_type || ""} ${inquiry.client_type || ""}`.toLowerCase();
-        const keyLine = matchText.includes("wedding")
-          ? "It feels like being let in on something."
-          : matchText.includes("corporate")
-            ? "It becomes shared moments your guests talk about long after the evening ends."
-            : "Your guests don't watch the show, they become the show.";
-        const subject = parsedDate
-          ? `${firstName}, about ${parsedDate.monthDay}`
-          : `${firstName}, about your ${inquiry.event_type?.trim() || "event"}`;
-
-        const note = extractClientNote(inquiry.message);
-        let aiLine: string | null = null;
-        let bodyText: string;
-        if (note) {
-          aiLine = await generateAckLine(note, email);
-          bodyText = `${firstName},\n\n${opening}\n\n${aiLine}\n\nI have some thoughts on how I'd shape it, and that's easier to say out loud than type. ${callLine}\n\n${keyLine}`;
-        } else {
-          const question = inquiry.guest_count?.trim()
-            ? "Before I put anything together I want to know what you're picturing. Is it a seated dinner or more of a cocktail hour? That changes the shape of the night completely."
-            : "Before I put anything together I want to know what you're picturing. How many guests, and is it a seated dinner or more of a cocktail hour? That changes the shape of the night completely.";
-          bodyText = `${firstName},\n\n${opening}\n\n${question}\n\n${callLine}\n\n${keyLine}`;
-        }
+        const subject = `${firstName}, about your event`;
+        const bodyText = `${firstName},\n\nYour note just came through and I'd love to hear more about what you're planning.\n\nHonestly the fastest way to do this is on the phone. Five minutes tells me more than a long email thread, and I can tell you straight whether I'm the right fit for your evening.\n\n${callLine}\n\nYour guests don't watch the show, they become the show.`;
 
         if (dryRun) {
           wouldSend.push({ inquiry_id: inquiry.id, name: inquiry.name, email, subject, body_text: bodyText, skipped_reason: null });
@@ -202,7 +139,7 @@ serve(async (req) => {
           inquiry_id: inquiry.id,
         });
         if (logError) throw logError;
-        await supabase.from("contact_inquiries").update({ instant_reply_message_id: sendData.message_id, instant_reply_ai_line: aiLine }).eq("id", inquiry.id);
+        await supabase.from("contact_inquiries").update({ instant_reply_message_id: sendData.message_id }).eq("id", inquiry.id);
         sent++;
 
         const alertBody = [
