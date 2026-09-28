@@ -106,13 +106,33 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
       <SEOHead title={seoTitle} description={seoDescription} canonical={`/areas/${citySlug}`} />
       {/* Hero */}
       <section className="relative h-[50vh] min-h-[400px]">
-        <img
-          src={areaPhoto.replace("w=600&h=400", "w=1600&h=900")}
-          alt={`${cityName}, ${stateFullName}, luxury event entertainment destination`}
-          width={1600}
-          height={900}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+        {showHeroVideo && heroVideo ? (
+          <video
+            key={citySlug}
+            src={heroVideo.video}
+            poster={heroVideo.poster}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            width={1280}
+            height={720}
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover"
+            onLoadedMetadata={(e) => {
+              e.currentTarget.playbackRate = 0.85;
+            }}
+          />
+        ) : (
+          <img
+            src={heroVideo ? heroVideo.poster : areaPhoto.replace("w=600&h=400", "w=1600&h=900")}
+            alt={`${cityName}, ${stateFullName}, luxury event entertainment destination`}
+            width={1600}
+            height={900}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
         <div className="absolute inset-0 flex items-end">
           <div className="max-w-4xl mx-auto px-6 pb-12 w-full">
