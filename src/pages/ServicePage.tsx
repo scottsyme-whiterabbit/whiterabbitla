@@ -47,6 +47,7 @@ const trustLogos = [
 interface ServiceData {
   slug: string;
   title: string;
+  ctaLabel?: string;
   metaTitle: string;
   metaDescription: string;
   heroHeadline: string;
@@ -332,48 +333,50 @@ const servicePages: Record<string, ServiceData> = {
   "holiday-party-magician": {
     slug: "holiday-party-magician",
     title: "Holiday Party Magician",
+    ctaLabel: "Check a December Date",
     metaTitle: "Holiday Party Magician in Los Angeles | White Rabbit LA",
-    metaDescription: "The entertainment your team mentions in Monday's all-hands. Trusted by Netflix, Disney, and Morgan Stanley for company holiday parties across Los Angeles.",
-    heroHeadline: "Holiday Party Magic",
-    heroSub: "The entertainment your team will mention in Monday's all-hands, and remember next December.",
+    metaDescription: "Close-up magic and a private show for company holiday parties in Los Angeles. Clean for every audience, ready for procurement, trusted by Netflix, Disney and Morgan Stanley.",
+    heroHeadline: "Holiday Party Magic in Los Angeles",
+    heroSub: "One evening, every guest in on the same impossible moment. The part of the night your team still talks about in January.",
     image: holidayPartyAction,
-    intro: "White Rabbit delivers close-up magic and mentalism for company holiday parties, end-of-year galas, and seasonal celebrations across Los Angeles. The kind of entertainment that earns a place on the calendar year over year, never awkward, always remembered.",
+    intro: "White Rabbit brings close-up magic, mentalism and a private show to company holiday parties across Los Angeles. It is the rare entertainment that works for everyone in the room at once: the executive team, the new hires, the colleagues who don't drink and the ones who do. For the person planning the evening, it is also one less thing to worry about.",
     sections: [
       {
-        heading: "Why Magic Works for Holiday Parties",
-        body: "Holiday parties are high-stakes for HR and EAs: book the wrong entertainment and the cringe lasts until January. Close-up magic solves it. The performance creates shared moments of surprise across the entire room, sober colleagues, social colleagues, executives, interns, international team members all having the same reaction at the same time. No bad karaoke. No awkward icebreakers. Just real, involuntary laughter and the kind of stories that get repeated in Slack the next morning.",
+        heading: "What the Evening Looks Like",
+        body: "Scott arrives well before your first guest. The music is on, the room is set, and by the time the doors open the evening already feels hosted. He greets guests as they arrive, the way a good host would, before a single card is touched. Through cocktails and dinner he moves through the room, eight to fifteen guests at a time. Teams that rarely talk end up laughing together. By dessert, most of the room has seen something they can't explain and has a story to tell about it.",
       },
       {
-        heading: "Cocktail Hour & Dinner Strolling",
-        body: "For most corporate holiday parties under 200 guests, the highest-impact format is 60 to 90 minutes of close-up strolling during cocktails and dinner. Scott moves through the room engaging clusters of eight to fifteen people for six to ten minutes each. Photo ops happen. Conversations between teams that never talk start happening. By the end of dinner, most of the room has seen the magic and has something to talk about.",
+        heading: "A Show After Dinner",
+        body: "For larger parties, or when you want one moment the whole company shares, a seated show follows dinner: 30 to 45 minutes, with its own lighting and sound, built around your guests rather than a routine performed the same way everywhere. Many companies book both: strolling magic through cocktails, and the show as the close of the night.",
       },
       {
-        heading: "Featured Parlor Set for Larger Parties",
-        body: "For company-wide holiday parties or holiday galas above 200 guests, a featured 25-minute parlor set after dinner gives the entire room a single shared centerpiece moment. Some companies book both, strolling early in the evening, parlor show as the featured close.",
+        heading: "For the Person Planning It",
+        body: "Your name is on this evening, so everything is built to make your part easy. A written contract. A certificate of insurance, with your venue named, within two business days. A W-9 and invoicing that fits your procurement process. Material that is clean for any audience, and no guest ever put on the spot in a way they wouldn't enjoy. One point of contact from the first call to the last guest out the door.",
       },
       {
-        heading: "Built for Mixed Corporate Audiences",
-        body: "Scott Syme has performed for Netflix, Disney, Morgan Stanley, and a long list of agencies, hedge funds, law firms, and Fortune 500 holiday events. Every routine is corporate-clean by default, no off-color material, no participant-embarrassment moments. The performance reads as sophisticated and intelligent rather than spectacle. It works for international audiences, sober crowds, conservative cultures, and younger social cultures equally well.",
+        heading: "Right for Every Room",
+        body: "The performance is visual and conversational, so it lands the same with a sober table, an international team or a room that leans conservative. It has been part of evenings for Netflix, Disney and Morgan Stanley, and for companies who book it again the following December.",
       },
       {
-        heading: "Booking Window · Why September Matters",
-        body: "Top close-up magicians in Los Angeles are typically booked solid for the first three weekends of December by mid-October. Friday and Saturday nights in mid-December are the first to lock. White Rabbit accepts limited late bookings into November for non-peak nights, weekday parties, lunchtime events, second-half-of-December dates, but companies that want a specific date should book by mid-September. Procurement-ready: written contract, $1M general liability insurance, COI, W-9, and standard payment terms are all pre-loaded.",
+        heading: "December Evenings",
+        body: "The Friday and Saturday evenings in early and mid-December are the first to be claimed each year. Weeknights, lunches and dates after December 15 stay open longer. If you have a date in mind, a short call is the simplest way to hold it.",
       },
     ],
     included: [
-      "Pre-event consultation to tailor the performance to your company culture",
-      "Corporate-clean close-up magic, mentalism, and audience interaction",
-      "Procurement-ready paperwork: COI, W-9, $1M general liability insurance",
-      "Custom integration with your event's theme, agenda, and timeline",
-      "Post-event follow-up to ensure your party exceeded expectations",
+      "A short planning call to fit the evening to your team and your timeline",
+      "Strolling close-up magic and mentalism through cocktails and dinner",
+      "A seated show after dinner, when the evening calls for one",
+      "Written contract, certificate of insurance within two business days, and W-9",
+      "Material that is clean for every audience",
+      "A personal note from Scott after the evening",
     ],
     faqs: [
-      { question: "When should we book a holiday party magician for our company event?", answer: "Book by mid-September for a December holiday party. Top close-up magicians in Los Angeles are typically booked solid for the first three weekends of December by mid-October. White Rabbit LA still accepts limited late bookings into November for non-peak-night events (weekday parties, lunchtime events, and second-half-of-December dates), but Friday and Saturday nights in mid-December are the first to lock. Book early to secure the date, the format, and the time slot you want." },
-      { question: "How much does a holiday party magician cost?", answer: "Holiday party magic at White Rabbit LA is custom-priced for each booking based on audience size, venue, format (cocktail strolling, dinner-table magic, or a featured parlor show), travel, and the level of brand or theme integration. Every quote is built on a short discovery call so the night you're planning is matched to the right format and investment. The booking process is built for corporate procurement teams, with written contract, $1M general liability insurance, COI, W-9, and standard payment terms. Scott Syme is a Magic Castle (Academy of Magical Arts) member, Disney Channel magic consultant, and magic consultant to America's Got Talent champion Dustin Tavella. Call (424) 394-1850 or request a callback through the contact page." },
-      { question: "Will a magician work for our company holiday party if half the team doesn't drink?", answer: "Yes, close-up magic is one of the few entertainment formats that works equally well sober or social. The performance creates shared moments of surprise and laughter that don't depend on alcohol. For office cultures that lean younger and more social, the energy meets that. For office cultures that lean older, more conservative, or international, the performance lands as elevated and intelligent. The same act has played for Netflix and Morgan Stanley audiences in the same week." },
-      { question: "What's the best format for a company holiday party magician?", answer: "For most corporate holiday parties under 200 guests, the highest-impact format is 60 to 90 minutes of close-up strolling during the cocktail and dinner portions of the event. Guests are mingling, photo ops are happening, and the magic creates the talking points that show up in the Monday-morning Slack. For larger company-wide parties or holiday galas, a featured 25-minute parlor set after dinner gives the entire room a single shared moment. Some companies book both, strolling early, parlor show as the featured close." },
-      { question: "Can a magician travel to our office or venue for a private holiday event?", answer: "Yes. White Rabbit LA performs at private offices, restaurants, ballrooms, members' clubs, and home venues across Los Angeles, Beverly Hills, Malibu, Santa Monica, Pasadena, Calabasas, and the broader LA metro area. Travel is included for venues within a 30-mile radius of Beverly Hills. For events outside that radius, Orange County, Santa Barbara, Palm Springs, Ojai, travel and lodging are added at flat rate." },
-      { question: "Is the holiday magic show appropriate for international and mixed-language audiences?", answer: "Yes. Scott's performance is heavily visual, the moments that land hardest are objects appearing, vanishing, and transforming in the guest's own hands, rather than verbal punchlines. The performance has played to audiences in cities including London, Tokyo, Dubai, and Mexico City. For international corporate holiday parties in Los Angeles, the magic translates without modification." },
+      { question: "When should we book entertainment for a company holiday party in Los Angeles?", answer: "As early as you can. The Friday and Saturday evenings in early and mid-December are claimed first every year, often by late October. Weeknights, lunches and dates after December 15 stay open longer. A short call is the simplest way to hold a date." },
+      { question: "How much does a holiday party magician cost?", answer: "Every holiday party is quoted individually, based on guest count, format (strolling magic, a seated show, or both), venue and timing. The quote comes after a short call and arrives as one clear figure, with no line items. The process is built for corporate procurement: written contract, certificate of insurance and W-9. Scott Syme is a member of the Magic Castle and a consultant to Dustin Tavella, winner of America's Got Talent. Call (424) 394-1850 or inquire through the contact page." },
+      { question: "What are good entertainment ideas for a 100-person company holiday party?", answer: "For a party of around 100, the format that works best is strolling close-up magic through cocktails and dinner, roughly 60 to 90 minutes, so every guest has a moment of their own. If you want one shared moment for the whole company, add a 30 to 45 minute show after dinner. Unlike a band or a photo booth, it brings people from different teams into the same conversation." },
+      { question: "Will magic work for our holiday party if half the team doesn't drink?", answer: "Yes. Close-up magic is one of the few kinds of entertainment that works equally well for a sober table and a social one. The moments of surprise and laughter don't depend on the bar. Younger, social teams meet it with energy; more reserved or international teams find it elegant and clever." },
+      { question: "Can you perform at our office, a restaurant or a private venue?", answer: "Yes. Offices, restaurants, ballrooms, members' clubs and private homes across Los Angeles, Beverly Hills, Santa Monica, Pasadena, Calabasas and beyond. Travel within greater Los Angeles is included. Orange County, Santa Barbara and Palm Springs are quoted as one all-inclusive fee." },
+      { question: "Is it right for an international or mixed-language team?", answer: "Yes. The strongest moments are visual: objects appearing, vanishing and changing in a guest's own hands. They don't depend on wordplay, so they land the same for every guest in the room." },
     ],
     testimonials: [
       {
@@ -749,7 +752,7 @@ const ServicePage = () => {
               onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors"
             >
-              Book Now
+              {page.ctaLabel ?? "Inquire"}
             </button>
           </AnimatedSection>
         </div>
@@ -759,7 +762,7 @@ const ServicePage = () => {
       <section className="bg-forest-dark py-8 border-t border-cream/10">
         <div className="max-w-4xl mx-auto px-6">
           <p className="text-center font-sans text-xs tracking-[0.3em] uppercase text-cream/40 mb-6">
-            Trusted by World-Class Brands
+            In Good Company
           </p>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12">
             {trustLogos.map((client) => (
@@ -796,16 +799,16 @@ const ServicePage = () => {
         <section className="bg-secondary/30 py-16">
           <div className="max-w-3xl mx-auto px-6 text-center">
             <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-4">
-              Ready to Elevate Your Event?
+              An evening like this begins with a conversation.
             </h2>
             <p className="font-sans text-base text-muted-foreground mb-8 max-w-xl mx-auto">
-              Tell us about your event and we'll usually confirm availability within a few hours.
+              Share your date and guest count. Scott replies personally, usually within a few hours.
             </p>
             <button
               onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors"
             >
-              Inquire Now, It's Free
+              {page.ctaLabel ?? "Inquire"}
             </button>
           </div>
         </section>
@@ -897,9 +900,9 @@ const ServicePage = () => {
       <section className="py-16 border-t border-border">
         <div className="max-w-3xl mx-auto px-6">
           <AnimatedSection>
-            <h2 className="font-serif text-2xl text-foreground mb-6">Available Nationwide</h2>
+            <h2 className="font-serif text-2xl text-foreground mb-6">Near You</h2>
             <p className="font-sans text-sm text-muted-foreground mb-6">
-              White Rabbit performs across the country. Find {page.title.toLowerCase()} services near you:
+              White Rabbit performs across Southern California and in select destinations:
             </p>
             <div className="flex flex-wrap gap-2">
               {getSeoPagesByCategory(
@@ -946,16 +949,16 @@ const ServicePage = () => {
         <section className="py-24 text-center">
           <div className="max-w-2xl mx-auto px-6">
             <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-4">
-              Make Your Next Event Unforgettable
+              White Rabbit, by Appointment
             </h2>
             <p className="font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground mb-8">
-              Most clients book 2 to 4 weeks in advance · No obligation to inquire
+              Scott replies personally, usually within a few hours
             </p>
             <button
               onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors"
             >
-              Book White Rabbit Now
+              {page.ctaLabel ?? "Inquire"}
             </button>
           </div>
         </section>
