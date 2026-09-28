@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { inquiryFirstName, parseFutureInquiryDate, withinPacificSendHours } from "../_shared/inquiry-email.ts";
+import { CALENDAR_URL, inquiryFirstName, parseFutureInquiryDate, withinPacificSendHours } from "../_shared/inquiry-email.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -33,37 +33,52 @@ serve(async (req) => {
     const cronOk = (cronSecret.length > 0 && suppliedCron === cronSecret) || (cronSecretV2.length > 0 && suppliedCron === cronSecretV2);
     const adminOk = adminPassword.length > 0 && body?.adminPassword === adminPassword;
     if (!cronOk && !adminOk) return json({ error: "Unauthorized" }, 401);
-    if (!withinPacificSendHours()) return json({ sent: 0 });
+
+    const dryRun = body?.dryRun === true;
+    const inquiryIds: string[] = dryRun && Array.isArray(body?.inquiryIds)
+      ? body.inquiryIds.filter((id: unknown) => typeof id === "string" && /^[0-9a-f-]{36}$/i.test(id)).slice(0, 100)
+      : [];
+    if (!dryRun && !withinPacificSendHours()) return json({ sent: 0 });
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     if (!supabaseUrl || !serviceKey || !adminPassword) throw new Error("Required service configuration is missing");
     const supabase = createClient(supabaseUrl, serviceKey);
-    const { data: inquiries, error: fetchError } = await supabase
+    let query = supabase
       .from("contact_inquiries")
       .select("id,email,name,date,followup_step,created_at")
-      .lt("followup_step", 2)
-      .is("sequence_stopped_at", null)
-      .not("instant_reply_sent_at", "is", null)
-      .is("called_at", null)
       .order("created_at", { ascending: true });
+    if (inquiryIds.length) {
+      query = query.in("id", inquiryIds);
+    } else {
+      query = query.lt("followup_step", 2).is("sequence_stopped_at", null).not("instant_reply_sent_at", "is", null).is("called_at", null);
+    }
+    const { data: inquiries, error: fetchError } = await query;
     if (fetchError) throw fetchError;
 
     let sent = 0;
     let skipped = 0;
     const errors: string[] = [];
+    const wouldSend: unknown[] = [];
+    const skippedList: unknown[] = [];
     const now = Date.now();
     for (const inquiry of (inquiries || []) as Inquiry[]) {
       const email = inquiry.email.trim().toLowerCase();
       const currentStep = inquiry.followup_step;
+      const nextStep = currentStep + 1;
+      const skip = (reason: string) => {
+        skipped++;
+        if (dryRun) skippedList.push({ inquiry_id: inquiry.id, name: inquiry.name, email, step: nextStep, skipped_reason: reason });
+      };
       const requiredDays = FOLLOWUP_SCHEDULE[currentStep];
-      if (requiredDays === undefined || now - new Date(inquiry.created_at).getTime() < requiredDays * 86400000) continue;
+      if (requiredDays === undefined) { if (dryRun) skip("sequence_complete"); continue; }
+      if (!inquiryIds.length && now - new Date(inquiry.created_at).getTime() < requiredDays * 86400000) continue;
 
       try {
         const { data: unsubscribed } = await supabase.from("email_unsubscribes").select("id").ilike("email", email).limit(1);
-        if (unsubscribed?.length) { skipped++; continue; }
+        if (unsubscribed?.length) { skip("unsubscribed"); continue; }
         const { data: inbound } = await supabase.from("deal_email_messages").select("id").eq("direction", "inbound").ilike("from_email", email).gt("sent_at", inquiry.created_at).limit(1);
-        if (inbound?.length) { skipped++; continue; }
+        if (inbound?.length) { skip("client_replied"); continue; }
 
         const { data: outbound } = await supabase
           .from("deal_email_messages")
@@ -75,10 +90,21 @@ serve(async (req) => {
         if (outboundIds.length) {
           const { data: automated } = await supabase.from("automated_gmail_sends").select("gmail_message_id").in("gmail_message_id", outboundIds);
           const automatedIds = new Set((automated || []).map((row) => row.gmail_message_id));
-          if (outboundIds.some((id) => !automatedIds.has(id))) { skipped++; continue; }
+          if (outboundIds.some((id) => !automatedIds.has(id))) { skip("scott_already_replied"); continue; }
         }
 
-        const nextStep = currentStep + 1;
+        const firstName = inquiryFirstName(inquiry.name);
+        const parsedDate = parseFutureInquiryDate(inquiry.date);
+        const subject = currentStep === 0 ? `${firstName}, just wanted to make sure this reached you` : `${firstName}, one last note`;
+        const bodyText = currentStep === 0
+          ? `${firstName},\n\nWanted to make sure this got to you and didn't land somewhere strange.\n\nMost of what I do is close up, right in the middle of the room while people are talking and drinking. Nobody sits in rows and nothing gets announced. It just starts happening next to them.\n\n${parsedDate ? `If ${parsedDate.monthDayOrdinal} is still the plan, tell me roughly what the evening looks like and I'll tell you honestly whether I'm the right fit for it.` : "If the evening is still happening, tell me roughly what it looks like and I'll tell you honestly whether I'm the right fit for it."}\n\n(424) 394-1850 is the fastest way to reach me. I answer it myself. Or pick a time here: ${CALENDAR_URL}`
+          : `${firstName},\n\nI'll stop filling your inbox after this.\n\nIf the date moved or you went a different direction, no hard feelings at all. Plans shift constantly in this world and I'd rather you have a great night than have a magician.\n\nIf it's still live, my number is (424) 394-1850.\n\n${parsedDate ? `Either way, I hope ${parsedDate.monthDayOrdinal} is a beautiful evening.` : "Either way, I hope it's a beautiful evening."}`;
+
+        if (dryRun) {
+          wouldSend.push({ inquiry_id: inquiry.id, name: inquiry.name, email, step: nextStep, subject, body_text: bodyText, skipped_reason: null });
+          continue;
+        }
+
         const { data: claimed, error: claimError } = await supabase
           .from("contact_inquiries")
           .update({ followup_step: nextStep })
@@ -88,13 +114,6 @@ serve(async (req) => {
           .select("id");
         if (claimError) throw claimError;
         if (!claimed?.length) { skipped++; continue; }
-
-        const firstName = inquiryFirstName(inquiry.name);
-        const parsedDate = parseFutureInquiryDate(inquiry.date);
-        const subject = currentStep === 0 ? `${firstName}, just wanted to make sure this reached you` : `${firstName}, one last note`;
-        const bodyText = currentStep === 0
-          ? `${firstName},\n\nWanted to make sure this got to you and didn't land somewhere strange.\n\nMost of what I do is close up, right in the middle of the room while people are talking and drinking. Nobody sits in rows and nothing gets announced. It just starts happening next to them.\n\n${parsedDate ? `If ${parsedDate.monthDayOrdinal} is still the plan, tell me roughly what the evening looks like and I'll tell you honestly whether I'm the right fit for it.` : "If the evening is still happening, tell me roughly what it looks like and I'll tell you honestly whether I'm the right fit for it."}\n\n(424) 394-1850 is the fastest way to reach me. I answer it myself.`
-          : `${firstName},\n\nI'll stop filling your inbox after this.\n\nIf the date moved or you went a different direction, no hard feelings at all. Plans shift constantly in this world and I'd rather you have a great night than have a magician.\n\nIf it's still live, my number is (424) 394-1850.\n\n${parsedDate ? `Either way, I hope ${parsedDate.monthDayOrdinal} is a beautiful evening.` : "Either way, I hope it's a beautiful evening."}`;
 
         const { data: deal } = await supabase.from("deals").select("id").ilike("contact_email", email).order("created_at", { ascending: false }).limit(1).maybeSingle();
         const sendResponse = await fetch(`${supabaseUrl}/functions/v1/gmail-send`, {
@@ -119,6 +138,7 @@ serve(async (req) => {
       }
     }
 
+    if (dryRun) return json({ dryRun: true, would_send: wouldSend, skipped: skippedList, errors });
     return json({ sent, skipped, errors });
   } catch (error) {
     console.error("inquiry-followup error", error);

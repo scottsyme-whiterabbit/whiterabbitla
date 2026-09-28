@@ -1,6 +1,9 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { inquiryFirstName, pacificParts, parseFutureInquiryDate, validEmail } from "../_shared/inquiry-email.ts";
+import {
+  CALENDAR_URL, FALLBACK_ACK_LINE, extractClientNote, inquiryFirstName, pacificParts,
+  parseFutureInquiryDate, validAckLine, validEmail,
+} from "../_shared/inquiry-email.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -22,10 +25,42 @@ interface Inquiry {
   created_at: string;
 }
 
+const ACK_PROMPT = "You are writing one sentence in the voice of Scott Syme, a close-up magician in Los Angeles, replying to someone who just enquired about his show. Below is what they wrote. Write ONE sentence, maximum 25 words, that shows you read it by naming a concrete detail they mentioned: the venue, the theme, the occasion, the format, the kind of room. Warm and plain. Do not greet them. Do not use their name. Do not ask a question. Do not mention price, packages, availability or links. Do not promise anything. Do not use dashes of any kind. Do not use the words 'thrilled', 'delighted', 'perfect', 'amazing' or 'absolutely'. Output only the sentence.";
+
 const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), {
   status,
   headers: { ...corsHeaders, "Content-Type": "application/json" },
 });
+
+// Same provider and auth pattern as proposal-ai-draft. Never throws; falls back on any problem.
+async function generateAckLine(note: string, clientEmail: string): Promise<string> {
+  const key = Deno.env.get("LOVABLE_API_KEY") || "";
+  if (!key) return FALLBACK_ACK_LINE;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  try {
+    const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      signal: controller.signal,
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "google/gemini-2.5-flash",
+        messages: [
+          { role: "system", content: ACK_PROMPT },
+          { role: "user", content: note.slice(0, 3000) },
+        ],
+      }),
+    });
+    if (!res.ok) return FALLBACK_ACK_LINE;
+    const data = await res.json();
+    const line = String(data?.choices?.[0]?.message?.content || "").trim().replace(/^["']|["']$/g, "").trim();
+    return validAckLine(line, clientEmail) ? line : FALLBACK_ACK_LINE;
+  } catch {
+    return FALLBACK_ACK_LINE;
+  } finally {
+    clearTimeout(timer);
+  }
+}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -40,21 +75,29 @@ serve(async (req) => {
     const adminOk = adminPassword.length > 0 && body?.adminPassword === adminPassword;
     if (!cronOk && !adminOk) return json({ error: "Unauthorized" }, 401);
 
+    const dryRun = body?.dryRun === true;
+    const inquiryIds: string[] = dryRun && Array.isArray(body?.inquiryIds)
+      ? body.inquiryIds.filter((id: unknown) => typeof id === "string" && /^[0-9a-f-]{36}$/i.test(id)).slice(0, 100)
+      : [];
+
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     const resendKey = Deno.env.get("RESEND_API_KEY");
     if (!supabaseUrl || !serviceKey || !adminPassword || !resendKey) throw new Error("Required service configuration is missing");
     const supabase = createClient(supabaseUrl, serviceKey);
-    const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
-    const { data: inquiries, error: fetchError } = await supabase
+    let query = supabase
       .from("contact_inquiries")
       .select("id,email,name,phone,event_type,date,location,guest_count,budget,message,client_type,created_at")
-      .is("instant_reply_sent_at", null)
-      .is("sequence_stopped_at", null)
-      .gt("created_at", cutoff)
       .not("email", "is", null)
       .order("created_at", { ascending: true });
+    if (inquiryIds.length) {
+      query = query.in("id", inquiryIds);
+    } else {
+      const cutoff = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString();
+      query = query.is("instant_reply_sent_at", null).is("sequence_stopped_at", null).gt("created_at", cutoff);
+    }
+    const { data: inquiries, error: fetchError } = await query;
     if (fetchError) throw fetchError;
 
     const pacific = pacificParts();
@@ -63,13 +106,19 @@ serve(async (req) => {
     let sent = 0;
     let skipped = 0;
     const errors: string[] = [];
+    const wouldSend: unknown[] = [];
+    const skippedList: unknown[] = [];
+    const skip = (inquiry: Inquiry, email: string, reason: string) => {
+      skipped++;
+      if (dryRun) skippedList.push({ inquiry_id: inquiry.id, name: inquiry.name, email, skipped_reason: reason });
+    };
 
     for (const inquiry of (inquiries || []) as Inquiry[]) {
       const email = inquiry.email.trim().toLowerCase();
       try {
-        if (!validEmail(email)) { skipped++; continue; }
+        if (!validEmail(email)) { skip(inquiry, email, "invalid_email"); continue; }
         const { data: unsubscribed } = await supabase.from("email_unsubscribes").select("id").ilike("email", email).limit(1);
-        if (unsubscribed?.length) { skipped++; continue; }
+        if (unsubscribed?.length) { skip(inquiry, email, "unsubscribed"); continue; }
 
         const { data: outbound } = await supabase
           .from("deal_email_messages")
@@ -81,7 +130,7 @@ serve(async (req) => {
         if (outboundIds.length) {
           const { data: automated } = await supabase.from("automated_gmail_sends").select("gmail_message_id").in("gmail_message_id", outboundIds);
           const automatedIds = new Set((automated || []).map((row) => row.gmail_message_id));
-          if (outboundIds.some((id) => !automatedIds.has(id))) { skipped++; continue; }
+          if (outboundIds.some((id) => !automatedIds.has(id))) { skip(inquiry, email, "scott_already_replied"); continue; }
         }
 
         const parsedDate = parseFutureInquiryDate(inquiry.date);
@@ -94,12 +143,9 @@ serve(async (req) => {
         const opening = parsedDate && dateIsFree
           ? `Your note just came through. ${parsedDate.monthDayOrdinal} is open on my calendar and I'd love to hear more about the evening.`
           : "Your note just came through. I'd love to hear more about the evening you're planning.";
-        const question = inquiry.guest_count?.trim()
-          ? "Before I put anything together I want to know what you're picturing. Is it a seated dinner or more of a cocktail hour? That changes the shape of the night completely."
-          : "Before I put anything together I want to know what you're picturing. How many guests, and is it a seated dinner or more of a cocktail hour? That changes the shape of the night completely.";
         const callLine = lateOrBookedToday
-          ? "It's late here so I won't ring you tonight. I'll call you in the morning from (424) 394-1850."
-          : "I'll give you a call today from (424) 394-1850. If you see that number come up, it's me. If you'd rather reach me first, that's the best line to use.";
+          ? `It's late here so I won't ring you tonight. I'll call you in the morning from (424) 394-1850. If you'd rather pick a time yourself, here's my calendar: ${CALENDAR_URL}`
+          : `I'll give you a call today from (424) 394-1850. If you see that number come up, it's me. If you'd rather pick a time yourself, here's my calendar: ${CALENDAR_URL}`;
         const matchText = `${inquiry.event_type || ""} ${inquiry.client_type || ""}`.toLowerCase();
         const keyLine = matchText.includes("wedding")
           ? "It feels like being let in on something."
@@ -109,7 +155,24 @@ serve(async (req) => {
         const subject = parsedDate
           ? `${firstName}, about ${parsedDate.monthDay}`
           : `${firstName}, about your ${inquiry.event_type?.trim() || "event"}`;
-        const bodyText = `${firstName},\n\n${opening}\n\n${question}\n\n${callLine}\n\n${keyLine}`;
+
+        const note = extractClientNote(inquiry.message);
+        let aiLine: string | null = null;
+        let bodyText: string;
+        if (note) {
+          aiLine = await generateAckLine(note, email);
+          bodyText = `${firstName},\n\n${opening}\n\n${aiLine}\n\nI have some thoughts on how I'd shape it, and that's easier to say out loud than type. ${callLine}\n\n${keyLine}`;
+        } else {
+          const question = inquiry.guest_count?.trim()
+            ? "Before I put anything together I want to know what you're picturing. Is it a seated dinner or more of a cocktail hour? That changes the shape of the night completely."
+            : "Before I put anything together I want to know what you're picturing. How many guests, and is it a seated dinner or more of a cocktail hour? That changes the shape of the night completely.";
+          bodyText = `${firstName},\n\n${opening}\n\n${question}\n\n${callLine}\n\n${keyLine}`;
+        }
+
+        if (dryRun) {
+          wouldSend.push({ inquiry_id: inquiry.id, name: inquiry.name, email, subject, body_text: bodyText, skipped_reason: null });
+          continue;
+        }
 
         const { data: claimed, error: claimError } = await supabase
           .from("contact_inquiries")
@@ -139,7 +202,7 @@ serve(async (req) => {
           inquiry_id: inquiry.id,
         });
         if (logError) throw logError;
-        await supabase.from("contact_inquiries").update({ instant_reply_message_id: sendData.message_id }).eq("id", inquiry.id);
+        await supabase.from("contact_inquiries").update({ instant_reply_message_id: sendData.message_id, instant_reply_ai_line: aiLine }).eq("id", inquiry.id);
         sent++;
 
         const alertBody = [
@@ -170,6 +233,7 @@ serve(async (req) => {
       }
     }
 
+    if (dryRun) return json({ dryRun: true, would_send: wouldSend, skipped: skippedList, errors });
     return json({ sent, skipped, errors });
   } catch (error) {
     console.error("inquiry-instant-reply error", error);

@@ -25,3 +25,14 @@ Deno.test("Pacific send window includes 8am and excludes 8:30pm", () => {
   assertEquals(withinPacificSendHours(new Date("2026-09-29T03:29:00Z")), true);
   assertEquals(withinPacificSendHours(new Date("2026-09-29T03:30:00Z")), false);
 });
+import { extractClientNote, validAckLine } from "../_shared/inquiry-email.ts";
+Deno.test("extracts client note and validates AI line", () => {
+  assertEquals(extractClientNote("Client Type: Individual\nRecommended: The Show\n\nNo additional message."), null);
+  assertEquals(extractClientNote("Client Type: Individual\nRecommended: The Show\n\nRooftop at the Proper, 160 guests"), "Rooftop at the Proper, 160 guests");
+  assertEquals(extractClientNote("  We are hosting about 160 guests at a vineyard.  "), "We are hosting about 160 guests at a vineyard.");
+  assertEquals(extractClientNote("short"), null);
+  assertEquals(validAckLine("A rooftop at the Proper for 160 guests sounds like a wonderful room.", "a@b.com"), true);
+  assertEquals(validAckLine("Is the rooftop open?", "a@b.com"), false);
+  assertEquals(validAckLine("Great room - lovely.", "a@b.com"), false);
+  assertEquals(validAckLine("Call 4243941850 soon.", "a@b.com"), false);
+});

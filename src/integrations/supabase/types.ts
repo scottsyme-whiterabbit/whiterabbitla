@@ -499,6 +499,7 @@ export type Database = {
           followup_step: number
           guest_count: string | null
           id: string
+          instant_reply_ai_line: string | null
           instant_reply_message_id: string | null
           instant_reply_sent_at: string | null
           location: string | null
@@ -525,6 +526,7 @@ export type Database = {
           followup_step?: number
           guest_count?: string | null
           id?: string
+          instant_reply_ai_line?: string | null
           instant_reply_message_id?: string | null
           instant_reply_sent_at?: string | null
           location?: string | null
@@ -551,6 +553,7 @@ export type Database = {
           followup_step?: number
           guest_count?: string | null
           id?: string
+          instant_reply_ai_line?: string | null
           instant_reply_message_id?: string | null
           instant_reply_sent_at?: string | null
           location?: string | null
