@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+
+const isMobileViewport = () =>
+  typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
 import { Link } from "react-router-dom";
 import { ArrowRight, Star } from "lucide-react";
 import threeStars from "@/assets/three-stars-gold.png";
@@ -167,6 +170,7 @@ const Index = () => {
                   }`}
                 >
                   <video
+                    src={isMobileViewport() ? clip.mobileSrc : clip.src}
                     poster={clip.poster}
                     autoPlay
                     muted
@@ -184,10 +188,7 @@ const Index = () => {
                         v.currentTime = clip.offset % v.duration;
                       }
                     }}
-                  >
-                    <source src={clip.mobileSrc} media="(max-width: 768px)" type="video/mp4" />
-                    <source src={clip.src} type="video/mp4" />
-                  </video>
+                  />
                 </div>
               );
             })}
@@ -408,7 +409,7 @@ const Index = () => {
       <QuizNudge />
 
       <div className="flex justify-center py-10">
-        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-16 w-auto opacity-50" />
+        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} loading="lazy" decoding="async" className="h-16 w-auto opacity-50" />
       </div>
 
       {/* From the Guestbook */}
@@ -463,7 +464,7 @@ const Index = () => {
       </section>
 
       <div className="flex justify-center pb-6">
-        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-14 w-auto opacity-50" />
+        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} loading="lazy" decoding="async" className="h-14 w-auto opacity-50" />
       </div>
 
       {/* What Clients Are Saying, Testimonial Carousel */}
@@ -479,7 +480,7 @@ const Index = () => {
       <QuizCTA title="Wondering If Magic Is Right for Your Event?" />
 
       <div className="flex justify-center">
-        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-14 w-auto opacity-50" />
+        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} loading="lazy" decoding="async" className="h-14 w-auto opacity-50" />
       </div>
 
       {/* Photo Gallery */}
@@ -570,7 +571,7 @@ const Index = () => {
       </section>
 
       <div className="flex justify-center">
-        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-14 w-auto opacity-50" />
+        <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} loading="lazy" decoding="async" className="h-14 w-auto opacity-50" />
       </div>
 
       {/* The Experiences */}
@@ -680,7 +681,7 @@ const Index = () => {
       <AnimatedSection>
         <section className="py-16 lg:py-20 text-center">
           <div className="max-w-2xl mx-auto px-6">
-            <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-12 w-auto opacity-50 mx-auto mb-6" />
+            <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} loading="lazy" decoding="async" className="h-12 w-auto opacity-50 mx-auto mb-6" />
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-5">For Hosts Who Intend to Be Talked About</p>
             <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-6 leading-tight">
               An evening like this begins with a conversation.

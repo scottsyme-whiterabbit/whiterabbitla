@@ -4,7 +4,7 @@
 // is the only client-side credential. It is safe to expose in the browser
 // bundle; the secret key never leaves the edge functions.
 
-import { loadStripe, type Stripe } from "@stripe/stripe-js";
+import { loadStripe, type Stripe } from "@stripe/stripe-js/pure";
 
 type StripeEnv = "sandbox" | "live";
 
