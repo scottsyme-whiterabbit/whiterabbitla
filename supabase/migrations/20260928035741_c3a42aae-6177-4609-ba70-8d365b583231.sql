@@ -1,0 +1,2 @@
+ALTER TABLE public.deals ADD COLUMN IF NOT EXISTS reply_dismissed_at timestamptz, ADD COLUMN IF NOT EXISTS reply_dismissed_reason text, ADD COLUMN IF NOT EXISTS reply_dismissed_by text;
+CREATE INDEX IF NOT EXISTS deals_unanswered_idx ON public.deals (stage, created_at) WHERE reply_dismissed_at IS NULL;

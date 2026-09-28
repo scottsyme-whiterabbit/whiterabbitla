@@ -734,6 +734,9 @@ export type Database = {
           post_show_started_at: string | null
           post_show_step: number
           priority_score: number | null
+          reply_dismissed_at: string | null
+          reply_dismissed_by: string | null
+          reply_dismissed_reason: string | null
           review_completed_at: string | null
           source: string | null
           source_id: string | null
@@ -769,6 +772,9 @@ export type Database = {
           post_show_started_at?: string | null
           post_show_step?: number
           priority_score?: number | null
+          reply_dismissed_at?: string | null
+          reply_dismissed_by?: string | null
+          reply_dismissed_reason?: string | null
           review_completed_at?: string | null
           source?: string | null
           source_id?: string | null
@@ -804,6 +810,9 @@ export type Database = {
           post_show_started_at?: string | null
           post_show_step?: number
           priority_score?: number | null
+          reply_dismissed_at?: string | null
+          reply_dismissed_by?: string | null
+          reply_dismissed_reason?: string | null
           review_completed_at?: string | null
           source?: string | null
           source_id?: string | null
