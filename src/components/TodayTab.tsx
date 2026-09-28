@@ -6,6 +6,9 @@ import type { ClientTarget } from "@/components/admin/ClientContextPanel";
 import { getAdminPassword } from "@/lib/adminAuth";
 import { Phone, Check, RefreshCw, ChevronDown, ChevronUp } from "lucide-react";
 
+interface UnansweredRow { deal_id: string; contact_name: string | null; contact_email: string; event_date: string | null; location: string | null; days_waiting: number; }
+const DISMISS_REASONS = ["Junk", "Kids show", "Wrong fit", "Handled elsewhere"];
+
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
@@ -72,14 +75,43 @@ const TodayTab = ({ storedPassword }: { storedPassword: string; onOpenMoney?: ()
     return j;
   }, [storedPassword]);
 
+  const [unanswered, setUnanswered] = useState<UnansweredRow[]>([]);
+  const [dismissing, setDismissing] = useState<UnansweredRow | null>(null);
+  const [reason, setReason] = useState("");
+  const [dismissBusy, setDismissBusy] = useState(false);
+
+  const unansweredApi = useCallback(async (action: string, payload: Record<string, unknown> = {}) => {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/unanswered-inquiries`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${SUPABASE_KEY}` },
+      body: JSON.stringify({ action, adminPassword: storedPassword || getAdminPassword(), ...payload }),
+    });
+    const j = await res.json();
+    if (!res.ok) throw new Error(j.error || "Request failed");
+    return j;
+  }, [storedPassword]);
+
+  const confirmDismiss = async () => {
+    const row = dismissing; const r = reason.trim();
+    if (!row || !r) return;
+    setDismissBusy(true);
+    try {
+      await unansweredApi("dismiss", { deal_id: row.deal_id, reason: r.slice(0, 200) });
+      setUnanswered((s) => s.filter((x) => x.deal_id !== row.deal_id));
+      setDismissing(null); setReason("");
+    } catch (e) { toast.error((e as Error).message); }
+    setDismissBusy(false);
+  };
+
   const load = useCallback(async () => {
     setLoading(true);
+    unansweredApi("list").then((j) => setUnanswered(j.waiting || [])).catch(() => {});
     try {
       const j = await api("get_today");
       setCall(j.call || []); setWaiting(j.waiting || []); setOwed(j.money || []); setUpcoming(j.upcoming || []); setToday(j.today || "");
     } catch (e) { toast.error((e as Error).message); }
     setLoading(false);
-  }, [api]);
+  }, [api, unansweredApi]);
 
   useEffect(() => { load(); }, [load]);
   // The first request can race the saved sign-in being restored; reload once it is.
@@ -124,6 +156,49 @@ const TodayTab = ({ storedPassword }: { storedPassword: string; onOpenMoney?: ()
           <RefreshCw size={18} className={loading ? "animate-spin" : ""} />
         </button>
       </div>
+
+      {unanswered.length > 0 && (
+        <section className="border-2 border-destructive bg-destructive/10 p-4 md:p-5">
+          <h2 className="font-sans uppercase tracking-[0.2em] mb-3 flex items-center gap-2 text-destructive text-base">
+            Waiting on you
+            <span className="inline-flex items-center justify-center min-w-[24px] h-6 px-1.5 rounded-full text-xs bg-destructive text-destructive-foreground">{unanswered.length}</span>
+          </h2>
+          <div className="space-y-3">
+            {unanswered.map((u) => (
+              <div key={u.deal_id} {...rowProps({ email: u.contact_email, name: u.contact_name, dealId: u.deal_id, folder: null })} className="border border-destructive/40 bg-background p-4 cursor-pointer hover:border-destructive transition-colors">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-sans text-base text-foreground">{u.contact_name || u.contact_email}</p>
+                    <p className="font-sans text-xs text-muted-foreground mt-0.5">{[u.event_date, u.location].filter(Boolean).join(" · ") || "No event details"}</p>
+                    <p className="font-sans text-xs text-destructive mt-1">Waiting {plural(u.days_waiting, "day")}</p>
+                  </div>
+                  <button onClick={(e) => { e.stopPropagation(); setDismissing(u); setReason(""); }} onKeyDown={stop} className="shrink-0 border border-border text-muted-foreground hover:text-foreground min-h-[44px] px-3 font-sans text-xs tracking-wider uppercase">
+                    Dismiss
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {dismissing && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-background/80 p-4" onClick={() => !dismissBusy && setDismissing(null)}>
+          <div className="w-full max-w-sm border border-border bg-background p-5 space-y-4" onClick={stop}>
+            <p className="font-sans text-sm text-foreground">Why does {dismissing.contact_name || dismissing.contact_email} not need a reply?</p>
+            <div className="flex flex-wrap gap-2">
+              {DISMISS_REASONS.map((r) => (
+                <button key={r} onClick={() => setReason(r)} className={`min-h-[40px] px-3 border font-sans text-xs ${reason === r ? "border-accent text-accent" : "border-border text-muted-foreground"}`}>{r}</button>
+              ))}
+            </div>
+            <input value={reason} onChange={(e) => setReason(e.target.value)} maxLength={200} placeholder="Or type a short reason" className="w-full border border-border bg-background px-3 min-h-[44px] font-sans text-sm text-foreground" />
+            <div className="flex justify-end gap-2">
+              <button onClick={() => setDismissing(null)} disabled={dismissBusy} className="min-h-[44px] px-4 font-sans text-xs uppercase tracking-wider text-muted-foreground">Cancel</button>
+              <button onClick={confirmDismiss} disabled={dismissBusy || !reason.trim()} className="min-h-[44px] px-4 bg-accent text-accent-foreground font-sans text-xs uppercase tracking-wider disabled:opacity-50">Dismiss</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {undo && (
         <div className="flex items-center justify-between gap-3 border border-border bg-muted/20 px-4 py-3">
