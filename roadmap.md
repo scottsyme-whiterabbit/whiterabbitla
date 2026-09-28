@@ -22,6 +22,7 @@
   - [ ] No unique constraint yet
 
 ## Done
+- Long Beach and Boston city hero videos added; the service-area page now uses the Los Angeles motion hero with reduced-motion support.
 - City page FAQs now preserve local Southern California answers and use all-inclusive travel wording for destinations.
 - Final approved inquiry copy and safe Gmail markdown hyperlinks deployed; both inquiry crons remain disabled.
 - Inquiry email flow rebuilt: kill-switch schema, five-minute Gmail instant reply, two-step plain-text follow-up, and disabled follow-up schedule.

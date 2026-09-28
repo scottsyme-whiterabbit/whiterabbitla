@@ -22,6 +22,10 @@ import theHamptonsVideo from "@/assets/city-heroes/city-the-hamptons.mp4.asset.j
 import theHamptonsPoster from "@/assets/city-heroes/city-the-hamptons-poster.jpg.asset.json";
 import hollywoodVideo from "@/assets/city-heroes/city-hollywood.mp4.asset.json";
 import hollywoodPoster from "@/assets/city-heroes/city-hollywood-poster.jpg.asset.json";
+import longBeachVideo from "@/assets/city-heroes/city-long-beach.mp4.asset.json";
+import longBeachPoster from "@/assets/city-heroes/city-long-beach-poster.jpg.asset.json";
+import bostonVideo from "@/assets/city-heroes/city-boston.mp4.asset.json";
+import bostonPoster from "@/assets/city-heroes/city-boston-poster.jpg.asset.json";
 
 export interface CityHeroVideo {
   video: string;
@@ -39,6 +43,8 @@ export const cityHeroVideos: Record<string, CityHeroVideo> = {
   "west-hollywood": { video: westHollywoodVideo.url, poster: westHollywoodPoster.url },
   "the-hamptons": { video: theHamptonsVideo.url, poster: theHamptonsPoster.url },
   "hollywood": { video: hollywoodVideo.url, poster: hollywoodPoster.url },
+  "long-beach": { video: longBeachVideo.url, poster: longBeachPoster.url },
+  "boston": { video: bostonVideo.url, poster: bostonPoster.url },
 };
 
 export const getCityHeroVideo = (citySlug: string): CityHeroVideo | undefined =>
