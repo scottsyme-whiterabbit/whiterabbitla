@@ -9,10 +9,12 @@ import { LogOut } from "lucide-react";
  */
 
 const SignIn = () => {
-  const { sendMagicLink, signInWithPassword, error, linkSent } = useAdminAuth();
+  const { requestCode, verifyCode, signInWithPassword, error } = useAdminAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [pw, setPw] = useState("");
-  const [addr, setAddr] = useState("");
+  const [addr, setAddr] = useState("scott.syme@whiterabbitla.com");
+  const [code, setCode] = useState("");
+  const [codeSent, setCodeSent] = useState(false);
   const [busy, setBusy] = useState(false);
 
   return (
@@ -21,21 +23,14 @@ const SignIn = () => {
         <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-3">White Rabbit LA</p>
         <h1 className="font-serif font-light text-3xl mb-8">Admin</h1>
 
-        {linkSent ? (
-          <div className="border border-gold/40 p-5 text-left">
-            <p className="text-sm text-cream mb-2">Check your inbox.</p>
-            <p className="text-xs text-cream/70 leading-relaxed">
-              A sign-in link is on its way to {addr}. Opening it on this device takes you straight
-              into the admin, and you stay signed in from then on.
-            </p>
-          </div>
-        ) : (
+        {!codeSent ? (
           <form
             className="space-y-3"
             onSubmit={async (e) => {
               e.preventDefault();
               setBusy(true);
-              await sendMagicLink(addr);
+              await requestCode(addr);
+              setCodeSent(true);
               setBusy(false);
             }}
           >
@@ -52,7 +47,48 @@ const SignIn = () => {
               disabled={busy}
               className="w-full bg-cream text-forest-dark py-3.5 text-xs tracking-[0.2em] uppercase hover:opacity-90 disabled:opacity-60"
             >
-              Send me a sign-in link
+              Send me a code
+            </button>
+          </form>
+        ) : (
+          <form
+            className="space-y-3"
+            onSubmit={async (e) => {
+              e.preventDefault();
+              setBusy(true);
+              const ok = await verifyCode(addr, code);
+              if (!ok) setCode("");
+              setBusy(false);
+            }}
+          >
+            <p className="text-xs text-cream/70 leading-relaxed text-left">
+              If that address is an admin, a code is on its way.
+            </p>
+            <input
+              type="text"
+              inputMode="numeric"
+              autoComplete="one-time-code"
+              pattern="[0-9]*"
+              maxLength={6}
+              value={code}
+              onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+              placeholder="6 digit code"
+              autoFocus
+              className="w-full bg-transparent border border-cream/25 px-4 py-3 text-center text-xl tracking-[0.5em] text-cream placeholder:text-cream/40 placeholder:text-sm placeholder:tracking-normal focus:outline-none focus:border-gold"
+            />
+            <button
+              type="submit"
+              disabled={busy || code.length !== 6}
+              className="w-full bg-cream text-forest-dark py-3.5 text-xs tracking-[0.2em] uppercase hover:opacity-90 disabled:opacity-60"
+            >
+              Sign in
+            </button>
+            <button
+              type="button"
+              onClick={() => { setCodeSent(false); setCode(""); }}
+              className="text-[11px] tracking-[0.2em] uppercase text-cream/50 hover:text-cream"
+            >
+              Send a new code
             </button>
           </form>
         )}

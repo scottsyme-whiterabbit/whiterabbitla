@@ -35,6 +35,8 @@ interface AdminAuthValue {
   /** True once a sign-in link has been emailed. */
   linkSent: boolean;
   sendMagicLink: (email: string) => Promise<boolean>;
+  requestCode: (email: string) => Promise<void>;
+  verifyCode: (email: string, code: string) => Promise<boolean>;
   signInWithPassword: (pw: string) => Promise<boolean>;
   signOut: () => Promise<void>;
   getToken: () => Promise<string | null>;
@@ -220,11 +222,13 @@ export const AdminAuthProvider = ({ children }: { children: React.ReactNode }) =
       error,
       linkSent,
       sendMagicLink,
+      requestCode,
+      verifyCode,
       signInWithPassword,
       signOut,
       getToken: getAccessToken,
     }),
-    [ready, mode, email, password, error, linkSent, sendMagicLink, signInWithPassword, signOut],
+    [ready, mode, email, password, error, linkSent, sendMagicLink, requestCode, verifyCode, signInWithPassword, signOut],
   );
 
 
