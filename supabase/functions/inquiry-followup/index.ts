@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { CALENDAR_URL, inquiryFirstName, parseFutureInquiryDate, withinPacificSendHours } from "../_shared/inquiry-email.ts";
+import { CALENDAR_URL, inquiryFirstName, withinPacificSendHours } from "../_shared/inquiry-email.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -12,7 +12,6 @@ interface Inquiry {
   id: string;
   email: string;
   name: string | null;
-  date: string | null;
   followup_step: number;
   created_at: string;
 }
@@ -46,7 +45,7 @@ serve(async (req) => {
     const supabase = createClient(supabaseUrl, serviceKey);
     let query = supabase
       .from("contact_inquiries")
-      .select("id,email,name,date,followup_step,created_at")
+      .select("id,email,name,followup_step,created_at")
       .order("created_at", { ascending: true });
     if (inquiryIds.length) {
       query = query.in("id", inquiryIds);
@@ -94,11 +93,10 @@ serve(async (req) => {
         }
 
         const firstName = inquiryFirstName(inquiry.name);
-        const parsedDate = parseFutureInquiryDate(inquiry.date);
         const subject = currentStep === 0 ? `${firstName}, just wanted to make sure this reached you` : `${firstName}, one last note`;
         const bodyText = currentStep === 0
-          ? `${firstName},\n\nWanted to make sure this got to you and didn't land somewhere strange.\n\nMost of what I do is close up, right in the middle of the room while people are talking and drinking. Nobody sits in rows and nothing gets announced. It just starts happening next to them.\n\n${parsedDate ? `If ${parsedDate.monthDayOrdinal} is still the plan, tell me roughly what the evening looks like and I'll tell you honestly whether I'm the right fit for it.` : "If the evening is still happening, tell me roughly what it looks like and I'll tell you honestly whether I'm the right fit for it."}\n\n(424) 394-1850 is the fastest way to reach me. I answer it myself. Or pick a time here: ${CALENDAR_URL}`
-          : `${firstName},\n\nI'll stop filling your inbox after this.\n\nIf the date moved or you went a different direction, no hard feelings at all. Plans shift constantly in this world and I'd rather you have a great night than have a magician.\n\nIf it's still live, my number is (424) 394-1850.\n\n${parsedDate ? `Either way, I hope ${parsedDate.monthDayOrdinal} is a beautiful evening.` : "Either way, I hope it's a beautiful evening."}`;
+          ? `${firstName},\n\nWanted to make sure this got to you and didn't land somewhere strange.\n\nMost of what I do is close up, right in the middle of the room while people are talking and drinking. Nobody sits in rows and nothing gets announced. It just starts happening next to them.\n\nIf it's still live, tell me what the evening looks like and I'll tell you honestly whether I'm the right fit for it.\n\n(424) 394-1850 is the fastest way to reach me. I answer it myself. Or pick a time here: ${CALENDAR_URL}`
+          : `${firstName},\n\nI'll stop filling your inbox after this.\n\nIf your plans changed or you went a different direction, no hard feelings at all. Plans shift constantly in this world and I'd rather you have a great night than have a magician.\n\nIf it's still live, my number is (424) 394-1850.\n\nEither way, I hope it's a beautiful evening.`;
 
         if (dryRun) {
           wouldSend.push({ inquiry_id: inquiry.id, name: inquiry.name, email, step: nextStep, subject, body_text: bodyText, skipped_reason: null });
