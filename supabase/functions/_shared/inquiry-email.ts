@@ -41,4 +41,4 @@ export function withinPacificSendHours(now = new Date()): boolean {
   const totalMinutes = hour * 60 + minute;
   return totalMinutes >= 8 * 60 && totalMinutes < 20 * 60 + 30;
 }
-export const CALENDAR_URL = "https://calendar.app.google/58WjggPt3RFAcJjq8";
+export const CALENDAR_URL = "https://calendar.app.google/qgd4ck3DCgBKTYHU8";
