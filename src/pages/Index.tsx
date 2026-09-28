@@ -56,7 +56,7 @@ import disneyLogo from "@/assets/logos/normalized/disney.png";
 import rollsroyceLogo from "@/assets/logos/normalized/rollsroyce.png";
 import morganstanleyLogo from "@/assets/logos/normalized/morganstanley.png";
 import rivianLogo from "@/assets/logos/normalized/rivian.png";
-import paramountLogo from "@/assets/logos/normalized/paramount.png";
+import createAndCultivateLogo from "@/assets/logos/normalized/createandcultivate.png";
 import oliviarodrigoLogo from "@/assets/logos/normalized/oliviarodrigo.png";
 import lionsgateLogo from "@/assets/logos/normalized/lionsgate.png";
 import beverlyHiltonLogo from "@/assets/logos/normalized/beverlyhilton.png";
@@ -72,7 +72,7 @@ const clients: { name: string; logo: string; h: number }[] = [
   { name: "Disney", logo: disneyLogo, h: 20 },
   { name: "Rolls Royce", logo: rollsroyceLogo, h: 34 },
   { name: "Lionsgate", logo: lionsgateLogo, h: 20 },
-  { name: "Paramount", logo: paramountLogo, h: 34 },
+  { name: "Create & Cultivate", logo: createAndCultivateLogo, h: 30 },
   { name: "Netflix", logo: netflixLogo, h: 20 },
   { name: "The Magic Castle", logo: magicCastleLogo, h: 40 },
   { name: "Morgan Stanley", logo: morganstanleyLogo, h: 20 },
