@@ -121,7 +121,7 @@ serve(async (req) => {
         const sendResponse = await fetch(`${supabaseUrl}/functions/v1/gmail-send`, {
           method: "POST",
           headers: { "Content-Type": "application/json", apikey: serviceKey, Authorization: `Bearer ${serviceKey}` },
-          body: JSON.stringify({ to: email, subject, body_text: bodyText, deal_id: deal?.id || null, adminPassword, ...(threadId ? { gmail_thread_id: threadId } : {}) }),
+          body: JSON.stringify({ to: email, subject, body_text: bodyText, skip_stage_update: true, deal_id: deal?.id || null, adminPassword, ...(threadId ? { gmail_thread_id: threadId } : {}) }),
         });
         const sendData = await sendResponse.json().catch(() => ({}));
         if (!sendResponse.ok || !sendData.message_id) {
