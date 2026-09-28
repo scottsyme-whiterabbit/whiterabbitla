@@ -3,6 +3,7 @@
 // with a hardcoded White Rabbit LA fallback).
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
+import { isAdminRequest } from "../_shared/require-admin.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -150,7 +151,8 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   try {
     const body = await req.json();
-    if (body.adminPassword !== ADMIN_PASSWORD) {
+    const passwordOk = !!ADMIN_PASSWORD && body.adminPassword === ADMIN_PASSWORD;
+    if (!passwordOk && !(await isAdminRequest(req, body))) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
     }
     const { deal_id, to, subject, body_text, html_body, gmail_thread_id, in_reply_to, skip_signature, skip_stage_update } = body;

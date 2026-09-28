@@ -120,3 +120,6 @@ verify_jwt = false
 
 [functions.unanswered-inquiries]
 verify_jwt = false
+
+[functions.admin-code-auth]
+verify_jwt = false

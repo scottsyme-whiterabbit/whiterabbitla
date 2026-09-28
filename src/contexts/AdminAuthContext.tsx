@@ -35,6 +35,8 @@ interface AdminAuthValue {
   /** True once a sign-in link has been emailed. */
   linkSent: boolean;
   sendMagicLink: (email: string) => Promise<boolean>;
+  requestCode: (email: string) => Promise<void>;
+  verifyCode: (email: string, code: string) => Promise<boolean>;
   signInWithPassword: (pw: string) => Promise<boolean>;
   signOut: () => Promise<void>;
   getToken: () => Promise<string | null>;
@@ -173,6 +175,48 @@ export const AdminAuthProvider = ({ children }: { children: React.ReactNode }) =
   }, []);
 
 
+  /** Emails a 6 digit code. Always resolves the same way so nothing is revealed. */
+  const requestCode = useCallback(async (raw: string) => {
+    setError(null);
+    const addr = (raw || "").trim().toLowerCase();
+    if (!addr) return;
+    try {
+      await fetch(`${SUPABASE_URL}/functions/v1/admin-code-auth`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
+        body: JSON.stringify({ action: "request", email: addr }),
+      });
+    } catch {}
+  }, []);
+
+  /** Exchanges the code for a session created inside this app's own storage. */
+  const verifyCode = useCallback(async (raw: string, code: string) => {
+    setError(null);
+    const addr = (raw || "").trim().toLowerCase();
+    try {
+      const res = await fetch(`${SUPABASE_URL}/functions/v1/admin-code-auth`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` },
+        body: JSON.stringify({ action: "verify", email: addr, code: code.trim() }),
+      });
+      const j = await res.json().catch(() => ({}));
+      if (!j?.ok || !j.token_hash) {
+        setError(j?.error || "Invalid or expired code");
+        return false;
+      }
+      const { error: err } = await supabase.auth.verifyOtp({ token_hash: j.token_hash, type: "magiclink" });
+      if (err) {
+        setError(err.message || "Could not sign in.");
+        return false;
+      }
+      setAdminSignedIn(true);
+      return true; // onAuthStateChange SIGNED_IN finishes applying the session
+    } catch {
+      setError("Could not reach the server.");
+      return false;
+    }
+  }, []);
+
   const signInWithPassword = useCallback(async (pw: string) => {
     setError(null);
     if (!pw) return false;
@@ -220,11 +264,13 @@ export const AdminAuthProvider = ({ children }: { children: React.ReactNode }) =
       error,
       linkSent,
       sendMagicLink,
+      requestCode,
+      verifyCode,
       signInWithPassword,
       signOut,
       getToken: getAccessToken,
     }),
-    [ready, mode, email, password, error, linkSent, sendMagicLink, signInWithPassword, signOut],
+    [ready, mode, email, password, error, linkSent, sendMagicLink, requestCode, verifyCode, signInWithPassword, signOut],
   );
 
 
