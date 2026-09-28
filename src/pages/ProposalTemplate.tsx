@@ -8,15 +8,18 @@ import wrScriptLogo from "@/assets/wr-wordmark-cream.png";
 import { DEFAULT_GALLERY_KEYS, photoKeyToSrc, reviewsForEventType } from "@/data/proposalAssets";
 import { adminViewHeaders } from "@/lib/adminAuth";
 
-import netflixLogo from "@/assets/logos/netflix.png";
-import disneyLogo from "@/assets/logos/disney.png";
-import morganstanleyLogo from "@/assets/logos/morganstanley.png";
-import rivianLogo from "@/assets/logos/rivian.png";
-import rollsroyceLogo from "@/assets/logos/rollsroyce.png";
-import paramountLogo from "@/assets/logos/paramount.png";
-import sohohouseLogo from "@/assets/logos/sohohouse-new.png";
-import beverlyHiltonLogo from "@/assets/logos/beverlyhilton.png";
-import magicCastleLogo from "@/assets/logos/magiccastle.png";
+import disneyLogo from "@/assets/logos/normalized/disney.png";
+import rollsroyceLogo from "@/assets/logos/normalized/rollsroyce.png";
+import lionsgateLogo from "@/assets/logos/normalized/lionsgate.png";
+import createAndCultivateLogo from "@/assets/logos/normalized/createandcultivate.png";
+import netflixLogo from "@/assets/logos/normalized/netflix.png";
+import magicCastleLogo from "@/assets/logos/normalized/magiccastle.png";
+import morganstanleyLogo from "@/assets/logos/normalized/morganstanley.png";
+import beverlyHiltonLogo from "@/assets/logos/normalized/beverlyhilton.png";
+import rivianLogo from "@/assets/logos/normalized/rivian.png";
+import oliviarodrigoLogo from "@/assets/logos/normalized/oliviarodrigo.png";
+import sohohouseLogo from "@/assets/logos/normalized/sohohouse.png";
+import agtLogo from "@/assets/logos/normalized/agt.png";
 
 import heroMain from "@/assets/hero-magic-cinematic.jpg";
 import proposalCardsBw from "@/assets/proposal-cards-bw.jpg";
@@ -47,16 +50,21 @@ export const HERO_OPTIONS = [
   { value: "evening", label: "Evening (dark)" },
 ];
 
+// Same treatment as the homepage logo wall: normalized (trimmed) logos,
+// per-logo render height in px for optical balance, forest-green tint.
 const logos = [
-  { name: "Netflix", src: netflixLogo },
-  { name: "Disney", src: disneyLogo },
-  { name: "Morgan Stanley", src: morganstanleyLogo },
-  { name: "Rivian", src: rivianLogo },
-  { name: "Rolls-Royce", src: rollsroyceLogo },
-  { name: "Paramount", src: paramountLogo },
-  { name: "Soho House", src: sohohouseLogo, sizeClass: "max-h-14 md:max-h-[68px]" },
-  { name: "The Beverly Hilton", src: beverlyHiltonLogo },
-  { name: "The Magic Castle", src: magicCastleLogo, sizeClass: "max-h-14 md:max-h-16" },
+  { name: "Disney", src: disneyLogo, h: 20 },
+  { name: "Rolls Royce", src: rollsroyceLogo, h: 34 },
+  { name: "Lionsgate", src: lionsgateLogo, h: 20 },
+  { name: "Create & Cultivate", src: createAndCultivateLogo, h: 36 },
+  { name: "Netflix", src: netflixLogo, h: 20 },
+  { name: "The Magic Castle", src: magicCastleLogo, h: 46 },
+  { name: "Morgan Stanley", src: morganstanleyLogo, h: 20 },
+  { name: "The Beverly Hilton", src: beverlyHiltonLogo, h: 26 },
+  { name: "Rivian", src: rivianLogo, h: 40 },
+  { name: "Olivia Rodrigo", src: oliviarodrigoLogo, h: 26 },
+  { name: "Soho House", src: sohohouseLogo, h: 40 },
+  { name: "America's Got Talent", src: agtLogo, h: 26 },
 ];
 
 export interface Tier {
@@ -429,10 +437,22 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">In Good Company</p>
           <OrnamentalDivider />
           <p className="font-sans text-sm md:text-base text-forest-dark/65 mt-6 mb-10">A few of the rooms we've worked.</p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-8 items-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-x-5 gap-y-8 sm:gap-x-8 sm:gap-y-10 md:gap-x-12 md:gap-y-12 items-center justify-items-center">
             {logos.map((logo) => (
-              <div key={logo.name} className="flex items-center justify-center">
-                <img src={logo.src} alt={logo.name} loading="lazy" className={`${(logo as any).sizeClass ?? "max-h-9 md:max-h-11"} w-auto object-contain opacity-60 hover:opacity-100 transition-opacity`} style={{ filter: "grayscale(100%)" }} />
+              <div key={logo.name} className="flex items-center justify-center h-12 md:h-14 w-full">
+                <img
+                  src={logo.src}
+                  alt={`${logo.name} logo, White Rabbit client`}
+                  loading="lazy"
+                  decoding="async"
+                  style={{
+                    height: `${logo.h}px`,
+                    width: "auto",
+                    maxWidth: "100%",
+                    filter: "brightness(0) saturate(100%) invert(24%) sepia(9%) saturate(1200%) hue-rotate(70deg) brightness(95%) contrast(85%)",
+                  }}
+                  className="object-contain opacity-55 hover:opacity-80 transition-opacity"
+                />
               </div>
             ))}
           </div>
