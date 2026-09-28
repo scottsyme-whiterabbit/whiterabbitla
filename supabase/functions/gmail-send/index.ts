@@ -153,7 +153,7 @@ serve(async (req) => {
     if (body.adminPassword !== ADMIN_PASSWORD) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
     }
-    const { deal_id, to, subject, body_text, gmail_thread_id, in_reply_to, skip_signature } = body;
+    const { deal_id, to, subject, body_text, html_body, gmail_thread_id, in_reply_to, skip_signature } = body;
     if (!to || !subject || !body_text) {
       return new Response(JSON.stringify({ error: "Missing to/subject/body_text" }), { status: 400, headers: corsHeaders });
     }
@@ -166,9 +166,11 @@ serve(async (req) => {
     const textBody = skip_signature
       ? plainText
       : `${plainText}\n\n-- \nScott Syme\nMagician · White Rabbit LA\n(424) 394-1850 · scott.syme@whiterabbitla.com\nwww.whiterabbitla.com`;
-    const htmlBody = skip_signature
-      ? `<div>${renderBodyHtml(cleanText).replace(/\n/g, "<br>")}</div>`
-      : `<div style="font-family:Arial,Helvetica,sans-serif;color:#222;font-size:14px;line-height:1.55;">${renderBodyHtml(cleanText).replace(/\n/g, "<br>")}</div><br><div>${signatureHtml}</div>`;
+    const htmlBody = typeof html_body === "string"
+      ? skip_signature ? html_body : `${html_body}<br><div>${signatureHtml}</div>`
+      : skip_signature
+        ? `<div>${renderBodyHtml(cleanText).replace(/\n/g, "<br>")}</div>`
+        : `<div style="font-family:Arial,Helvetica,sans-serif;color:#222;font-size:14px;line-height:1.55;">${renderBodyHtml(cleanText).replace(/\n/g, "<br>")}</div><br><div>${signatureHtml}</div>`;
 
     const headers = [
       `From: ${OWNER_NAME} <${OWNER_EMAIL}>`,
