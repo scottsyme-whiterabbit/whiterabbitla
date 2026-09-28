@@ -867,7 +867,7 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
     "golf-tournament-magician": [
       {
         question: "When does the magician perform at a golf tournament?",
-        answer: "There are three key windows. First, on the course itself: Scott can station at a signature hole and perform close-up magic for groups waiting at the tee, turning a five-minute backup into the most talked-about hole of the day. Second, during the post-round reception as golfers come off the course. Third, as MC and host during dinner and awards. One performer covers the entire day.",
+        answer: "There are three key windows. First, on the course itself: Scott can station at a signature hole and perform close-up magic for groups waiting at the tee, turning a five-minute backup into the most talked-about hole of the day. Second, during the post-round reception as golfers come off the course. Third, as MC and host after dinner for the awards. One performer covers the entire day.",
       },
       {
         question: "Is the magic appropriate for a golf crowd?",
@@ -1475,7 +1475,7 @@ const citySpecificOverrides: Record<string, string[]> = {
   ],
   "calabasas--christmas-party-magician": [
     "Christmas parties and New Year's Eve events in Calabasas are private home celebrations, intimate dinners, family gatherings, and neighborhood parties where the host wants the evening to feel special. Scott's close-up magic during cocktail hour gives guests something warm and genuine to bond over. The reactions are real, and they set the tone for the rest of the night.",
-    "For New Year's Eve, Scott brings higher energy, faster pace, bigger reveals, countdown-ready material. Whether it's 20 people around a dinner table or 80 in a backyard, White Rabbit makes your Calabasas holiday event the one people talk about well into the new year. December dates fill fast for private estate bookings.",
+    "For New Year's Eve, Scott brings higher energy, faster pace, bigger reveals, countdown-ready material. Whether it's 20 people gathered before or after dinner or 80 in a backyard, White Rabbit makes your Calabasas holiday event the one people talk about well into the new year. December dates fill fast for private estate bookings.",
   ],
   "calabasas--premiere-red-carpet-magician": [
     "Calabasas is home to entertainment executives, producers, and athletes who host private screening events, viewing parties, and industry gatherings at their estates. Scott's close-up magic works at these events because the crowd is small, the expectations are high, and the magic is personal. He reads the room, matches the energy, and delivers something that surprises people who spend their careers in entertainment.",
@@ -1682,7 +1682,7 @@ const citySpecificOverrides: Record<string, string[]> = {
   ],
   "bel-air--christmas-party-magician": [
     "Christmas parties and New Year's Eve events in Bel-Air are private home celebrations, intimate dinners, estate parties, and holiday gatherings where the host wants the evening to feel genuinely special. Scott's close-up magic during cocktail hour gives guests something warm to bond over. The reactions are real, the connections are genuine, and the evening has a center of gravity that goes beyond the usual holiday party formula.",
-    "For New Year's Eve, Scott brings higher energy, faster pace, bigger reveals, midnight-ready material. Whether it's 20 people around a dinner table or 60 in a garden, White Rabbit makes your Bel-Air holiday event the one people talk about well into the new year. December dates fill fast for private estate bookings.",
+    "For New Year's Eve, Scott brings higher energy, faster pace, bigger reveals, midnight-ready material. Whether it's 20 people gathered before or after dinner or 60 in a garden, White Rabbit makes your Bel-Air holiday event the one people talk about well into the new year. December dates fill fast for private estate bookings.",
   ],
   "bel-air--premiere-red-carpet-magician": [
     "Bel-Air is home to entertainment executives, studio heads, and producers who host private screening events, viewing parties, and industry gatherings at their estates. Scott's close-up magic works at these events because the crowd is small, the expectations are high, and the magic is personal. He reads the room, matches the energy, and delivers something that surprises people who spend their careers creating entertainment for everyone else.",
