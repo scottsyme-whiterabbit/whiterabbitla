@@ -130,7 +130,7 @@ const Index = () => {
     name: "Scott Syme",
     jobTitle: "Magician & Mentalist",
     worksFor: { "@type": "Organization", name: "White Rabbit LA" },
-    description: "World-class magician, Magic Castle member, and consultant to America's Got Talent and Disney Channel performers",
+    description: "Magician and mentalist, Magic Castle member, and consultant to America's Got Talent and Disney Channel performers",
     url: "https://whiterabbitla.com/about",
     sameAs: ["https://www.instagram.com/scottsyme_/"],
   });

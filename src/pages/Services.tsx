@@ -10,7 +10,7 @@ import parlorImg from "@/assets/event-parlor-stage.jpg";
 import corporateImg from "@/assets/event-penthouse-show.jpg";
 import weddingImg from "@/assets/service-wedding-hero.jpg";
 import privateImg from "@/assets/events/ladies-luncheon-laughter.jpg";
-import holidayImg from "@/assets/service-holiday-party-action.jpg";
+import holidayImg from "@/assets/event-group-finale.jpg";
 import charityImg from "@/assets/service-charity-gala-action.jpg";
 import tradeShowImg from "@/assets/event-crowd-reaction.jpg";
 import golfImg from "@/assets/event-guest-laughing.jpg";
@@ -31,14 +31,14 @@ const services: ServiceTile[] = [
     slug: "corporate-magician",
     title: "Corporate Event Magician",
     blurb:
-      "Galas, product launches, and offsites. Trusted by Netflix, Disney, and Morgan Stanley in LA and 80+ Fortune 500 markets nationwide.",
+      "Galas, product launches and offsites. Trusted by Netflix, Disney and Morgan Stanley.",
     image: corporateImg,
   },
   {
     slug: "wedding-magician",
     title: "Wedding Magician",
     blurb:
-      "Cocktail hour, reception, and rehearsal dinner entertainment for 5★ couples in LA, Aspen, the Hamptons, Napa, and 80+ luxury destinations.",
+      "Cocktail hour, reception and rehearsal dinner, in Los Angeles and destinations from Aspen to the Hamptons.",
     image: weddingImg,
   },
   {
@@ -73,14 +73,14 @@ const services: ServiceTile[] = [
     slug: "charity-gala-magician",
     title: "Charity Gala Magician",
     blurb:
-      "Raises the room before the auction. Trusted by nonprofits in LA, Hollywood, Napa, the Hamptons, and 80+ luxury markets.",
+      "Raises the room before the auction. For galas in Los Angeles and select destinations.",
     image: charityImg,
   },
   {
     slug: "trade-show-magician",
     title: "Trade Show Magician",
     blurb:
-      "Lead-capture-ready routines with sales-team handoff built in. CES, Dreamforce, NRF, SXSW, HIMSS, and 80+ B2B conferences.",
+      "Booth and hospitality-suite magic that draws a crowd and hands warm conversations to your sales team.",
     image: tradeShowImg,
   },
   {
@@ -94,14 +94,14 @@ const services: ServiceTile[] = [
     slug: "dmc-entertainment",
     title: "Magician for DMC Programs",
     blurb:
-      "RFP-ready, insurance-loaded, performance consistent. The LA experience your incentive group remembers years later.",
+      "RFP-ready, fully insured, consistent every night. The Los Angeles evening your incentive group remembers.",
     image: dmcImg,
   },
   {
     slug: "resident-event-magician",
     title: "Resident Event Magician",
     blurb:
-      "Multi-event partnerships for HOAs, country clubs, and luxury residential communities across LA and nationwide.",
+      "Multi-event partnerships for country clubs, HOAs and residential communities in Los Angeles and select destinations.",
     image: residentImg,
   },
 ];
@@ -111,7 +111,7 @@ const ServicesHub = () => {
 
   const seoTitle = "Services | Magician for Corporate, Weddings, Galas & More | White Rabbit LA";
   const seoDescription =
-    "All 11 White Rabbit LA magic services in one place. Corporate, weddings, galas, trade shows, golf tournaments, DMC programs, and more, across LA and 80+ US markets.";
+    "Luxury close-up magic and private shows for corporate events, weddings, galas and celebrations at home. Los Angeles and select destinations.";
 
   useWebPageSchema({
     name: "Services",
@@ -166,20 +166,19 @@ const ServicesHub = () => {
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
           <AnimatedSection>
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">
-              The White Rabbit Catalog
+              The Experiences
             </p>
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-cream mb-6 leading-tight">
-              All Services
+              Every Evening, Built Around Your Guests
             </h1>
             <p className="font-sans text-lg text-cream/80 max-w-2xl mx-auto mb-8">
-              Eleven dedicated magic services for corporate events, weddings, galas, trade shows, tournaments, DMC
-              programs, and residential communities, across Los Angeles and 80+ luxury markets nationwide.
+              Close-up magic, mentalism and private shows for corporate evenings, weddings, galas and celebrations at home, in Los Angeles and select destinations.
             </p>
             <button
               onClick={openQuiz}
               className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors"
             >
-              Check Availability
+              Inquire
             </button>
           </AnimatedSection>
         </div>
@@ -190,10 +189,10 @@ const ServicesHub = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <AnimatedSection>
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3 text-center">
-              Eleven Ways to Book
+              By Occasion
             </p>
             <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-12 text-center">
-              Pick the experience that fits your event
+              Find the evening that fits
             </h2>
           </AnimatedSection>
 
@@ -282,17 +281,17 @@ const ServicesHub = () => {
         <section className="py-24 text-center">
           <div className="max-w-2xl mx-auto px-6">
             <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-4">
-              Ready to talk about your event?
+              An evening like this begins with a conversation.
             </h2>
             <p className="font-sans text-base text-muted-foreground mb-8">
-              Tell us your date, guest count, and vibe, we'll usually confirm availability within a few hours.
+              Share your date and guest count. Scott replies personally, usually within a few hours.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <button
                 onClick={openQuiz}
                 className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-primary text-primary-foreground px-10 py-4 hover:bg-primary/90 transition-colors"
               >
-                Book White Rabbit Now
+                Inquire
               </button>
               <a
                 href="tel:+14243941850"
