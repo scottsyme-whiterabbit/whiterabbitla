@@ -12,6 +12,16 @@ import newYorkVideo from "@/assets/city-heroes/city-new-york.mp4.asset.json";
 import newYorkPoster from "@/assets/city-heroes/city-new-york-poster.jpg.asset.json";
 import sanFranciscoVideo from "@/assets/city-heroes/city-san-francisco.mp4.asset.json";
 import sanFranciscoPoster from "@/assets/city-heroes/city-san-francisco-poster.jpg.asset.json";
+import losFelizVideo from "@/assets/city-heroes/city-los-feliz.mp4.asset.json";
+import losFelizPoster from "@/assets/city-heroes/city-los-feliz-poster.jpg.asset.json";
+import aspenVideo from "@/assets/city-heroes/city-aspen.mp4.asset.json";
+import aspenPoster from "@/assets/city-heroes/city-aspen-poster.jpg.asset.json";
+import westHollywoodVideo from "@/assets/city-heroes/city-west-hollywood.mp4.asset.json";
+import westHollywoodPoster from "@/assets/city-heroes/city-west-hollywood-poster.jpg.asset.json";
+import theHamptonsVideo from "@/assets/city-heroes/city-the-hamptons.mp4.asset.json";
+import theHamptonsPoster from "@/assets/city-heroes/city-the-hamptons-poster.jpg.asset.json";
+import hollywoodVideo from "@/assets/city-heroes/city-hollywood.mp4.asset.json";
+import hollywoodPoster from "@/assets/city-heroes/city-hollywood-poster.jpg.asset.json";
 
 export interface CityHeroVideo {
   video: string;
@@ -24,6 +34,11 @@ export const cityHeroVideos: Record<string, CityHeroVideo> = {
   "miami": { video: miamiVideo.url, poster: miamiPoster.url },
   "new-york": { video: newYorkVideo.url, poster: newYorkPoster.url },
   "san-francisco": { video: sanFranciscoVideo.url, poster: sanFranciscoPoster.url },
+  "los-feliz": { video: losFelizVideo.url, poster: losFelizPoster.url },
+  "aspen": { video: aspenVideo.url, poster: aspenPoster.url },
+  "west-hollywood": { video: westHollywoodVideo.url, poster: westHollywoodPoster.url },
+  "the-hamptons": { video: theHamptonsVideo.url, poster: theHamptonsPoster.url },
+  "hollywood": { video: hollywoodVideo.url, poster: hollywoodPoster.url },
 };
 
 export const getCityHeroVideo = (citySlug: string): CityHeroVideo | undefined =>
