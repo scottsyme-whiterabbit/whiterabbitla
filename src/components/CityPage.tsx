@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Phone, Calendar, Sparkles, Building2, HelpCircle, ArrowRight } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
