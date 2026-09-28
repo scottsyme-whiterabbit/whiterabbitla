@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.224.0/assert/mod.ts";
-import { inquiryFirstName, parseFutureInquiryDate, validEmail, withinPacificSendHours } from "./inquiry-email.ts";
+import { inquiryFirstName, parseFutureInquiryDate, validEmail, withinPacificSendHours } from "../_shared/inquiry-email.ts";
 
 Deno.test("parses supported future inquiry dates and rejects invalid dates", () => {
   const now = new Date("2026-09-28T12:00:00Z");
