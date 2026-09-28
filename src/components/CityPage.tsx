@@ -66,7 +66,7 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
 
   const metaOverride = cityMetaOverrides[citySlug];
   const seoTitle = metaOverride?.title || `${cityName} Magician for Hire | White Rabbit LA`;
-  const seoDescription = metaOverride?.description || `Hire a world-class close-up magician for corporate events, weddings, and private parties in ${cityName}. Magic Castle member. 5-star rated on Google.`;
+  const seoDescription = metaOverride?.description || `Close-up magic and mentalism for luxury private events, weddings and corporate evenings in ${cityName}. Magic Castle member, 5-star rated on Google.`;
 
   // JSON-LD @graph with schemas
   useJsonLd(`city-schema-${citySlug}`, {
@@ -137,11 +137,12 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
         <div className="absolute inset-0 flex items-end">
           <div className="max-w-4xl mx-auto px-6 pb-12 w-full">
             <AnimatedSection>
-              <Link to="/areas" className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4 inline-block hover:text-accent/80 transition-colors">
+              <Link to="/areas" className="font-sans text-xs tracking-[0.3em] uppercase text-cream/60 mb-4 inline-block hover:text-cream transition-colors">
                 ← All Service Areas
               </Link>
+              <span className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3 block">Private Magic · By Appointment</span>
               <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-cream mb-3">
-                Magician in {cityName}, Luxury Event Entertainment
+                Magician in {cityName}
               </h1>
               <p className="font-sans text-base text-cream/70 max-w-lg">{areaTagline}</p>
             </AnimatedSection>
@@ -156,15 +157,15 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
         <div className="max-w-3xl mx-auto px-6">
           <AnimatedSection>
             <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8" data-speakable="true">
-              White Rabbit LA provides luxury close-up magic and mentalism entertainment for private events in {cityName}, {stateFullName}. Performed by Scott Syme, a member of the Magic Castle in Hollywood and consultant to performers on America's Got Talent and Disney Channel, every show is tailored to your event, whether it's a corporate gala, wedding reception, private party, or fundraiser. 5-star rated on Google with clients including Netflix, Disney, Paramount, and Hyatt.
+              White Rabbit LA brings close-up magic and mentalism to private evenings in {cityName}, {stateFullName}. Performed by Scott Syme, a member of the Magic Castle in Hollywood and consultant to performers on America's Got Talent and Disney Channel, every show is tailored to your event, whether it's a corporate gala, wedding reception, private party, or fundraiser. 5-star rated on Google with clients including Netflix, Disney, Paramount, and Hyatt.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <button onClick={openQuiz} className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors">
-                Book Now
-              </button>
-              <Link to="/contact" className="font-sans text-sm tracking-[0.2em] uppercase border border-border text-foreground px-10 py-4 hover:border-accent/40 transition-colors text-center">
                 Inquire
-              </Link>
+              </button>
+              <a href="tel:+14243941850" className="font-sans text-sm tracking-[0.2em] uppercase border border-border text-foreground px-10 py-4 hover:border-accent/40 transition-colors text-center">
+                Call (424) 394-1850
+              </a>
             </div>
           </AnimatedSection>
         </div>
@@ -319,17 +320,17 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
       <section className="py-16 border-t border-border">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <AnimatedSection>
-            <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-4">Book a Magician in {cityName}</h2>
+            <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-4">An evening in {cityName} begins with a conversation.</h2>
             <p className="font-sans text-base text-muted-foreground mb-2">
               Ready to make your {cityName} event unforgettable? Book now or call{" "}
               <a href="tel:+14243941850" className="text-accent hover:underline">(424) 394-1850</a>.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
               <Link to="/contact" className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors">
-                Book Now
+                Inquire
               </Link>
               <Link to="/quiz" className="font-sans text-sm tracking-[0.2em] uppercase border border-border text-foreground px-10 py-4 hover:border-accent/40 transition-colors">
-                Take the Quiz
+                Find Your Fit
               </Link>
             </div>
           </AnimatedSection>
@@ -368,9 +369,9 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
       <AnimatedSection>
         <section className="bg-forest-dark py-24 text-center">
           <div className="max-w-2xl mx-auto px-6">
-            <h2 className="font-serif text-4xl text-cream mb-6">Book White Rabbit in {cityName}</h2>
+            <h2 className="font-serif text-4xl text-cream mb-6">White Rabbit in {cityName}</h2>
             <Link to="/contact" className="inline-block font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors">
-              Inquire Now
+              Inquire
             </Link>
           </div>
         </section>
