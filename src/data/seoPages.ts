@@ -166,7 +166,7 @@ const regionHooks: Record<Region, { eventCulture: string; travelNote: string; au
     audienceStyle: "Central Coast audiences appreciate understated excellence, the kind of entertainment that feels effortless because every detail has been carefully considered.",
   },
   southwest: {
-    eventCulture: "The Southwest's resort culture creates events where guests expect a premium experience from arrival to departure. White Rabbit fills the entertainment gap that most resort events miss, the personal, interactive moments between cocktails and dinner that transform a nice evening into an unforgettable one.",
+    eventCulture: "The Southwest's resort culture creates events where guests expect a premium experience from arrival to departure. White Rabbit fills the entertainment gap that most resort events miss, the personal, interactive moments during cocktails before dinner that transform a nice evening into an unforgettable one.",
     travelNote: "Scott frequently performs throughout Arizona and Nevada, with seamless travel coordination from Los Angeles.",
     audienceStyle: "Desert audiences bring a relaxed warmth that makes the interactive elements of close-up magic feel like a conversation between friends. Guests lean in rather than sit back.",
   },
@@ -911,7 +911,7 @@ function generateFaqs(location: string, serviceKey: string): FaqItem[] {
       },
       {
         question: "How long does the performance last at a rehearsal dinner?",
-        answer: "Most couples book 1 to 2 hours of roaming magic during cocktails and dinner. Scott moves table to table, creating personal moments for each group. It's subtle, elegant, and never interrupts the flow of the evening.",
+        answer: "Most couples book 1 to 2 hours of roaming magic during cocktails, before dinner. Scott moves from group to group, creating personal moments for each group. It's subtle, elegant, and never interrupts the flow of the evening.",
       },
     ],
     "halloween-party-magician": [
@@ -1167,7 +1167,7 @@ const citySpecificOverrides: Record<string, string[]> = {
   // ── Malibu ──────────────────────────────────────────────────────────
   "malibu--corporate-event-magician": [
     "Malibu corporate events are intimate gatherings at beachfront homes along PCH, private events at Nobu Malibu or Soho House Malibu where the entertainment industry and Hollywood's creative elite celebrate and do business. The vibe here is casual luxury: flip-flops and million-dollar views, where the most impressive backdrop is the Pacific Ocean itself. Scott Syme understands Malibu's particular aesthetic, no need to perform in the traditional sense; the magic should feel as effortless and natural as the setting itself.",
-    "Whether your event is at a Point Dume mansion, a Carbon Beach estate, or a private gathering at Broad Beach, Scott's approach to magic fits the Malibu sensibility perfectly. These are events where authenticity matters more than polish, where your guests expect entertainment that matches their sophistication and their setting. His magic creates conversation starters during dinner, memorable moments during cocktails, and genuine connection that enhances the evening without ever feeling forced. In Malibu, where the view is already spectacular, the magic that matters is the kind that happens in a moment of real connection between performer and guest.",
+    "Whether your event is at a Point Dume mansion, a Carbon Beach estate, or a private gathering at Broad Beach, Scott's approach to magic fits the Malibu sensibility perfectly. These are events where authenticity matters more than polish, where your guests expect entertainment that matches their sophistication and their setting. His magic creates conversation starters after dinner, memorable moments during cocktails, and genuine connection that enhances the evening without ever feeling forced. In Malibu, where the view is already spectacular, the magic that matters is the kind that happens in a moment of real connection between performer and guest.",
   ],
   "malibu--private-party-magician": [
     "Private parties in Malibu happen at home. Beachfront estates, canyon properties, PCH compounds where the driveway is longer than most city blocks. The guest list is usually 20 to 50, entertainment executives, producers, neighbors who happen to be household names. Scott has performed at these gatherings and the magic works because the setting is already extraordinary. Adding close-up magic to a Malibu sunset dinner takes an incredible evening and makes it one people talk about for months.",
@@ -1214,7 +1214,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "White Rabbit has consulted for America's Got Talent and Disney Channel, and performed for executives at Netflix and Paramount. That credibility means Scott belongs in these Malibu rooms. He reads the energy, keeps it low-key, and delivers something that genuinely surprises people whose entire career is built on creating surprises.",
   ],
   "malibu--dmc-entertainment": [
-    "Destination management companies bringing VIP groups to Malibu want entertainment that matches the exclusivity of the setting. White Rabbit fits into curated Malibu itineraries: welcome reception magic at a beachfront estate, dinner performances at private venues along PCH, and intimate experiences that give groups something they can't get anywhere else. Scott arrives ready to perform with zero setup, no stage, no AV, nothing that disrupts the setting.",
+    "Destination management companies bringing VIP groups to Malibu want entertainment that matches the exclusivity of the setting. White Rabbit fits into curated Malibu itineraries: welcome reception magic at a beachfront estate, performances before or after dinner at private venues along PCH, and intimate experiences that give groups something they can't get anywhere else. Scott arrives ready to perform with zero setup, no stage, no AV, nothing that disrupts the setting.",
     "The magic works especially well during networking dinners where attendees from different offices or cities are meeting for the first time. Malibu's relaxed energy makes people open and present, and the close-up magic takes advantage of that. Guests bond faster, connect deeper, and leave with a shared story.",
   ],
   "malibu--golf-tournament-magician": [
@@ -1413,7 +1413,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "White Rabbit has worked with Netflix, Disney, Paramount, and Lionsgate, and that credibility carries weight in rooms where entertainment is the business. Scott reads the energy, matches the crowd, and delivers something that surprises people who spend their careers creating content for everyone else.",
   ],
   "santa-monica--dmc-entertainment": [
-    "Destination management companies bringing groups to Santa Monica want entertainment that captures the area's character, the beachfront energy, the Silicon Beach innovation scene, the casual luxury that defines the Westside. White Rabbit fits into curated Santa Monica itineraries: welcome reception magic at oceanview hotels, dinner performances at private restaurants, and VIP experiences during group outings that give attendees something memorable between sessions.",
+    "Destination management companies bringing groups to Santa Monica want entertainment that captures the area's character, the beachfront energy, the Silicon Beach innovation scene, the casual luxury that defines the Westside. White Rabbit fits into curated Santa Monica itineraries: welcome reception magic at oceanview hotels, performances before or after dinner at private restaurants, and VIP experiences during group outings that give attendees something memorable between sessions.",
     "The magic works especially well during networking moments where attendees from different offices or regions are meeting for the first time. Santa Monica's relaxed energy makes people open and present, and close-up magic takes advantage of that. Guests bond quickly and leave with a shared story that has nothing to do with the conference agenda.",
   ],
   "santa-monica--golf-tournament-magician": [
@@ -1482,7 +1482,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "White Rabbit has worked with Netflix, Disney, Paramount, and Rolls-Royce, brands that the Calabasas audience knows and respects. That credibility means Scott belongs in these rooms. The magic is polished, the interactions are genuine, and the host gets credit for finding something their guests haven't seen before.",
   ],
   "calabasas--dmc-entertainment": [
-    "Destination management companies bringing VIP groups to the Calabasas area want entertainment that captures the exclusive, private-estate energy of the community. White Rabbit fits into curated luxury itineraries: welcome reception magic at private venues, dinner performances at country clubs, and VIP experiences that give groups something memorable during their downtime.",
+    "Destination management companies bringing VIP groups to the Calabasas area want entertainment that captures the exclusive, private-estate energy of the community. White Rabbit fits into curated luxury itineraries: welcome reception magic at private venues, performances before or after dinner at country clubs, and VIP experiences that give groups something memorable during their downtime.",
     "The magic works especially well during networking moments where attendees from different backgrounds are meeting for the first time. Calabasas's relaxed luxury makes people open and present, and close-up magic takes advantage of that. Guests bond quickly over shared amazement and leave with a story that has nothing to do with the conference agenda.",
   ],
   "calabasas--golf-tournament-magician": [
@@ -1551,7 +1551,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "White Rabbit has worked with Netflix, Disney, Paramount, and Lionsgate. Scott flies in from LA for New York industry events and fits into the energy of the room, no setup, no production, just polished magic that earns genuine reactions from people who spend their careers creating surprise for everyone else.",
   ],
   "new-york--dmc-entertainment": [
-    "Destination management companies bringing groups to New York want entertainment that captures the city's energy without being a cliché. White Rabbit fits into curated Manhattan itineraries: welcome reception magic at iconic venues, dinner performances at private restaurants, and VIP experiences that give groups something memorable during networking hours. Scott flies in from LA and coordinates with DMC teams to make logistics seamless.",
+    "Destination management companies bringing groups to New York want entertainment that captures the city's energy without being a cliché. White Rabbit fits into curated Manhattan itineraries: welcome reception magic at iconic venues, performances before or after dinner at private restaurants, and VIP experiences that give groups something memorable during networking hours. Scott flies in from LA and coordinates with DMC teams to make logistics seamless.",
     "The magic works especially well during networking moments where attendees from different offices or regions are meeting for the first time. New York's pace can be intimidating, and close-up magic breaks through that wall immediately. Guests bond over something unexpected and leave with a shared story that has nothing to do with the conference agenda.",
   ],
   "new-york--golf-tournament-magician": [
@@ -1596,7 +1596,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "The desert atmosphere adds something to the fundraising energy that's hard to replicate in a city ballroom. Guests are relaxed, present, and genuinely connected to the evening. Scott's roaming magic builds on that, and by the time the host or auctioneer speaks, the room is already in a giving mood. He drives from LA and coordinates with event teams to fit seamlessly into the evening's flow.",
   ],
   "joshua-tree--holiday-party-magician": [
-    "Holiday gatherings in Joshua Tree are desert escapes, friends or colleagues renting a property for a long weekend, companies booking a boutique resort for their annual celebration, families gathering at a desert home for the holidays. Scott's close-up magic fits the relaxed pace of these events. He moves through small groups performing around the pool, at dinner, by the fire pit, wherever people are gathered with a drink and time to spare.",
+    "Holiday gatherings in Joshua Tree are desert escapes, friends or colleagues renting a property for a long weekend, companies booking a boutique resort for their annual celebration, families gathering at a desert home for the holidays. Scott's close-up magic fits the relaxed pace of these events. He moves through small groups performing around the pool, before or after dinner, by the fire pit, wherever people are gathered with a drink and time to spare.",
     "The desert in December has its own magic, cool evenings, clear skies, and a pace that lets people actually enjoy each other's company. Scott adds to that with entertainment that feels personal and genuine. For New Year's Eve desert gatherings, he brings higher energy and countdown-ready material. He drives from LA and Joshua Tree holiday dates book early, especially for weekend retreats.",
   ],
   "joshua-tree--trade-show-magician": [
@@ -1604,7 +1604,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "For experiential marketing events and brand activations at Joshua Tree venues, White Rabbit adds a layer of wonder that matches the setting. Scott performed for Rivian in the area, and the magic was designed to complement the brand's identity, innovative, authentic, and worth talking about. That same approach works for any brand looking to make an impression with a curated desert audience.",
   ],
   "joshua-tree--rehearsal-dinner-magician": [
-    "Rehearsal dinners in Joshua Tree happen at rented estates, boutique resort dining spaces, and desert patios where the guest list is the people who matter most. Scott's close-up magic moves table to table, creating moments that connect two families who may be meeting for the first time, in a setting that's already relaxed and beautiful. The desert removes all the usual wedding-weekend stress, and the magic adds something warm and memorable.",
+    "Rehearsal dinners in Joshua Tree happen at rented estates, boutique resort dining spaces, and desert patios where the guest list is the people who matter most. Once plates are cleared, Scott's close-up magic moves table to table, creating moments that connect two families who may be meeting for the first time, in a setting that's already relaxed and beautiful. The desert removes all the usual wedding-weekend stress, and the magic adds something warm and memorable.",
     "For couples hosting their rehearsal dinner in Joshua Tree, Scott also offers the full Private Magic Show, 30 to 45 minutes of high-energy, interactive performance under the desert sky. It gives the intimate group a shared experience that sets the tone for the entire wedding weekend. He drives from LA and coordinates timing with the couple's weekend itinerary.",
   ],
   "joshua-tree--halloween-party-magician": [
@@ -1620,7 +1620,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "White Rabbit has worked with Netflix, Disney, Paramount, and Rivian. Scott drives from LA for Joshua Tree industry events and fits into the retreat energy, no production, no disruption, just world-class magic during the moments when people are gathered and open to something unexpected.",
   ],
   "joshua-tree--dmc-entertainment": [
-    "Destination management companies bringing groups to Joshua Tree want entertainment that matches the desert experience, intimate, unexpected, and nothing you'd find at a city hotel. White Rabbit fits into curated Joshua Tree itineraries: welcome reception magic at resort properties, dinner performances at rented estates, and fire-pit entertainment that gives groups something genuinely memorable between daytime activities.",
+    "Destination management companies bringing groups to Joshua Tree want entertainment that matches the desert experience, intimate, unexpected, and nothing you'd find at a city hotel. White Rabbit fits into curated Joshua Tree itineraries: welcome reception magic at resort properties, performances before or after dinner at rented estates, and fire-pit entertainment that gives groups something genuinely memorable between daytime activities.",
     "The magic works especially well during evening gatherings where attendees are unwinding from the day. The desert pace makes people open and present, and close-up magic takes advantage of that. Guests bond over shared amazement and leave with a story that has nothing to do with the conference agenda. Scott drives from LA and coordinates with DMC teams on timing and logistics.",
   ],
   "joshua-tree--golf-tournament-magician": [
@@ -1811,7 +1811,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "The format works for brand activations, pop-up events, and experiential marketing targeting the eastside creative community. Exhibitors report more foot traffic and higher-quality engagement when White Rabbit is part of the setup. For a crowd that curates everything, having a magician at your booth signals that your brand gets it.",
   ],
   "silver-lake--rehearsal-dinner-magician": [
-    "Rehearsal dinners in Silver Lake happen at local restaurants, private dining rooms, and homes in the hills. The guest list is small and the evening is supposed to feel warm and personal. Scott's close-up magic moves table to table, creating moments that connect two families who may be meeting for the first time. The Silver Lake setting, relaxed, intimate, intentional, makes those connections feel natural rather than forced.",
+    "Rehearsal dinners in Silver Lake happen at local restaurants, private dining rooms, and homes in the hills. The guest list is small and the evening is supposed to feel warm and personal. Once plates are cleared, Scott's close-up magic moves table to table, creating moments that connect two families who may be meeting for the first time. The Silver Lake setting, relaxed, intimate, intentional, makes those connections feel natural rather than forced.",
     "For couples hosting their rehearsal dinner in Silver Lake, Scott also offers the full Private Magic Show, 30 to 45 minutes of high-energy, interactive performance for the closest people in your life. Venues like The Paramour Estate and Elysian work beautifully for both the dinner and the show.",
   ],
   "silver-lake--halloween-party-magician": [
@@ -1965,7 +1965,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "White Rabbit has worked with Netflix, Disney, Paramount, and Rolls-Royce. Scott flies in from LA for Vegas industry events and fits into VIP rooms naturally, no production, no disruption, just world-class magic during the moments when people are gathered and open to something real.",
   ],
   "las-vegas--dmc-entertainment": [
-    "Destination management companies bringing groups to Las Vegas want entertainment that stands out from the Strip's noise. White Rabbit fits into curated Vegas itineraries: welcome reception magic at resort venues, dinner performances at private restaurants, and VIP experiences during hospitality events that give groups something personal and memorable between convention sessions.",
+    "Destination management companies bringing groups to Las Vegas want entertainment that stands out from the Strip's noise. White Rabbit fits into curated Vegas itineraries: welcome reception magic at resort venues, performances before or after dinner at private restaurants, and VIP experiences during hospitality events that give groups something personal and memorable between convention sessions.",
     "The magic works especially well during networking moments where attendees from different offices or regions are meeting for the first time. In Vegas, everyone's in a good mood and open to new experiences, which makes close-up magic land even harder. Guests bond over shared amazement and leave with a story that has nothing to do with the conference agenda. Scott flies in from LA and coordinates with DMC teams on timing and logistics.",
   ],
   "las-vegas--golf-tournament-magician": [
@@ -1978,7 +1978,7 @@ const citySpecificOverrides: Record<string, string[]> = {
   ],
   // ── Brentwood ────────────────────────────────────────────────────────
   "brentwood--corporate-event-magician": [
-    "Corporate events in Brentwood are rare, and that's the point. When they happen, they're intimate executive dinners, partner retreats, or client appreciation evenings hosted at private homes or members-only spots along San Vicente. The guest list is small and the expectations are high. Scott's close-up magic fits these settings because it's personal, quiet, and impossible to ignore when it's happening in your hands across the dinner table.",
+    "Corporate events in Brentwood are rare, and that's the point. When they happen, they're intimate executive dinners, partner retreats, or client appreciation evenings hosted at private homes or members-only spots along San Vicente. The guest list is small and the expectations are high. Scott's close-up magic fits these settings because it's personal, quiet, and impossible to ignore when it happens in your hands before the meal or once plates are cleared.",
     "The Brentwood corporate crowd is senior-level, managing partners, C-suite executives, entertainment lawyers. These aren't people who want a show. They want something that sparks real conversation and gives the evening a moment everyone remembers. Scott reads the room, matches the energy, and delivers magic that feels like it belongs at the table, not on a stage.",
   ],
   "brentwood--private-party-magician": [
@@ -2018,12 +2018,12 @@ const citySpecificOverrides: Record<string, string[]> = {
     "The Brentwood crowd is smart, successful, and used to being in control. Mentalism works on them because it challenges that control in a way that's thrilling, not threatening. When a managing partner or studio head can't explain how Scott knew what they were thinking, the room comes alive. It's the kind of moment that becomes the story of the party.",
   ],
   "brentwood--rehearsal-dinner-magician": [
-    "Rehearsal dinners in Brentwood are intimate by nature, close family, the wedding party, maybe thirty or forty people at a restaurant or private home. Scott's close-up magic during cocktails gives the group something to bond over the night before the big day. He reads the room, keeps it warm and personal, and creates moments that the wedding party will reference during toasts the next afternoon.",
+    "Rehearsal dinners in Brentwood are intimate by nature, close family, the wedding party, maybe thirty or forty people at a restaurant or private home. Scott's close-up magic before the meal gives the group something to bond over the night before the big day. He reads the room, keeps it warm and personal, and creates moments that the wedding party will reference during toasts the next afternoon.",
     "The magic works especially well at rehearsal dinners because the audience is small and connected. Everyone knows each other, the mood is celebratory, and people are relaxed enough to be genuinely surprised. Scott tailors the experience to the couple and their crowd, making the rehearsal dinner feel like its own event, not just a preview.",
   ],
   "brentwood--halloween-party-magician": [
     "Halloween in Brentwood means neighborhood parties, costume dinners, and gatherings where the hosts go all-in on atmosphere. Scott's mentalism and close-up magic fit the Halloween mood perfectly, mind-reading, predictions, and impossible moments that feel a little bit eerie in the best way. It's not a haunted house. It's something real and unexplainable happening right in front of you.",
-    "The format works for adult Halloween parties, themed dinners, and any gathering where the host wants the entertainment to match the atmosphere. In Brentwood's quiet, leafy setting, the contrast between the beautiful home and something genuinely mysterious happening at the dinner table makes the experience hit even harder.",
+    "The format works for adult Halloween parties, themed dinners, and any gathering where the host wants the entertainment to match the atmosphere. In Brentwood's quiet, leafy setting, the contrast between the beautiful home and something genuinely mysterious happening before the meal or once plates are cleared makes the experience hit even harder.",
   ],
   "brentwood--christmas-party-magician": [
     "Christmas parties and New Year's Eve gatherings in Brentwood are warm, home-hosted celebrations, fireplaces, good wine, and guests who've known each other for years. Scott's close-up magic adds a spark to these evenings without changing the tone. He performs for small groups during cocktails, and the reactions spread naturally. By dessert, everyone's talking about what they saw.",
@@ -2034,7 +2034,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "White Rabbit has worked with Netflix, Disney, Paramount, and Rolls-Royce. Scott performs regularly in Brentwood for entertainment industry clients who want something their guests haven't seen before. In a neighborhood full of people who make entertainment for a living, that's a high bar, and it's exactly where Scott operates best.",
   ],
   "brentwood--dmc-entertainment": [
-    "Brentwood isn't a typical DMC destination, but for groups doing a curated LA experience, visiting the Getty Center, dining along San Vicente, or attending a private event in the neighborhood. White Rabbit adds an entertainment layer that makes the itinerary unforgettable. Scott performs during welcome receptions, private dinners, and intimate group gatherings.",
+    "Brentwood isn't a typical DMC destination, but for groups doing a curated LA experience, visiting the Getty Center, dining along San Vicente, or attending a private event in the neighborhood. White Rabbit adds an entertainment layer that makes the itinerary unforgettable. Scott performs during welcome receptions, before or after private dinners, and at intimate group gatherings.",
     "The magic works especially well for incentive travel groups and executive retreats where the attendees are high-level and hard to impress. Close-up magic and mentalism cut through the usual entertainment options and give people something genuinely surprising to talk about over dinner. Scott coordinates with DMC teams on timing and logistics.",
   ],
   "brentwood--resident-event-magician": [
@@ -2064,7 +2064,7 @@ const citySpecificOverrides: Record<string, string[]> = {
   ],
   "los-feliz--golf-tournament-magician": [
     "Golf tournaments near Los Feliz, at courses in Griffith Park and nearby clubs, host their post-round receptions at the clubhouse. White Rabbit fills the gap between the last putt and the first toast with roaming close-up magic that keeps players and sponsors engaged. The 19th-hole magic consistently becomes the most talked-about part of the tournament day.",
-    "Scott also serves as MC for the awards dinner when needed, keeping the flow tight from cocktails through trophies. The format is flexible: roaming magic during cocktails, a short stage set during dinner, or both. Sponsors get genuine face time with their audience, and players get a story that's better than any hole-in-one they didn't make.",
+    "Scott also serves as MC for the awards dinner when needed, keeping the flow tight from cocktails through trophies. The format is flexible: roaming magic during cocktails, a short stage set before or after dinner, or both. Sponsors get genuine face time with their audience, and players get a story that's better than any hole-in-one they didn't make.",
   ],
   "los-feliz--charity-gala-magician": [
     "Charity galas in Los Feliz tend to be community-driven, arts organizations, neighborhood causes, school fundraisers, with guest lists full of people who live in the area and care about the mission. Scott's close-up magic during the cocktail hour gives guests something to bond over before the program begins. When people are energized and connected, they bid higher and give more freely.",
@@ -2083,11 +2083,11 @@ const citySpecificOverrides: Record<string, string[]> = {
     "The Los Feliz crowd, actors, writers, musicians, directors, is used to being entertained professionally. They know how stories work, they understand performance, and they're not easy to fool. Mentalism works on them because it operates on a different level. When Scott knows what someone was thinking, the room goes quiet for a second before it erupts. That moment is why people book White Rabbit.",
   ],
   "los-feliz--rehearsal-dinner-magician": [
-    "Rehearsal dinners in Los Feliz are intimate, close family, the wedding party, maybe thirty people at a neighborhood restaurant or someone's home. Scott's close-up magic during cocktails gives the group something to bond over the night before the big day. He keeps it warm and personal, and creates moments that the wedding party will reference during toasts the next afternoon.",
+    "Rehearsal dinners in Los Feliz are intimate, close family, the wedding party, maybe thirty people at a neighborhood restaurant or someone's home. Scott's close-up magic before the meal gives the group something to bond over the night before the big day. He keeps it warm and personal, and creates moments that the wedding party will reference during toasts the next afternoon.",
     "The magic works especially well at rehearsal dinners because the audience is small and connected. Everyone knows each other, the mood is celebratory, and people are relaxed enough to be genuinely surprised. In a neighborhood as charming as Los Feliz, the evening already has character. Scott just adds a moment nobody saw coming.",
   ],
   "los-feliz--halloween-party-magician": [
-    "Halloween in Los Feliz is a neighborhood event, the streets come alive, the houses go all-out, and the house parties are some of the best in LA. Scott's mentalism and close-up magic fit the Halloween mood perfectly, mind-reading, predictions, and impossible moments that feel a little eerie in the best way. It's not a haunted house. It's something real and unexplainable happening at the dinner table.",
+    "Halloween in Los Feliz is a neighborhood event, the streets come alive, the houses go all-out, and the house parties are some of the best in LA. Scott's mentalism and close-up magic fit the Halloween mood perfectly, mind-reading, predictions, and impossible moments that feel a little eerie in the best way. It's not a haunted house. It's something real and unexplainable happening before the meal or once plates are cleared.",
     "The Los Feliz Halloween crowd goes hard on atmosphere, and Scott matches that energy. The format works for costume parties, themed dinners, and any gathering where the host wants entertainment that feels like it belongs in the neighborhood's spooky, artistic spirit.",
   ],
   "los-feliz--christmas-party-magician": [
@@ -2099,7 +2099,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "White Rabbit has worked with Netflix, Disney, Paramount, and Rolls-Royce. In a neighborhood full of people who understand performance, Scott's magic stands out because it doesn't feel like a performance. It feels like something that shouldn't be possible, and that's what gets the Los Feliz crowd talking.",
   ],
   "los-feliz--dmc-entertainment": [
-    "Los Feliz isn't a typical DMC stop, but for groups doing a curated LA experience, visiting Griffith Observatory, exploring the neighborhood's old Hollywood architecture, dining along Hillhurst or Vermont. White Rabbit adds an entertainment layer that makes the evening unforgettable. Scott performs during welcome receptions, private dinners, and intimate group gatherings.",
+    "Los Feliz isn't a typical DMC stop, but for groups doing a curated LA experience, visiting Griffith Observatory, exploring the neighborhood's old Hollywood architecture, dining along Hillhurst or Vermont. White Rabbit adds an entertainment layer that makes the evening unforgettable. Scott performs during welcome receptions, before or after private dinners, and at intimate group gatherings.",
     "The magic works especially well for incentive travel groups and executive retreats where the attendees are culturally aware and hard to impress. Close-up magic and mentalism cut through the usual entertainment options and give people something genuinely surprising to talk about. Scott coordinates with DMC teams on timing, venue, and logistics.",
   ],
   "los-feliz--resident-event-magician": [
@@ -2133,7 +2133,7 @@ const citySpecificOverrides: Record<string, string[]> = {
   ],
   "manhattan-beach--charity-gala-magician": [
     "Charity galas in Manhattan Beach are community events, school fundraisers, local nonprofit dinners, and beach community causes that bring the neighborhood together. Scott's close-up magic during the cocktail hour gives guests something to bond over before the program begins. When people are energized and connected, they bid higher and give more freely. That's not a theory, it's what hosts tell Scott after every gala.",
-    "The format is flexible: roaming magic during cocktails, a short stage set during dinner, or both. For the Manhattan Beach gala crowd, generous, social, and used to attending these events, the magic provides something unexpected that makes this year's event stand out from last year's.",
+    "The format is flexible: roaming magic during cocktails, a short stage set before or after dinner, or both. For the Manhattan Beach gala crowd, generous, social, and used to attending these events, the magic provides something unexpected that makes this year's event stand out from last year's.",
   ],
   "manhattan-beach--holiday-party-magician": [
     "Holiday parties in Manhattan Beach are backyard affairs and beach house gatherings, lights on the patio, good food, and guests who live within walking distance. Scott's close-up magic adds something unexpected to these evenings without changing the relaxed South Bay vibe. He moves through the party, performs for small groups, and the reactions spread naturally.",
@@ -2148,11 +2148,11 @@ const citySpecificOverrides: Record<string, string[]> = {
     "The Manhattan Beach crowd is smart, successful, and used to being in control. Mentalism works on them because it challenges that control in a way that's thrilling and fun. When a tech CEO or a pro athlete can't explain how Scott knew what they were thinking, the room loses it. That's the kind of moment that makes a party legendary.",
   ],
   "manhattan-beach--rehearsal-dinner-magician": [
-    "Rehearsal dinners in Manhattan Beach are intimate and relaxed, close family and the wedding party at a local restaurant or someone's beach house. Scott's close-up magic during cocktails gives the group something to bond over the night before the big day. He keeps it warm and personal, and creates moments that get referenced in toasts the next afternoon.",
+    "Rehearsal dinners in Manhattan Beach are intimate and relaxed, close family and the wedding party at a local restaurant or someone's beach house. Scott's close-up magic before the meal gives the group something to bond over the night before the big day. He keeps it warm and personal, and creates moments that get referenced in toasts the next afternoon.",
     "The magic works especially well at rehearsal dinners because the audience is small and connected. Everyone knows each other, the mood is celebratory, and the South Bay setting keeps everyone relaxed and open. Scott tailors the experience to the couple and their crowd, making the rehearsal dinner feel like its own event.",
   ],
   "manhattan-beach--halloween-party-magician": [
-    "Halloween in Manhattan Beach means neighborhood parties, costume gatherings at beach houses, and themed dinners where the hosts go all-in. Scott's mentalism and close-up magic fit the Halloween mood perfectly, mind-reading, predictions, and impossible moments that feel a little eerie in the best way. It's not a haunted house. It's something real and unexplainable happening at the dinner table.",
+    "Halloween in Manhattan Beach means neighborhood parties, costume gatherings at beach houses, and themed dinners where the hosts go all-in. Scott's mentalism and close-up magic fit the Halloween mood perfectly, mind-reading, predictions, and impossible moments that feel a little eerie in the best way. It's not a haunted house. It's something real and unexplainable happening before the meal or once plates are cleared.",
     "The South Bay Halloween crowd is fun and competitive about their parties, which means the entertainment needs to match. Scott brings the right energy, mysterious enough for the theme, social enough for the setting. The format works for costume parties, themed dinners, and any gathering where the host wants their party to be the one people talk about.",
   ],
   "manhattan-beach--christmas-party-magician": [
@@ -2164,7 +2164,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "White Rabbit has worked with Netflix, Disney, Paramount, and Rolls-Royce. Scott performs in the South Bay regularly for industry clients who want something their guests haven't seen before, and the beach house setting makes every reaction feel more genuine.",
   ],
   "manhattan-beach--dmc-entertainment": [
-    "Manhattan Beach isn't a typical DMC destination, but for groups doing a curated LA beach experience, South Bay tours, ocean-view dinners, team-building retreats. White Rabbit adds entertainment that makes the evening unforgettable. Scott performs during welcome receptions, private dinners, and group gatherings at local restaurants and beach venues.",
+    "Manhattan Beach isn't a typical DMC destination, but for groups doing a curated LA beach experience, South Bay tours, ocean-view dinners, team-building retreats. White Rabbit adds entertainment that makes the evening unforgettable. Scott performs during welcome receptions, before or after private dinners, and at group gatherings at local restaurants and beach venues.",
     "The magic works especially well for incentive travel groups where attendees are relaxed from a day at the beach and open to something unexpected. Close-up magic and mentalism cut through the usual entertainment options and give people something genuinely surprising to talk about. Scott coordinates with DMC teams on timing and logistics.",
   ],
   "manhattan-beach--resident-event-magician": [
@@ -2174,7 +2174,7 @@ const citySpecificOverrides: Record<string, string[]> = {
   // ── Encino ───────────────────────────────────────────────────────────
   "encino--corporate-event-magician": [
     "Corporate events in Encino happen at restaurants along Ventura Boulevard, at private estates in the Encino Hills, and at Valley-based companies that want to host clients somewhere comfortable and impressive. The guest list tends to be senior professionals, entertainment executives, financial advisors, real estate developers, who live in the Valley because they want space without giving up access. Scott's close-up magic fits these events because it's polished and personal without being fussy.",
-    "The Encino corporate crowd is successful and well-traveled but doesn't want anything pretentious. They want entertainment that sparks real conversation and gives the evening a moment everyone remembers. Scott reads the room, keeps it sharp, and delivers magic that feels like it belongs at the dinner table, not on a stage somewhere.",
+    "The Encino corporate crowd is successful and well-traveled but doesn't want anything pretentious. They want entertainment that sparks real conversation and gives the evening a moment everyone remembers. Scott reads the room, keeps it sharp, and delivers magic that feels like it belongs before the meal or once plates are cleared, not on a stage somewhere.",
   ],
   "encino--private-party-magician": [
     "Private parties in Encino happen at sprawling Valley estates, big backyards, pools, and enough space that the party spreads out naturally. Birthday milestones, anniversary celebrations, holiday gatherings, graduation parties, the hosts put effort into the details and want entertainment that matches without trying too hard. Scott's close-up magic fits perfectly. He moves through the party performing for small groups, and the reactions ripple through the yard naturally.",
@@ -2198,7 +2198,7 @@ const citySpecificOverrides: Record<string, string[]> = {
   ],
   "encino--charity-gala-magician": [
     "Charity galas in Encino are community events, school fundraisers, synagogue galas, local nonprofit dinners, and neighborhood causes that bring the Valley's generous families together. Scott's close-up magic during the cocktail hour gives guests something to bond over before the program begins. When people are energized and connected, they bid higher and give more freely.",
-    "The format is flexible: roaming magic during cocktails, a short stage set during dinner, or both. For the Encino gala crowd, generous, family-oriented, and used to attending these events, the magic provides something unexpected that makes this year's event the one people remember.",
+    "The format is flexible: roaming magic during cocktails, a short stage set before or after dinner, or both. For the Encino gala crowd, generous, family-oriented, and used to attending these events, the magic provides something unexpected that makes this year's event the one people remember.",
   ],
   "encino--holiday-party-magician": [
     "Holiday parties in Encino are home-hosted celebrations on a bigger scale than most neighborhoods, big houses, big guest lists, and hosts who go all-in on making the evening special. Scott's close-up magic adds something unexpected without competing with the party. He moves through the room, performs for small groups, and the reactions become the soundtrack of the evening.",
@@ -2213,7 +2213,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "The Encino crowd is used to being in control, running companies, managing deals, making decisions. Mentalism works on them because it challenges that control in a way that's thrilling and fun. When a managing partner or studio executive can't explain how Scott knew what they were thinking, the room comes alive.",
   ],
   "encino--rehearsal-dinner-magician": [
-    "Rehearsal dinners in Encino are intimate family affairs, close relatives, the wedding party, maybe thirty or forty people at a restaurant on Ventura Boulevard or at someone's home in the Hills. Scott's close-up magic during cocktails gives the group something to bond over the night before the big day. He keeps it warm and personal, and creates moments that get referenced in toasts the next afternoon.",
+    "Rehearsal dinners in Encino are intimate family affairs, close relatives, the wedding party, maybe thirty or forty people at a restaurant on Ventura Boulevard or at someone's home in the Hills. Scott's close-up magic before the meal gives the group something to bond over the night before the big day. He keeps it warm and personal, and creates moments that get referenced in toasts the next afternoon.",
     "The magic works especially well at rehearsal dinners because the audience is small and connected. Everyone knows each other, the mood is celebratory, and people are relaxed enough to be genuinely surprised. Scott tailors the experience to the couple and their crowd, making the rehearsal dinner feel like its own event.",
   ],
   "encino--halloween-party-magician": [
@@ -2229,7 +2229,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "White Rabbit has worked with Netflix, Disney, Paramount, and Rolls-Royce. Scott performs in the Valley regularly for industry clients who want something their guests haven't seen before. In a neighborhood full of people who know how hard it is to genuinely surprise an audience, that's a high bar, and it's exactly where Scott operates best.",
   ],
   "encino--dmc-entertainment": [
-    "Encino isn't a typical DMC destination, but for groups doing a curated Valley or greater LA experience, White Rabbit adds entertainment that makes the evening unforgettable. Scott performs during welcome receptions, private dinners, and group gatherings at local restaurants and private estates.",
+    "Encino isn't a typical DMC destination, but for groups doing a curated Valley or greater LA experience, White Rabbit adds entertainment that makes the evening unforgettable. Scott performs during welcome receptions, before or after private dinners, and at group gatherings at local restaurants and private estates.",
     "The magic works especially well for incentive travel groups and executive retreats where the attendees are senior-level and hard to impress. Close-up magic and mentalism give people something genuinely surprising to talk about over dinner. Scott coordinates with DMC teams on timing, venue, and logistics.",
   ],
   "encino--resident-event-magician": [
@@ -2239,7 +2239,7 @@ const citySpecificOverrides: Record<string, string[]> = {
   // ── Pacific Palisades ────────────────────────────────────────────────
   "pacific-palisades--corporate-event-magician": [
     "Corporate events in Pacific Palisades are rare and intentional, executive dinners at canyon estates, partner retreats hosted at private homes, and client appreciation evenings where the guest list is small and the view is the Pacific. The Palisades crowd is senior-level, family-oriented, and unimpressed by anything that feels like a production. Scott's close-up magic fits because it's personal, conversational, and sharp enough to surprise people who've been to a thousand events.",
-    "The format works beautifully here: Scott moves through the gathering performing for small groups during cocktails or between courses, and the magic sparks exactly the kind of conversation the host was hoping for. No stage, no AV, no formality, just something impossible happening while the sun sets behind the ocean.",
+    "The format works beautifully here: Scott moves through the gathering performing for small groups during cocktails or once plates are cleared between courses, and the magic sparks exactly the kind of conversation the host was hoping for. No stage, no AV, no formality, just something impossible happening while the sun sets behind the ocean.",
   ],
   "pacific-palisades--private-party-magician": [
     "Private parties in Pacific Palisades happen at canyon homes, oceanview estates, and backyards where the Pacific is the backdrop. Birthday milestones, anniversary celebrations, holiday gatherings, the hosts care about every detail and want entertainment that matches the setting without overwhelming it. Scott's close-up magic is perfect for this. He moves through the party performing for small groups, and the reactions spread naturally across the yard.",
@@ -2278,7 +2278,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "The Palisades crowd is sharp, successful, and used to being the smartest person in the room. Mentalism works on them because it challenges that in a way that's thrilling and fun. When Scott knows what someone was thinking, really knows, the room goes quiet for a beat before it erupts. That's the moment that makes a party legendary.",
   ],
   "pacific-palisades--rehearsal-dinner-magician": [
-    "Rehearsal dinners in the Palisades are intimate, close family, the wedding party, maybe thirty people at a local restaurant or someone's canyon home. Scott's close-up magic during cocktails gives the group something to bond over the night before the big day. He keeps it warm and personal, and creates moments that get referenced in toasts the next afternoon.",
+    "Rehearsal dinners in the Palisades are intimate, close family, the wedding party, maybe thirty people at a local restaurant or someone's canyon home. Scott's close-up magic before the meal gives the group something to bond over the night before the big day. He keeps it warm and personal, and creates moments that get referenced in toasts the next afternoon.",
     "The magic works especially well at rehearsal dinners because the audience is small and connected. In a setting as beautiful as the Palisades, the evening already has character. Scott just adds a moment nobody saw coming.",
   ],
   "pacific-palisades--halloween-party-magician": [
@@ -2294,7 +2294,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "White Rabbit has worked with Netflix, Disney, Paramount, and Rolls-Royce. Scott performs on the Westside regularly for industry clients who want something their guests haven't seen before. The Palisades setting, beautiful, private, intimate, makes every reaction feel more genuine.",
   ],
   "pacific-palisades--dmc-entertainment": [
-    "Pacific Palisades isn't a typical DMC stop, but for groups doing a curated coastal LA experience, Malibu to Santa Monica itineraries, oceanview dinners, executive retreats at canyon estates. White Rabbit adds entertainment that makes the evening unforgettable. Scott performs during welcome receptions, private dinners, and intimate group gatherings.",
+    "Pacific Palisades isn't a typical DMC stop, but for groups doing a curated coastal LA experience, Malibu to Santa Monica itineraries, oceanview dinners, executive retreats at canyon estates. White Rabbit adds entertainment that makes the evening unforgettable. Scott performs during welcome receptions, before or after private dinners, and at intimate group gatherings.",
     "The magic works especially well for incentive travel groups where the setting is already stunning and the attendees are senior-level. Close-up magic and mentalism give people something genuinely surprising that matches the beauty of the Palisades. Scott coordinates with DMC teams on timing and logistics.",
   ],
   "pacific-palisades--resident-event-magician": [
@@ -2343,7 +2343,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "The SF crowd is analytical, curious, and competitive about figuring things out. Mentalism works on them because it operates outside the framework they're used to. When a CTO or a venture partner can't explain how Scott knew what they were thinking, the room shifts. That moment, the one where the smartest person in the room has no answer, is what makes mentalism unforgettable.",
   ],
   "san-francisco--rehearsal-dinner-magician": [
-    "Rehearsal dinners in San Francisco are intimate, close family, the wedding party, maybe thirty people at a restaurant in North Beach or a private dining room on Nob Hill. Scott's close-up magic during cocktails gives the group something to bond over the night before the big day. He keeps it warm and personal, and creates moments that get referenced in toasts the next afternoon.",
+    "Rehearsal dinners in San Francisco are intimate, close family, the wedding party, maybe thirty people at a restaurant in North Beach or a private dining room on Nob Hill. Scott's close-up magic before the meal gives the group something to bond over the night before the big day. He keeps it warm and personal, and creates moments that get referenced in toasts the next afternoon.",
     "Scott flies in from LA for San Francisco rehearsal dinner bookings, and wine country rehearsal dinners in Napa or Sonoma are also a natural fit. The smaller group makes the magic even more personal, and the relaxed pre-wedding energy means guests are open and ready to be surprised.",
   ],
   "san-francisco--halloween-party-magician": [
@@ -2359,7 +2359,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "White Rabbit has worked with Netflix, Disney, Paramount, and Rolls-Royce. Scott flies in from LA for San Francisco industry events and fits into VIP rooms naturally. In a city that prides itself on seeing the future first, something genuinely unexplainable happening in your hands still gets the biggest reaction in the room.",
   ],
   "san-francisco--dmc-entertainment": [
-    "Destination management companies bringing groups to San Francisco want entertainment that stands out from the typical cable car tour and Fisherman's Wharf dinner. White Rabbit fits into curated SF itineraries: welcome reception magic at hotel venues, dinner performances at private restaurants, and VIP experiences that give groups something personal and memorable between conference sessions.",
+    "Destination management companies bringing groups to San Francisco want entertainment that stands out from the typical cable car tour and Fisherman's Wharf dinner. White Rabbit fits into curated SF itineraries: welcome reception magic at hotel venues, performances before or after dinner at private restaurants, and VIP experiences that give groups something personal and memorable between conference sessions.",
     "The magic works especially well during networking moments where attendees from different offices or regions are meeting for the first time. Close-up magic breaks the ice faster than any icebreaker exercise, and guests bond over shared amazement rather than awkward small talk. Scott flies in from LA and coordinates with DMC teams on timing and logistics.",
   ],
   "san-francisco--resident-event-magician": [
@@ -2408,11 +2408,11 @@ const citySpecificOverrides: Record<string, string[]> = {
     "That directness is what makes performing mentalism in Chicago so rewarding. There's no pretense, no playing it cool. When a managing partner or a Fortune 500 executive can't explain how Scott knew what they were thinking, the whole table hears about it. Scott flies in from LA for Chicago mentalism bookings, and the city is one of his favorite audiences in the country.",
   ],
   "chicago--rehearsal-dinner-magician": [
-    "Rehearsal dinners in Chicago are intimate, close family, the wedding party, maybe thirty people at a neighborhood restaurant in Lincoln Park or a private dining room downtown. Scott's close-up magic during cocktails gives the group something to bond over the night before the big day. He keeps it warm and personal, and creates moments that get referenced in toasts the next afternoon.",
+    "Rehearsal dinners in Chicago are intimate, close family, the wedding party, maybe thirty people at a neighborhood restaurant in Lincoln Park or a private dining room downtown. Scott's close-up magic before the meal gives the group something to bond over the night before the big day. He keeps it warm and personal, and creates moments that get referenced in toasts the next afternoon.",
     "Scott flies in from LA for Chicago rehearsal dinner bookings. The smaller group makes the magic even more personal, and the celebratory pre-wedding energy means guests are open and ready to be surprised. Chicago rehearsal dinner crowds are warm and vocal, which makes every reaction contagious.",
   ],
   "chicago--halloween-party-magician": [
-    "Halloween in Chicago has serious energy, costume parties, themed dinners, and gatherings where the hosts go all-in on atmosphere. Scott's mentalism and close-up magic fit the Halloween mood perfectly, mind-reading, predictions, and impossible moments that feel a little eerie in the best way. A dark October evening in a Gold Coast brownstone with mentalism happening at the dinner table is a combination that works every time.",
+    "Halloween in Chicago has serious energy, costume parties, themed dinners, and gatherings where the hosts go all-in on atmosphere. Scott's mentalism and close-up magic fit the Halloween mood perfectly, mind-reading, predictions, and impossible moments that feel a little eerie in the best way. A dark October evening in a Gold Coast brownstone with mentalism happening before the meal or once plates are cleared is a combination that works every time.",
     "The format works for adult Halloween parties, themed corporate events, and any gathering where the host wants entertainment that matches the atmosphere. Scott flies in from LA for Chicago Halloween bookings.",
   ],
   "chicago--christmas-party-magician": [
@@ -2424,7 +2424,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "White Rabbit has worked with Netflix, Disney, Paramount, and Rolls-Royce. Scott flies in from LA for Chicago industry events and fits into VIP settings naturally. The magic works because it's real and personal in a way that stage shows and DJs can't match.",
   ],
   "chicago--dmc-entertainment": [
-    "Destination management companies bringing groups to Chicago want entertainment that stands out from the architecture tour and deep-dish dinner. White Rabbit fits into curated Chicago itineraries: welcome reception magic at downtown hotels, dinner performances at private restaurants, and VIP experiences that give groups something personal and memorable between convention sessions at McCormick Place.",
+    "Destination management companies bringing groups to Chicago want entertainment that stands out from the architecture tour and deep-dish dinner. White Rabbit fits into curated Chicago itineraries: welcome reception magic at downtown hotels, performances before or after dinner at private restaurants, and VIP experiences that give groups something personal and memorable between convention sessions at McCormick Place.",
     "The magic works especially well during networking moments where attendees from different offices or regions are meeting for the first time. Close-up magic breaks the ice faster than any icebreaker exercise, and guests bond over shared amazement rather than awkward small talk. Scott flies in from LA and coordinates with DMC teams on timing and logistics.",
   ],
   "chicago--resident-event-magician": [
@@ -2465,7 +2465,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "The format is flexible and requires zero setup. Scott arrives, reads the room, and starts performing where the energy is right. He adjusts to the crowd, more mentalism for a sophisticated corporate group, more visual magic for a lively birthday party. Long Beach cocktail hours have a relaxed social energy that makes them some of Scott's favorite events to work.",
   ],
   "long-beach--corporate-dinner-magician": [
-    "Corporate dinners in Long Beach happen at waterfront restaurants, hotel private dining rooms, and venues near the convention center where the food is excellent and the conversation matters. Scott performs between courses, moving from table to table with close-up magic that gives each group their own impossible moment. The magic breaks down the hierarchy, suddenly the CEO and the new hire are reacting to the same thing, and the table dynamic shifts.",
+    "Corporate dinners in Long Beach happen at waterfront restaurants, hotel private dining rooms, and venues near the convention center where the food is excellent and the conversation matters. Once plates are cleared between courses, Scott moves from table to table with close-up magic that gives each group their own impossible moment. The magic breaks down the hierarchy, suddenly the CEO and the new hire are reacting to the same thing, and the table dynamic shifts.",
     "These performances are quiet, sophisticated, and built for the intimate setting of a seated dinner. Scott reads the room and adjusts, more mentalism for an executive group, more interactive magic for a team celebration. The Long Beach dining scene is strong enough that hosts put real thought into these evenings, and the entertainment should match that effort.",
   ],
   "long-beach--birthday-party-magician": [
@@ -2530,7 +2530,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "The format is flexible and requires zero setup. Scott arrives, reads the room, and starts performing where the energy is right. Dallas cocktail hours have a social warmth that makes them some of his favorite events to work. People here don't hold back, and that makes the magic land every single time.",
   ],
   "dallas--corporate-dinner-magician": [
-    "Corporate dinners in Dallas happen at Uptown steakhouses, Arts District private dining rooms, and hotel venues where the food is serious and the relationships matter. Scott performs between courses, moving from table to table with close-up magic that gives each group their own impossible moment. The magic breaks down the hierarchy, suddenly the managing partner and the associate are reacting to the same thing, and the table feels different.",
+    "Corporate dinners in Dallas happen at Uptown steakhouses, Arts District private dining rooms, and hotel venues where the food is serious and the relationships matter. Once plates are cleared between courses, Scott moves from table to table with close-up magic that gives each group their own impossible moment. The magic breaks down the hierarchy, suddenly the managing partner and the associate are reacting to the same thing, and the table feels different.",
     "These performances are sophisticated, quiet, and built for the intimate setting of a seated dinner. Scott reads the room and adjusts, more mentalism for a buttoned-up executive group, more interactive magic for a team celebration. Dallas takes its corporate dining seriously, and the entertainment should match that effort. Scott flies in from LA for these bookings.",
   ],
   "dallas--birthday-party-magician": [
@@ -2595,7 +2595,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "The format is flexible and requires zero setup. Scott arrives, reads the room, and starts performing where the energy is right. Houston cocktail hours have a social warmth that makes them some of his favorite events. People here are genuinely hospitable, and that openness makes the magic land every single time.",
   ],
   "houston--corporate-dinner-magician": [
-    "Corporate dinners in Houston happen at steakhouses downtown, private dining rooms in the Galleria area, and hotel venues where the food is serious and the relationships matter. The city's international business community means these dinners often include guests from different countries and cultures, and close-up magic is one of the few forms of entertainment that connects across every barrier. Scott performs between courses, and the shared amazement creates genuine bonding.",
+    "Corporate dinners in Houston happen at steakhouses downtown, private dining rooms in the Galleria area, and hotel venues where the food is serious and the relationships matter. The city's international business community means these dinners often include guests from different countries and cultures, and close-up magic is one of the few forms of entertainment that connects across every barrier. Once plates are cleared between courses, Scott performs, and the shared amazement creates genuine bonding.",
     "These performances are sophisticated, conversational, and built for the intimate setting of a seated dinner. Scott reads the room and adjusts, more mentalism for an executive group, more interactive magic for a team celebration. Houston takes its corporate dining seriously, and the entertainment should match that effort. Scott flies in from LA for these bookings.",
   ],
   "houston--birthday-party-magician": [
@@ -2660,7 +2660,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "The format is flexible and requires zero setup. Scott arrives, reads the room, and starts performing where the energy is right. Atlanta cocktail hours have a social warmth that makes them some of his favorite events. People here are genuinely hospitable, and that openness makes the magic land every single time.",
   ],
   "atlanta--corporate-dinner-magician": [
-    "Corporate dinners in Atlanta happen at Buckhead steakhouses, Midtown private dining rooms, and hotel venues where the food is excellent and the relationships matter. Scott performs between courses, moving from table to table with close-up magic that gives each group their own impossible moment. The magic breaks down the corporate hierarchy, suddenly the VP and the new hire are reacting to the same thing, and the table dynamic shifts.",
+    "Corporate dinners in Atlanta happen at Buckhead steakhouses, Midtown private dining rooms, and hotel venues where the food is excellent and the relationships matter. Once plates are cleared between courses, Scott moves from table to table with close-up magic that gives each group their own impossible moment. The magic breaks down the corporate hierarchy, suddenly the VP and the new hire are reacting to the same thing, and the table dynamic shifts.",
     "These performances are sophisticated, conversational, and built for the intimate setting of a seated dinner. Scott reads the room and adjusts, more mentalism for an executive group, more interactive magic for a team celebration. Atlanta takes its dining seriously, and the entertainment should match that effort. Scott flies in from LA for these bookings.",
   ],
   "atlanta--birthday-party-magician": [
@@ -2725,7 +2725,7 @@ const citySpecificOverrides: Record<string, string[]> = {
     "Nashville cocktail hours have a warmth that makes them some of Scott's favorite events. People here are genuinely social, not just polite, but actually interested in each other. That openness makes the magic land harder and spread faster through the room. Scott flies in from LA and the format requires zero setup.",
   ],
   "nashville--corporate-dinner-magician": [
-    "Corporate dinners in Nashville happen at downtown steakhouses, private dining rooms in the Gulch, and hotel venues where the hospitality is serious and the relationships matter. Scott performs between courses, moving from table to table with close-up magic that gives each group their own impossible moment. The magic breaks down corporate hierarchy, suddenly the CEO and the newest team member are reacting to the same thing, and the dinner conversation opens up.",
+    "Corporate dinners in Nashville happen at downtown steakhouses, private dining rooms in the Gulch, and hotel venues where the hospitality is serious and the relationships matter. Once plates are cleared between courses, Scott moves from table to table with close-up magic that gives each group their own impossible moment. The magic breaks down corporate hierarchy, suddenly the CEO and the newest team member are reacting to the same thing, and the dinner conversation opens up.",
     "These performances are sophisticated, conversational, and built for the intimate setting of a seated dinner. Scott reads the room and adjusts, more mentalism for an executive group, more interactive magic for a team celebration. Nashville takes its dining and hospitality seriously, and the entertainment should match. Scott flies in from LA for these bookings.",
   ],
   "nashville--birthday-party-magician": [
@@ -2851,7 +2851,7 @@ function generatePage(location: string, service: typeof serviceTypes[number]): S
         `Here's the truth about golf tournaments: the golf is great, but the post-round experience is where loyalty is built. Your players remember the 19th hole more than the 18th. Scott Syme transforms that dead zone into the highlight of the day with roaming close-up magic during cocktails, mentalism that reads the room, and the kind of energy that turns strangers into friends.`,
         `But the entertainment can start on the course itself. One of the most effective formats is stationing a magician at a signature hole where groups inevitably back up. Instead of standing around for five minutes waiting for the group ahead to clear, your players get a close-up magic performance right at the tee box. It turns dead time into the most talked-about moment of the round, and players arrive at the 19th hole already buzzing about the entertainment.`,
         `Scott is a proud member of the world-famous Magic Castle® in Hollywood, and his style is perfectly calibrated for the country club environment. Sophisticated, conversational, whiskey-in-hand entertainment that feels like it belongs at a private club. No stage required. No cheesy props. Just a master craftsman moving through the room creating impossible moments that spark genuine connection.`,
-        `Beyond the magic, Scott also serves as a professional MC and host, managing the flow from cocktail hour through dinner, awards, and auction. It's a hybrid offering that eliminates the need for a separate emcee while keeping energy high and pacing tight.`,
+        `Beyond the magic, Scott also serves as a professional MC and host, managing the flow from cocktail hour through the dinner program, awards, and auction. It's a hybrid offering that eliminates the need for a separate emcee while keeping energy high and pacing tight.`,
         `Available for charity tournaments, corporate golf outings, member-guest events, and private club celebrations across ${location}. Limited dates during peak golf season (April to October). Inquire now.`,
       ];
       break;
