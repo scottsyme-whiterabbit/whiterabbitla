@@ -5,7 +5,6 @@
 - [ ] Homepage brand logos: swap current block for actual businesses performed for (long-standing request).
 
 ## In progress
-- [ ] City page FAQ split: preserve Southern California answers and use destination travel wording elsewhere.
 - [ ] Mobile-first CRM/PWA pass: improve navigation, dense lists, forms, dialogs, and touch use across every admin screen without removing features.
 - [ ] PART A: Google sign-in for all admin pages (phase 1, alongside password)
   - [ ] Enable Google provider, disable open email signups
@@ -23,6 +22,7 @@
   - [ ] No unique constraint yet
 
 ## Done
+- City page FAQs now preserve local Southern California answers and use all-inclusive travel wording for destinations.
 - Final approved inquiry copy and safe Gmail markdown hyperlinks deployed; both inquiry crons remain disabled.
 - Inquiry email flow rebuilt: kill-switch schema, five-minute Gmail instant reply, two-step plain-text follow-up, and disabled follow-up schedule.
 - Proposal follow-up ladder, invoice reminders, manual-booked client emails, reviews page updates.
