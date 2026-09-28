@@ -97,6 +97,7 @@ async function syncDeal(deal: any) {
   const messages = list.messages || [];
   let newInbound = 0;
   let newOutbound = 0;
+  let humanOutboundAt: string | null = null; // latest outbound sent_at that was NOT automated (i.e. Scott wrote it himself)
   let latestInboundAt: string | null = null;
   let primaryThreadId: string | null = null;
 
@@ -183,6 +184,14 @@ async function syncDeal(deal: any) {
       if (!latestInboundAt || sentAt > latestInboundAt) latestInboundAt = sentAt;
     } else {
       newOutbound++;
+      // Automated mail (inquiry confirmation, follow ups) is logged in automated_gmail_sends.
+      // An outbound message with no ledger row is a genuine human reply from Scott.
+      const { data: automatedSend } = await supabase
+        .from("automated_gmail_sends")
+        .select("id")
+        .eq("gmail_message_id", m.id)
+        .maybeSingle();
+      if (!automatedSend && (!humanOutboundAt || sentAt > humanOutboundAt)) humanOutboundAt = sentAt;
     }
   }
 
@@ -214,7 +223,6 @@ async function syncDeal(deal: any) {
     updates.last_inbound_at = latestInboundAt;
     updates.hot_signal = true;
     updates.hot_reason = "Replied via Gmail";
-    if (deal.stage === "new") updates.stage = "contacted";
     // Halt any drip campaigns by marking newsletter contact reply_detected
     if (deal.contact_email) {
       await supabase
@@ -229,9 +237,15 @@ async function syncDeal(deal: any) {
     await supabase.from("deal_activity").insert({
       deal_id: deal.id,
       type: "stage_change",
-      title: deal.stage === "new" ? "Auto-advanced: New → Contacted (reply detected)" : "Reply detected — drips halted",
+      title: "Reply detected — drips halted",
       occurred_at: new Date().toISOString(),
     });
+  }
+
+  // Scott's own outbound reply (not automated) is what moves a 'new' deal to 'contacted'.
+  if (humanOutboundAt) {
+    if (deal.stage === "new") updates.stage = "contacted";
+    if (!deal.last_outreach_date || deal.last_outreach_date < humanOutboundAt) updates.last_outreach_date = humanOutboundAt;
   }
   await supabase.from("deals").update(updates).eq("id", deal.id);
 
@@ -273,7 +287,7 @@ serve(async (req) => {
 
     let dealsQuery = supabase
       .from("deals")
-      .select("id, contact_email, stage, gmail_thread_id, last_gmail_sync_at")
+      .select("id, contact_email, stage, gmail_thread_id, last_gmail_sync_at, last_outreach_date")
       .not("contact_email", "is", null)
       .not("stage", "in", "(completed,lost)")
       .order("updated_at", { ascending: false });
