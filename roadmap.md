@@ -22,6 +22,7 @@
   - [ ] No unique constraint yet
 
 ## Done
+- Inquiry email flow rebuilt: kill-switch schema, five-minute Gmail instant reply, two-step plain-text follow-up, and disabled follow-up schedule.
 - Proposal follow-up ladder, invoice reminders, manual-booked client emails, reviews page updates.
 
 ## Admin Google sign-in (phase 1) — DONE 2026-09-21

@@ -184,6 +184,38 @@ export type Database = {
           },
         ]
       }
+      automated_gmail_sends: {
+        Row: {
+          created_at: string
+          gmail_message_id: string
+          id: string
+          inquiry_id: string | null
+          kind: string
+        }
+        Insert: {
+          created_at?: string
+          gmail_message_id: string
+          id?: string
+          inquiry_id?: string | null
+          kind: string
+        }
+        Update: {
+          created_at?: string
+          gmail_message_id?: string
+          id?: string
+          inquiry_id?: string | null
+          kind?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automated_gmail_sends_inquiry_id_fkey"
+            columns: ["inquiry_id"]
+            isOneToOne: false
+            referencedRelation: "contact_inquiries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bounce_daily_log: {
         Row: {
           bounces_30d: number | null
@@ -467,6 +499,8 @@ export type Database = {
           followup_step: number
           guest_count: string | null
           id: string
+          instant_reply_message_id: string | null
+          instant_reply_sent_at: string | null
           location: string | null
           message: string | null
           name: string
@@ -475,6 +509,8 @@ export type Database = {
           phone: string | null
           recommendation: string | null
           reengaged_at: string | null
+          sequence_stopped_at: string | null
+          sequence_stopped_reason: string | null
           source: string
         }
         Insert: {
@@ -489,6 +525,8 @@ export type Database = {
           followup_step?: number
           guest_count?: string | null
           id?: string
+          instant_reply_message_id?: string | null
+          instant_reply_sent_at?: string | null
           location?: string | null
           message?: string | null
           name: string
@@ -497,6 +535,8 @@ export type Database = {
           phone?: string | null
           recommendation?: string | null
           reengaged_at?: string | null
+          sequence_stopped_at?: string | null
+          sequence_stopped_reason?: string | null
           source?: string
         }
         Update: {
@@ -511,6 +551,8 @@ export type Database = {
           followup_step?: number
           guest_count?: string | null
           id?: string
+          instant_reply_message_id?: string | null
+          instant_reply_sent_at?: string | null
           location?: string | null
           message?: string | null
           name?: string
@@ -519,6 +561,8 @@ export type Database = {
           phone?: string | null
           recommendation?: string | null
           reengaged_at?: string | null
+          sequence_stopped_at?: string | null
+          sequence_stopped_reason?: string | null
           source?: string
         }
         Relationships: []
@@ -2071,6 +2115,10 @@ export type Database = {
     Functions: {
       deals_awaiting_reply: { Args: never; Returns: Json }
       get_resident_opens_stats: { Args: never; Returns: Json }
+      stop_inquiry_sequence: {
+        Args: { p_email: string; p_reason: string }
+        Returns: undefined
+      }
       system_health: { Args: never; Returns: Json }
     }
     Enums: {
