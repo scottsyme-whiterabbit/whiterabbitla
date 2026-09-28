@@ -64,8 +64,9 @@ async function getSignature(): Promise<string> {
       const data = await r.json();
       const primary = (data.sendAs || []).find((s: any) => s.isPrimary) || (data.sendAs || [])[0];
       if (primary?.signature && primary.signature.trim().length > 0) {
-        cachedSignature = primary.signature;
-        return cachedSignature;
+        const signature = String(primary.signature);
+        cachedSignature = signature;
+        return signature;
       }
     } else {
       console.warn(`sendAs fetch ${r.status} — using fallback signature`);
