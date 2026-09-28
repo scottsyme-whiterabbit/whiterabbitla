@@ -288,7 +288,7 @@ export const ResidencyView = ({ data }: { data: VenuePitchData }) => {
               },
               {
                 t: "Two hours, table to table",
-                d: `Between the second course and dessert. Every booth, every two-top. ${data.session_hours} hours.`,
+                d: `Once plates are cleared, before dessert arrives. Every booth, every two-top. ${data.session_hours} hours.`,
               },
               {
                 t: "No microphone. No stage.",
