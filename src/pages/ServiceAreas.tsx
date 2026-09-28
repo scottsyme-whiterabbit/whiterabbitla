@@ -1,39 +1,79 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
 import QuizCTA from "@/components/QuizCTA";
 import threeStars from "@/assets/three-stars-gold.png";
 import { serviceAreas, getAreasByRegion, serviceAreaRegions } from "@/data/serviceAreas";
+import { cityHeroVideos } from "@/data/cityHeroVideos";
 import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
 const ServiceAreas = () => {
   const seoTitle = "Service Areas | White Rabbit Magic, Luxury Entertainment Nationwide";
-  const seoDescription = "White Rabbit brings world-class close-up magic and parlor shows to luxury events across 70+ cities, from Los Angeles to New York, Aspen to Miami.";
+  const seoDescription = "Close-up magic and private shows for luxury events across Southern California and select destinations, from Aspen to the Hamptons.";
   useWebPageSchema({
     name: "Service Areas",
-    description: "Luxury magic entertainment in 70+ cities nationwide.",
+    description: "Close-up magic and private shows across Southern California and select destinations.",
     path: "/areas",
     type: "CollectionPage",
   });
 
   const grouped = getAreasByRegion();
+  const losAngelesHero = cityHeroVideos["los-angeles"];
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mq.matches);
+    const onChange = (event: MediaQueryListEvent) => setPrefersReducedMotion(event.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
 
   return (
     <main id="main-content" className="pt-20">
       <SEOHead title={seoTitle} description={seoDescription} canonical="/areas" />
       {/* Hero */}
-      <section className="bg-forest-dark py-24">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-forest-dark">
+        {prefersReducedMotion ? (
+          <img
+            src={losAngelesHero.poster}
+            alt=""
+            width={1600}
+            height={900}
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : (
+          <video
+            src={losAngelesHero.video}
+            poster={losAngelesHero.poster}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            width={1280}
+            height={720}
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover"
+            onLoadedMetadata={(event) => {
+              event.currentTarget.playbackRate = 0.85;
+            }}
+          />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/90 via-forest-dark/60 to-forest-dark/40" />
+        <div className="relative z-10 max-w-4xl mx-auto px-6 py-24 text-center">
           <AnimatedSection>
             <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">
-              Nationwide
+              Los Angeles &amp; Select Destinations
             </p>
             <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-cream mb-6">
               Where We Perform
             </h1>
             <p className="font-sans text-base text-cream/70 max-w-xl mx-auto">
-              Based in Los Angeles, Scott Syme brings White Rabbit's immersive magic experiences to luxury events in over 70 cities across the country.
+              Based in Los Angeles. Performing across Southern California and in select destinations, from Aspen to the Hamptons.
             </p>
           </AnimatedSection>
         </div>
@@ -101,7 +141,7 @@ const ServiceAreas = () => {
               Don't See Your City?
             </h2>
             <p className="font-sans text-sm text-cream/70 mb-8">
-              White Rabbit travels worldwide for the right event. Let's talk.
+              White Rabbit travels for the right evening. Let's talk.
             </p>
             <Link
               to="/contact"
