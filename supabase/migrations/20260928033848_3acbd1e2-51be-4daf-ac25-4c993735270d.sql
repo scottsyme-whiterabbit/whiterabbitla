@@ -1,0 +1,1 @@
+SELECT cron.unschedule('inquiry-instant-reply-5min');
