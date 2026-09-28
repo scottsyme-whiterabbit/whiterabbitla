@@ -224,8 +224,9 @@ const Index = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
             style={{ textShadow: "0 0 60px hsl(var(--accent) / 0.35), 0 0 120px hsl(var(--accent) / 0.15)" }}>
-            Experience Magic<br />
-            <span className="block mt-2 md:mt-3">That Makes You Feel Truly Alive</span>
+            Some evenings are catered.<br />
+            <span className="block mt-2 md:mt-3">Some are staged.</span>
+            <span className="block mt-2 md:mt-3">The best are conjured.</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -233,7 +234,7 @@ const Index = () => {
             transition={{ duration: 1, delay: 0.85 }}
             className="relative mt-5 md:mt-7 max-w-xl font-sans text-sm md:text-base text-cream/75 italic"
           >
-            Some evenings are catered. Some are staged. The best are conjured.
+            Experience magic that makes you feel truly alive.
           </motion.p>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -305,8 +306,9 @@ const Index = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.3 }}
         >
-          Experience Magic<br />
-          <span className="block mt-2">That Makes You Feel Truly Alive</span>
+          Some evenings are catered.<br />
+          <span className="block mt-2">Some are staged.</span>
+          <span className="block mt-2">The best are conjured.</span>
         </motion.h2>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
@@ -314,7 +316,7 @@ const Index = () => {
           transition={{ duration: 1, delay: 0.6 }}
           className="text-center mt-5 max-w-md mx-auto font-sans text-sm text-muted-foreground italic"
         >
-          Some evenings are catered. Some are staged. The best are conjured.
+          Experience magic that makes you feel truly alive.
         </motion.p>
         <motion.p
           initial={{ opacity: 0, y: 20 }}
