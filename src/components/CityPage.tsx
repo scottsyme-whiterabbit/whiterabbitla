@@ -53,6 +53,17 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
   const { openQuiz } = useBookingQuiz();
   const { cityName, citySlug, state, stateFullName, region, venues, nearbyLinks, uniqueContent } = content;
 
+  const heroVideo = getCityHeroVideo(citySlug);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setPrefersReducedMotion(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  const showHeroVideo = Boolean(heroVideo) && !prefersReducedMotion;
+
   const metaOverride = cityMetaOverrides[citySlug];
   const seoTitle = metaOverride?.title || `${cityName} Magician for Hire | White Rabbit LA`;
   const seoDescription = metaOverride?.description || `Hire a world-class close-up magician for corporate events, weddings, and private parties in ${cityName}. Magic Castle member. 5-star rated on Google.`;
