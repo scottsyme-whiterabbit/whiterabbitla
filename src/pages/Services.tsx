@@ -14,7 +14,8 @@ import holidayImg from "@/assets/event-group-finale.jpg";
 import charityImg from "@/assets/service-charity-gala-action.jpg";
 import tradeShowImg from "@/assets/event-crowd-reaction.jpg";
 import golfImg from "@/assets/event-guest-laughing.jpg";
-import dmcImg from "@/assets/event-scott-performing.jpg";
+import dmcImgAsset from "@/assets/dmc-white-coat.jpg.asset.json";
+const dmcImg = dmcImgAsset.url;
 import residentImg from "@/assets/events/ladies-luncheon-room-wide.jpg";
 
 const BASE_URL = "https://whiterabbitla.com";
