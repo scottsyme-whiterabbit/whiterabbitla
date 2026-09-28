@@ -27,11 +27,11 @@ import { useJsonLd } from "@/hooks/useSchemaOrg";
 
 import heroImage from "@/assets/hero-magic-cinematic.jpg";
 import experienceImg from "@/assets/experience-closeup.jpg";
-import scottDesertImg from "@/assets/scott-desert-sitting.jpg";
-import experienceHeroImg from "@/assets/experience-hero-desert.jpg";
+import serviceGalaImg from "@/assets/service-charity-gala-action.jpg";
+import serviceWeddingImg from "@/assets/service-wedding-hero.jpg";
+import parlorStageImg from "@/assets/event-parlor-stage.jpg";
 import eventCardsImg from "@/assets/cards-spring-bw.jpg";
 import penthouseImg from "@/assets/event-penthouse-show.jpg";
-import cocktailImg from "@/assets/event-closeup-cocktail.jpg";
 import parlorShowImg from "@/assets/event-parlor-show.jpg";
 import scottCardsImg from "@/assets/event-scott-cards.jpg";
 import silhouetteImg from "@/assets/event-silhouette.jpg";
@@ -572,17 +572,17 @@ const Index = () => {
         <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} className="h-14 w-auto opacity-50" />
       </div>
 
-      {/* Discover More */}
+      {/* The Experiences */}
       <section className="py-28 lg:py-36">
         <div className="max-w-7xl mx-auto px-6 lg:px-12">
           <AnimatedSection>
-            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4 text-center">Discover More</p>
-            <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-16 text-center">Go Deeper</h2>
+            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4 text-center">The Experiences</p>
+            <h2 className="font-serif text-4xl md:text-5xl text-foreground mb-16 text-center">Choose Your Evening</h2>
           </AnimatedSection>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <AnimatedSection>
-              <Link to="/experience" className="group block relative aspect-[3/4] overflow-hidden border border-accent/15 shadow-[0_0_20px_-5px_hsl(var(--accent)/0.1)]">
-                <img src={experienceHeroImg} alt="The White Rabbit experience" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <Link to="/services/corporate-magician" className="group block relative aspect-[3/4] overflow-hidden border border-accent/15 shadow-[0_0_20px_-5px_hsl(var(--accent)/0.1)]">
+                <img src={serviceGalaImg} alt="Guests reacting to close-up magic at a corporate gala in Los Angeles" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
                 {/* Corner filigree */}
                 <div className="absolute top-3 left-3 w-5 h-5 border-t border-l border-accent/30" />
@@ -590,9 +590,9 @@ const Index = () => {
                 <div className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-accent/30" />
                 <div className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-accent/30" />
                 <div className="absolute bottom-0 left-0 right-0 p-8">
-                  <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Experience</p>
-                  <h3 className="font-serif text-2xl text-cream mb-3">See What Awaits</h3>
-                  <p className="font-sans text-sm text-cream/60 mb-4">Close-up magic, parlor shows, and fully produced private events.</p>
+                  <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Corporate</p>
+                  <h3 className="font-serif text-2xl text-cream mb-3">Galas & Corporate Evenings</h3>
+                  <p className="font-sans text-sm text-cream/60 mb-4">Shared moments your guests talk about long after the evening ends.</p>
                   <span className="inline-flex items-center gap-2 font-sans text-sm tracking-[0.2em] uppercase text-cream/80 group-hover:text-accent transition-colors">
                     Explore <ArrowRight size={14} />
                   </span>
@@ -600,42 +600,49 @@ const Index = () => {
               </Link>
             </AnimatedSection>
             <AnimatedSection delay={0.1}>
-              <Link to="/about" className="group block relative aspect-[3/4] overflow-hidden border border-accent/15 shadow-[0_0_20px_-5px_hsl(var(--accent)/0.1)]">
-                <img src={scottDesertImg} alt="Scott Syme, magician and founder of White Rabbit" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <Link to="/services/wedding-magician" className="group block relative aspect-[3/4] overflow-hidden border border-accent/15 shadow-[0_0_20px_-5px_hsl(var(--accent)/0.1)]">
+                <img src={serviceWeddingImg} alt="Wedding guests during a White Rabbit performance" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
                 <div className="absolute top-3 left-3 w-5 h-5 border-t border-l border-accent/30" />
                 <div className="absolute top-3 right-3 w-5 h-5 border-t border-r border-accent/30" />
                 <div className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-accent/30" />
                 <div className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-accent/30" />
                 <div className="absolute bottom-0 left-0 right-0 p-8">
-                  <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">About</p>
-                  <h3 className="font-serif text-2xl text-cream mb-3">Meet Scott Syme</h3>
-                  <p className="font-sans text-sm text-cream/60 mb-4">The story behind the magician who built a luxury experience from scratch.</p>
+                  <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Weddings</p>
+                  <h3 className="font-serif text-2xl text-cream mb-3">The Wedding Weekend</h3>
+                  <p className="font-sans text-sm text-cream/60 mb-4">Cocktail hour and reception magic that feels like being let in on something.</p>
                   <span className="inline-flex items-center gap-2 font-sans text-sm tracking-[0.2em] uppercase text-cream/80 group-hover:text-accent transition-colors">
-                    Read More <ArrowRight size={14} />
+                    Explore <ArrowRight size={14} />
                   </span>
                 </div>
               </Link>
             </AnimatedSection>
             <AnimatedSection delay={0.2}>
-              <Link to="/blog" className="group block relative aspect-[3/4] overflow-hidden border border-accent/15 shadow-[0_0_20px_-5px_hsl(var(--accent)/0.1)]">
-                <img src={cocktailImg} alt="Luxury event entertainment and magic" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+              <Link to="/services/private-magic-show" className="group block relative aspect-[3/4] overflow-hidden border border-accent/15 shadow-[0_0_20px_-5px_hsl(var(--accent)/0.1)]">
+                <img src={parlorStageImg} alt="Scott Syme performing a private parlor show beneath emerald drapes" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
                 <div className="absolute top-3 left-3 w-5 h-5 border-t border-l border-accent/30" />
                 <div className="absolute top-3 right-3 w-5 h-5 border-t border-r border-accent/30" />
                 <div className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-accent/30" />
                 <div className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-accent/30" />
                 <div className="absolute bottom-0 left-0 right-0 p-8">
-                  <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Blog</p>
-                  <h3 className="font-serif text-2xl text-cream mb-3">Planning Your Event</h3>
-                  <p className="font-sans text-sm text-cream/60 mb-4">Tips, guides, and inspiration for unforgettable private events.</p>
+                  <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Private</p>
+                  <h3 className="font-serif text-2xl text-cream mb-3">Private Evenings</h3>
+                  <p className="font-sans text-sm text-cream/60 mb-4">Milestones, dinners and parlor shows at home, for ten to 120 guests.</p>
                   <span className="inline-flex items-center gap-2 font-sans text-sm tracking-[0.2em] uppercase text-cream/80 group-hover:text-accent transition-colors">
-                    Browse <ArrowRight size={14} />
+                    Explore <ArrowRight size={14} />
                   </span>
                 </div>
               </Link>
             </AnimatedSection>
           </div>
+          <AnimatedSection delay={0.3}>
+            <div className="mt-12 flex justify-center">
+              <Link to="/services" className="inline-flex items-center gap-2 font-sans text-xs tracking-[0.3em] uppercase text-accent hover:text-accent/80 transition-colors">
+                All experiences <ArrowRight size={14} />
+              </Link>
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
