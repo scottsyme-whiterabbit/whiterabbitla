@@ -32,7 +32,6 @@ import serviceWeddingImg from "@/assets/service-wedding-hero.jpg";
 import parlorStageImg from "@/assets/event-parlor-stage.jpg";
 import eventCardsImg from "@/assets/cards-spring-bw.jpg";
 import penthouseImg from "@/assets/event-penthouse-show.jpg";
-import cocktailImg from "@/assets/event-closeup-cocktail.jpg";
 import parlorShowImg from "@/assets/event-parlor-show.jpg";
 import scottCardsImg from "@/assets/event-scott-cards.jpg";
 import silhouetteImg from "@/assets/event-silhouette.jpg";
