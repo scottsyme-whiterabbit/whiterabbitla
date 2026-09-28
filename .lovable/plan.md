@@ -1,12 +1,16 @@
-# Inquiry email hyperlink and copy update
+# Destination city FAQ fix
 
-## Scope
-- Extend `gmail-send` so approved markdown links render as safe anchors in HTML and as `text (URL)` in plain text.
-- Preserve the existing bare URL linkifier without relinking URLs already inside anchors.
-- Replace only the approved instant reply paragraph, instant reply call lines, and day 3 follow-up closing line.
-- Leave day 9 unchanged and keep both inquiry schedules disabled.
+## Implementation
+- Classify a city as local only when its existing data says California and Southern California.
+- Keep all five current FAQ questions and answers unchanged for local cities.
+- Substitute only the requested travel question, travel answer, and event-area phrase for destination cities.
+- Leave the legacy page unchanged because it contains no FAQ section or travel-fee wording.
 
 ## Verification
-- Add focused rendering checks for valid links, invalid links, trailing punctuation, and no double processing.
-- Verify the exact three message bodies and generated call-line HTML.
-- Deploy only the three affected email functions and confirm both inquiry schedules remain off.
+- Confirm the displayed FAQ and FAQ schema share the same generated array.
+- Check the build and inspect local and destination city pages in the browser.
+- Report the complete local and destination slug lists derived from the existing service-area data.
+
+## Technical details
+- Add `isLocalCity(content)` beside the existing FAQ builder in `CityPage.tsx`.
+- Pass the existing city content object into `buildFaqs`; no data, routing, SEO, or page-section changes.
