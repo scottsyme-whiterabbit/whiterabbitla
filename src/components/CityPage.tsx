@@ -99,7 +99,7 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
   // Nearby city areas
   const nearbyAreas = nearbyLinks.map((slug) => getAreaBySlug(slug)).filter(Boolean);
 
-  const faqs = buildFaqs(cityName, region);
+  const faqs = buildFaqs(content);
 
   return (
     <main id="main-content" className="pt-20">
@@ -381,7 +381,14 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
 
 // ─── FAQ Helpers ───────────────────────────────────────────────────────────────
 
-function buildFaqs(city: string, region: string) {
+function isLocalCity(content: CityContentData) {
+  return content.state === "CA" && content.region === "Southern California";
+}
+
+function buildFaqs(content: CityContentData) {
+  const { cityName: city, region } = content;
+  const isLocal = isLocalCity(content);
+
   return [
     {
       question: `How do I book a magician for an event in ${city}?`,
@@ -389,15 +396,19 @@ function buildFaqs(city: string, region: string) {
     },
     {
       question: `What types of events can a magician perform at in ${city}?`,
-      answer: `White Rabbit LA performs at corporate events, weddings, private parties, fundraisers, holiday parties, and restaurant/venue entertainment throughout ${city} and greater Los Angeles.`,
+      answer: isLocal
+        ? `White Rabbit LA performs at corporate events, weddings, private parties, fundraisers, holiday parties, and restaurant/venue entertainment throughout ${city} and greater Los Angeles.`
+        : `White Rabbit LA performs at corporate events, weddings, private parties, fundraisers, holiday parties, and restaurant/venue entertainment throughout ${city} and the surrounding area.`,
     },
     {
       question: `How far in advance should I book a magician in ${city}?`,
       answer: `We recommend booking 4-8 weeks in advance for events in ${city}, though last-minute availability is sometimes possible. Popular dates (holidays, wedding season) book 2-3 months out.`,
     },
     {
-      question: `Does the magician travel to ${city}?`,
-      answer: `Yes. White Rabbit LA serves all of ${city} and the greater ${region} area. There is no additional travel fee for events in the region.`,
+      question: isLocal ? `Does the magician travel to ${city}?` : `Does White Rabbit travel to ${city}?`,
+      answer: isLocal
+        ? `Yes. White Rabbit LA serves all of ${city} and the greater ${region} area. There is no additional travel fee for events in the region.`
+        : "Yes. Engagements beyond Southern California are quoted as a single, all-inclusive fee: travel, accommodation and production, arranged by us. No line items, no surprises. Destination dates are limited, so we recommend inquiring early.",
     },
     {
       question: `What is close-up magic and is it right for my ${city} event?`,
