@@ -8,15 +8,18 @@ import wrScriptLogo from "@/assets/wr-wordmark-cream.png";
 import { DEFAULT_GALLERY_KEYS, photoKeyToSrc, reviewsForEventType } from "@/data/proposalAssets";
 import { adminViewHeaders } from "@/lib/adminAuth";
 
-import netflixLogo from "@/assets/logos/netflix.png";
-import disneyLogo from "@/assets/logos/disney.png";
-import morganstanleyLogo from "@/assets/logos/morganstanley.png";
-import rivianLogo from "@/assets/logos/rivian.png";
-import rollsroyceLogo from "@/assets/logos/rollsroyce.png";
-import paramountLogo from "@/assets/logos/paramount.png";
-import sohohouseLogo from "@/assets/logos/sohohouse-new.png";
-import beverlyHiltonLogo from "@/assets/logos/beverlyhilton.png";
-import magicCastleLogo from "@/assets/logos/magiccastle.png";
+import disneyLogo from "@/assets/logos/normalized/disney.png";
+import rollsroyceLogo from "@/assets/logos/normalized/rollsroyce.png";
+import lionsgateLogo from "@/assets/logos/normalized/lionsgate.png";
+import createAndCultivateLogo from "@/assets/logos/normalized/createandcultivate.png";
+import netflixLogo from "@/assets/logos/normalized/netflix.png";
+import magicCastleLogo from "@/assets/logos/normalized/magiccastle.png";
+import morganstanleyLogo from "@/assets/logos/normalized/morganstanley.png";
+import beverlyHiltonLogo from "@/assets/logos/normalized/beverlyhilton.png";
+import rivianLogo from "@/assets/logos/normalized/rivian.png";
+import oliviarodrigoLogo from "@/assets/logos/normalized/oliviarodrigo.png";
+import sohohouseLogo from "@/assets/logos/normalized/sohohouse.png";
+import agtLogo from "@/assets/logos/normalized/agt.png";
 
 import heroMain from "@/assets/hero-magic-cinematic.jpg";
 import proposalCardsBw from "@/assets/proposal-cards-bw.jpg";
@@ -47,16 +50,21 @@ export const HERO_OPTIONS = [
   { value: "evening", label: "Evening (dark)" },
 ];
 
+// Same treatment as the homepage logo wall: normalized (trimmed) logos,
+// per-logo render height in px for optical balance, forest-green tint.
 const logos = [
-  { name: "Netflix", src: netflixLogo },
-  { name: "Disney", src: disneyLogo },
-  { name: "Morgan Stanley", src: morganstanleyLogo },
-  { name: "Rivian", src: rivianLogo },
-  { name: "Rolls-Royce", src: rollsroyceLogo },
-  { name: "Paramount", src: paramountLogo },
-  { name: "Soho House", src: sohohouseLogo, sizeClass: "max-h-14 md:max-h-[68px]" },
-  { name: "The Beverly Hilton", src: beverlyHiltonLogo },
-  { name: "The Magic Castle", src: magicCastleLogo, sizeClass: "max-h-14 md:max-h-16" },
+  { name: "Disney", src: disneyLogo, h: 20 },
+  { name: "Rolls Royce", src: rollsroyceLogo, h: 34 },
+  { name: "Lionsgate", src: lionsgateLogo, h: 20 },
+  { name: "Create & Cultivate", src: createAndCultivateLogo, h: 36 },
+  { name: "Netflix", src: netflixLogo, h: 20 },
+  { name: "The Magic Castle", src: magicCastleLogo, h: 46 },
+  { name: "Morgan Stanley", src: morganstanleyLogo, h: 20 },
+  { name: "The Beverly Hilton", src: beverlyHiltonLogo, h: 26 },
+  { name: "Rivian", src: rivianLogo, h: 40 },
+  { name: "Olivia Rodrigo", src: oliviarodrigoLogo, h: 26 },
+  { name: "Soho House", src: sohohouseLogo, h: 40 },
+  { name: "America's Got Talent", src: agtLogo, h: 26 },
 ];
 
 export interface Tier {
