@@ -77,6 +77,14 @@ async function getSignature(): Promise<string> {
   return cachedSignature;
 }
 
+function linkify(escaped: string) {
+  return escaped.replace(/\bhttps?:\/\/[^\s<>"']+/g, (m) => {
+    const trail = m.match(/[.,)]+$/)?.[0] || "";
+    const url = trail ? m.slice(0, -trail.length) : m;
+    return `<a href="${url}" target="_blank">${url}</a>${trail}`;
+  });
+}
+
 function escapeHtml(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
@@ -134,8 +142,8 @@ serve(async (req) => {
       ? cleanText
       : `${cleanText}\n\n-- \nScott Syme\nMagician · White Rabbit LA\n(424) 394-1850 · scott.syme@whiterabbitla.com\nwww.whiterabbitla.com`;
     const htmlBody = skip_signature
-      ? `<div>${escapeHtml(cleanText).replace(/\n/g, "<br>")}</div>`
-      : `<div style="font-family:Arial,Helvetica,sans-serif;color:#222;font-size:14px;line-height:1.55;">${escapeHtml(cleanText).replace(/\n/g, "<br>")}</div><br><div>${signatureHtml}</div>`;
+      ? `<div>${linkify(escapeHtml(cleanText)).replace(/\n/g, "<br>")}</div>`
+      : `<div style="font-family:Arial,Helvetica,sans-serif;color:#222;font-size:14px;line-height:1.55;">${linkify(escapeHtml(cleanText)).replace(/\n/g, "<br>")}</div><br><div>${signatureHtml}</div>`;
 
     const headers = [
       `From: ${OWNER_NAME} <${OWNER_EMAIL}>`,

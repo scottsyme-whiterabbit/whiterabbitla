@@ -107,3 +107,30 @@ export function withinPacificSendHours(now = new Date()): boolean {
   const totalMinutes = hour * 60 + minute;
   return totalMinutes >= 8 * 60 && totalMinutes < 20 * 60 + 30;
 }
+export const CALENDAR_URL = "https://calendar.app.google/58WjggPt3RFAcJjq8";
+export const FALLBACK_ACK_LINE = "I read through what you sent and it sounds like a great evening.";
+
+export function extractClientNote(message: string | null | undefined): string | null {
+  if (!message || message.length < 15) return null;
+  const idx = message.indexOf("Recommended:");
+  if (idx === -1) return message.trim() || null;
+  const lineEnd = message.indexOf("\n", idx);
+  const rest = lineEnd === -1 ? "" : message.slice(lineEnd + 1).trim();
+  if (!rest || /^No additional message/i.test(rest)) return null;
+  return rest;
+}
+
+const BANNED_ACK = ["thank you so much", "reaching out", "just checking in", "i'm available", "is open", "free that", "my calendar", "package", "pricing", "quote", "deposit"];
+
+export function validAckLine(line: string | null | undefined, clientEmail: string): boolean {
+  const s = (line || "").trim();
+  if (!s || s.length > 200) return false;
+  if ((s.match(/\. [A-Z]/g) || []).length > 1) return false;
+  if (["$", "http", "www.", "?", "\u2014", "\u2013"].some((t) => s.includes(t))) return false;
+  if (/\s-\s/.test(s)) return false;
+  const lower = s.toLowerCase();
+  if (BANNED_ACK.some((t) => lower.includes(t))) return false;
+  if (clientEmail && lower.includes(clientEmail.toLowerCase())) return false;
+  if (/\d{7,}/.test(s)) return false;
+  return true;
+}
