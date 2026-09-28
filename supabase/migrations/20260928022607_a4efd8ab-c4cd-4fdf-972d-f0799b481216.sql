@@ -1,0 +1,1 @@
+ALTER TABLE public.contact_inquiries ADD COLUMN IF NOT EXISTS instant_reply_ai_line text;
