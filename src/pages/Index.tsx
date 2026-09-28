@@ -28,7 +28,8 @@ import { useJsonLd } from "@/hooks/useSchemaOrg";
 import heroImage from "@/assets/hero-magic-cinematic.jpg";
 import experienceImg from "@/assets/experience-closeup.jpg";
 import serviceGalaImg from "@/assets/service-charity-gala-action.jpg";
-import serviceWeddingImg from "@/assets/service-wedding-hero.jpg";
+import serviceWeddingImgAsset from "@/assets/wedding-white-coat.jpg.asset.json";
+const serviceWeddingImg = serviceWeddingImgAsset.url;
 import parlorStageImg from "@/assets/event-parlor-stage.jpg";
 import eventCardsImg from "@/assets/cards-spring-bw.jpg";
 import penthouseImg from "@/assets/event-penthouse-show.jpg";
@@ -601,7 +602,7 @@ const Index = () => {
             </AnimatedSection>
             <AnimatedSection delay={0.1}>
               <Link to="/services/wedding-magician" className="group block relative aspect-[3/4] overflow-hidden border border-accent/15 shadow-[0_0_20px_-5px_hsl(var(--accent)/0.1)]">
-                <img src={serviceWeddingImg} alt="Wedding guests during a White Rabbit performance" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <img src={serviceWeddingImg} alt="White Rabbit LA magician in a white dinner jacket performing for wedding weekend guests in a luxury living room" width={400} height={533} loading="lazy" decoding="async" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 <div className="absolute inset-0 bg-gradient-to-t from-forest-dark/80 via-forest-dark/20 to-transparent" />
                 <div className="absolute top-3 left-3 w-5 h-5 border-t border-l border-accent/30" />
                 <div className="absolute top-3 right-3 w-5 h-5 border-t border-r border-accent/30" />
