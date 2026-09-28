@@ -27,8 +27,9 @@ import { useJsonLd } from "@/hooks/useSchemaOrg";
 
 import heroImage from "@/assets/hero-magic-cinematic.jpg";
 import experienceImg from "@/assets/experience-closeup.jpg";
-import scottDesertImg from "@/assets/scott-desert-sitting.jpg";
-import experienceHeroImg from "@/assets/experience-hero-desert.jpg";
+import serviceGalaImg from "@/assets/service-charity-gala-action.jpg";
+import serviceWeddingImg from "@/assets/service-wedding-hero.jpg";
+import parlorStageImg from "@/assets/event-parlor-stage.jpg";
 import eventCardsImg from "@/assets/cards-spring-bw.jpg";
 import penthouseImg from "@/assets/event-penthouse-show.jpg";
 import cocktailImg from "@/assets/event-closeup-cocktail.jpg";
