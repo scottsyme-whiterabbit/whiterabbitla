@@ -125,9 +125,24 @@
       ]
     }
     </script>
-    <!-- Google Analytics (GA4), deferred to not block LCP -->
+    <!-- Third-party trackers: all kept, loaded after the page is interactive (load + idle, 2.5s fallback) -->
     <script>
-      window.addEventListener('load', function() {
+      (function() {
+        function afterIdle(fn) {
+          var run = function() {
+            var done = false;
+            var once = function() { if (!done) { done = true; fn(); } };
+            if ('requestIdleCallback' in window) window.requestIdleCallback(once, { timeout: 2500 });
+            setTimeout(once, 2500);
+          };
+          if (document.readyState === 'complete') run(); else window.addEventListener('load', run);
+        }
+        window.__wrAfterIdle = afterIdle;
+      })();
+    </script>
+    <!-- Google Analytics (GA4) -->
+    <script>
+      window.__wrAfterIdle(function() {
         var s = document.createElement('script');
         s.src = 'https://www.googletagmanager.com/gtag/js?id=G-65KMF8KK5P';
         s.async = true;
@@ -141,9 +156,9 @@
         };
       });
     </script>
-    <!-- Meta Pixel · deferred -->
+    <!-- Meta Pixel -->
     <script>
-      window.addEventListener('load', function() {
+      window.__wrAfterIdle(function() {
         !function(f,b,e,v,n,t,s)
         {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
         n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -157,9 +172,9 @@
       });
     </script>
     <!-- End Meta Pixel -->
-    <!-- Microsoft Clarity · deferred -->
+    <!-- Microsoft Clarity -->
     <script>
-      window.addEventListener('load', function() {
+      window.__wrAfterIdle(function() {
         (function(c,l,a,r,i,t,y){
           c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
           t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
@@ -168,9 +183,9 @@
       });
     </script>
     <!-- End Microsoft Clarity -->
-    <!-- Contentsquare · deferred -->
+    <!-- Contentsquare -->
     <script>
-      window.addEventListener('load', function() {
+      window.__wrAfterIdle(function() {
         var s = document.createElement('script');
         s.src = 'https://t.contentsquare.net/uxa/61d3fac571b97.js';
         s.async = true;
@@ -178,9 +193,14 @@
       });
     </script>
     <!-- End Contentsquare -->
-    <link rel="preload" as="font" href="/fonts/Ogg-Bold.ttf" type="font/ttf" crossorigin />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="font" href="/fonts/Ogg-Bold.ttf" type="font/ttf" crossorigin />
+    <link rel="preload" as="image" href="/__l5e/assets-v1/3ea2e3fd-32ae-4321-befa-b6041e1ae302/triptych-2-poster.jpg" fetchpriority="high" />
+    <!-- Google Fonts (Montserrat, Homemade Apple), loaded without blocking render -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Homemade+Apple&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Homemade+Apple&display=swap" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Homemade+Apple&display=swap" /></noscript>
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
     <link rel="dns-prefetch" href="https://connect.facebook.net" />
     <link rel="dns-prefetch" href="https://www.clarity.ms" />

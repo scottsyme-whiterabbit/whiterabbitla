@@ -2,6 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import RemovedRouteRedirect from "@/components/RemovedRouteRedirect";
 import Navbar from "@/components/Navbar";
@@ -18,45 +19,39 @@ import ExitIntentPopup from "@/components/ExitIntentPopup";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
 
 import Index from "./pages/Index";
-import Experience from "./pages/Experience";
-import ExperienceGallery from "./pages/ExperienceGallery";
-import About from "./pages/About";
-import Reviews from "./pages/Reviews";
-import Contact from "./pages/Contact";
-import Blog from "./pages/Blog";
-import BlogArticle from "./pages/BlogArticle";
-import SeoLanding from "./pages/SeoLanding";
-import ServicePage from "./pages/ServicePage";
-import ServicesHub from "./pages/Services";
-import NotFound from "./pages/NotFound";
-import DiscoveryQuiz from "./pages/DiscoveryQuiz";
-import HostsPlaybook from "./pages/HostsPlaybook";
-import AdminNewsletter from "./pages/AdminNewsletter";
-import SocialGenerator from "./pages/SocialGenerator";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import ReviewGate from "./pages/ReviewGate";
-import TermsOfService from "./pages/TermsOfService";
-import PitchDeck from "./pages/PitchDeck";
-import Refer from "./pages/Refer";
-import PayInvoice from "./pages/PayInvoice";
-import Unsubscribe from "./pages/Unsubscribe";
-import ServiceAreas from "./pages/ServiceAreas";
-import ServiceAreaDetail from "./pages/ServiceAreaDetail";
-import DigitalCard from "./pages/DigitalCard";
-import Consultation from "./pages/Consultation";
-import Planners from "./pages/Planners";
-import ProposalTemplate from "./pages/ProposalTemplate";
-import ResidencyTemplate from "./pages/ResidencyTemplate";
-import AdminProposals from "./pages/AdminProposals";
-import { getBlogArticleBySlug } from "./data/blogArticles";
-import { useParams } from "react-router-dom";
+const Experience = lazy(() => import("./pages/Experience"));
+const ExperienceGallery = lazy(() => import("./pages/ExperienceGallery"));
+const About = lazy(() => import("./pages/About"));
+const Reviews = lazy(() => import("./pages/Reviews"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogArticle = lazy(() => import("./pages/BlogArticle"));
+const SeoLanding = lazy(() => import("./pages/SeoLanding"));
+const ServicePage = lazy(() => import("./pages/ServicePage"));
+const ServicesHub = lazy(() => import("./pages/Services"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const DiscoveryQuiz = lazy(() => import("./pages/DiscoveryQuiz"));
+const HostsPlaybook = lazy(() => import("./pages/HostsPlaybook"));
+const AdminNewsletter = lazy(() => import("./pages/AdminNewsletter"));
+const SocialGenerator = lazy(() => import("./pages/SocialGenerator"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const ReviewGate = lazy(() => import("./pages/ReviewGate"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const PitchDeck = lazy(() => import("./pages/PitchDeck"));
+const Refer = lazy(() => import("./pages/Refer"));
+const PayInvoice = lazy(() => import("./pages/PayInvoice"));
+const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
+const ServiceAreas = lazy(() => import("./pages/ServiceAreas"));
+const ServiceAreaDetail = lazy(() => import("./pages/ServiceAreaDetail"));
+const DigitalCard = lazy(() => import("./pages/DigitalCard"));
+const Consultation = lazy(() => import("./pages/Consultation"));
+const Planners = lazy(() => import("./pages/Planners"));
+const ProposalTemplate = lazy(() => import("./pages/ProposalTemplate"));
+const ResidencyTemplate = lazy(() => import("./pages/ResidencyTemplate"));
+const AdminProposals = lazy(() => import("./pages/AdminProposals"));
+const BlogArticleOrSeo = lazy(() => import("./pages/BlogArticleOrSeo"));
 
-const BlogArticleOrSeo = () => {
-  const { slug } = useParams<{ slug: string }>();
-  const article = slug ? getBlogArticleBySlug(slug) : undefined;
-  if (article) return <BlogArticle />;
-  return <SeoLanding />;
-};
+const PageFallback = () => <div className="bg-background min-h-screen" />;
 
 const queryClient = new QueryClient();
 
@@ -71,6 +66,7 @@ const AppContent = () => {
       <BookingQuiz />
       <ExitIntentPopup />
       <StickyMobileCTA />
+      <Suspense fallback={<PageFallback />}>
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/experience" element={<Experience />} />
@@ -106,6 +102,7 @@ const AppContent = () => {
         <Route path="/post/*" element={<RemovedRouteRedirect to="/blog" />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+      </Suspense>
       <Footer />
       <CookieConsent />
     </>
@@ -119,6 +116,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <Suspense fallback={<PageFallback />}>
           <Routes>
             <Route path="/card" element={<><DigitalCard /></>} />
             <Route path="/consultation" element={<><Consultation /></>} />
@@ -130,6 +128,7 @@ const App = () => (
             <Route path="/pay/:token" element={<PayInvoice />} />
             <Route path="/*" element={<AppContent />} />
           </Routes>
+          </Suspense>
         </BrowserRouter>
       </BookingQuizProvider>
     </TooltipProvider>
