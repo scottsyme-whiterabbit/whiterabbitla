@@ -18,7 +18,7 @@ const HostsPlaybook = () => {
     {
       number: "02",
       title: "How to Match the Right Performer to Your Event Format",
-      content: `A 200-person corporate gala requires a completely different act than a 20-person dinner party. Here's the framework:\n\n**Cocktail receptions (20 to 100 guests)** work best with close-up, roaming magic. The performer moves through the crowd, creating intimate moments in small groups.\n\n**Seated dinners (10 to 50 guests)** call for table-side performances between courses. Each table gets a private 5 to 8 minute show.\n\n**Stage events (50 to 500+ guests)** shine with a curated parlor show featuring a dedicated performance space, sound, and lighting.\n\nThe best entertainers adapt their act to your format, not the other way around.`,
+      content: `A 200-person corporate gala requires a completely different act than a 20-person dinner party. Here's the framework:\n\n**Cocktail receptions (20 to 100 guests)** work best with close-up, roaming magic. The performer moves through the crowd, creating intimate moments in small groups.\n\n**Seated dinners (10 to 50 guests)** call for performances before the meal or once plates are cleared between courses. Each table gets a private 5 to 8 minute show.\n\n**Stage events (50 to 500+ guests)** shine with a curated parlor show featuring a dedicated performance space, sound, and lighting.\n\nThe best entertainers adapt their act to your format, not the other way around.`,
     },
     {
       number: "03",

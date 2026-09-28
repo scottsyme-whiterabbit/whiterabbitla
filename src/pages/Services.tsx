@@ -53,7 +53,7 @@ const services: ServiceTile[] = [
     slug: "close-up-magician",
     title: "Close-Up Magician",
     blurb:
-      "Strolling, table-side close-up magic and mentalism. Cocktails, dinners, VIP receptions, and brand activations.",
+      "Strolling close-up magic and mentalism during cocktail hours, receptions, before or after dinner, VIP events, and brand activations.",
     image: closeupImg,
   },
   {
