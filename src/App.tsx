@@ -25,8 +25,6 @@ const About = lazy(() => import("./pages/About"));
 const Reviews = lazy(() => import("./pages/Reviews"));
 const Contact = lazy(() => import("./pages/Contact"));
 const Blog = lazy(() => import("./pages/Blog"));
-const BlogArticle = lazy(() => import("./pages/BlogArticle"));
-const SeoLanding = lazy(() => import("./pages/SeoLanding"));
 const ServicePage = lazy(() => import("./pages/ServicePage"));
 const ServicesHub = lazy(() => import("./pages/Services"));
 const NotFound = lazy(() => import("./pages/NotFound"));
