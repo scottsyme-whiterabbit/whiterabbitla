@@ -437,10 +437,22 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
           <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">In Good Company</p>
           <OrnamentalDivider />
           <p className="font-sans text-sm md:text-base text-forest-dark/65 mt-6 mb-10">A few of the rooms we've worked.</p>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-8 gap-y-8 items-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-x-5 gap-y-8 sm:gap-x-8 sm:gap-y-10 md:gap-x-12 md:gap-y-12 items-center justify-items-center">
             {logos.map((logo) => (
-              <div key={logo.name} className="flex items-center justify-center">
-                <img src={logo.src} alt={logo.name} loading="lazy" className={`${(logo as any).sizeClass ?? "max-h-9 md:max-h-11"} w-auto object-contain opacity-60 hover:opacity-100 transition-opacity`} style={{ filter: "grayscale(100%)" }} />
+              <div key={logo.name} className="flex items-center justify-center h-12 md:h-14 w-full">
+                <img
+                  src={logo.src}
+                  alt={`${logo.name} logo, White Rabbit client`}
+                  loading="lazy"
+                  decoding="async"
+                  style={{
+                    height: `${logo.h}px`,
+                    width: "auto",
+                    maxWidth: "100%",
+                    filter: "brightness(0) saturate(100%) invert(24%) sepia(9%) saturate(1200%) hue-rotate(70deg) brightness(95%) contrast(85%)",
+                  }}
+                  className="object-contain opacity-55 hover:opacity-80 transition-opacity"
+                />
               </div>
             ))}
           </div>
