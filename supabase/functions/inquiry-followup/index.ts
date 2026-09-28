@@ -100,7 +100,7 @@ serve(async (req) => {
           : currentStep === 0 ? `${firstName}, just wanted to make sure this reached you` : `${firstName}, one last note`;
         const bodyText = currentStep === 0
           ? `Hi ${firstName},\n\nI wanted to make sure this reached you and did not land somewhere strange.\n\nMost of what I do is close up, right in the middle of the room while people are talking and drinking. Nobody sits in rows and nothing gets announced. It simply starts happening next to them.\n\nIf your plans are still taking shape, tell me what you are picturing and I will tell you what I would do with it.\n\n(424) 394-1850 is the fastest way to reach me. I answer it myself. Or [pick a time here](${CALENDAR_URL}).`
-          : `Hi ${firstName},\n\nI will stop filling your inbox after this one.\n\nIf your plans changed or you went a different direction, there are no hard feelings at all. Plans shift constantly in this world, and I would rather you have a wonderful night than have a magician.\n\nIf it is still live, my number is (424) 394-1850.\n\nEither way, I hope it is a beautiful event.`;
+          : `Hi ${firstName},\n\nI will stop filling your inbox after this one.\n\nIf your plans changed or you went a different direction, there are no hard feelings at all. Plans shift constantly in this world, and whenever the timing is right, I would love to be part of it.\n\nIf it is still live, my number is (424) 394-1850.\n\nEither way, I hope it is a beautiful event.`;
 
         if (dryRun) {
           wouldSend.push({ inquiry_id: inquiry.id, name: inquiry.name, email, step: nextStep, subject, body_text: bodyText, skipped_reason: null });
