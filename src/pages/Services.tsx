@@ -4,7 +4,7 @@ import SEOHead from "@/components/SEOHead";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import { useWebPageSchema, useSpeakableSchema } from "@/hooks/useSchemaOrg";
-import heroDesertImg from "@/assets/experience-hero-desert.jpg";
+import heroDesertImg from "@/assets/hero-desert.jpg";
 import closeupImg from "@/assets/event-closeup-cocktail.jpg";
 import parlorImg from "@/assets/event-parlor-stage.jpg";
 import corporateImg from "@/assets/event-penthouse-show.jpg";
@@ -14,7 +14,7 @@ import holidayImg from "@/assets/event-group-finale.jpg";
 import charityImg from "@/assets/service-charity-gala-action.jpg";
 import tradeShowImg from "@/assets/event-crowd-reaction.jpg";
 import golfImg from "@/assets/event-guest-laughing.jpg";
-import dmcImg from "@/assets/service-dmc-hero.jpg";
+import dmcImg from "@/assets/event-scott-performing.jpg";
 import residentImg from "@/assets/events/ladies-luncheon-room-wide.jpg";
 
 const BASE_URL = "https://whiterabbitla.com";
