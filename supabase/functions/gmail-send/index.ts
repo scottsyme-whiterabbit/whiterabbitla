@@ -153,7 +153,7 @@ serve(async (req) => {
     if (body.adminPassword !== ADMIN_PASSWORD) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
     }
-    const { deal_id, to, subject, body_text, html_body, gmail_thread_id, in_reply_to, skip_signature } = body;
+    const { deal_id, to, subject, body_text, html_body, gmail_thread_id, in_reply_to, skip_signature, skip_stage_update } = body;
     if (!to || !subject || !body_text) {
       return new Response(JSON.stringify({ error: "Missing to/subject/body_text" }), { status: 400, headers: corsHeaders });
     }
@@ -212,7 +212,7 @@ serve(async (req) => {
       const { data: deal } = await supabase.from("deals").select("stage,gmail_thread_id").eq("id", deal_id).maybeSingle();
       const updates: any = {};
       if (deal && !deal.gmail_thread_id) updates.gmail_thread_id = data.threadId;
-      if (deal && deal.stage === "new") updates.stage = "contacted";
+      if (!skip_stage_update && deal && deal.stage === "new") updates.stage = "contacted";
       if (Object.keys(updates).length) await supabase.from("deals").update(updates).eq("id", deal_id);
     }
     return new Response(JSON.stringify({ success: true, message_id: data.id, thread_id: data.threadId }), {

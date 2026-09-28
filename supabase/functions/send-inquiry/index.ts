@@ -272,6 +272,7 @@ serve(async (req) => {
             body_text: confirmationText,
             html_body: confirmationHtml,
             skip_signature: true,
+            skip_stage_update: true,
             deal_id: dealId,
             adminPassword: ADMIN_PASSWORD,
           }),
