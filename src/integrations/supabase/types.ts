@@ -497,6 +497,7 @@ export type Database = {
           event_type: string | null
           followup_started_at: string | null
           followup_step: number
+          gmail_thread_id: string | null
           guest_count: string | null
           id: string
           instant_reply_ai_line: string | null
@@ -524,6 +525,7 @@ export type Database = {
           event_type?: string | null
           followup_started_at?: string | null
           followup_step?: number
+          gmail_thread_id?: string | null
           guest_count?: string | null
           id?: string
           instant_reply_ai_line?: string | null
@@ -551,6 +553,7 @@ export type Database = {
           event_type?: string | null
           followup_started_at?: string | null
           followup_step?: number
+          gmail_thread_id?: string | null
           guest_count?: string | null
           id?: string
           instant_reply_ai_line?: string | null

@@ -74,6 +74,7 @@ serve(async (req) => {
     const errors: string[] = [];
     const wouldSend: unknown[] = [];
     const skippedList: unknown[] = [];
+    const threadStatuses: { inquiry_id: string; thread_status: string }[] = [];
     const skip = (inquiry: Inquiry, email: string, reason: string) => {
       skipped++;
       if (dryRun) skippedList.push({ inquiry_id: inquiry.id, name: inquiry.name, email, skipped_reason: reason });
@@ -122,10 +123,17 @@ serve(async (req) => {
         if (!claimed?.length) { skipped++; continue; }
 
         const { data: deal } = await supabase.from("deals").select("id").ilike("contact_email", email).order("created_at", { ascending: false }).limit(1).maybeSingle();
+        const thread = await findNotificationThread(email, subject);
+        threadStatuses.push({ inquiry_id: inquiry.id, thread_status: thread.status });
+        const sendPayload: Record<string, unknown> = { to: email, subject, body_text: bodyText, deal_id: deal?.id || null, adminPassword };
+        if (thread.status === "threaded") {
+          sendPayload.gmail_thread_id = thread.threadId;
+          sendPayload.in_reply_to = thread.messageId;
+        }
         const sendResponse = await fetch(`${supabaseUrl}/functions/v1/gmail-send`, {
           method: "POST",
           headers: { "Content-Type": "application/json", apikey: serviceKey, Authorization: `Bearer ${serviceKey}` },
-          body: JSON.stringify({ to: email, subject, body_text: bodyText, deal_id: deal?.id || null, adminPassword }),
+          body: JSON.stringify(sendPayload),
         });
         const sendData = await sendResponse.json().catch(() => ({}));
         if (!sendResponse.ok || !sendData.message_id) {
@@ -139,7 +147,7 @@ serve(async (req) => {
           inquiry_id: inquiry.id,
         });
         if (logError) throw logError;
-        await supabase.from("contact_inquiries").update({ instant_reply_message_id: sendData.message_id }).eq("id", inquiry.id);
+        await supabase.from("contact_inquiries").update({ instant_reply_message_id: sendData.message_id, gmail_thread_id: sendData.thread_id || null }).eq("id", inquiry.id);
         sent++;
 
         const alertBody = [
@@ -171,9 +179,54 @@ serve(async (req) => {
     }
 
     if (dryRun) return json({ dryRun: true, would_send: wouldSend, skipped: skippedList, errors });
-    return json({ sent, skipped, errors });
+    return json({ sent, skipped, errors, threads: threadStatuses });
   } catch (error) {
     console.error("inquiry-instant-reply error", error);
     return json({ error: error instanceof Error ? error.message : String(error) }, 500);
   }
 });
+
+const GMAIL_GATEWAY = "https://connector-gateway.lovable.dev/google_mail/gmail/v1";
+type ThreadResult =
+  | { status: "threaded"; threadId: string; messageId: string }
+  | { status: "fallback_new_thread" | "lookup_failed" };
+
+// Find Scott's inquiry notification so the reply joins that thread. Never throws; 8s cap.
+async function findNotificationThread(email: string, subject: string): Promise<ThreadResult> {
+  const lovableKey = Deno.env.get("LOVABLE_API_KEY");
+  const gmailKey = Deno.env.get("GOOGLE_MAIL_API_KEY");
+  if (!lovableKey || !gmailKey) return { status: "lookup_failed" };
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  const headers = { Authorization: `Bearer ${lovableKey}`, "X-Connection-Api-Key": gmailKey };
+  const header = (msg: any, name: string) =>
+    (msg?.payload?.headers || []).find((h: any) => String(h.name).toLowerCase() === name.toLowerCase())?.value as string | undefined;
+  try {
+    const q = encodeURIComponent(`"${email}" newer_than:2d`);
+    const list = await fetch(`${GMAIL_GATEWAY}/users/me/messages?q=${q}&maxResults=5`, { headers, signal: controller.signal });
+    if (!list.ok) return { status: "lookup_failed" };
+    const ids: string[] = ((await list.json())?.messages || []).map((m: any) => m.id);
+    if (!ids.length) return { status: "fallback_new_thread" };
+    const matches: { threadId: string; messageId: string; date: number }[] = [];
+    for (const id of ids) {
+      const r = await fetch(
+        `${GMAIL_GATEWAY}/users/me/messages/${id}?format=metadata&metadataHeaders=Message-ID&metadataHeaders=Subject&metadataHeaders=To`,
+        { headers, signal: controller.signal },
+      );
+      if (!r.ok) continue;
+      const msg = await r.json();
+      const to = (header(msg, "To") || "").toLowerCase();
+      const messageId = header(msg, "Message-ID") || header(msg, "Message-Id");
+      if (header(msg, "Subject")?.trim() !== subject || !to.includes("scott.syme@whiterabbitla.com")) continue;
+      if (!messageId || !msg.threadId) continue;
+      matches.push({ threadId: msg.threadId, messageId, date: Number(msg.internalDate) || 0 });
+    }
+    if (!matches.length) return { status: "fallback_new_thread" };
+    matches.sort((a, b) => b.date - a.date);
+    return { status: "threaded", threadId: matches[0].threadId, messageId: matches[0].messageId };
+  } catch {
+    return { status: "lookup_failed" };
+  } finally {
+    clearTimeout(timer);
+  }
+}
