@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { inquiryFirstName } from "../_shared/inquiry-email.ts";
+import { CALENDAR_URL, inquiryFirstName } from "../_shared/inquiry-email.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -50,13 +50,9 @@ serve(async (req) => {
     }
 
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
-    if (!RESEND_API_KEY) {
-      console.error("RESEND_API_KEY is not set");
-      return new Response(
-        JSON.stringify({ error: "Email service not configured" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
+    const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+    const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    const ADMIN_PASSWORD = Deno.env.get("ADMIN_PASSWORD");
 
     const emailHtml = `
       <h2>New Booking Inquiry</h2>
@@ -76,21 +72,22 @@ serve(async (req) => {
       <p style="white-space:pre-wrap;">${escapeHtml(message)}</p>
     `;
 
-    const firstName = name.split(" ")[0] || name;
-
-    const TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-click";
-    const BOOKING_URL = "https://calendar.app.google/9DnGRoMUWaMDvvpt9";
+    const firstName = inquiryFirstName(name);
+    const safeFirstName = escapeHtml(firstName);
     const GALLERY_URL = "https://whiterabbitla.com/experience";
-
-    function buildTrackedUrl(url: string, contactId: string, step: number, content: string): string {
-      const sep = url.includes("?") ? "&" : "?";
-      const taggedUrl = `${url}${sep}utm_source=email&utm_medium=inquiry-auto-reply&utm_campaign=inquiry&utm_content=${encodeURIComponent(content)}`;
-      return `${TRACK_URL}?cid=${encodeURIComponent(contactId)}&step=${step}&r=${encodeURIComponent(taggedUrl)}`;
-    }
-
-    const calendarTrackingUrl = buildTrackedUrl(BOOKING_URL, email, 0, "inquiry-calendar");
-    const galleryTrackingUrl = buildTrackedUrl(GALLERY_URL, email, 0, "inquiry-gallery");
-    const scheduleCallUrl = buildTrackedUrl("https://calendar.app.google/z5ZF2B9FeMMLXUjV7", email, 0, "inquiry-schedule-call");
+    const pacificParts = new Intl.DateTimeFormat("en-US", {
+      timeZone: "America/Los_Angeles",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    }).formatToParts(new Date());
+    const pacificValue = (type: "hour" | "minute") => Number(pacificParts.find((part) => part.type === type)?.value || 0);
+    const pacificMinutes = pacificValue("hour") * 60 + pacificValue("minute");
+    const callLine = pacificMinutes >= 8 * 60 && pacificMinutes < 20 * 60 + 30
+      ? "I will give you a call today from (424) 394-1850, and I will not keep you long. If you see that number come up, it is me."
+      : "It is late here, so I will leave you be tonight. I will call you in the morning from (424) 394-1850.";
+    const confirmationSubject = `Your note reached me, ${firstName}`;
+    const confirmationText = `Hi ${firstName},\n\n${firstName}, your note has reached me, and I am glad it did.\n\nRather than send over a list of options, I would like to hear about it in your own words. What you are imagining, and how you want the room to feel. Then I will put together a proposal built around your event specifically, not a template.\n\n${callLine}\n\nPICK A TIME THAT SUITS YOU →\n${CALENDAR_URL}\n\nAnd if you would like a glimpse while you wait:\n${GALLERY_URL}\n\nSEE A NIGHT IN ACTION →\n${GALLERY_URL}\n\nYour guests do not watch the show, they become the show.\n\nScott Syme\nMagician · (424) 394-1850 · whiterabbitla.com`;
 
     const confirmationHtml = `
 <!DOCTYPE html>
@@ -109,7 +106,7 @@ serve(async (req) => {
         <!-- Headline -->
         <tr><td style="padding:32px 40px 0;text-align:center;">
           <h1 style="margin:0;font-family:Georgia,serif;font-size:28px;font-weight:normal;color:#F8F5F0;letter-spacing:0.02em;line-height:1.3;">
-            Your note reached me, ${firstName}
+             Your note reached me, ${safeFirstName}
           </h1>
         </td></tr>
 
@@ -121,40 +118,32 @@ serve(async (req) => {
         <!-- Body -->
         <tr><td style="padding:24px 40px 0;">
           <p style="margin:0 0 20px;font-family:Georgia,serif;font-size:16px;line-height:1.8;color:rgba(245,240,232,0.85);">
-            ${firstName}, your inquiry just landed with me — and I'm already looking forward to hearing about your event.
+             ${safeFirstName}, your note has reached me, and I am glad it did.
           </p>
           <p style="margin:0 0 20px;font-family:Georgia,serif;font-size:16px;line-height:1.8;color:rgba(245,240,232,0.85);">
-            I read every one of these myself, so this isn't an auto-pilot reply. I'll be in touch within a few hours to talk through your evening; every event is different and yours deserves that attention.
+             Rather than send over a list of options, I would like to hear about it in your own words. What you are imagining, and how you want the room to feel. Then I will put together a proposal built around your event specifically, not a template.
           </p>
           <p style="margin:0 0 20px;font-family:Georgia,serif;font-size:16px;line-height:1.8;color:rgba(245,240,232,0.85);">
-            If you'd rather not wait, you can put a time straight on my calendar — a short, easy fifteen minutes about what you're planning:
+             ${callLine}
           </p>
 
           <!-- Calendar CTA Button -->
           <p style="margin:0 0 28px;text-align:center;">
-            <a href="${calendarTrackingUrl}" target="_blank" style="display:inline-block;font-family:Georgia,serif;font-size:14px;letter-spacing:0.12em;text-transform:uppercase;color:#223D34;text-decoration:none;background-color:#C9A3A8;padding:14px 28px;border-radius:4px;">
-              Book a 15-minute conversation →
+             <a href="${CALENDAR_URL}" target="_blank" style="display:inline-block;font-family:Georgia,serif;font-size:14px;letter-spacing:0.12em;text-transform:uppercase;color:#223D34;text-decoration:none;background-color:#C9A3A8;padding:14px 28px;border-radius:4px;">
+               PICK A TIME THAT SUITS YOU →
             </a>
           </p>
 
           <p style="margin:0 0 20px;font-family:Georgia,serif;font-size:16px;line-height:1.8;color:rgba(245,240,232,0.85);">
-            And if you'd like a glimpse while you wait:
+             And if you would like a glimpse while you wait:
           </p>
           <p style="margin:0 0 28px;text-align:center;">
-            <a href="${galleryTrackingUrl}" target="_blank" style="font-family:Georgia,serif;font-size:14px;letter-spacing:0.15em;text-transform:uppercase;color:#C9A3A8;text-decoration:none;border-bottom:1px solid rgba(201,163,168,0.3);padding-bottom:2px;">
-              See a night in action →
+             <a href="${GALLERY_URL}" target="_blank" style="font-family:Georgia,serif;font-size:14px;letter-spacing:0.15em;text-transform:uppercase;color:#C9A3A8;text-decoration:none;border-bottom:1px solid rgba(201,163,168,0.3);padding-bottom:2px;">
+               SEE A NIGHT IN ACTION →
             </a>
           </p>
           <p style="margin:0 0 20px;font-family:Georgia,serif;font-size:16px;line-height:1.8;color:rgba(245,240,232,0.85);">
-            Prefer to talk it through? Pick a time that suits you and we'll map out your event together.
-          </p>
-          <p style="margin:0 0 28px;text-align:center;">
-            <a href="${scheduleCallUrl}" target="_blank" style="font-family:Georgia,serif;font-size:14px;letter-spacing:0.15em;text-transform:uppercase;color:#C9A3A8;text-decoration:none;border-bottom:1px solid rgba(201,163,168,0.3);padding-bottom:2px;">
-              Schedule a Call →
-            </a>
-          </p>
-          <p style="margin:0 0 20px;font-family:Georgia,serif;font-size:16px;line-height:1.8;color:rgba(245,240,232,0.85);">
-            Looking forward to it.
+             Your guests do not watch the show, they become the show.
           </p>
         </td></tr>
 
@@ -182,67 +171,15 @@ serve(async (req) => {
 </body>
 </html>`;
 
-    // Send notification to Scott
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-      },
-      body: JSON.stringify({
-        from: "White Rabbit <scott.syme@whiterabbitla.com>",
-        to: ["scott.syme@whiterabbitla.com"],
-        subject: `${inquiryFirstName(name)}, about your event`,
-        html: emailHtml,
-        reply_to: email,
-      }),
-    });
+    const contactEmail = email.toLowerCase().trim();
+    const supabase = SUPABASE_URL && SERVICE_KEY ? createClient(SUPABASE_URL, SERVICE_KEY) : null;
+    let inquiryId: string | null = null;
+    let dealId: string | null = null;
 
-    const data = await res.json();
-
-    if (!res.ok) {
-      console.error("Resend error:", data);
-      return new Response(
-        JSON.stringify({ error: "Failed to send email", details: data }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    // Send confirmation email to the user
-    const confirmRes = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${RESEND_API_KEY}`,
-      },
-      body: JSON.stringify({
-        from: "White Rabbit <scott.syme@whiterabbitla.com>",
-        to: [email],
-        reply_to: "events@whiterabbitla.com",
-        subject: "Your note reached me, " + firstName,
-        html: confirmationHtml,
-        text: `${firstName}, your inquiry just landed with me — and I'm already looking forward to hearing about your event.\n\nI read every one of these myself, so this isn't an auto-pilot reply. I'll be in touch within a few hours to talk through your evening; every event is different and yours deserves that attention.\n\nIf you'd rather not wait, you can put a time straight on my calendar — a short, easy fifteen minutes about what you're planning:\n${calendarTrackingUrl}\n\nAnd if you'd like a glimpse while you wait:\n${galleryTrackingUrl}\n\nPrefer to talk it through? Pick a time that suits you and we'll map out your event together.\n${scheduleCallUrl}\n\nLooking forward to it.\n\nScott Syme\nMagician · (424) 394-1850 · whiterabbitla.com`,
-        headers: {
-          "List-Unsubscribe": "<mailto:events@whiterabbitla.com?subject=Unsubscribe>",
-        },
-      }),
-    });
-
-    if (!confirmRes.ok) {
-      const confirmErr = await confirmRes.json();
-      console.error("Confirmation email error:", confirmErr);
-    }
-
-    // Save to contact_inquiries and create deal in pipeline
-    try {
-      const supabase = createClient(
-        Deno.env.get("SUPABASE_URL")!,
-        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
-      );
-      const contactEmail = email.toLowerCase().trim();
-
-      // Save inquiry
-      const { data: inquiry } = await supabase
+    if (!supabase) {
+      console.error("Database configuration is missing");
+    } else {
+      const { data: inquiry, error: inquiryError } = await supabase
         .from("contact_inquiries")
         .insert({
           name,
@@ -260,8 +197,9 @@ serve(async (req) => {
         })
         .select("id")
         .single();
+      if (inquiryError) console.error("Inquiry insert failed:", inquiryError);
+      inquiryId = inquiry?.id || null;
 
-      // Create deal in pipeline
       const eventTypeMap: Record<string, string> = {
         "Corporate Event": "corporate",
         "Wedding": "wedding",
@@ -281,7 +219,7 @@ serve(async (req) => {
         ? message
         : `Event Date (raw): ${date}\n\n${message || ""}`;
 
-      const { error: dealErr } = await supabase.from("deals").insert({
+      const { data: deal, error: dealErr } = await supabase.from("deals").insert({
         contact_email: contactEmail,
         contact_name: name,
         phone: phone || null,
@@ -290,12 +228,105 @@ serve(async (req) => {
         location: location || null,
         stage: "new",
         source: formSource || "contact_form",
-        source_id: inquiry?.id || null,
+        source_id: inquiryId,
         notes: notesWithDate,
-      });
+      }).select("id").single();
       if (dealErr) console.error("Deal insert failed:", dealErr);
+      dealId = deal?.id || null;
+    }
 
-      // Auto-convert: if this email is in the drip campaign, mark as converted
+    if (RESEND_API_KEY) {
+      try {
+        const notificationResponse = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
+          body: JSON.stringify({
+            from: "White Rabbit <scott.syme@whiterabbitla.com>",
+            to: ["scott.syme@whiterabbitla.com"],
+            subject: `Booking Inquiry: ${name} (${eventType})`,
+            html: emailHtml,
+            reply_to: email,
+          }),
+        });
+        if (!notificationResponse.ok) console.error("Resend notification error:", await notificationResponse.text());
+      } catch (notificationError) {
+        console.error("Resend notification failed:", notificationError);
+      }
+    } else {
+      console.error("RESEND_API_KEY is not set; Scott notification was not sent");
+    }
+
+    let gmailSent = false;
+    if (SUPABASE_URL && SERVICE_KEY && ADMIN_PASSWORD) {
+      try {
+        const gmailResponse = await fetch(`${SUPABASE_URL}/functions/v1/gmail-send`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` },
+          body: JSON.stringify({
+            to: email,
+            subject: confirmationSubject,
+            body_text: confirmationText,
+            html_body: confirmationHtml,
+            skip_signature: true,
+            deal_id: dealId,
+            adminPassword: ADMIN_PASSWORD,
+          }),
+        });
+        const gmailData = await gmailResponse.json().catch(() => ({}));
+        if (!gmailResponse.ok || !gmailData.message_id) throw new Error(gmailData.error || `Gmail send ${gmailResponse.status}`);
+        gmailSent = true;
+        if (supabase && inquiryId) {
+          const { error: inquiryUpdateError } = await supabase.from("contact_inquiries").update({
+            instant_reply_sent_at: new Date().toISOString(),
+            instant_reply_message_id: gmailData.message_id,
+            gmail_thread_id: gmailData.thread_id || null,
+          }).eq("id", inquiryId);
+          if (inquiryUpdateError) console.error("Inquiry Gmail result update failed:", inquiryUpdateError);
+          const { error: ledgerError } = await supabase.from("automated_gmail_sends").insert({
+            gmail_message_id: gmailData.message_id,
+            kind: "instant_reply",
+            inquiry_id: inquiryId,
+          });
+          if (ledgerError) console.error("Automated Gmail ledger insert failed:", ledgerError);
+        }
+      } catch (gmailError) {
+        console.error("Gmail confirmation failed; using Resend fallback:", gmailError);
+      }
+    } else {
+      console.error("Gmail confirmation configuration is missing; using Resend fallback");
+    }
+
+    if (!gmailSent) {
+      if (RESEND_API_KEY) {
+        try {
+          const fallbackResponse = await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
+            body: JSON.stringify({
+              from: "White Rabbit <scott.syme@whiterabbitla.com>",
+              to: [email],
+              subject: confirmationSubject,
+              html: confirmationHtml,
+              text: confirmationText,
+            }),
+          });
+          if (!fallbackResponse.ok) console.error("Resend confirmation fallback error:", await fallbackResponse.text());
+          else if (supabase && inquiryId) {
+            const { error: fallbackUpdateError } = await supabase.from("contact_inquiries").update({
+              instant_reply_sent_at: new Date().toISOString(),
+            }).eq("id", inquiryId);
+            if (fallbackUpdateError) console.error("Inquiry fallback result update failed:", fallbackUpdateError);
+          }
+        } catch (fallbackError) {
+          console.error("Resend confirmation fallback failed:", fallbackError);
+        }
+      } else {
+        console.error("Resend confirmation fallback unavailable because RESEND_API_KEY is not set");
+      }
+    }
+
+    if (supabase) {
+      try {
       const { data: dripContact } = await supabase
         .from("newsletter_contacts")
         .select("id, drip_campaign")
@@ -312,19 +343,20 @@ serve(async (req) => {
           .eq("id", dripContact.id);
         console.log(`Auto-converted drip contact: ${contactEmail}`);
       }
-    } catch (convErr) {
-      console.error("Post-send processing failed (non-blocking):", convErr);
+      } catch (convErr) {
+        console.error("Post-send processing failed (non-blocking):", convErr);
+      }
     }
 
     return new Response(
-      JSON.stringify({ success: true, id: data.id }),
+      JSON.stringify({ success: true }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
     console.error("Error:", error);
     return new Response(
-      JSON.stringify({ error: "Internal server error" }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({ success: true }),
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 });
