@@ -1237,6 +1237,33 @@ export type Database = {
         }
         Relationships: []
       }
+      inquiry_sequence_backup_20260926: {
+        Row: {
+          backed_up_at: string | null
+          email: string | null
+          followup_step: number | null
+          id: string | null
+          name: string | null
+          nurture_step: number | null
+        }
+        Insert: {
+          backed_up_at?: string | null
+          email?: string | null
+          followup_step?: number | null
+          id?: string | null
+          name?: string | null
+          nurture_step?: number | null
+        }
+        Update: {
+          backed_up_at?: string | null
+          email?: string | null
+          followup_step?: number | null
+          id?: string | null
+          name?: string | null
+          nurture_step?: number | null
+        }
+        Relationships: []
+      }
       lead_magnet_signups: {
         Row: {
           created_at: string
