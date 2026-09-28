@@ -87,7 +87,7 @@ serve(async (req) => {
       ? "I will give you a call today from (424) 394-1850, and I will not keep you long. If you see that number come up, it is me."
       : "It is late here, so I will leave you be tonight. I will call you in the morning from (424) 394-1850.";
     const confirmationSubject = `Your note reached me, ${firstName}`;
-    const confirmationText = `Hi ${firstName},\n\n${firstName}, your note has reached me, and I am glad it did.\n\nRather than send over a list of options, I would like to hear about it in your own words. What you are imagining, and how you want the room to feel. Then I will put together a proposal built around your event specifically, not a template.\n\n${callLine}\n\nPICK A TIME THAT SUITS YOU →\n${CALENDAR_URL}\n\nAnd if you would like a glimpse while you wait:\n${GALLERY_URL}\n\nSEE A NIGHT IN ACTION →\n${GALLERY_URL}\n\nYour guests do not watch the show, they become the show.\n\nScott Syme\nMagician · (424) 394-1850 · whiterabbitla.com`;
+    const confirmationText = `Hi ${firstName},\n\n${firstName}, your note has reached me, and I am glad it did.\n\nRather than send over a list of options, I would like to hear about it in your own words. What you are imagining, and how you want the room to feel. Then I will put together a proposal built around your event specifically, not a template.\n\n${callLine}\n\nPICK A TIME THAT SUITS YOU →\n${CALENDAR_URL}\n\nAnd if you would like a glimpse while you wait:\n\nSEE A NIGHT IN ACTION →\n${GALLERY_URL}\n\nYour guests do not watch the show, they become the show.\n\nScott Syme\nMagician · (424) 394-1850 · whiterabbitla.com`;
 
     const confirmationHtml = `
 <!DOCTYPE html>
@@ -179,7 +179,8 @@ serve(async (req) => {
     if (!supabase) {
       console.error("Database configuration is missing");
     } else {
-      const { data: inquiry, error: inquiryError } = await supabase
+      try {
+        const { data: inquiry, error: inquiryError } = await supabase
         .from("contact_inquiries")
         .insert({
           name,
@@ -197,42 +198,45 @@ serve(async (req) => {
         })
         .select("id")
         .single();
-      if (inquiryError) console.error("Inquiry insert failed:", inquiryError);
-      inquiryId = inquiry?.id || null;
+        if (inquiryError) console.error("Inquiry insert failed:", inquiryError);
+        inquiryId = inquiry?.id || null;
 
-      const eventTypeMap: Record<string, string> = {
-        "Corporate Event": "corporate",
-        "Wedding": "wedding",
-        "Private Party": "private_party",
-        "Parlor Show": "parlor_show",
-      };
+        const eventTypeMap: Record<string, string> = {
+          "Corporate Event": "corporate",
+          "Wedding": "wedding",
+          "Private Party": "private_party",
+          "Parlor Show": "parlor_show",
+        };
 
-      // Safely parse event_date — accept ISO/parseable strings only, else null
-      let parsedEventDate: string | null = null;
-      if (date) {
-        const d = new Date(date);
-        if (!isNaN(d.getTime())) {
-          parsedEventDate = d.toISOString().slice(0, 10);
+        // Safely parse event_date — accept ISO/parseable strings only, else null
+        let parsedEventDate: string | null = null;
+        if (date) {
+          const d = new Date(date);
+          if (!isNaN(d.getTime())) {
+            parsedEventDate = d.toISOString().slice(0, 10);
+          }
         }
-      }
-      const notesWithDate = parsedEventDate
-        ? message
-        : `Event Date (raw): ${date}\n\n${message || ""}`;
+        const notesWithDate = parsedEventDate
+          ? message
+          : `Event Date (raw): ${date}\n\n${message || ""}`;
 
-      const { data: deal, error: dealErr } = await supabase.from("deals").insert({
-        contact_email: contactEmail,
-        contact_name: name,
-        phone: phone || null,
-        event_type: eventTypeMap[eventType] || "other",
-        event_date: parsedEventDate,
-        location: location || null,
-        stage: "new",
-        source: formSource || "contact_form",
-        source_id: inquiryId,
-        notes: notesWithDate,
-      }).select("id").single();
-      if (dealErr) console.error("Deal insert failed:", dealErr);
-      dealId = deal?.id || null;
+        const { data: deal, error: dealErr } = await supabase.from("deals").insert({
+          contact_email: contactEmail,
+          contact_name: name,
+          phone: phone || null,
+          event_type: eventTypeMap[eventType] || "other",
+          event_date: parsedEventDate,
+          location: location || null,
+          stage: "new",
+          source: formSource || "contact_form",
+          source_id: inquiryId,
+          notes: notesWithDate,
+        }).select("id").single();
+        if (dealErr) console.error("Deal insert failed:", dealErr);
+        dealId = deal?.id || null;
+      } catch (insertError) {
+        console.error("Inquiry or deal insert failed:", insertError);
+      }
     }
 
     if (RESEND_API_KEY) {
