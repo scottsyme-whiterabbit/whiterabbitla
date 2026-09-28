@@ -85,6 +85,30 @@ function linkify(escaped: string) {
   });
 }
 
+const MARKDOWN_LINK = /\[([^\]\r\n]+)\]\(([^)\s]+)\)/g;
+
+function validMarkdownUrl(url: string) {
+  return url.startsWith("https://") && !/["'<>]/.test(url) && !/&(?:lt|gt|quot|#39);/i.test(url);
+}
+
+function markdownLinksToPlain(text: string) {
+  return text.replace(MARKDOWN_LINK, (match, anchorText: string, url: string) =>
+    validMarkdownUrl(url) ? `${anchorText} (${url})` : match
+  );
+}
+
+function renderBodyHtml(text: string) {
+  const anchors: string[] = [];
+  const withPlaceholders = escapeHtml(text).replace(MARKDOWN_LINK, (match, anchorText: string, url: string) => {
+    if (!validMarkdownUrl(url)) return match;
+    const placeholder = `WRMARKDOWNLINK${anchors.length}TOKEN`;
+    anchors.push(`<a href="${url}" target="_blank">${anchorText}</a>`);
+    return placeholder;
+  });
+  const linked = linkify(withPlaceholders);
+  return anchors.reduce((html, anchor, index) => html.replace(`WRMARKDOWNLINK${index}TOKEN`, anchor), linked);
+}
+
 function escapeHtml(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
@@ -138,12 +162,13 @@ serve(async (req) => {
     const signatureHtml = skip_signature ? "" : await getSignature();
 
     // Build text + html parts. Gmail uses "-- \n" as the standard signature separator.
+    const plainText = markdownLinksToPlain(cleanText);
     const textBody = skip_signature
-      ? cleanText
-      : `${cleanText}\n\n-- \nScott Syme\nMagician · White Rabbit LA\n(424) 394-1850 · scott.syme@whiterabbitla.com\nwww.whiterabbitla.com`;
+      ? plainText
+      : `${plainText}\n\n-- \nScott Syme\nMagician · White Rabbit LA\n(424) 394-1850 · scott.syme@whiterabbitla.com\nwww.whiterabbitla.com`;
     const htmlBody = skip_signature
-      ? `<div>${linkify(escapeHtml(cleanText)).replace(/\n/g, "<br>")}</div>`
-      : `<div style="font-family:Arial,Helvetica,sans-serif;color:#222;font-size:14px;line-height:1.55;">${linkify(escapeHtml(cleanText)).replace(/\n/g, "<br>")}</div><br><div>${signatureHtml}</div>`;
+      ? `<div>${renderBodyHtml(cleanText).replace(/\n/g, "<br>")}</div>`
+      : `<div style="font-family:Arial,Helvetica,sans-serif;color:#222;font-size:14px;line-height:1.55;">${renderBodyHtml(cleanText).replace(/\n/g, "<br>")}</div><br><div>${signatureHtml}</div>`;
 
     const headers = [
       `From: ${OWNER_NAME} <${OWNER_EMAIL}>`,

@@ -22,6 +22,7 @@
   - [ ] No unique constraint yet
 
 ## Done
+- Final approved inquiry copy and safe Gmail markdown hyperlinks deployed; both inquiry crons remain disabled.
 - Inquiry email flow rebuilt: kill-switch schema, five-minute Gmail instant reply, two-step plain-text follow-up, and disabled follow-up schedule.
 - Proposal follow-up ladder, invoice reminders, manual-booked client emails, reviews page updates.
 

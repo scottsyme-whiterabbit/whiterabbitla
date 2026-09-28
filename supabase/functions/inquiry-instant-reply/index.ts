@@ -101,10 +101,10 @@ serve(async (req) => {
 
         const firstName = inquiryFirstName(inquiry.name);
         const callLine = lateOrBookedToday
-          ? `It's late here so I won't ring you tonight. I'll call you in the morning from (424) 394-1850. If you'd rather pick a time yourself, here's my calendar: ${CALENDAR_URL}`
-          : `I'll give you a call today from (424) 394-1850. If you see that number come up, it's me. If you'd rather pick a time yourself, here's my calendar: ${CALENDAR_URL}`;
+          ? `It is late here, so I will leave you be tonight. I will call you in the morning from (424) 394-1850. If you would rather pick a time that suits you, [here is my calendar](${CALENDAR_URL}).`
+          : `I will give you a call today from (424) 394-1850, and I will not keep you long. If you see that number come up, it is me. If you would rather pick a time that suits you, [here is my calendar](${CALENDAR_URL}).`;
         const subject = `${firstName}, about your event`;
-        const bodyText = `${firstName},\n\nYour note just came through and I'd love to hear more about what you're planning.\n\nHonestly the fastest way to do this is on the phone. Five minutes tells me more than a long email thread, and I can tell you straight whether I'm the right fit for your evening.\n\n${callLine}\n\nYour guests don't watch the show, they become the show.`;
+        const bodyText = `Hi ${firstName},\n\nYour note just came through, and I am glad it did.\n\nRather than send over a list of options, I would like to hear about it in your own words. What you are imagining, and how you want the room to feel. Then I will put together a proposal built around your event specifically, not a template.\n\n${callLine}\n\nYour guests do not watch the show, they become the show.`;
 
         if (dryRun) {
           wouldSend.push({ inquiry_id: inquiry.id, name: inquiry.name, email, subject, body_text: bodyText, skipped_reason: null });
