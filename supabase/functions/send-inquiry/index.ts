@@ -87,7 +87,7 @@ serve(async (req) => {
       ? "I will give you a call today from (424) 394-1850, and I will not keep you long. If you see that number come up, it is me."
       : "It is late here, so I will leave you be tonight. I will call you in the morning from (424) 394-1850.";
     const confirmationSubject = `Your note reached me, ${firstName}`;
-    const confirmationText = `Hi ${firstName},\n\n${firstName}, your note has reached me, and I am glad it did.\n\nRather than send over a list of options, I would like to hear about it in your own words. What you are imagining, and how you want the room to feel. Then I will put together a proposal built around your event specifically, not a template.\n\n${callLine}\n\nPICK A TIME THAT SUITS YOU →\n${CALENDAR_URL}\n\nAnd if you would like a glimpse while you wait:\n\nSEE A NIGHT IN ACTION →\n${GALLERY_URL}\n\nYour guests do not watch the show, they become the show.\n\nScott Syme\nMagician · (424) 394-1850 · whiterabbitla.com`;
+    const confirmationText = `${firstName}, your note has reached me, and I am glad it did.\n\nRather than send over a list of options, I would like to hear about it in your own words. What you are imagining, and how you want the room to feel. Then I will put together a proposal built around your event specifically, not a template.\n\n${callLine}\n\nPICK A TIME THAT SUITS YOU →\n${CALENDAR_URL}\n\nAnd if you would like a glimpse while you wait:\n\nSEE A NIGHT IN ACTION →\n${GALLERY_URL}\n\nYour guests do not watch the show, they become the show.\n\nScott Syme\nMagician · (424) 394-1850 · whiterabbitla.com`;
 
     const confirmationHtml = `
 <!DOCTYPE html>
