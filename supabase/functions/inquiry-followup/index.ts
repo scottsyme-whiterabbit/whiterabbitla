@@ -13,6 +13,7 @@ interface Inquiry {
   email: string;
   name: string | null;
   followup_step: number;
+  gmail_thread_id: string | null;
   created_at: string;
 }
 
@@ -45,7 +46,7 @@ serve(async (req) => {
     const supabase = createClient(supabaseUrl, serviceKey);
     let query = supabase
       .from("contact_inquiries")
-      .select("id,email,name,followup_step,created_at")
+      .select("id,email,name,followup_step,gmail_thread_id,created_at")
       .order("created_at", { ascending: true });
     if (inquiryIds.length) {
       query = query.in("id", inquiryIds);
@@ -93,7 +94,10 @@ serve(async (req) => {
         }
 
         const firstName = inquiryFirstName(inquiry.name);
-        const subject = currentStep === 0 ? `${firstName}, just wanted to make sure this reached you` : `${firstName}, one last note`;
+        const threadId = inquiry.gmail_thread_id || null;
+        const subject = threadId
+          ? `${firstName}, about your event`
+          : currentStep === 0 ? `${firstName}, just wanted to make sure this reached you` : `${firstName}, one last note`;
         const bodyText = currentStep === 0
           ? `Hi ${firstName},\n\nI wanted to make sure this reached you and did not land somewhere strange.\n\nMost of what I do is close up, right in the middle of the room while people are talking and drinking. Nobody sits in rows and nothing gets announced. It simply starts happening next to them.\n\nIf your plans are still taking shape, tell me what you are picturing and I will tell you what I would do with it.\n\n(424) 394-1850 is the fastest way to reach me. I answer it myself. Or [pick a time here](${CALENDAR_URL}).`
           : `Hi ${firstName},\n\nI will stop filling your inbox after this one.\n\nIf your plans changed or you went a different direction, there are no hard feelings at all. Plans shift constantly in this world, and I would rather you have a wonderful night than have a magician.\n\nIf it is still live, my number is (424) 394-1850.\n\nEither way, I hope it is a beautiful event.`;
@@ -117,7 +121,7 @@ serve(async (req) => {
         const sendResponse = await fetch(`${supabaseUrl}/functions/v1/gmail-send`, {
           method: "POST",
           headers: { "Content-Type": "application/json", apikey: serviceKey, Authorization: `Bearer ${serviceKey}` },
-          body: JSON.stringify({ to: email, subject, body_text: bodyText, deal_id: deal?.id || null, adminPassword }),
+          body: JSON.stringify({ to: email, subject, body_text: bodyText, deal_id: deal?.id || null, adminPassword, ...(threadId ? { gmail_thread_id: threadId } : {}) }),
         });
         const sendData = await sendResponse.json().catch(() => ({}));
         if (!sendResponse.ok || !sendData.message_id) {

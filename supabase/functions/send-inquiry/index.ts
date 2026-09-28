@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { inquiryFirstName } from "../_shared/inquiry-email.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -191,7 +192,7 @@ serve(async (req) => {
       body: JSON.stringify({
         from: "White Rabbit <scott.syme@whiterabbitla.com>",
         to: ["scott.syme@whiterabbitla.com"],
-        subject: `Booking Inquiry — ${eventType}`,
+        subject: `${inquiryFirstName(name)}, about your event`,
         html: emailHtml,
         reply_to: email,
       }),
