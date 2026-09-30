@@ -214,7 +214,7 @@ interface Props {
 const folderBtn = "flex items-center justify-center sm:justify-start gap-1.5 px-3 min-h-[44px] font-sans text-[11px] tracking-[0.12em] uppercase border transition-colors";
 const smallBtn = "inline-flex items-center gap-1.5 min-h-[40px] font-sans text-[11px] tracking-[0.1em] uppercase transition-colors";
 
-const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onEditDeal }: Props) => {
+const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Props) => {
   const email = (dealProp?.contact_email || target?.email || "").toLowerCase().trim();
   const [file, setFile] = useState<ClientFile | null>(null);
   const [createdDeal, setCreatedDeal] = useState<ContextDeal | null>(null);
