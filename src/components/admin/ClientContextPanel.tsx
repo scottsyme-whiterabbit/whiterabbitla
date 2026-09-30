@@ -152,7 +152,53 @@ const campaignLabel = (r: LogRow) => {
   return cap(id.replace(/[-_]/g, " "));
 };
 
-type TabKey = "payments" | "email" | "documents" | "correspondence" | "proposal";
+type TabKey = "activity" | "payments" | "email" | "documents" | "correspondence" | "proposal";
+
+interface ActivityRow {
+  id: string;
+  type: string;
+  title: string | null;
+  body: string | null;
+  metadata: Record<string, unknown> | null;
+  created_at: string;
+  occurred_at?: string | null;
+}
+
+const STAGE_OPTIONS = [
+  { value: "new", label: "New" },
+  { value: "contacted", label: "Contacted" },
+  { value: "proposal_sent", label: "Proposal sent" },
+  { value: "on_hold", label: "On hold" },
+  { value: "booked", label: "Booked" },
+  { value: "completed", label: "Completed" },
+  { value: "lost", label: "Lost" },
+];
+
+const CALL_OUTCOMES = [
+  { value: "reached", label: "Reached them" },
+  { value: "voicemail", label: "Left a voicemail" },
+  { value: "no_answer", label: "No answer" },
+  { value: "wrong_number", label: "Wrong number" },
+];
+
+const EDIT_FIELDS: { key: string; label: string; type: string }[] = [
+  { key: "contact_name", label: "Name", type: "text" },
+  { key: "phone", label: "Phone", type: "tel" },
+  { key: "company", label: "Company", type: "text" },
+  { key: "event_type", label: "Event type", type: "text" },
+  { key: "event_date", label: "Event date", type: "date" },
+  { key: "event_time", label: "Event time", type: "text" },
+  { key: "location", label: "Location", type: "text" },
+  { key: "guest_count", label: "Guest count", type: "number" },
+  { key: "deal_value", label: "Deal value (dollars)", type: "number" },
+  { key: "stage", label: "Stage", type: "select" },
+  { key: "next_follow_up", label: "Next follow up", type: "date" },
+  { key: "notes", label: "Notes", type: "textarea" },
+];
+
+const inputCls = "w-full bg-background border border-border px-2 min-h-[44px] text-base focus:outline-none focus:border-accent";
+const saveBtn = "flex items-center gap-1.5 bg-accent text-accent-foreground px-4 min-h-[44px] font-sans text-[11px] tracking-[0.15em] uppercase hover:bg-accent/80 disabled:opacity-50 transition-colors";
+const cancelBtn = "border border-border px-4 min-h-[44px] font-sans text-[11px] tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors";
 
 interface Props {
   /** Pipeline passes the deal it already has; everywhere else passes a target by email. */
@@ -186,8 +232,19 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onEdit
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
   const [pdfBusy, setPdfBusy] = useState<string | null>(null);
+  const [dealOverride, setDealOverride] = useState<ContextDeal | null>(null);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editForm, setEditForm] = useState<Record<string, string>>({});
+  const [editInitial, setEditInitial] = useState<Record<string, string>>({});
+  const [activity, setActivity] = useState<ActivityRow[]>([]);
+  const [logForm, setLogForm] = useState<"call" | "note" | null>(null);
+  const [callOutcome, setCallOutcome] = useState<string | null>(null);
+  const [logText, setLogText] = useState("");
 
-  const deal: ContextDeal | null = dealProp || createdDeal || file?.deal || null;
+  const baseDeal: ContextDeal | null = dealProp || createdDeal || file?.deal || null;
+  const deal: ContextDeal | null = baseDeal && dealOverride && dealOverride.id === baseDeal.id
+    ? { ...baseDeal, ...dealOverride }
+    : baseDeal;
   const invoices = file?.invoices || [];
   const proposals = file?.proposals || [];
   const agreements = file?.agreements || [];
@@ -231,6 +288,78 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onEdit
     return msgs;
   }, [callAdmin]);
 
+  const loadActivity = useCallback(async (dealId: string) => {
+    const res = await callAdmin("get_deal_activity", { deal_id: dealId });
+    setActivity(res.activity || []);
+  }, [callAdmin]);
+
+  const startEdit = () => {
+    if (!deal) return;
+    const d = deal as unknown as Record<string, unknown>;
+    const init: Record<string, string> = {};
+    for (const f of EDIT_FIELDS) {
+      const v = d[f.key];
+      init[f.key] = v === null || v === undefined ? "" : String(v);
+    }
+    if (init.event_date) init.event_date = init.event_date.slice(0, 10);
+    if (init.next_follow_up) init.next_follow_up = init.next_follow_up.slice(0, 10);
+    setEditInitial(init);
+    setEditForm(init);
+    setEditOpen(true);
+  };
+
+  const saveEdit = async () => {
+    if (!deal) return;
+    const changed: Record<string, string> = {};
+    for (const f of EDIT_FIELDS) {
+      if ((editForm[f.key] ?? "") !== (editInitial[f.key] ?? "")) changed[f.key] = editForm[f.key] ?? "";
+    }
+    if (Object.keys(changed).length === 0) { setEditOpen(false); return; }
+    setBusy(true);
+    try {
+      const res = await callAdmin("update_deal", { deal_id: deal.id, fields: changed });
+      if (res.deal) setDealOverride({ ...deal, ...res.deal });
+      toast.success("Deal saved");
+      setEditOpen(false);
+      await loadFile().catch(() => {});
+      if ("stage" in changed) loadActivity(deal.id).catch(() => {});
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not save");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const openLog = (kind: "call" | "note") => {
+    if (logForm === kind) { setLogForm(null); return; }
+    setLogForm(kind);
+    setCallOutcome(null);
+    setLogText("");
+  };
+
+  const submitLog = async () => {
+    if (!deal || !logForm) return;
+    setBusy(true);
+    try {
+      const res = await callAdmin("log_activity", {
+        deal_id: deal.id, kind: logForm, outcome: logForm === "call" ? callOutcome : undefined, body: logText,
+      });
+      if (res.moved_to_contacted) {
+        setDealOverride({ ...deal, stage: "contacted" });
+        toast.success("Call logged, moved to contacted");
+      } else {
+        toast.success(logForm === "call" ? "Call logged" : "Note added");
+      }
+      setLogForm(null);
+      await Promise.all([loadFile().catch(() => {}), loadActivity(deal.id).catch(() => {})]);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Could not save");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+
   const syncGmail = useCallback(async (dealId: string, quiet = false) => {
     setSyncing(true);
     try {
@@ -255,11 +384,16 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onEdit
     setExpanded({});
     setReply("");
     setOpenForm(null);
+    setDealOverride(null);
+    setEditOpen(false);
+    setLogForm(null);
+    setActivity([]);
     (async () => {
       try {
         const f = await loadFile();
         const d = dealProp || f?.deal;
         if (d && !cancelled) {
+          loadActivity(d.id).catch(() => {});
           const msgs = await loadThread(d.id);
           // Never show a blank conversation for a client who may have real history.
           if (!cancelled && msgs.length === 0) await syncGmail(d.id, true);
@@ -475,6 +609,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onEdit
   const phone = deal?.phone || file?.known.phone || inquiry?.phone || null;
 
   const TABS: { key: TabKey; label: string; icon: typeof Mail; count?: number }[] = [
+    ...(deal ? [{ key: "activity" as TabKey, label: "Activity", icon: History, count: activity.length }] : []),
     { key: "payments", label: "Payments", icon: BadgeDollarSign, count: invoices.length },
     { key: "email", label: "Email activity", icon: CalendarClock, count: emailActivity.sent.length },
     { key: "documents", label: "Documents", icon: FileSignature, count: agreements.length },
@@ -539,13 +674,57 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onEdit
                 ))}
               </div>
               <div className="flex flex-wrap gap-x-5">
-                <button onClick={() => { navigator.clipboard.writeText(email); toast.success("Email copied"); }} className={`${smallBtn} text-muted-foreground hover:text-foreground`}>
+                <button onClick={() => { navigator.clipboard.writeText(email); toast.success("Email copied"); }} className={`${smallBtn} text-muted-foreground hover:text-foreground min-h-[44px]`}>
                   <Copy size={13} /> Copy email
                 </button>
                 {phone && (
-                  <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} className={`${smallBtn} text-accent`}><Phone size={13} /> Call</a>
+                  <a href={`tel:${phone.replace(/[^\d+]/g, "")}`} className={`${smallBtn} text-accent min-h-[44px]`}><Phone size={13} /> Call</a>
+                )}
+                {deal && (
+                  <>
+                    <button onClick={() => openLog("call")} className={`${smallBtn} min-h-[44px] ${logForm === "call" ? "text-accent" : "text-muted-foreground hover:text-foreground"}`}>
+                      <Phone size={13} /> Log a call
+                    </button>
+                    <button onClick={() => openLog("note")} className={`${smallBtn} min-h-[44px] ${logForm === "note" ? "text-accent" : "text-muted-foreground hover:text-foreground"}`}>
+                      <Plus size={13} /> Add a note
+                    </button>
+                  </>
                 )}
               </div>
+              {deal && logForm && (
+                <div className="border-t border-border pt-3 space-y-2">
+                  {logForm === "call" && (
+                    <div>
+                      <label className="block text-[9px] tracking-[0.1em] uppercase text-muted-foreground mb-1">Outcome</label>
+                      <div className="grid grid-cols-2 gap-2">
+                        {CALL_OUTCOMES.map((o) => (
+                          <button
+                            key={o.value}
+                            onClick={() => setCallOutcome(o.value)}
+                            className={`border px-2 min-h-[44px] font-sans text-[11px] tracking-[0.1em] uppercase transition-colors ${callOutcome === o.value ? "border-accent text-accent bg-accent/5" : "border-border text-muted-foreground hover:text-foreground"}`}
+                          >
+                            {o.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  <div>
+                    <label className="block text-[9px] tracking-[0.1em] uppercase text-muted-foreground mb-1">Note</label>
+                    {logForm === "call" ? (
+                      <input value={logText} onChange={(e) => setLogText(e.target.value)} placeholder="Optional" className={inputCls} />
+                    ) : (
+                      <textarea value={logText} onChange={(e) => setLogText(e.target.value)} rows={3} className={`${inputCls} py-2`} />
+                    )}
+                  </div>
+                  <div className="flex gap-2">
+                    <button onClick={submitLog} disabled={busy || (logForm === "call" ? !callOutcome : !logText.trim())} className={saveBtn}>
+                      {busy && <Loader2 size={12} className="animate-spin" />} Save
+                    </button>
+                    <button onClick={() => setLogForm(null)} className={cancelBtn}>Cancel</button>
+                  </div>
+                </div>
+              )}
               {!deal && inquiry && (inquiry.message || inquiry.description) && (
                 <div className="border-t border-border pt-2">
                   <p className="text-[9px] tracking-[0.1em] uppercase text-muted-foreground">What they wrote · {fmtDate(inquiry.created_at)}</p>
@@ -555,14 +734,47 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onEdit
             </section>
 
             {deal ? (
-              onEditDeal && (
+              <>
                 <button
-                  onClick={() => { onOpenChange(false); onEditDeal(deal); }}
+                  onClick={() => (editOpen ? setEditOpen(false) : startEdit())}
                   className="w-full border border-border min-h-[44px] font-sans text-[11px] tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Edit deal details
+                  {editOpen ? "Close edit form" : "Edit deal details"}
                 </button>
-              )
+                {editOpen && (
+                  <section className="border border-border p-4 space-y-3">
+                    <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent">Edit deal</p>
+                    <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-2">
+                      {EDIT_FIELDS.map((f) => (
+                        <div key={f.key} className={f.type === "textarea" ? "min-[420px]:col-span-2" : ""}>
+                          <label className="block text-[9px] tracking-[0.1em] uppercase text-muted-foreground mb-1">{f.label}</label>
+                          {f.type === "select" ? (
+                            <select value={editForm[f.key] ?? ""} onChange={(e) => setEditForm((p) => ({ ...p, [f.key]: e.target.value }))} className={inputCls}>
+                              {STAGE_OPTIONS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+                            </select>
+                          ) : f.type === "textarea" ? (
+                            <textarea value={editForm[f.key] ?? ""} onChange={(e) => setEditForm((p) => ({ ...p, [f.key]: e.target.value }))} rows={4} className={`${inputCls} py-2`} />
+                          ) : (
+                            <input
+                              type={f.type}
+                              inputMode={f.type === "number" ? "numeric" : undefined}
+                              value={editForm[f.key] ?? ""}
+                              onChange={(e) => setEditForm((p) => ({ ...p, [f.key]: e.target.value }))}
+                              className={inputCls}
+                            />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex gap-2">
+                      <button onClick={saveEdit} disabled={busy} className={saveBtn}>
+                        {busy && <Loader2 size={12} className="animate-spin" />} Save
+                      </button>
+                      <button onClick={() => setEditOpen(false)} className={cancelBtn}>Cancel</button>
+                    </div>
+                  </section>
+                )}
+              </>
             ) : (
               <button
                 onClick={createDeal}
@@ -590,6 +802,41 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onEdit
                 );
               })}
             </div>
+
+            {/* ACTIVITY */}
+            {tab === "activity" && deal && (
+              <section className="space-y-3">
+                <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent flex items-center gap-1.5"><History size={12} /> Activity</p>
+                {activity.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">Nothing logged yet. Log a call or add a note above.</p>
+                ) : (
+                  <ul className="divide-y divide-border border border-border">
+                    {activity.map((a) => {
+                      const loud = a.type === "call" || a.type === "note";
+                      const when = new Date(a.occurred_at || a.created_at);
+                      return (
+                        <li key={a.id} className={`p-3 ${loud ? "" : "opacity-70"}`}>
+                          <div className="flex gap-3 items-start">
+                            <p className="shrink-0 w-28 text-[11px] text-muted-foreground leading-snug">
+                              {when.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })}
+                              <br />
+                              {when.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })}
+                            </p>
+                            <div className="min-w-0 flex-1">
+                              <p className={`break-words ${loud ? "text-sm text-foreground" : "text-xs text-muted-foreground"}`}>
+                                {a.type === "call" && <Phone size={12} className="inline mr-1 text-accent" />}
+                                {a.title || a.type.replace(/_/g, " ")}
+                              </p>
+                              {a.body && <p className="text-xs text-muted-foreground whitespace-pre-wrap break-words mt-1 line-clamp-6">{a.body}</p>}
+                            </div>
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </section>
+            )}
 
             {/* PAYMENTS */}
             {tab === "payments" && (
