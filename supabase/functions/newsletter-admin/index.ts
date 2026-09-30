@@ -914,6 +914,49 @@ serve(async (req) => {
       }
 
       case "update_deal": {
+        // New partial-update shape from the client panel: { deal_id, fields }.
+        // The legacy { deal } shape used by the pipeline form continues below unchanged.
+        if (payload.deal_id && payload.fields && !payload.deal) {
+          const json = (b: unknown, status = 200) => new Response(JSON.stringify(b), {
+            status, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+          const dealId = String(payload.deal_id);
+          const fields = (payload.fields || {}) as Record<string, unknown>;
+          const ALLOWED = ["contact_name", "company", "phone", "event_type", "event_date", "event_time", "location", "guest_count", "deal_value", "stage", "notes", "next_follow_up", "lost_reason"];
+          const STAGES = ["new", "contacted", "proposal_sent", "on_hold", "booked", "completed", "lost"];
+          const update: Record<string, unknown> = {};
+          for (const key of ALLOWED) {
+            if (!(key in fields)) continue;
+            let v = fields[key];
+            if (typeof v === "string") v = v.trim();
+            if (v === "" || v === undefined) v = null;
+            if ((key === "deal_value" || key === "guest_count") && v !== null) {
+              const n = Number(v);
+              if (!Number.isFinite(n)) return json({ error: `${key} must be a number` }, 400);
+              v = Math.round(n);
+              if (key === "guest_count") v = String(v); // column is text; store the integer as text
+            }
+            if ((key === "event_date" || key === "next_follow_up") && v !== null) {
+              if (typeof v !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(v) || isNaN(Date.parse(v))) {
+                return json({ error: `${key} must be a date in YYYY-MM-DD format` }, 400);
+              }
+            }
+            if (key === "stage") {
+              if (v === null || !STAGES.includes(String(v))) {
+                return json({ error: `Unknown stage "${v}". Use one of: ${STAGES.join(", ")}` }, 400);
+              }
+            }
+            update[key] = v;
+          }
+          if (Object.keys(update).length === 0) return json({ error: "No valid fields to update" }, 400);
+          const { data, error } = await supabase.from("deals").update(update).eq("id", dealId).select().single();
+          if (error) return json({ error: error.message }, 400);
+          if (data?.id) {
+            await syncDealToGoogleCalendar(supabase, data.id);
+            await ensureBookedClientEmails(supabase, data.id);
+          }
+          return json({ ok: true, deal: data });
+        }
         const { deal } = payload;
         const { data, error } = await supabase
           .from("deals")
