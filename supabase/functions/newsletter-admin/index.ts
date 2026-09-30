@@ -990,6 +990,64 @@ serve(async (req) => {
         });
       }
 
+      case "log_activity": {
+        const json = (b: unknown, status = 200) => new Response(JSON.stringify(b), {
+          status, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+        const dealId = payload.deal_id ? String(payload.deal_id) : "";
+        const kind = String(payload.kind || "");
+        const outcome = payload.outcome ? String(payload.outcome) : null;
+        const text = typeof payload.body === "string" && payload.body.trim() ? payload.body.trim().slice(0, 5000) : null;
+        if (!dealId) return json({ error: "deal_id is required" }, 400);
+        if (kind !== "call" && kind !== "note") return json({ error: "kind must be call or note" }, 400);
+        const TITLES: Record<string, string> = {
+          reached: "Called and reached them",
+          voicemail: "Called, left a voicemail",
+          no_answer: "Called, no answer",
+          wrong_number: "Wrong number",
+        };
+        if (kind === "call" && (!outcome || !TITLES[outcome])) {
+          return json({ error: "outcome must be one of: reached, voicemail, no_answer, wrong_number" }, 400);
+        }
+        if (kind === "note" && !text) return json({ error: "A note needs some text" }, 400);
+        const { error: insErr } = await supabase.from("deal_activity").insert({
+          deal_id: dealId,
+          type: kind,
+          title: kind === "call" ? TITLES[outcome!] : "Note",
+          body: text,
+          metadata: kind === "call" ? { outcome } : null,
+        });
+        if (insErr) return json({ error: insErr.message }, 400);
+        let moved = false;
+        if (kind === "call" && (outcome === "reached" || outcome === "voicemail")) {
+          const { data: movedRows, error: upErr } = await supabase
+            .from("deals").update({ stage: "contacted" })
+            .eq("id", dealId).eq("stage", "new").select("id");
+          if (upErr) return json({ error: upErr.message }, 400);
+          moved = (movedRows || []).length > 0;
+        }
+        return json({ ok: true, moved_to_contacted: moved });
+      }
+
+      case "get_deal_activity": {
+        const dealId = payload.deal_id ? String(payload.deal_id) : "";
+        if (!dealId) {
+          return new Response(JSON.stringify({ error: "deal_id is required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const { data, error } = await supabase
+          .from("deal_activity")
+          .select("id, type, title, body, metadata, created_at, occurred_at")
+          .eq("deal_id", dealId)
+          .order("occurred_at", { ascending: false })
+          .limit(100);
+        if (error) throw error;
+        return new Response(JSON.stringify({ activity: data || [] }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       case "sync_deal_calendar": {
         const { dealId } = payload;
         await syncDealToGoogleCalendar(supabase, dealId);
