@@ -87,18 +87,46 @@ serve(async (req) => {
       // Try to find an existing deal: by calendar_event_id, or by attendee email
       let { data: deal } = await supabase
         .from("deals")
-        .select("id, stage, contact_email, post_show_step, post_show_started_at, hot_signal")
+        .select("id, stage, contact_email, post_show_step, post_show_started_at, hot_signal, calendar_event_id")
         .eq("calendar_event_id", eventId)
         .maybeSingle();
 
       if (!deal && guestEmails.length) {
         const { data: byEmail } = await supabase
           .from("deals")
-          .select("id, stage, contact_email, post_show_step, post_show_started_at, hot_signal")
+          .select("id, stage, contact_email, post_show_step, post_show_started_at, hot_signal, calendar_event_id")
           .in("contact_email", guestEmails)
           .order("updated_at", { ascending: false })
           .limit(1);
         if (byEmail && byEmail.length) deal = byEmail[0];
+      }
+
+      // Discovery calls and consultations are not show bookings.
+      const titleLc = summary.toLowerCase();
+      const isConsultation = ["conversation with scott", "15-minute", "15 minute", "discovery call", "consultation"]
+        .some((k) => titleLc.includes(k));
+
+      if (isConsultation) {
+        if (deal && !isPast && (deal as any).calendar_event_id !== eventId) {
+          await supabase.from("deals").update({
+            calendar_event_id: eventId,
+            ...(deal.stage === "new" ? { stage: "contacted" } : {}),
+            hot_signal: true,
+            hot_reason: "Call booked",
+            last_calendar_sync_at: new Date().toISOString(),
+          }).eq("id", deal.id);
+          await supabase.from("deal_activity").insert({
+            deal_id: deal.id,
+            type: "calendar_event",
+            title: `Booked a call: ${summary}`,
+            body: null,
+            metadata: { event_id: eventId, start, end, consultation: true },
+            occurred_at: new Date().toISOString(),
+          });
+          linked++;
+          hotMarked++;
+        }
+        continue;
       }
 
       // Link existing deal to event
