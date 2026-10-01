@@ -107,14 +107,20 @@ serve(async (req) => {
         .some((k) => titleLc.includes(k));
 
       if (isConsultation) {
+        // A consultation only says a call is scheduled. It must NEVER write the
+        // deal's event_date, event_time or location; only a real show event may.
         if (deal && !isPast && (deal as any).calendar_event_id !== eventId) {
-          await supabase.from("deals").update({
+          const consultUpdate: Record<string, unknown> = {
             calendar_event_id: eventId,
             ...(deal.stage === "new" ? { stage: "contacted" } : {}),
             hot_signal: true,
             hot_reason: "Call booked",
             last_calendar_sync_at: new Date().toISOString(),
-          }).eq("id", deal.id);
+          };
+          delete consultUpdate.event_date;
+          delete consultUpdate.event_time;
+          delete consultUpdate.location;
+          await supabase.from("deals").update(consultUpdate).eq("id", deal.id);
           await supabase.from("deal_activity").insert({
             deal_id: deal.id,
             type: "calendar_event",
