@@ -2190,6 +2190,11 @@ export type Database = {
     Functions: {
       deals_awaiting_reply: { Args: never; Returns: Json }
       get_resident_opens_stats: { Args: never; Returns: Json }
+      parse_price_cents: { Args: { p: string }; Returns: number }
+      resolve_proposal_deal: {
+        Args: { p_proposal_id: string; p_slug: string }
+        Returns: string
+      }
       stop_inquiry_sequence: {
         Args: { p_email: string; p_reason: string }
         Returns: undefined
