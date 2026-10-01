@@ -1,0 +1,1 @@
+ALTER TABLE public.proposals ADD COLUMN IF NOT EXISTS special_terms text, ADD COLUMN IF NOT EXISTS omit_photography boolean NOT NULL DEFAULT false;

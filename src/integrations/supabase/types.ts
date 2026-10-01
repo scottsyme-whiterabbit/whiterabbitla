@@ -1725,10 +1725,12 @@ export type Database = {
           last_followup_at: string | null
           last_name: string
           letter_intro: string
+          omit_photography: boolean
           recipient_email: string | null
           reviews: Json | null
           sent_at: string | null
           slug: string
+          special_terms: string | null
           square_invoice_url: string | null
           tiers: Json
           timeline: Json
@@ -1754,10 +1756,12 @@ export type Database = {
           last_followup_at?: string | null
           last_name?: string
           letter_intro?: string
+          omit_photography?: boolean
           recipient_email?: string | null
           reviews?: Json | null
           sent_at?: string | null
           slug: string
+          special_terms?: string | null
           square_invoice_url?: string | null
           tiers?: Json
           timeline?: Json
@@ -1783,10 +1787,12 @@ export type Database = {
           last_followup_at?: string | null
           last_name?: string
           letter_intro?: string
+          omit_photography?: boolean
           recipient_email?: string | null
           reviews?: Json | null
           sent_at?: string | null
           slug?: string
+          special_terms?: string | null
           square_invoice_url?: string | null
           tiers?: Json
           timeline?: Json
