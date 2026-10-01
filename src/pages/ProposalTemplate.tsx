@@ -5,7 +5,7 @@ import OrnamentalDivider from "@/components/OrnamentalDivider";
 import SignAgreementModal from "@/components/SignAgreementModal";
 import threeStars from "@/assets/three-stars-gold.png";
 import wrScriptLogo from "@/assets/wr-wordmark-cream.png";
-import { DEFAULT_GALLERY_KEYS, photoKeyToSrc, reviewsForEventType } from "@/data/proposalAssets";
+import { DEFAULT_GALLERY_KEYS, photoKeyToSrc, reviewsForEventType, reviewsForProposal, type ProposalReview } from "@/data/proposalAssets";
 import { adminViewHeaders } from "@/lib/adminAuth";
 
 import disneyLogo from "@/assets/logos/normalized/disney.png";
@@ -94,6 +94,7 @@ export interface ProposalData {
   faqs: FaqItem[];
   closing_quote?: string | null;
   closing_attribution?: string | null;
+  reviews?: ProposalReview[] | null;
   gallery_photos?: string[]; // optional: brand-photo keys to override default gallery grid
   square_invoice_url?: string | null; // single Square invoice URL, fills every Reserve button if set
   sent_at?: string | null;
@@ -468,7 +469,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
             <h2 className="font-serif font-light text-3xl md:text-4xl text-forest-dark mt-6">A Few Words From the Room</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-5 md:gap-6">
-            {reviewsForEventType(data.event_type).map((r, i) => (
+            {reviewsForProposal(data.reviews, data.event_type).map((r, i) => (
               <figure key={i} className="relative bg-cream border border-forest-dark/10 p-6 md:p-7 flex flex-col">
                 <span className="absolute top-0 left-0 w-4 h-px bg-gold/70" />
                 <span className="absolute top-0 left-0 w-px h-4 bg-gold/70" />
