@@ -125,26 +125,40 @@ function stripTrailingSignoff(body: string): string {
   return out.replace(/\s+$/, "");
 }
 
+// Standard base64 for MIME part bodies (RFC 2045): encode the UTF-8 bytes,
+// keep padding, hard wrap at 76 characters per line with CRLF.
+// NOT the same as b64url above, which is the URL-safe, unpadded encoding
+// used for the outer Gmail API payload.
+function mimeBase64(text: string): string {
+  const bytes = new TextEncoder().encode(text);
+  let binary = "";
+  const chunkSize = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+  }
+  return btoa(binary).replace(/(.{76})/g, "$1\r\n");
+}
+
 function buildMultipart(textBody: string, htmlBody: string, headers: string[]): string {
   const boundary = `=_wr_${Math.random().toString(36).slice(2)}_${Date.now()}`;
   const hdrs = [...headers, `Content-Type: multipart/alternative; boundary="${boundary}"`];
   const parts = [
     `--${boundary}`,
     `Content-Type: text/plain; charset=UTF-8`,
-    `Content-Transfer-Encoding: 7bit`,
+    `Content-Transfer-Encoding: base64`,
     ``,
-    textBody,
+    mimeBase64(textBody),
     ``,
     `--${boundary}`,
     `Content-Type: text/html; charset=UTF-8`,
-    `Content-Transfer-Encoding: 7bit`,
+    `Content-Transfer-Encoding: base64`,
     ``,
-    htmlBody,
+    mimeBase64(htmlBody),
     ``,
     `--${boundary}--`,
     ``,
   ].join("\r\n");
-  return hdrs.join("\r\n") + "\r\n\r\n" + parts;
+  return hdrs.join("\r\n\r\n") + "\r\n\r\n" + parts;
 }
 
 serve(async (req) => {
