@@ -24,7 +24,7 @@ const stripAdditional = (text: string): string =>
 
 /** Remove the Photography and Video heading and its single paragraph. */
 const stripPhotography = (text: string): string =>
-  text.replace(/\nPhotography and Video:\n[^\n]*\n/, "\n");
+  text.replace(/Photography and Video:\n[^\n]*\n\n\n?/, "");
 
 /**
  * Apply per proposal terms to the standard agreement text. With no options set the
