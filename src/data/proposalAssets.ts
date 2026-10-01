@@ -655,6 +655,22 @@ export const reviewsForEventType = (eventType?: string): ProposalReview[] => [
   ...(REVIEWS_BY_TYPE[eventType || ""] || REVIEWS_BY_TYPE["Private Event"]),
 ];
 
+// Every stock review, deduped, for the proposal editor's picker.
+export const ALL_PROPOSAL_REVIEWS: ProposalReview[] = (() => {
+  const seen = new Set<string>();
+  return [ANCHOR_REVIEW, ...Object.values(REVIEWS_BY_TYPE).flat()].filter((r) => {
+    if (seen.has(r.text)) return false;
+    seen.add(r.text);
+    return true;
+  });
+})();
+
+// Custom picks win when set; otherwise the event-type defaults.
+export const reviewsForProposal = (reviews: ProposalReview[] | null | undefined, eventType?: string): ProposalReview[] => {
+  const picked = (reviews || []).filter((r) => r && r.text?.trim());
+  return picked.length ? picked : reviewsForEventType(eventType);
+};
+
 // ── STANDARD TIER LINES ──
 // The detail lines Scott reaches for again and again when quoting packages,
 // distilled from the wording across every proposal he has sent. Grouped so the

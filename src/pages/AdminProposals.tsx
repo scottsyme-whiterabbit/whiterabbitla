@@ -3,7 +3,7 @@ import { ClientFileProvider } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
 import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2, ArrowLeft, ArrowUp, ArrowDown } from "lucide-react";
 import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type Tier, type TimelineItem, type FaqItem } from "./ProposalTemplate";
-import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, PROPOSAL_TEMPLATES, STANDARD_TIER_LINES, reviewsForEventType } from "@/data/proposalAssets";
+import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, PROPOSAL_TEMPLATES, STANDARD_TIER_LINES, reviewsForEventType, ALL_PROPOSAL_REVIEWS, type ProposalReview } from "@/data/proposalAssets";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import AdminGate, { AdminSignOutButton } from "@/components/admin/AdminGate";
@@ -642,6 +642,29 @@ const ProposalEditor = ({
   const addFaq = () => update({ faqs: [...proposal.faqs, { q: "", a: "" }] });
   const removeFaq = (i: number) => update({ faqs: proposal.faqs.filter((_, j) => j !== i) });
 
+  const customReviews = (proposal.reviews || []) as ProposalReview[];
+  const isCustomReviews = customReviews.length > 0;
+  const shownReviews: ProposalReview[] = isCustomReviews ? customReviews : reviewsForEventType(proposal.event_type);
+  const setReviews = (r: ProposalReview[]) => update({ reviews: r.length ? r : null });
+  const editReview = (i: number, patch: Partial<ProposalReview>) => {
+    const r = [...shownReviews]; r[i] = { ...r[i], ...patch }; setReviews(r);
+  };
+  const moveReview = (i: number, d: number) => {
+    const r = [...shownReviews]; const j = i + d; if (j < 0 || j >= r.length) return;
+    [r[i], r[j]] = [r[j], r[i]]; setReviews(r);
+  };
+  const removeReview = (i: number) => {
+    const r = shownReviews.filter((_, j) => j !== i);
+    if (!r.length) { toast.error("Keep at least one review, or press Reset to defaults"); return; }
+    setReviews(r);
+  };
+  const addStockReview = (idx: string) => {
+    const r = ALL_PROPOSAL_REVIEWS[Number(idx)]; if (!r) return;
+    if (shownReviews.some((x) => x.text === r.text)) { toast.error("Already on this proposal"); return; }
+    setReviews([...shownReviews, { ...r }]);
+  };
+  const addCustomReview = () => setReviews([...shownReviews, { text: "", name: "", role: "" }]);
+
   const inputCls = "w-full border border-forest-dark/20 px-3 py-2 bg-white text-sm";
   const labelCls = "block text-xs uppercase tracking-wider text-forest-dark/60 mb-1";
   const sectionCls = "bg-white border border-forest-dark/10 p-6 mb-6";
@@ -792,17 +815,36 @@ const ProposalEditor = ({
               </select>
             </div>
             <div className="md:col-span-2 rounded-md border border-forest-dark/10 bg-cream/60 p-3">
-              <p className={labelCls + " mb-2"}>Quotes shown on this proposal</p>
-              <ul className="space-y-1.5">
-                {reviewsForEventType(proposal.event_type).map((r) => (
-                  <li key={r.name} className="text-xs text-forest-dark/80">
-                    <span className="font-medium">{r.name}</span>
-                    <span className="text-forest-dark/50"> · {r.role} · </span>
-                    <span>"{r.text.length > 90 ? r.text.slice(0, 90) + "…" : r.text}"</span>
-                  </li>
+              <div className="flex items-center justify-between mb-2">
+                <p className={labelCls + " mb-0"}>Reviews shown on this proposal</p>
+                {isCustomReviews && (
+                  <button type="button" onClick={() => update({ reviews: null })} className="text-[11px] underline text-forest-dark/60 hover:text-forest-dark">Reset to defaults</button>
+                )}
+              </div>
+              <div className="space-y-3">
+                {shownReviews.map((r, i) => (
+                  <div key={i} className="bg-white border border-forest-dark/10 p-2 space-y-1.5">
+                    <textarea className={inputCls + " min-h-[60px]"} placeholder="Review text" value={r.text} onChange={(e) => editReview(i, { text: e.target.value })} />
+                    <div className="flex gap-2">
+                      <input className={inputCls} placeholder="Name" value={r.name} onChange={(e) => editReview(i, { name: e.target.value })} />
+                      <input className={inputCls} placeholder="Role or event" value={r.role} onChange={(e) => editReview(i, { role: e.target.value })} />
+                      <button type="button" onClick={() => moveReview(i, -1)} className="px-2 text-forest-dark/60 hover:text-forest-dark" aria-label="Move up"><ArrowUp className="w-4 h-4" /></button>
+                      <button type="button" onClick={() => moveReview(i, 1)} className="px-2 text-forest-dark/60 hover:text-forest-dark" aria-label="Move down"><ArrowDown className="w-4 h-4" /></button>
+                      <button type="button" onClick={() => removeReview(i)} className="px-2 text-red-700/70 hover:text-red-700" aria-label="Remove review"><Trash2 className="w-4 h-4" /></button>
+                    </div>
+                  </div>
                 ))}
-              </ul>
-              <p className="text-[11px] text-forest-dark/50 mt-2">Don Cheadle leads every proposal. The other two follow the event type.</p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2 mt-3">
+                <select className={inputCls} value="" onChange={(e) => addStockReview(e.target.value)}>
+                  <option value="">Add a review from the library…</option>
+                  {ALL_PROPOSAL_REVIEWS.map((r, i) => (
+                    <option key={i} value={i}>{r.name} · {r.role} · {r.text.length > 50 ? r.text.slice(0, 50) + "…" : r.text}</option>
+                  ))}
+                </select>
+                <button type="button" onClick={addCustomReview} className="px-3 py-2 border border-forest-dark/20 bg-white text-sm whitespace-nowrap flex items-center gap-1"><Plus className="w-4 h-4" /> Write your own</button>
+              </div>
+              <p className="text-[11px] text-forest-dark/50 mt-2">{isCustomReviews ? "Custom set for this proposal." : "Standard set: Don Cheadle plus two matched to the event type. Edit, add or remove to customize."} Three reads best.</p>
             </div>
             <div><label className={labelCls}>Event date (display)</label><input className={inputCls} placeholder="June 14, 2026" value={proposal.event_date} onChange={(e) => update({ event_date: e.target.value })} /></div>
             <div><label className={labelCls}>Venue</label><input className={inputCls} value={proposal.venue || ""} onChange={(e) => update({ venue: e.target.value })} /></div>
