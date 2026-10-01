@@ -9,6 +9,7 @@ import {
 } from "../_shared/invoice-email.ts";
 import { isAdminRequest } from "../_shared/require-admin.ts";
 import { buildAgreementPdf } from "../_shared/agreement-pdf.ts";
+import { applyAgreementTerms } from "../_shared/agreement-terms.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -338,8 +339,9 @@ Deno.serve(async (req) => {
       const {
         proposal_id, proposal_slug, tier_name, tier_price,
         client_name, client_email, event_type, event_date, venue,
-        agreement_text, performance_time, arrival_time,
+        agreement_text: submittedAgreementText, performance_time, arrival_time,
       } = body || {};
+      let agreement_text = submittedAgreementText;
       if (!tier_name || !client_name || !agreement_text) {
         return json({ error: "Missing required fields" }, 400);
       }
@@ -367,7 +369,7 @@ Deno.serve(async (req) => {
       let storedTiers: any[] = [];
       let storedProposalId: string | null = null;
       if (proposal_id || proposal_slug) {
-        const q = supabase.from("proposals").select("id, deal_id, tiers");
+        const q = supabase.from("proposals").select("id, deal_id, tiers, special_terms, omit_photography");
         const { data: prop } = proposal_id
           ? await q.eq("id", proposal_id).maybeSingle()
           : await q.eq("slug", proposal_slug).maybeSingle();
@@ -375,6 +377,13 @@ Deno.serve(async (req) => {
           linkedDealId = prop.deal_id || null;
           storedProposalId = prop.id as string;
           storedTiers = Array.isArray(prop.tiers) ? (prop.tiers as any[]) : [];
+          // Agreement terms come ONLY from the stored proposal row, never the browser.
+          if (typeof agreement_text === "string") {
+            agreement_text = applyAgreementTerms(agreement_text, {
+              omit_photography: (prop as any).omit_photography === true,
+              special_terms: (prop as any).special_terms ?? null,
+            });
+          }
         }
       }
       if (!storedProposalId) {

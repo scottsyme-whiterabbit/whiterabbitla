@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { X, Loader2, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { getStripeEnvironment } from "@/lib/stripe";
+import { applyAgreementTerms } from "../../supabase/functions/_shared/agreement-terms";
 
 import type { Tier, ProposalData } from "@/pages/ProposalTemplate";
 
@@ -167,7 +168,7 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
 
   if (!open || !tier) return null;
 
-  const agreementText = buildAgreement({
+  const agreementText = applyAgreementTerms(buildAgreement({
     clientName: clientName || "____________________",
     clientEmail,
     tier,
@@ -176,6 +177,9 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
     arrivalTime: arrivalTime.trim() || detectDefaultArrival(tier),
     performanceTime: performanceTime.trim(),
     eventLocation: eventLocation.trim(),
+  }), {
+    omit_photography: proposal.omit_photography === true,
+    special_terms: proposal.special_terms ?? null,
   });
 
   const submit = async () => {

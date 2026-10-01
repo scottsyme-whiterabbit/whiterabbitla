@@ -95,6 +95,8 @@ export interface ProposalData {
   closing_quote?: string | null;
   closing_attribution?: string | null;
   reviews?: ProposalReview[] | null;
+  special_terms?: string | null;
+  omit_photography?: boolean | null;
   gallery_photos?: string[]; // optional: brand-photo keys to override default gallery grid
   square_invoice_url?: string | null; // single Square invoice URL, fills every Reserve button if set
   sent_at?: string | null;

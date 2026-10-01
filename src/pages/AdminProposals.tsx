@@ -3,6 +3,7 @@ import { ClientFileProvider } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
 import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2, ArrowLeft, ArrowUp, ArrowDown } from "lucide-react";
 import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type Tier, type TimelineItem, type FaqItem } from "./ProposalTemplate";
+import { additionalTermsBlock } from "../../supabase/functions/_shared/agreement-terms";
 import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, PROPOSAL_TEMPLATES, STANDARD_TIER_LINES, reviewsForEventType, ALL_PROPOSAL_REVIEWS, type ProposalReview } from "@/data/proposalAssets";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
@@ -1008,6 +1009,35 @@ const ProposalEditor = ({
           <input className={inputCls + " mb-3"} value={proposal.closing_quote || ""} onChange={(e) => update({ closing_quote: e.target.value })} />
           <label className={labelCls}>Attribution (optional)</label>
           <input className={inputCls} value={proposal.closing_attribution || ""} onChange={(e) => update({ closing_attribution: e.target.value })} />
+        </div>
+
+        {/* Agreement terms */}
+        <div className={sectionCls + " border-2 border-gold/40"}>
+          <h2 className="font-serif text-xl text-forest-dark mb-4">Agreement terms</h2>
+          <label className="flex items-start gap-3 min-h-[44px] cursor-pointer mb-1">
+            <input
+              type="checkbox"
+              className="mt-1 h-6 w-6 shrink-0"
+              checked={proposal.omit_photography === true}
+              onChange={(e) => update({ omit_photography: e.target.checked })}
+            />
+            <span className="text-base text-forest-dark">Remove the photography and video clause</span>
+          </label>
+          <p className="text-xs text-forest-dark/60 mb-5 pl-9">Use when a client asks not to be photographed or filmed.</p>
+
+          <label className={labelCls}>Additional terms</label>
+          <textarea
+            rows={6}
+            className="w-full border border-forest-dark/20 px-3 py-2 bg-white text-base min-h-[44px]"
+            value={proposal.special_terms || ""}
+            onChange={(e) => update({ special_terms: e.target.value })}
+          />
+          <p className="text-xs text-forest-dark/60 mt-1 mb-4">Appears in the signed agreement as Additional Terms Agreed, directly above your contact details. Anything written here overrides the standard terms where they conflict.</p>
+
+          <div className={labelCls}>Preview in the agreement</div>
+          <pre className="whitespace-pre-wrap font-sans text-sm text-forest-dark/80 bg-cream/60 border border-forest-dark/10 p-3 min-h-[44px]">
+            {additionalTermsBlock(proposal.special_terms).trimEnd() || "Nothing added. The agreement uses the standard terms."}
+          </pre>
         </div>
 
         <div className="flex justify-end gap-2 sticky bottom-4">
