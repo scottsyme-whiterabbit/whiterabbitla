@@ -734,6 +734,33 @@ export type Database = {
         }
         Relationships: []
       }
+      deal_value_backup_20261001: {
+        Row: {
+          backed_up_at: string | null
+          contact_email: string | null
+          contact_name: string | null
+          deal_value: number | null
+          id: string | null
+          stage: string | null
+        }
+        Insert: {
+          backed_up_at?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          deal_value?: number | null
+          id?: string | null
+          stage?: string | null
+        }
+        Update: {
+          backed_up_at?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          deal_value?: number | null
+          id?: string | null
+          stage?: string | null
+        }
+        Relationships: []
+      }
       deals: {
         Row: {
           calendar_event_id: string | null
@@ -1699,6 +1726,7 @@ export type Database = {
           last_name: string
           letter_intro: string
           recipient_email: string | null
+          reviews: Json | null
           sent_at: string | null
           slug: string
           square_invoice_url: string | null
@@ -1727,6 +1755,7 @@ export type Database = {
           last_name?: string
           letter_intro?: string
           recipient_email?: string | null
+          reviews?: Json | null
           sent_at?: string | null
           slug: string
           square_invoice_url?: string | null
@@ -1755,6 +1784,7 @@ export type Database = {
           last_name?: string
           letter_intro?: string
           recipient_email?: string | null
+          reviews?: Json | null
           sent_at?: string | null
           slug?: string
           square_invoice_url?: string | null
