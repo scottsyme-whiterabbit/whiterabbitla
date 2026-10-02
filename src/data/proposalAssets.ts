@@ -210,6 +210,7 @@ export interface ProposalTemplate {
   intro_paragraph: string;
   letter_intro: string;
   hero_image: string;
+  gallery_photos: string[];
   timeline: { time: string; desc: string }[];
   tiers: {
     name: string;
@@ -240,6 +241,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
     intro_paragraph:
       "What you described isn't a magic act dropped into your evening, it's an entire texture woven through the night. Quiet conversation that turns into wide-eyed silence, then laughter, then the kind of story your guests will still be telling on Monday.",
     hero_image: "wedding",
+    gallery_photos: ["curtain-greeting", "closeup-cocktail", "guest-reaction", "gallery-1", "crowd-reaction", "group-photo", "gallery-7", "proposal-cards-detail"],
     timeline: [
       { time: "5:30 PM", desc: "I arrive, set quietly, full environment built before guests arrive." },
       { time: "6:00 PM", desc: "Greeting every guest as they walk in to cocktail hour." },
@@ -304,6 +306,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
     intro_paragraph:
       "Your guests have been to a hundred corporate dinners. What they haven't been to is the one they're still telling stories about on Monday. That's the night we build together, quiet wonder during cocktails, then a parlor moment after dinner that resets the whole room.",
     hero_image: "corporate",
+    gallery_photos: ["scott-performing", "closeup-cocktail", "crowd-reaction", "gallery-setup", "parlor-audience", "group-photo", "cards-emerald", "gallery-6"],
     timeline: [
       { time: "5:30 PM", desc: "Arrive, set up discreetly before guests." },
       { time: "6:30 PM", desc: "Close-up magic during cocktail reception." },
@@ -369,6 +372,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
     intro_paragraph:
       "A private evening should feel like a secret kept beautifully. What we're building together isn't an act inserted into your night, it's a thread that runs through it, drawing your guests closer to one another and to the room.",
     hero_image: "private",
+    gallery_photos: ["penthouse", "scott-couch", "closeup-cocktail", "guest-reaction", "parlor-stage", "cu-magic", "cards-fan", "gallery-7"],
     timeline: [
       { time: "6:30 PM", desc: "Arrive and set up before guests." },
       { time: "7:00 PM", desc: "Greeting every guest with close-up moments." },
@@ -430,6 +434,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
     intro_paragraph:
       "Galas live and die by energy. Magic resets the room, breaks the ice between strangers, and gives your donors a moment they'll attach to your cause for years. The goal isn't a show, it's atmosphere that opens wallets.",
     hero_image: "corporate",
+    gallery_photos: ["crowd-reaction", "parlor-audience", "scott-performing", "group-photo", "gallery-setup", "cu-magic", "gallery-6", "curtain-greeting"],
     timeline: [
       { time: "5:30 PM", desc: "Arrive, set up discreetly before doors." },
       { time: "6:00 PM", desc: "Close-up magic during cocktail reception." },
@@ -479,6 +484,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
     intro_paragraph:
       "Birthdays are the easiest night to phone in and the hardest to get right. The version your guest of honor will remember isn't bigger, it's more personal. Quiet wonder, woven into the room, with a moment built just for them.",
     hero_image: "private",
+    gallery_photos: ["guest-reaction", "scott-couch", "cu-magic", "closeup-cocktail", "parlor-stage", "crowd-reaction", "cards-fan", "group-photo"],
     timeline: [
       { time: "6:30 PM", desc: "Arrive, set up before guests." },
       { time: "7:00 PM", desc: "Close-up magic during cocktails and arrivals." },
@@ -523,6 +529,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
     intro_paragraph:
       "Holiday parties are crowded, generous, and easy to forget. The ones people remember are the ones where something quiet and unexpected happened. Magic during cocktails resets the room, strangers turn into friends, phones go down, and the night actually starts.",
     hero_image: "corporate",
+    gallery_photos: ["cards-emerald", "scott-performing", "closeup-cocktail", "crowd-reaction", "parlor-audience", "gallery-setup", "group-photo", "gallery-6"],
     timeline: [
       { time: "5:30 PM", desc: "Arrive, set up before guests." },
       { time: "6:00 PM", desc: "Close-up magic during cocktails and arrivals." },

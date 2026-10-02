@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Loader2, RefreshCw, Plus, Trash2, ImageIcon, X } from "lucide-react";
 import { toast } from "sonner";
 
@@ -48,6 +48,7 @@ export function DrivePhotoBank({
   thumbClassName = "aspect-square overflow-hidden border-2 transition-all",
   selectedClassName = "border-gold ring-2 ring-gold/30",
   unselectedClassName = "border-transparent hover:border-forest-dark/40 opacity-90 hover:opacity-100",
+  beforeFiles,
 }: {
   password: string;
   onPick: (fileId: string, name: string) => void;
@@ -56,6 +57,7 @@ export function DrivePhotoBank({
   thumbClassName?: string;
   selectedClassName?: string;
   unselectedClassName?: string;
+  beforeFiles?: ReactNode;
 }) {
   const [folders, setFolders] = useState<DriveFolder[]>([]);
   const [activeFolder, setActiveFolder] = useState<string | null>(null);
@@ -205,7 +207,7 @@ export function DrivePhotoBank({
 
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 [&_button]:!min-h-[44px] [&_button]:!text-base [&_input]:!min-h-[44px] [&_input]:!text-base">
       {/* Folder tabs */}
       <div className="flex flex-wrap items-center gap-2">
         {loadingFolders && <Loader2 className="w-3 h-3 animate-spin opacity-60" />}
@@ -238,14 +240,15 @@ export function DrivePhotoBank({
       </div>
 
       {/* Files grid */}
-      {activeFolder && (
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 max-h-[420px] overflow-y-auto pr-1">
-          {loading && files.length === 0 && (
+      {(activeFolder || beforeFiles) && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
+          {beforeFiles}
+          {activeFolder && loading && files.length === 0 && (
             <div className="col-span-full text-center text-xs text-forest-dark/50 py-6">
               <Loader2 className="w-4 h-4 animate-spin mx-auto mb-2" /> Loading from Drive…
             </div>
           )}
-          {!loading && files.length === 0 && (
+          {activeFolder && !loading && files.length === 0 && (
             <div className="col-span-full text-center text-xs text-forest-dark/50 py-6">
               No images in this folder.
             </div>
@@ -254,20 +257,22 @@ export function DrivePhotoBank({
             const selected = selectedFileIds.includes(file.id);
             const order = selected ? selectedFileIds.indexOf(file.id) + 1 : null;
             return (
-              <button
-                key={file.id}
-                type="button"
-                onClick={() => onPick(file.id, file.name)}
-                title={file.name}
-                className={`relative ${thumbClassName} ${selected ? selectedClassName : unselectedClassName}`}
-              >
-                <img src={THUMB(file)} onError={(e) => onThumbErr(e, file.id)} alt={file.name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
-                {selected && order !== null && (
-                  <div className="absolute top-1 right-1 bg-gold text-forest-dark w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold">
-                    {order}
-                  </div>
-                )}
-              </button>
+              <div key={file.id} className="min-w-0">
+                <button
+                  type="button"
+                  onClick={() => onPick(file.id, file.name)}
+                  title={file.name}
+                  className={`relative w-full min-h-[44px] ${thumbClassName} ${selected ? selectedClassName : unselectedClassName}`}
+                >
+                  <img src={THUMB(file)} onError={(e) => onThumbErr(e, file.id)} alt={file.name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                  {selected && order !== null && (
+                    <div className="absolute top-1 right-1 bg-gold text-forest-dark w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold">
+                      {order}
+                    </div>
+                  )}
+                </button>
+                <div className="mt-1 truncate text-xs text-forest-dark/60" title={file.name}>{file.name}</div>
+              </div>
             );
           })}
         </div>
@@ -289,18 +294,18 @@ export function DrivePhotoBank({
                 value={newId}
                 onChange={(e) => setNewId(e.target.value)}
                 placeholder="https://drive.google.com/drive/folders/…"
-                className="flex-1 min-w-[260px] text-xs px-3 py-2 border border-forest-dark/20 bg-cream/50"
+                className="flex-1 min-w-[260px] min-h-[44px] text-base px-3 py-2 border border-forest-dark/20 bg-cream/50"
               />
               <input
                 value={newLabel}
                 onChange={(e) => setNewLabel(e.target.value)}
                 placeholder="Label (e.g. Ladies Luncheon)"
-                className="text-xs px-3 py-2 border border-forest-dark/20 bg-cream/50"
+                className="min-h-[44px] text-base px-3 py-2 border border-forest-dark/20 bg-cream/50"
               />
               <button
                 type="button"
                 onClick={addFolder}
-                className="text-xs px-3 py-2 bg-forest-dark text-cream flex items-center gap-1"
+                className="min-h-[44px] text-base px-3 py-2 bg-forest-dark text-cream flex items-center gap-1"
               >
                 <Plus className="w-3 h-3" /> Add
               </button>
@@ -389,7 +394,7 @@ export function DrivePhotoBank({
                 <div className="text-center text-xs text-forest-dark/60 py-10">No media in this folder.</div>
               )}
               {!pickerLoading && pickerFiles.length > 0 && (
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
                   {pickerFiles.map((file) => {
                     const selected = pickerSelected.has(file.id);
                     const isVideo = file.mimeType?.startsWith("video/");

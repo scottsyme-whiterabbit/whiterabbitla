@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ClientFileProvider } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
-import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2, ArrowLeft, ArrowUp, ArrowDown } from "lucide-react";
+import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2, ArrowLeft, ArrowUp, ArrowDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type Tier, type TimelineItem, type FaqItem } from "./ProposalTemplate";
 import { additionalTermsBlock } from "../../supabase/functions/_shared/agreement-terms";
-import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, PROPOSAL_TEMPLATES, STANDARD_TIER_LINES, reviewsForEventType, ALL_PROPOSAL_REVIEWS, type ProposalReview } from "@/data/proposalAssets";
+import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, GALLERY_UPLOAD_PHOTOS, PROPOSAL_TEMPLATES, STANDARD_TIER_LINES, photoKeyToSrc, reviewsForEventType, ALL_PROPOSAL_REVIEWS, type ProposalReview } from "@/data/proposalAssets";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import AdminGate, { AdminSignOutButton } from "@/components/admin/AdminGate";
@@ -81,6 +81,10 @@ const AdminProposals = () => {
 
   const [list, setList] = useState<ProposalRow[]>([]);
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [sending, setSending] = useState(false);
+  const savingRef = useRef(false);
+  const sendingRef = useRef(false);
   const [editing, setEditing] = useState<FullProposal | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [activeTab, setActiveTab] = useState<"client" | "residency" | "signed" | "payments">("client");
@@ -175,7 +179,9 @@ const AdminProposals = () => {
   };
 
   const save = async () => {
-    if (!editing) return;
+    if (!editing || savingRef.current) return;
+    savingRef.current = true;
+    setSaving(true);
     try {
       const payload: any = { ...editing };
       // Strip server-managed fields and any empty id/slug to avoid invalid uuid syntax
@@ -191,6 +197,7 @@ const AdminProposals = () => {
       setEditing(j.proposal);
       loadList();
     } catch (e) { toast.error((e as Error).message); }
+    finally { savingRef.current = false; setSaving(false); }
   };
 
   const remove = async (id: string) => {
@@ -238,18 +245,22 @@ const AdminProposals = () => {
   };
 
   const sendEmail = async (proposal: FullProposal | ProposalRow) => {
+    if (sendingRef.current) return;
+    sendingRef.current = true;
+    setSending(true);
     const to = prompt("Recipient email:", proposal.recipient_email || "");
-    if (!to) return;
+    if (!to) { sendingRef.current = false; setSending(false); return; }
     const subject = prompt("Subject:", `Your White Rabbit LA Proposal, ${proposal.first_name}`);
-    if (!subject) return;
+    if (!subject) { sendingRef.current = false; setSending(false); return; }
     const message = prompt("Personal message (greeting and signature are added automatically):", `Here's the proposal we discussed. Take your time with it, call me anytime.\n\nBest,\n-Scott`);
-    if (message === null) return;
+    if (message === null) { sendingRef.current = false; setSending(false); return; }
     const link = `${window.location.origin}/proposal/${proposal.slug}`;
     try {
       await apiCall("send", "POST", { id: proposal.id, to, subject, message, link, firstName: proposal.first_name });
       toast.success("Email sent");
       loadList();
     } catch (e) { toast.error((e as Error).message); }
+    finally { sendingRef.current = false; setSending(false); }
   };
 
   if (showPreview && editing) {
@@ -267,7 +278,7 @@ const AdminProposals = () => {
   }
 
   if (editing) {
-    return <ProposalEditor proposal={editing} onChange={setEditing} onSave={save} onCancel={() => setEditing(null)} onPreview={() => setShowPreview(true)} list={list} password={password} loadFullProposal={async (slug) => { const res = await fetch(`${FN}?action=get&slug=${slug}`, { headers: { "x-admin-password": password } }); const j = await res.json(); if (!res.ok) throw new Error(j.error); return j.proposal; }} />;
+    return <ProposalEditor proposal={editing} onChange={setEditing} onSave={save} saving={saving} onCancel={() => setEditing(null)} onPreview={() => setShowPreview(true)} list={list} password={password} loadFullProposal={async (slug) => { const res = await fetch(`${FN}?action=get&slug=${slug}`, { headers: { "x-admin-password": password } }); const j = await res.json(); if (!res.ok) throw new Error(j.error); return j.proposal; }} />;
   }
 
   return (
@@ -447,7 +458,7 @@ const AdminProposals = () => {
                 <div className="flex items-center gap-2">
                   <button onClick={() => copyLink(p.slug)} title="Copy link" className="p-2 hover:bg-cream rounded"><Copy className="w-4 h-4 text-forest-dark" /></button>
                   <a href={`/proposal/${p.slug}`} target="_blank" rel="noopener noreferrer" title="View" className="p-2 hover:bg-cream rounded"><Eye className="w-4 h-4 text-forest-dark" /></a>
-                  <button onClick={() => sendEmail(p)} title="Email" className="p-2 hover:bg-cream rounded"><Send className="w-4 h-4 text-forest-dark" /></button>
+                  <button onClick={() => sendEmail(p)} disabled={sending} title="Email" className="min-h-[44px] min-w-[44px] p-2 hover:bg-cream rounded disabled:opacity-40">{sending ? <Loader2 className="w-4 h-4 animate-spin text-forest-dark" /> : <Send className="w-4 h-4 text-forest-dark" />}</button>
                   <button onClick={() => startEdit(p.slug)} className="px-3 py-2 text-sm border border-forest-dark/20 hover:bg-cream">Edit</button>
                   <button onClick={() => remove(p.id)} title="Delete" className="p-2 hover:bg-red-50 rounded"><Trash2 className="w-4 h-4 text-red-600" /></button>
                 </div>
@@ -464,11 +475,12 @@ const AdminProposals = () => {
 
 /* ===================== EDITOR ===================== */
 const ProposalEditor = ({
-  proposal, onChange, onSave, onCancel, onPreview, list, password, loadFullProposal,
+  proposal, onChange, onSave, saving, onCancel, onPreview, list, password, loadFullProposal,
 }: {
   proposal: FullProposal;
   onChange: (p: FullProposal) => void;
   onSave: () => void;
+  saving: boolean;
   onCancel: () => void;
   onPreview: () => void;
   list: ProposalRow[];
@@ -532,6 +544,7 @@ const ProposalEditor = ({
       letter_intro: tpl.letter_intro,
       intro_paragraph: tpl.intro_paragraph,
       hero_image: tpl.hero_image,
+      gallery_photos: tpl.gallery_photos,
       timeline: tpl.timeline,
       tiers: tpl.tiers,
       faqs: tpl.faqs,
@@ -585,6 +598,7 @@ const ProposalEditor = ({
         letter_intro: d.letter_intro || proposal.letter_intro,
         intro_paragraph: d.intro_paragraph || proposal.intro_paragraph,
         hero_image: tpl?.hero_image || proposal.hero_image,
+        gallery_photos: tpl?.gallery_photos || proposal.gallery_photos,
         timeline: tpl?.timeline || proposal.timeline,
         tiers: tiersWithPricing,
         faqs: tpl?.faqs || proposal.faqs,
@@ -597,7 +611,7 @@ const ProposalEditor = ({
     setAiLoading(false);
   };
 
-  const [photoSource, setPhotoSource] = useState<"brand" | "drive">("brand");
+  const [photoFilter, setPhotoFilter] = useState<"all" | "brand" | "drive" | "uploads">("all");
 
   const galleryKeys: string[] = (proposal.gallery_photos && proposal.gallery_photos.length > 0)
     ? proposal.gallery_photos
@@ -614,6 +628,14 @@ const ProposalEditor = ({
     update({ gallery_photos: current });
   };
   const resetGallery = () => update({ gallery_photos: [] });
+  const moveGalleryPhoto = (index: number, direction: -1 | 1) => {
+    const nextIndex = index + direction;
+    if (nextIndex < 0 || nextIndex >= galleryKeys.length) return;
+    const next = [...galleryKeys];
+    [next[index], next[nextIndex]] = [next[nextIndex], next[index]];
+    update({ gallery_photos: next });
+  };
+  const removeGalleryPhoto = (key: string) => update({ gallery_photos: galleryKeys.filter((item) => item !== key) });
 
   const updateTier = (i: number, patch: Partial<Tier>) => {
     const tiers = [...proposal.tiers];
@@ -666,18 +688,18 @@ const ProposalEditor = ({
   };
   const addCustomReview = () => setReviews([...shownReviews, { text: "", name: "", role: "" }]);
 
-  const inputCls = "w-full border border-forest-dark/20 px-3 py-2 bg-white text-sm";
+  const inputCls = "w-full min-h-[44px] border border-forest-dark/20 px-3 py-2 bg-white text-base";
   const labelCls = "block text-xs uppercase tracking-wider text-forest-dark/60 mb-1";
   const sectionCls = "bg-white border border-forest-dark/10 p-6 mb-6";
 
   return (
-    <div className="min-h-screen bg-cream p-6 md:p-10">
+    <div className="min-h-screen bg-cream p-4 md:p-10 [&_button]:!min-h-[44px] [&_button]:!text-base [&_input]:!min-h-[44px] [&_input]:!text-base [&_select]:!min-h-[44px] [&_select]:!text-base [&_textarea]:!min-h-[44px] [&_textarea]:!text-base">
       <div className="max-w-4xl mx-auto">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
           <button onClick={onCancel} className="text-sm text-forest-dark/70 hover:text-forest-dark">← Back to list</button>
           <div className="flex gap-2">
             <button onClick={onPreview} className="px-4 py-2 border border-forest-dark/20 text-sm hover:bg-white flex items-center gap-2"><Eye className="w-4 h-4" /> Preview</button>
-            <button onClick={onSave} className="px-5 py-2 bg-forest-dark text-cream text-sm hover:opacity-90">Save</button>
+            <button onClick={onSave} disabled={saving} className="px-5 py-2 bg-forest-dark text-cream hover:opacity-90 disabled:opacity-50 flex items-center gap-2">{saving && <Loader2 className="w-4 h-4 animate-spin" />} {saving ? "Saving…" : "Save"}</button>
           </div>
         </div>
 
@@ -851,9 +873,19 @@ const ProposalEditor = ({
             <div><label className={labelCls}>Venue</label><input className={inputCls} value={proposal.venue || ""} onChange={(e) => update({ venue: e.target.value })} /></div>
             <div className="md:col-span-2">
               <label className={labelCls}>Hero photo</label>
-              <select className={inputCls} value={proposal.hero_image} onChange={(e) => update({ hero_image: e.target.value })}>
-                {HERO_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-              </select>
+              <div className="mb-3 overflow-hidden border border-forest-dark/15 bg-cream aspect-[16/7]">
+                <img src={photoKeyToSrc(proposal.hero_image === "corporate" ? "experience-corporate" : proposal.hero_image === "wedding" ? "gallery-1" : proposal.hero_image === "private" ? "experience-private" : proposal.hero_image === "parlor" ? "parlor-stage" : proposal.hero_image === "cocktail" ? "closeup-cocktail" : "silhouette") || undefined} alt={`${HERO_OPTIONS.find((option) => option.value === proposal.hero_image)?.label || "Current"} hero preview`} className="h-full w-full object-cover" />
+              </div>
+              <div className="flex gap-3 overflow-x-auto pb-2">
+                {HERO_OPTIONS.map((option) => {
+                  const previewKey = option.value === "corporate" ? "experience-corporate" : option.value === "wedding" ? "gallery-1" : option.value === "private" ? "experience-private" : option.value === "parlor" ? "parlor-stage" : option.value === "cocktail" ? "closeup-cocktail" : "silhouette";
+                  const selected = proposal.hero_image === option.value;
+                  return <button key={option.value} type="button" onClick={() => update({ hero_image: option.value })} className={`shrink-0 w-28 border-2 bg-white text-left ${selected ? "border-gold ring-2 ring-gold/30" : "border-transparent"}`} aria-pressed={selected}>
+                    <img src={photoKeyToSrc(previewKey) || undefined} alt="" className="h-20 w-full object-cover" loading="lazy" decoding="async" />
+                    <span className="block px-2 py-2 text-base text-forest-dark">{option.label}</span>
+                  </button>;
+                })}
+              </div>
             </div>
           </div>
         </div>
@@ -870,48 +902,55 @@ const ProposalEditor = ({
               : "Using the default gallery. Click any photo to start a custom selection for this proposal."}
           </p>
 
-          {/* Source tabs */}
-          <div className="flex gap-1 mb-3 border-b border-forest-dark/10">
-            {(["brand", "drive"] as const).map((src) => (
+          {galleryKeys.length > 0 && (
+            <div className="mb-5">
+              <div className={labelCls}>Selected</div>
+              <div className="flex gap-3 overflow-x-auto pb-2">
+                {galleryKeys.map((key, index) => {
+                  const src = photoKeyToSrc(key);
+                  return <div key={key} className="relative w-24 shrink-0 border border-forest-dark/15 bg-white">
+                    {src ? <img src={src} alt="" className="h-24 w-24 object-cover" loading="lazy" decoding="async" /> : <div className="h-24 w-24 bg-forest-dark/5" />}
+                    <span className="absolute left-1 top-1 flex h-6 min-w-6 items-center justify-center rounded-full bg-gold px-1 text-xs font-bold text-forest-dark">{index + 1}</span>
+                    <div className="grid grid-cols-3">
+                      <button type="button" onClick={() => moveGalleryPhoto(index, -1)} disabled={index === 0} aria-label={`Move photo ${index + 1} earlier`} className="min-h-[44px] flex items-center justify-center border-r border-forest-dark/10 disabled:opacity-25"><ChevronLeft className="h-4 w-4" /></button>
+                      <button type="button" onClick={() => moveGalleryPhoto(index, 1)} disabled={index === galleryKeys.length - 1} aria-label={`Move photo ${index + 1} later`} className="min-h-[44px] flex items-center justify-center border-r border-forest-dark/10 disabled:opacity-25"><ChevronRight className="h-4 w-4" /></button>
+                      <button type="button" onClick={() => removeGalleryPhoto(key)} aria-label={`Remove photo ${index + 1}`} className="min-h-[44px] flex items-center justify-center text-red-700"><X className="h-4 w-4" /></button>
+                    </div>
+                  </div>;
+                })}
+              </div>
+            </div>
+          )}
+
+          <div className="flex flex-wrap gap-2 mb-4">
+            {(["all", "brand", "drive", "uploads"] as const).map((filter) => (
               <button
-                key={src}
+                key={filter}
                 type="button"
-                onClick={() => setPhotoSource(src)}
-                className={`text-xs uppercase tracking-wider px-3 py-2 -mb-px border-b-2 transition-colors ${
-                  photoSource === src
-                    ? "border-forest-dark text-forest-dark"
-                    : "border-transparent text-forest-dark/50 hover:text-forest-dark"
+                onClick={() => setPhotoFilter(filter)}
+                className={`px-4 py-2 border transition-colors ${
+                  photoFilter === filter
+                    ? "border-forest-dark bg-forest-dark text-cream"
+                    : "border-forest-dark/20 bg-white text-forest-dark hover:border-forest-dark"
                 }`}
               >
-                {src === "brand" ? "Brand Library" : "Google Drive"}
+                {filter[0].toUpperCase() + filter.slice(1)}
               </button>
             ))}
           </div>
 
-          {photoSource === "brand" ? (
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 max-h-[420px] overflow-y-auto pr-1">
-              {BRAND_PHOTOS.map((p) => {
+          {(photoFilter === "brand" || photoFilter === "uploads") && (
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
+              {(photoFilter === "uploads" ? GALLERY_UPLOAD_PHOTOS : BRAND_PHOTOS.filter((photo) => !photo.key.startsWith("upload:"))).map((p) => {
                 const selected = galleryKeys.includes(p.key);
                 const order = selected ? galleryKeys.indexOf(p.key) + 1 : null;
                 return (
-                  <button
-                    key={p.key}
-                    type="button"
-                    onClick={() => togglePhoto(p.key)}
-                    title={p.label}
-                    className={`relative aspect-square overflow-hidden border-2 transition-all ${selected ? "border-gold ring-2 ring-gold/30" : "border-transparent hover:border-forest-dark/40"}`}
-                  >
-                    <img src={p.src} alt={p.label} loading="lazy" className="w-full h-full object-cover" />
-                    {selected && (
-                      <div className="absolute top-1 right-1 bg-gold text-forest-dark w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold">
-                        {order}
-                      </div>
-                    )}
-                  </button>
+                  <PhotoTile key={p.key} photo={p} selected={selected} order={order} onPick={() => togglePhoto(p.key)} />
                 );
               })}
             </div>
-          ) : (
+          )}
+          {(photoFilter === "all" || photoFilter === "drive") && (
             <DrivePhotoBank
               password={password}
               showManager
@@ -919,6 +958,10 @@ const ProposalEditor = ({
                 .filter((k) => k.startsWith("drive:"))
                 .map((k) => k.slice(6))}
               onPick={(fileId) => togglePhoto(`drive:${fileId}`)}
+              beforeFiles={photoFilter === "all" ? BRAND_PHOTOS.map((p) => {
+                const selected = galleryKeys.includes(p.key);
+                return <PhotoTile key={p.key} photo={p} selected={selected} order={selected ? galleryKeys.indexOf(p.key) + 1 : null} onPick={() => togglePhoto(p.key)} />;
+              }) : undefined}
             />
           )}
         </div>
@@ -1042,16 +1085,26 @@ const ProposalEditor = ({
 
         <div className="flex justify-end gap-2 sticky bottom-4">
           <button onClick={onPreview} className="px-4 py-2 border border-forest-dark/20 bg-white text-sm hover:bg-cream flex items-center gap-2"><Eye className="w-4 h-4" /> Preview</button>
-          <button onClick={onSave} className="px-6 py-2 bg-forest-dark text-cream text-sm hover:opacity-90">Save</button>
+          <button onClick={onSave} disabled={saving} className="px-6 py-2 bg-forest-dark text-cream hover:opacity-90 disabled:opacity-50 flex items-center gap-2">{saving && <Loader2 className="w-4 h-4 animate-spin" />} {saving ? "Saving…" : "Save"}</button>
         </div>
       </div>
     </div>
   );
 };
 
+const PhotoTile = ({ photo, selected, order, onPick }: { photo: { key: string; src: string; label: string }; selected: boolean; order: number | null; onPick: () => void }) => (
+  <div className="min-w-0">
+    <button type="button" onClick={onPick} title={photo.label} className={`relative w-full aspect-square overflow-hidden border-2 transition-all ${selected ? "border-gold ring-2 ring-gold/30" : "border-transparent hover:border-forest-dark/40"}`}>
+      <img src={photo.src} alt={photo.label} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+      {selected && order !== null && <div className="absolute top-1 right-1 bg-gold text-forest-dark w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">{order}</div>}
+    </button>
+    <div className="mt-1 truncate text-xs text-forest-dark/60" title={photo.label}>{photo.label}</div>
+  </div>
+);
+
 const TierEditor = ({ tier, onChange, onRemove, index }: { tier: Tier; onChange: (p: Partial<Tier>) => void; onRemove: () => void; index: number }) => {
   const [open, setOpen] = useState(true);
-  const inputCls = "w-full border border-forest-dark/20 px-3 py-2 bg-white text-sm";
+  const inputCls = "w-full min-h-[44px] border border-forest-dark/20 px-3 py-2 bg-white text-base";
   const labelCls = "block text-xs uppercase tracking-wider text-forest-dark/60 mb-1";
 
   const updateItem = (i: number, val: string) => {
