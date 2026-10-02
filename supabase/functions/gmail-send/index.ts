@@ -158,7 +158,7 @@ function buildMultipart(textBody: string, htmlBody: string, headers: string[]): 
     `--${boundary}--`,
     ``,
   ].join("\r\n");
-  return hdrs.join("\r\n\r\n") + "\r\n\r\n" + parts;
+  return hdrs.join("\r\n") + "\r\n\r\n" + parts;
 }
 
 serve(async (req) => {
