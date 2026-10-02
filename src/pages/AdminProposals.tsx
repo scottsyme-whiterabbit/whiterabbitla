@@ -385,7 +385,7 @@ const AdminProposals = () => {
           <div className="bg-white border border-forest-dark/10 divide-y divide-forest-dark/10">
             {list.map((p) => (
               <div key={p.id} className="p-5 flex flex-wrap items-center justify-between gap-4">
-                <div className="flex-1 min-w-[240px]">
+                <div className="flex-1 min-w-0">
                   <div className="font-serif text-lg text-forest-dark">{p.first_name} {p.last_name}</div>
                   <div className="text-sm text-forest-dark/60">
                     {p.event_type} {p.event_date && `· ${p.event_date}`} {p.venue && `· ${p.venue}`}
@@ -694,7 +694,7 @@ const ProposalEditor = ({
 
   return (
     <div className="min-h-screen bg-cream p-4 md:p-10 [&_button]:!min-h-[44px] [&_button]:!text-base [&_input]:!min-h-[44px] [&_input]:!text-base [&_select]:!min-h-[44px] [&_select]:!text-base [&_textarea]:!min-h-[44px] [&_textarea]:!text-base">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto pb-24">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
           <button onClick={onCancel} className="text-sm text-forest-dark/70 hover:text-forest-dark">← Back to list</button>
           <div className="flex gap-2">
@@ -905,11 +905,11 @@ const ProposalEditor = ({
           {galleryKeys.length > 0 && (
             <div className="mb-5">
               <div className={labelCls}>Selected</div>
-              <div className="flex gap-3 overflow-x-auto pb-2">
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(110px, 1fr))", gap: "0.5rem" }}>
                 {galleryKeys.map((key, index) => {
                   const src = photoKeyToSrc(key);
-                  return <div key={key} className="relative w-24 shrink-0 border border-forest-dark/15 bg-white">
-                    {src ? <img src={src} alt="" className="h-24 w-24 object-cover" loading="lazy" decoding="async" /> : <div className="h-24 w-24 bg-forest-dark/5" />}
+                  return <div key={key} className="relative border border-forest-dark/15 bg-white">
+                    {src ? <img src={src} alt="" className="h-24 w-full object-cover" loading="lazy" decoding="async" /> : <div className="h-24 bg-forest-dark/5" />}
                     <span className="absolute left-1 top-1 flex h-6 min-w-6 items-center justify-center rounded-full bg-gold px-1 text-xs font-bold text-forest-dark">{index + 1}</span>
                     <div className="grid grid-cols-3">
                       <button type="button" onClick={() => moveGalleryPhoto(index, -1)} disabled={index === 0} aria-label={`Move photo ${index + 1} earlier`} className="min-h-[44px] flex items-center justify-center border-r border-forest-dark/10 disabled:opacity-25"><ChevronLeft className="h-4 w-4" /></button>
@@ -940,7 +940,7 @@ const ProposalEditor = ({
           </div>
 
           {(photoFilter === "brand" || photoFilter === "uploads") && (
-            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
+            <div className="max-h-[420px] overflow-y-auto pr-1" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(110px, 1fr))", gap: "0.5rem" }}>
               {(photoFilter === "uploads" ? GALLERY_UPLOAD_PHOTOS : BRAND_PHOTOS.filter((photo) => !photo.key.startsWith("upload:"))).map((p) => {
                 const selected = galleryKeys.includes(p.key);
                 const order = selected ? galleryKeys.indexOf(p.key) + 1 : null;

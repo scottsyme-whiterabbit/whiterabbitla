@@ -241,7 +241,7 @@ export function DrivePhotoBank({
 
       {/* Files grid */}
       {(activeFolder || beforeFiles) && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
+        <div className="max-h-[420px] overflow-y-auto pr-1" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(110px, 1fr))", gap: "0.5rem" }}>
           {beforeFiles}
           {activeFolder && loading && files.length === 0 && (
             <div className="col-span-full text-center text-xs text-forest-dark/50 py-6">
@@ -394,7 +394,7 @@ export function DrivePhotoBank({
                 <div className="text-center text-xs text-forest-dark/60 py-10">No media in this folder.</div>
               )}
               {!pickerLoading && pickerFiles.length > 0 && (
-                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(110px, 1fr))", gap: "0.5rem" }}>
                   {pickerFiles.map((file) => {
                     const selected = pickerSelected.has(file.id);
                     const isVideo = file.mimeType?.startsWith("video/");
