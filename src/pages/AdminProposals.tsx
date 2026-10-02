@@ -693,7 +693,7 @@ const ProposalEditor = ({
   const sectionCls = "bg-white border border-forest-dark/10 p-6 mb-6";
 
   return (
-    <div className="min-h-screen bg-cream p-4 md:p-10 [&_button]:min-h-[44px] [&_button]:text-base [&_input]:min-h-[44px] [&_input]:text-base [&_select]:min-h-[44px] [&_select]:text-base [&_textarea]:min-h-[44px] [&_textarea]:text-base">
+    <div className="min-h-screen bg-cream p-4 md:p-10 [&_button]:!min-h-[44px] [&_button]:!text-base [&_input]:!min-h-[44px] [&_input]:!text-base [&_select]:!min-h-[44px] [&_select]:!text-base [&_textarea]:!min-h-[44px] [&_textarea]:!text-base">
       <div className="max-w-4xl mx-auto">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
           <button onClick={onCancel} className="text-sm text-forest-dark/70 hover:text-forest-dark">← Back to list</button>

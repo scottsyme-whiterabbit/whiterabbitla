@@ -207,7 +207,7 @@ export function DrivePhotoBank({
 
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 [&_button]:!min-h-[44px] [&_button]:!text-base [&_input]:!min-h-[44px] [&_input]:!text-base">
       {/* Folder tabs */}
       <div className="flex flex-wrap items-center gap-2">
         {loadingFolders && <Loader2 className="w-3 h-3 animate-spin opacity-60" />}
@@ -240,15 +240,15 @@ export function DrivePhotoBank({
       </div>
 
       {/* Files grid */}
-      {activeFolder && (
+      {(activeFolder || beforeFiles) && (
         <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
           {beforeFiles}
-          {loading && files.length === 0 && (
+          {activeFolder && loading && files.length === 0 && (
             <div className="col-span-full text-center text-xs text-forest-dark/50 py-6">
               <Loader2 className="w-4 h-4 animate-spin mx-auto mb-2" /> Loading from Drive…
             </div>
           )}
-          {!loading && files.length === 0 && (
+          {activeFolder && !loading && files.length === 0 && (
             <div className="col-span-full text-center text-xs text-forest-dark/50 py-6">
               No images in this folder.
             </div>
