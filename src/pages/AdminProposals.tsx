@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ClientFileProvider } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
 import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2, ArrowLeft, ArrowUp, ArrowDown, ChevronLeft, ChevronRight } from "lucide-react";
@@ -474,6 +474,46 @@ const AdminProposals = () => {
 };
 
 /* ===================== EDITOR ===================== */
+function EditorSection({
+  id,
+  title,
+  summary,
+  openId,
+  setOpenId,
+  children,
+}: {
+  id: string;
+  title: string;
+  summary: string;
+  openId: string | null;
+  setOpenId: (id: string | null) => void;
+  children: ReactNode;
+}) {
+  const isOpen = openId === id;
+
+  return (
+    <section className="mb-3">
+      <button
+        type="button"
+        onClick={() => setOpenId(isOpen ? null : id)}
+        className="flex min-h-[52px] w-full items-center gap-3 border border-forest-dark/15 bg-white px-4 py-3 text-left"
+        aria-expanded={isOpen}
+        aria-controls={`editor-section-${id}`}
+      >
+        <span className="text-base uppercase tracking-wider text-forest-dark">{title}</span>
+        <span className="ml-auto min-w-0 truncate text-right text-sm text-forest-dark/60">{summary}</span>
+        <ChevronDown className={`h-5 w-5 shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+      </button>
+      <div
+        id={`editor-section-${id}`}
+        className={`border border-t-0 border-forest-dark/15 px-4 py-4 ${isOpen ? "" : "hidden"}`}
+      >
+        {children}
+      </div>
+    </section>
+  );
+}
+
 const ProposalEditor = ({
   proposal, onChange, onSave, saving, onCancel, onPreview, list, password, loadFullProposal,
 }: {
@@ -495,6 +535,8 @@ const ProposalEditor = ({
   const [contactQuery, setContactQuery] = useState("");
   const [contactResults, setContactResults] = useState<any[]>([]);
   const [contactLoading, setContactLoading] = useState(false);
+  const [openId, setOpenId] = useState<string | null>("client");
+  const [photoLibraryOpen, setPhotoLibraryOpen] = useState(false);
 
   useEffect(() => {
     const q = contactQuery.trim();
@@ -690,7 +732,6 @@ const ProposalEditor = ({
 
   const inputCls = "w-full min-h-[44px] border border-forest-dark/20 px-3 py-2 bg-white text-base";
   const labelCls = "block text-xs uppercase tracking-wider text-forest-dark/60 mb-1";
-  const sectionCls = "bg-white border border-forest-dark/10 p-6 mb-6";
 
   return (
     <div className="min-h-screen bg-cream p-4 md:p-10 [&_button]:!min-h-[44px] [&_button]:!text-base [&_input]:!min-h-[44px] [&_input]:!text-base [&_select]:!min-h-[44px] [&_select]:!text-base [&_textarea]:!min-h-[44px] [&_textarea]:!text-base">
