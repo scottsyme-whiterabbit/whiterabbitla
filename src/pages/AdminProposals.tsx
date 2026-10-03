@@ -732,6 +732,7 @@ const ProposalEditor = ({
 
   const inputCls = "w-full min-h-[44px] border border-forest-dark/20 px-3 py-2 bg-white text-base";
   const labelCls = "block text-xs uppercase tracking-wider text-forest-dark/60 mb-1";
+  const sectionCls = "bg-white border border-forest-dark/10 p-6 mb-6";
 
   return (
     <div className="min-h-screen bg-cream p-4 md:p-10 [&_button]:!min-h-[44px] [&_button]:!text-base [&_input]:!min-h-[44px] [&_input]:!text-base [&_select]:!min-h-[44px] [&_select]:!text-base [&_textarea]:!min-h-[44px] [&_textarea]:!text-base">
@@ -746,7 +747,10 @@ const ProposalEditor = ({
 
         <h1 className="font-serif text-3xl text-forest-dark mb-6">
           {[proposal.first_name, proposal.last_name].filter(Boolean).join(" ") || (proposal.id ? "Edit Proposal" : "New Proposal")}
-          {proposal.slug && <span className="ml-3 text-sm text-fo        <EditorSection id="client" title="Client and event" summary={([proposal.first_name, proposal.last_name].filter(Boolean).join(" ") && proposal.event_type ? `${[proposal.first_name, proposal.last_name].filter(Boolean).join(" ")} · ${proposal.event_type}` : [proposal.first_name, proposal.last_name].filter(Boolean).join(" ") || proposal.event_type || "Not set")} openId={openId} setOpenId={setOpenId}>
+          {proposal.slug && <span className="ml-3 text-sm text-forest-dark/50 font-sans">/proposal/{proposal.slug}</span>}
+        </h1>
+
+        <EditorSection id="client" title="Client and event" summary={([proposal.first_name, proposal.last_name].filter(Boolean).join(" ") && proposal.event_type ? `${[proposal.first_name, proposal.last_name].filter(Boolean).join(" ")} · ${proposal.event_type}` : [proposal.first_name, proposal.last_name].filter(Boolean).join(" ") || proposal.event_type || "Not set")} openId={openId} setOpenId={setOpenId}>
         {/* QUICK START, only on new proposals */}
         {isNew && (
           <div className="bg-forest-dark/5 border border-forest-dark/15 p-6 mb-6">
