@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ClientFileProvider } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
 import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2, ArrowLeft, ArrowUp, ArrowDown, ChevronLeft, ChevronRight } from "lucide-react";
@@ -474,6 +474,46 @@ const AdminProposals = () => {
 };
 
 /* ===================== EDITOR ===================== */
+function EditorSection({
+  id,
+  title,
+  summary,
+  openId,
+  setOpenId,
+  children,
+}: {
+  id: string;
+  title: string;
+  summary: string;
+  openId: string | null;
+  setOpenId: (id: string | null) => void;
+  children: ReactNode;
+}) {
+  const isOpen = openId === id;
+
+  return (
+    <section className="mb-3">
+      <button
+        type="button"
+        onClick={() => setOpenId(isOpen ? null : id)}
+        className="flex min-h-[52px] w-full items-center gap-3 border border-forest-dark/15 bg-white px-4 py-3 text-left"
+        aria-expanded={isOpen}
+        aria-controls={`editor-section-${id}`}
+      >
+        <span className="text-base uppercase tracking-wider text-forest-dark">{title}</span>
+        <span className="ml-auto min-w-0 truncate text-right text-sm text-forest-dark/60">{summary}</span>
+        <ChevronDown className={`h-5 w-5 shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+      </button>
+      <div
+        id={`editor-section-${id}`}
+        className={`border border-t-0 border-forest-dark/15 px-4 py-4 ${isOpen ? "" : "hidden"}`}
+      >
+        {children}
+      </div>
+    </section>
+  );
+}
+
 const ProposalEditor = ({
   proposal, onChange, onSave, saving, onCancel, onPreview, list, password, loadFullProposal,
 }: {
@@ -495,6 +535,8 @@ const ProposalEditor = ({
   const [contactQuery, setContactQuery] = useState("");
   const [contactResults, setContactResults] = useState<any[]>([]);
   const [contactLoading, setContactLoading] = useState(false);
+  const [openId, setOpenId] = useState<string | null>("client");
+  const [photoLibraryOpen, setPhotoLibraryOpen] = useState(false);
 
   useEffect(() => {
     const q = contactQuery.trim();
@@ -704,10 +746,11 @@ const ProposalEditor = ({
         </div>
 
         <h1 className="font-serif text-3xl text-forest-dark mb-6">
-          {proposal.id ? "Edit Proposal" : "New Proposal"}
+          {[proposal.first_name, proposal.last_name].filter(Boolean).join(" ") || (proposal.id ? "Edit Proposal" : "New Proposal")}
           {proposal.slug && <span className="ml-3 text-sm text-forest-dark/50 font-sans">/proposal/{proposal.slug}</span>}
         </h1>
 
+        <EditorSection id="client" title="Client and event" summary={([proposal.first_name, proposal.last_name].filter(Boolean).join(" ") && proposal.event_type ? `${[proposal.first_name, proposal.last_name].filter(Boolean).join(" ")} · ${proposal.event_type}` : [proposal.first_name, proposal.last_name].filter(Boolean).join(" ") || proposal.event_type || "Not set")} openId={openId} setOpenId={setOpenId}>
         {/* QUICK START, only on new proposals */}
         {isNew && (
           <div className="bg-forest-dark/5 border border-forest-dark/15 p-6 mb-6">
@@ -871,6 +914,33 @@ const ProposalEditor = ({
             </div>
             <div><label className={labelCls}>Event date (display)</label><input className={inputCls} placeholder="June 14, 2026" value={proposal.event_date} onChange={(e) => update({ event_date: e.target.value })} /></div>
             <div><label className={labelCls}>Venue</label><input className={inputCls} value={proposal.venue || ""} onChange={(e) => update({ venue: e.target.value })} /></div>
+
+          </div>
+        </div>
+
+        </EditorSection>
+
+        <EditorSection id="letter" title="Letter" summary={proposal.letter_intro?.trim() ? `${proposal.letter_intro.trim().slice(0, 40)}…` : "Empty"} openId={openId} setOpenId={setOpenId}>
+        <div className={sectionCls}>
+          <h2 className="font-serif text-xl text-forest-dark mb-2">Opening Letter Line</h2>
+          <p className="text-xs text-forest-dark/60 mb-3">Optional opening line after their name. Leave blank to skip.</p>
+          <textarea
+            className={inputCls + " min-h-[80px]"}
+            placeholder="Thank you for the time on the phone. I enjoyed it more than you know."
+            value={proposal.letter_intro || ""}
+            onChange={(e) => update({ letter_intro: e.target.value })}
+          />
+        </div>
+
+        {/* Intro */}
+        <div className={sectionCls}>
+          <h2 className="font-serif text-xl text-forest-dark mb-4">Your Night (intro paragraph)</h2>
+          <textarea className={inputCls + " min-h-[140px]"} value={proposal.intro_paragraph} onChange={(e) => update({ intro_paragraph: e.target.value })} />
+        </div>
+
+        </EditorSection>
+
+        <EditorSection id="hero" title="Hero image" summary={HERO_OPTIONS.find((option) => option.value === proposal.hero_image)?.label || "None chosen"} openId={openId} setOpenId={setOpenId}>
             <div className="md:col-span-2">
               <label className={labelCls}>Hero photo</label>
               <div className="mb-3 overflow-hidden border border-forest-dark/15 bg-cream aspect-[16/7]">
@@ -887,9 +957,9 @@ const ProposalEditor = ({
                 })}
               </div>
             </div>
-          </div>
-        </div>
+        </EditorSection>
 
+        <EditorSection id="photos" title="Photos" summary={`${galleryKeys.length} selected`} openId={openId} setOpenId={setOpenId}>
         {/* GALLERY PHOTOS picker */}
         <div className={sectionCls}>
           <div className="flex items-center justify-between mb-2">
@@ -939,6 +1009,16 @@ const ProposalEditor = ({
             ))}
           </div>
 
+          <button
+            type="button"
+            onClick={() => setPhotoLibraryOpen((open) => !open)}
+            className="mb-4 flex min-h-[44px] items-center gap-2 border border-forest-dark/20 bg-white px-4 py-2 text-base text-forest-dark"
+            aria-expanded={photoLibraryOpen}
+          >
+            {photoLibraryOpen ? "Hide photo library" : "Add photos"}
+            <ChevronDown className={`h-4 w-4 transition-transform ${photoLibraryOpen ? "rotate-180" : ""}`} />
+          </button>
+          <div className={photoLibraryOpen ? "" : "hidden"}>
           {(photoFilter === "brand" || photoFilter === "uploads") && (
             <div className="max-h-[420px] overflow-y-auto pr-1" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(110px, 1fr))", gap: "0.5rem" }}>
               {(photoFilter === "uploads" ? GALLERY_UPLOAD_PHOTOS : BRAND_PHOTOS.filter((photo) => !photo.key.startsWith("upload:"))).map((p) => {
@@ -964,45 +1044,13 @@ const ProposalEditor = ({
               }) : undefined}
             />
           )}
-        </div>
 
-        <div className={sectionCls}>
-          <h2 className="font-serif text-xl text-forest-dark mb-2">Opening Letter Line</h2>
-          <p className="text-xs text-forest-dark/60 mb-3">Optional opening line after their name. Leave blank to skip.</p>
-          <textarea
-            className={inputCls + " min-h-[80px]"}
-            placeholder="Thank you for the time on the phone. I enjoyed it more than you know."
-            value={proposal.letter_intro || ""}
-            onChange={(e) => update({ letter_intro: e.target.value })}
-          />
-        </div>
-
-        {/* Intro */}
-        <div className={sectionCls}>
-          <h2 className="font-serif text-xl text-forest-dark mb-4">Your Night (intro paragraph)</h2>
-          <textarea className={inputCls + " min-h-[140px]"} value={proposal.intro_paragraph} onChange={(e) => update({ intro_paragraph: e.target.value })} />
-        </div>
-
-        {/* Timeline */}
-        <div className={sectionCls}>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-serif text-xl text-forest-dark">Timeline</h2>
-            <button onClick={addTimeline} className="text-sm text-forest-dark/70 hover:text-forest-dark flex items-center gap-1"><Plus className="w-4 h-4" /> Add</button>
           </div>
-          {proposal.timeline.map((t, i) => (
-            <div key={i} className="grid grid-cols-12 gap-2 mb-3 items-center">
-              <input className={inputCls + " col-span-3"} placeholder="6:30 PM" value={t.time} onChange={(e) => updateTimeline(i, { time: e.target.value })} />
-              <input className={inputCls + " col-span-6"} placeholder="Description" value={t.desc} onChange={(e) => updateTimeline(i, { desc: e.target.value })} />
-              <div className="col-span-3 flex items-center justify-end gap-1">
-                <button onClick={() => moveTimeline(i, -1)} disabled={i === 0} title="Move up" className="p-1.5 border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowUp className="w-4 h-4" /></button>
-                <button onClick={() => moveTimeline(i, 1)} disabled={i === proposal.timeline.length - 1} title="Move down" className="p-1.5 border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowDown className="w-4 h-4" /></button>
-                <button onClick={() => removeTimeline(i)} title="Remove" className="p-1.5 text-red-600 hover:bg-red-50"><Trash2 className="w-4 h-4" /></button>
-              </div>
-            </div>
-          ))}
-
         </div>
 
+        </EditorSection>
+
+        <EditorSection id="pricing" title="Pricing" summary={proposal.tiers.find((tier) => tier.recommended)?.name ? `${proposal.tiers.length} tiers · ${proposal.tiers.find((tier) => tier.recommended)?.name}` : `${proposal.tiers.length} tiers`} openId={openId} setOpenId={setOpenId}>
         {/* Square Invoice URL (proposal-level) */}
         <div className={sectionCls}>
           <h2 className="font-serif text-xl text-forest-dark mb-2">Square Invoice URL</h2>
@@ -1030,6 +1078,32 @@ const ProposalEditor = ({
           ))}
         </div>
 
+        </EditorSection>
+
+        <EditorSection id="timeline" title="Timeline" summary={proposal.timeline.length ? `${proposal.timeline.length} rows` : "Empty"} openId={openId} setOpenId={setOpenId}>
+        {/* Timeline */}
+        <div className={sectionCls}>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-serif text-xl text-forest-dark">Timeline</h2>
+            <button onClick={addTimeline} className="text-sm text-forest-dark/70 hover:text-forest-dark flex items-center gap-1"><Plus className="w-4 h-4" /> Add</button>
+          </div>
+          {proposal.timeline.map((t, i) => (
+            <div key={i} className="grid grid-cols-12 gap-2 mb-3 items-center">
+              <input className={inputCls + " col-span-3"} placeholder="6:30 PM" value={t.time} onChange={(e) => updateTimeline(i, { time: e.target.value })} />
+              <input className={inputCls + " col-span-6"} placeholder="Description" value={t.desc} onChange={(e) => updateTimeline(i, { desc: e.target.value })} />
+              <div className="col-span-3 flex items-center justify-end gap-1">
+                <button onClick={() => moveTimeline(i, -1)} disabled={i === 0} title="Move up" className="p-1.5 border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowUp className="w-4 h-4" /></button>
+                <button onClick={() => moveTimeline(i, 1)} disabled={i === proposal.timeline.length - 1} title="Move down" className="p-1.5 border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowDown className="w-4 h-4" /></button>
+                <button onClick={() => removeTimeline(i)} title="Remove" className="p-1.5 text-red-600 hover:bg-red-50"><Trash2 className="w-4 h-4" /></button>
+              </div>
+            </div>
+          ))}
+
+        </div>
+
+        </EditorSection>
+
+        <EditorSection id="faqs" title="FAQs" summary={proposal.faqs.length ? `${proposal.faqs.length} questions` : "Empty"} openId={openId} setOpenId={setOpenId}>
         {/* FAQs */}
         <div className={sectionCls}>
           <div className="flex items-center justify-between mb-4">
@@ -1045,6 +1119,9 @@ const ProposalEditor = ({
           ))}
         </div>
 
+        </EditorSection>
+
+        <EditorSection id="closing" title="Closing" summary={proposal.closing_quote?.trim() ? `${proposal.closing_quote.trim().slice(0, 40)}…` : "Empty"} openId={openId} setOpenId={setOpenId}>
         {/* Closing */}
         <div className={sectionCls}>
           <h2 className="font-serif text-xl text-forest-dark mb-4">Closing</h2>
@@ -1082,6 +1159,8 @@ const ProposalEditor = ({
             {additionalTermsBlock(proposal.special_terms).trimEnd() || "Nothing added. The agreement uses the standard terms."}
           </pre>
         </div>
+
+        </EditorSection>
 
         <div className="flex justify-end gap-2 sticky bottom-4">
           <button onClick={onPreview} className="px-4 py-2 border border-forest-dark/20 bg-white text-sm hover:bg-cream flex items-center gap-2"><Eye className="w-4 h-4" /> Preview</button>
