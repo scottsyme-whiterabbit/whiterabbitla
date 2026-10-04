@@ -123,3 +123,6 @@ verify_jwt = false
 
 [functions.admin-code-auth]
 verify_jwt = false
+
+[functions.email-canary]
+verify_jwt = false
