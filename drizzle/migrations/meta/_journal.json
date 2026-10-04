@@ -15,6 +15,13 @@
       "when": 1791093200547,
       "tag": "0001_job_manifest_canary_health",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791093414840,
+      "tag": "0002_fix_jobs_running_check",
+      "breakpoints": true
     }
   ]
 }
