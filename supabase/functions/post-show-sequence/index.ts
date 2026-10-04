@@ -19,8 +19,12 @@ const SITE_URL = "https://whiterabbitla.com";
 const TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-click";
 const OPEN_TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/track-open";
 
-// Day offsets: Email 1 immediately (0), Email 2 day 3, Email 3 day 14, Email 4 day 90
-const POST_SHOW_SCHEDULE = [0, 3, 14, 90];
+// Two step core. Step 0: 1 day after post_show_started_at.
+// Step 1: 21 days after post_show_last_sent_at (falls back to post_show_started_at).
+const POST_SHOW_SCHEDULE = [1, 21];
+
+// Holiday copy is being rewritten; Phase 2 must not send until this is true.
+const HOLIDAY_PHASE_ENABLED = false;
 
 // ═══════════════════════════════════════════════
 // SHARED HELPERS
@@ -126,6 +130,7 @@ interface Deal {
   location: string | null;
   post_show_step: number;
   post_show_started_at: string | null;
+  post_show_last_sent_at: string | null;
   review_completed_at: string | null;
 }
 
@@ -247,16 +252,18 @@ function getUpcomingHoliday(now: Date): Holiday | null {
 }
 
 // ═══════════════════════════════════════════════
-// CORE DRIP TEMPLATES (Steps 0-3)
+// CORE DRIP TEMPLATES (Steps 0-1)
 // ═══════════════════════════════════════════════
 
 function email1ThankYou(deal: Deal): { subject: string; preheader: string; html: string } {
   const name = extractFirstName(deal.contact_name);
-  const STANDARD_TYPES = ["corporate", "wedding", "private party", "parlor show", "other"];
-  const rawType = deal.event_type?.replace(/_/g, " ") || "";
-  const isStandard = STANDARD_TYPES.includes(rawType.toLowerCase());
-  const eventLabel = rawType ? (isStandard ? `your ${rawType}` : rawType) : "your event";
   const contactId = deal.id;
+  const type = (deal.event_type || "").toLowerCase();
+  const typeLine = type.includes("wedding")
+    ? "A wedding at its best feels like being let in on something, and yours did."
+    : type.includes("corporate")
+      ? "What I hope you are left with are shared moments your guests talk about long after the evening ends."
+      : "Your guests did not watch the show, they became the show, and that was down to the room you built before I ever opened a case.";
 
   const innerHtml = `<!-- Headline -->
 <tr><td style="padding: 0 40px 0; text-align:center;" class="padding-mobile">
@@ -271,12 +278,13 @@ Thank You, ${name}
 </td></tr>
 
 <tr><td style="padding: 20px 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
-<p style="margin:0 0 18px;">It was a genuine pleasure performing at ${eventLabel}. I hope the magic created a few moments your guests will be talking about for a while.</p>
-<p style="margin:0 0 18px;">Every event is different, and yours had a special energy. Those are the nights that remind me why I do this.</p>
-<p style="margin:0 0 18px;">If you have a moment, I'd love to hear what stood out. And if you'd like to share the experience with others, a quick note would mean the world.</p>
-${trackedCTA(`${SITE_URL}/review?cid=${contactId}`, "Share Your Experience", contactId, 0)}
-<p style="margin:24px 0 18px;">And of course — if you ever need entertainment for a future event, or know someone who does, I'm always just an email away.</p>
-${signoff(true)}
+<p style="margin:0 0 18px;">Thank you for letting me into your evening.</p>
+<p style="margin:0 0 18px;">${typeLine}</p>
+<p style="margin:0 0 18px;">Nights like that one are the reason I do this.</p>
+<p style="margin:0 0 18px;">If anything stood out to you, I would love to hear it. And if you have a minute to put a few words down about the evening, it is how other hosts find their way to me.</p>
+${trackedCTA(`${SITE_URL}/review?cid=${contactId}`, "Share A Few Words", contactId, 0)}
+<p style="margin:24px 0 18px;">Either way, thank you for trusting me with your night. My number is (424) 394-1850 whenever you need it.</p>
+${signoff()}
 </td></tr>`;
 
   return {
@@ -286,75 +294,24 @@ ${signoff(true)}
   };
 }
 
-function email2Review(deal: Deal): { subject: string; preheader: string; html: string } {
+function email2Referral(deal: Deal): { subject: string; preheader: string; html: string } {
   const name = extractFirstName(deal.contact_name);
   const contactId = deal.id;
-  const reviewLink = trackedLink(`${SITE_URL}/review?cid=${contactId}`, "Leave a quick review", contactId, 1);
 
   const innerHtml = `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
-<p style="margin:0 0 18px;">Hey ${name},</p>
-<p style="margin:0 0 18px;">A small favor — if the experience lived up to your expectations, a quick Google review means the world to me. It's how other hosts find White Rabbit, and it truly makes a difference.</p>
-<p style="margin:0 0 18px;">Takes about 30 seconds: ${reviewLink}</p>
-${trackedCTA(`${SITE_URL}/review?cid=${contactId}`, "Leave a Review", contactId, 1)}
-<p style="margin:24px 0 18px;">Either way, thank you again for trusting me with your event. It was a great night.</p>
+<p style="margin:0 0 18px;">Hi ${name},</p>
+<p style="margin:0 0 18px;">A few weeks on and your evening still comes up when people ask me what a good night looks like.</p>
+<p style="margin:0 0 18px;">If anyone in your world is planning something, a wedding, a birthday, a company evening, I would be glad to be the first name you pass along. Nearly everything I do comes from one host telling someone else.</p>
+<p style="margin:0 0 18px;">No rush at all. My number is (424) 394-1850 whenever you need it.</p>
+${trackedCTA(`${SITE_URL}/refer`, "Pass Along White Rabbit", contactId, 1)}
+<p style="margin:24px 0 0;"></p>
 ${signoff()}
 </td></tr>`;
 
   return {
-    subject: "A small favor",
-    preheader: "If the experience lived up to your expectations...",
-    html: wrapEmail("If the experience lived up to your expectations...", innerHtml, deal.contact_email, contactId, 1),
-  };
-}
-
-function email3Referral(deal: Deal): { subject: string; preheader: string; html: string } {
-  const name = extractFirstName(deal.contact_name);
-  const contactId = deal.id;
-  const STANDARD_TYPES = ["corporate", "wedding", "private party", "parlor show", "other"];
-  const rawType = deal.event_type?.replace(/_/g, " ") || "";
-  const isStandard = STANDARD_TYPES.includes(rawType.toLowerCase());
-  const eventLabel = rawType ? (isStandard ? `your ${rawType}` : rawType) : "your event";
-  const referLink = trackedLink(`${SITE_URL}/refer`, "Share White Rabbit", contactId, 2);
-
-  const innerHtml = `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
-<p style="margin:0 0 18px;">Hey ${name},</p>
-<p style="margin:0 0 18px;">I keep thinking about ${eventLabel} — those are the nights that remind me why I love this work.</p>
-<p style="margin:0 0 18px;">If anyone in your network is planning something special — a corporate event, a wedding, a milestone celebration — I'd love to be the first name you share. Word of mouth from hosts like you is how I've built everything.</p>
-<p style="margin:0 0 18px;">${referLink}</p>
-${trackedCTA(`${SITE_URL}/refer`, "Refer a Friend", contactId, 2)}
-<p style="margin:24px 0 18px;">Thank you for being part of the White Rabbit story.</p>
-${signoff()}
-</td></tr>`;
-
-  return {
-    subject: "Know someone planning an event?",
-    preheader: "Word of mouth from hosts like you means everything.",
-    html: wrapEmail("Word of mouth from hosts like you means everything.", innerHtml, deal.contact_email, contactId, 2),
-  };
-}
-
-function email4Reengage(deal: Deal): { subject: string; preheader: string; html: string } {
-  const name = extractFirstName(deal.contact_name);
-  const contactId = deal.id;
-  const season = getSeason();
-  const seasonalHook = getSeasonalHook();
-  const calendarLink = trackedLink("https://calendar.app.google/58WjggPt3RFAcJjq8", "grab a time here", contactId, 3);
-
-  const innerHtml = `<tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:15px; line-height:1.8; color:rgba(245,240,232,0.75);" class="padding-mobile">
-<p style="margin:0 0 18px;">Hey ${name},</p>
-<p style="margin:0 0 18px;">Planning anything for ${season}?</p>
-<p style="margin:0 0 18px;">${seasonalHook}</p>
-<p style="margin:0 0 18px;">As a repeat client, I always make sure to hold priority availability. If you're thinking about another event — even just exploring the idea — I'd love to chat early so we can lock in the best date.</p>
-<p style="margin:0 0 18px;">No pressure at all. Just ${calendarLink} or reply to this email.</p>
-${trackedCTA("https://calendar.app.google/58WjggPt3RFAcJjq8", "Book a Call", contactId, 3)}
-<p style="margin:24px 0 18px;">Hope you've been well.</p>
-${signoff()}
-</td></tr>`;
-
-  return {
-    subject: `Planning anything for ${season}?`,
-    preheader: "Priority availability for repeat clients.",
-    html: wrapEmail("Priority availability for repeat clients.", innerHtml, deal.contact_email, contactId, 3),
+    subject: `${name}, your evening still comes up`,
+    preheader: "Word of mouth from hosts like you is everything.",
+    html: wrapEmail("Word of mouth from hosts like you is everything.", innerHtml, deal.contact_email, contactId, 1),
   };
 }
 
@@ -407,12 +364,8 @@ serve(async (req) => {
     }
 
 
+    // Weekday is only enforced inside the holiday phase; the core thank you sends any day.
     const pacificDay = new Intl.DateTimeFormat("en-US", { timeZone: "America/Los_Angeles", weekday: "short" }).format(new Date());
-    if (!["Tue", "Wed", "Thu"].includes(pacificDay)) {
-      return new Response(JSON.stringify({ sent: 0, message: `Skipped: ${pacificDay} is outside the Tue-Thu send window` }), {
-        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
 
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
     if (!RESEND_API_KEY) throw new Error("RESEND_API_KEY not configured");
@@ -425,7 +378,7 @@ serve(async (req) => {
     // Get all completed deals that still need post-show emails OR are eligible for holiday emails
     const { data: deals, error: fetchErr } = await supabase
       .from("deals")
-      .select("id, contact_email, contact_name, company, event_type, event_date, location, post_show_step, post_show_started_at, review_completed_at")
+      .select("id, contact_email, contact_name, company, event_type, event_date, location, post_show_step, post_show_started_at, post_show_last_sent_at, review_completed_at")
       .eq("stage", "completed")
       .order("updated_at", { ascending: true });
 
@@ -448,8 +401,8 @@ serve(async (req) => {
 
     for (const deal of deals) {
       try {
-        // ── PHASE 1: Core drip (steps 0-3) ──
-        if (deal.post_show_step < 4) {
+        // ── PHASE 1: Core drip (steps 0-1) ──
+        if (deal.post_show_step < POST_SHOW_SCHEDULE.length) {
           let startedAt: Date;
           if (!deal.post_show_started_at) {
             startedAt = now;
@@ -462,29 +415,31 @@ serve(async (req) => {
           }
 
           const currentStep = deal.post_show_step;
-          const daysSinceStart = (now.getTime() - startedAt.getTime()) / (1000 * 60 * 60 * 24);
-          const requiredDays = POST_SHOW_SCHEDULE[currentStep];
-
-          if (daysSinceStart < requiredDays) continue;
+          // Step 0 measures from the start; later steps measure from the previous send.
+          const anchor = currentStep === 0
+            ? startedAt
+            : (deal.post_show_last_sent_at ? new Date(deal.post_show_last_sent_at) : startedAt);
+          const daysSinceAnchor = (now.getTime() - anchor.getTime()) / (1000 * 60 * 60 * 24);
+          if (daysSinceAnchor < POST_SHOW_SCHEDULE[currentStep]) continue;
 
           let subject: string;
           let html: string;
 
           switch (currentStep) {
             case 0: { const e = email1ThankYou(deal as Deal); subject = e.subject; html = e.html; break; }
-            case 1: {
-              // Skip review ask if client already left a review
-              if ((deal as Deal).review_completed_at) {
-                console.log(`Skipping review email for ${deal.contact_email} — review already completed`);
-                await supabase.from("deals").update({ post_show_step: currentStep + 1 }).eq("id", deal.id);
-                continue;
-              }
-              const e = email2Review(deal as Deal); subject = e.subject; html = e.html; break;
-            }
-            case 2: { const e = email3Referral(deal as Deal); subject = e.subject; html = e.html; break; }
-            case 3: { const e = email4Reengage(deal as Deal); subject = e.subject; html = e.html; break; }
+            case 1: { const e = email2Referral(deal as Deal); subject = e.subject; html = e.html; break; }
             default: continue;
           }
+
+          // Atomic claim: advance step and stamp send time only if no other run got here first.
+          const prevLastSent = deal.post_show_last_sent_at ?? null;
+          const { data: claimed } = await supabase
+            .from("deals")
+            .update({ post_show_step: currentStep + 1, post_show_last_sent_at: now.toISOString() })
+            .eq("id", deal.id)
+            .eq("post_show_step", currentStep)
+            .select("id");
+          if (!claimed || claimed.length === 0) continue;
 
           const resendRes = await fetch("https://api.resend.com/emails", {
             method: "POST",
@@ -503,6 +458,12 @@ serve(async (req) => {
           });
 
           if (!resendRes.ok) {
+            // Roll the claim back so the next run retries.
+            await supabase
+              .from("deals")
+              .update({ post_show_step: currentStep, post_show_last_sent_at: prevLastSent })
+              .eq("id", deal.id)
+              .eq("post_show_step", currentStep + 1);
             errors.push(`${deal.contact_email}: Resend error ${await resendRes.text()}`);
             continue;
           }
@@ -513,13 +474,14 @@ serve(async (req) => {
             status: "sent",
           });
 
-          await supabase.from("deals").update({ post_show_step: currentStep + 1 }).eq("id", deal.id);
           sent++;
           console.log(`Sent post-show step ${currentStep} to ${deal.contact_email}`);
           continue; // Don't also send a holiday email on the same run
         }
 
-        // ── PHASE 2: Holiday bonus emails (post_show_step >= 4) ──
+        // ── PHASE 2: Holiday bonus emails (post_show_step >= 2) ──
+        if (!HOLIDAY_PHASE_ENABLED) continue;
+        if (!["Tue", "Wed", "Thu"].includes(pacificDay)) continue;
         if (!upcomingHoliday || !holidayCampaignId) continue;
 
         // Check if we already sent this holiday email to this deal
