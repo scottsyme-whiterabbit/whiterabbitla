@@ -12,7 +12,7 @@ const GOOGLE_REVIEW_URL = "https://g.page/r/CXLCQWnGrGWrEAE/review";
 
 const ReviewGate = () => {
   const { toast } = useToast();
-  const [step, setStep] = useState<"sentiment" | "positive" | "feedback">("sentiment");
+  const [step, setStep] = useState<"sentiment" | "positive" | "feedback" | "thanks">("sentiment");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [feedbackData, setFeedbackData] = useState({ name: "", email: "", message: "" });
 
