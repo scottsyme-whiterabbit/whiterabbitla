@@ -1857,6 +1857,30 @@ export type Database = {
         }
         Relationships: []
       }
+      scheduled_job_manifest: {
+        Row: {
+          added_at: string
+          expected_schedule: string
+          jobname: string
+          purpose: string | null
+          required: boolean
+        }
+        Insert: {
+          added_at?: string
+          expected_schedule: string
+          jobname: string
+          purpose?: string | null
+          required?: boolean
+        }
+        Update: {
+          added_at?: string
+          expected_schedule?: string
+          jobname?: string
+          purpose?: string | null
+          required?: boolean
+        }
+        Relationships: []
+      }
       seasonal_campaign_copy: {
         Row: {
           active: boolean
@@ -2060,6 +2084,30 @@ export type Database = {
           expires_at?: string
           id?: string
           payload?: Json
+        }
+        Relationships: []
+      }
+      system_canary_log: {
+        Row: {
+          error: string | null
+          id: string
+          message_id: string | null
+          ok: boolean
+          ran_at: string
+        }
+        Insert: {
+          error?: string | null
+          id?: string
+          message_id?: string | null
+          ok: boolean
+          ran_at?: string
+        }
+        Update: {
+          error?: string | null
+          id?: string
+          message_id?: string | null
+          ok?: boolean
+          ran_at?: string
         }
         Relationships: []
       }
