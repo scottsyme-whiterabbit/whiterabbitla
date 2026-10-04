@@ -39,6 +39,90 @@ serve(async (req) => {
       });
     }
 
+    // ── Private feedback from the review gate (never an inquiry, never a deal) ──
+    if (body._privateFeedback) {
+      const fbName = typeof body.name === "string" ? body.name.trim().slice(0, 100) : "";
+      const fbEmail = typeof body.email === "string" ? body.email.trim().slice(0, 255) : "";
+      const fbMessage = typeof body.message === "string" ? body.message.trim().slice(0, 2000) : "";
+      const fbDealId = typeof body.dealId === "string" ? body.dealId.trim() : "";
+
+      if (!fbName || !fbMessage) {
+        return new Response(JSON.stringify({ error: "Name and message are required" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (fbEmail && !fbEmail.includes("@")) {
+        return new Response(JSON.stringify({ error: "Email address is not valid" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const fbSupabase = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+      );
+
+      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if (fbDealId && isUuid.test(fbDealId)) {
+        try {
+          await fbSupabase.from("deal_activity").insert({
+            deal_id: fbDealId,
+            type: "feedback",
+            title: "Private feedback from the review page",
+            body: fbMessage.slice(0, 500),
+            metadata: { name: fbName, email: fbEmail, source: "review_gate" },
+          });
+        } catch (fbActivityError) {
+          console.error("Private feedback activity insert failed:", fbActivityError);
+        }
+        // Pull the client out of the post-show core so the referral ask never
+        // reaches someone who said the night fell short.
+        try {
+          await fbSupabase
+            .from("deals")
+            .update({ post_show_step: 2 })
+            .eq("id", fbDealId)
+            .lt("post_show_step", 2);
+        } catch (fbStepError) {
+          console.error("Post-show step update failed:", fbStepError);
+        }
+      }
+
+      const fbResendKey = Deno.env.get("RESEND_API_KEY");
+      if (fbResendKey) {
+        try {
+          const fbHtml = `
+            <h2>Private feedback from the review page</h2>
+            <p><strong>Name:</strong> ${escapeHtml(fbName)}</p>
+            <p><strong>Email:</strong> ${escapeHtml(fbEmail || "Not provided")}</p>
+            <p><strong>Deal ID:</strong> ${escapeHtml(fbDealId || "Not linked")}</p>
+            <p style="white-space:pre-wrap;">${escapeHtml(fbMessage)}</p>
+          `;
+          const fbPayload: Record<string, unknown> = {
+            from: "White Rabbit <scott.syme@whiterabbitla.com>",
+            to: ["scott.syme@whiterabbitla.com"],
+            subject: `Private feedback from ${fbName}`,
+            html: fbHtml,
+          };
+          if (fbEmail) fbPayload.reply_to = fbEmail;
+          const fbResponse = await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${fbResendKey}` },
+            body: JSON.stringify(fbPayload),
+          });
+          if (!fbResponse.ok) console.error("Resend feedback notification error:", await fbResponse.text());
+        } catch (fbSendError) {
+          console.error("Resend feedback notification failed:", fbSendError);
+        }
+      } else {
+        console.error("RESEND_API_KEY is not set; private feedback notification was not sent");
+      }
+
+      return new Response(JSON.stringify({ ok: true }), {
+        status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const { name, email, phone, eventType, date, location, message, clientType, guestCount, budget, recommendation, source: formSource } = body;
 
     // Basic validation
