@@ -174,7 +174,15 @@ const AdminProposals = () => {
       });
       const j = await res.json();
       if (!res.ok) throw new Error(j.error);
-      setEditing(j.proposal);
+      setEditing({
+        ...DEFAULT_PROPOSAL,
+        ...j.proposal,
+        tiers: j.proposal.tiers ?? DEFAULT_PROPOSAL.tiers,
+        timeline: j.proposal.timeline ?? DEFAULT_PROPOSAL.timeline,
+        faqs: j.proposal.faqs ?? DEFAULT_PROPOSAL.faqs,
+        gallery_photos: j.proposal.gallery_photos ?? DEFAULT_PROPOSAL.gallery_photos,
+        reviews: j.proposal.reviews ?? DEFAULT_PROPOSAL.reviews,
+      });
     } catch (e) { toast.error((e as Error).message); }
   };
 
@@ -1050,7 +1058,7 @@ const ProposalEditor = ({
 
         </EditorSection>
 
-        <EditorSection id="pricing" title="Pricing" summary={proposal.tiers.find((tier) => tier.recommended)?.name ? `${proposal.tiers.length} tiers · ${proposal.tiers.find((tier) => tier.recommended)?.name}` : `${proposal.tiers.length} tiers`} openId={openId} setOpenId={setOpenId}>
+        <EditorSection id="pricing" title="Pricing" summary={proposal.tiers?.find((tier) => tier.recommended)?.name ? `${proposal.tiers?.length ?? 0} tiers · ${proposal.tiers?.find((tier) => tier.recommended)?.name}` : `${proposal.tiers?.length ?? 0} tiers`} openId={openId} setOpenId={setOpenId}>
         {/* Square Invoice URL (proposal-level) */}
         <div className={sectionCls}>
           <h2 className="font-serif text-xl text-forest-dark mb-2">Square Invoice URL</h2>
@@ -1080,7 +1088,7 @@ const ProposalEditor = ({
 
         </EditorSection>
 
-        <EditorSection id="timeline" title="Timeline" summary={proposal.timeline.length ? `${proposal.timeline.length} rows` : "Empty"} openId={openId} setOpenId={setOpenId}>
+        <EditorSection id="timeline" title="Timeline" summary={proposal.timeline?.length ? `${proposal.timeline.length} rows` : "Empty"} openId={openId} setOpenId={setOpenId}>
         {/* Timeline */}
         <div className={sectionCls}>
           <div className="flex items-center justify-between mb-4">
@@ -1103,7 +1111,7 @@ const ProposalEditor = ({
 
         </EditorSection>
 
-        <EditorSection id="faqs" title="FAQs" summary={proposal.faqs.length ? `${proposal.faqs.length} questions` : "Empty"} openId={openId} setOpenId={setOpenId}>
+        <EditorSection id="faqs" title="FAQs" summary={proposal.faqs?.length ? `${proposal.faqs.length} questions` : "Empty"} openId={openId} setOpenId={setOpenId}>
         {/* FAQs */}
         <div className={sectionCls}>
           <div className="flex items-center justify-between mb-4">
