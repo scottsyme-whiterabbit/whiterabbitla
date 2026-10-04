@@ -44,19 +44,16 @@ const ReviewGate = () => {
     try {
       const { error } = await supabase.functions.invoke("send-inquiry", {
         body: {
+          _privateFeedback: true,
+          dealId,
           name: feedbackData.name,
           email: feedbackData.email,
-          phone: "",
-          eventType: "Private Feedback",
-          date: "",
-          location: "",
-          message: `[PRIVATE FEEDBACK]\n\n${feedbackData.message}`,
+          message: feedbackData.message,
         },
       });
       if (error) throw error;
-      toast({ title: "Thank you!", description: "Your feedback has been received. We'll be in touch." });
       setFeedbackData({ name: "", email: "", message: "" });
-      setStep("sentiment");
+      setStep("thanks");
     } catch {
       toast({ title: "Something went wrong", description: "Please email us at events@whiterabbitla.com", variant: "destructive" });
     } finally {
@@ -124,6 +121,16 @@ const ReviewGate = () => {
               >
                 Leave Your Review <ArrowRight size={16} />
               </a>
+            </AnimatedSection>
+          )}
+
+          {/* Private Feedback Thanks */}
+          {step === "thanks" && (
+            <AnimatedSection>
+              <h2 className="font-serif text-4xl text-foreground mb-4">Thank you for telling me</h2>
+              <p className="font-sans text-base text-muted-foreground max-w-md mx-auto">
+                That goes straight to Scott and nowhere else. He will follow up with you directly.
+              </p>
             </AnimatedSection>
           )}
 
