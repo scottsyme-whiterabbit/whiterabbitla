@@ -788,6 +788,7 @@ export type Database = {
           outreach_notes: string | null
           outreach_status: string | null
           phone: string | null
+          post_show_last_sent_at: string | null
           post_show_started_at: string | null
           post_show_step: number
           priority_score: number | null
@@ -826,6 +827,7 @@ export type Database = {
           outreach_notes?: string | null
           outreach_status?: string | null
           phone?: string | null
+          post_show_last_sent_at?: string | null
           post_show_started_at?: string | null
           post_show_step?: number
           priority_score?: number | null
@@ -864,6 +866,7 @@ export type Database = {
           outreach_notes?: string | null
           outreach_status?: string | null
           phone?: string | null
+          post_show_last_sent_at?: string | null
           post_show_started_at?: string | null
           post_show_step?: number
           priority_score?: number | null

@@ -1,0 +1,1 @@
+alter table public.deals add column if not exists post_show_last_sent_at timestamptz;
