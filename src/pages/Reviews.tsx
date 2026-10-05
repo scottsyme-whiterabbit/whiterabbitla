@@ -11,6 +11,12 @@ import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
 const reviews = [
 {
+  name: "Carlota L.",
+  role: "Event Planner San Francisco",
+  text: "I absolutely loved working with him! He was impeccable from start to finish, professional, kind, easy to work with, and incredibly talented. His performance was amazing, and it was so much fun seeing how much the guests enjoyed his magic.\n\nAs an event planner, I truly appreciate vendors I can trust to show up, be professional, and give my clients and their guests a wonderful experience. He did exactly that and more! I'm so happy I chose him for this event and I will definitely be calling him again for future events. Highly recommend!",
+  rating: 5
+},
+{
   name: "Kaitlyn T.",
   role: "Private Event Host",
   text: "I truly cannot say enough amazing things about Scott! I hired him to surprise a group of friends with a magic show at my home, and he completely exceeded every expectation.\n\nFrom the very beginning, he was incredible to work with. He arrived early, got everything set up, talked through the surprise with me, and was so flexible in making sure we timed the reveal perfectly. I gave a little speech to my guests and introduced the surprise, and Scott came in at exactly the right moment—it could not have gone better.\n\nAnd the show itself was INCREDIBLE. He captivated everyone immediately. He was funny, engaging, personable, and so incredibly talented. You can genuinely tell how passionate he is about what he does, and that energy made the entire experience even more special.\n\nWe did a parlor-style show, and it was honestly the perfect entertainment for a party. Everyone was completely locked in from beginning to end. Since the party, literally every single person who was there has messaged me about how amazing he was—and a few of my friends who had never really been into magic before are now completely obsessed!\n\nScott made the night so memorable and gave us an experience we will be talking about for a long time. If you are considering hiring him for a party or event, DO IT. It was easily one of the best decisions I made for the entire night. I would hire him again in a heartbeat!",
