@@ -89,16 +89,35 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
 
     // Deal died: pull the hold off the calendar so the night frees up again.
     if (GCAL_CANCEL_STAGES.has(deal.stage) && deal.calendar_event_id) {
-      await fetch(
-        `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(deal.calendar_event_id)}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${LOVABLE_API_KEY}`,
-            "X-Connection-Api-Key": GCAL_API_KEY,
-          },
-        },
-      ).catch(() => {});
+      // Ownership check: only DELETE an event this system created. A foreign
+      // or unreadable event is never deleted; the stale id is still dropped.
+      const eventUrl = `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(deal.calendar_event_id)}`;
+      const gcalHeaders = {
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        "X-Connection-Api-Key": GCAL_API_KEY,
+      };
+      const getRes = await fetch(eventUrl, { headers: gcalHeaders }).catch(() => null);
+      let owned = false;
+      let foreignSummary = "";
+      if (getRes && getRes.ok) {
+        const existing = await getRes.json().catch(() => ({}));
+        foreignSummary = typeof existing?.summary === "string" ? existing.summary : "";
+        owned = foreignSummary.startsWith(GCAL_OWNED_PREFIX);
+      } else if (getRes) {
+        await getRes.text().catch(() => "");
+        foreignSummary = `(GET ${getRes.status})`;
+      } else {
+        foreignSummary = "(GET failed)";
+      }
+      if (owned) {
+        await fetch(eventUrl, { method: "DELETE", headers: gcalHeaders })
+          .then((r) => r.text().catch(() => ""))
+          .catch(() => {});
+      } else {
+        console.warn(
+          `[gcal-push] deal ${deal.id} lost: skipping DELETE of foreign or unreadable event ("${foreignSummary}"); clearing calendar_event_id only`,
+        );
+      }
       await supabase.from("deals").update({
         calendar_event_id: null,
         last_calendar_sync_at: new Date().toISOString(),

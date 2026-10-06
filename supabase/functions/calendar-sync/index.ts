@@ -206,8 +206,60 @@ serve(async (req) => {
       }
     }
 
+    // Reconciliation pass: a show deal inside the fetched window whose
+    // calendar entry is absent from the fetch gets recreated. Skipped on an
+    // empty fetch (unhealthy API, not every show vanished). Capped per run.
+    const HEAL_CAP = 20;
+    let healed = 0;
+    const fetchedItems: any[] = data.items || [];
+    if (fetchedItems.length > 0) {
+      const fetchedIds = new Set<string>(fetchedItems.map((e: any) => e.id).filter(Boolean));
+      const windowStart = timeMin.slice(0, 10);
+      const windowEnd = timeMax.slice(0, 10);
+      const { data: showDeals, error: showErr } = await supabase
+        .from("deals")
+        .select("id, event_date, calendar_event_id")
+        .in("stage", ["booked", "completed", "proposal_sent", "negotiating", "on_hold"])
+        .not("event_date", "is", null)
+        .gte("event_date", windowStart)
+        .lte("event_date", windowEnd);
+      if (showErr) console.error("[calendar-sync] reconciliation query failed", showErr);
+      for (const d of showDeals || []) {
+        if (healed >= HEAL_CAP) break;
+        const needsHeal = !d.calendar_event_id || !fetchedIds.has(d.calendar_event_id);
+        if (!needsHeal) continue;
+        // Null FIRST so the sync creates a fresh event instead of patching a missing one.
+        const { error: nullErr } = await supabase.from("deals")
+          .update({ calendar_event_id: null }).eq("id", d.id);
+        if (nullErr) { console.error(`[calendar-sync] could not clear id on ${d.id}`, nullErr); continue; }
+        try {
+          const res = await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${SERVICE_KEY}` },
+            body: JSON.stringify({ action: "sync_deal_calendar", adminPassword: ADMIN_PASSWORD, dealId: d.id }),
+          });
+          await res.text().catch(() => "");
+          if (!res.ok) console.error(`[calendar-sync] resync failed for ${d.id}: ${res.status}`);
+        } catch (err) {
+          console.error(`[calendar-sync] resync error for ${d.id}`, err);
+        }
+        await supabase.from("deal_activity").insert({
+          deal_id: d.id,
+          type: "calendar_event",
+          title: "Calendar entry was missing, recreated",
+          body: `Show on ${d.event_date}`,
+          metadata: { previous_event_id: d.calendar_event_id ?? null },
+          occurred_at: new Date().toISOString(),
+        });
+        healed++;
+      }
+      console.log(`[calendar-sync] reconciliation healed ${healed} deal(s)`);
+    } else {
+      console.warn("[calendar-sync] empty calendar fetch; reconciliation skipped");
+    }
+
     return new Response(JSON.stringify({
-      success: true, events: data.items?.length || 0, linked, created, hotMarked, postShowQueued,
+      success: true, events: data.items?.length || 0, linked, created, hotMarked, postShowQueued, healed,
     }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e) {
     console.error(e);
