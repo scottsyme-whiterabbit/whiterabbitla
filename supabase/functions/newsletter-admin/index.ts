@@ -16,6 +16,8 @@ const GCAL_BOOKED_STAGES = new Set(["booked", "completed"]);
 // with a 🎩 HOLD event that gets upgraded in place to 🎩 BOOKED once they sign.
 const GCAL_HOLD_STAGES = new Set(["proposal_sent", "negotiating", "on_hold"]);
 const GCAL_CANCEL_STAGES = new Set(["lost"]);
+// Every event this system creates has a summary starting with this marker.
+const GCAL_OWNED_PREFIX = "🎩";
 
 // Pulls an end time out of free text the client typed, such as "6:00-9:00"
 // or "7:30 to 9:00 PM". Returns minutes from midnight, or null when unsure.
@@ -232,7 +234,34 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
       ...times,
     };
 
-    const isUpdate = !!deal.calendar_event_id;
+    // Ownership check: only PATCH an event this system created (summary starts
+    // with GCAL_OWNED_PREFIX). A dead or foreign id gets a fresh POST instead.
+    let isUpdate = false;
+    if (deal.calendar_event_id) {
+      const getRes = await fetch(
+        `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(deal.calendar_event_id)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${LOVABLE_API_KEY}`,
+            "X-Connection-Api-Key": GCAL_API_KEY,
+          },
+        },
+      ).catch(() => null);
+      if (getRes && getRes.ok) {
+        const existing = await getRes.json().catch(() => ({}));
+        const existingSummary = typeof existing?.summary === "string" ? existing.summary : "";
+        if (existingSummary.startsWith(GCAL_OWNED_PREFIX)) {
+          isUpdate = true;
+        } else {
+          console.warn(
+            `[gcal-push] deal ${deal.id} calendar_event_id points at a foreign event ("${existingSummary}"); creating a fresh event instead of patching`,
+          );
+        }
+      } else {
+        if (getRes) await getRes.text().catch(() => "");
+        console.warn(`[gcal-push] deal ${deal.id} calendar_event_id is dead (GET ${getRes?.status ?? "failed"}); creating a fresh event`);
+      }
+    }
     const url = isUpdate
       ? `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(deal.calendar_event_id)}`
       : `${GCAL_GATEWAY}/calendars/primary/events`;

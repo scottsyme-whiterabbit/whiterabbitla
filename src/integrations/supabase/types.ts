@@ -765,6 +765,7 @@ export type Database = {
         Row: {
           calendar_event_id: string | null
           company: string | null
+          consultation_event_id: string | null
           contact_email: string
           contact_name: string | null
           created_at: string
@@ -804,6 +805,7 @@ export type Database = {
         Insert: {
           calendar_event_id?: string | null
           company?: string | null
+          consultation_event_id?: string | null
           contact_email: string
           contact_name?: string | null
           created_at?: string
@@ -843,6 +845,7 @@ export type Database = {
         Update: {
           calendar_event_id?: string | null
           company?: string | null
+          consultation_event_id?: string | null
           contact_email?: string
           contact_name?: string | null
           created_at?: string
