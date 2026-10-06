@@ -87,14 +87,14 @@ serve(async (req) => {
       // Try to find an existing deal: by calendar_event_id, or by attendee email
       let { data: deal } = await supabase
         .from("deals")
-        .select("id, stage, contact_email, post_show_step, post_show_started_at, hot_signal, calendar_event_id")
+        .select("id, stage, contact_email, post_show_step, post_show_started_at, hot_signal, calendar_event_id, consultation_event_id")
         .eq("calendar_event_id", eventId)
         .maybeSingle();
 
       if (!deal && guestEmails.length) {
         const { data: byEmail } = await supabase
           .from("deals")
-          .select("id, stage, contact_email, post_show_step, post_show_started_at, hot_signal, calendar_event_id")
+          .select("id, stage, contact_email, post_show_step, post_show_started_at, hot_signal, calendar_event_id, consultation_event_id")
           .in("contact_email", guestEmails)
           .order("updated_at", { ascending: false })
           .limit(1);
@@ -103,15 +103,20 @@ serve(async (req) => {
 
       // Discovery calls and consultations are not show bookings.
       const titleLc = summary.toLowerCase();
-      const isConsultation = ["conversation with scott", "15-minute", "15 minute", "discovery call", "consultation"]
-        .some((k) => titleLc.includes(k));
+      // System show events (🎩 BOOKED / 🎩 HOLD) are never consultations.
+      // Booking page appointments read "A 15-minute conversation with Scott Syme x White Rabbit LA (Name)".
+      const isSystemShow = summary.startsWith("🎩");
+      const isConsultation = !isSystemShow &&
+        ["conversation with scott syme", "conversation with scott", "15-minute", "15 minute", "discovery call", "consultation"]
+          .some((k) => titleLc.includes(k));
 
       if (isConsultation) {
         // A consultation only says a call is scheduled. It must NEVER write the
-        // deal's event_date, event_time or location; only a real show event may.
-        if (deal && !isPast && (deal as any).calendar_event_id !== eventId) {
+        // deal's event_date, event_time, location or calendar_event_id; the
+        // consultation id goes into consultation_event_id only.
+        if (deal && !isPast && (deal as any).consultation_event_id !== eventId) {
           const consultUpdate: Record<string, unknown> = {
-            calendar_event_id: eventId,
+            consultation_event_id: eventId,
             ...(deal.stage === "new" ? { stage: "contacted" } : {}),
             hot_signal: true,
             hot_reason: "Call booked",
@@ -120,11 +125,12 @@ serve(async (req) => {
           delete consultUpdate.event_date;
           delete consultUpdate.event_time;
           delete consultUpdate.location;
+          delete consultUpdate.calendar_event_id;
           await supabase.from("deals").update(consultUpdate).eq("id", deal.id);
           await supabase.from("deal_activity").insert({
             deal_id: deal.id,
             type: "calendar_event",
-            title: `Booked a call: ${summary}`,
+            title: `Linked consultation call: ${summary}`,
             body: null,
             metadata: { event_id: eventId, start, end, consultation: true },
             occurred_at: new Date().toISOString(),
