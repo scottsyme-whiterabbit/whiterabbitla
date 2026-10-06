@@ -11,6 +11,12 @@ import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
 const reviews = [
 {
+  name: "Monique S.",
+  role: "Corporate Event, Create & Cultivate",
+  text: "Scott with White Rabbit was amazing!!!! It was such a fun piece of our yearly Supper Club dinner in LA! We will absolutely be having him again at the future event!! :)",
+  rating: 5
+},
+{
   name: "Carlota L.",
   role: "Event Planner San Francisco",
   text: "I absolutely loved working with him! He was impeccable from start to finish, professional, kind, easy to work with, and incredibly talented. His performance was amazing, and it was so much fun seeing how much the guests enjoyed his magic.\n\nAs an event planner, I truly appreciate vendors I can trust to show up, be professional, and give my clients and their guests a wonderful experience. He did exactly that and more! I'm so happy I chose him for this event and I will definitely be calling him again for future events. Highly recommend!",
