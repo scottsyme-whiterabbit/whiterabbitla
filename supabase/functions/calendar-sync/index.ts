@@ -207,27 +207,84 @@ serve(async (req) => {
     }
 
     // Reconciliation pass: a show deal inside the fetched window whose
-    // calendar entry is absent from the fetch gets recreated. Skipped on an
+    // calendar entry is absent from the fetch gets adopted from an existing
+    // calendar event when one matches, otherwise recreated. Skipped on an
     // empty fetch (unhealthy API, not every show vanished). Capped per run.
+    // NOTE: a null calendar_event_id does NOT mean no event exists — Scott
+    // hand-writes many calendar entries himself, so always try to adopt
+    // before creating a duplicate.
     const HEAL_CAP = 20;
     let healed = 0;
+    let adopted = 0;
     const fetchedItems: any[] = data.items || [];
     if (fetchedItems.length > 0) {
       const fetchedIds = new Set<string>(fetchedItems.map((e: any) => e.id).filter(Boolean));
       const windowStart = timeMin.slice(0, 10);
       const windowEnd = timeMax.slice(0, 10);
+      const pacificDateOf = (ev: any): string | null => {
+        if (ev?.start?.dateTime) {
+          try {
+            return new Intl.DateTimeFormat("en-CA", {
+              timeZone: "America/Los_Angeles", year: "numeric", month: "2-digit", day: "2-digit",
+            }).format(new Date(ev.start.dateTime));
+          } catch { return null; }
+        }
+        const dateOnly = ev?.start?.date;
+        return dateOnly ? String(dateOnly).slice(0, 10) : null;
+      };
+      // Priority 1: the system writes "White Rabbit CRM deal <id>" into
+      // descriptions, so an exact deal-id match wins outright.
+      // Priority 2: an owned event (summary starts with the 🎩 marker, written
+      // with or without a following space) whose start date falls on the
+      // deal's event_date and whose summary/description names the client.
+      const findAdoptable = (d: any) => {
+        for (const ev of fetchedItems) {
+          if ((ev?.description || "").includes(d.id)) return ev;
+        }
+        const name = (d.contact_name || "").toLowerCase();
+        const email = (d.contact_email || "").toLowerCase();
+        const dealDate = String(d.event_date || "").slice(0, 10);
+        for (const ev of fetchedItems) {
+          const summary = ev?.summary || "";
+          if (!summary.startsWith("🎩")) continue;
+          if ((pacificDateOf(ev) || "") !== dealDate) continue;
+          const desc = (ev?.description || "").toLowerCase();
+          if (name && (summary.toLowerCase().includes(name) || desc.includes(name))) return ev;
+          if (email && desc.includes(email)) return ev;
+        }
+        return null;
+      };
       const { data: showDeals, error: showErr } = await supabase
         .from("deals")
-        .select("id, event_date, calendar_event_id")
+        .select("id, event_date, calendar_event_id, contact_name, contact_email")
         .in("stage", ["booked", "completed", "proposal_sent", "negotiating", "on_hold"])
         .not("event_date", "is", null)
         .gte("event_date", windowStart)
         .lte("event_date", windowEnd);
       if (showErr) console.error("[calendar-sync] reconciliation query failed", showErr);
       for (const d of showDeals || []) {
-        if (healed >= HEAL_CAP) break;
+        if (healed + adopted >= HEAL_CAP) break;
         const needsHeal = !d.calendar_event_id || !fetchedIds.has(d.calendar_event_id);
         if (!needsHeal) continue;
+        // Adopt an existing event out of the already-fetched list before
+        // creating anything new.
+        const match = findAdoptable(d);
+        if (match?.id) {
+          const { error: adoptErr } = await supabase.from("deals")
+            .update({ calendar_event_id: match.id, last_calendar_sync_at: new Date().toISOString() })
+            .eq("id", d.id);
+          if (adoptErr) { console.error(`[calendar-sync] adopt failed for ${d.id}`, adoptErr); continue; }
+          await supabase.from("deal_activity").insert({
+            deal_id: d.id,
+            type: "calendar_event",
+            title: "Linked to an existing calendar entry",
+            body: `Show on ${d.event_date}`,
+            metadata: { event_id: match.id, summary: match.summary || "", previous_event_id: d.calendar_event_id ?? null },
+            occurred_at: new Date().toISOString(),
+          });
+          adopted++;
+          continue;
+        }
         // Null FIRST so the sync creates a fresh event instead of patching a missing one.
         const { error: nullErr } = await supabase.from("deals")
           .update({ calendar_event_id: null }).eq("id", d.id);
@@ -253,13 +310,13 @@ serve(async (req) => {
         });
         healed++;
       }
-      console.log(`[calendar-sync] reconciliation healed ${healed} deal(s)`);
+      console.log(`[calendar-sync] reconciliation healed ${healed}, adopted ${adopted}`);
     } else {
       console.warn("[calendar-sync] empty calendar fetch; reconciliation skipped");
     }
 
     return new Response(JSON.stringify({
-      success: true, events: data.items?.length || 0, linked, created, hotMarked, postShowQueued, healed,
+      success: true, events: data.items?.length || 0, linked, created, hotMarked, postShowQueued, healed, adopted,
     }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
   } catch (e) {
     console.error(e);
