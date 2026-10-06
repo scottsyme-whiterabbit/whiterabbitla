@@ -22,6 +22,13 @@
       "when": 1791093414840,
       "tag": "0002_fix_jobs_running_check",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1791309117565,
+      "tag": "0003_deals_consultation_event_id",
+      "breakpoints": true
     }
   ]
 }
