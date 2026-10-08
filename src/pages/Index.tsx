@@ -63,6 +63,8 @@ import beverlyHiltonLogo from "@/assets/logos/normalized/beverlyhilton.png";
 import magicCastleLogo from "@/assets/logos/normalized/magiccastle.png";
 import sohohouseLogo from "@/assets/logos/normalized/sohohouse.png";
 import microsoftLogo from "@/assets/logos/normalized/microsoft.png";
+import taittingerLogo from "@/assets/logos/normalized/taittinger.png";
+import hyattLogo from "@/assets/logos/normalized/hyatt.png";
 
 // Logos are pre-normalized (trimmed of baked padding, exported at 3x retina).
 // `h` is the render height in px, tiered by aspect ratio for optical balance:
@@ -71,6 +73,7 @@ import microsoftLogo from "@/assets/logos/normalized/microsoft.png";
 const clients: { name: string; logo: string; h: number }[] = [
   { name: "Disney", logo: disneyLogo, h: 20 },
   { name: "Rolls Royce", logo: rollsroyceLogo, h: 34 },
+  { name: "Taittinger", logo: taittingerLogo, h: 34 },
   { name: "Lionsgate", logo: lionsgateLogo, h: 20 },
   { name: "Create & Cultivate", logo: createAndCultivateLogo, h: 36 },
   { name: "Netflix", logo: netflixLogo, h: 20 },
@@ -78,6 +81,7 @@ const clients: { name: string; logo: string; h: number }[] = [
   { name: "The Magic Castle", logo: magicCastleLogo, h: 46 },
   { name: "Morgan Stanley", logo: morganstanleyLogo, h: 20 },
   { name: "The Beverly Hilton", logo: beverlyHiltonLogo, h: 26 },
+  { name: "Hyatt", logo: hyattLogo, h: 20 },
   { name: "Rivian", logo: rivianLogo, h: 40 },
   { name: "Olivia Rodrigo", logo: oliviarodrigoLogo, h: 26 },
   { name: "Soho House", logo: sohohouseLogo, h: 40 },
@@ -380,7 +384,7 @@ const Index = () => {
             <p className="text-center font-sans text-[11px] tracking-[0.4em] uppercase text-gold mb-10">
               IN GOOD COMPANY
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-x-5 gap-y-6 sm:gap-x-8 sm:gap-y-10 md:gap-x-12 md:gap-y-12 items-center justify-items-center">
+            <div className="gap-x-5 gap-y-6 sm:gap-x-8 sm:gap-y-10 md:gap-x-12 md:gap-y-12 items-center justify-items-center" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "2rem 1.5rem" }}>
               {clients.map((client) => (
                 <div key={client.name} className="flex items-center justify-center h-12 md:h-14 w-full">
                   <img
