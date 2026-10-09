@@ -391,9 +391,10 @@ const Index = () => {
                     loading="lazy"
                     decoding="async"
                     style={{
-                      height: `${client.h}px`,
-                      width: "auto",
+                      maxHeight: `${client.h}px`,
                       maxWidth: "100%",
+                      width: "auto",
+                      height: "auto",
                       filter: "brightness(0) saturate(100%) invert(24%) sepia(9%) saturate(1200%) hue-rotate(70deg) brightness(95%) contrast(85%)",
                     }}
                     className="object-contain opacity-55 hover:opacity-80 transition-opacity"
