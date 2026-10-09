@@ -63,6 +63,7 @@ import magicCastleLogo from "@/assets/logos/normalized/magiccastle.png";
 import sohohouseLogo from "@/assets/logos/normalized/sohohouse.png";
 import microsoftLogo from "@/assets/logos/normalized/microsoft.png";
 import hyattLogo from "@/assets/logos/normalized/hyatt.png";
+import taittingerLogo from "@/assets/logos/normalized/taittinger.png";
 
 // Logos are pre-normalized (trimmed of baked padding, exported at 3x retina).
 // `h` is the render height in px, tiered by aspect ratio for optical balance:
@@ -71,6 +72,7 @@ import hyattLogo from "@/assets/logos/normalized/hyatt.png";
 const clients: { name: string; logo: string; h: number }[] = [
   { name: "Disney", logo: disneyLogo, h: 20 },
   { name: "Rolls Royce", logo: rollsroyceLogo, h: 34 },
+  { name: "Taittinger", logo: taittingerLogo, h: 20 },
   { name: "Create & Cultivate", logo: createAndCultivateLogo, h: 36 },
   { name: "Netflix", logo: netflixLogo, h: 20 },
   { name: "Microsoft", logo: microsoftLogo, h: 20 },
