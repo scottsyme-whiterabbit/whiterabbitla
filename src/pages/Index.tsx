@@ -414,6 +414,29 @@ const Index = () => {
         <img src={threeStars} alt="" role="presentation" aria-hidden="true" width={120} height={48} loading="lazy" decoding="async" className="h-16 w-auto opacity-50" />
       </div>
 
+      {/* Cities */}
+      <p className="max-w-4xl mx-auto px-6 py-10 text-center font-sans text-xs uppercase leading-loose tracking-[0.3em] text-muted-foreground">
+        <span className="whitespace-nowrap">
+          <Link to="/areas/los-angeles" className="no-underline transition-colors hover:text-cream">Los Angeles</Link>
+        </span>{" "}
+        <span className="whitespace-nowrap">
+          <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
+          <Link to="/areas/new-york" className="no-underline transition-colors hover:text-cream">New York</Link>
+        </span>{" "}
+        <span className="whitespace-nowrap">
+          <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
+          <Link to="/areas/miami" className="no-underline transition-colors hover:text-cream">Miami</Link>
+        </span>{" "}
+        <span className="whitespace-nowrap">
+          <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
+          <Link to="/areas/san-francisco" className="no-underline transition-colors hover:text-cream">San Francisco</Link>
+        </span>{" "}
+        <span className="whitespace-nowrap">
+          <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
+          <span>By invitation elsewhere</span>
+        </span>
+      </p>
+
       {/* The Experience Teaser */}
       <section className="py-28 lg:py-36">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -674,28 +697,6 @@ const Index = () => {
       />
 
 
-      {/* Cities */}
-      <p className="max-w-4xl mx-auto px-6 py-10 text-center font-sans text-xs uppercase leading-loose tracking-[0.3em] text-muted-foreground">
-        <span className="whitespace-nowrap">
-          <Link to="/areas/los-angeles" className="no-underline transition-colors hover:text-cream">Los Angeles</Link>
-        </span>{" "}
-        <span className="whitespace-nowrap">
-          <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
-          <Link to="/areas/new-york" className="no-underline transition-colors hover:text-cream">New York</Link>
-        </span>{" "}
-        <span className="whitespace-nowrap">
-          <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
-          <Link to="/areas/miami" className="no-underline transition-colors hover:text-cream">Miami</Link>
-        </span>{" "}
-        <span className="whitespace-nowrap">
-          <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
-          <Link to="/areas/san-francisco" className="no-underline transition-colors hover:text-cream">San Francisco</Link>
-        </span>{" "}
-        <span className="whitespace-nowrap">
-          <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
-          <span>By invitation elsewhere</span>
-        </span>
-      </p>
 
       {/* Final CTA */}
       <AnimatedSection>
