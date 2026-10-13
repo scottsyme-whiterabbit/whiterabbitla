@@ -420,19 +420,19 @@ const Index = () => {
           <Link to="/areas/los-angeles" className="no-underline hover:font-bold">Los Angeles</Link>
         </span>{" "}
         <span className="whitespace-nowrap">
-          <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
+          <span aria-hidden="true" className="mx-3 text-muted-foreground/40 hidden md:inline">·</span>
           <Link to="/areas/new-york" className="no-underline hover:font-bold">New York</Link>
         </span>{" "}
         <span className="whitespace-nowrap">
-          <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
+          <span aria-hidden="true" className="mx-3 text-muted-foreground/40 hidden md:inline">·</span>
           <Link to="/areas/miami" className="no-underline hover:font-bold">Miami</Link>
         </span>{" "}
         <span className="whitespace-nowrap">
-          <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
+          <span aria-hidden="true" className="mx-3 text-muted-foreground/40 hidden md:inline">·</span>
           <Link to="/areas/san-francisco" className="no-underline hover:font-bold">San Francisco</Link>
         </span>{" "}
         <span className="whitespace-nowrap">
-          <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
+          <span aria-hidden="true" className="mx-3 text-muted-foreground/40 hidden md:inline">·</span>
           <Link to="/areas" className="no-underline hover:font-bold">By invitation elsewhere</Link>
         </span>
       </p>
@@ -491,7 +491,7 @@ const Index = () => {
       <AnimatedSection>
         <div className="relative">
           {/* Ambient warm glow behind testimonials */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-[radial-gradient(ellipse_at_center,_hsl(var(--accent)/0.06)_0%,_transparent_70%)] pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-[radial-gradient(ellipse_at_center,_hsl(var(--accent)/0.06)_0%,_transparent_70%)] pointer-events-none hidden md:block" />
           <TestimonialCarousel />
         </div>
       </AnimatedSection>
