@@ -417,23 +417,23 @@ const Index = () => {
       {/* Cities */}
       <p className="max-w-4xl mx-auto px-6 py-10 text-center font-sans text-xs uppercase leading-loose tracking-[0.3em] text-muted-foreground">
         <span className="whitespace-nowrap">
-          <Link to="/areas/los-angeles" className="no-underline transition-colors hover:text-cream">Los Angeles</Link>
+          <Link to="/areas/los-angeles" className="no-underline hover:font-bold">Los Angeles</Link>
         </span>{" "}
         <span className="whitespace-nowrap">
           <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
-          <Link to="/areas/new-york" className="no-underline transition-colors hover:text-cream">New York</Link>
+          <Link to="/areas/new-york" className="no-underline hover:font-bold">New York</Link>
         </span>{" "}
         <span className="whitespace-nowrap">
           <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
-          <Link to="/areas/miami" className="no-underline transition-colors hover:text-cream">Miami</Link>
+          <Link to="/areas/miami" className="no-underline hover:font-bold">Miami</Link>
         </span>{" "}
         <span className="whitespace-nowrap">
           <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
-          <Link to="/areas/san-francisco" className="no-underline transition-colors hover:text-cream">San Francisco</Link>
+          <Link to="/areas/san-francisco" className="no-underline hover:font-bold">San Francisco</Link>
         </span>{" "}
         <span className="whitespace-nowrap">
           <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
-          <span>By invitation elsewhere</span>
+          <Link to="/areas" className="no-underline hover:font-bold">By invitation elsewhere</Link>
         </span>
       </p>
 
