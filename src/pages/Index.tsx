@@ -675,16 +675,26 @@ const Index = () => {
 
 
       {/* Cities */}
-      <p className="max-w-3xl mx-auto px-6 py-10 text-center font-sans text-xs uppercase leading-loose tracking-[0.3em] text-muted-foreground">
-        <Link to="/areas/los-angeles" className="no-underline transition-colors hover:text-cream">Los Angeles</Link>
-        <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
-        <Link to="/areas/new-york" className="no-underline transition-colors hover:text-cream">New York</Link>
-        <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
-        <Link to="/areas/miami" className="no-underline transition-colors hover:text-cream">Miami</Link>
-        <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
-        <Link to="/areas/san-francisco" className="no-underline transition-colors hover:text-cream">San Francisco</Link>
-        <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
-        <span>By invitation elsewhere</span>
+      <p className="max-w-4xl mx-auto px-6 py-10 text-center font-sans text-xs uppercase leading-loose tracking-[0.3em] text-muted-foreground">
+        <span className="whitespace-nowrap">
+          <Link to="/areas/los-angeles" className="no-underline transition-colors hover:text-cream">Los Angeles</Link>
+        </span>
+        <span className="whitespace-nowrap">
+          <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
+          <Link to="/areas/new-york" className="no-underline transition-colors hover:text-cream">New York</Link>
+        </span>
+        <span className="whitespace-nowrap">
+          <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
+          <Link to="/areas/miami" className="no-underline transition-colors hover:text-cream">Miami</Link>
+        </span>
+        <span className="whitespace-nowrap">
+          <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
+          <Link to="/areas/san-francisco" className="no-underline transition-colors hover:text-cream">San Francisco</Link>
+        </span>
+        <span className="whitespace-nowrap">
+          <span aria-hidden="true" className="mx-3 text-muted-foreground/40">·</span>
+          <span>By invitation elsewhere</span>
+        </span>
       </p>
 
       {/* Final CTA */}
