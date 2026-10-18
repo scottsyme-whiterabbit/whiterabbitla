@@ -713,4 +713,14 @@ export const STANDARD_TIER_LINES: StandardLine[] = [
   { group: "Signature Touches", text: "Personal guest invitation list to the Magic Castle on a set date after the wedding" },
   { group: "Signature Touches", text: "Custom branded moment for the company" },
   { group: "Signature Touches", text: "Two vetted Magic Castle magicians: Scott Syme plus a second approved magician" },
+  // The Magic (added 2026-10)
+  { group: "The Magic", text: "The Afterglow: about 30 minutes of intimate close-up magic after the show, a few guests at a time" },
+  // Presentation & Attire (added 2026-10)
+  { group: "Presentation & Attire", text: "Scott Syme in elegant evening attire, his signature green suit, or a tuxedo on request" },
+  // Production (added 2026-10)
+  { group: "Production", text: "Music and sound through a Bose S1 Pro+ speaker, and a Neewer key light" },
+  { group: "Production", text: "Full production build: emerald pipe-and-drape curtains (six velvet panels), Neewer stage lights and uplights, and a Bose S1 Pro+ soundtrack for arrival" },
+  // Signature Touches (added 2026-10)
+  { group: "Signature Touches", text: "A keepsake for guests to take home: a signed card, a sealed prediction, or a scroll wrapped in green ribbon" },
+  { group: "Signature Touches", text: "A handwritten note to the host" },
 ];
