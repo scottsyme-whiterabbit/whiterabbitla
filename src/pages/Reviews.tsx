@@ -11,6 +11,12 @@ import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
 const reviews = [
 {
+  name: "Tanya R.",
+  role: "Private Party, Hollywood Hills",
+  text: "Absolutely incredible! such a fun experience and an amazing story teller. Must see!!",
+  rating: 5
+},
+{
   name: "Monique S.",
   role: "Corporate Event, Create & Cultivate",
   text: "Scott with White Rabbit was amazing!!!! It was such a fun piece of our yearly Supper Club dinner in LA! We will absolutely be having him again at the future event!! :)",
