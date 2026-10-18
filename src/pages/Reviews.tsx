@@ -17,6 +17,12 @@ const reviews = [
   rating: 5
 },
 {
+  name: "Sabrina G.",
+  role: "Private Party, Hollywood Hills",
+  text: "Scott was amazing!! He kept everyone on their toes and engaged!",
+  rating: 5
+},
+{
   name: "Monique S.",
   role: "Corporate Event, Create & Cultivate",
   text: "Scott with White Rabbit was amazing!!!! It was such a fun piece of our yearly Supper Club dinner in LA! We will absolutely be having him again at the future event!! :)",
