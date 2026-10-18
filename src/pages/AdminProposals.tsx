@@ -695,6 +695,10 @@ const ProposalEditor = ({
   };
   const removeTier = (i: number) => update({ tiers: proposal.tiers.filter((_, j) => j !== i) });
   const addTier = () => update({ tiers: [...proposal.tiers, { name: "New Tier", tagline: "", items: [], price: "$0", href: "", cta: "Reserve" }] });
+  const loadTierSet = (setName: PricingTierSetName) => {
+    if (tiersHaveContent(proposal.tiers) && !window.confirm("Replace the current pricing tiers?")) return;
+    update({ tiers: PRICING_TIER_SETS[setName].map((t) => ({ ...t, items: [...t.items] })) });
+  };
 
   const updateTimeline = (i: number, patch: Partial<TimelineItem>) => {
     const t = [...proposal.timeline]; t[i] = { ...t[i], ...patch }; update({ timeline: t });
