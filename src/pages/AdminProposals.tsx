@@ -5,6 +5,7 @@ import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loa
 import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type Tier, type TimelineItem, type FaqItem } from "./ProposalTemplate";
 import { additionalTermsBlock } from "../../supabase/functions/_shared/agreement-terms";
 import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, GALLERY_UPLOAD_PHOTOS, PROPOSAL_TEMPLATES, STANDARD_TIER_LINES, photoKeyToSrc, reviewsForEventType, ALL_PROPOSAL_REVIEWS, type ProposalReview } from "@/data/proposalAssets";
+import { PRICING_TIER_SETS, tiersHaveContent, type PricingTierSetName } from "@/data/pricingTierSets";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import AdminGate, { AdminSignOutButton } from "@/components/admin/AdminGate";
@@ -694,6 +695,10 @@ const ProposalEditor = ({
   };
   const removeTier = (i: number) => update({ tiers: proposal.tiers.filter((_, j) => j !== i) });
   const addTier = () => update({ tiers: [...proposal.tiers, { name: "New Tier", tagline: "", items: [], price: "$0", href: "", cta: "Reserve" }] });
+  const loadTierSet = (setName: PricingTierSetName) => {
+    if (tiersHaveContent(proposal.tiers) && !window.confirm("Replace the current pricing tiers?")) return;
+    update({ tiers: PRICING_TIER_SETS[setName].map((t) => ({ ...t, items: [...t.items] })) });
+  };
 
   const updateTimeline = (i: number, patch: Partial<TimelineItem>) => {
     const t = [...proposal.timeline]; t[i] = { ...t[i], ...patch }; update({ timeline: t });
@@ -1073,6 +1078,29 @@ const ProposalEditor = ({
             value={proposal.square_invoice_url || ""}
             onChange={(e) => update({ square_invoice_url: e.target.value })}
           />
+        </div>
+
+        {/* Load pricing tiers */}
+        <div className={sectionCls}>
+          <h2 className="font-serif text-xl text-forest-dark mb-2">Load pricing tiers</h2>
+          <p className="text-xs text-forest-dark/60 mb-3">
+            Pick a set to drop in its three tiers. Everything stays fully editable below. If tiers already exist here, it asks first.
+          </p>
+          <select
+            className={inputCls}
+            defaultValue=""
+            aria-label="Load pricing tiers"
+            onChange={(e) => {
+              const value = e.target.value;
+              e.currentTarget.value = "";
+              if (value === "Wedding" || value === "Corporate" || value === "General") loadTierSet(value);
+            }}
+          >
+            <option value="" disabled>Load pricing tiers</option>
+            <option value="Wedding">Wedding</option>
+            <option value="Corporate">Corporate</option>
+            <option value="General">General</option>
+          </select>
         </div>
 
         {/* Tiers */}
