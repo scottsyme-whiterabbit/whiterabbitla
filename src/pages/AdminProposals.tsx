@@ -5,6 +5,7 @@ import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loa
 import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type Tier, type TimelineItem, type FaqItem } from "./ProposalTemplate";
 import { additionalTermsBlock } from "../../supabase/functions/_shared/agreement-terms";
 import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, GALLERY_UPLOAD_PHOTOS, PROPOSAL_TEMPLATES, STANDARD_TIER_LINES, photoKeyToSrc, reviewsForEventType, ALL_PROPOSAL_REVIEWS, type ProposalReview } from "@/data/proposalAssets";
+import { PRICING_TIER_SETS, tiersHaveContent, type PricingTierSetName } from "@/data/pricingTierSets";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import AdminGate, { AdminSignOutButton } from "@/components/admin/AdminGate";
