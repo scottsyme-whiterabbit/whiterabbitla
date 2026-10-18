@@ -1080,6 +1080,29 @@ const ProposalEditor = ({
           />
         </div>
 
+        {/* Load pricing tiers */}
+        <div className={sectionCls}>
+          <h2 className="font-serif text-xl text-forest-dark mb-2">Load pricing tiers</h2>
+          <p className="text-xs text-forest-dark/60 mb-3">
+            Pick a set to drop in its three tiers. Everything stays fully editable below. If tiers already exist here, it asks first.
+          </p>
+          <select
+            className={inputCls}
+            defaultValue=""
+            aria-label="Load pricing tiers"
+            onChange={(e) => {
+              const value = e.target.value;
+              e.currentTarget.value = "";
+              if (value === "Wedding" || value === "Corporate" || value === "General") loadTierSet(value);
+            }}
+          >
+            <option value="" disabled>Load pricing tiers</option>
+            <option value="Wedding">Wedding</option>
+            <option value="Corporate">Corporate</option>
+            <option value="General">General</option>
+          </select>
+        </div>
+
         {/* Tiers */}
         <div className={sectionCls}>
           <div className="flex items-center justify-between mb-4">
