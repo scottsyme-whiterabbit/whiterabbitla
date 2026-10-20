@@ -5,7 +5,6 @@
 - [ ] Homepage brand logos: swap current block for actual businesses performed for (long-standing request).
 
 ## In progress
-- [ ] Resolve pre-ship failures: reason cap, safe errors, public allowlists, database access; deploy and verify logged-out proposal desktop/mobile without signing.
 - [ ] Mobile-first CRM/PWA pass: improve navigation, dense lists, forms, dialogs, and touch use across every admin screen without removing features.
 - [ ] PART A: Google sign-in for all admin pages (phase 1, alongside password)
   - [ ] Enable Google provider, disable open email signups
@@ -23,6 +22,7 @@
   - [ ] No unique constraint yet
 
 ## Done
+- Pre-ship fixes deployed: 240-character lost-reason cap, request-ID safe errors, public proposal/sign allowlists, locked backup tables and anonymous health RPC revocation. Logged-out real proposal checked at 1280px and 390px; no signature or payment submitted. Authenticated RPC advisor warnings remain outside the requested anonymous revocation.
 - Authoritative agreement pricing deployed and pre-ship checks completed; public response minimization, server-side Other length cap, and error sanitization failed review and were reported without expanding scope. Not published.
 - Shared lost-reason enforcement and display, proposal-tier safety audit and fixes, and five standard tier lines; payment execution left untested to avoid client emails or charges.
 - Holiday party service copy rebuilt, shared service-page labels refined, and the homepage Private Evenings guest count corrected.
