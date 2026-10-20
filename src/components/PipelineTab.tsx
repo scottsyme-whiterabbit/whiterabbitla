@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { Plus, DollarSign, TrendingUp, Calendar, BarChart3, ChevronDown, ChevronRight, Mail, Eye, MousePointerClick, Search, X } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { LostReasonField, useLostReasonPicker } from "@/components/admin/LostReasonPicker";
-import { lostReasonError } from "@/lib/lostReason";
+import { LOST_REASONS, lostReasonError } from "@/lib/lostReason";
 import ShowCalendar from "@/components/ShowCalendar";
 import ClientContextPanel from "@/components/admin/ClientContextPanel";
 
@@ -286,7 +286,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
   const bucketReason = (raw: string | null): string => {
     if (!raw) return "Unspecified";
     const r = raw.toLowerCase();
-    if (LOST_REASONS.includes(raw)) return raw;
+    if (LOST_REASONS.some(reason => reason === raw)) return raw;
     if (/(price|pricing|budget|cost|expensive|too much|afford)/.test(r)) return "Pricing / budget";
     if (/(date|conflict|not available|unavailable|schedul)/.test(r)) return "Date conflict";
     if (/(another|other vendor|different|hired|went with|chose)/.test(r)) return "Went with another vendor";

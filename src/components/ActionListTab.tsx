@@ -976,6 +976,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                   </div>
                 </div>
                 <p className="font-sans text-sm text-foreground font-medium"><ClientName email={item.email} name={item.name} dealId={item.deal?.id}>{item.name || item.email.split("@")[0]}</ClientName></p>
+                {item.deal?.stage === "lost" && <p className="text-xs text-muted-foreground break-words">{item.deal.lost_reason || "No reason recorded"}</p>}
                 <p className="text-[11px] text-muted-foreground">{item.email}</p>
                 {item.company && <p className="text-[10px] text-muted-foreground mt-0.5">{item.company}</p>}
                 <p className="text-[10px] text-muted-foreground mt-1">{item.engagement}</p>
