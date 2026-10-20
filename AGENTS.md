@@ -6,3 +6,5 @@
 - Lost-stage UI transitions use LostReasonPicker; frontend and newsletter-admin share the pure lost-reason validator so cancellation and required reasons stay consistent.
 - Normalize legacy proposal tier fields at editor/render boundaries without inventing pricing; empty arrays stay empty and do not render an empty pricing section.
 - Agreement signing resolves tier identity against the stored proposal before writing; agreement name and price are server-authoritative to prevent browser price tampering.
+- Public proposal and signing responses use explicit field allowlists; authenticated admin reads retain their existing shapes to keep internal data private without breaking editing.
+- Browser-facing infrastructure failures use the shared safe-error payload with a per-request ID; real errors are logged only server side for traceable diagnostics.
