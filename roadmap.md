@@ -5,7 +5,6 @@
 - [ ] Homepage brand logos: swap current block for actual businesses performed for (long-standing request).
 
 ## In progress
-- [ ] Enforce shared lost-reason picker on every deal path, audit proposal tiers, and append five standard tier lines.
 - [ ] Mobile-first CRM/PWA pass: improve navigation, dense lists, forms, dialogs, and touch use across every admin screen without removing features.
 - [ ] PART A: Google sign-in for all admin pages (phase 1, alongside password)
   - [ ] Enable Google provider, disable open email signups
@@ -23,6 +22,7 @@
   - [ ] No unique constraint yet
 
 ## Done
+- Shared lost-reason enforcement and display, proposal-tier safety audit and fixes, and five standard tier lines; payment execution left untested to avoid client emails or charges.
 - Holiday party service copy rebuilt, shared service-page labels refined, and the homepage Private Evenings guest count corrected.
 - Long Beach and Boston city hero videos added; the service-area page now uses the Los Angeles motion hero with reduced-motion support.
 - City page FAQs now preserve local Southern California answers and use all-inclusive travel wording for destinations.
