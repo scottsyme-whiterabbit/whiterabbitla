@@ -723,4 +723,9 @@ export const STANDARD_TIER_LINES: StandardLine[] = [
   // Signature Touches (added 2026-10)
   { group: "Signature Touches", text: "A keepsake for guests to take home: a signed card, a sealed prediction, or a scroll wrapped in green ribbon" },
   { group: "Signature Touches", text: "A handwritten note to the host" },
+  { group: "The Magic", text: "Performed during cocktail hour or once plates are cleared, never while guests are eating" },
+  { group: "Signature Touches", text: "Invitations to the Magic Castle for you and your guests on a set date" },
+  { group: "Production", text: "No stage, mic or setup needed for strolling magic; Scott arrives 30 minutes early" },
+  { group: "Consultation", text: "Recommended for up to 150 guests; a second performer is added above that" },
+  { group: "Signature Touches", text: "Couple's moment: a private effect built around your story, revealed during cocktail hour" },
 ];
