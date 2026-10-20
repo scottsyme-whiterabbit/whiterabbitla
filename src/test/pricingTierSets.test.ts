@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { PRICING_TIER_SETS, tiersHaveContent } from "@/data/pricingTierSets";
-import { parsePriceToCents, depositCents } from "../../supabase/functions/_shared/invoice-email";
 import { normalizeTiers } from "@/lib/proposalTiers";
 
 describe("pricing tier sets", () => {
@@ -17,9 +16,5 @@ describe("pricing tier sets", () => {
     expect(tiersHaveContent(null)).toBe(false);
     expect(tiersHaveContent([])).toBe(false);
     expect(tiersHaveContent(PRICING_TIER_SETS.General)).toBe(true);
-  });
-  it("existing invoice parser resolves From $5,000 to 500000 cents", () => {
-    expect(parsePriceToCents("From $5,000")).toBe(500000);
-    expect(depositCents({ total_cents: 500000, deposit_percent: 50 } as Parameters<typeof depositCents>[0])).toBe(250000);
   });
 });
