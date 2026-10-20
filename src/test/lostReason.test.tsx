@@ -11,6 +11,10 @@ describe("lost reasons", () => {
     expect(lostReasonError("lost", "Other: ")).toBe("Enter a short explanation for Other.");
     expect(lostReasonError("lost", "Other: Host cancelled")).toBeNull();
   });
+  it("caps server-side lost reasons at 240 characters", () => {
+    expect(lostReasonError("lost", "Other: " + "x".repeat(233))).toBeNull();
+    expect(lostReasonError("lost", "Other: " + "x".repeat(234))).toBe("A lost reason must be 240 characters or fewer.");
+  });
   it("does not require a reason for other stages", () => {
     expect(lostReasonError("booked", "")).toBeNull();
   });

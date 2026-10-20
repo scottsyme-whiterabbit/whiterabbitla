@@ -11,6 +11,7 @@ export const LOST_REASONS = [
 export function lostReasonError(stage: unknown, reason: unknown): string | null {
   if (stage !== "lost") return null;
   if (typeof reason !== "string" || !reason.trim()) return "A lost reason is required before moving a deal to Lost.";
+  if (reason.length > 240) return "A lost reason must be 240 characters or fewer.";
   if (reason.trim() === "Other" || /^Other:\s*$/i.test(reason.trim())) return "Enter a short explanation for Other.";
   return null;
 }
