@@ -6,6 +6,7 @@ import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type T
 import { additionalTermsBlock } from "../../supabase/functions/_shared/agreement-terms";
 import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, GALLERY_UPLOAD_PHOTOS, PROPOSAL_TEMPLATES, STANDARD_TIER_LINES, photoKeyToSrc, reviewsForEventType, ALL_PROPOSAL_REVIEWS, type ProposalReview } from "@/data/proposalAssets";
 import { PRICING_TIER_SETS, tiersHaveContent, type PricingTierSetName } from "@/data/pricingTierSets";
+import { normalizeTiers } from "@/lib/proposalTiers";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import AdminGate, { AdminSignOutButton } from "@/components/admin/AdminGate";
@@ -178,7 +179,7 @@ const AdminProposals = () => {
       setEditing({
         ...DEFAULT_PROPOSAL,
         ...j.proposal,
-        tiers: j.proposal.tiers ?? DEFAULT_PROPOSAL.tiers,
+        tiers: normalizeTiers(j.proposal.tiers ?? DEFAULT_PROPOSAL.tiers),
         timeline: j.proposal.timeline ?? DEFAULT_PROPOSAL.timeline,
         faqs: j.proposal.faqs ?? DEFAULT_PROPOSAL.faqs,
         gallery_photos: j.proposal.gallery_photos ?? DEFAULT_PROPOSAL.gallery_photos,
@@ -590,6 +591,7 @@ const ProposalEditor = ({
   const applyTemplate = (eventType: string) => {
     const tpl = PROPOSAL_TEMPLATES[eventType];
     if (!tpl) return;
+    if (tiersHaveContent(proposal.tiers) && !window.confirm("Replace the current pricing tiers?")) return;
     update({
       event_type: eventType,
       letter_intro: tpl.letter_intro,
@@ -638,6 +640,7 @@ const ProposalEditor = ({
             priceOverrides[idx] ? { ...t, price: priceOverrides[idx] } : t
           )
         : proposal.tiers;
+      if (tpl && tiersHaveContent(proposal.tiers) && !window.confirm("Replace the current pricing tiers?")) { setAiLoading(false); return; }
       onChange({
         ...proposal,
         first_name: d.first_name || proposal.first_name,

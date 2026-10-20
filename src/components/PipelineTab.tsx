@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import { Plus, DollarSign, TrendingUp, Calendar, BarChart3, ChevronDown, ChevronRight, Mail, Eye, MousePointerClick, Search, X } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { LostReasonField, useLostReasonPicker } from "@/components/admin/LostReasonPicker";
+import { LOST_REASONS, lostReasonError } from "@/lib/lostReason";
 import ShowCalendar from "@/components/ShowCalendar";
 import ClientContextPanel from "@/components/admin/ClientContextPanel";
 
@@ -46,18 +48,6 @@ const STAGES = [
 
 const COLLAPSIBLE_STAGES = ["completed", "lost"];
 const PREVIEW_COUNT = 3;
-
-const LOST_REASONS = [
-  "Pricing / budget",
-  "Date conflict",
-  "Went with another vendor",
-  "Event cancelled / postponed",
-  "Ghosted / no response",
-  "Wrong fit (entertainment style)",
-  "Venue restriction",
-  "Decision delayed",
-  "Other",
-];
 
 const EVENT_EMOJIS: Record<string, string> = {
   corporate: "🏢", Corporate: "🏢",
@@ -112,6 +102,7 @@ interface PipelineTabProps {
 }
 
 const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
+  const { requestLostReason, picker } = useLostReasonPicker();
   const [deals, setDeals] = useState<Deal[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editingDeal, setEditingDeal] = useState<Deal | null>(null);
@@ -195,6 +186,8 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
 
   const handleSave = async () => {
     if (!form.contact_email) { toast.error("Email required"); return; }
+    const reasonError = lostReasonError(form.stage, form.lost_reason);
+    if (reasonError) { toast.error(reasonError); return; }
     try {
       const { skip_thank_you, ...rest } = form;
       const dealData = {
@@ -218,9 +211,11 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
   };
 
   const handleStageChange = async (dealId: string, newStage: string) => {
+    const lost_reason = newStage === "lost" ? await requestLostReason(deals.find(d => d.id === dealId)?.lost_reason || "") : undefined;
+    if (newStage === "lost" && lost_reason === null) return;
     try {
-      await callAdmin("update_deal_stage", { dealId, stage: newStage });
-      setDeals(prev => prev.map(d => d.id === dealId ? { ...d, stage: newStage } : d));
+      await callAdmin("update_deal_stage", { dealId, stage: newStage, ...(lost_reason !== undefined ? { lost_reason } : {}) });
+      setDeals(prev => prev.map(d => d.id === dealId ? { ...d, stage: newStage, ...(lost_reason !== undefined ? { lost_reason } : {}) } : d));
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Update failed");
     }
@@ -291,7 +286,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
   const bucketReason = (raw: string | null): string => {
     if (!raw) return "Unspecified";
     const r = raw.toLowerCase();
-    if (LOST_REASONS.includes(raw)) return raw;
+    if (LOST_REASONS.some(reason => reason === raw)) return raw;
     if (/(price|pricing|budget|cost|expensive|too much|afford)/.test(r)) return "Pricing / budget";
     if (/(date|conflict|not available|unavailable|schedul)/.test(r)) return "Date conflict";
     if (/(another|other vendor|different|hired|went with|chose)/.test(r)) return "Went with another vendor";
@@ -562,6 +557,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
                           <span className="text-sm">{EVENT_EMOJIS[deal.event_type || "other"] || "✨"}</span>
                           <span className="font-sans text-xs text-foreground truncate">{deal.contact_name || deal.contact_email}</span>
                         </div>
+                        {deal.stage === "lost" && <p className="text-[10px] text-muted-foreground break-words" onClick={() => openContext(deal)}>{deal.lost_reason || "No reason recorded"}</p>}
                         {deal.event_date && (
                           <p className="text-[10px] text-muted-foreground" onClick={() => openContext(deal)}>{new Date(deal.event_date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</p>
                         )}
@@ -622,6 +618,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
       {/* Show Calendar */}
       <ShowCalendar deals={deals} onOpenDeal={openDealById} adminPassword={adminPassword} />
 
+      {picker}
       {/* Deal Form Modal */}
       <Dialog open={showForm} onOpenChange={setShowForm}>
         <DialogContent className="max-w-lg bg-background border-border max-h-[90vh] overflow-y-auto">
@@ -694,7 +691,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
               </div>
               <div>
                 <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Stage</label>
-                <select value={form.stage} onChange={e => setForm(f => ({ ...f, stage: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent">
+                <select value={form.stage} onChange={async e => { const stage = e.target.value; if (stage === "lost" && form.stage !== "lost") { const reason = await requestLostReason(form.lost_reason); if (reason === null) return; setForm(f => ({ ...f, stage, lost_reason: reason })); } else setForm(f => ({ ...f, stage })); }} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent">
                   {STAGES.map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
                 </select>
               </div>
@@ -713,27 +710,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
                 <option value="quiz">Quiz</option>
               </select>
             </div>
-            {form.stage === "lost" && (
-              <div>
-                <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Lost Reason</label>
-                <select
-                  value={LOST_REASONS.includes(form.lost_reason) ? form.lost_reason : (form.lost_reason ? "Other" : "")}
-                  onChange={e => setForm(f => ({ ...f, lost_reason: e.target.value === "Other" ? (LOST_REASONS.includes(f.lost_reason) ? "" : f.lost_reason) : e.target.value }))}
-                  className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent"
-                >
-                  <option value="">Select reason, </option>
-                  {LOST_REASONS.map(r => <option key={r} value={r}>{r}</option>)}
-                </select>
-                {(!LOST_REASONS.includes(form.lost_reason) || form.lost_reason === "Other") && (
-                  <input
-                    value={form.lost_reason === "Other" ? "" : form.lost_reason}
-                    onChange={e => setForm(f => ({ ...f, lost_reason: e.target.value }))}
-                    placeholder="Add detail (optional)"
-                    className="w-full mt-1 bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent"
-                  />
-                )}
-              </div>
-            )}
+            {form.stage === "lost" && <LostReasonField value={form.lost_reason} onChange={lost_reason => setForm(f => ({ ...f, lost_reason }))} />}
             {form.stage === "completed" && (
               <label className="flex items-center gap-2 cursor-pointer py-1">
                 <input type="checkbox" checked={form.skip_thank_you} onChange={e => setForm(f => ({ ...f, skip_thank_you: e.target.checked }))} className="accent-accent" />

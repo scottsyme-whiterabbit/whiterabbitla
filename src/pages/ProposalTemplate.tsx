@@ -7,6 +7,7 @@ import threeStars from "@/assets/three-stars-gold.png";
 import wrScriptLogo from "@/assets/wr-wordmark-cream.png";
 import { DEFAULT_GALLERY_KEYS, photoKeyToSrc, reviewsForEventType, reviewsForProposal, type ProposalReview } from "@/data/proposalAssets";
 import { adminViewHeaders } from "@/lib/adminAuth";
+import { normalizeTiers } from "@/lib/proposalTiers";
 
 import disneyLogo from "@/assets/logos/normalized/disney.png";
 import rollsroyceLogo from "@/assets/logos/normalized/rollsroyce.png";
@@ -186,7 +187,8 @@ export const DEFAULT_PROPOSAL: ProposalData = {
   closing_attribution: "",
 };
 
-export const ProposalView = ({ data }: { data: ProposalData }) => {
+export const ProposalView = ({ data: input }: { data: ProposalData }) => {
+  const data = { ...input, tiers: normalizeTiers(input.tiers) };
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [signTier, setSignTier] = useState<Tier | null>(null);
   const heroSrc = HERO_MAP[data.hero_image] || HERO_MAP.wedding;
@@ -324,7 +326,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
       })()}
 
       {/* TIERS */}
-      <section className="relative bg-forest-dark text-cream py-20 md:py-32 px-6 overflow-hidden">
+      {data.tiers.length > 0 && <section className="relative bg-forest-dark text-cream py-20 md:py-32 px-6 overflow-hidden">
         <Flourishes tone="cream" size="md" />
         <div className="max-w-6xl mx-auto relative">
           <div className="text-center mb-12">
@@ -342,6 +344,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
               return (
                 <div key={i} className={`relative flex flex-col p-7 md:p-8 transition-all ${rec ? "bg-cream/[0.05] border border-gold md:-translate-y-3 shadow-xl shadow-black/30" : "border border-cream/15"}`}>
                   <span className="absolute top-0 left-0 w-4 h-px bg-gold/70" />
+                  {rec && <p className="text-xs uppercase tracking-wider text-gold mb-3">Recommended</p>}
                   <span className="absolute top-0 left-0 w-px h-4 bg-gold/70" />
                   <span className="absolute top-0 right-0 w-4 h-px bg-gold/70" />
                   <span className="absolute top-0 right-0 w-px h-4 bg-gold/70" />
@@ -372,6 +375,7 @@ export const ProposalView = ({ data }: { data: ProposalData }) => {
         </div>
       </section>
 
+      }
       {/* WHAT HAPPENS NEXT */}
       <section className="relative bg-cream py-14 md:py-20 px-6">
         <div className="max-w-4xl mx-auto text-center">

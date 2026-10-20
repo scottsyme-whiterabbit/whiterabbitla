@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { lostReasonError } from "../_shared/lost-reason.ts";
 import { isAdminRequest } from "../_shared/require-admin.ts";
 
 const corsHeaders = {
@@ -912,6 +913,8 @@ serve(async (req) => {
 
       case "create_deal": {
         const { deal } = payload;
+        const reasonError = lostReasonError(deal?.stage, deal?.lost_reason);
+        if (reasonError) return new Response(JSON.stringify({ error: reasonError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
            const { data, error } = await supabase
           .from("deals")
           .insert({
@@ -996,6 +999,12 @@ serve(async (req) => {
             }
             update[key] = v;
           }
+          if (update.stage === "lost" || "lost_reason" in update) {
+            const { data: current, error: readError } = await supabase.from("deals").select("stage, lost_reason").eq("id", dealId).single();
+            if (readError) return json({ error: readError.message }, 400);
+            const reasonError = lostReasonError(update.stage ?? current.stage, update.stage === "lost" || "lost_reason" in update ? update.lost_reason : current.lost_reason);
+            if (reasonError) return json({ error: reasonError }, 400);
+          }
           if (Object.keys(update).length === 0) return json({ error: "No valid fields to update" }, 400);
           const { data, error } = await supabase.from("deals").update(update).eq("id", dealId).select().single();
           if (error) return json({ error: error.message }, 400);
@@ -1006,6 +1015,8 @@ serve(async (req) => {
           return json({ ok: true, deal: data });
         }
         const { deal } = payload;
+        const reasonError = lostReasonError(deal?.stage, deal?.lost_reason);
+        if (reasonError) return new Response(JSON.stringify({ error: reasonError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
         const { data, error } = await supabase
           .from("deals")
           .update({
@@ -1105,10 +1116,12 @@ serve(async (req) => {
       }
 
       case "update_deal_stage": {
-        const { dealId, stage } = payload;
+        const { dealId, stage, lost_reason } = payload;
+        const reasonError = lostReasonError(stage, lost_reason);
+        if (reasonError) return new Response(JSON.stringify({ error: reasonError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
         const { error } = await supabase
           .from("deals")
-          .update({ stage })
+          .update({ stage, ...(stage === "lost" ? { lost_reason: lost_reason.trim() } : {}) })
           .eq("id", dealId);
         if (error) throw error;
         await syncDealToGoogleCalendar(supabase, dealId);

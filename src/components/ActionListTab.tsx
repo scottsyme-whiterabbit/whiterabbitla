@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { useLostReasonPicker } from "@/components/admin/LostReasonPicker";
 import { ClientName } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
 import { Phone, PhoneOutgoing, Mail, ChevronDown, ChevronUp, Search, Flame, Clock, CheckCircle, TrendingUp, ClipboardList, Pencil, Sparkles, Zap, ListChecks } from "lucide-react";
@@ -50,6 +51,7 @@ interface Deal {
   guest_count: string | null;
   deal_value: number | null;
   stage: string;
+  lost_reason: string | null;
   notes: string | null;
   next_follow_up: string | null;
   source: string | null;
@@ -201,6 +203,7 @@ const ActivityTimeline = ({ email, items, loading }: { email: string; items: Tim
 
 const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
 
+  const { requestLostReason, picker } = useLostReasonPicker();
   const [deals, setDeals] = useState<Deal[]>([]);
   const [hotWarmContacts, setHotWarmContacts] = useState<HotWarmContact[]>([]);
   const [outreachLogs, setOutreachLogs] = useState<OutreachLog[]>([]);
@@ -632,9 +635,8 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
           await callAdmin("update_deal_stage", { dealId: logModal.dealId, stage: "booked" });
         }
       } else if (logForm.outcome === "not_interested" && logModal.dealId) {
-        if (confirm("Mark this deal as 'Lost' in the pipeline?")) {
-          await callAdmin("update_deal_stage", { dealId: logModal.dealId, stage: "lost" });
-        }
+        const lost_reason = await requestLostReason(deals.find(d => d.id === logModal.dealId)?.lost_reason || "");
+        if (lost_reason !== null) await callAdmin("update_deal_stage", { dealId: logModal.dealId, stage: "lost", lost_reason });
       }
 
       setLogModal(null);
@@ -818,6 +820,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                         {isExpanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
                       </button>
                     </div>
+                    {item.deal?.stage === "lost" && <p className="text-xs text-muted-foreground break-words">{item.deal.lost_reason || "No reason recorded"}</p>}
                     <p className="text-[11px] text-muted-foreground truncate">{item.email}</p>
                     {item.company && <p className="text-[10px] text-muted-foreground">{item.company}</p>}
                   </div>
@@ -842,8 +845,9 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                             });
                             if (newStatus === "booked" && confirm("Mark this deal as 'Booked' in the pipeline too?")) {
                               await callAdmin("update_deal_stage", { dealId: item.deal.id, stage: "booked" });
-                            } else if (newStatus === "not_interested" && confirm("Mark this deal as 'Lost' in the pipeline?")) {
-                              await callAdmin("update_deal_stage", { dealId: item.deal.id, stage: "lost" });
+                            } else if (newStatus === "not_interested") {
+                              const lost_reason = await requestLostReason(item.deal.lost_reason || "");
+                              if (lost_reason !== null) await callAdmin("update_deal_stage", { dealId: item.deal.id, stage: "lost", lost_reason });
                             }
                           } else {
                             await callAdmin("log_outreach", {
@@ -972,6 +976,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                   </div>
                 </div>
                 <p className="font-sans text-sm text-foreground font-medium"><ClientName email={item.email} name={item.name} dealId={item.deal?.id}>{item.name || item.email.split("@")[0]}</ClientName></p>
+                {item.deal?.stage === "lost" && <p className="text-xs text-muted-foreground break-words">{item.deal.lost_reason || "No reason recorded"}</p>}
                 <p className="text-[11px] text-muted-foreground">{item.email}</p>
                 {item.company && <p className="text-[10px] text-muted-foreground mt-0.5">{item.company}</p>}
                 <p className="text-[10px] text-muted-foreground mt-1">{item.engagement}</p>
@@ -1037,6 +1042,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                     <Pencil size={14} /> Edit Contact Info
                   </button>
 
+                  {item.deal?.stage === "lost" && <p className="text-xs text-muted-foreground break-words">Lost reason: {item.deal.lost_reason || "No reason recorded"}</p>}
                   {/* Contact Details Grid */}
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     <div><span className="text-muted-foreground text-[9px] uppercase tracking-wider block mb-0.5">Phone</span><span className="text-foreground">{item.phone || ""}</span></div>
@@ -1071,8 +1077,9 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                           });
                           if (newStatus === "booked" && item.deal && confirm("Mark as 'Booked' in pipeline too?")) {
                             await callAdmin("update_deal_stage", { dealId: item.deal.id, stage: "booked" });
-                          } else if (newStatus === "not_interested" && item.deal && confirm("Mark as 'Lost' in pipeline?")) {
-                            await callAdmin("update_deal_stage", { dealId: item.deal.id, stage: "lost" });
+                          } else if (newStatus === "not_interested" && item.deal) {
+                            const lost_reason = await requestLostReason(item.deal.lost_reason || "");
+                              if (lost_reason !== null) await callAdmin("update_deal_stage", { dealId: item.deal.id, stage: "lost", lost_reason });
                           }
                           toast.success("Status updated");
                           loadData();
@@ -1218,6 +1225,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
         </DialogContent>
       </Dialog>
 
+      {picker}
       <AIDraftModal
         open={!!aiDraftCtx}
         onClose={() => setAiDraftCtx(null)}
