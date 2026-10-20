@@ -1002,7 +1002,7 @@ serve(async (req) => {
           if (update.stage === "lost" || "lost_reason" in update) {
             const { data: current, error: readError } = await supabase.from("deals").select("stage, lost_reason").eq("id", dealId).single();
             if (readError) return json({ error: readError.message }, 400);
-            const reasonError = lostReasonError(update.stage ?? current.stage, "lost_reason" in update ? update.lost_reason : current.lost_reason);
+            const reasonError = lostReasonError(update.stage ?? current.stage, update.stage === "lost" || "lost_reason" in update ? update.lost_reason : current.lost_reason);
             if (reasonError) return json({ error: reasonError }, 400);
           }
           if (Object.keys(update).length === 0) return json({ error: "No valid fields to update" }, 400);

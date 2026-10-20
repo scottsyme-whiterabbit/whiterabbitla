@@ -344,6 +344,7 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
               return (
                 <div key={i} className={`relative flex flex-col p-7 md:p-8 transition-all ${rec ? "bg-cream/[0.05] border border-gold md:-translate-y-3 shadow-xl shadow-black/30" : "border border-cream/15"}`}>
                   <span className="absolute top-0 left-0 w-4 h-px bg-gold/70" />
+                  {rec && <p className="text-xs uppercase tracking-wider text-gold mb-3">Recommended</p>}
                   <span className="absolute top-0 left-0 w-px h-4 bg-gold/70" />
                   <span className="absolute top-0 right-0 w-4 h-px bg-gold/70" />
                   <span className="absolute top-0 right-0 w-px h-4 bg-gold/70" />
