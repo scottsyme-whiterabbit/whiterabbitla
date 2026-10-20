@@ -11,6 +11,8 @@ import { isAdminRequest } from "../_shared/require-admin.ts";
 import { buildAgreementPdf } from "../_shared/agreement-pdf.ts";
 import { applyAgreementTerms } from "../_shared/agreement-terms.ts";
 import { resolveSelectedTier } from "./selected-tier.ts";
+import { safeErrorPayload } from "../_shared/safe-error.ts";
+import { publicProposal, publicSignResponse } from "./public-response.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -278,6 +280,8 @@ async function notifyProposalView(p: any, ua: string, lastViewedAt: string | nul
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
+  const requestId = crypto.randomUUID().slice(0, 8);
+  const fail = (error: unknown) => json(safeErrorPayload(error, requestId), 500);
   try {
     const url = new URL(req.url);
     const action = url.searchParams.get("action") || "";
@@ -286,10 +290,11 @@ Deno.serve(async (req) => {
     // PUBLIC: get proposal by slug
     if (action === "get" && slug) {
       const { data, error } = await supabase.from("proposals").select("*").eq("slug", slug).maybeSingle();
-      if (error) return json({ error: error.message }, 500);
+      if (error) return fail(error);
       if (!data) return json({ error: "Not found" }, 404);
 
-      if (!(await isAdmin(req))) {
+      const admin = await isAdmin(req);
+      if (!admin) {
         const ua = req.headers.get("user-agent") || "";
         const ref = req.headers.get("referer") || "";
         // Record the view, then decide whether this is worth an alert.
@@ -313,13 +318,13 @@ Deno.serve(async (req) => {
         })();
       }
 
-      return json({ proposal: data });
+      return json({ proposal: admin ? data : publicProposal(data) });
     }
 
     // PUBLIC: get venue pitch by slug
     if (action === "get_venue" && slug) {
       const { data, error } = await supabase.from("venue_pitches").select("*").eq("slug", slug).maybeSingle();
-      if (error) return json({ error: error.message }, 500);
+      if (error) return fail(error);
       if (!data) return json({ error: "Not found" }, 404);
 
       if (!(await isAdmin(req))) {
@@ -390,7 +395,7 @@ Deno.serve(async (req) => {
       if (!storedProposalId) {
         // Template preview or an unknown proposal: acknowledge with a success
         // state, but store nothing, invoice nothing, send nothing.
-        return json({ ok: true, preview: true });
+        return json(publicSignResponse({}));
       }
 
       const selectedTier = resolveSelectedTier(storedTiers, tier_name);
@@ -415,16 +420,14 @@ Deno.serve(async (req) => {
             .limit(1);
           const inv = priorInv?.[0] as Invoice | undefined;
           if (inv) {
-            return json({
-              ok: true,
-              already_signed: true,
+            return json(publicSignResponse({
               pay_token: inv.pay_token,
               total_cents: inv.total_cents,
               deposit_cents: Math.round(inv.total_cents * 0.5),
               pay_url: payUrl(inv),
-            });
+            }));
           }
-          return json({ ok: true, already_signed: true });
+          return json(publicSignResponse({}));
         }
       }
 
@@ -446,7 +449,7 @@ Deno.serve(async (req) => {
         user_agent: ua.slice(0, 500),
         signer_ip: ip.slice(0, 64),
       }).select().single();
-      if (error) return json({ error: error.message }, 500);
+      if (error) return fail(error);
 
       // Auto-move linked deal to Booked so the Google Calendar sync fires
       if (linkedDealId) {
@@ -605,16 +608,14 @@ White Rabbit LA`,
       }
 
       if (createdInvoice) {
-        return json({
-          ok: true,
-          agreement: data,
+        return json(publicSignResponse({
           pay_token: createdInvoice.pay_token,
           total_cents: createdInvoice.total_cents,
           deposit_cents: Math.round(createdInvoice.total_cents * 0.5),
           pay_url: payUrl(createdInvoice),
-        });
+        }));
       }
-      return json({ ok: true, agreement: data, pay_token: null });
+      return json(publicSignResponse({ pay_token: null }));
     }
 
     // ADMIN actions below
@@ -626,7 +627,7 @@ White Rabbit LA`,
         .select("*")
         .order("signed_at", { ascending: false })
         .limit(500);
-      if (error) return json({ error: error.message }, 500);
+      if (error) return fail(error);
       return json({ agreements: data || [] });
     }
 
@@ -637,7 +638,7 @@ White Rabbit LA`,
         .from("signed_agreements")
         .update({ invoice_sent_at: new Date().toISOString() })
         .eq("id", id);
-      if (error) return json({ error: error.message }, 500);
+      if (error) return fail(error);
       return json({ ok: true });
     }
 
@@ -683,7 +684,7 @@ White Rabbit LA`,
         .from("proposals")
         .select("id, slug, first_name, last_name, recipient_email, event_type, event_date, venue, sent_at, created_at, deal_id, followup_step, followup_paused, last_followup_at, hold_until")
         .order("created_at", { ascending: false });
-      if (error) return json({ error: error.message }, 500);
+      if (error) return fail(error);
 
       // Attach view stats
       const ids = (data || []).map((p: any) => p.id);
@@ -717,7 +718,7 @@ White Rabbit LA`,
         .eq("proposal_id", id)
         .order("viewed_at", { ascending: false })
         .limit(100);
-      if (error) return json({ error: error.message }, 500);
+      if (error) return fail(error);
       return json({ views: data });
     }
 
@@ -729,7 +730,7 @@ White Rabbit LA`,
         .insert({ ...body, slug: newSlug })
         .select()
         .single();
-      if (error) return json({ error: error.message }, 500);
+      if (error) return fail(error);
       return json({ proposal: data });
     }
 
@@ -744,7 +745,7 @@ White Rabbit LA`,
         .eq("id", id)
         .select()
         .single();
-      if (error) return json({ error: error.message }, 500);
+      if (error) return fail(error);
 
       // If the date, venue or occasion moved, keep the calendar hold in step.
       try {
@@ -782,7 +783,7 @@ White Rabbit LA`,
         .from("proposals")
         .update({ followup_paused: paused === true })
         .eq("id", id);
-      if (error) return json({ error: error.message }, 500);
+      if (error) return fail(error);
       return json({ ok: true, paused: paused === true });
     }
 
@@ -810,7 +811,7 @@ White Rabbit LA`,
         .from("proposals")
         .update({ hold_until })
         .eq("id", id);
-      if (error) return json({ error: error.message }, 500);
+      if (error) return fail(error);
 
       // Only a genuine extension earns a note to the client.
       let notified = false;
@@ -829,7 +830,7 @@ White Rabbit LA`,
     if (action === "delete" && req.method === "POST") {
       const { id } = await req.json();
       const { error } = await supabase.from("proposals").delete().eq("id", id);
-      if (error) return json({ error: error.message }, 500);
+      if (error) return fail(error);
       return json({ ok: true });
     }
 
@@ -840,7 +841,7 @@ White Rabbit LA`,
         .from("venue_pitches")
         .select("id, slug, venue_name, gm_name, gm_email, submarket, fee_dollars, sent_at, created_at")
         .order("created_at", { ascending: false });
-      if (error) return json({ error: error.message }, 500);
+      if (error) return fail(error);
 
       const ids = (data || []).map((p: any) => p.id);
       let stats: Record<string, { count: number; last: string | null }> = {};
@@ -872,7 +873,7 @@ White Rabbit LA`,
         .insert({ ...body, slug: newSlug })
         .select()
         .single();
-      if (error) return json({ error: error.message }, 500);
+      if (error) return fail(error);
       return json({ pitch: data });
     }
 
@@ -887,14 +888,14 @@ White Rabbit LA`,
         .eq("id", id)
         .select()
         .single();
-      if (error) return json({ error: error.message }, 500);
+      if (error) return fail(error);
       return json({ pitch: data });
     }
 
     if (action === "delete_venue" && req.method === "POST") {
       const { id } = await req.json();
       const { error } = await supabase.from("venue_pitches").delete().eq("id", id);
-      if (error) return json({ error: error.message }, 500);
+      if (error) return fail(error);
       return json({ ok: true });
     }
 
@@ -957,7 +958,7 @@ White Rabbit LA — Luxury Magic
       });
       if (!r.ok) {
         const t = await r.text();
-        return json({ error: `Email send failed: ${t}` }, 500);
+        return fail(new Error(`Email send failed: ${t}`));
       }
       if (id) {
         await supabase.from("venue_pitches").update({ sent_at: new Date().toISOString() }).eq("id", id);
@@ -1093,7 +1094,7 @@ White Rabbit LA · 7393 W. Manchester Ave #209, Los Angeles, CA 90045`;
       });
       if (!r.ok) {
         const t = await r.text();
-        return json({ error: `Email send failed: ${t}` }, 500);
+        return fail(new Error(`Email send failed: ${t}`));
       }
       if (id) {
         await supabase.from("proposals").update({ sent_at: new Date().toISOString() }).eq("id", id);
@@ -1183,6 +1184,6 @@ White Rabbit LA · 7393 W. Manchester Ave #209, Los Angeles, CA 90045`;
 
     return json({ error: "Unknown action" }, 400);
   } catch (e) {
-    return json({ error: (e as Error).message }, 500);
+    return fail(e);
   }
 });

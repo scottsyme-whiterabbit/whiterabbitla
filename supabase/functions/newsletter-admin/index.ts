@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { safeErrorPayload } from "../_shared/safe-error.ts";
 import { lostReasonError } from "../_shared/lost-reason.ts";
 import { isAdminRequest } from "../_shared/require-admin.ts";
 
@@ -516,6 +517,10 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const requestId = crypto.randomUUID().slice(0, 8);
+  const fail = (error: unknown, status = 500) => new Response(JSON.stringify(safeErrorPayload(error, requestId)), {
+    status, headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
   try {
     const { action, adminPassword, ...payload } = await req.json();
 
@@ -1001,13 +1006,13 @@ serve(async (req) => {
           }
           if (update.stage === "lost" || "lost_reason" in update) {
             const { data: current, error: readError } = await supabase.from("deals").select("stage, lost_reason").eq("id", dealId).single();
-            if (readError) return json({ error: readError.message }, 400);
+            if (readError) return fail(readError, 400);
             const reasonError = lostReasonError(update.stage ?? current.stage, update.stage === "lost" || "lost_reason" in update ? update.lost_reason : current.lost_reason);
             if (reasonError) return json({ error: reasonError }, 400);
           }
           if (Object.keys(update).length === 0) return json({ error: "No valid fields to update" }, 400);
           const { data, error } = await supabase.from("deals").update(update).eq("id", dealId).select().single();
-          if (error) return json({ error: error.message }, 400);
+          if (error) return fail(error, 400);
           if (data?.id) {
             await syncDealToGoogleCalendar(supabase, data.id);
             await ensureBookedClientEmails(supabase, data.id);
@@ -1076,13 +1081,13 @@ serve(async (req) => {
           body: text,
           metadata: kind === "call" ? { outcome } : null,
         });
-        if (insErr) return json({ error: insErr.message }, 400);
+        if (insErr) return fail(insErr, 400);
         let moved = false;
         if (kind === "call" && (outcome === "reached" || outcome === "voicemail")) {
           const { data: movedRows, error: upErr } = await supabase
             .from("deals").update({ stage: "contacted" })
             .eq("id", dealId).eq("stage", "new").select("id");
-          if (upErr) return json({ error: upErr.message }, 400);
+          if (upErr) return fail(upErr, 400);
           moved = (movedRows || []).length > 0;
         }
         return json({ ok: true, moved_to_contacted: moved });
@@ -1239,9 +1244,7 @@ serve(async (req) => {
             .from("newsletter_contacts")
             .select("email, name, company, phone, created_at")
             .eq("drip_campaign", "cold_spirits");
-          if (error) return new Response(JSON.stringify({ error: error.message }), {
-            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
-          });
+          if (error) return fail(error, 400);
           const mapped = (data || []).map((c: { email: string; name: string | null; company: string | null; phone: string | null; created_at: string }) => ({
             email: c.email,
             name: c.name || null,
@@ -2187,9 +2190,7 @@ serve(async (req) => {
           .select("id, name, email, event_type, created_at, reengaged_at")
           .in("id", ids);
         if (rowsErr) {
-          return new Response(JSON.stringify({ error: rowsErr.message }), {
-            status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
-          });
+          return fail(rowsErr);
         }
 
         const emails = (rows || []).map((r) => (r.email || "").toLowerCase().trim()).filter(Boolean);
@@ -2253,9 +2254,6 @@ serve(async (req) => {
         });
     }
   } catch (error) {
-    console.error("newsletter-admin error:", error);
-    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }), {
-      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    return fail(error);
   }
 });

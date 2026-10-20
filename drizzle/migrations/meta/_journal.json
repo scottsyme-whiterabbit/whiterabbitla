@@ -29,6 +29,13 @@
       "when": 1791309117565,
       "tag": "0003_deals_consultation_event_id",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792538611242,
+      "tag": "0004_lock_backup_tables_and_anon_health_rpcs",
+      "breakpoints": true
     }
   ]
 }
