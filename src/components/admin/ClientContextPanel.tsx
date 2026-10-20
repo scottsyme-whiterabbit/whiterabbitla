@@ -303,6 +303,8 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
     }
     if (init.event_date) init.event_date = init.event_date.slice(0, 10);
     if (init.next_follow_up) init.next_follow_up = init.next_follow_up.slice(0, 10);
+    // deal_value is stored in cents; the field is edited in dollars.
+    if (init.deal_value) init.deal_value = String(Number(init.deal_value) / 100);
     setEditInitial(init);
     setEditForm(init);
     setEditOpen(true);
@@ -313,6 +315,10 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
     const changed: Record<string, string> = {};
     for (const f of EDIT_FIELDS) {
       if ((editForm[f.key] ?? "") !== (editInitial[f.key] ?? "")) changed[f.key] = editForm[f.key] ?? "";
+    }
+    if ("deal_value" in changed && changed.deal_value.trim() !== "") {
+      const dollars = parseFloat(changed.deal_value);
+      if (Number.isFinite(dollars)) changed.deal_value = String(Math.round(dollars * 100));
     }
     if (Object.keys(changed).length === 0) { setEditOpen(false); return; }
     setBusy(true);
