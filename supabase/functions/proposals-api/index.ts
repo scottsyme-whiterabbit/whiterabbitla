@@ -10,6 +10,7 @@ import {
 import { isAdminRequest } from "../_shared/require-admin.ts";
 import { buildAgreementPdf } from "../_shared/agreement-pdf.ts";
 import { applyAgreementTerms } from "../_shared/agreement-terms.ts";
+import { resolveSelectedTier } from "./selected-tier.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -392,6 +393,9 @@ Deno.serve(async (req) => {
         return json({ ok: true, preview: true });
       }
 
+      const selectedTier = resolveSelectedTier(storedTiers, tier_name);
+      if (selectedTier.status === 400) return json({ error: selectedTier.error }, 400);
+
       // Idempotent signing: an existing agreement for this proposal returns the
       // same payment details instead of creating a second agreement/invoice.
       {
@@ -429,8 +433,8 @@ Deno.serve(async (req) => {
         proposal_id: storedProposalId,
         proposal_slug: trim(proposal_slug, 200),
         deal_id: linkedDealId,
-        tier_name: trim(tier_name, 200),
-        tier_price: trim(tier_price, 50),
+        tier_name: selectedTier.tier.name,
+        tier_price: selectedTier.tier.price,
         client_name: trim(client_name, 200),
         client_email: trim(client_email, 200),
         event_type: trim(event_type, 200),
