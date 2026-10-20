@@ -590,6 +590,7 @@ const ProposalEditor = ({
   const applyTemplate = (eventType: string) => {
     const tpl = PROPOSAL_TEMPLATES[eventType];
     if (!tpl) return;
+    if (tiersHaveContent(proposal.tiers) && !window.confirm("Replace the current pricing tiers?")) return;
     update({
       event_type: eventType,
       letter_intro: tpl.letter_intro,
@@ -638,6 +639,7 @@ const ProposalEditor = ({
             priceOverrides[idx] ? { ...t, price: priceOverrides[idx] } : t
           )
         : proposal.tiers;
+      if (tpl && tiersHaveContent(proposal.tiers) && !window.confirm("Replace the current pricing tiers?")) { setAiLoading(false); return; }
       onChange({
         ...proposal,
         first_name: d.first_name || proposal.first_name,

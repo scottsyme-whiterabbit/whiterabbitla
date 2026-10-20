@@ -5,6 +5,8 @@ import {
   ArrowLeft, Mail, RefreshCw, Send, Loader2, BadgeDollarSign, BellOff, FileText, ExternalLink, Copy,
   CalendarClock, FileSignature, Phone, Plus, History,
 } from "lucide-react";
+import { LostReasonField, useLostReasonPicker } from "@/components/admin/LostReasonPicker";
+import { lostReasonError } from "@/lib/lostReason";
 import { getAdminPassword } from "@/lib/adminAuth";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -23,6 +25,7 @@ export interface ContextDeal {
   contact_name: string | null;
   company: string | null;
   stage: string;
+  lost_reason?: string | null;
   event_type: string | null;
   event_date: string | null;
   location: string | null;
@@ -193,6 +196,7 @@ const EDIT_FIELDS: { key: string; label: string; type: string }[] = [
   { key: "deal_value", label: "Deal value (dollars)", type: "number" },
   { key: "stage", label: "Stage", type: "select" },
   { key: "next_follow_up", label: "Next follow up", type: "date" },
+  { key: "lost_reason", label: "Lost reason", type: "lost_reason" },
   { key: "notes", label: "Notes", type: "textarea" },
 ];
 
@@ -215,6 +219,7 @@ const folderBtn = "flex items-center justify-center sm:justify-start gap-1.5 px-
 const smallBtn = "inline-flex items-center gap-1.5 min-h-[40px] font-sans text-[11px] tracking-[0.1em] uppercase transition-colors";
 
 const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Props) => {
+  const { requestLostReason, picker } = useLostReasonPicker();
   const email = (dealProp?.contact_email || target?.email || "").toLowerCase().trim();
   const [file, setFile] = useState<ClientFile | null>(null);
   const [createdDeal, setCreatedDeal] = useState<ContextDeal | null>(null);
@@ -320,6 +325,8 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
       const dollars = parseFloat(changed.deal_value);
       if (Number.isFinite(dollars)) changed.deal_value = String(Math.round(dollars * 100));
     }
+    const reasonError = lostReasonError(editForm.stage, editForm.lost_reason);
+    if (("stage" in changed || "lost_reason" in changed) && reasonError) { toast.error(reasonError); return; }
     if (Object.keys(changed).length === 0) { setEditOpen(false); return; }
     setBusy(true);
     try {
@@ -664,6 +671,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
                 {(deal
                   ? [
                       ["Name", deal.contact_name || "-"], ["Email", deal.contact_email], ["Phone", phone || "-"],
+                      ...(deal.stage === "lost" ? [["Lost reason", deal.lost_reason || "No reason recorded"]] : []),
                       ["Company", deal.company || "-"], ["Stage", deal.stage], ["Event", deal.event_type || "-"],
                       ["Date", fmtDate(deal.event_date) || "-"], ["Location", deal.location || "-"],
                     ]
@@ -751,11 +759,11 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
                   <section className="border border-border p-4 space-y-3">
                     <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent">Edit deal</p>
                     <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-2">
-                      {EDIT_FIELDS.map((f) => (
+                      {EDIT_FIELDS.filter(f => f.key !== "lost_reason" || editForm.stage === "lost").map((f) => (
                         <div key={f.key} className={f.type === "textarea" ? "min-[420px]:col-span-2" : ""}>
                           <label className="block text-[9px] tracking-[0.1em] uppercase text-muted-foreground mb-1">{f.label}</label>
-                          {f.type === "select" ? (
-                            <select value={editForm[f.key] ?? ""} onChange={(e) => setEditForm((p) => ({ ...p, [f.key]: e.target.value }))} className={inputCls}>
+                          {f.type === "lost_reason" ? <LostReasonField value={editForm.lost_reason || ""} onChange={lost_reason => setEditForm(p => ({ ...p, lost_reason }))} /> : f.type === "select" ? (
+                            <select value={editForm[f.key] ?? ""} onChange={async (e) => { const stage = e.target.value; if (stage === "lost" && editForm.stage !== "lost") { const reason = await requestLostReason(editForm.lost_reason || ""); if (reason === null) return; setEditForm(p => ({ ...p, stage, lost_reason: reason })); } else setEditForm(p => ({ ...p, stage })); }} className={inputCls}>
                               {STAGE_OPTIONS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
                             </select>
                           ) : f.type === "textarea" ? (
@@ -1105,6 +1113,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
             )}
           </>
         )}
+      {picker}
       </DialogContent>
     </Dialog>
   );
