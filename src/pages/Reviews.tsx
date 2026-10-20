@@ -131,6 +131,12 @@ const reviews = [
   rating: 5
 },
 {
+  name: "Olivia W.",
+  role: "Private Party, Hollywood Hills",
+  text: "Scott was amazing, kind and not only was his show insanely impressive but it was also inspiring. Thank you!!!",
+  rating: 5
+},
+{
   name: "Tim C.",
   role: "Company Holiday Luncheon",
   text: "Scott is an amazing magician. We had him showcase his skills at a company holiday luncheon. He is a true professional.",
