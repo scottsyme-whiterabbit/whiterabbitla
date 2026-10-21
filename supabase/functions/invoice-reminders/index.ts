@@ -5,9 +5,11 @@
 //    day of the event, only while the balance is unpaid, at least 20 hours apart.
 // Holiday shift: if tomorrow in America/Los_Angeles is Thanksgiving (4th Thursday
 // of November), Christmas Day or New Year's Day, the 7 and 2 day balance
-// reminders and the anticipation notes are evaluated one day early (days - 1),
-// so a send that would land on the holiday goes out today instead. The day-of
-// balance reminder is never shifted. Step counters and the 20 hour spacing
+// reminders and the "Two weeks to go" anticipation note are evaluated one day
+// early (days - 1), so a send that would land on the holiday goes out today
+// instead. The "See you tomorrow" anticipation note and the day of balance
+// reminder are never shifted: that note reads "Tomorrow's the day", so shifting
+// it would send it two days early. Step counters and the 20 hour spacing
 // still stop the holiday-day run from sending again, and each run sends at
 // most one step per type.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
@@ -168,8 +170,9 @@ Deno.serve(async (req) => {
           const eff = holidayTomorrow ? days - 1 : days;
           // "Two weeks to go" note: only with real runway (8-14 days out)
           if (!(sent & FAR) && eff >= 8 && eff <= 14) bit = FAR;
-          // "See you tomorrow" note: the day before (0-1 days out)
-          else if (!(sent & NEAR) && eff <= 1) bit = NEAR;
+          // "See you tomorrow" note: the day before (0-1 days out). Never
+          // holiday shifted: its copy reads "Tomorrow's the day".
+          else if (!(sent & NEAR) && days <= 1) bit = NEAR;
           if (bit) {
             if (!dryRun) {
               const { subject, html } = anticipationEmail(inv, days);
