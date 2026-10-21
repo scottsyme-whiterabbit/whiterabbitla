@@ -328,8 +328,8 @@ serve(async (req) => {
 
     if (RESEND_API_KEY) {
       try {
-        const notification = await gatedSend(
-          { to: "scott.syme@whiterabbitla.com", subject: `Booking Inquiry: ${name} (${eventType})`, label: "inquiry-notification", supabase },
+        const sendAlert = () => gatedSend(
+          { to: "scott.syme@whiterabbitla.com", subject: `Booking Inquiry: ${name} (${eventType})`, label: "inquiry-notification", supabase, internalAlert: true },
           (to, subject) => fetch("https://api.resend.com/emails", {
             method: "POST",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
@@ -342,6 +342,11 @@ serve(async (req) => {
             }),
           }),
         );
+        let notification = await sendAlert();
+        if (!notification.sent && (notification.reason === "provider_error" || notification.reason === "send_exception")) {
+          await new Promise((r) => setTimeout(r, 1500));
+          notification = await sendAlert();
+        }
         if (!notification.sent) console.error("Resend notification not sent:", notification.reason);
       } catch (notificationError) {
         console.error("Resend notification failed:", notificationError);
