@@ -1,3 +1,4 @@
+import { isInactiveInvoice, INACTIVE_INVOICE_STATUS_FILTER } from "../_shared/invoice-status.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { type StripeEnv, stripeEnvironment, verifyWebhook } from "../_shared/stripe.ts";
 import { type Invoice, payUrl, paymentFailedEmail, receiptEmail, sendEmail } from "../_shared/invoice-email.ts";
@@ -115,6 +116,12 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
     return;
   }
   const inv = data as unknown as Invoice & { deposit_paid_at?: string | null };
+  // A void or cancelled invoice is never marked paid and never emails anyone.
+  // A real payment on one needs Scott's manual review in Stripe.
+  if (isInactiveInvoice((data as any).status)) {
+    console.error("payment received on inactive invoice; left unchanged", invoiceId, (data as any).status, session.id);
+    return;
+  }
 
   const paid = Number(session.amount_total ?? session.metadata?.amount_cents ?? 0);
   const alreadyPaid = inv.amount_paid_cents || 0;
@@ -239,6 +246,7 @@ async function handlePaymentFailed(session: any, reason: string) {
     if (!data) return;
     const inv = data as unknown as Invoice;
     if (inv.status === "paid") return; // nothing to unlock on a settled invoice
+    if (isInactiveInvoice(inv.status)) return; // void/cancelled: no failure emails
 
     const { error } = await supabase.from("event_invoices").update({
       pending_session_id: null,
