@@ -7,7 +7,7 @@
 //    failure, never reported as sent.
 // Blocked or failed sends return { sent: false, reason } and are logged. The
 // gate never throws.
-import { createClient, type SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 
 export type GateResult =
   | { sent: true; status: number; data: any }
@@ -32,8 +32,8 @@ export function validEmail(raw: unknown): boolean {
   return e.length > 3 && e.length <= 254 && EMAIL_RE.test(e);
 }
 
-let cached: SupabaseClient | null = null;
-function client(supabase?: SupabaseClient | null): SupabaseClient | null {
+let cached: any = null;
+function client(supabase?: any | null): any | null {
   if (supabase) return supabase;
   if (cached) return cached;
   const url = Deno.env.get("SUPABASE_URL");
@@ -44,7 +44,7 @@ function client(supabase?: SupabaseClient | null): SupabaseClient | null {
 }
 
 /** Why an address must not be emailed, or null when it is clear to send. */
-export async function blockReason(rawTo: unknown, supabase?: SupabaseClient | null): Promise<string | null> {
+export async function blockReason(rawTo: unknown, supabase?: any | null): Promise<string | null> {
   if (!validEmail(rawTo)) return "invalid_address";
   const email = bareEmail(rawTo);
   const db = client(supabase);
@@ -89,7 +89,7 @@ export async function readProviderResponse(res: Response): Promise<GateResult> {
  * return the provider's fetch Response.
  */
 export async function gatedSend(
-  opts: { to: unknown; subject: unknown; label: string; supabase?: SupabaseClient | null },
+  opts: { to: unknown; subject: unknown; label: string; supabase?: any | null },
   send: (to: string, subject: string) => Promise<Response>,
 ): Promise<GateResult> {
   const to = cleanHeader(opts.to);
