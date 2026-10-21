@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react";
 import { emailTypeLabel, fmtPacific, sentStatus, type ScheduledEmail, type SentEmail } from "@/lib/emailTimeline";
 
-type Props = { dealId: string; callAdmin: (action: string, payload?: Record<string, unknown>) => Promise<any> };
+export type EmailTimelineData = { sent: SentEmail[]; upcoming: ScheduledEmail[] };
+type Props = { dealId: string; callAdmin: (action: string, payload?: Record<string, unknown>) => Promise<any>; loadedData?: EmailTimelineData | null };
 
-const EmailTimeline = ({ dealId, callAdmin }: Props) => {
-  const [data, setData] = useState<{ sent: SentEmail[]; upcoming: ScheduledEmail[] } | null>(null);
+const EmailTimeline = ({ dealId, callAdmin, loadedData }: Props) => {
+  const [fetchedData, setData] = useState<EmailTimelineData | null>(null);
+  const data = loadedData ?? fetchedData;
   const [error, setError] = useState(false);
   useEffect(() => {
+    if (loadedData) return;
     let live = true;
     setData(null); setError(false);
     callAdmin("get_email_timeline", { dealId }).then((r) => live && setData(r)).catch(() => live && setError(true));
     return () => { live = false; };
-  }, [dealId, callAdmin]);
+  }, [dealId, callAdmin, loadedData]);
 
   if (error) return <p className="text-sm text-muted-foreground">The email timeline could not load.</p>;
   if (!data) return <p className="text-sm text-muted-foreground">Loading emails...</p>;
