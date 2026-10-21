@@ -206,7 +206,7 @@ const PaymentsTab = ({ password }: { password: string }) => {
                         · {money(inv.total_cents)}
                         {inv.tier_name ? ` · ${inv.tier_name}` : ""}
                       </span>
-                      {invoiceMoneyFlags(inv as any).map((f) => <span key={f} className="ml-2 align-middle font-sans text-[10px] tracking-[0.1em] uppercase border border-destructive/40 text-destructive px-1.5 py-0.5">{f}</span>)}
+                      {invoiceMoneyFlags(inv as any).map((f) => <span key={f} className="ml-2 inline-block whitespace-nowrap align-middle font-sans text-[10px] tracking-[0.1em] uppercase border border-destructive/40 text-destructive px-1.5 py-0.5">{f}</span>)}
                     </div>
                     <div className="text-sm text-forest-dark/60 mt-1">
                       {inv.event_type || "Event"}

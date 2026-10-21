@@ -23,7 +23,7 @@ const EmailTimeline = ({ dealId, callAdmin }: Props) => {
           <ul className="divide-y divide-border border border-border">
             {data.upcoming.map((u, i) => (
               <li key={i} className="p-3 text-sm flex flex-wrap justify-between gap-2">
-                <span className="text-foreground">{u.label}{u.tentative ? <span className="text-xs text-muted-foreground"> ({u.note})</span> : null}</span>
+                <span className="text-foreground min-w-0 break-words">{u.label}{u.tentative ? <span className="text-xs text-muted-foreground"> ({u.note})</span> : null}</span>
                 <span className="text-xs text-muted-foreground">{fmtPacific(u.planned_at, false)}{u.blocked_reason ? <span className="ml-2 text-destructive uppercase tracking-[0.1em]">Will be blocked: {u.blocked_reason.replace(/_/g, " ")}</span> : null}</span>
               </li>
             ))}
@@ -37,11 +37,11 @@ const EmailTimeline = ({ dealId, callAdmin }: Props) => {
             {data.sent.map((e) => (
               <li key={e.id} className="p-3 text-sm space-y-1">
                 <div className="flex flex-wrap justify-between gap-2">
-                  <span className="text-foreground">{emailTypeLabel(e.email_type)}</span>
+                  <span className="text-foreground min-w-0 break-words">{emailTypeLabel(e.email_type)}</span>
                   <span className="text-[10px] uppercase tracking-[0.1em] text-muted-foreground">{sentStatus(e)}</span>
                 </div>
                 {e.subject && <p className="text-xs text-foreground/80 break-words">{e.subject}</p>}
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground break-all">
                   {e.recipient} · {e.provider === "gmail" ? "Gmail" : "Resend"} · {e.approximate_time ? "about " : ""}{fmtPacific(e.sent_at)}
                   {e.backfilled ? " · reconstructed" : ""}
                   {e.possible_duplicate ? <span className="ml-2 text-destructive uppercase tracking-[0.1em]">Possible duplicate</span> : null}

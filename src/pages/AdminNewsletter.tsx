@@ -737,7 +737,7 @@ const AdminNewsletter = () => {
 
         {/* Mobile "More" tabs, grouped */}
         {showMoreTabs && (
-          <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex flex-col">
+          <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex flex-col pt-[env(safe-area-inset-top,0px)] pb-[env(safe-area-inset-bottom,0px)]">
             <div className="flex items-center justify-between p-4 border-b border-border">
               <h2 className="font-sans text-sm tracking-[0.2em] uppercase text-foreground">More</h2>
               <button onClick={() => setShowMoreTabs(false)} className="min-h-[44px] min-w-[44px] flex items-center justify-center text-muted-foreground">
@@ -1615,7 +1615,7 @@ const AdminNewsletter = () => {
           </button>
 
           {/* Bottom Nav Bar */}
-          <nav className="fixed bottom-0 left-0 right-0 z-40 bg-background border-t border-border h-[60px] flex items-center justify-around px-1 safe-area-pb">
+          <nav className="fixed bottom-0 left-0 right-0 z-40 bg-background border-t border-border h-[calc(60px+env(safe-area-inset-bottom,0px))] flex items-center justify-around px-1 safe-area-pb">
             {PRIMARY_TABS.map(tab => {
               const isActive = activeTab === tab.key;
               const cls = `relative flex flex-1 flex-col items-center justify-center gap-0.5 min-h-[48px] min-w-0 px-0.5 transition-colors ${isActive ? "text-accent" : "text-muted-foreground"}`;

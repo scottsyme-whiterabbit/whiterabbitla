@@ -901,8 +901,10 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
                           <p className="text-xs text-muted-foreground mt-0.5">{money(inv.total_cents)} total · {money(inv.amount_paid_cents)} paid</p>
                           {inv.external_note && <p className="text-xs text-muted-foreground mt-0.5 break-words">Note: {inv.external_note}</p>}
                         </div>
-                        <span className={`font-sans text-[10px] tracking-[0.1em] uppercase shrink-0 ${settled ? "text-primary" : "text-accent"}`}>{statusLabel(inv)}</span>
-                        {invoiceMoneyFlags(inv).map((f) => <span key={f} className="font-sans text-[10px] tracking-[0.1em] uppercase shrink-0 border border-destructive/40 text-destructive px-1.5 py-0.5">{f}</span>)}
+                        <div className="flex flex-wrap items-center gap-1.5 min-[420px]:justify-end min-[420px]:max-w-[50%]">
+                          <span className={`font-sans text-[10px] tracking-[0.1em] uppercase ${settled ? "text-primary" : "text-accent"}`}>{statusLabel(inv)}</span>
+                          {invoiceMoneyFlags(inv).map((f) => <span key={f} className="font-sans text-[10px] tracking-[0.1em] uppercase whitespace-nowrap border border-destructive/40 text-destructive px-1.5 py-0.5">{f}</span>)}
+                        </div>
                       </div>
 
                       <p className={`text-sm ${remaining > 0 && !isInactiveInvoice(inv.status) ? "text-foreground" : "text-muted-foreground"}`}>
