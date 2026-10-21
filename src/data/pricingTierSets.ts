@@ -31,8 +31,6 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
       tagline: "Cocktail hour for every guest, plus one more moment you choose: the rehearsal dinner or a private speakeasy show.",
       items: [
         "Up to 90 minutes of close-up magic during cocktail hour",
-        "Your choice of one: a seated show at the rehearsal dinner, or a private speakeasy show for the couple and inner circle during the reception",
-        "Music and sound through a Bose S1 Pro+ speaker, and a Neewer key light, for the seated moment",
         "Full pre-event consultation with the couple and planner",
         "Mind reading, mentalism, sleight of hand card magic, and magic with borrowed phones and rings",
         "Scott Syme in elegant evening attire, his signature green suit, or a tuxedo on request",
@@ -46,9 +44,6 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
       href: "",
       tagline: "The whole weekend, hosted: the rehearsal dinner show, cocktail hour, and a private speakeasy for your inner circle.",
       items: [
-        "A seated show at the rehearsal dinner, with music and a warm key light",
-        "Up to 90 minutes of close-up magic during cocktail hour",
-        "A private speakeasy show for the couple and inner circle during the reception",
         "Full pre-event consultation with the couple and planner",
         "Mind reading, mentalism, sleight of hand card magic, and magic with borrowed phones and rings",
         "Scott Syme in elegant evening attire, his signature green suit, or a tuxedo on request",

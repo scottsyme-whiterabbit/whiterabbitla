@@ -10,7 +10,7 @@ describe("proposal standard line rules", () => {
     for (const tier of tiers) expect(tier.items.filter(item => optional.includes(item))).toEqual([]);
   });
 
-  it.each(["Wedding", "Private Event", "Corporate Event"])("uses the three performance and production defaults for %s", event => {
+  it.each(["Private Event", "Corporate Event"])("uses the three performance and production defaults for %s", event => {
     const tiers = tierLinesForProposal(pricingTiersForEventType(event), event, true);
     const groups = ["Setting: Close-up setup", "Setting: Parlor half build", "Setting: Full build"];
     expect(groups.map(group => STANDARD_TIER_LINES.filter(line => line.group === group).length)).toEqual([1, 5, 6]);
@@ -44,7 +44,7 @@ describe("proposal standard line rules", () => {
   });
 
   it("restricts wedding touches to weddings and excludes corporate planning", () => {
-    expect(standardLinesForEventType("Wedding").filter(line => line.eventTypes).map(line => line.eventTypes)).toEqual([["wedding"]]);
+    expect(standardLinesForEventType("Wedding").filter(line => line.eventTypes).map(line => line.eventTypes)).toEqual(Array(5).fill(["wedding"]));
     expect(standardLinesForEventType("Private Event").filter(line => line.eventTypes)).toEqual([]);
     expect(tierLinesForProposal(PRICING_TIER_SETS.Wedding, "Wedding", true).flatMap(tier => tier.items)).not.toContain("A planning call with your planner and executive sponsor.");
   });
@@ -63,5 +63,24 @@ describe("proposal standard line rules", () => {
     expect(result).toEqual(saved);
     result[0].items.push("Editable");
     expect(saved[0].items).toEqual(["My existing custom line", "An existing keepsake promise"]);
+  });
+
+  it("builds exact wedding defaults and keeps wedding lines out of other events", () => {
+    const L = (g: string) => STANDARD_TIER_LINES.filter(l => l.group === g).map(l => l.text);
+    const [choice, weekend, rehearsal, speakeasy] = L("Wedding");
+    const closeUp = "Up to ninety minutes of close-up magic, performed among your guests during cocktails.";
+    const planning = ["A planning call with you and your planner before the event.", "I coordinate arrival and setup directly with your venue."];
+    const magic = L("The Magic");
+    const noGlow = magic.filter(t => !t.startsWith("The Afterglow:"));
+    const travel = "Anywhere in Los Angeles County, I come to you at no added cost.";
+    const tiers = tierLinesForProposal(pricingTiersForEventType("Wedding"), "Wedding", true);
+    const generic = tierLinesForProposal(pricingTiersForEventType("Private Event"), "Private Event", true);
+    expect(tiers[0].items).toEqual(generic[0].items);
+    expect(tiers[1].items).toEqual([choice, rehearsal, speakeasy, closeUp, ...planning, ...noGlow, ...L("Presentation"), ...L("Setting: Close-up setup"), ...L("Setting: Parlor half build"), travel]);
+    expect(tiers[2].items).toEqual([weekend, rehearsal, closeUp, speakeasy, ...planning, ...magic, ...L("Presentation"), ...L("Setting: Full build"), travel]);
+    expect(tiers.map(t => [t.name, t.price, !!t.recommended])).toEqual([["The Cocktail Hour", "$2,000", false], ["The Cocktail Hour and The Parlor", "$3,000", false], ["The White Rabbit Wedding", "From $5,000", true]]);
+    for (const event of ["Corporate Event", "Private Event", "Birthday"]) {
+      expect(tierLinesForProposal(pricingTiersForEventType(event), event, true).flatMap(t => t.items).filter(i => L("Wedding").includes(i))).toEqual([]);
+    }
   });
 });
