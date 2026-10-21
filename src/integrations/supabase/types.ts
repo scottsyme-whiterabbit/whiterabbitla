@@ -1199,6 +1199,10 @@ export type Database = {
           deal_id: string | null
           deposit_paid_at: string | null
           deposit_percent: number
+          dispute_amount_cents: number
+          dispute_id: string | null
+          dispute_status: string | null
+          disputed_at: string | null
           environment: string
           event_date: string | null
           event_type: string | null
@@ -1238,6 +1242,10 @@ export type Database = {
           deal_id?: string | null
           deposit_paid_at?: string | null
           deposit_percent?: number
+          dispute_amount_cents?: number
+          dispute_id?: string | null
+          dispute_status?: string | null
+          disputed_at?: string | null
           environment?: string
           event_date?: string | null
           event_type?: string | null
@@ -1277,6 +1285,10 @@ export type Database = {
           deal_id?: string | null
           deposit_paid_at?: string | null
           deposit_percent?: number
+          dispute_amount_cents?: number
+          dispute_id?: string | null
+          dispute_status?: string | null
+          disputed_at?: string | null
           environment?: string
           event_date?: string | null
           event_type?: string | null
@@ -2093,6 +2105,27 @@ export type Database = {
           expires_at?: string
           id?: string
           payload?: Json
+        }
+        Relationships: []
+      }
+      stripe_webhook_events: {
+        Row: {
+          event_id: string
+          event_type: string
+          invoice_id: string | null
+          processed_at: string
+        }
+        Insert: {
+          event_id: string
+          event_type: string
+          invoice_id?: string | null
+          processed_at?: string
+        }
+        Update: {
+          event_id?: string
+          event_type?: string
+          invoice_id?: string | null
+          processed_at?: string
         }
         Relationships: []
       }
