@@ -24,11 +24,10 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
       ],
     },
     {
-      name: "Choose Two",
-      price: "$3,500",
-      cta: "Reserve Choose Two",
+      name: "The Cocktail Hour and The Parlor",
+      price: "$3,000",
+      cta: "Reserve The Cocktail Hour and The Parlor",
       href: "",
-      recommended: true,
       tagline: "Cocktail hour for every guest, plus one more moment you choose: the rehearsal dinner or a private speakeasy show.",
       items: [
         "Up to 90 minutes of close-up magic during cocktail hour",
@@ -42,6 +41,7 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
     {
       name: "The White Rabbit Wedding",
       price: "From $5,000",
+      recommended: true,
       cta: "Reserve The White Rabbit Wedding",
       href: "",
       tagline: "The whole weekend, hosted: the rehearsal dinner show, cocktail hour, and a private speakeasy for your inner circle.",
@@ -72,10 +72,9 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
     },
     {
       name: "The Cocktail Hour and The Parlor",
-      price: "$3,500",
+      price: "$3,000",
       cta: "Reserve The Cocktail Hour and The Parlor",
       href: "",
-      recommended: true,
       tagline: "Strolling close-up for the whole room, then a seated show for the guests who matter most.",
       items: [
         "About 90 minutes of strolling close-up magic for all guests",
@@ -89,6 +88,7 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
     {
       name: "The White Rabbit Evening",
       price: "From $5,000",
+      recommended: true,
       cta: "Reserve The White Rabbit Evening",
       href: "",
       tagline: "The room is transformed before guests walk in, with a moment built for your honoree or brand and a keepsake to take home.",
@@ -105,6 +105,20 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
   ],
   General: [
     {
+      name: "The Cocktail Hour",
+      price: "$2,000",
+      cta: "Reserve The Cocktail Hour",
+      href: "",
+      tagline: "Every guest gets their own moment. About ninety minutes of close-up magic, in their hands, as your evening begins.",
+      items: [
+        "About 90 minutes of strolling close-up magic during cocktail hour",
+        "Pre-event call with the host",
+        "Mind reading, mentalism, sleight of hand card magic, and magic with borrowed phones and rings",
+        "Scott weaves through guests, performing up close for small groups",
+        "Scott Syme in elegant evening attire, his signature green suit, or a tuxedo on request",
+      ],
+    },
+    {
       name: "The Parlor",
       price: "$3,000",
       cta: "Reserve The Parlor",
@@ -120,24 +134,9 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
       ],
     },
     {
-      name: "The Parlor with Full Production",
-      price: "$3,500",
-      cta: "Reserve The Parlor with Full Production",
-      href: "",
-      recommended: true,
-      tagline: "The Parlor, with your room transformed: emerald drapes, stage light, and a soundtrack that greets guests at the door.",
-      items: [
-        "Full production build: emerald pipe-and-drape curtains (six velvet panels), Neewer stage lights and uplights, and a Bose S1 Pro+ soundtrack for arrival",
-        "A seated Parlor show inside the build",
-        "The Afterglow: about 30 minutes of intimate close-up magic after the show, a few guests at a time",
-        "Pre-event call with the host",
-        "Mind reading, mentalism, sleight of hand card magic, and magic with borrowed phones and rings",
-        "Scott Syme in elegant evening attire, his signature green suit, or a tuxedo on request",
-      ],
-    },
-    {
       name: "The White Rabbit Evening",
       price: "From $5,000",
+      recommended: true,
       cta: "Reserve The White Rabbit Evening",
       href: "",
       tagline: "Your living room becomes a private theater. Emerald drapes, warm stage light, and a soundtrack greet your guests at the door.",
@@ -153,6 +152,18 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
     },
   ],
 };
+
+// One mapping for buttons, event selectors, templates and preview defaults.
+export function pricingTierSetForEventType(eventType: string): PricingTierSetName {
+  const type = eventType.trim().toLowerCase();
+  if (type === "wedding") return "Wedding";
+  if (["corporate", "corporate event", "fundraiser", "holiday party"].includes(type)) return "Corporate";
+  return "General";
+}
+
+export function pricingTiersForEventType(eventType: string): Tier[] {
+  return PRICING_TIER_SETS[pricingTierSetForEventType(eventType)].map(tier => ({ ...tier, items: [...tier.items] }));
+}
 
 // True when at least one tier already carries anything worth keeping.
 export const tiersHaveContent = (tiers: Tier[] | null | undefined): boolean =>

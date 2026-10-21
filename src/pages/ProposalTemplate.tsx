@@ -1,3 +1,4 @@
+import { pricingTiersForEventType } from "@/data/pricingTierSets";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Phone, Plus, Instagram, Linkedin } from "lucide-react";
@@ -129,51 +130,7 @@ export const DEFAULT_PROPOSAL: ProposalData = {
     { time: "8:45 PM", desc: "40-minute parlor experience after dinner." },
     { time: "9:30 PM", desc: "I stay through dessert, walk out last." },
   ],
-  tiers: [
-    {
-      name: "Cocktail Hour",
-      tagline: "Intimate close-up during cocktail hour",
-      items: [
-        "90 minutes of close-up magic during cocktail hour",
-        "Up to 100 guests",
-        "Pre-event call with couple and/or planner",
-        "Standard LA County",
-      ],
-      price: "$1,800",
-      href: "",
-      cta: "Reserve Cocktail Hour",
-    },
-    {
-      name: "The White Rabbit Wedding Experience",
-      tagline: "Parlor at rehearsal dinner + cocktail hour the next day",
-      items: [
-        "40 to 45 minute parlor experience at rehearsal dinner the night before",
-        "90 minutes of close-up at cocktail hour the next day",
-        "Up to 150 guests across both events",
-        "Full pre-event consultation with couple and planner",
-        "White Rabbit branded materials, custom moment for the couple",
-      ],
-      price: "$3,500",
-      href: "",
-      cta: "Reserve Wedding Experience",
-      recommended: true,
-    },
-    {
-      name: "The Estate Wedding Experience",
-      tagline: "Parlor + cocktail hour + post-reception speakeasy",
-      items: [
-        "40 to 45 minute parlor at rehearsal dinner",
-        "2 hours of close-up at cocktail hour",
-        "30-minute Speakeasy lounge moment after reception",
-        "Up to 250 guests across all three events",
-        "Full environment build for parlor moment",
-        "Custom narrative woven through the night",
-      ],
-      price: "$5,500",
-      href: "",
-      cta: "Reserve Estate Experience",
-    },
-  ],
+  tiers: pricingTiersForEventType("Wedding"),
   faqs: [
     { q: "How much space do you need?", a: "For close-up walk-around, none. I move through the room the way a host does, and only need a small spot for my bag. For the parlor experience, an 8 by 10 foot area is plenty for the emerald lobby curtains and lighting. Beyond that, staging is flexible." },
     { q: "What if a guest doesn't want to participate?", a: "No one is ever pulled in who doesn't want to be. The night is built around making your guests feel hosted, not put on the spot." },
