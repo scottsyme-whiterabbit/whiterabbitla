@@ -273,7 +273,7 @@ async function notifyProposalView(p: any, ua: string, lastViewedAt: string | nul
         subject: `${name} ${isFirst ? "opened" : "reopened"} their proposal`,
         html,
       }),
-    });
+    }, "resend", true);
   } catch (e) {
     console.error("proposal view notification failed", e);
   }
@@ -552,7 +552,7 @@ ${invoiceLink ? `Invoice sent automatically: ${invoiceLink}\nDaily reminders wil
               text: plain,
               reply_to: client_email || "scott.syme@whiterabbitla.com",
             }),
-          });
+          }, "resend", true);
         } catch {}
         if (client_email && createdInvoice) {
           // ONE combined "White Rabbit Agreement & Reservation Invoice" email,
