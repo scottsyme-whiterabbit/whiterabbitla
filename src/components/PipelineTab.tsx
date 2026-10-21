@@ -1,3 +1,4 @@
+import { eventDateRangeError, isSquareHistory, FLAG_LABELS, type RevenueStats } from "@/lib/revenueStats";
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import { Plus, DollarSign, TrendingUp, Calendar, BarChart3, ChevronDown, ChevronRight, Mail, Eye, MousePointerClick, Search, X } from "lucide-react";
@@ -115,6 +116,11 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
   const [contextDeal, setContextDeal] = useState<Deal | null>(null);
   const [showContext, setShowContext] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [revenueStats, setRevenueStats] = useState<RevenueStats | null>(null);
+  // Square Import deals with no value are client history: shown on the board,
+  // left out of counts and conversion unless this is switched off.
+  const [hideSquare, setHideSquare] = useState(true);
+  const [showReview, setShowReview] = useState(false);
 
   const [form, setForm] = useState({
     contact_email: "",
@@ -155,6 +161,11 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
     try {
       const res = await callAdmin("get_deals");
       setDeals(res.deals || []);
+      try {
+        setRevenueStats(await callAdmin("get_revenue_stats"));
+      } catch (e) {
+        console.error("get_revenue_stats failed", e);
+      }
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed to load deals");
     }
@@ -188,6 +199,8 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
     if (!form.contact_email) { toast.error("Email required"); return; }
     const reasonError = lostReasonError(form.stage, form.lost_reason);
     if (reasonError) { toast.error(reasonError); return; }
+    const dateError = eventDateRangeError(form.event_date || null);
+    if (dateError) { toast.error(dateError); return; }
     try {
       const { skip_thank_you, ...rest } = form;
       const dealData = {
@@ -268,21 +281,23 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
 
 
   // Stats
-  const activeDeals = deals.filter(d => !["completed", "lost"].includes(d.stage));
+  const countDeals = hideSquare ? deals.filter(d => !isSquareHistory(d as any)) : deals;
+  const squareHistoryCount = deals.filter(d => isSquareHistory(d as any)).length;
+  const activeDeals = countDeals.filter(d => !["completed", "lost"].includes(d.stage));
   const pipelineValue = activeDeals.reduce((sum, d) => sum + (d.deal_value || 0), 0);
-  const thisMonth = deals.filter(d => {
+  const thisMonth = countDeals.filter(d => {
     const created = new Date(d.created_at);
     const now = new Date();
     return created.getMonth() === now.getMonth() && created.getFullYear() === now.getFullYear();
   });
-  const booked = deals.filter(d => d.stage === "booked" || d.stage === "completed").length;
-  const conversionRate = deals.length ? Math.round((booked / deals.length) * 100) : 0;
+  const booked = countDeals.filter(d => d.stage === "booked" || d.stage === "completed").length;
+  const conversionRate = countDeals.length ? Math.round((booked / countDeals.length) * 100) : 0;
   const avgDealValue = activeDeals.length
     ? activeDeals.reduce((s, d) => s + (d.deal_value || 0), 0) / activeDeals.length
     : 0;
 
   // Lost reasons breakdown — bucket free-text into known categories where possible
-  const lostDeals = deals.filter(d => d.stage === "lost");
+  const lostDeals = countDeals.filter(d => d.stage === "lost");
   const bucketReason = (raw: string | null): string => {
     if (!raw) return "Unspecified";
     const r = raw.toLowerCase();
@@ -310,17 +325,14 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
   // Revenue meter calculations
   const ANNUAL_TARGET = 50000000; // $500,000 in cents
   const MONTHLY_TARGET = Math.round(ANNUAL_TARGET / 12);
-  const PROPOSED_STAGES = ["new", "contacted", "negotiating", "proposal_sent"];
-  
-  const bookedRevenue = deals
-    .filter(d => d.stage === "booked" || d.stage === "completed")
-    .reduce((s, d) => s + (d.deal_value || 0), 0);
-  const proposedRevenue = deals
-    .filter(d => PROPOSED_STAGES.includes(d.stage))
-    .reduce((s, d) => s + (d.deal_value || 0), 0);
-  const totalPipeline = bookedRevenue + proposedRevenue;
-  const bookedPct = Math.min((bookedRevenue / ANNUAL_TARGET) * 100, 100);
-  const proposedPct = Math.min((proposedRevenue / ANNUAL_TARGET) * 100, 100 - bookedPct);
+  // Real money only, from get_revenue_stats: delivered shows this year plus
+  // booked shows still ahead this year. Not deal_value sums of open deals.
+  const deliveredRevenue = revenueStats?.delivered.cents ?? 0;
+  const bookedAheadRevenue = revenueStats?.bookedAhead.cents ?? 0;
+  const totalThisYear = revenueStats?.totalThisYear ?? 0;
+  const bookedPct = Math.min((deliveredRevenue / ANNUAL_TARGET) * 100, 100);
+  const proposedPct = Math.min((bookedAheadRevenue / ANNUAL_TARGET) * 100, 100 - bookedPct);
+  const reviewFlags = revenueStats?.flags ?? [];
   const monthlyPct = (MONTHLY_TARGET / ANNUAL_TARGET) * 100;
 
   const openDealById = (dealId: string) => {
@@ -369,23 +381,52 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
         <div className="flex flex-wrap items-center gap-x-2 gap-y-1 pt-2">
           <span className="flex items-center gap-1.5">
             <span className="w-3 h-3 bg-emerald-700/60 rounded-sm" />
-            <span className="font-mono text-sm text-foreground">{formatCurrency(bookedRevenue)}</span>
-            <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Booked</span>
+            <span className="font-mono text-sm text-foreground">{formatCurrency(deliveredRevenue)}</span>
+            <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Delivered this year</span>
           </span>
           <span className="text-muted-foreground text-sm">+</span>
           <span className="flex items-center gap-1.5">
             <span className="w-3 h-3 bg-[#C9A96E]/40 rounded-sm" />
-            <span className="font-mono text-sm text-[#C9A96E]">{formatCurrency(proposedRevenue)}</span>
-            <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Proposed</span>
+            <span className="font-mono text-sm text-[#C9A96E]">{formatCurrency(bookedAheadRevenue)}</span>
+            <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Booked ahead</span>
           </span>
           <span className="text-muted-foreground text-sm">=</span>
-          <span className="font-mono text-sm text-foreground font-medium">{formatCurrency(totalPipeline)}</span>
-          <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Pipeline</span>
+          <span className="font-mono text-sm text-foreground font-medium">{formatCurrency(totalThisYear)}</span>
+          <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Total this year</span>
           <span className="ml-auto font-sans text-xs text-accent font-medium">
-            {Math.round((totalPipeline / ANNUAL_TARGET) * 100)}% of Goal
+            {Math.round((totalThisYear / ANNUAL_TARGET) * 100)}% of Goal
           </span>
         </div>
+        {revenueStats && revenueStats.bookedAhead.allYearsCents > revenueStats.bookedAhead.cents && (
+          <p className="text-[11px] text-muted-foreground">
+            Booked ahead including next years: {formatCurrency(revenueStats.bookedAhead.allYearsCents)}
+            {" · "}paid {formatCurrency(revenueStats.bookedAhead.paidCents)}
+            {" · "}remaining {formatCurrency(revenueStats.bookedAhead.remainingCents)}
+          </p>
+        )}
       </div>
+
+      {/* Needs review: display only, nothing is changed automatically */}
+      {reviewFlags.length > 0 && (
+        <div className="border border-amber-500/40 p-4">
+          <button onClick={() => setShowReview(v => !v)} className="flex items-center gap-2 w-full text-left">
+            <span className="font-sans text-[10px] tracking-[0.15em] uppercase text-amber-600">Needs review</span>
+            <span className="font-mono text-xs bg-amber-500/15 text-amber-700 px-2 py-0.5">{reviewFlags.length}</span>
+            <span className="ml-auto text-[11px] text-muted-foreground">{showReview ? "Hide" : "Show"}</span>
+          </button>
+          {showReview && (
+            <ul className="mt-3 space-y-1.5">
+              {reviewFlags.map(f => (
+                <li key={`${f.id}-${f.reason}`} className="flex flex-wrap items-baseline gap-x-2 text-sm">
+                  <button onClick={() => openDealById(f.id)} className="text-foreground hover:text-accent">{f.contact_name || "Unnamed"}</button>
+                  <span className="text-[11px] text-muted-foreground">{f.stage} · {f.event_date || "no date"}</span>
+                  <span className="text-[11px] text-amber-700">{FLAG_LABELS[f.reason] || f.reason}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
 
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -407,7 +448,15 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
 
       {/* Actions */}
       <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
-        <p className="text-muted-foreground text-sm">{deals.length} total deals</p>
+        <div className="flex items-center gap-3">
+          <p className="text-muted-foreground text-sm">{countDeals.length} deals counted</p>
+          {squareHistoryCount > 0 && (
+            <label className="flex items-center gap-1.5 text-[11px] text-muted-foreground cursor-pointer">
+              <input type="checkbox" checked={hideSquare} onChange={e => setHideSquare(e.target.checked)} className="accent-current" />
+              Hide Square history ({squareHistoryCount}) from counts
+            </label>
+          )}
+        </div>
         <div className="flex items-center gap-2">
           <div className="relative flex-1 sm:w-72">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />

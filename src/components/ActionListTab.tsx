@@ -1,3 +1,4 @@
+import { eventDateRangeError } from "@/lib/revenueStats";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useLostReasonPicker } from "@/components/admin/LostReasonPicker";
 import { ClientName } from "@/components/admin/ClientFileContext";
@@ -267,6 +268,8 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
 
   const handleSaveEdit = async () => {
     if (!editModal) return;
+    const dateError = eventDateRangeError(editForm.event_date || null);
+    if (dateError) { toast.error(dateError); return; }
     setEditSaving(true);
     try {
       if (editModal.deal) {
