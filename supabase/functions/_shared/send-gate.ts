@@ -10,6 +10,8 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 
 import { classifyEmail } from "./email-schedule.ts";
+import { ownerAlertOverride } from "./owner-alert.ts";
+export { OWNER_INBOXES } from "./owner-alert.ts";
 
 /**
  * Record one send attempt in email_log. Never throws and never delays the
@@ -124,12 +126,16 @@ export async function readProviderResponse(res: Response): Promise<GateResult> {
  * return the provider's fetch Response.
  */
 export async function gatedSend(
-  opts: { to: unknown; subject: unknown; label: string; supabase?: any | null },
+  opts: { to: unknown; subject: unknown; label: string; supabase?: any | null; internalAlert?: boolean },
   send: (to: string, subject: string) => Promise<Response>,
 ): Promise<GateResult> {
   const to = cleanHeader(opts.to);
   const subject = cleanHeader(opts.subject);
-  const blocked = await blockReason(to, opts.supabase);
+  let blocked = await blockReason(to, opts.supabase);
+  if (ownerAlertOverride(bareEmail(to), blocked, opts.internalAlert)) {
+    console.warn(`[send-gate] ${opts.label}: owner inbox override (${blocked})`);
+    blocked = null;
+  }
   if (blocked) {
     console.warn(`[send-gate] ${opts.label}: not sent to ${bareEmail(to) || "(none)"} (${blocked})`);
     await logEmail({ to, subject, label: opts.label, status: "blocked", reason: blocked, supabase: opts.supabase });
