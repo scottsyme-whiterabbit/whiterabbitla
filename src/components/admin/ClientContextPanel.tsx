@@ -1,3 +1,5 @@
+import { useBookingPayment } from "@/components/admin/BookingPaymentModal";
+import { type BookingPayment } from "@/lib/manualBooking";
 import { eventDateRangeError } from "@/lib/revenueStats";
 import { isInactiveInvoice } from "@/lib/invoiceStatus";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -267,6 +269,9 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
     return data;
   }, []);
 
+  const { requestBookingPayment, bookingModal } = useBookingPayment(callAdmin);
+  const [editPayment, setEditPayment] = useState<BookingPayment | null>(null);
+
   const callInvoice = useCallback(async (action: string, body: Record<string, unknown>) => {
     const pw = getAdminPassword();
     const res = await fetch(`${INVOICE_FN}?action=${action}`, {
@@ -312,6 +317,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
     if (init.next_follow_up) init.next_follow_up = init.next_follow_up.slice(0, 10);
     // deal_value is stored in cents; the field is edited in dollars.
     if (init.deal_value) init.deal_value = String(Number(init.deal_value) / 100);
+    setEditPayment(null);
     setEditInitial(init);
     setEditForm(init);
     setEditOpen(true);
@@ -336,7 +342,12 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
     if (Object.keys(changed).length === 0) { setEditOpen(false); return; }
     setBusy(true);
     try {
-      const res = await callAdmin("update_deal", { deal_id: deal.id, fields: changed });
+      let payment = editPayment;
+      if (changed.stage === "booked" && deal.stage !== "booked" && !payment) {
+        payment = await requestBookingPayment({ id: deal.id, stage: deal.stage, deal_value: Math.round(Number(editForm.deal_value || 0) * 100) });
+        if (payment === null) return;
+      }
+      const res = await callAdmin("update_deal", { deal_id: deal.id, fields: changed, ...(payment ? { payment } : {}) });
       if (res.deal) setDealOverride({ ...deal, ...res.deal });
       toast.success("Deal saved");
       setEditOpen(false);
@@ -769,7 +780,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
                         <div key={f.key} className={f.type === "textarea" ? "min-[420px]:col-span-2" : ""}>
                           <label className="block text-[9px] tracking-[0.1em] uppercase text-muted-foreground mb-1">{f.label}</label>
                           {f.type === "lost_reason" ? <LostReasonField value={editForm.lost_reason || ""} onChange={lost_reason => setEditForm(p => ({ ...p, lost_reason }))} /> : f.type === "select" ? (
-                            <select value={editForm[f.key] ?? ""} onChange={async (e) => { const stage = e.target.value; if (stage === "lost" && editForm.stage !== "lost") { const reason = await requestLostReason(editForm.lost_reason || ""); if (reason === null) return; setEditForm(p => ({ ...p, stage, lost_reason: reason })); } else setEditForm(p => ({ ...p, stage })); }} className={inputCls}>
+                            <select value={editForm[f.key] ?? ""} onChange={async (e) => { const stage = e.target.value; if (stage === "lost" && editForm.stage !== "lost") { const reason = await requestLostReason(editForm.lost_reason || ""); if (reason === null) return; setEditForm(p => ({ ...p, stage, lost_reason: reason })); } else if (stage === "booked" && editForm.stage !== "booked") { try { const payment = await requestBookingPayment({ id: deal?.id, stage: deal?.stage, deal_value: Math.round(Number(editForm.deal_value || 0) * 100) }); if (payment === null) return; setEditPayment(payment); setEditForm(p => ({ ...p, stage })); } catch (error) { toast.error(error instanceof Error ? error.message : "Could not check booking"); } } else { setEditPayment(null); setEditForm(p => ({ ...p, stage })); } }} className={inputCls}>
                               {STAGE_OPTIONS.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
                             </select>
                           ) : f.type === "textarea" ? (
@@ -1120,6 +1131,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
           </>
         )}
       {picker}
+      {bookingModal}
       </DialogContent>
     </Dialog>
   );
