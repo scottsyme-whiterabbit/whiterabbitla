@@ -181,7 +181,7 @@ export const DEFAULT_PROPOSAL: ProposalData = {
     { q: "What's your weather contingency for outdoor events?", a: "We move indoors. I'll work with your planner on the indoor backup so it's ready before it's needed." },
     { q: "How early do you arrive?", a: "For close-up walk-around, 15 to 30 minutes before showtime is plenty. For the parlor experience, I arrive about 40 minutes early to prep the space and set the lighting." },
     { q: "Do you travel?", a: "Yes. Standard pricing covers Los Angeles County. For events outside LA County, travel is included in your quote, so there are no surprise line items." },
-    { q: "What happens after I reserve the date?", a: "A 50% deposit holds your date. The remaining 50% is due the day before. Two weeks before, we hop on a final call to walk through the night together." },
+    { q: "What happens after I reserve the date?", a: "A 50% deposit holds your date. The remaining 50% is due before the performance. Two weeks before, we hop on a final call to walk through the night together." },
   ],
   closing_quote: "In those moments, nothing feels impossible. And maybe, for the guests who were there, nothing quite does afterward either.",
   closing_attribution: "",
