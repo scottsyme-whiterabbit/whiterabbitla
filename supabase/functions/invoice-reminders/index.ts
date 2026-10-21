@@ -13,6 +13,7 @@
 // still stop the holiday-day run from sending again, and each run sends at
 // most one step per type.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { invoiceDecisions, isShiftHoliday, pacificYmd as pacificYmdAt } from "../_shared/email-schedule.ts";
 import {
   type Invoice, anticipationEmail, balanceReminderEmail, reminderEmail, sendEmail,
 } from "../_shared/invoice-email.ts";
@@ -27,37 +28,11 @@ const supabase = createClient(
   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
 );
 
-const MAX_INITIAL_REMINDERS = 4;
-const BALANCE_DAYS_OUT = [7, 2, 0];
-const MIN_HOURS_BETWEEN = 20;
-
 const hoursSince = (ts: string | null) =>
   ts ? (Date.now() - new Date(ts).getTime()) / 36e5 : Infinity;
 
-const daysUntil = (date: string | null) => {
-  if (!date) return null;
-  const d = new Date(`${date}T12:00:00Z`).getTime();
-  if (!isFinite(d)) return null;
-  return Math.ceil((d - Date.now()) / 864e5);
-};
-
 // YYYY-MM-DD for "now + offsetDays" in Pacific time.
-const pacificYmd = (offsetDays: number) =>
-  new Intl.DateTimeFormat("en-CA", {
-    timeZone: "America/Los_Angeles", year: "numeric", month: "2-digit", day: "2-digit",
-  }).format(new Date(Date.now() + offsetDays * 864e5));
-
-const isShiftHoliday = (ymd: string) => {
-  const [y, m, d] = ymd.split("-").map(Number);
-  if (m === 12 && d === 25) return true;
-  if (m === 1 && d === 1) return true;
-  if (m === 11) {
-    const firstDow = new Date(Date.UTC(y, 10, 1)).getUTCDay();
-    const firstThu = 1 + ((4 - firstDow + 7) % 7);
-    return d === firstThu + 21;
-  }
-  return false;
-};
+const pacificYmd = (offsetDays: number) => pacificYmdAt(Date.now(), offsetDays);
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -137,86 +112,50 @@ Deno.serve(async (req) => {
 
 
     try {
-      // --- Unpaid: daily reminders, max 4 ---
-      if (inv.status === "open") {
-        // Never nag while a payment is already clearing.
-        if (inv.pending_session_id) { results.skipped++; continue; }
-        if (inv.initial_reminders_sent >= MAX_INITIAL_REMINDERS) { results.skipped++; continue; }
-        const anchor = inv.last_reminder_at || inv.sent_at;
-        if (hoursSince(anchor) < MIN_HOURS_BETWEEN) { results.skipped++; continue; }
-
-        const n = inv.initial_reminders_sent + 1;
-        if (!dryRun) {
-          const { subject, html } = reminderEmail(inv, n);
-          const ok = await sendEmail(inv.client_email, subject, html);
-          if (!ok) { results.errors.push(`send failed ${inv.id}`); continue; }
-          await supabase.from("event_invoices").update({
-            initial_reminders_sent: n,
-            last_reminder_at: new Date().toISOString(),
-          }).eq("id", inv.id);
-        }
-        results.unpaid_reminders++;
-        continue;
-      }
-
-      // --- Confirmed bookings: pre-event anticipation notes (windowed) ---
-      if (inv.status === "deposit_paid" || inv.status === "paid") {
-        const days = daysUntil(inv.event_date);
-        if (days !== null && days >= 0 && hoursSince(inv.last_anticipation_at) >= MIN_HOURS_BETWEEN) {
-          const sent = inv.anticipation_sent || 0;
-          const FAR = 1, NEAR = 2;
-          let bit = 0;
-          // Holiday shift: evaluate as if it were one day later.
-          const eff = holidayTomorrow ? days - 1 : days;
-          // "Two weeks to go" note: only with real runway (8-14 days out)
-          if (!(sent & FAR) && eff >= 8 && eff <= 14) bit = FAR;
-          // "See you tomorrow" note: the day before (0-1 days out). Never
-          // holiday shifted: its copy reads "Tomorrow's the day".
-          else if (!(sent & NEAR) && days <= 1) bit = NEAR;
-          if (bit) {
-            if (!dryRun) {
-              const { subject, html } = anticipationEmail(inv, days);
-              const ok = await sendEmail(inv.client_email, subject, html);
-              if (ok) {
-                await supabase.from("event_invoices").update({
-                  anticipation_sent: sent | bit,
-                  last_anticipation_at: new Date().toISOString(),
-                }).eq("id", inv.id);
-                results.anticipation_reminders++;
-              } else {
-                results.errors.push(`anticipation send failed ${inv.id}`);
-              }
-            } else {
-              results.anticipation_reminders++;
-            }
+      // Decisions come from the shared pure rules so the admin email schedule
+      // preview reads exactly what this run will do.
+      const decisions = invoiceDecisions(inv, Date.now(), holidayTomorrow);
+      if (!decisions.length) { results.skipped++; continue; }
+      for (const d of decisions) {
+        if (d.kind === "initial") {
+          if (!dryRun) {
+            const { subject, html } = reminderEmail(inv, d.n);
+            const ok = await sendEmail(inv.client_email, subject, html);
+            if (!ok) { results.errors.push(`send failed ${inv.id}`); break; }
+            await supabase.from("event_invoices").update({
+              initial_reminders_sent: d.n,
+              last_reminder_at: new Date().toISOString(),
+            }).eq("id", inv.id);
           }
+          results.unpaid_reminders++;
+        } else if (d.kind === "anticipation") {
+          if (!dryRun) {
+            const { subject, html } = anticipationEmail(inv, d.days);
+            const ok = await sendEmail(inv.client_email, subject, html);
+            if (ok) {
+              await supabase.from("event_invoices").update({
+                anticipation_sent: (inv.anticipation_sent || 0) | d.bit,
+                last_anticipation_at: new Date().toISOString(),
+              }).eq("id", inv.id);
+              results.anticipation_reminders++;
+            } else {
+              results.errors.push(`anticipation send failed ${inv.id}`);
+            }
+          } else {
+            results.anticipation_reminders++;
+          }
+        } else {
+          if (!dryRun) {
+            const { subject, html } = balanceReminderEmail(inv, d.days);
+            const ok = await sendEmail(inv.client_email, subject, html);
+            if (!ok) { results.errors.push(`send failed ${inv.id}`); break; }
+            await supabase.from("event_invoices").update({
+              balance_reminders_sent: d.nextCount,
+              last_balance_reminder_at: new Date().toISOString(),
+            }).eq("id", inv.id);
+          }
+          results.balance_reminders++;
         }
-      }
-
-
-      // --- Deposit paid: 3 pre-event balance reminders ---
-      if (inv.status === "deposit_paid") {
-        const days = daysUntil(inv.event_date);
-        if (days === null || days < 0) { results.skipped++; continue; }
-        const sentCount = inv.balance_reminders_sent || 0;
-        if (sentCount >= BALANCE_DAYS_OUT.length) { results.skipped++; continue; }
-        // Fire whenever we've crossed the next threshold in the schedule.
-        const nextThreshold = BALANCE_DAYS_OUT[sentCount];
-        // Holiday shift for the 7 and 2 day steps only; day-of never shifts.
-        const effDays = holidayTomorrow && nextThreshold > 0 ? days - 1 : days;
-        if (effDays > nextThreshold) { results.skipped++; continue; }
-        if (hoursSince(inv.last_balance_reminder_at) < MIN_HOURS_BETWEEN) { results.skipped++; continue; }
-
-        if (!dryRun) {
-          const { subject, html } = balanceReminderEmail(inv, days);
-          const ok = await sendEmail(inv.client_email, subject, html);
-          if (!ok) { results.errors.push(`send failed ${inv.id}`); continue; }
-          await supabase.from("event_invoices").update({
-            balance_reminders_sent: sentCount + 1,
-            last_balance_reminder_at: new Date().toISOString(),
-          }).eq("id", inv.id);
-        }
-        results.balance_reminders++;
       }
     } catch (e) {
       results.errors.push(`${inv.id}: ${(e as Error).message}`);
