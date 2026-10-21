@@ -5,7 +5,6 @@
 - [ ] Homepage brand logos: swap current block for actual businesses performed for (long-standing request).
 
 ## In progress
-- [ ] Replace proposal standard line catalog and new-proposal defaults only; preserve pricing presets and saved proposals, verify locally without service calls.
 - [ ] Mobile-first CRM/PWA pass: improve navigation, dense lists, forms, dialogs, and touch use across every admin screen without removing features.
 - [ ] PART A: Google sign-in for all admin pages (phase 1, alongside password)
   - [ ] Enable Google provider, disable open email signups
@@ -23,6 +22,7 @@
   - [ ] No unique constraint yet
 
 ## Done
+- Replaced proposal standard line catalog and event-filtered new-draft defaults; pricing presets and saved-load behavior unchanged. 35 tests and isolated builder checks passed without real service requests; build OK. No deployment or publication.
 - Event-type buttons, selector, templates and preview defaults use shared three-tier presets with premium recommendation; line-item picker and its 33 options unchanged. 24 local tests passed and build OK. No deployment, publication, function invocation or database changes.
 - Explicit manual booking payment logging and shared modal on all manual Booked paths; revenue source already uses actual net paid and no-invoice deal-value fallback. 23 isolated tests passed, build OK, newsletter-admin deployed only. No invocation, sends, Stripe calls, schema changes or data edits.
 - Pre-ship fixes deployed: 240-character lost-reason cap, request-ID safe errors, public proposal/sign allowlists, locked backup tables and anonymous health RPC revocation. Logged-out real proposal checked at 1280px and 390px; no signature or payment submitted. Authenticated RPC advisor warnings remain outside the requested anonymous revocation.
