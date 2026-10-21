@@ -9,3 +9,4 @@
 - Public proposal and signing responses use explicit field allowlists; authenticated admin reads retain their existing shapes to keep internal data private without breaking editing.
 - Browser-facing infrastructure failures use the shared safe-error payload with a per-request ID; real errors are logged only server side for traceable diagnostics.
 - Manual Booked transitions share BookingPaymentModal and the pure manual-booking validator; a read-only admin guard endpoint checks agreements and active invoices before prompting, and payment validation precedes deal writes to avoid false paid records.
+- Proposal event templates, event selectors and preview defaults resolve tiers through the shared pricing-set mapping and clone tier items, preventing stale duplicate prices and edits leaking into later presets.
