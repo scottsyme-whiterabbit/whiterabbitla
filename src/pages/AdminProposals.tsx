@@ -1134,8 +1134,8 @@ const ProposalEditor = ({
               <input className={inputCls + " col-span-3"} placeholder="6:30 PM" value={t.time} onChange={(e) => updateTimeline(i, { time: e.target.value })} />
               <input className={inputCls + " col-span-6"} placeholder="Description" value={t.desc} onChange={(e) => updateTimeline(i, { desc: e.target.value })} />
               <div className="col-span-3 flex items-center justify-end gap-1">
-                <button onClick={() => moveTimeline(i, -1)} disabled={i === 0} title="Move up" className="p-1.5 border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowUp className="w-4 h-4" /></button>
-                <button onClick={() => moveTimeline(i, 1)} disabled={i === proposal.timeline.length - 1} title="Move down" className="p-1.5 border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowDown className="w-4 h-4" /></button>
+                <button onClick={() => moveTimeline(i, -1)} disabled={i === 0} title="Move up" className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowUp className="w-4 h-4" /></button>
+                <button onClick={() => moveTimeline(i, 1)} disabled={i === proposal.timeline.length - 1} title="Move down" className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowDown className="w-4 h-4" /></button>
                 <button onClick={() => removeTimeline(i)} title="Remove" className="p-1.5 text-red-600 hover:bg-red-50"><Trash2 className="w-4 h-4" /></button>
               </div>
             </div>
@@ -1268,9 +1268,9 @@ const TierEditor = ({ tier, onChange, onRemove, index, eventType }: { eventType:
           <div className="md:col-span-2">
             <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
               <label className={labelCls}>What's included</label>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                 <select
-                  className="border border-forest-dark/20 px-2 py-1 bg-white text-xs text-forest-dark max-w-[260px]"
+                  className="border border-forest-dark/20 px-2 py-1 min-h-[44px] bg-white text-base sm:text-xs text-forest-dark w-full sm:w-auto sm:max-w-[260px]"
                   value=""
                   onChange={(e) => {
                     const line = e.target.value;
@@ -1287,15 +1287,15 @@ const TierEditor = ({ tier, onChange, onRemove, index, eventType }: { eventType:
                     </optgroup>
                   ))}
                 </select>
-                <button onClick={addItem} className="text-xs text-forest-dark/70 hover:text-forest-dark flex items-center gap-1"><Plus className="w-3 h-3" /> Add line</button>
+                <button onClick={addItem} className="min-h-[44px] px-2 text-xs text-forest-dark/70 hover:text-forest-dark flex items-center gap-1"><Plus className="w-3 h-3" /> Add line</button>
               </div>
             </div>
             {tier.items.map((it, i) => (
-              <div key={i} className="flex gap-2 mb-2 items-center">
-                <input className={inputCls} value={it} onChange={(e) => updateItem(i, e.target.value)} />
-                <button onClick={() => moveItem(i, -1)} disabled={i === 0} title="Move up" className="p-1.5 border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowUp className="w-4 h-4" /></button>
-                <button onClick={() => moveItem(i, 1)} disabled={i === tier.items.length - 1} title="Move down" className="p-1.5 border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowDown className="w-4 h-4" /></button>
-                <button onClick={() => removeItem(i)} title="Remove" className="text-red-600 hover:bg-red-50 px-2"><X className="w-4 h-4" /></button>
+              <div key={i} className="flex flex-wrap sm:flex-nowrap gap-2 mb-3 sm:mb-2 items-center">
+                <div className="basis-full sm:basis-auto sm:flex-1 min-w-0"><input className={inputCls} value={it} onChange={(e) => updateItem(i, e.target.value)} /></div>
+                <button onClick={() => moveItem(i, -1)} disabled={i === 0} title="Move up" className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowUp className="w-4 h-4" /></button>
+                <button onClick={() => moveItem(i, 1)} disabled={i === tier.items.length - 1} title="Move down" className="p-1.5 min-h-[44px] min-w-[44px] flex items-center justify-center border border-forest-dark/15 text-forest-dark hover:bg-cream disabled:opacity-30 disabled:cursor-not-allowed"><ArrowDown className="w-4 h-4" /></button>
+                <button onClick={() => removeItem(i)} title="Remove" className="text-red-600 hover:bg-red-50 px-2 min-h-[44px] min-w-[44px] flex items-center justify-center"><X className="w-4 h-4" /></button>
               </div>
             ))}
 
