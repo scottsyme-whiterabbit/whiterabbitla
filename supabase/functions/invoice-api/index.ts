@@ -1,3 +1,4 @@
+import { isInactiveInvoice, INACTIVE_INVOICE_STATUS_FILTER } from "../_shared/invoice-status.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { type StripeEnv, createStripeClient } from "../_shared/stripe.ts";
 import {
@@ -76,6 +77,7 @@ Deno.serve(async (req) => {
       if (!data) return json({ error: "Invoice not found" }, 404);
       const inv = data as Invoice;
       if (inv.status === "paid") return json({ error: "This invoice is already paid in full." }, 400);
+      if (isInactiveInvoice(inv.status)) return json({ error: "This invoice is no longer active." }, 400);
       // A payment is already in flight (typically a bank transfer clearing):
       // refuse a second checkout so the client cannot pay twice.
       if ((data as any).pending_session_id) {
@@ -172,6 +174,7 @@ Deno.serve(async (req) => {
       const { data } = await supabase.from("event_invoices").select("*").eq("id", id).maybeSingle();
       if (!data) return json({ error: "Not found" }, 404);
       const inv = data as Invoice;
+      if (isInactiveInvoice(inv.status)) return json({ error: "This invoice is no longer active." }, 400);
       if (!inv.client_email) return json({ error: "No client email on this invoice" }, 400);
       const { subject, html } = invoiceEmail(inv);
       await sendEmail(inv.client_email, subject, html);
@@ -196,6 +199,7 @@ Deno.serve(async (req) => {
         deposit_paid_at: string | null;
         external_note: string | null;
       };
+      if (isInactiveInvoice(inv.status)) return json({ error: "This invoice is no longer active." }, 400);
 
       // The submitted amount is the total recorded on this invoice, not an
       // addition, so a mistyped payment can be corrected by resubmitting.
@@ -291,7 +295,7 @@ Deno.serve(async (req) => {
         pending_session_id: null,
         pending_since: null,
         pending_alert_sent_at: null,
-      }).eq("id", id).neq("status", "canceled").select("id");
+      }).eq("id", id).not("status", "in", INACTIVE_INVOICE_STATUS_FILTER).select("id");
       if (error) return json({ error: error.message }, 500);
       if (!data || data.length === 0) return json({ ok: false, error: "Invoice is canceled" }, 400);
       return json({ ok: true });

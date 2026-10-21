@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { INACTIVE_INVOICE_STATUS_FILTER } from "../_shared/invoice-status.ts";
 import { safeErrorPayload } from "../_shared/safe-error.ts";
 import { lostReasonError } from "../_shared/lost-reason.ts";
 import { isAdminRequest } from "../_shared/require-admin.ts";
@@ -189,6 +190,7 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
         .from("event_invoices")
         .select("total_cents, amount_paid_cents, status, payment_method")
         .eq("deal_id", deal.id)
+        .not("status", "in", INACTIVE_INVOICE_STATUS_FILTER)
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle();
@@ -367,6 +369,7 @@ async function ensureBookedClientEmails(supabase: any, dealId: string) {
       .from("event_invoices")
       .select("id")
       .eq("deal_id", deal.id)
+      .not("status", "in", INACTIVE_INVOICE_STATUS_FILTER)
       .limit(1);
     if (existing && existing.length) return;
 

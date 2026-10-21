@@ -1,3 +1,4 @@
+import { isInactiveInvoice } from "@/lib/invoiceStatus";
 import { useEffect, useState } from "react";
 import { ClientName } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
@@ -224,7 +225,7 @@ const PaymentsTab = ({ password }: { password: string }) => {
                       {inv.pending_session_id && (
                         <span className="text-amber-700">Payment processing</span>
                       )}
-                      {inv.status === "canceled" && <span className="text-red-700">Canceled</span>}
+                      {isInactiveInvoice(inv.status) && <span className="text-red-700">Canceled</span>}
                       {inv.client_emails_paused && (
                         <span className="bg-forest-dark/10 text-forest-dark px-2 py-0.5 rounded-sm">
                           Emails paused
@@ -235,7 +236,7 @@ const PaymentsTab = ({ password }: { password: string }) => {
                   </div>
 
                   <div className="flex flex-wrap gap-2 items-center">
-                    {inv.status !== "canceled" && (
+                    {!isInactiveInvoice(inv.status) && (
                       <button
                         onClick={() => (formOpen ? setOpenForm(null) : startSettle(inv))}
                         className="inline-flex items-center gap-2 bg-forest-dark text-cream px-4 py-2 text-xs tracking-wider uppercase hover:opacity-90"
@@ -244,7 +245,7 @@ const PaymentsTab = ({ password }: { password: string }) => {
                         {formOpen ? "Close" : "Mark paid outside Stripe"}
                       </button>
                     )}
-                    {hasPayment && inv.status !== "canceled" && (
+                    {hasPayment && !isInactiveInvoice(inv.status) && (
                       <button
                         onClick={() => undoPayment(inv)}
                         className="inline-flex items-center gap-2 border border-forest-dark/25 px-4 py-2 text-xs tracking-wider uppercase hover:bg-cream"
@@ -258,7 +259,7 @@ const PaymentsTab = ({ password }: { password: string }) => {
                     >
                       <Send className="w-4 h-4" /> Resend
                     </button>
-                    {inv.status !== "canceled" && (
+                    {!isInactiveInvoice(inv.status) && (
                       <button
                         onClick={() => cancel(inv)}
                         className="inline-flex items-center gap-2 border border-forest-dark/25 px-4 py-2 text-xs tracking-wider uppercase hover:bg-cream"

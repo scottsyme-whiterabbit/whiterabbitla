@@ -1,3 +1,4 @@
+import { isInactiveInvoice } from "@/lib/invoiceStatus";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -117,7 +118,7 @@ const methodLabel = (m: string | null) => {
 const statusLabel = (inv: Invoice) => {
   if (inv.status === "paid") return `Paid · ${methodLabel(inv.payment_method)}`;
   if (inv.status === "deposit_paid") return `Deposit received · ${methodLabel(inv.payment_method)}`;
-  if (inv.status === "canceled") return "Canceled";
+  if (isInactiveInvoice(inv.status)) return "Canceled";
   if (inv.pending_session_id) return "Payment processing";
   return "Unpaid";
 };
@@ -882,8 +883,8 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
                         <span className={`font-sans text-[10px] tracking-[0.1em] uppercase shrink-0 ${settled ? "text-primary" : "text-accent"}`}>{statusLabel(inv)}</span>
                       </div>
 
-                      <p className={`text-sm ${remaining > 0 && inv.status !== "canceled" ? "text-foreground" : "text-muted-foreground"}`}>
-                        {inv.status === "canceled" ? "This invoice was canceled." : remaining > 0 ? `Still owed: ${money(remaining)}` : "Nothing left to pay."}
+                      <p className={`text-sm ${remaining > 0 && !isInactiveInvoice(inv.status) ? "text-foreground" : "text-muted-foreground"}`}>
+                        {isInactiveInvoice(inv.status) ? "This invoice was canceled." : remaining > 0 ? `Still owed: ${money(remaining)}` : "Nothing left to pay."}
                       </p>
 
                       <div className="border-t border-border pt-2">
@@ -902,7 +903,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
                       </div>
 
                       <div className="flex flex-wrap items-center gap-x-5">
-                        {!settled && inv.status !== "canceled" && (
+                        {!settled && !isInactiveInvoice(inv.status) && (
                           <button onClick={() => (openForm === inv.id ? setOpenForm(null) : startMarkPaid(inv))} className={`${smallBtn} text-accent hover:text-accent/80`}>
                             Mark paid outside Stripe
                           </button>
