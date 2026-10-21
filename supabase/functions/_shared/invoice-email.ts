@@ -1,4 +1,5 @@
 import { gatedSend } from "./send-gate.ts";
+import { eventDateForClient } from "./event-date.ts";
 // Shared helpers for White Rabbit LA event invoices: money math, brand-styled
 // email templates, and Resend delivery.
 
@@ -71,7 +72,8 @@ function detailsBlock(inv: Invoice) {
   const rows: string[] = [];
   if (inv.tier_name) rows.push(`<strong>Experience:</strong> ${esc(inv.tier_name)}`);
   if (inv.event_type) rows.push(`<strong>Occasion:</strong> ${esc(inv.event_type)}`);
-  if (inv.event_date) rows.push(`<strong>Date:</strong> ${esc(inv.event_date)}`);
+  const shownDate = eventDateForClient(inv.event_date);
+  if (shownDate) rows.push(`<strong>Date:</strong> ${esc(shownDate)}`);
   if (inv.venue) rows.push(`<strong>Venue:</strong> ${esc(inv.venue)}`);
   rows.push(`<strong>Total:</strong> ${money(inv.total_cents)}`);
   return `<div style="background:#ffffff;border:1px solid #e3ddd3;padding:20px 22px;margin:24px 0;font-family:Montserrat,Arial,sans-serif;font-size:14px;line-height:1.9;">
@@ -127,7 +129,7 @@ export function balanceReminderEmail(inv: Invoice, daysOut: number) {
   return {
     subject: daysOut <= 0
       ? `Balance due today for ${inv.tier_name || "your evening"}`
-      : `Balance due for ${inv.event_date || inv.tier_name || "your evening"}`,
+      : `Balance due for ${eventDateForClient(inv.event_date) || inv.tier_name || "your evening"}`,
     html: emailShell(body, payUrl(inv), "Pay balance"),
   };
 }
@@ -135,7 +137,8 @@ export function balanceReminderEmail(inv: Invoice, daysOut: number) {
 /** Pre-event anticipation note. Non-transactional — no CTA, no amounts. Format-agnostic and time-of-day agnostic. */
 export function anticipationEmail(inv: Invoice, daysOut: number) {
   const name = inv.client_name?.split(" ")[0] || "there";
-  const when = inv.event_date ? `<div style="font-family:Montserrat,Arial,sans-serif;font-size:13px;color:#6c7a72;margin:22px 0;letter-spacing:.04em;">${esc(inv.event_date)}${inv.venue ? ` &nbsp;·&nbsp; ${esc(inv.venue)}` : ""}</div>` : "";
+  const whenDate = eventDateForClient(inv.event_date);
+  const when = whenDate ? `<div style="font-family:Montserrat,Arial,sans-serif;font-size:13px;color:#6c7a72;margin:22px 0;letter-spacing:.04em;">${esc(whenDate)}${inv.venue ? ` &nbsp;·&nbsp; ${esc(inv.venue)}` : ""}</div>` : "";
 
   if (daysOut >= 7) {
     const body = `<p>${esc(name)},</p>
