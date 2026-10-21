@@ -1,0 +1,1 @@
+export { normalizeBookingPayment, type BookingPayment } from "../../supabase/functions/newsletter-admin/manual-booking";
