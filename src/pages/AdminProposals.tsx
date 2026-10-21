@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2, ArrowLeft, ArrowUp, ArrowDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type Tier, type TimelineItem, type FaqItem } from "./ProposalTemplate";
 import { additionalTermsBlock } from "../../supabase/functions/_shared/agreement-terms";
-import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, GALLERY_UPLOAD_PHOTOS, PROPOSAL_TEMPLATES, STANDARD_TIER_LINES, photoKeyToSrc, reviewsForEventType, ALL_PROPOSAL_REVIEWS, type ProposalReview } from "@/data/proposalAssets";
+import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, GALLERY_UPLOAD_PHOTOS, PROPOSAL_TEMPLATES, standardLinesForEventType, tierLinesForProposal, photoKeyToSrc, reviewsForEventType, ALL_PROPOSAL_REVIEWS, type ProposalReview } from "@/data/proposalAssets";
 import { PRICING_TIER_SETS, pricingTiersForEventType, tiersHaveContent, type PricingTierSetName } from "@/data/pricingTierSets";
 import { normalizeTiers } from "@/lib/proposalTiers";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
@@ -131,6 +131,7 @@ const AdminProposals = () => {
           last_name: rest.join(" "),
           recipient_email: deal.contact_email || "",
           event_type: eventTypeMap[deal.event_type] || deal.event_type || "Private Event",
+          tiers: tierLinesForProposal(pricingTiersForEventType(eventTypeMap[deal.event_type] || deal.event_type || "Private Event"), eventTypeMap[deal.event_type] || deal.event_type || "Private Event", true),
           event_date: deal.event_date || "",
           venue: deal.location || "",
           deal_id: deal.id,
@@ -165,7 +166,7 @@ const AdminProposals = () => {
   };
 
   const startNew = () => {
-    setEditing({ ...DEFAULT_PROPOSAL, id: "", slug: "" } as FullProposal);
+    setEditing({ ...DEFAULT_PROPOSAL, tiers: tierLinesForProposal(pricingTiersForEventType(DEFAULT_PROPOSAL.event_type), DEFAULT_PROPOSAL.event_type, true), id: "", slug: "" } as FullProposal);
   };
 
   const startEdit = async (slug: string) => {
@@ -599,7 +600,7 @@ const ProposalEditor = ({
       hero_image: tpl.hero_image,
       gallery_photos: tpl.gallery_photos,
       timeline: tpl.timeline,
-      tiers: pricingTiersForEventType(eventType),
+      tiers: tierLinesForProposal(pricingTiersForEventType(eventType), eventType, isNew),
       faqs: tpl.faqs,
       closing_quote: tpl.closing_quote || "",
       closing_attribution: tpl.closing_attribution || "",
@@ -636,7 +637,7 @@ const ProposalEditor = ({
       const tp = d.tier_prices || {};
       const priceOverrides = [tp.tier_1, tp.tier_2, tp.tier_3];
       const tiersWithPricing = tpl?.tiers
-        ? tpl.tiers.map((t, idx) =>
+        ? tierLinesForProposal(tpl.tiers, d.event_type || proposal.event_type, isNew).map((t, idx) =>
             priceOverrides[idx] ? { ...t, price: priceOverrides[idx] } : t
           )
         : proposal.tiers;
@@ -700,7 +701,7 @@ const ProposalEditor = ({
   const addTier = () => update({ tiers: [...proposal.tiers, { name: "New Tier", tagline: "", items: [], price: "", href: "", cta: "Reserve" }] });
   const loadTierSet = (setName: PricingTierSetName) => {
     if (tiersHaveContent(proposal.tiers) && !window.confirm("Replace the current pricing tiers?")) return;
-    update({ tiers: PRICING_TIER_SETS[setName].map((t) => ({ ...t, items: [...t.items] })) });
+    update({ tiers: tierLinesForProposal(PRICING_TIER_SETS[setName], proposal.event_type, isNew) });
   };
 
   const updateTimeline = (i: number, patch: Partial<TimelineItem>) => {
@@ -890,7 +891,7 @@ const ProposalEditor = ({
                   if (tiersHaveContent(proposal.tiers) && !window.confirm("Replace the current pricing tiers?")) return;
                   update({
                     event_type: t,
-                    tiers: pricingTiersForEventType(t),
+                    tiers: tierLinesForProposal(pricingTiersForEventType(t), t, isNew),
                     ...(tpl ? { closing_quote: tpl.closing_quote || "", closing_attribution: tpl.closing_attribution || "" } : {}),
                   });
                 }}
@@ -1115,7 +1116,7 @@ const ProposalEditor = ({
             <button onClick={addTier} className="text-sm text-forest-dark/70 hover:text-forest-dark flex items-center gap-1"><Plus className="w-4 h-4" /> Add Tier</button>
           </div>
           {proposal.tiers.map((tier, i) => (
-            <TierEditor key={i} tier={tier} onChange={(patch) => updateTier(i, patch)} onRemove={() => removeTier(i)} index={i} />
+            <TierEditor key={i} eventType={proposal.event_type} tier={tier} onChange={(patch) => updateTier(i, patch)} onRemove={() => removeTier(i)} index={i} />
           ))}
         </div>
 
@@ -1222,8 +1223,9 @@ const PhotoTile = ({ photo, selected, order, onPick }: { photo: { key: string; s
   </div>
 );
 
-const TierEditor = ({ tier, onChange, onRemove, index }: { tier: Tier; onChange: (p: Partial<Tier>) => void; onRemove: () => void; index: number }) => {
+const TierEditor = ({ tier, onChange, onRemove, index, eventType }: { eventType: string; tier: Tier; onChange: (p: Partial<Tier>) => void; onRemove: () => void; index: number }) => {
   const [open, setOpen] = useState(true);
+  const standardLines = standardLinesForEventType(eventType);
   const inputCls = "w-full min-h-[44px] border border-forest-dark/20 px-3 py-2 bg-white text-base";
   const labelCls = "block text-xs uppercase tracking-wider text-forest-dark/60 mb-1";
 
@@ -1277,9 +1279,9 @@ const TierEditor = ({ tier, onChange, onRemove, index }: { tier: Tier; onChange:
                   }}
                 >
                   <option value="">+ Standard line...</option>
-                  {Array.from(new Set(STANDARD_TIER_LINES.map((l) => l.group))).map((group) => (
+                  {Array.from(new Set(standardLines.map((l) => l.group))).map((group) => (
                     <optgroup key={group} label={group}>
-                      {STANDARD_TIER_LINES.filter((l) => l.group === group).map((l) => (
+                      {standardLines.filter((l) => l.group === group).map((l) => (
                         <option key={l.text} value={l.text}>{l.text}</option>
                       ))}
                     </optgroup>

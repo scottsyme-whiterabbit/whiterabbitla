@@ -1,4 +1,4 @@
-import { pricingTiersForEventType } from "@/data/pricingTierSets";
+import { pricingTierSetForEventType, pricingTiersForEventType } from "@/data/pricingTierSets";
 // Shared asset bank used by both the proposal renderer and the admin editor.
 // Photos are referenced by stable string keys so the user's selections survive
 // asset renames/hash changes without being lost.
@@ -466,50 +466,75 @@ export const reviewsForProposal = (reviews: ProposalReview[] | null | undefined,
 // The detail lines Scott reaches for again and again when quoting packages,
 // distilled from the wording across every proposal he has sent. Grouped so the
 // admin builder can offer them as one-click inserts inside the tier editor.
-export interface StandardLine { group: string; text: string; }
+export interface StandardLine {
+  group: string;
+  text: string;
+  eventTypes?: ('corporate' | 'wedding')[];
+  optional?: boolean;
+}
 
 export const STANDARD_TIER_LINES: StandardLine[] = [
-  // Consultation
-  { group: "Consultation", text: "Pre-event call with couple and/or planner" },
-  { group: "Consultation", text: "Full pre-event consultation with couple and planner" },
-  { group: "Consultation", text: "Pre-event call with planner" },
-  { group: "Consultation", text: "Pre-event call with host" },
-  { group: "Consultation", text: "Full pre-event consultation with planner and executive sponsor" },
-  // The Magic
-  { group: "The Magic", text: "Mind reading, mentalism, sleight of hand card magic, and magic with borrowed phones and rings" },
-  { group: "The Magic", text: "All effects are high energy and interactive" },
-  { group: "The Magic", text: "Scott weaves through guests, performing up close for small groups" },
-  { group: "The Magic", text: "Custom narrative woven through the night" },
-  // Presentation & Attire
-  { group: "Presentation & Attire", text: "Scott Syme dressed in elegant evening attire to match the atmosphere of the event" },
-  { group: "Presentation & Attire", text: "Scott Syme dressed in an elegant suit or tuxedo" },
-  // Travel
-  { group: "Travel", text: "All travel included in the reservation investment" },
-  { group: "Travel", text: "Travel and lodging included" },
-  { group: "Travel", text: "Standard LA County" },
-  // Production
-  { group: "Production", text: "Emerald Lobby drapes, cinematic lighting, and full show soundtrack provided by White Rabbit LA" },
-  { group: "Production", text: "Portable sound system providing the soundtrack for the full show" },
-  { group: "Production", text: "Full environment build for the parlor moment" },
-  // Signature Touches
-  { group: "Signature Touches", text: "Custom moment built for the guest of honor" },
-  { group: "Signature Touches", text: "Custom moment for the bride and groom" },
-  { group: "Signature Touches", text: "Personal guest invitation list to the Magic Castle on a set date after the wedding" },
-  { group: "Signature Touches", text: "Custom branded moment for the company" },
-  { group: "Signature Touches", text: "Two vetted Magic Castle magicians: Scott Syme plus a second approved magician" },
-  // The Magic (added 2026-10)
-  { group: "The Magic", text: "The Afterglow: about 30 minutes of intimate close-up magic after the show, a few guests at a time" },
-  // Presentation & Attire (added 2026-10)
-  { group: "Presentation & Attire", text: "Scott Syme in elegant evening attire, his signature green suit, or a tuxedo on request" },
-  // Production (added 2026-10)
-  { group: "Production", text: "Music and sound through a Bose S1 Pro+ speaker, and a Neewer key light" },
-  { group: "Production", text: "Full production build: emerald pipe-and-drape curtains (six velvet panels), Neewer stage lights and uplights, and a Bose S1 Pro+ soundtrack for arrival" },
-  // Signature Touches (added 2026-10)
-  { group: "Signature Touches", text: "A keepsake for guests to take home: a signed card, a sealed prediction, or a scroll wrapped in green ribbon" },
-  { group: "Signature Touches", text: "A handwritten note to the host" },
-  { group: "The Magic", text: "Performed during cocktail hour or once plates are cleared, never while guests are eating" },
-  { group: "Signature Touches", text: "Invitations to the Magic Castle for you and your guests on a set date" },
-  { group: "Production", text: "No stage, mic or setup needed for strolling magic; Scott arrives 30 minutes early" },
-  { group: "Consultation", text: "Recommended for up to 150 guests; a second performer is added above that" },
-  { group: "Signature Touches", text: "Couple's moment: a private effect built around your story, revealed during cocktail hour" },
+  { group: "Planning", text: "A planning call with you and your planner before the event." },
+  { group: "Planning", text: "A planning call with your planner and executive sponsor.", eventTypes: ["corporate"] },
+  { group: "Planning", text: "I coordinate arrival and setup directly with your venue." },
+  { group: "Planning", text: "A certificate of insurance for your venue, on request." },
+  { group: "The Magic", text: "Mind reading and sleight of hand, performed with your guests' own phones, rings, and thoughts." },
+  { group: "The Magic", text: "Each small group receives its own performance, at its own pace." },
+  { group: "The Magic", text: "Your guests are part of every moment. No one is put on the spot." },
+  { group: "The Magic", text: "One quiet thread of mystery, from arrival to the final goodbye." },
+  { group: "The Magic", text: "The Afterglow: thirty unhurried minutes of close-up magic after the show, for the guests who stay." },
+  { group: "The Magic", text: "Performed over cocktails or after dinner. Never during the meal." },
+  { group: "The Magic", text: "Up to 150 guests. Beyond that, a second Magic Castle magician joins, so no one is missed." },
+  { group: "Close-up vs Parlor", text: "Up to ninety minutes of close-up magic, performed among your guests during cocktails." },
+  { group: "Close-up vs Parlor", text: "A forty-five-minute parlor show, performed for your guests together, as one audience." },
+  { group: "Close-up vs Parlor", text: "Close-up is for small circles. The Parlor is for the whole room at once." },
+  { group: "Presentation", text: "Dressed to complement your room: a double-breasted suit in chocolate, burgundy, or racing green, or a black or white tuxedo." },
+  { group: "Presentation", text: "I never film or photograph your guests." },
+  { group: "Presentation", text: "I carry myself as a member of your staff would, and perform as your guest of honor would hope." },
+  { group: "Setting: Close-up setup", text: "No setup required. Everything I perform with is carried on my person." },
+  { group: "Setting: Parlor half build", text: "A full parlor production, installed in your space about forty minutes before the show." },
+  { group: "Setting: Parlor half build", text: "A professional PA sound system, with music for arrival and a full original soundtrack for the show." },
+  { group: "Setting: Parlor half build", text: "A single stage light, shaped to the performance space." },
+  { group: "Setting: Parlor half build", text: "A small set table, dressed with hotel stationery, a service bell, and a tasseled room key." },
+  { group: "Setting: Parlor half build", text: "The black woven case that carries the show, displayed on a clear acrylic stand." },
+  { group: "Setting: Full build", text: "The production of a touring show, installed for one night in your space." },
+  { group: "Setting: Full build", text: "Emerald velvet stage curtains, lit from below with ambient uplighting." },
+  { group: "Setting: Full build", text: "Two professional stage lights, focused for the performance." },
+  { group: "Setting: Full build", text: "A professional PA sound system, with music for arrival and a full original soundtrack for the show." },
+  { group: "Setting: Full build", text: "A small set table, dressed with hotel stationery, a service bell, and a tasseled room key." },
+  { group: "Setting: Full build", text: "The black woven case that carries the show, displayed on a clear acrylic stand." },
+  { group: "Travel", text: "Anywhere in Los Angeles County, I come to you at no added cost." },
+  { group: "Travel", text: "Travel and lodging beyond Los Angeles are included." },
+  { group: "Signature Touches", text: "One piece of the evening belongs entirely to your guest of honor.", optional: true },
+  { group: "Signature Touches", text: "A moment created for the two of you, woven into your celebration.", eventTypes: ["wedding"], optional: true },
+  { group: "Signature Touches", text: "A moment built around your brand, your team, or your milestone.", eventTypes: ["corporate"], optional: true },
+  { group: "Signature Touches", text: "A keepsake from the performance, for each guest to take home.", optional: true },
+  { group: "Signature Touches", text: "A private moment for you, away from the room, before the night ends.", optional: true },
+  { group: "Signature Touches", text: "Your own invitation through the doors of the Magic Castle.", optional: true },
 ];
+
+export function standardLinesForEventType(eventType: string): StandardLine[] {
+  const set = pricingTierSetForEventType(eventType);
+  const type = set === "Corporate" ? "corporate" : set === "Wedding" ? "wedding" : undefined;
+  return STANDARD_TIER_LINES.filter(line => !line.eventTypes || (type !== undefined && line.eventTypes.includes(type)));
+}
+
+// Replace only description items for new drafts; all pricing metadata stays intact.
+export function tierLinesForProposal<T extends { items: string[] }>(tiers: T[], eventType: string, isNew: boolean): T[] {
+  const lines = standardLinesForEventType(eventType);
+  return tiers.map((tier, index) => {
+    if (!isNew || index > 2) return { ...tier, items: [...tier.items] };
+    const setting = ["Setting: Close-up setup", "Setting: Parlor half build", "Setting: Full build"][index];
+    const items = lines.filter(line => {
+      if (line.optional) return false;
+      if (line.group === "Planning" || line.group === "Presentation") return true;
+      if (line.group === "The Magic") return index === 2 || !line.text.startsWith("The Afterglow:");
+      if (line.group === "Close-up vs Parlor") {
+        return index === 2 || (index === 0 ? line.text.startsWith("Up to ninety minutes") : line.text.startsWith("A forty-five-minute"));
+      }
+      if (line.group === setting) return true;
+      return line.group === "Travel" && line.text.startsWith("Anywhere in Los Angeles County");
+    }).map(line => line.text);
+    return { ...tier, items };
+  });
+}
