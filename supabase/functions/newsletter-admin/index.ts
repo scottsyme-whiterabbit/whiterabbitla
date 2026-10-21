@@ -352,6 +352,17 @@ async function ensureBookedClientEmails(supabase: any, dealId: string) {
     if (deal.stage !== "booked") return;
     if (!deal.event_date || !deal.contact_email) return;
 
+    // A signed agreement means proposals-api owns the invoice (and the
+    // pre-event notes that hang off it). Never add a placeholder beside it.
+    const { data: signed } = await supabase
+      .from("signed_agreements")
+      .select("id")
+      .eq("deal_id", deal.id)
+      .limit(1);
+    if (signed && signed.length) return;
+
+    // Any existing invoice already carries this deal's pre-event notes, so a
+    // second one would schedule them twice.
     const { data: existing } = await supabase
       .from("event_invoices")
       .select("id")
