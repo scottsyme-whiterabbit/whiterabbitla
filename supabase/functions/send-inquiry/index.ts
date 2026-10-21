@@ -1,4 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { gatedSend } from "../_shared/send-gate.ts";
+import { eventDateForAlert, eventDateIso, parseEventDate } from "../_shared/event-date.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { CALENDAR_URL, inquiryFirstName } from "../_shared/inquiry-email.ts";
 
@@ -146,7 +148,7 @@ serve(async (req) => {
         <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Phone</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(phone || "N/A")}</td></tr>
         <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Client Type</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(clientType || "Not specified")}</td></tr>
         <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Event Type</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(eventType)}</td></tr>
-        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Date</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(date)}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Date</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(eventDateForAlert(date))}${parseEventDate(date) ? "" : ` (they wrote: ${escapeHtml(date)})`}</td></tr>
         <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Guest Count</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(guestCount || "Not specified")}</td></tr>
         <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Budget</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(budget || "Not specified")}</td></tr>
         <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Location</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(location)}</td></tr>
@@ -295,7 +297,7 @@ serve(async (req) => {
         // Safely parse event_date — accept ISO/parseable strings only, else null
         let parsedEventDate: string | null = null;
         if (date) {
-          const d = new Date(date);
+          const d = parseEventDate(date);
           if (!isNaN(d.getTime())) {
             parsedEventDate = d.toISOString().slice(0, 10);
           }
