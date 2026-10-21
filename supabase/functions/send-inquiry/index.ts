@@ -108,7 +108,7 @@ serve(async (req) => {
           };
           if (fbEmail) fbPayload.reply_to = fbEmail;
           const fbResult = await gatedSend(
-            { to: "scott.syme@whiterabbitla.com", subject: fbPayload.subject, label: "private-feedback" },
+            { to: "scott.syme@whiterabbitla.com", subject: fbPayload.subject, label: "private-feedback", internalAlert: true },
             (to, subject) => fetch("https://api.resend.com/emails", {
               method: "POST",
               headers: { "Content-Type": "application/json", Authorization: `Bearer ${fbResendKey}` },

@@ -160,7 +160,7 @@ export async function gatedSend(
  * Response whose `ok` reflects whether the email really went out. A blocked
  * or failed send comes back as a non-2xx Response with { sent:false, reason }.
  */
-export async function gatedResendFetch(url: string, init: RequestInit & { body: string }, label = "resend"): Promise<Response> {
+export async function gatedResendFetch(url: string, init: RequestInit & { body: string }, label = "resend", internalAlert = false): Promise<Response> {
   let payload: Record<string, unknown>;
   try { payload = JSON.parse(init.body); } catch {
     return new Response(JSON.stringify({ sent: false, reason: "bad_payload" }), { status: 400 });
@@ -168,7 +168,11 @@ export async function gatedResendFetch(url: string, init: RequestInit & { body: 
   const list = (Array.isArray(payload.to) ? payload.to : [payload.to]).map(cleanHeader).filter(Boolean);
   const allowed: string[] = [];
   for (const addr of list) {
-    const why = await blockReason(addr);
+    let why = await blockReason(addr);
+    if (ownerAlertOverride(bareEmail(addr), why, internalAlert)) {
+      console.warn(`[send-gate] ${label}: owner inbox override (${why})`);
+      why = null;
+    }
     if (why) {
       console.warn(`[send-gate] ${label}: dropped ${bareEmail(addr)} (${why})`);
       await logEmail({ to: addr, subject: cleanHeader(payload.subject), label, status: "blocked", reason: why });
