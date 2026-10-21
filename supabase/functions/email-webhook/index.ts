@@ -25,24 +25,6 @@ serve(async (req) => {
     const body = await req.json();
     const eventType = body.type;
 
-    // Delivery status for the admin email timeline. Never blocks the webhook.
-    try {
-      const statusMap: Record<string, string> = {
-        "email.delivered": "delivered", "email.opened": "opened", "email.clicked": "clicked",
-        "email.bounced": "bounced", "email.complained": "complained", "email.delivery_delayed": "delayed",
-      };
-      const st = statusMap[eventType];
-      const msgId = body.data?.email_id;
-      if (st && typeof msgId === "string") {
-        const rank = ["delayed", "delivered", "opened", "clicked", "bounced", "complained"];
-        const { data: cur } = await supabase.from("email_log").select("id, delivery_status").eq("provider_message_id", msgId).limit(5);
-        for (const r of cur || []) {
-          if (rank.indexOf(st) >= rank.indexOf(r.delivery_status || "")) {
-            await supabase.from("email_log").update({ delivery_status: st }).eq("id", r.id);
-          }
-        }
-      }
-    } catch (e) { console.warn("email_log status update failed", e); }
 
     console.log("Webhook received:", eventType);
 
@@ -91,6 +73,25 @@ serve(async (req) => {
       );
       if (error) console.error(`suppression insert failed for ${email}:`, error.message);
     }
+
+    // Delivery status for the admin email timeline. Never blocks the webhook.
+    try {
+      const statusMap: Record<string, string> = {
+        "email.delivered": "delivered", "email.opened": "opened", "email.clicked": "clicked",
+        "email.bounced": "bounced", "email.complained": "complained", "email.delivery_delayed": "delayed",
+      };
+      const st = statusMap[eventType];
+      const msgId = body.data?.email_id;
+      if (st && typeof msgId === "string") {
+        const rank = ["delayed", "delivered", "opened", "clicked", "bounced", "complained"];
+        const { data: cur } = await supabase.from("email_log").select("id, delivery_status").eq("provider_message_id", msgId).limit(5);
+        for (const r of cur || []) {
+          if (rank.indexOf(st) >= rank.indexOf(r.delivery_status || "")) {
+            await supabase.from("email_log").update({ delivery_status: st }).eq("id", r.id);
+          }
+        }
+      }
+    } catch (e) { console.warn("email_log status update failed", e); }
 
     // Handle complaint (spam) events — auto-unsubscribe + log bounce
     if (eventType === "email.complained") {
