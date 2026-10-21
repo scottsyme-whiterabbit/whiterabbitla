@@ -291,6 +291,7 @@ export function classifyEmail(label: string, subject: string): string {
   if (s.startsWith("thank you for having me")) return "post_show_thank_you";
   if (s.includes("your evening still comes up")) return "post_show_referral";
   if (s.includes("your date is held through")) return "proposal_sent";
+  if (label === "gmail-send") return "crm_gmail";
   if (label === "proposal-followup") return "proposal_followup";
   if (label === "invoice-email" && s.includes("balance")) return "balance_reminder";
   if (label === "invoice-email") return "invoice_reminder";
