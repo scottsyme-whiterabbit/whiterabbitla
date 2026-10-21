@@ -63,6 +63,16 @@ serve(async (req) => {
       });
     }
 
+    // Hard bounces and complaints go on the suppression list so no function
+    // can mail the address again. Soft bounces and delays never suppress.
+    async function suppress(email: string, reason: "hard_bounce" | "complaint", note: string | null) {
+      const { error } = await supabase.from("email_suppression_list").upsert(
+        { email: email.toLowerCase().trim(), reason, notes: note ? `email-webhook: ${note}`.slice(0, 500) : "email-webhook" },
+        { onConflict: "email", ignoreDuplicates: true },
+      );
+      if (error) console.error(`suppression insert failed for ${email}:`, error.message);
+    }
+
     // Handle complaint (spam) events — auto-unsubscribe + log bounce
     if (eventType === "email.complained") {
       const recipientEmail = parseEmail(body.data?.to?.[0]) ?? parseEmail(body.data?.email);
@@ -73,6 +83,7 @@ serve(async (req) => {
           .update({ subscribed: false, engagement_status: "bounced" })
           .eq("email", recipientEmail.toLowerCase());
         await logBounce(contact?.id || null, recipientEmail, "complained", body.data?.reason || body.data?.error || "Spam complaint");
+        await suppress(recipientEmail, "complaint", body.data?.reason || body.data?.error || "Spam complaint");
         console.log(`Contact ${recipientEmail} unsubscribed + logged bounce (spam complaint)`);
 
         // Cold contact: mark as unsubscribed
@@ -125,6 +136,9 @@ serve(async (req) => {
           .update({ subscribed: false, engagement_status: "bounced" })
           .eq("email", recipientEmail.toLowerCase());
         await logBounce(contact?.id || null, recipientEmail, bounceType, body.data?.reason || body.data?.error || null);
+        if (bounceType === "hard_bounce") {
+          await suppress(recipientEmail, "hard_bounce", body.data?.reason || body.data?.error || null);
+        }
         console.log(`Contact ${recipientEmail} unsubscribed + logged bounce (${eventType} → ${bounceType})`);
 
         // Cold contact: only auto-suppress on HARD bounces. Soft bounces and
