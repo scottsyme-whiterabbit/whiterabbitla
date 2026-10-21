@@ -451,26 +451,6 @@ Deno.serve(async (req) => {
       }).select().single();
       if (error) return fail(error);
 
-      // Auto-move linked deal to Booked so the Google Calendar sync fires
-      if (linkedDealId) {
-        try {
-          await supabase.from("deals").update({ stage: "booked" }).eq("id", linkedDealId);
-          // Fire calendar sync via newsletter-admin (which owns the helper)
-          await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${SERVICE_KEY}`,
-            },
-            body: JSON.stringify({
-              action: "update_deal_stage",
-              adminPassword: ADMIN_PASSWORD,
-              dealId: linkedDealId,
-              stage: "booked",
-            }),
-          }).catch(() => {});
-        } catch (e) { console.error("auto-book failed", e); }
-      }
 
       // Auto-create the payment invoice (50% deposit or pay-in-full) and email it
       // to the client alongside the agreement. Daily reminders are handled by
@@ -517,6 +497,29 @@ Deno.serve(async (req) => {
           }
         }
       } catch (e) { console.error("invoice creation failed", e); }
+
+      // Runs only AFTER the real invoice exists, so newsletter-admin never
+      // creates a placeholder "external paid" invoice for this deal.
+      // Auto-move linked deal to Booked so the Google Calendar sync fires
+      if (linkedDealId) {
+        try {
+          await supabase.from("deals").update({ stage: "booked" }).eq("id", linkedDealId);
+          // Fire calendar sync via newsletter-admin (which owns the helper)
+          await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${SERVICE_KEY}`,
+            },
+            body: JSON.stringify({
+              action: "update_deal_stage",
+              adminPassword: ADMIN_PASSWORD,
+              dealId: linkedDealId,
+              stage: "booked",
+            }),
+          }).catch(() => {});
+        } catch (e) { console.error("auto-book failed", e); }
+      }
 
 
       // Notify Scott + client (best-effort)
