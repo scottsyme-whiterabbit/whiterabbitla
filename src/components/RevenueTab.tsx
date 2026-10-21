@@ -1,3 +1,4 @@
+import { isSquareHistory, type RevenueStats } from "@/lib/revenueStats";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { ClientName } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
@@ -83,6 +84,7 @@ const RevenueTab = ({ adminPassword }: Props) => {
   const [opens, setOpens] = useState<OpenLog[]>([]);
   const [clicks, setClicks] = useState<ClickLog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<RevenueStats | null>(null);
   const [dateRange, setDateRange] = useState<DateRange>("year");
 
   const callAdmin = useCallback(async (action: string, payload: Record<string, unknown> = {}) => {
@@ -104,6 +106,7 @@ const RevenueTab = ({ adminPassword }: Props) => {
           callAdmin("get_opens_log"),
           callAdmin("get_clicks_log"),
         ]);
+        try { setStats(await callAdmin("get_revenue_stats")); } catch (e) { console.error("get_revenue_stats failed", e); }
         setDeals(dealsRes.deals || []);
         setSendLog(sendsRes.sends || []);
         setOpens(opensRes.opens || []);
@@ -118,7 +121,8 @@ const RevenueTab = ({ adminPassword }: Props) => {
   }, [callAdmin]);
 
   // Exclude legacy Square Import deals from all metrics
-  const cleanDeals = useMemo(() => deals.filter(d => d.source !== "Square Import"), [deals]);
+  // Square Import deals with no value are client history, not revenue.
+  const cleanDeals = useMemo(() => deals.filter(d => !isSquareHistory(d as any)), [deals]);
 
   const filtered = useMemo(() => {
     const start = getDateRangeStart(dateRange);
@@ -126,32 +130,40 @@ const RevenueTab = ({ adminPassword }: Props) => {
     return cleanDeals.filter(d => new Date(d.created_at) >= start);
   }, [cleanDeals, dateRange]);
 
-  // Revenue Summary — split booked vs completed (exclude $0 deals from revenue calcs)
+  // Revenue Summary from get_revenue_stats: delivered (completed shows this
+  // year, net paid) and booked ahead, bucketed by SHOW date, not created_at.
   const revenueSummary = useMemo(() => {
-    const now = new Date();
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    const quarterStart = new Date(now.getFullYear(), Math.floor(now.getMonth() / 3) * 3, 1);
-    const yearStart = new Date(now.getFullYear(), 0, 1);
-
-    const booked = cleanDeals.filter(d => d.stage === "booked" && (d.deal_value || 0) > 0);
-    const completed = cleanDeals.filter(d => d.stage === "completed" && (d.deal_value || 0) > 0);
-    const all = [...booked, ...completed];
-    const sum = (arr: Deal[]) => arr.reduce((s, d) => s + (d.deal_value || 0), 0);
-    const inRange = (d: Deal, start: Date) => new Date(d.created_at) >= start;
-
+    const m = stats?.monthly ?? [];
+    const nowMonth = Number((stats?.today ?? new Date().toISOString()).slice(5, 7));
+    const qStart = Math.floor((nowMonth - 1) / 3) * 3 + 1;
+    const sumRange = (key: "delivered" | "booked", from: number, to: number) =>
+      m.filter(x => x.month >= from && x.month <= to).reduce((s, x) => s + x[key], 0);
+    const deliveredCount = stats?.delivered.count ?? 0;
+    const aheadCount = stats?.bookedAhead.count ?? 0;
+    const totalDeals = deliveredCount + aheadCount;
+    const delivered = stats?.delivered.cents ?? 0;
+    const ahead = stats?.bookedAhead.allYearsCents ?? 0;
     return {
-      bookedTotal: sum(booked),
-      completedTotal: sum(completed),
-      grossMonth: sum(completed.filter(d => inRange(d, monthStart))),
-      grossQuarter: sum(completed.filter(d => inRange(d, quarterStart))),
-      grossYear: sum(completed.filter(d => inRange(d, yearStart))),
-      bookedMonth: sum(booked.filter(d => inRange(d, monthStart))),
-      bookedQuarter: sum(booked.filter(d => inRange(d, quarterStart))),
-      bookedYear: sum(booked.filter(d => inRange(d, yearStart))),
-      avgDeal: all.length ? sum(all) / all.length : 0,
-      totalDeals: all.length,
+      bookedTotal: stats?.bookedAhead.cents ?? 0,
+      completedTotal: delivered,
+      grossMonth: sumRange("delivered", nowMonth, nowMonth),
+      grossQuarter: sumRange("delivered", qStart, qStart + 2),
+      grossYear: delivered,
+      bookedMonth: sumRange("booked", nowMonth, nowMonth),
+      bookedQuarter: sumRange("booked", qStart, qStart + 2),
+      bookedYear: stats?.bookedAhead.cents ?? 0,
+      avgDeal: totalDeals ? (delivered + ahead) / totalDeals : 0,
+      totalDeals,
     };
-  }, [cleanDeals]);
+  }, [stats]);
+
+  const monthlyRevenue = useMemo(() =>
+    (stats?.monthly ?? []).map(x => ({
+      month: new Date(Date.UTC(stats!.year, x.month - 1, 15)).toLocaleDateString("en-US", { month: "short", timeZone: "UTC" }),
+      delivered: x.delivered / 100,
+      booked: x.booked / 100,
+      paid: x.paid / 100,
+    })), [stats]);
 
   // Monthly Show Tracker
   const monthlyShows = useMemo(() => {
@@ -162,8 +174,9 @@ const RevenueTab = ({ adminPassword }: Props) => {
       const key = d.toLocaleDateString("en-US", { month: "short", year: "2-digit" });
       const count = cleanDeals.filter(deal => {
         if (!["booked", "completed"].includes(deal.stage)) return false;
-        const ed = deal.event_date ? new Date(deal.event_date) : new Date(deal.created_at);
-        return ed.getMonth() === d.getMonth() && ed.getFullYear() === d.getFullYear();
+        if (!deal.event_date) return false; // by show date only
+        const [y, mo] = deal.event_date.split("-").map(Number);
+        return mo - 1 === d.getMonth() && y === d.getFullYear();
       }).length;
       months.push({ month: key, shows: count });
     }
@@ -291,9 +304,9 @@ const RevenueTab = ({ adminPassword }: Props) => {
         <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-accent mb-4">Revenue Overview</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { icon: Calendar, label: "Booked Revenue", value: formatCurrency(revenueSummary.bookedTotal), sub: "Upcoming confirmed shows" },
-            { icon: CheckCircle, label: "Gross Revenue", value: formatCurrency(revenueSummary.completedTotal), sub: "Completed shows" },
-            { icon: TrendingUp, label: "Combined Total", value: formatCurrency(revenueSummary.bookedTotal + revenueSummary.completedTotal), sub: "Booked + Completed" },
+            { icon: Calendar, label: "Booked Ahead", value: formatCurrency(revenueSummary.bookedTotal), sub: "Upcoming shows this year" },
+            { icon: CheckCircle, label: "Delivered This Year", value: formatCurrency(revenueSummary.completedTotal), sub: "Completed shows, net paid" },
+            { icon: TrendingUp, label: "Total This Year", value: formatCurrency(stats?.totalThisYear ?? 0), sub: "Delivered + booked ahead" },
             { icon: DollarSign, label: "Avg Deal Value", value: formatCurrency(revenueSummary.avgDeal), sub: `${revenueSummary.totalDeals} total deals` },
           ].map(stat => (
             <div key={stat.label} className="border border-border p-4">
@@ -454,6 +467,21 @@ const RevenueTab = ({ adminPassword }: Props) => {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Monthly Revenue by show date */}
+      <div className="border border-border p-6">
+        <h3 className="font-sans text-xs tracking-[0.2em] uppercase text-accent mb-1">Revenue by Show Month</h3>
+        <p className="font-sans text-[10px] text-muted-foreground mb-4">Delivered and booked value for {stats?.year ?? "this year"}, by event date</p>
+        <ResponsiveContainer width="100%" height={240}>
+          <BarChart data={monthlyRevenue}>
+            <XAxis dataKey="month" tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />
+            <YAxis tick={{ fontSize: 10 }} stroke="hsl(var(--muted-foreground))" />
+            <Tooltip formatter={(v: number) => `$${Math.round(v).toLocaleString()}`} contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", fontSize: 12 }} />
+            <Bar dataKey="delivered" stackId="r" fill="hsl(var(--accent))" name="Delivered" />
+            <Bar dataKey="booked" stackId="r" fill="hsl(var(--muted-foreground))" name="Booked" radius={[2, 2, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
 
       {/* Monthly Show Tracker */}
