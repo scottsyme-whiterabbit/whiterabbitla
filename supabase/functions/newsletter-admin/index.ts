@@ -6,6 +6,7 @@ import { lostReasonError } from "../_shared/lost-reason.ts";
 import { isAdminRequest } from "../_shared/require-admin.ts";
 import { computeRevenueStats, dealsToAutoBook } from "./revenue-stats.ts";
 import { eventDateRangeError } from "./event-date-range.ts";
+import { sentEmails, upcomingEmails } from "./email-timeline.ts";
 import { BookingPaymentError, normalizeBookingPayment, manualInvoiceFields, type BookingPayment } from "./manual-booking.ts";
 
 const corsHeaders = {
@@ -1188,6 +1189,19 @@ serve(async (req) => {
         return new Response(JSON.stringify({ success: true }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
+      }
+
+      case "get_email_timeline": {
+        const dealId = String(payload.dealId || "");
+        if (!/^[0-9a-f-]{36}$/i.test(dealId)) return new Response(JSON.stringify({ error: "dealId required" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        const [sent, upcoming] = await Promise.all([sentEmails(supabase, dealId), upcomingEmails(supabase, { dealId, horizonDays: 120 })]);
+        return new Response(JSON.stringify({ sent, upcoming }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+
+      case "get_email_schedule": {
+        const days = Math.min(Math.max(Number(payload.days) || 30, 1), 120);
+        const upcoming = await upcomingEmails(supabase, { horizonDays: days });
+        return new Response(JSON.stringify({ upcoming, days }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
 
       case "get_revenue_stats": {

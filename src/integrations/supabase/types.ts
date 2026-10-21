@@ -1132,6 +1132,69 @@ export type Database = {
         }
         Relationships: []
       }
+      email_log: {
+        Row: {
+          approximate_time: boolean
+          backfilled: boolean
+          block_reason: string | null
+          created_at: string
+          deal_id: string | null
+          dedupe_key: string | null
+          delivery_status: string | null
+          email_type: string
+          id: string
+          label: string | null
+          metadata: Json
+          provider: string
+          provider_message_id: string | null
+          recipient: string
+          sent_at: string
+          source: string
+          status: string
+          subject: string | null
+        }
+        Insert: {
+          approximate_time?: boolean
+          backfilled?: boolean
+          block_reason?: string | null
+          created_at?: string
+          deal_id?: string | null
+          dedupe_key?: string | null
+          delivery_status?: string | null
+          email_type?: string
+          id?: string
+          label?: string | null
+          metadata?: Json
+          provider?: string
+          provider_message_id?: string | null
+          recipient: string
+          sent_at?: string
+          source?: string
+          status?: string
+          subject?: string | null
+        }
+        Update: {
+          approximate_time?: boolean
+          backfilled?: boolean
+          block_reason?: string | null
+          created_at?: string
+          deal_id?: string | null
+          dedupe_key?: string | null
+          delivery_status?: string | null
+          email_type?: string
+          id?: string
+          label?: string | null
+          metadata?: Json
+          provider?: string
+          provider_message_id?: string | null
+          recipient?: string
+          sent_at?: string
+          source?: string
+          status?: string
+          subject?: string | null
+        }
+        Relationships: []
+      }
       email_suppression_list: {
         Row: {
           email: string

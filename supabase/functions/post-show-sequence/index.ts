@@ -22,7 +22,7 @@ const OPEN_TRACK_URL = "https://pgjyzayvkyrftcksvncj.supabase.co/functions/v1/tr
 
 // Two step core. Step 0: 1 day after post_show_started_at.
 // Step 1: 21 days after post_show_last_sent_at (falls back to post_show_started_at).
-const POST_SHOW_SCHEDULE = [1, 21];
+import { POST_SHOW_SCHEDULE, postShowDue } from "../_shared/email-schedule.ts";
 
 // Holiday copy is being rewritten; Phase 2 must not send until this is true.
 const HOLIDAY_PHASE_ENABLED = false;
@@ -417,11 +417,8 @@ serve(async (req) => {
 
           const currentStep = deal.post_show_step;
           // Step 0 measures from the start; later steps measure from the previous send.
-          const anchor = currentStep === 0
-            ? startedAt
-            : (deal.post_show_last_sent_at ? new Date(deal.post_show_last_sent_at) : startedAt);
-          const daysSinceAnchor = (now.getTime() - anchor.getTime()) / (1000 * 60 * 60 * 24);
-          if (daysSinceAnchor < POST_SHOW_SCHEDULE[currentStep]) continue;
+          // Shared pure rule, also used by the admin email schedule preview.
+          if (!postShowDue({ ...deal, stage: "completed", post_show_started_at: startedAt.toISOString() }, now.getTime())) continue;
 
           let subject: string;
           let html: string;
