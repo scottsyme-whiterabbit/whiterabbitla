@@ -1,8 +1,8 @@
 // Daily invoice reminder engine.
 // 1) Unpaid invoices: up to 4 reminders, one per day, until the deposit or the
 //    full amount is paid.
-// 2) Deposit-paid invoices: 3 balance reminders before the event
-//    (21, 10 and 3 days out).
+// 2) Deposit-paid invoices: 3 balance reminders, 7 days out, 2 days out, and the
+//    day of the event, only while the balance is unpaid, at least 20 hours apart.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import {
   type Invoice, anticipationEmail, balanceReminderEmail, reminderEmail, sendEmail,
@@ -19,7 +19,7 @@ const supabase = createClient(
 );
 
 const MAX_INITIAL_REMINDERS = 4;
-const BALANCE_DAYS_OUT = [7, 3, 0];
+const BALANCE_DAYS_OUT = [7, 2, 0];
 const MIN_HOURS_BETWEEN = 20;
 
 const hoursSince = (ts: string | null) =>

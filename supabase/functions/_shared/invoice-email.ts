@@ -120,7 +120,7 @@ export function balanceReminderEmail(inv: Invoice, daysOut: number) {
   const name = inv.client_name?.split(" ")[0] || "there";
   const lead =
     daysOut <= 0
-      ? `Your event is today, and the remaining balance of <strong>${money(balanceCents(inv))}</strong> is due.`
+      ? `A gentle reminder that the remaining balance of <strong>${money(balanceCents(inv))}</strong> is due before this evening's performance.`
       : `We're ${daysOut} ${daysOut === 1 ? "day" : "days"} out. The remaining balance of <strong>${money(balanceCents(inv))}</strong> is due before the performance.`;
   const body = `<p>${esc(name)},</p>
   <p>${lead}</p>
@@ -128,7 +128,7 @@ export function balanceReminderEmail(inv: Invoice, daysOut: number) {
   <p>Paid to date: ${money(inv.amount_paid_cents || 0)}. Everything else is handled on my end.</p>`;
   return {
     subject: daysOut <= 0
-      ? `Balance due today for ${inv.tier_name || "your evening"}`
+      ? `A gentle reminder for this evening`
       : `Balance due for ${eventDateForClient(inv.event_date) || inv.tier_name || "your evening"}`,
     html: emailShell(body, payUrl(inv), "Pay balance"),
   };
