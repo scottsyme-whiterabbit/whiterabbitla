@@ -1,4 +1,5 @@
-import EmailTimeline from "@/components/admin/EmailTimeline";
+import EmailTimeline, { type EmailTimelineData } from "@/components/admin/EmailTimeline";
+import { Button } from "@/components/ui/button";
 import { invoiceMoneyFlags } from "@/lib/invoiceMoneyFlag";
 import { useBookingPayment } from "@/components/admin/BookingPaymentModal";
 import { type BookingPayment } from "@/lib/manualBooking";
@@ -224,7 +225,7 @@ interface Props {
   adminPassword?: string;
 }
 
-const folderBtn = "flex items-center justify-center sm:justify-start gap-1.5 px-3 min-h-[44px] font-sans text-[11px] tracking-[0.12em] uppercase border transition-colors";
+const folderBtn = "flex items-center justify-center sm:justify-start gap-1.5 px-2 py-2 h-auto min-h-[44px] min-w-0 whitespace-normal rounded-none font-sans text-[11px] tracking-[0.12em] uppercase border transition-colors";
 const smallBtn = "inline-flex items-center gap-1.5 min-h-[40px] font-sans text-[11px] tracking-[0.1em] uppercase transition-colors";
 
 const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Props) => {
@@ -251,6 +252,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
   const [editForm, setEditForm] = useState<Record<string, string>>({});
   const [editInitial, setEditInitial] = useState<Record<string, string>>({});
   const [activity, setActivity] = useState<ActivityRow[]>([]);
+  const [timeline, setTimeline] = useState<{ dealId: string; data: EmailTimelineData } | null>(null);
   const [logForm, setLogForm] = useState<"call" | "note" | null>(null);
   const [callOutcome, setCallOutcome] = useState<string | null>(null);
   const [logText, setLogText] = useState("");
@@ -273,6 +275,17 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
     if (!res.ok) throw new Error(data.error || "Request failed");
     return data;
   }, []);
+
+  useEffect(() => {
+    if (!open || !deal?.id) return;
+    let live = true;
+    const dealId = deal.id;
+    setTimeline(null);
+    callAdmin("get_email_timeline", { dealId }).then((data: EmailTimelineData) => {
+      if (live) setTimeline({ dealId, data });
+    }).catch(() => {});
+    return () => { live = false; };
+  }, [open, deal?.id, callAdmin]);
 
   const { requestBookingPayment, bookingModal } = useBookingPayment(callAdmin);
   const [editPayment, setEditPayment] = useState<BookingPayment | null>(null);
@@ -646,7 +659,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
   const TABS: { key: TabKey; label: string; icon: typeof Mail; count?: number }[] = [
     ...(deal ? [{ key: "activity" as TabKey, label: "Activity", icon: History, count: activity.length }] : []),
     { key: "payments", label: "Payments", icon: BadgeDollarSign, count: invoices.length },
-    { key: "email", label: "Email activity", icon: CalendarClock, count: emailActivity.sent.length },
+    { key: "email", label: "Emails", icon: CalendarClock, count: deal ? (timeline?.dealId === deal.id ? timeline.data.sent.length + timeline.data.upcoming.length : undefined) : emailActivity.sent.length + emailActivity.next.length },
     { key: "documents", label: "Documents", icon: FileSignature, count: agreements.length },
     ...(deal ? [{ key: "correspondence" as TabKey, label: "Correspondence", icon: Mail, count: messages.length }] : []),
     { key: "proposal", label: "Proposal", icon: FileText, count: proposals.length },
@@ -827,14 +840,14 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
                 const Icon = t.icon;
                 const active = tab === t.key;
                 return (
-                  <button
+                  <Button variant="outline"
                     key={t.key}
                     onClick={() => setTab(active ? null : t.key)}
                     className={`${folderBtn} ${active ? "border-accent text-accent bg-accent/5" : "border-border text-muted-foreground hover:text-foreground"}`}
                   >
-                    <Icon size={14} /> <span className="truncate">{t.label}</span>
-                    {t.count ? <span className="text-[10px] opacity-70">({t.count})</span> : null}
-                  </button>
+                    <Icon size={14} className="shrink-0" /> <span className="min-w-0 break-words leading-relaxed">{t.label}</span>
+                    {t.count !== undefined ? <span className="text-[10px] opacity-70 shrink-0">({t.count})</span> : null}
+                  </Button>
                 );
               })}
             </div>
@@ -970,8 +983,8 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
             {/* EMAIL ACTIVITY */}
             {tab === "email" && (
               <section className="space-y-4">
-                <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent flex items-center gap-1.5"><CalendarClock size={12} /> Email activity</p>
-                {deal && <EmailTimeline dealId={deal.id} callAdmin={callAdmin} />}
+                <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent flex items-center gap-1.5"><CalendarClock size={12} /> Emails</p>
+                {deal && <EmailTimeline dealId={deal.id} callAdmin={callAdmin} loadedData={timeline?.dealId === deal.id ? timeline.data : null} />}
 
                 <div className="border border-border p-3">
                   <p className="text-[9px] tracking-[0.1em] uppercase text-muted-foreground mb-2">Scheduled next</p>
