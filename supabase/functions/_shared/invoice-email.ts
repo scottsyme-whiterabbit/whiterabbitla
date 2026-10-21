@@ -1,3 +1,4 @@
+import { gatedSend } from "./send-gate.ts";
 // Shared helpers for White Rabbit LA event invoices: money math, brand-styled
 // email templates, and Resend delivery.
 
@@ -193,11 +194,10 @@ export function paymentFailedEmail(inv: Invoice) {
 export async function sendEmail(to: string, subject: string, html: string) {
   const key = Deno.env.get("RESEND_API_KEY");
   if (!key || !to) return false;
-  const res = await fetch("https://api.resend.com/emails", {
+  const result = await gatedSend({ to, subject, label: "_shared" }, (to, subject) => fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
     body: JSON.stringify({ from: FROM, to: [to], subject, html, reply_to: REPLY_TO }),
-  });
-  if (!res.ok) console.error("Resend failed", res.status, await res.text().catch(() => ""));
-  return res.ok;
+  }));
+  return result.sent;
 }

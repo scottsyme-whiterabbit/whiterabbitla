@@ -2,6 +2,7 @@
 // Three emails on a sent-but-unsigned proposal: day 2, day 5, day 7 (the day
 // the seven-day hold lapses). Modelled on invoice-reminders.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { gatedSend } from "../_shared/send-gate.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -241,7 +242,7 @@ whiterabbitla.com`;
 async function sendEmail(to: string, subject: string, html: string, text: string) {
   const key = Deno.env.get("RESEND_API_KEY");
   if (!key || !to) return false;
-  const res = await fetch("https://api.resend.com/emails", {
+  const result = await gatedSend({ to, subject, label: "proposal-followup" }, (to, subject) => fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -256,9 +257,8 @@ async function sendEmail(to: string, subject: string, html: string, text: string
         "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
       },
     }),
-  });
-  if (!res.ok) console.error("Resend failed", res.status, await res.text().catch(() => ""));
-  return res.ok;
+  }));
+  return result.sent;
 }
 
 Deno.serve(async (req) => {
