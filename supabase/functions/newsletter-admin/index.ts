@@ -4,6 +4,8 @@ import { INACTIVE_INVOICE_STATUS_FILTER } from "../_shared/invoice-status.ts";
 import { safeErrorPayload } from "../_shared/safe-error.ts";
 import { lostReasonError } from "../_shared/lost-reason.ts";
 import { isAdminRequest } from "../_shared/require-admin.ts";
+import { computeRevenueStats, dealsToAutoBook } from "./revenue-stats.ts";
+import { eventDateRangeError } from "./event-date-range.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -411,6 +413,51 @@ async function ensureBookedClientEmails(supabase: any, dealId: string) {
   }
 }
 
+
+// Read-time auto-stage, display safe: an open deal with a signed agreement or
+// money received is moved to booked. This never calls ensureBookedClientEmails
+// or the calendar sync, so no email or invite can come from it. Each change is
+// written to deal_activity (type auto_stage). Booked deals whose date passed
+// are only flagged, never auto-completed.
+async function loadRevenueInputs(supabase: any) {
+  const [dealsRes, invRes, agrRes] = await Promise.all([
+    supabase.from("deals").select("id, contact_name, stage, event_date, deal_value, source").limit(10000),
+    supabase.from("event_invoices").select("*").limit(10000),
+    supabase.from("signed_agreements").select("deal_id").not("deal_id", "is", null).limit(10000),
+  ]);
+  const err = dealsRes.error || invRes.error || agrRes.error;
+  if (err) throw err;
+  return { deals: dealsRes.data || [], invoices: invRes.data || [], agreements: agrRes.data || [] };
+}
+
+async function autoBookPaidDeals(supabase: any, inputs?: Awaited<ReturnType<typeof loadRevenueInputs>>) {
+  try {
+    const { deals, invoices, agreements } = inputs || await loadRevenueInputs(supabase);
+    const ids = dealsToAutoBook(deals, invoices, agreements);
+    const changed: string[] = [];
+    for (const id of ids) {
+      const before = deals.find((d: any) => d.id === id)?.stage;
+      const { data } = await supabase.from("deals").update({ stage: "booked" })
+        .eq("id", id).in("stage", ["new", "contacted", "proposal_sent", "negotiating"]).select("id");
+      if (!data?.length) continue;
+      changed.push(id);
+      const row = deals.find((d: any) => d.id === id);
+      if (row) row.stage = "booked";
+      await supabase.from("deal_activity").insert({
+        deal_id: id,
+        type: "auto_stage",
+        title: "Moved to Booked automatically",
+        body: `Was ${before}. This deal has a signed agreement or a payment on record.`,
+        metadata: { from: before, to: "booked", rule: "signed_or_paid" },
+        occurred_at: new Date().toISOString(),
+      });
+    }
+    return changed;
+  } catch (e) {
+    console.error("[auto-stage] failed:", e);
+    return [];
+  }
+}
 
 /* ==========================================================================
    "Still interested?" re-engagement email.
@@ -920,6 +967,7 @@ serve(async (req) => {
       }
 
       case "get_deals": {
+        await autoBookPaidDeals(supabase);
         const { data, error } = await supabase
           .from("deals")
           .select("*")
@@ -932,6 +980,8 @@ serve(async (req) => {
 
       case "create_deal": {
         const { deal } = payload;
+        const createDateError = eventDateRangeError(deal?.event_date);
+        if (createDateError) return new Response(JSON.stringify({ error: createDateError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
         const reasonError = lostReasonError(deal?.stage, deal?.lost_reason);
         if (reasonError) return new Response(JSON.stringify({ error: reasonError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
            const { data, error } = await supabase
@@ -1010,6 +1060,10 @@ serve(async (req) => {
               if (typeof v !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(v) || isNaN(Date.parse(v))) {
                 return json({ error: `${key} must be a date in YYYY-MM-DD format` }, 400);
               }
+              if (key === "event_date") {
+                const rangeError = eventDateRangeError(v);
+                if (rangeError) return json({ error: rangeError }, 400);
+              }
             }
             if (key === "stage") {
               if (v === null || !STAGES.includes(String(v))) {
@@ -1034,6 +1088,8 @@ serve(async (req) => {
           return json({ ok: true, deal: data });
         }
         const { deal } = payload;
+        const updateDateError = eventDateRangeError(deal?.event_date);
+        if (updateDateError) return new Response(JSON.stringify({ error: updateDateError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
         const reasonError = lostReasonError(deal?.stage, deal?.lost_reason);
         if (reasonError) return new Response(JSON.stringify({ error: reasonError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
         const { data, error } = await supabase
@@ -1134,8 +1190,21 @@ serve(async (req) => {
         });
       }
 
+      case "get_revenue_stats": {
+        const inputs = await loadRevenueInputs(supabase);
+        const autoBooked = await autoBookPaidDeals(supabase, inputs);
+        const stats = computeRevenueStats(inputs.deals, inputs.invoices, inputs.agreements);
+        return new Response(JSON.stringify({ ...stats, autoBooked }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
       case "update_deal_stage": {
         const { dealId, stage, lost_reason } = payload;
+        if ("event_date" in payload) {
+          const stageDateError = eventDateRangeError(payload.event_date);
+          if (stageDateError) return new Response(JSON.stringify({ error: stageDateError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        }
         const reasonError = lostReasonError(stage, lost_reason);
         if (reasonError) return new Response(JSON.stringify({ error: reasonError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
         const { error } = await supabase
