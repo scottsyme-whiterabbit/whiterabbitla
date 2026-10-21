@@ -1,6 +1,6 @@
 // Visible badge for Stripe refunds and disputes on a deal's invoice.
 export type MoneyFlagInvoice = { status?: string | null; refunded_cents?: number | null; dispute_status?: string | null; dispute_amount_cents?: number | null };
-const usd = (c: number) => (c / 100).toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
+const usd = (c: number) => (c / 100).toLocaleString("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0, maximumFractionDigits: 2 });
 
 export function invoiceMoneyFlags(inv: MoneyFlagInvoice): string[] {
   const flags: string[] = [];
