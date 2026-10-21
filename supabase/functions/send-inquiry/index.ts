@@ -1,4 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { gatedSend } from "../_shared/send-gate.ts";
+import { eventDateForAlert, eventDateIso, parseEventDate } from "../_shared/event-date.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { CALENDAR_URL, inquiryFirstName } from "../_shared/inquiry-email.ts";
 
@@ -105,12 +107,15 @@ serve(async (req) => {
             html: fbHtml,
           };
           if (fbEmail) fbPayload.reply_to = fbEmail;
-          const fbResponse = await fetch("https://api.resend.com/emails", {
-            method: "POST",
-            headers: { "Content-Type": "application/json", Authorization: `Bearer ${fbResendKey}` },
-            body: JSON.stringify(fbPayload),
-          });
-          if (!fbResponse.ok) console.error("Resend feedback notification error:", await fbResponse.text());
+          const fbResult = await gatedSend(
+            { to: "scott.syme@whiterabbitla.com", subject: fbPayload.subject, label: "private-feedback" },
+            (to, subject) => fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${fbResendKey}` },
+              body: JSON.stringify({ ...fbPayload, to: [to], subject }),
+            }),
+          );
+          if (!fbResult.sent) console.error("Resend feedback notification not sent:", fbResult.reason);
         } catch (fbSendError) {
           console.error("Resend feedback notification failed:", fbSendError);
         }
@@ -146,7 +151,7 @@ serve(async (req) => {
         <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Phone</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(phone || "N/A")}</td></tr>
         <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Client Type</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(clientType || "Not specified")}</td></tr>
         <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Event Type</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(eventType)}</td></tr>
-        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Date</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(date)}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Date</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(eventDateForAlert(date))}${parseEventDate(date) ? "" : ` (they wrote: ${escapeHtml(date)})`}</td></tr>
         <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Guest Count</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(guestCount || "Not specified")}</td></tr>
         <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Budget</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(budget || "Not specified")}</td></tr>
         <tr><td style="padding:8px;font-weight:bold;border-bottom:1px solid #eee;">Location</td><td style="padding:8px;border-bottom:1px solid #eee;">${escapeHtml(location)}</td></tr>
@@ -295,10 +300,8 @@ serve(async (req) => {
         // Safely parse event_date — accept ISO/parseable strings only, else null
         let parsedEventDate: string | null = null;
         if (date) {
-          const d = new Date(date);
-          if (!isNaN(d.getTime())) {
-            parsedEventDate = d.toISOString().slice(0, 10);
-          }
+          const d = parseEventDate(date);
+          if (d) parsedEventDate = eventDateIso(d);
         }
         const notesWithDate = parsedEventDate
           ? message
@@ -325,18 +328,21 @@ serve(async (req) => {
 
     if (RESEND_API_KEY) {
       try {
-        const notificationResponse = await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
-          body: JSON.stringify({
-            from: "White Rabbit <scott.syme@whiterabbitla.com>",
-            to: ["scott.syme@whiterabbitla.com"],
-            subject: `Booking Inquiry: ${name} (${eventType})`,
-            html: emailHtml,
-            reply_to: email,
+        const notification = await gatedSend(
+          { to: "scott.syme@whiterabbitla.com", subject: `Booking Inquiry: ${name} (${eventType})`, label: "inquiry-notification", supabase },
+          (to, subject) => fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
+            body: JSON.stringify({
+              from: "White Rabbit <scott.syme@whiterabbitla.com>",
+              to: [to],
+              subject,
+              html: emailHtml,
+              reply_to: email,
+            }),
           }),
-        });
-        if (!notificationResponse.ok) console.error("Resend notification error:", await notificationResponse.text());
+        );
+        if (!notification.sent) console.error("Resend notification not sent:", notification.reason);
       } catch (notificationError) {
         console.error("Resend notification failed:", notificationError);
       }
@@ -362,6 +368,13 @@ serve(async (req) => {
           }),
         });
         const gmailData = await gmailResponse.json().catch(() => ({}));
+        // Blocked by the send gate (suppressed, unsubscribed, bounced, invalid):
+        // do not fall back to Resend either.
+        if (gmailResponse.status === 422 && gmailData.reason) {
+          console.warn("Instant reply blocked by send gate:", gmailData.reason);
+          gmailSent = true; // nothing further to attempt; no instant_reply_sent_at is written
+          throw new Error(`blocked: ${gmailData.reason}`);
+        }
         if (!gmailResponse.ok || !gmailData.message_id) throw new Error(gmailData.error || `Gmail send ${gmailResponse.status}`);
         gmailSent = true;
         if (supabase && inquiryId) {
@@ -388,18 +401,21 @@ serve(async (req) => {
     if (!gmailSent) {
       if (RESEND_API_KEY) {
         try {
-          const fallbackResponse = await fetch("https://api.resend.com/emails", {
-            method: "POST",
-            headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
-            body: JSON.stringify({
-              from: "White Rabbit <scott.syme@whiterabbitla.com>",
-              to: [email],
-              subject: confirmationSubject,
-              html: confirmationHtml,
-              text: confirmationText,
+          const fallback = await gatedSend(
+            { to: email, subject: confirmationSubject, label: "inquiry-instant-reply-fallback", supabase },
+            (to, subject) => fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
+              body: JSON.stringify({
+                from: "White Rabbit <scott.syme@whiterabbitla.com>",
+                to: [to],
+                subject,
+                html: confirmationHtml,
+                text: confirmationText,
+              }),
             }),
-          });
-          if (!fallbackResponse.ok) console.error("Resend confirmation fallback error:", await fallbackResponse.text());
+          );
+          if (!fallback.sent) console.error("Resend confirmation fallback not sent:", fallback.reason);
           else if (supabase && inquiryId) {
             const { error: fallbackUpdateError } = await supabase.from("contact_inquiries").update({
               instant_reply_sent_at: new Date().toISOString(),

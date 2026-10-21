@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { gatedResendFetch } from "../_shared/send-gate.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
@@ -441,7 +442,7 @@ serve(async (req) => {
             .select("id");
           if (!claimed || claimed.length === 0) continue;
 
-          const resendRes = await fetch("https://api.resend.com/emails", {
+          const resendRes = await gatedResendFetch("https://api.resend.com/emails", {
             method: "POST",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
             body: JSON.stringify({
@@ -496,7 +497,7 @@ serve(async (req) => {
 
         const holidayEmail = buildHolidayEmail(deal as Deal, upcomingHoliday);
 
-        const resendRes = await fetch("https://api.resend.com/emails", {
+        const resendRes = await gatedResendFetch("https://api.resend.com/emails", {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${RESEND_API_KEY}` },
           body: JSON.stringify({

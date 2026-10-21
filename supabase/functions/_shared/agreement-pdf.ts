@@ -1,4 +1,5 @@
 import { type Invoice, money } from "./invoice-email.ts";
+import { eventDateForClient } from "./event-date.ts";
 
 /** Render the signed agreement to a PDF. Returns base64, or null on any failure. */
 export async function buildAgreementPdf(inv: Invoice, agreementText: string): Promise<string | null> {
@@ -46,7 +47,7 @@ export async function buildAgreementPdf(inv: Invoice, agreementText: string): Pr
     const meta = [
       `Client: ${inv.client_name || "-"}`,
       `Event: ${inv.event_type || "-"}`,
-      `Date: ${inv.event_date || "-"}`,
+      `Date: ${eventDateForClient(inv.event_date) || "-"}`,
       `Venue: ${inv.venue || "-"}`,
       `Experience: ${inv.tier_name || "-"}`,
       `Total: ${money(inv.total_cents)}`,

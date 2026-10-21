@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { blockReason } from "../_shared/send-gate.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { CALENDAR_URL, inquiryFirstName, withinPacificSendHours } from "../_shared/inquiry-email.ts";
 
@@ -77,6 +78,8 @@ serve(async (req) => {
       try {
         const { data: unsubscribed } = await supabase.from("email_unsubscribes").select("id").ilike("email", email).limit(1);
         if (unsubscribed?.length) { skip("unsubscribed"); continue; }
+        const blocked = await blockReason(email, supabase);
+        if (blocked) { skip(blocked); continue; }
         const { data: inbound } = await supabase.from("deal_email_messages").select("id").eq("direction", "inbound").ilike("from_email", email).gt("sent_at", inquiry.created_at).limit(1);
         if (inbound?.length) { skip("client_replied"); continue; }
 

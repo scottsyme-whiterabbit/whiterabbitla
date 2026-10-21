@@ -2,6 +2,8 @@
 // Three emails on a sent-but-unsigned proposal: day 2, day 5, day 7 (the day
 // the seven-day hold lapses). Modelled on invoice-reminders.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { eventDateForClient, parseEventDate as sharedParseEventDate } from "../_shared/event-date.ts";
+import { gatedSend } from "../_shared/send-gate.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -49,13 +51,9 @@ const daysSince = (ts: string | null) =>
 
 /** Lenient date parse. Returns null when unusable (free-text like "Sept 19 or 26"). */
 const parseEventDate = (raw: string | null): Date | null => {
-  if (!raw) return null;
-  const cleaned = raw.trim();
-  if (/\bor\b|\//.test(cleaned) && !/^\d{4}-\d{2}-\d{2}$/.test(cleaned)) {
-    if (/\bor\b/i.test(cleaned)) return null;
-  }
-  const d = new Date(/^\d{4}-\d{2}-\d{2}$/.test(cleaned) ? `${cleaned}T12:00:00Z` : cleaned);
-  return isFinite(d.getTime()) ? d : null;
+  // Shared Pacific calendar-date parser; end of that day so today is not "past".
+  const d = sharedParseEventDate(raw);
+  return d ? new Date(Date.UTC(d.year, d.month - 1, d.day + 1, 8)) : null;
 };
 
 const firstNameOf = (p: { first_name?: string | null }) =>
@@ -152,7 +150,7 @@ function buildEmail(prop: Proposal, step: 1 | 2 | 3) {
   const name = firstNameOf(prop);
   const nameE = esc(name);
   const url = `${SITE_URL}/proposal/${prop.slug}`;
-  const eventDate = prop.event_date || "your date";
+  const eventDate = eventDateForClient(prop.event_date) || "your date";
 
   if (step === 1) {
     const sentDate = fmtDate(prop.sent_at);
@@ -241,7 +239,7 @@ whiterabbitla.com`;
 async function sendEmail(to: string, subject: string, html: string, text: string) {
   const key = Deno.env.get("RESEND_API_KEY");
   if (!key || !to) return false;
-  const res = await fetch("https://api.resend.com/emails", {
+  const result = await gatedSend({ to, subject, label: "proposal-followup" }, (to, subject) => fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -256,9 +254,8 @@ async function sendEmail(to: string, subject: string, html: string, text: string
         "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
       },
     }),
-  });
-  if (!res.ok) console.error("Resend failed", res.status, await res.text().catch(() => ""));
-  return res.ok;
+  }));
+  return result.sent;
 }
 
 Deno.serve(async (req) => {

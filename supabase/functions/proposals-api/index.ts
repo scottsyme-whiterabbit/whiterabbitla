@@ -1,4 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { gatedResendFetch } from "../_shared/send-gate.ts";
+import { eventDateForAlert, eventDateForClient, eventDateIso, parseEventDate } from "../_shared/event-date.ts";
 import {
   type Invoice,
   depositCents,
@@ -81,7 +83,7 @@ async function sendHoldExtensionEmail(opts: {
 }): Promise<boolean> {
   if (!RESEND_API_KEY || !opts.to) return false;
   const { to, firstName, holdUntil } = opts;
-  const eventDate = opts.eventDate || "your date";
+  const eventDate = eventDateForClient(opts.eventDate) || "your date";
   const through = holdLongDate(holdUntil);
   const subject = `${firstName}, your date is held through ${holdShortDate(holdUntil)}`;
 
@@ -133,7 +135,7 @@ Magician
 (424) 394-1850
 whiterabbitla.com`;
 
-  const res = await fetch("https://api.resend.com/emails", {
+  const res = await gatedResendFetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -192,7 +194,8 @@ const signDetailsBlock = (inv: Invoice) => {
   const rows: string[] = [];
   if (inv.tier_name) rows.push(`<strong>Experience:</strong> ${esc(inv.tier_name)}`);
   if (inv.event_type) rows.push(`<strong>Occasion:</strong> ${esc(inv.event_type)}`);
-  if (inv.event_date) rows.push(`<strong>Date:</strong> ${esc(inv.event_date)}`);
+  const shownDate = eventDateForClient(inv.event_date);
+  if (shownDate) rows.push(`<strong>Date:</strong> ${esc(shownDate)}`);
   if (inv.venue) rows.push(`<strong>Venue:</strong> ${esc(inv.venue)}`);
   rows.push(`<strong>Total:</strong> ${money(inv.total_cents)}`);
   return `<div style="background:#ffffff;border:1px solid #e3ddd3;padding:20px 22px;margin:24px 0;font-family:Montserrat,Arial,sans-serif;font-size:14px;line-height:1.9;">
@@ -241,7 +244,7 @@ async function notifyProposalView(p: any, ua: string, lastViewedAt: string | nul
   const link = `https://whiterabbitla.com/proposal/${p.slug}`;
   const rows = [
     p.event_type ? `<strong>Occasion:</strong> ${esc(p.event_type)}` : "",
-    p.event_date ? `<strong>Date:</strong> ${esc(p.event_date)}` : "",
+    p.event_date ? `<strong>Date:</strong> ${esc(eventDateForAlert(p.event_date))}` : "",
     p.venue ? `<strong>Venue:</strong> ${esc(p.venue)}` : "",
     p.recipient_email ? `<strong>Email:</strong> ${esc(p.recipient_email)}` : "",
   ].filter(Boolean).join("<br/>");
@@ -260,7 +263,7 @@ async function notifyProposalView(p: any, ua: string, lastViewedAt: string | nul
     </div>
   </div>`;
   try {
-    await fetch("https://api.resend.com/emails", {
+    await gatedResendFetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -473,8 +476,8 @@ Deno.serve(async (req) => {
           const payToken = crypto.randomUUID().replace(/-/g, "").slice(0, 24);
           const isoDate = (() => {
             if (!event_date) return null;
-            const d = new Date(event_date);
-            return isFinite(d.getTime()) ? d.toISOString().slice(0, 10) : null;
+            const d = parseEventDate(event_date);
+            return d ? eventDateIso(d) : null;
           })();
           const { data: inv } = await supabase.from("event_invoices").insert({
             agreement_id: data.id,
@@ -527,7 +530,7 @@ Deno.serve(async (req) => {
         const subject = `Signed: ${tier_name} — ${client_name}`;
         const plain = `${client_name} just signed for the ${tier_name} option${tier_price ? ` (${tier_price})` : ""}.
 
-Event: ${event_type || "—"} on ${event_date || "—"}${venue ? ` at ${venue}` : ""}
+Event: ${event_type || "—"} on ${eventDateForAlert(event_date)}${venue ? ` at ${venue}` : ""}
 Client email: ${client_email || "—"}
 Signed at: ${new Date().toISOString()}
 
@@ -538,7 +541,7 @@ ${agreement_text}
 ${invoiceLink ? `Invoice sent automatically: ${invoiceLink}\nDaily reminders will run until the deposit or full amount is paid.` : "Invoice NOT auto-created — tier price could not be resolved from the stored proposal; create manually from the Payments tab."}`;
         const htmlBody = `<pre style="font-family:Georgia,serif;font-size:14px;line-height:1.6;white-space:pre-wrap;color:#223D34;background:#F8F5F0;padding:24px;border-radius:4px;">${plain.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</pre>`;
         try {
-          await fetch("https://api.resend.com/emails", {
+          await gatedResendFetch("https://api.resend.com/emails", {
             method: "POST",
             headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -572,7 +575,7 @@ ${invoiceLink ? `Invoice sent automatically: ${invoiceLink}\nDaily reminders wil
                 content: pdfB64,
               }];
             }
-            await fetch("https://api.resend.com/emails", {
+            await gatedResendFetch("https://api.resend.com/emails", {
               method: "POST",
               headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
               body: JSON.stringify(payload),
@@ -581,7 +584,7 @@ ${invoiceLink ? `Invoice sent automatically: ${invoiceLink}\nDaily reminders wil
         } else if (client_email) {
           // No invoice could be created — send the agreement copy on its own.
           try {
-            await fetch("https://api.resend.com/emails", {
+            await gatedResendFetch("https://api.resend.com/emails", {
               method: "POST",
               headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -755,8 +758,8 @@ White Rabbit LA`,
         if (data?.deal_id && (updates.event_date || updates.venue || updates.event_type)) {
           const dealPatch: Record<string, unknown> = {};
           if (updates.event_date) {
-            const d = new Date(updates.event_date);
-            if (!isNaN(d.getTime())) dealPatch.event_date = d.toISOString().slice(0, 10);
+            const d = parseEventDate(updates.event_date);
+            if (d) dealPatch.event_date = eventDateIso(d);
           }
           if (updates.venue) dealPatch.location = updates.venue;
           if (updates.event_type) dealPatch.event_type = updates.event_type;
@@ -943,7 +946,7 @@ Scott Syme
 White Rabbit LA — Luxury Magic
 (424) 394-1850 · whiterabbitla.com`;
 
-      const r = await fetch("https://api.resend.com/emails", {
+      const r = await gatedResendFetch("https://api.resend.com/emails", {
         method: "POST",
         headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1076,7 +1079,7 @@ View your proposal: ${link}
 —
 White Rabbit LA · 7393 W. Manchester Ave #209, Los Angeles, CA 90045`;
 
-      const r = await fetch("https://api.resend.com/emails", {
+      const r = await gatedResendFetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${RESEND_API_KEY}`,
@@ -1124,8 +1127,8 @@ White Rabbit LA · 7393 W. Manchester Ave #209, Los Angeles, CA 90045`;
             // Parse event_date (free-text) to a real date if possible
             let eventDate: string | null = null;
             if (prop.event_date) {
-              const d = new Date(prop.event_date);
-              if (!isNaN(d.getTime())) eventDate = d.toISOString().slice(0, 10);
+              const d = parseEventDate(prop.event_date);
+              if (d) eventDate = eventDateIso(d);
             }
             const { data: existing } = await supabase
               .from("deals")
