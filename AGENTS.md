@@ -11,3 +11,4 @@
 - Manual Booked transitions share BookingPaymentModal and the pure manual-booking validator; a read-only admin guard endpoint checks agreements and active invoices before prompting, and payment validation precedes deal writes to avoid false paid records.
 - Proposal event templates, event selectors and preview defaults resolve tiers through the shared pricing-set mapping and clone tier items, preventing stale duplicate prices and edits leaking into later presets.
 - Admin new-proposal description defaults derive from the event-filtered standard line catalog, without changing pricing presets or applying new defaults to saved proposals; optional lines are dropdown-only.
+- Stripe refund/dispute webhooks claim each event id in stripe_webhook_events and store absolute refund totals from the Charge, so retries and duplicate deliveries never double count; this path never writes to Stripe or emails clients.
