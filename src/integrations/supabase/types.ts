@@ -1215,6 +1215,8 @@ export type Database = {
           pending_alert_sent_at: string | null
           pending_session_id: string | null
           pending_since: string | null
+          refunded_at: string | null
+          refunded_cents: number
           sent_at: string | null
           status: string
           stripe_payment_intent_id: string | null
@@ -1252,6 +1254,8 @@ export type Database = {
           pending_alert_sent_at?: string | null
           pending_session_id?: string | null
           pending_since?: string | null
+          refunded_at?: string | null
+          refunded_cents?: number
           sent_at?: string | null
           status?: string
           stripe_payment_intent_id?: string | null
@@ -1289,6 +1293,8 @@ export type Database = {
           pending_alert_sent_at?: string | null
           pending_session_id?: string | null
           pending_since?: string | null
+          refunded_at?: string | null
+          refunded_cents?: number
           sent_at?: string | null
           status?: string
           stripe_payment_intent_id?: string | null
