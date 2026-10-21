@@ -28,6 +28,18 @@ export function emailTypeLabel(type: string): string {
   return type.replace(/_/g, " ");
 }
 
+/** Manual Gmail messages have no fixed type name, so their subject line is the title. */
+export const isManualGmail = (e: Pick<SentEmail, "email_type" | "provider">) =>
+  e.provider === "gmail" &&
+  (e.email_type === "crm_gmail" || e.email_type.startsWith("gmail/") || e.email_type.startsWith("manual"));
+
+/** Title of a sent row: subject for manual Gmail, otherwise the type label. */
+export function sentTitle(e: SentEmail): string {
+  const subject = (e.subject || "").trim();
+  if (isManualGmail(e) && subject) return subject;
+  return emailTypeLabel(e.email_type);
+}
+
 /** Status shown on a sent row: blocked and failed win over delivery events. */
 export function sentStatus(e: Pick<SentEmail, "status" | "block_reason" | "delivery_status">): string {
   if (e.status === "blocked") return `Blocked: ${(e.block_reason || "send gate").replace(/_/g, " ")}`;
