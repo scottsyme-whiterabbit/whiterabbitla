@@ -40,10 +40,10 @@ const EmailTimeline = ({ dealId, callAdmin, loadedData }: Props) => {
             {data.sent.map((e) => (
               <li key={e.id} className="p-3 text-sm space-y-1">
                 <div className="flex flex-wrap justify-between gap-2">
-                  <span className="text-foreground min-w-0 break-words">{emailTypeLabel(e.email_type)}</span>
+                  <span className="text-foreground min-w-0 break-words">{sentTitle(e)}</span>
                   <span className="text-[10px] uppercase tracking-[0.1em] text-muted-foreground">{sentStatus(e)}</span>
                 </div>
-                {e.subject && <p className="text-xs text-foreground/80 break-words">{e.subject}</p>}
+                {e.subject && sentTitle(e) !== e.subject.trim() && <p className="text-xs text-foreground/80 break-words">{e.subject}</p>}
                 <p className="text-xs text-muted-foreground break-all">
                   {e.recipient} · {e.provider === "gmail" ? "Gmail" : "Resend"} · {e.approximate_time ? "about " : ""}{fmtPacific(e.sent_at)}
                   {e.backfilled ? " · reconstructed" : ""}
