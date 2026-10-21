@@ -11,6 +11,7 @@ import AnalyticsTab from "@/components/AnalyticsTab";
 import PipelineTab from "@/components/PipelineTab";
 import ActionListTab from "@/components/ActionListTab";
 import RevenueTab from "@/components/RevenueTab";
+import EmailScheduleTab from "@/components/admin/EmailScheduleTab";
 import SubjectScorer from "@/components/SubjectScorer";
 // ColdCampaignsTab removed — consolidated into ColdDripCampaignTab with sub-selector
 import ColdDripCampaignTab from "@/components/ColdDripCampaignTab";
@@ -91,10 +92,10 @@ const AdminNewsletter = () => {
   const { password: storedPassword, authed: authenticated } = useAdminAuth();
 
 
-  const [activeTab, setActiveTab] = useState<"today" | "dashboard" | "pipeline" | "inbox" | "actions" | "followups" | "activity" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "email_analytics" | "planner" | "apartment" | "thankyou" | "cold" | "lead_attribution" | "castle" | "reengage">(() => {
+  const [activeTab, setActiveTab] = useState<"today" | "dashboard" | "pipeline" | "inbox" | "actions" | "followups" | "activity" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "email_analytics" | "planner" | "apartment" | "thankyou" | "cold" | "lead_attribution" | "castle" | "reengage" | "email_schedule">(() => {
     if (typeof window !== "undefined") {
       const t = new URLSearchParams(window.location.search).get("tab");
-      const allowed = ["today","reengage","dashboard","pipeline","inbox","actions","followups","activity","revenue","contacts","compose","campaigns","calendar","analytics","email_analytics","planner","apartment","thankyou","cold","lead_attribution","castle"];
+      const allowed = ["today","reengage","dashboard","pipeline","inbox","actions","followups","activity","revenue","contacts","compose","campaigns","calendar","analytics","email_analytics","planner","apartment","thankyou","cold","lead_attribution","castle","email_schedule"];
       if (t && allowed.includes(t)) return t as any;
     }
     return "today";
@@ -585,6 +586,7 @@ const AdminNewsletter = () => {
       label: "Money",
       tabs: [
         { key: "revenue", label: "Revenue & Payments" },
+        { key: "email_schedule", label: "Email schedule" },
       ],
     },
     {
@@ -847,6 +849,10 @@ const AdminNewsletter = () => {
         )}
 
         {/* Revenue */}
+        {activeTab === "email_schedule" && (
+          <EmailScheduleTab adminPassword={storedPassword} />
+        )}
+
         {activeTab === "revenue" && (
           <RevenueTab adminPassword={storedPassword} />
         )}

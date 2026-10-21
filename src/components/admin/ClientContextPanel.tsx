@@ -1,3 +1,4 @@
+import EmailTimeline from "@/components/admin/EmailTimeline";
 import { invoiceMoneyFlags } from "@/lib/invoiceMoneyFlag";
 import { useBookingPayment } from "@/components/admin/BookingPaymentModal";
 import { type BookingPayment } from "@/lib/manualBooking";
@@ -968,6 +969,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
             {tab === "email" && (
               <section className="space-y-4">
                 <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent flex items-center gap-1.5"><CalendarClock size={12} /> Email activity</p>
+                {deal && <EmailTimeline dealId={deal.id} callAdmin={callAdmin} />}
 
                 <div className="border border-border p-3">
                   <p className="text-[9px] tracking-[0.1em] uppercase text-muted-foreground mb-2">Scheduled next</p>
