@@ -50,6 +50,13 @@
       "when": 1792613462447,
       "tag": "0006_stripe_refunds_disputes",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1792614318792,
+      "tag": "0007_email_log",
+      "breakpoints": true
     }
   ]
 }
