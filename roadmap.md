@@ -38,3 +38,4 @@
 - AdminAuthProvider + AdminGate on /admin/newsletter, /admin/proposals, /admin/social.
 - Password path kept in memory only; biometric unlock removed (it persisted the password).
 - Phase 2 (remove password path) pending Scott's confirmation on laptop + phone.
+- [x] Payment wording 'before the performance' + invoice-reminders holiday shift
