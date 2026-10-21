@@ -4,6 +4,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { eventDateForClient, parseEventDate as sharedParseEventDate } from "../_shared/event-date.ts";
 import { gatedSend } from "../_shared/send-gate.ts";
+import { proposalFollowupDue } from "../_shared/email-schedule.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -366,24 +367,11 @@ Deno.serve(async (req) => {
         if (signedIds.has(prop.id)) { results.skipped++; continue; }
         if (blocked.has(email)) { results.skipped++; continue; }
         if (recentlyViewed.has(prop.id)) { results.skipped++; continue; }
-        if (hoursSince(prop.last_followup_at) < MIN_HOURS_BETWEEN) { results.skipped++; continue; }
-
+        // Shared pure rules: the admin email schedule preview uses the same check.
         const eventDate = parseEventDate(prop.event_date);
-        if (eventDate && eventDate.getTime() < Date.now()) { results.skipped++; continue; }
-
+        const due = proposalFollowupDue({ ...prop, event_end_ms: eventDate ? eventDate.getTime() : null }, Date.now());
+        if (!due) { results.skipped++; continue; }
         const step = prop.followup_step || 0;
-        const offset = FOLLOWUP_OFFSETS[step];
-        if (offset === undefined) { results.skipped++; continue; }
-        if (step === 2 && prop.hold_until) {
-          // Step 3 is the hold lapsing, so it keys off the real hold date,
-          // which Scott can move. Step 2 having gone out is implied by step === 2.
-          const today = new Date().toISOString().slice(0, 10);
-          if (prop.hold_until > today) { results.skipped++; continue; }
-        } else {
-          // Six hour tolerance: a proposal sent at 09:32 is due on the 09:00 run.
-          if (daysSince(prop.sent_at) < offset - 0.25) { results.skipped++; continue; }
-        }
-
         const next = (step + 1) as 1 | 2 | 3;
         const { subject, html, text } = buildEmail(prop, next);
 

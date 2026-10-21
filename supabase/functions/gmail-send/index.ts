@@ -4,7 +4,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 import { isAdminRequest } from "../_shared/require-admin.ts";
-import { blockReason, cleanHeader, readProviderResponse } from "../_shared/send-gate.ts";
+import { blockReason, cleanHeader, logEmail, readProviderResponse } from "../_shared/send-gate.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -180,6 +180,7 @@ serve(async (req) => {
     const blocked = await blockReason(to, supabase);
     if (blocked) {
       console.warn(`[gmail-send] not sent to ${to} (${blocked})`);
+      await logEmail({ to, subject, label: "gmail-send", provider: "gmail", status: "blocked", reason: blocked, dealId: deal_id, supabase });
       return new Response(JSON.stringify({ sent: false, success: false, reason: blocked }), {
         status: 422, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -227,11 +228,13 @@ serve(async (req) => {
     const checked = await readProviderResponse(r);
     if (!checked.sent || !checked.data?.id) {
       console.error("[gmail-send] provider failure", checked.sent ? "no message id" : checked.detail);
+      await logEmail({ to, subject, label: "gmail-send", provider: "gmail", status: "failed", reason: "provider_error", dealId: deal_id, supabase });
       return new Response(JSON.stringify({ sent: false, success: false, reason: "provider_error" }), {
         status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
     const data = checked.data;
+    await logEmail({ to, subject, label: "gmail-send", provider: "gmail", status: "sent", messageId: data.id, dealId: deal_id, supabase });
 
     // Log activity
     if (deal_id) {

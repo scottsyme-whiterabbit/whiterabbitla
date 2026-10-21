@@ -9,6 +9,41 @@
 // gate never throws.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 
+import { classifyEmail } from "./email-schedule.ts";
+
+/**
+ * Record one send attempt in email_log. Never throws and never delays the
+ * caller meaningfully: logging must not block or alter a send.
+ */
+export async function logEmail(row: {
+  to: string; subject: string; label: string; provider?: string;
+  status: "sent" | "blocked" | "failed"; reason?: string | null; messageId?: string | null;
+  dealId?: string | null; supabase?: any | null;
+}): Promise<void> {
+  try {
+    const db = client(row.supabase);
+    if (!db) return;
+    const recipient = bareEmail(row.to) || "(none)";
+    const providerName = row.provider || (row.label.includes("gmail") ? "gmail" : "resend");
+    const { error } = await db.from("email_log").insert({
+      recipient,
+      subject: row.subject || null,
+      email_type: classifyEmail(row.label, row.subject || ""),
+      label: row.label,
+      provider: providerName,
+      status: row.status,
+      block_reason: row.reason || null,
+      provider_message_id: row.messageId || null,
+      deal_id: row.dealId || null,
+      source: "live",
+      dedupe_key: row.messageId ? `${providerName}:${row.messageId}` : null,
+    });
+    if (error) console.warn("[send-gate] email_log insert failed", error.message);
+  } catch (e) {
+    console.warn("[send-gate] email_log insert threw", e);
+  }
+}
+
 export type GateResult =
   | { sent: true; status: number; data: any }
   | { sent: false; reason: string; status?: number; detail?: string };
@@ -97,14 +132,17 @@ export async function gatedSend(
   const blocked = await blockReason(to, opts.supabase);
   if (blocked) {
     console.warn(`[send-gate] ${opts.label}: not sent to ${bareEmail(to) || "(none)"} (${blocked})`);
+    await logEmail({ to, subject, label: opts.label, status: "blocked", reason: blocked, supabase: opts.supabase });
     return { sent: false, reason: blocked };
   }
   try {
     const result = await readProviderResponse(await send(to, subject));
     if (!result.sent) console.error(`[send-gate] ${opts.label}: provider failure for ${bareEmail(to)}`, result.status, result.detail);
+    await logEmail({ to, subject, label: opts.label, status: result.sent ? "sent" : "failed", reason: result.sent ? null : result.reason, messageId: result.sent ? result.data?.id : null, supabase: opts.supabase });
     return result;
   } catch (e) {
     console.error(`[send-gate] ${opts.label}: send threw for ${bareEmail(to)}`, e);
+    await logEmail({ to, subject, label: opts.label, status: "failed", reason: "send_exception", supabase: opts.supabase });
     return { sent: false, reason: "send_exception", detail: String(e).slice(0, 500) };
   }
 }
@@ -125,7 +163,10 @@ export async function gatedResendFetch(url: string, init: RequestInit & { body: 
   const allowed: string[] = [];
   for (const addr of list) {
     const why = await blockReason(addr);
-    if (why) console.warn(`[send-gate] ${label}: dropped ${bareEmail(addr)} (${why})`);
+    if (why) {
+      console.warn(`[send-gate] ${label}: dropped ${bareEmail(addr)} (${why})`);
+      await logEmail({ to: addr, subject: cleanHeader(payload.subject), label, status: "blocked", reason: why });
+    }
     else allowed.push(addr);
   }
   if (!allowed.length) {
@@ -135,6 +176,9 @@ export async function gatedResendFetch(url: string, init: RequestInit & { body: 
   try {
     const res = await fetch(url, { ...init, body: JSON.stringify({ ...payload, to: allowed, subject }) });
     const result = await readProviderResponse(res);
+    for (const addr of allowed) {
+      await logEmail({ to: addr, subject, label, status: result.sent ? "sent" : "failed", reason: result.sent ? null : result.reason, messageId: result.sent && allowed.length === 1 ? result.data?.id : null });
+    }
     if (!result.sent) {
       console.error(`[send-gate] ${label}: provider failure`, result.status, result.detail);
       return new Response(JSON.stringify({ sent: false, reason: result.reason, error: result.detail }), { status: result.status && result.status >= 400 ? result.status : 502 });
