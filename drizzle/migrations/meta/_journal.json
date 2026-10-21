@@ -43,6 +43,13 @@
       "when": 1792605079059,
       "tag": "0005_event_invoices_one_active_per_deal",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792613462447,
+      "tag": "0006_stripe_refunds_disputes",
+      "breakpoints": true
     }
   ]
 }

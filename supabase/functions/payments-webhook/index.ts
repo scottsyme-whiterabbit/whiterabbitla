@@ -1,6 +1,7 @@
 import { isInactiveInvoice, INACTIVE_INVOICE_STATUS_FILTER } from "../_shared/invoice-status.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { type StripeEnv, stripeEnvironment, verifyWebhook } from "../_shared/stripe.ts";
+import { HANDLED_EVENTS, handleRefundOrDispute } from "./refund-dispute.ts";
 import { type Invoice, payUrl, paymentFailedEmail, receiptEmail, sendEmail } from "../_shared/invoice-email.ts";
 
 let _supabase: ReturnType<typeof createClient> | null = null;
@@ -272,6 +273,15 @@ async function handlePaymentFailed(session: any, reason: string) {
   }
 }
 
+// Read-only Stripe GET used when a refund/dispute event carries no Charge.
+async function readCharge(chargeId: string): Promise<Record<string, any> | null> {
+  if (!/^(ch|py)_[A-Za-z0-9]+$/.test(chargeId)) return null;
+  const key = Deno.env.get("STRIPE_SECRET_KEY_LIVE") || Deno.env.get("STRIPE_SECRET_KEY") || "";
+  if (!key) return null;
+  const res = await fetch(`https://api.stripe.com/v1/charges/${chargeId}?expand[]=refunds`, { method: "GET", headers: { Authorization: `Bearer ${key}` } });
+  if (!res.ok) { await res.text(); throw new Error(`charge read failed: ${res.status}`); }
+  return await res.json();
+}
 
 Deno.serve(async (req) => {
   if (req.method !== "POST") return new Response("Method not allowed", { status: 405 });
@@ -314,6 +324,10 @@ Deno.serve(async (req) => {
         await handlePaymentFailed(event.data.object, "session_expired");
         break;
       default:
+        if (HANDLED_EVENTS.includes(event.type)) {
+          await handleRefundOrDispute(getSupabase(), event, readCharge);
+          break;
+        }
         console.log("Unhandled event:", event.type);
     }
     return new Response(JSON.stringify({ received: true }), {

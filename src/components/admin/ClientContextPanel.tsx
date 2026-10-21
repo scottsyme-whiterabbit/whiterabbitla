@@ -1,3 +1,4 @@
+import { invoiceMoneyFlags } from "@/lib/invoiceMoneyFlag";
 import { useBookingPayment } from "@/components/admin/BookingPaymentModal";
 import { type BookingPayment } from "@/lib/manualBooking";
 import { eventDateRangeError } from "@/lib/revenueStats";
@@ -64,6 +65,9 @@ interface Invoice {
   client_emails_paused: boolean | null;
   pending_session_id: string | null;
   stripe_payment_intent_id: string | null;
+  refunded_cents?: number | null;
+  dispute_status?: string | null;
+  dispute_amount_cents?: number | null;
   deposit_paid_at: string | null;
   paid_in_full_at: string | null;
   sent_at: string | null;
@@ -897,6 +901,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
                           {inv.external_note && <p className="text-xs text-muted-foreground mt-0.5 break-words">Note: {inv.external_note}</p>}
                         </div>
                         <span className={`font-sans text-[10px] tracking-[0.1em] uppercase shrink-0 ${settled ? "text-primary" : "text-accent"}`}>{statusLabel(inv)}</span>
+                        {invoiceMoneyFlags(inv).map((f) => <span key={f} className="font-sans text-[10px] tracking-[0.1em] uppercase shrink-0 border border-destructive/40 text-destructive px-1.5 py-0.5">{f}</span>)}
                       </div>
 
                       <p className={`text-sm ${remaining > 0 && !isInactiveInvoice(inv.status) ? "text-foreground" : "text-muted-foreground"}`}>
