@@ -27,6 +27,16 @@ describe("proposal standard line rules", () => {
     expect(tiers.flatMap(tier => tier.items)).not.toContain("Travel and lodging beyond Los Angeles are included.");
   });
 
+  it("keeps the certificate of insurance line available but out of every tier default", () => {
+    const line = "A certificate of insurance for your venue, on request.";
+    expect(STANDARD_TIER_LINES.map(entry => entry.text)).toContain(line);
+    expect(standardLinesForEventType("Wedding").map(entry => entry.text)).toContain(line);
+    for (const event of ["Wedding", "Corporate Event", "Private Event", "Fundraiser", "Birthday", "Holiday Party"]) {
+      const tiers = tierLinesForProposal(pricingTiersForEventType(event), event, true);
+      expect(tiers.flatMap(tier => tier.items)).not.toContain(line);
+    }
+  });
+
   it.each(["Corporate", "Corporate Event", "Fundraiser", "Holiday Party"])("allows corporate-only options and planning defaults for %s", event => {
     const restricted = standardLinesForEventType(event).filter(line => line.eventTypes);
     expect(restricted.map(line => line.eventTypes)).toEqual([["corporate"], ["corporate"]]);
