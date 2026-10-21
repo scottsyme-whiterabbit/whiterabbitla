@@ -4,6 +4,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 import { isAdminRequest } from "../_shared/require-admin.ts";
+import { blockReason, cleanHeader, readProviderResponse } from "../_shared/send-gate.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -169,9 +170,19 @@ serve(async (req) => {
     if (!passwordOk && !(await isAdminRequest(req, body))) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
     }
-    const { deal_id, to, subject, body_text, html_body, gmail_thread_id, in_reply_to, skip_signature, skip_stage_update } = body;
+    const { deal_id, body_text, html_body, gmail_thread_id, in_reply_to, skip_signature, skip_stage_update } = body;
+    // CR/LF stripped so nothing can inject extra headers.
+    const to = cleanHeader(body.to);
+    const subject = cleanHeader(body.subject);
     if (!to || !subject || !body_text) {
       return new Response(JSON.stringify({ error: "Missing to/subject/body_text" }), { status: 400, headers: corsHeaders });
+    }
+    const blocked = await blockReason(to, supabase);
+    if (blocked) {
+      console.warn(`[gmail-send] not sent to ${to} (${blocked})`);
+      return new Response(JSON.stringify({ sent: false, success: false, reason: blocked }), {
+        status: 422, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     const cleanText = skip_signature ? body_text : stripTrailingSignoff(body_text);
@@ -213,8 +224,14 @@ serve(async (req) => {
       },
       body: JSON.stringify(payload),
     });
-    const data = await r.json();
-    if (!r.ok) throw new Error(`Gmail send ${r.status}: ${JSON.stringify(data)}`);
+    const checked = await readProviderResponse(r);
+    if (!checked.sent || !checked.data?.id) {
+      console.error("[gmail-send] provider failure", checked.sent ? "no message id" : checked.detail);
+      return new Response(JSON.stringify({ sent: false, success: false, reason: "provider_error" }), {
+        status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const data = checked.data;
 
     // Log activity
     if (deal_id) {
@@ -231,7 +248,7 @@ serve(async (req) => {
       if (!skip_stage_update && deal && deal.stage === "new") updates.stage = "contacted";
       if (Object.keys(updates).length) await supabase.from("deals").update(updates).eq("id", deal_id);
     }
-    return new Response(JSON.stringify({ success: true, message_id: data.id, thread_id: data.threadId }), {
+    return new Response(JSON.stringify({ sent: true, success: true, message_id: data.id, thread_id: data.threadId }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
