@@ -8,3 +8,4 @@
 - Agreement signing resolves tier identity against the stored proposal before writing; agreement name and price are server-authoritative to prevent browser price tampering.
 - Public proposal and signing responses use explicit field allowlists; authenticated admin reads retain their existing shapes to keep internal data private without breaking editing.
 - Browser-facing infrastructure failures use the shared safe-error payload with a per-request ID; real errors are logged only server side for traceable diagnostics.
+- Manual Booked transitions share BookingPaymentModal and the pure manual-booking validator; a read-only admin guard endpoint checks agreements and active invoices before prompting, and payment validation precedes deal writes to avoid false paid records.

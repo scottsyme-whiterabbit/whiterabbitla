@@ -6,6 +6,7 @@ import { lostReasonError } from "../_shared/lost-reason.ts";
 import { isAdminRequest } from "../_shared/require-admin.ts";
 import { computeRevenueStats, dealsToAutoBook } from "./revenue-stats.ts";
 import { eventDateRangeError } from "./event-date-range.ts";
+import { BookingPaymentError, normalizeBookingPayment, manualInvoiceFields, type BookingPayment } from "./manual-booking.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -338,45 +339,45 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
   }
 }
 
-// ---- Manually booked shows: give them the same client-facing emails ----
-// A show marked booked by hand (comped, settled outside Stripe, invoiced
-// elsewhere) has no event_invoices row, so the pre-event anticipation notes
-// never fire. This creates a settled booking record for it: status "paid" and
-// payment_method "external", so no payment nags or balance reminders can ever
-// go out, only the "two weeks to go" and "see you tomorrow" notes. Post-show
-// follow-up already runs off the calendar link, so it needs nothing here.
-async function ensureBookedClientEmails(supabase: any, dealId: string) {
-  try {
-    const { data: deal } = await supabase
-      .from("deals")
-      .select("id, stage, contact_email, contact_name, company, event_type, event_date, location, deal_value")
-      .eq("id", dealId)
-      .maybeSingle();
-    if (!deal) return;
-    if (deal.stage !== "booked") return;
-    if (!deal.event_date || !deal.contact_email) return;
+// Manual booking only records explicit payment input. No immediate client send.
+async function bookingPaymentContext(supabase: any, dealId: string) {
+  const [signed, existing] = await Promise.all([
+    supabase.from("signed_agreements").select("id").eq("deal_id", dealId).limit(1),
+    supabase.from("event_invoices").select("id").eq("deal_id", dealId).not("status", "in", INACTIVE_INVOICE_STATUS_FILTER).limit(1),
+  ]);
+  if (signed.error || existing.error) throw signed.error || existing.error;
+  return { has_signed_agreement: !!signed.data?.length, has_active_invoice: !!existing.data?.length };
+}
 
-    // A signed agreement means proposals-api owns the invoice (and the
-    // pre-event notes that hang off it). Never add a placeholder beside it.
-    const { data: signed } = await supabase
-      .from("signed_agreements")
-      .select("id")
-      .eq("deal_id", deal.id)
-      .limit(1);
-    if (signed && signed.length) return;
+// Validate before any deal write. Only a transition into Booked is eligible.
+async function prepareBookingPayment(supabase: any, dealId: string | null, stage: unknown, fields: Record<string, any>, input: unknown) {
+  if (stage !== "booked") return null;
+  let current: any = null;
+  if (dealId) {
+    const { data, error } = await supabase.from("deals").select("stage, event_date, contact_email, deal_value").eq("id", dealId).single();
+    if (error) throw error;
+    current = data;
+    if (current.stage === "booked") return null;
+    const context = await bookingPaymentContext(supabase, dealId);
+    if (context.has_signed_agreement || context.has_active_invoice) return null;
+  }
+  const deal = { ...current, ...fields };
+  if (!deal.event_date || !deal.contact_email) return null;
+  return normalizeBookingPayment(input, deal.deal_value ?? 0);
+}
 
-    // Any existing invoice already carries this deal's pre-event notes, so a
-    // second one would schedule them twice.
-    const { data: existing } = await supabase
-      .from("event_invoices")
-      .select("id")
-      .eq("deal_id", deal.id)
-      .not("status", "in", INACTIVE_INVOICE_STATUS_FILTER)
-      .limit(1);
-    if (existing && existing.length) return;
-
-    const total = typeof deal.deal_value === "number" ? deal.deal_value : 0;
-    const nowIso = new Date().toISOString();
+async function ensureBookedClientEmails(supabase: any, dealId: string, payment: Required<BookingPayment> | null) {
+  if (!payment) return;
+  const { data: deal, error: readError } = await supabase.from("deals")
+    .select("id, stage, contact_email, contact_name, event_type, event_date, location, deal_value")
+    .eq("id", dealId).single();
+  if (readError) throw readError;
+  if (deal.stage !== "booked" || !deal.event_date || !deal.contact_email) return;
+  const context = await bookingPaymentContext(supabase, dealId);
+  if (context.has_signed_agreement || context.has_active_invoice) return;
+  const nowIso = new Date().toISOString();
+  const invoice = manualInvoiceFields(payment, deal.deal_value ?? 0, nowIso);
+  if (invoice) {
     const { error } = await supabase.from("event_invoices").insert({
       deal_id: deal.id,
       pay_token: crypto.randomUUID().replace(/-/g, ""),
@@ -386,31 +387,20 @@ async function ensureBookedClientEmails(supabase: any, dealId: string) {
       event_date: deal.event_date,
       venue: deal.location || null,
       tier_name: null,
-      total_cents: total,
-      deposit_percent: 0,
-      amount_paid_cents: total,
-      status: "paid",
-      environment: "external",
-      payment_method: "external",
-      external_note: "Marked booked manually in the pipeline; settled outside Stripe.",
-      client_emails_paused: false,
-      paid_in_full_at: nowIso,
-      sent_at: nowIso,
+      ...invoice,
     });
-    if (error) {
-      console.error("[booked-emails] insert failed:", error.message);
-      return;
-    }
-    await supabase.from("deal_activity").insert({
-      deal_id: deal.id,
-      type: "note",
-      title: "Marked booked manually — client emails enabled",
-      body: "Pre-event notes and post-show follow-up will run as for any signed client. No payment reminders.",
-      occurred_at: nowIso,
-    });
-  } catch (e) {
-    console.error("[booked-emails] unexpected error:", e);
+    // The existing active-invoice unique index also guards concurrent bookings.
+    if (error) throw error;
   }
+  const { error: activityError } = await supabase.from("deal_activity").insert({
+    deal_id: deal.id,
+    type: "note",
+    title: "Booking logged manually",
+    body: `Mode: ${payment.mode}. Amount paid: $${((payment.amount_paid ?? 0) / 100).toFixed(2)}. Method: ${payment.method}. Client emails: ${payment.send_client_emails ? "on" : "off"}. No email sent.`,
+    metadata: { payment },
+    occurred_at: nowIso,
+  });
+  if (activityError) throw activityError;
 }
 
 
@@ -966,6 +956,13 @@ serve(async (req) => {
         });
       }
 
+      case "get_booking_payment_context": {
+        if (typeof payload.dealId !== "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(payload.dealId)) {
+          return new Response(JSON.stringify({ error: "A valid deal id is required." }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        }
+        return new Response(JSON.stringify(await bookingPaymentContext(supabase, payload.dealId)), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+
       case "get_deals": {
         await autoBookPaidDeals(supabase);
         const { data, error } = await supabase
@@ -984,7 +981,8 @@ serve(async (req) => {
         if (createDateError) return new Response(JSON.stringify({ error: createDateError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
         const reasonError = lostReasonError(deal?.stage, deal?.lost_reason);
         if (reasonError) return new Response(JSON.stringify({ error: reasonError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-           const { data, error } = await supabase
+        const bookingPayment = await prepareBookingPayment(supabase, null, deal?.stage, deal, payload.payment);
+        const { data, error } = await supabase
           .from("deals")
           .insert({
             contact_email: deal.contact_email,
@@ -1025,7 +1023,7 @@ serve(async (req) => {
 
         if (data?.id) {
           await syncDealToGoogleCalendar(supabase, data.id);
-          await ensureBookedClientEmails(supabase, data.id);
+          await ensureBookedClientEmails(supabase, data.id, bookingPayment);
         }
 
         return new Response(JSON.stringify({ deal: data }), {
@@ -1079,11 +1077,12 @@ serve(async (req) => {
             if (reasonError) return json({ error: reasonError }, 400);
           }
           if (Object.keys(update).length === 0) return json({ error: "No valid fields to update" }, 400);
+          const bookingPayment = await prepareBookingPayment(supabase, dealId, update.stage, update, payload.payment);
           const { data, error } = await supabase.from("deals").update(update).eq("id", dealId).select().single();
           if (error) return fail(error, 400);
           if (data?.id) {
             await syncDealToGoogleCalendar(supabase, data.id);
-            await ensureBookedClientEmails(supabase, data.id);
+            await ensureBookedClientEmails(supabase, data.id, bookingPayment);
           }
           return json({ ok: true, deal: data });
         }
@@ -1092,6 +1091,7 @@ serve(async (req) => {
         if (updateDateError) return new Response(JSON.stringify({ error: updateDateError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
         const reasonError = lostReasonError(deal?.stage, deal?.lost_reason);
         if (reasonError) return new Response(JSON.stringify({ error: reasonError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        const bookingPayment = await prepareBookingPayment(supabase, deal.id, deal.stage, deal, payload.payment);
         const { data, error } = await supabase
           .from("deals")
           .update({
@@ -1117,7 +1117,7 @@ serve(async (req) => {
         if (error) throw error;
         if (data?.id) {
           await syncDealToGoogleCalendar(supabase, data.id);
-          await ensureBookedClientEmails(supabase, data.id);
+          await ensureBookedClientEmails(supabase, data.id, bookingPayment);
         }
         return new Response(JSON.stringify({ deal: data }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -1207,13 +1207,14 @@ serve(async (req) => {
         }
         const reasonError = lostReasonError(stage, lost_reason);
         if (reasonError) return new Response(JSON.stringify({ error: reasonError }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+        const bookingPayment = await prepareBookingPayment(supabase, dealId, stage, {}, payload.payment);
         const { error } = await supabase
           .from("deals")
           .update({ stage, ...(stage === "lost" ? { lost_reason: lost_reason.trim() } : {}) })
           .eq("id", dealId);
         if (error) throw error;
         await syncDealToGoogleCalendar(supabase, dealId);
-        await ensureBookedClientEmails(supabase, dealId);
+        await ensureBookedClientEmails(supabase, dealId, bookingPayment);
         return new Response(JSON.stringify({ success: true }), {
           status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -2337,6 +2338,7 @@ serve(async (req) => {
         });
     }
   } catch (error) {
+    if (error instanceof BookingPaymentError) return new Response(JSON.stringify({ error: error.message }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     return fail(error);
   }
 });

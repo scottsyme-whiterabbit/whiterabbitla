@@ -1,3 +1,4 @@
+import { useBookingPayment } from "@/components/admin/BookingPaymentModal";
 import { eventDateRangeError } from "@/lib/revenueStats";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useLostReasonPicker } from "@/components/admin/LostReasonPicker";
@@ -610,6 +611,8 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
   };
 
 
+  const { requestBookingPayment, bookingModal } = useBookingPayment(callAdmin);
+
   const openLogModal = (item: ActionItem, actionType: string) => {
     setLogModal({ email: item.email, name: item.name, dealId: item.deal?.id, actionType });
     setLogForm({ action_type: actionType, outcome: "", notes: "", follow_up_date: "" });
@@ -619,6 +622,9 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
     if (!logModal || !logForm.outcome) { toast.error("Select an outcome"); return; }
     setSaving(true);
     try {
+      const bookingDeal = deals.find(d => d.id === logModal.dealId);
+      const payment = logForm.outcome === "booked" && logModal.dealId ? await requestBookingPayment(bookingDeal ?? { id: logModal.dealId }) : undefined;
+      if (payment === null) return;
       await callAdmin("log_outreach", {
         entry: {
           contact_email: logModal.email,
@@ -634,9 +640,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
 
       // Sync pipeline stage
       if (logForm.outcome === "booked" && logModal.dealId) {
-        if (confirm("Mark this deal as 'Booked' in the pipeline too?")) {
-          await callAdmin("update_deal_stage", { dealId: logModal.dealId, stage: "booked" });
-        }
+        await callAdmin("update_deal_stage", { dealId: logModal.dealId, stage: "booked", payment });
       } else if (logForm.outcome === "not_interested" && logModal.dealId) {
         const lost_reason = await requestLostReason(deals.find(d => d.id === logModal.dealId)?.lost_reason || "");
         if (lost_reason !== null) await callAdmin("update_deal_stage", { dealId: logModal.dealId, stage: "lost", lost_reason });
@@ -835,6 +839,8 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                       onChange={async (e) => {
                         const newStatus = e.target.value;
                         try {
+                          const payment = newStatus === "booked" && item.deal ? await requestBookingPayment(item.deal) : undefined;
+                          if (payment === null) return;
                           if (item.deal) {
                             await callAdmin("log_outreach", {
                               entry: {
@@ -846,8 +852,8 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                                 deal_id: item.deal.id,
                               }
                             });
-                            if (newStatus === "booked" && confirm("Mark this deal as 'Booked' in the pipeline too?")) {
-                              await callAdmin("update_deal_stage", { dealId: item.deal.id, stage: "booked" });
+                            if (newStatus === "booked") {
+                              await callAdmin("update_deal_stage", { dealId: item.deal.id, stage: "booked", payment });
                             } else if (newStatus === "not_interested") {
                               const lost_reason = await requestLostReason(item.deal.lost_reason || "");
                               if (lost_reason !== null) await callAdmin("update_deal_stage", { dealId: item.deal.id, stage: "lost", lost_reason });
@@ -1068,6 +1074,8 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                         e.stopPropagation();
                         const newStatus = e.target.value;
                         try {
+                          const payment = newStatus === "booked" && item.deal ? await requestBookingPayment(item.deal) : undefined;
+                          if (payment === null) return;
                           await callAdmin("log_outreach", {
                             entry: {
                               contact_email: item.email,
@@ -1078,8 +1086,8 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
                               deal_id: item.deal?.id,
                             }
                           });
-                          if (newStatus === "booked" && item.deal && confirm("Mark as 'Booked' in pipeline too?")) {
-                            await callAdmin("update_deal_stage", { dealId: item.deal.id, stage: "booked" });
+                          if (newStatus === "booked" && item.deal) {
+                            await callAdmin("update_deal_stage", { dealId: item.deal.id, stage: "booked", payment });
                           } else if (newStatus === "not_interested" && item.deal) {
                             const lost_reason = await requestLostReason(item.deal.lost_reason || "");
                               if (lost_reason !== null) await callAdmin("update_deal_stage", { dealId: item.deal.id, stage: "lost", lost_reason });
@@ -1229,6 +1237,7 @@ const ActionListTab = ({ adminPassword, onBadgeCount }: ActionListTabProps) => {
       </Dialog>
 
       {picker}
+      {bookingModal}
       <AIDraftModal
         open={!!aiDraftCtx}
         onClose={() => setAiDraftCtx(null)}

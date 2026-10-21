@@ -6,6 +6,16 @@ const NOW = new Date("2026-10-21T18:00:00Z"); // Oct 21 2026 in LA
 const deal = (o: Partial<any>) => ({ id: "x", contact_name: "C", stage: "new", event_date: null, deal_value: null, source: null, ...o });
 
 describe("get_revenue_stats", () => {
+  it("completed deposit counts only collected cents net of refunds", () => {
+    const s = computeRevenueStats([deal({ id: "a", stage: "completed", event_date: "2026-05-10", deal_value: 500000 })], [{ deal_id: "a", status: "deposit_paid", amount_paid_cents: 250000, refunded_cents: 10000 }], [], NOW);
+    expect(s.delivered.cents).toBe(240000);
+  });
+  it("booked without an active invoice retains full deal value but claims no paid money", () => {
+    const s = computeRevenueStats([deal({ id: "a", stage: "booked", event_date: "2026-12-05", deal_value: 500000 })], [{ deal_id: "a", status: "void", amount_paid_cents: 500000 }], [], NOW);
+    expect(s.bookedAhead.cents).toBe(500000);
+    expect(s.bookedAhead.paidCents).toBe(0);
+    expect(s.bookedAhead.remainingCents).toBe(500000);
+  });
   it("delivered uses net paid on invoices, ignoring void/canceled, minus refunds", () => {
     const s = computeRevenueStats(
       [deal({ id: "a", stage: "completed", event_date: "2026-05-10", deal_value: 500000 })],

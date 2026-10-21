@@ -1,3 +1,5 @@
+import { useBookingPayment } from "@/components/admin/BookingPaymentModal";
+import { type BookingPayment } from "@/lib/manualBooking";
 import { eventDateRangeError, isSquareHistory, FLAG_LABELS, type RevenueStats } from "@/lib/revenueStats";
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
@@ -157,6 +159,9 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
     return res.json();
   }, [adminPassword]);
 
+  const { requestBookingPayment, bookingModal } = useBookingPayment(callAdmin);
+  const [formPayment, setFormPayment] = useState<BookingPayment | null>(null);
+
   const loadDeals = useCallback(async () => {
     try {
       const res = await callAdmin("get_deals");
@@ -212,7 +217,12 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
         ...(editingDeal ? { id: editingDeal.id } : {}),
         ...(skip_thank_you && rest.stage === "completed" ? { post_show_step: 2, post_show_started_at: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString() } : {}),
       };
-      await callAdmin(editingDeal ? "update_deal" : "create_deal", { deal: dealData });
+      let payment = formPayment;
+      if (dealData.stage === "booked" && editingDeal?.stage !== "booked" && !payment) {
+        payment = await requestBookingPayment({ ...dealData, stage: editingDeal?.stage });
+        if (payment === null) return;
+      }
+      await callAdmin(editingDeal ? "update_deal" : "create_deal", { deal: dealData, ...(payment ? { payment } : {}) });
       toast.success(editingDeal ? "Deal updated" : "Deal created");
       setShowForm(false);
       setEditingDeal(null);
@@ -227,7 +237,10 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
     const lost_reason = newStage === "lost" ? await requestLostReason(deals.find(d => d.id === dealId)?.lost_reason || "") : undefined;
     if (newStage === "lost" && lost_reason === null) return;
     try {
-      await callAdmin("update_deal_stage", { dealId, stage: newStage, ...(lost_reason !== undefined ? { lost_reason } : {}) });
+      const deal = deals.find(d => d.id === dealId);
+      const payment = newStage === "booked" ? await requestBookingPayment(deal ?? { id: dealId }) : undefined;
+      if (payment === null) return;
+      await callAdmin("update_deal_stage", { dealId, stage: newStage, ...(payment ? { payment } : {}), ...(lost_reason !== undefined ? { lost_reason } : {}) });
       setDeals(prev => prev.map(d => d.id === dealId ? { ...d, stage: newStage, ...(lost_reason !== undefined ? { lost_reason } : {}) } : d));
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Update failed");
@@ -235,11 +248,13 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
   };
 
   const resetForm = () => {
+    setFormPayment(null);
     setForm({ contact_email: "", contact_name: "", company: "", phone: "", event_type: "corporate", event_date: "", event_time: "", location: "", guest_count: "", deal_value: "", stage: "new", notes: "", next_follow_up: "", source: "manual", lost_reason: "", skip_thank_you: false });
   };
 
   const openEdit = (deal: Deal) => {
     setEditingDeal(deal);
+    setFormPayment(null);
     setForm({
       contact_email: deal.contact_email,
       contact_name: deal.contact_name || "",
@@ -668,6 +683,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
       <ShowCalendar deals={deals} onOpenDeal={openDealById} adminPassword={adminPassword} />
 
       {picker}
+      {bookingModal}
       {/* Deal Form Modal */}
       <Dialog open={showForm} onOpenChange={setShowForm}>
         <DialogContent className="max-w-lg bg-background border-border max-h-[90vh] overflow-y-auto">
@@ -740,7 +756,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
               </div>
               <div>
                 <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Stage</label>
-                <select value={form.stage} onChange={async e => { const stage = e.target.value; if (stage === "lost" && form.stage !== "lost") { const reason = await requestLostReason(form.lost_reason); if (reason === null) return; setForm(f => ({ ...f, stage, lost_reason: reason })); } else setForm(f => ({ ...f, stage })); }} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent">
+                <select value={form.stage} onChange={async e => { const stage = e.target.value; if (stage === "lost" && form.stage !== "lost") { const reason = await requestLostReason(form.lost_reason); if (reason === null) return; setForm(f => ({ ...f, stage, lost_reason: reason })); } else if (stage === "booked" && form.stage !== "booked") { try { const payment = await requestBookingPayment({ id: editingDeal?.id, stage: editingDeal?.stage, deal_value: form.deal_value ? Math.round(Number(form.deal_value) * 100) : null }); if (payment === null) return; setFormPayment(payment); setForm(f => ({ ...f, stage })); } catch (error) { toast.error(error instanceof Error ? error.message : "Could not check booking"); } } else { setFormPayment(null); setForm(f => ({ ...f, stage })); } }} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent">
                   {STAGES.map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
                 </select>
               </div>

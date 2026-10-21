@@ -22,6 +22,7 @@
   - [ ] No unique constraint yet
 
 ## Done
+- Explicit manual booking payment logging and shared modal on all manual Booked paths; revenue source already uses actual net paid and no-invoice deal-value fallback. 23 isolated tests passed, build OK, newsletter-admin deployed only. No invocation, sends, Stripe calls, schema changes or data edits.
 - Pre-ship fixes deployed: 240-character lost-reason cap, request-ID safe errors, public proposal/sign allowlists, locked backup tables and anonymous health RPC revocation. Logged-out real proposal checked at 1280px and 390px; no signature or payment submitted. Authenticated RPC advisor warnings remain outside the requested anonymous revocation.
 - Authoritative agreement pricing deployed and pre-ship checks completed; public response minimization, server-side Other length cap, and error sanitization failed review and were reported without expanding scope. Not published.
 - Shared lost-reason enforcement and display, proposal-tier safety audit and fixes, and five standard tier lines; payment execution left untested to avoid client emails or charges.
