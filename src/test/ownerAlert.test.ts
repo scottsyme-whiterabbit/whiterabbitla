@@ -17,3 +17,18 @@ describe("owner inbox alert override", () => {
     expect(ownerAlertOverride(OWNER, "hard_bounced", true)).toBe(false);
   });
 });
+
+import { readFileSync } from "node:fs";
+describe("owner alert call sites", () => {
+  const read = (p: string) => readFileSync(`supabase/functions/${p}`, "utf8");
+  it("only owner-addressed calls pass internalAlert", () => {
+    expect(read("send-inquiry/index.ts").match(/internalAlert: true/g)?.length).toBe(2);
+    expect(read("proposals-api/index.ts").match(/"resend", true\)/g)?.length).toBe(2);
+    for (const f of ["gmail-send/index.ts", "proposal-followup/index.ts", "post-show-sequence/index.ts", "inquiry-followup/index.ts", "_shared/invoice-email.ts"]) {
+      expect(read(f)).not.toMatch(/internalAlert|"resend", true\)/);
+    }
+  });
+  it("gatedResendFetch applies the owner override per recipient", () => {
+    expect(read("_shared/send-gate.ts")).toMatch(/ownerAlertOverride\(bareEmail\(addr\), why, internalAlert\)/);
+  });
+});
