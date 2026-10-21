@@ -505,6 +505,10 @@ export const STANDARD_TIER_LINES: StandardLine[] = [
   { group: "Setting: Full build", text: "The black woven case that carries the show, displayed on a clear acrylic stand." },
   { group: "Travel", text: "Anywhere in Los Angeles County, I come to you at no added cost." },
   { group: "Travel", text: "Travel and lodging beyond Los Angeles are included." },
+  { group: "Wedding", text: "Cocktail hour, plus your choice of the Rehearsal Dinner or the Speakeasy.", eventTypes: ["wedding"] },
+  { group: "Wedding", text: "The whole weekend: the Rehearsal Dinner, the Cocktail Hour, and the Speakeasy.", eventTypes: ["wedding"] },
+  { group: "Wedding", text: "The Rehearsal Dinner: a private parlor show, up to forty-five minutes, for the people closest to you, the night before.", eventTypes: ["wedding"] },
+  { group: "Wedding", text: "The Speakeasy: an hour of close-up magic at the bar during your reception, for the guests who drift away from the dance floor.", eventTypes: ["wedding"] },
   { group: "Signature Touches", text: "One piece of the evening belongs entirely to your guest of honor.", optional: true },
   { group: "Signature Touches", text: "A moment created for the two of you, woven into your celebration.", eventTypes: ["wedding"], optional: true },
   { group: "Signature Touches", text: "A moment built around your brand, your team, or your milestone.", eventTypes: ["corporate"], optional: true },
@@ -522,9 +526,23 @@ export function standardLinesForEventType(eventType: string): StandardLine[] {
 // Replace only description items for new drafts; all pricing metadata stays intact.
 export function tierLinesForProposal<T extends { items: string[] }>(tiers: T[], eventType: string, isNew: boolean): T[] {
   const lines = standardLinesForEventType(eventType);
+  const wedding = pricingTierSetForEventType(eventType) === "Wedding";
   return tiers.map((tier, index) => {
     if (!isNew || index > 2) return { ...tier, items: [...tier.items] };
     const setting = ["Setting: Close-up setup", "Setting: Parlor half build", "Setting: Full build"][index];
+    if (wedding && index > 0) {
+      const w = lines.filter(line => line.group === "Wedding").map(line => line.text);
+      const closeUp = "Up to ninety minutes of close-up magic, performed among your guests during cocktails.";
+      const pick = (fn: (line: StandardLine) => boolean) => lines.filter(line => !line.optional && fn(line)).map(line => line.text);
+      const planning = pick(line => line.group === "Planning" && line.text !== "A certificate of insurance for your venue, on request.");
+      const magic = pick(line => line.group === "The Magic" && (index === 2 || !line.text.startsWith("The Afterglow:")));
+      const presentation = pick(line => line.group === "Presentation");
+      const travel = pick(line => line.group === "Travel" && line.text.startsWith("Anywhere in Los Angeles County"));
+      const items = index === 1
+        ? [w[0], w[2], w[3], closeUp, ...planning, ...magic, ...presentation, ...pick(line => line.group === "Setting: Close-up setup"), ...pick(line => line.group === "Setting: Parlor half build"), ...travel]
+        : [w[1], w[2], closeUp, w[3], ...planning, ...magic, ...presentation, ...pick(line => line.group === "Setting: Full build"), ...travel];
+      return { ...tier, items };
+    }
     const items = lines.filter(line => {
       if (line.optional) return false;
       if (line.group === "Planning") return line.text !== "A certificate of insurance for your venue, on request.";
