@@ -75,7 +75,7 @@ Performance Requirements:
 
 Payment & Booking Confirmation:
 - A paid invoice or deposit is required to secure the performance date. Until payment is received, the booking is not confirmed, and availability cannot be guaranteed.
-- A 50% deposit is due upon receipt to lock the date. The remaining 50% is due the day before the event, unless otherwise agreed upon in writing.
+- A 50% deposit is due upon receipt to lock the date. The remaining 50% is due before the performance, unless otherwise agreed upon in writing.
 - If the final balance is not paid within 7 days of the agreed balance-due date, a late fee of $200 will be added to the total amount owed.
 
 Cancellation & Rescheduling:

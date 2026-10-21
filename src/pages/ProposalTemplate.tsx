@@ -385,7 +385,7 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
             {[
               { n: "One", t: "Choose your evening", d: "Pick the experience that fits your night. One click opens the agreement, already filled in." },
               { n: "Two", t: "Sign in a minute", d: "Read it, type your name, done. Your copy arrives by email the moment you sign." },
-              { n: "Three", t: "Deposit holds the date", d: "A 50% deposit locks it in. The balance is due the day before, and I take it from there." },
+              { n: "Three", t: "Deposit holds the date", d: "A 50% deposit locks it in. The balance is due before the performance, and I take it from there." },
             ].map((s) => (
               <div key={s.n} className="relative border border-forest-dark/10 p-6 bg-cream">
                 <span className="absolute top-0 left-0 w-4 h-px bg-gold/70" />
@@ -590,7 +590,7 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
             <span className="w-10 h-px bg-gold/60" />
           </div>
           <div className="font-sans text-base leading-relaxed text-cream/80 max-w-2xl mx-auto space-y-4">
-            <p>A 50% deposit holds your date and locks the booking. The remaining 50% is due the day before the event.</p>
+            <p>A 50% deposit holds your date and locks the booking. The remaining 50% is due before the performance.</p>
             <p>{holdUntil
               ? `This proposal, and your date, is held through ${holdUntil}, seven days from the day I sent it.`
               : "This proposal, and your date, is held for seven days from the day I sent it."} If you need more time, tell me in writing or on a call and I will happily extend the hold.</p>

@@ -3,6 +3,13 @@
 //    full amount is paid.
 // 2) Deposit-paid invoices: 3 balance reminders, 7 days out, 2 days out, and the
 //    day of the event, only while the balance is unpaid, at least 20 hours apart.
+// Holiday shift: if tomorrow in America/Los_Angeles is Thanksgiving (4th Thursday
+// of November), Christmas Day or New Year's Day, the 7 and 2 day balance
+// reminders and the anticipation notes are evaluated one day early (days - 1),
+// so a send that would land on the holiday goes out today instead. The day-of
+// balance reminder is never shifted. Step counters and the 20 hour spacing
+// still stop the holiday-day run from sending again, and each run sends at
+// most one step per type.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import {
   type Invoice, anticipationEmail, balanceReminderEmail, reminderEmail, sendEmail,
@@ -30,6 +37,24 @@ const daysUntil = (date: string | null) => {
   const d = new Date(`${date}T12:00:00Z`).getTime();
   if (!isFinite(d)) return null;
   return Math.ceil((d - Date.now()) / 864e5);
+};
+
+// YYYY-MM-DD for "now + offsetDays" in Pacific time.
+const pacificYmd = (offsetDays: number) =>
+  new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Los_Angeles", year: "numeric", month: "2-digit", day: "2-digit",
+  }).format(new Date(Date.now() + offsetDays * 864e5));
+
+const isShiftHoliday = (ymd: string) => {
+  const [y, m, d] = ymd.split("-").map(Number);
+  if (m === 12 && d === 25) return true;
+  if (m === 1 && d === 1) return true;
+  if (m === 11) {
+    const firstDow = new Date(Date.UTC(y, 10, 1)).getUTCDay();
+    const firstThu = 1 + ((4 - firstDow + 7) % 7);
+    return d === firstThu + 21;
+  }
+  return false;
 };
 
 Deno.serve(async (req) => {
@@ -60,6 +85,8 @@ Deno.serve(async (req) => {
       status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
+
+  const holidayTomorrow = isShiftHoliday(pacificYmd(1));
 
   for (const row of data || []) {
     const inv = row as unknown as Invoice & {
@@ -137,10 +164,12 @@ Deno.serve(async (req) => {
           const sent = inv.anticipation_sent || 0;
           const FAR = 1, NEAR = 2;
           let bit = 0;
+          // Holiday shift: evaluate as if it were one day later.
+          const eff = holidayTomorrow ? days - 1 : days;
           // "Two weeks to go" note: only with real runway (8-14 days out)
-          if (!(sent & FAR) && days >= 8 && days <= 14) bit = FAR;
+          if (!(sent & FAR) && eff >= 8 && eff <= 14) bit = FAR;
           // "See you tomorrow" note: the day before (0-1 days out)
-          else if (!(sent & NEAR) && days <= 1) bit = NEAR;
+          else if (!(sent & NEAR) && eff <= 1) bit = NEAR;
           if (bit) {
             if (!dryRun) {
               const { subject, html } = anticipationEmail(inv, days);
@@ -170,7 +199,9 @@ Deno.serve(async (req) => {
         if (sentCount >= BALANCE_DAYS_OUT.length) { results.skipped++; continue; }
         // Fire whenever we've crossed the next threshold in the schedule.
         const nextThreshold = BALANCE_DAYS_OUT[sentCount];
-        if (days > nextThreshold) { results.skipped++; continue; }
+        // Holiday shift for the 7 and 2 day steps only; day-of never shifts.
+        const effDays = holidayTomorrow && nextThreshold > 0 ? days - 1 : days;
+        if (effDays > nextThreshold) { results.skipped++; continue; }
         if (hoursSince(inv.last_balance_reminder_at) < MIN_HOURS_BETWEEN) { results.skipped++; continue; }
 
         if (!dryRun) {
