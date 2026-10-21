@@ -16,10 +16,12 @@ describe("pricing tier sets", () => {
     expect(PRICING_TIER_SETS[set].map(t => t.price)).toEqual(["$2,000", "$3,000", "From $5,000"]);
     expect(PRICING_TIER_SETS[set].map(t => Boolean(t.recommended))).toEqual([false, false, true]);
   });
-  it("Wedding keeps the former Choose Two items in its Parlor-level middle tier", () => {
+  it("Wedding preset drops the lines replaced by the wedding standard lines", () => {
     expect(PRICING_TIER_SETS.Wedding.map(t => t.name)).toEqual(["The Cocktail Hour", "The Cocktail Hour and The Parlor", "The White Rabbit Wedding"]);
-    expect(PRICING_TIER_SETS.Wedding[1].items).toHaveLength(6);
-    expect(PRICING_TIER_SETS.Wedding[1].items[1]).toBe("Your choice of one: a seated show at the rehearsal dinner, or a private speakeasy show for the couple and inner circle during the reception");
+    const items = PRICING_TIER_SETS.Wedding.flatMap(t => t.items);
+    expect(PRICING_TIER_SETS.Wedding.map(t => t.items.length)).toEqual([5, 4, 3]);
+    expect(items.some(i => i.startsWith("Your choice of one") || i.includes("for the seated moment") || i.startsWith("A seated show at the rehearsal") || i.startsWith("A private speakeasy"))).toBe(false);
+    expect(PRICING_TIER_SETS.Wedding[2].items).not.toContain("Up to 90 minutes of close-up magic during cocktail hour");
   });
   it("Corporate uses its event-adapted tier names", () => {
     expect(PRICING_TIER_SETS.Corporate.map(t => t.name)).toEqual(["The Cocktail Hour", "The Cocktail Hour and The Parlor", "The White Rabbit Evening"]);
