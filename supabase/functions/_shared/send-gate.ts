@@ -108,3 +108,40 @@ export async function gatedSend(
     return { sent: false, reason: "send_exception", detail: String(e).slice(0, 500) };
   }
 }
+
+/**
+ * Drop-in replacement for fetch() to the Resend send endpoint. Reads `to` and
+ * `subject` from the JSON body, gates every recipient (blocked ones are
+ * removed; if none remain nothing is sent), cleans the headers, and returns a
+ * Response whose `ok` reflects whether the email really went out. A blocked
+ * or failed send comes back as a non-2xx Response with { sent:false, reason }.
+ */
+export async function gatedResendFetch(url: string, init: RequestInit & { body: string }, label = "resend"): Promise<Response> {
+  let payload: Record<string, unknown>;
+  try { payload = JSON.parse(init.body); } catch {
+    return new Response(JSON.stringify({ sent: false, reason: "bad_payload" }), { status: 400 });
+  }
+  const list = (Array.isArray(payload.to) ? payload.to : [payload.to]).map(cleanHeader).filter(Boolean);
+  const allowed: string[] = [];
+  for (const addr of list) {
+    const why = await blockReason(addr);
+    if (why) console.warn(`[send-gate] ${label}: dropped ${bareEmail(addr)} (${why})`);
+    else allowed.push(addr);
+  }
+  if (!allowed.length) {
+    return new Response(JSON.stringify({ sent: false, reason: list.length ? "all_recipients_blocked" : "invalid_address" }), { status: 422 });
+  }
+  const subject = cleanHeader(payload.subject);
+  try {
+    const res = await fetch(url, { ...init, body: JSON.stringify({ ...payload, to: allowed, subject }) });
+    const result = await readProviderResponse(res);
+    if (!result.sent) {
+      console.error(`[send-gate] ${label}: provider failure`, result.status, result.detail);
+      return new Response(JSON.stringify({ sent: false, reason: result.reason, error: result.detail }), { status: result.status && result.status >= 400 ? result.status : 502 });
+    }
+    return new Response(JSON.stringify(result.data ?? { sent: true }), { status: 200, headers: { "Content-Type": "application/json" } });
+  } catch (e) {
+    console.error(`[send-gate] ${label}: send threw`, e);
+    return new Response(JSON.stringify({ sent: false, reason: "send_exception" }), { status: 502 });
+  }
+}

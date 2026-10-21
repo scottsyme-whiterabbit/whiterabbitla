@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { gatedResendFetch } from "../_shared/send-gate.ts";
 import { eventDateForAlert, eventDateForClient, eventDateIso, parseEventDate } from "../_shared/event-date.ts";
 import {
   type Invoice,
@@ -134,7 +135,7 @@ Magician
 (424) 394-1850
 whiterabbitla.com`;
 
-  const res = await fetch("https://api.resend.com/emails", {
+  const res = await gatedResendFetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -243,7 +244,7 @@ async function notifyProposalView(p: any, ua: string, lastViewedAt: string | nul
   const link = `https://whiterabbitla.com/proposal/${p.slug}`;
   const rows = [
     p.event_type ? `<strong>Occasion:</strong> ${esc(p.event_type)}` : "",
-    eventDateForClient(p.event_date) ? `<strong>Date:</strong> ${esc(eventDateForClient(p.event_date))}` : "",
+    p.event_date ? `<strong>Date:</strong> ${esc(eventDateForAlert(p.event_date))}` : "",
     p.venue ? `<strong>Venue:</strong> ${esc(p.venue)}` : "",
     p.recipient_email ? `<strong>Email:</strong> ${esc(p.recipient_email)}` : "",
   ].filter(Boolean).join("<br/>");
@@ -262,7 +263,7 @@ async function notifyProposalView(p: any, ua: string, lastViewedAt: string | nul
     </div>
   </div>`;
   try {
-    await fetch("https://api.resend.com/emails", {
+    await gatedResendFetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -540,7 +541,7 @@ ${agreement_text}
 ${invoiceLink ? `Invoice sent automatically: ${invoiceLink}\nDaily reminders will run until the deposit or full amount is paid.` : "Invoice NOT auto-created — tier price could not be resolved from the stored proposal; create manually from the Payments tab."}`;
         const htmlBody = `<pre style="font-family:Georgia,serif;font-size:14px;line-height:1.6;white-space:pre-wrap;color:#223D34;background:#F8F5F0;padding:24px;border-radius:4px;">${plain.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</pre>`;
         try {
-          await fetch("https://api.resend.com/emails", {
+          await gatedResendFetch("https://api.resend.com/emails", {
             method: "POST",
             headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -574,7 +575,7 @@ ${invoiceLink ? `Invoice sent automatically: ${invoiceLink}\nDaily reminders wil
                 content: pdfB64,
               }];
             }
-            await fetch("https://api.resend.com/emails", {
+            await gatedResendFetch("https://api.resend.com/emails", {
               method: "POST",
               headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
               body: JSON.stringify(payload),
@@ -583,7 +584,7 @@ ${invoiceLink ? `Invoice sent automatically: ${invoiceLink}\nDaily reminders wil
         } else if (client_email) {
           // No invoice could be created — send the agreement copy on its own.
           try {
-            await fetch("https://api.resend.com/emails", {
+            await gatedResendFetch("https://api.resend.com/emails", {
               method: "POST",
               headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -945,7 +946,7 @@ Scott Syme
 White Rabbit LA — Luxury Magic
 (424) 394-1850 · whiterabbitla.com`;
 
-      const r = await fetch("https://api.resend.com/emails", {
+      const r = await gatedResendFetch("https://api.resend.com/emails", {
         method: "POST",
         headers: { Authorization: `Bearer ${RESEND_API_KEY}`, "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1078,7 +1079,7 @@ View your proposal: ${link}
 —
 White Rabbit LA · 7393 W. Manchester Ave #209, Los Angeles, CA 90045`;
 
-      const r = await fetch("https://api.resend.com/emails", {
+      const r = await gatedResendFetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${RESEND_API_KEY}`,
