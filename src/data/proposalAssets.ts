@@ -527,7 +527,8 @@ export function tierLinesForProposal<T extends { items: string[] }>(tiers: T[], 
     const setting = ["Setting: Close-up setup", "Setting: Parlor half build", "Setting: Full build"][index];
     const items = lines.filter(line => {
       if (line.optional) return false;
-      if (line.group === "Planning" || line.group === "Presentation") return true;
+      if (line.group === "Planning") return line.text !== "A certificate of insurance for your venue, on request.";
+      if (line.group === "Presentation") return true;
       if (line.group === "The Magic") return index === 2 || !line.text.startsWith("The Afterglow:");
       if (line.group === "Close-up vs Parlor") {
         return index === 2 || (index === 0 ? line.text.startsWith("Up to ninety minutes") : line.text.startsWith("A forty-five-minute"));
