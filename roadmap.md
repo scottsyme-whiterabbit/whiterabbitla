@@ -5,7 +5,6 @@
 - [ ] Homepage brand logos: swap current block for actual businesses performed for (long-standing request).
 
 ## In progress
-- [ ] Client-panel email navigation and wrapping check; report installed-app update behavior without deployments or data changes.
 - [ ] Mobile-first CRM/PWA pass: improve navigation, dense lists, forms, dialogs, and touch use across every admin screen without removing features.
 - [ ] PART A: Google sign-in for all admin pages (phase 1, alongside password)
   - [ ] Enable Google provider, disable open email signups
@@ -23,6 +22,7 @@
   - [ ] No unique constraint yet
 
 ## Done
+- Client-panel Emails tile uses sent plus upcoming timeline counts; tile labels wrap. Verified client Emails and Back → More → Money → Email schedule at 390 × 844 with intercepted sample responses. Network-first service worker unchanged; no deployment or data changes.
 - Replaced proposal standard line catalog and event-filtered new-draft defaults; pricing presets and saved-load behavior unchanged. 35 tests and isolated builder checks passed without real service requests; build OK. No deployment or publication.
 - Event-type buttons, selector, templates and preview defaults use shared three-tier presets with premium recommendation; line-item picker and its 33 options unchanged. 24 local tests passed and build OK. No deployment, publication, function invocation or database changes.
 - Explicit manual booking payment logging and shared modal on all manual Booked paths; revenue source already uses actual net paid and no-invoice deal-value fallback. 23 isolated tests passed, build OK, newsletter-admin deployed only. No invocation, sends, Stripe calls, schema changes or data edits.
