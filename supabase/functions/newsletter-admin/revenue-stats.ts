@@ -14,6 +14,8 @@ export type StatsInvoice = {
   status: string | null;
   amount_paid_cents: number | null;
   refunded_cents?: number | null;
+  dispute_status?: string | null;
+  dispute_amount_cents?: number | null;
 };
 export type StatsAgreement = { deal_id: string | null };
 
@@ -27,8 +29,9 @@ export function todayLA(now: Date = new Date()): string {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "America/Los_Angeles", year: "numeric", month: "2-digit", day: "2-digit" }).format(now);
 }
 
+// Refunds and lost disputes both subtract from money actually kept.
 export const netPaid = (inv: StatsInvoice) =>
-  Math.max(0, (inv.amount_paid_cents || 0) - (inv.refunded_cents || 0));
+  Math.max(0, (inv.amount_paid_cents || 0) - (inv.refunded_cents || 0) - (inv.dispute_status === "dispute_lost" ? inv.dispute_amount_cents || 0 : 0));
 
 /** Legacy client history: Square imports with no real value. */
 export const isSquareHistory = (d: StatsDeal) =>
