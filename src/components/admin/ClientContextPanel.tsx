@@ -1,3 +1,4 @@
+import { eventDateRangeError } from "@/lib/revenueStats";
 import { isInactiveInvoice } from "@/lib/invoiceStatus";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -328,6 +329,10 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
     }
     const reasonError = lostReasonError(editForm.stage, editForm.lost_reason);
     if (("stage" in changed || "lost_reason" in changed) && reasonError) { toast.error(reasonError); return; }
+    if ("event_date" in changed) {
+      const dateError = eventDateRangeError(changed.event_date.trim() || null);
+      if (dateError) { toast.error(dateError); return; }
+    }
     if (Object.keys(changed).length === 0) { setEditOpen(false); return; }
     setBusy(true);
     try {
