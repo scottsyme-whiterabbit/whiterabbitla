@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { emailTypeLabel, fmtPacific, sentStatus, type ScheduledEmail, type SentEmail } from "@/lib/emailTimeline";
+import { emailTypeLabel, fmtPacific, isManualGmail, sentStatus, sentTitle, type ScheduledEmail, type SentEmail } from "@/lib/emailTimeline";
 
 export type EmailTimelineData = { sent: SentEmail[]; upcoming: ScheduledEmail[] };
 type Props = { dealId: string; callAdmin: (action: string, payload?: Record<string, unknown>) => Promise<any>; loadedData?: EmailTimelineData | null };
