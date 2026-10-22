@@ -12,7 +12,7 @@ export function priceTextToCents(p: unknown): number | null {
 /** Recommended tier price, else the first tier, in cents. */
 export function proposalValueCents(tiers: unknown): number | null {
   if (!Array.isArray(tiers) || tiers.length === 0) return null;
-  const rec = tiers.find((t) => t && typeof t === "object" && (t as any).recommended === true);
+  const rec = tiers.find((t) => t && typeof t === "object" && ((t as any).recommended === true || (t as any).recommended === "true"));
   return priceTextToCents(((rec ?? tiers[0]) as any)?.price);
 }
 
