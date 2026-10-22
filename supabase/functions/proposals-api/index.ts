@@ -1193,6 +1193,10 @@ White Rabbit LA · 7393 W. Manchester Ave #209, Los Angeles, CA 90045`;
             // when the client signs.
             if (dealId) {
               await supabase.from("proposals").update({ deal_id: dealId }).eq("id", prop.id);
+              {
+                const { data: withTiers } = await supabase.from("proposals").select("tiers").eq("id", prop.id).maybeSingle();
+                await syncDealValue(supabase, { ...prop, deal_id: dealId, tiers: withTiers?.tiers });
+              }
               if (eventDate) {
                 await fetch(`${SUPABASE_URL}/functions/v1/newsletter-admin`, {
                   method: "POST",
