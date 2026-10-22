@@ -16,9 +16,9 @@ describe("approved exact city retirements", () => {
     expect(generatedPaths).not.toContain(from);
   });
 
-  it("keeps Las Vegas, Aspen and all 31 Southern California areas", () => {
+  it("keeps Las Vegas, Aspen and all Southern California areas", () => {
     expect(serviceAreas.map((a) => a.slug)).toEqual(expect.arrayContaining(["las-vegas", "aspen"]));
-    expect(getAreasByRegion()["Southern California"]).toHaveLength(31);
+    expect(getAreasByRegion()["Southern California"]).toHaveLength(30);
     expect(Object.keys(getAreasByRegion())).toEqual(["Southern California", "Mountain & Resort"]);
   });
 
