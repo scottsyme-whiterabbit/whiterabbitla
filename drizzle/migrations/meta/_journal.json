@@ -57,6 +57,13 @@
       "when": 1792614318792,
       "tag": "0007_email_log",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792711786780,
+      "tag": "0008_deal_value_from_proposal_no_sent_requirement",
+      "breakpoints": true
     }
   ]
 }
