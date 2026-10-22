@@ -97,7 +97,7 @@ export function generateSharePages(): Plugin {
         { slug: "home", title: "White Rabbit LA | Luxury Magic Entertainment", description: "Bespoke magical experiences for Fortune 500 events, private celebrations, and luxury gatherings across Los Angeles and beyond.", path: "/", image: DEFAULT_OG },
         { slug: "about", title: "About Scott Syme | White Rabbit Magic", description: "Meet Scott Syme, the magician behind White Rabbit. A Magic Castle® member who has performed for Netflix, Disney, and Morgan Stanley.", path: "/about", image: `${BASE_URL}/og/about.jpg` },
         { slug: "experience", title: "Our Services | White Rabbit Magic", description: "Explore luxury magic experiences: close-up magic, parlor shows, corporate entertainment, and private event performances.", path: "/experience", image: `${BASE_URL}/og/experience.jpg` },
-        { slug: "reviews", title: "Client Reviews | White Rabbit Magic", description: "Read 50+ five-star reviews from corporate planners, brides, and private event hosts.", path: "/reviews", image: `${BASE_URL}/og/reviews.jpg` },
+        { slug: "reviews", title: "Client Reviews | White Rabbit Magic", description: "Read 45+ five-star reviews from corporate planners, brides, and private event hosts.", path: "/reviews", image: `${BASE_URL}/og/reviews.jpg` },
         { slug: "contact", title: "Contact & Booking | White Rabbit Magic", description: "Book Scott Syme for your next corporate event, wedding, or private celebration.", path: "/contact", image: `${BASE_URL}/og/contact.jpg` },
       ];
 
