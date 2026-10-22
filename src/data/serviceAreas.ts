@@ -1,4 +1,5 @@
 // Service area data with city photos and regional grouping
+import { retiredCityPaths } from "./retiredCityRoutes";
 
 export interface ServiceArea {
   city: string;
@@ -78,7 +79,7 @@ const cityData: { city: string; region: string; photo: string; tagline: string }
 export const serviceAreas: ServiceArea[] = cityData.map((c) => ({
   ...c,
   slug: slugify(c.city),
-}));
+})).filter((area) => !retiredCityPaths.has(`/areas/${area.slug}`));
 
 export const getAreasByRegion = () => {
   const grouped: Record<string, ServiceArea[]> = {};

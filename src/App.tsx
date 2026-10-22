@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import RemovedRouteRedirect from "@/components/RemovedRouteRedirect";
+import { retiredCityRoutes } from "@/data/retiredCityRoutes";
 import Navbar from "@/components/Navbar";
 
 import Footer from "@/components/Footer";
@@ -73,6 +74,9 @@ const AppContent = () => {
         <Route path="/reviews" element={<Reviews />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/blog" element={<Blog />} />
+        {retiredCityRoutes.map((r) => (
+          <Route key={r.from} path={r.from} element={<RemovedRouteRedirect to={r.to} />} />
+        ))}
         <Route path="/blog/:slug" element={<BlogArticleOrSeo />} />
         <Route path="/services" element={<ServicesHub />} />
         <Route path="/services/:serviceSlug" element={<ServicePage />} />

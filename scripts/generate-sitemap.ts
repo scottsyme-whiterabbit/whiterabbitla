@@ -6,6 +6,7 @@ import { writeFileSync } from "fs";
 import { blogArticles } from "../src/data/blogArticles";
 import { seoPages } from "../src/data/seoPages";
 import { serviceAreas } from "../src/data/serviceAreas";
+import { retiredCityPaths } from "../src/data/retiredCityRoutes";
 
 const BASE = "https://whiterabbitla.com";
 const TODAY = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
@@ -65,6 +66,7 @@ for (const slug of validServiceSlugs) {
 lines.push("");
 lines.push('  <!-- Service Area Pages -->');
 for (const area of serviceAreas) {
+  if (retiredCityPaths.has(`/areas/${area.slug}`)) continue;
   lines.push(url(`/areas/${area.slug}`, latestBlogDate));
 }
 
@@ -89,6 +91,7 @@ const filteredSeoPages = seoPages.filter(
 lines.push("");
 lines.push('  <!-- SEO Landing Pages -->');
 for (const page of filteredSeoPages) {
+  if (retiredCityPaths.has(`/blog/${page.slug}`)) continue;
   lines.push(url(`/blog/${page.slug}`, TODAY));
 }
 
@@ -104,6 +107,7 @@ const removedCityTokens = [
   "philadelphia","short-hills","potomac","chicago","minneapolis","winnetka","paradise-valley",
 ];
 for (const article of blogArticles) {
+  if (retiredCityPaths.has(`/blog/${article.slug}`)) continue;
   if (removedCityTokens.some((t) => article.slug.startsWith(`${t}-`) || article.slug.includes(`-${t}-`) || article.slug.endsWith(`-${t}`))) continue;
   lines.push(url(`/blog/${article.slug}`, article.publishDate));
 }

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import AnimatedSection from "@/components/AnimatedSection";
+import { retiredCityPaths } from "@/data/retiredCityRoutes";
 
 const expandedCities = [
   { slug: "chicago", name: "Chicago", tagline: "Corporate Galas & Convention Entertainment" },
@@ -25,7 +26,7 @@ const WhereWePerform = ({ articleIndex }: WhereWePerformProps) => {
   const offset = (articleIndex * 3) % expandedCities.length;
   const cities = Array.from({ length: 4 }, (_, i) =>
     expandedCities[(offset + i) % expandedCities.length]
-  );
+  ).filter((city) => !retiredCityPaths.has(`/areas/${city.slug}`));
 
   return (
     <section className="py-16 border-t border-border">
