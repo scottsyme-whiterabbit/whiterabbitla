@@ -2,57 +2,37 @@ import { describe, expect, it } from "vitest";
 import { STANDARD_TIER_LINES, standardLinesForEventType, tierLinesForProposal } from "@/data/proposalAssets";
 import { PRICING_TIER_SETS, pricingTiersForEventType } from "@/data/pricingTierSets";
 
+const ALL_EVENTS = ["Wedding", "Corporate Event", "Private Event", "Fundraiser", "Birthday", "Holiday Party", "Other"];
+
 describe("proposal standard line rules", () => {
-  it.each(["Wedding", "Corporate Event", "Private Event", "Fundraiser", "Birthday", "Holiday Party"])("never preselects optional touches for new %s proposals", event => {
+  it.each(ALL_EVENTS)("preselects no description lines for new %s proposals", event => {
     const tiers = tierLinesForProposal(pricingTiersForEventType(event), event, true);
-    const optional = STANDARD_TIER_LINES.filter(line => line.optional).map(line => line.text);
-    expect(optional).toHaveLength(6);
-    for (const tier of tiers) expect(tier.items.filter(item => optional.includes(item))).toEqual([]);
+    expect(tiers).toHaveLength(3);
+    for (const tier of tiers) expect(tier.items).toEqual([]);
   });
 
-  it.each(["Private Event", "Corporate Event"])("uses the three performance and production defaults for %s", event => {
-    const tiers = tierLinesForProposal(pricingTiersForEventType(event), event, true);
-    const groups = ["Setting: Close-up setup", "Setting: Parlor half build", "Setting: Full build"];
-    expect(groups.map(group => STANDARD_TIER_LINES.filter(line => line.group === group).length)).toEqual([1, 5, 6]);
-    tiers.forEach((tier, index) => {
-      const expected = STANDARD_TIER_LINES.filter(line => groups.includes(line.group) && line.group === groups[index]).map(line => line.text);
-      const other = STANDARD_TIER_LINES.filter(line => groups.includes(line.group) && !expected.includes(line.text)).map(line => line.text);
-      expect(tier.items.filter(item => expected.includes(item))).toEqual(expected);
-      expect(tier.items.filter(item => other.includes(item))).toEqual([]);
-    });
-    const performance = STANDARD_TIER_LINES.filter(line => line.group === "Close-up vs Parlor").map(line => line.text);
-    expect(tiers.map(tier => tier.items.filter(item => performance.includes(item)))).toEqual([[performance[0]], [performance[1]], performance]);
-    expect(tiers.map(tier => tier.items.some(item => item.startsWith("The Afterglow:")))).toEqual([false, false, true]);
-    expect(tiers.map(tier => tier.items.filter(item => item.startsWith("Anywhere in Los Angeles County")).length)).toEqual([1, 1, 1]);
-    expect(tiers.flatMap(tier => tier.items)).not.toContain("Travel and lodging beyond Los Angeles are included.");
-  });
-
-  it("keeps the certificate of insurance line available but out of every tier default", () => {
-    const line = "A certificate of insurance for your venue, on request.";
-    expect(STANDARD_TIER_LINES.map(entry => entry.text)).toContain(line);
-    expect(standardLinesForEventType("Wedding").map(entry => entry.text)).toContain(line);
-    for (const event of ["Wedding", "Corporate Event", "Private Event", "Fundraiser", "Birthday", "Holiday Party"]) {
-      const tiers = tierLinesForProposal(pricingTiersForEventType(event), event, true);
-      expect(tiers.flatMap(tier => tier.items)).not.toContain(line);
+  it("keeps the full grouped standard-line catalog available in the dropdown", () => {
+    expect(STANDARD_TIER_LINES.length).toBeGreaterThan(30);
+    const groups = new Set(STANDARD_TIER_LINES.map(line => line.group));
+    for (const group of ["Planning", "The Magic", "Close-up vs Parlor", "Presentation", "Setting: Close-up setup", "Setting: Parlor half build", "Setting: Full build", "Travel", "Wedding", "Signature Touches"]) {
+      expect(groups.has(group)).toBe(true);
     }
+    expect(STANDARD_TIER_LINES.filter(line => line.optional)).toHaveLength(6);
+    expect(STANDARD_TIER_LINES.map(entry => entry.text)).toContain("A certificate of insurance for your venue, on request.");
   });
 
-  it.each(["Corporate", "Corporate Event", "Fundraiser", "Holiday Party"])("allows corporate-only options and planning defaults for %s", event => {
-    const restricted = standardLinesForEventType(event).filter(line => line.eventTypes);
-    expect(restricted.map(line => line.eventTypes)).toEqual([["corporate"], ["corporate"]]);
-    expect(tierLinesForProposal(pricingTiersForEventType(event), event, true).map(tier => tier.items.includes("A planning call with your planner and executive sponsor."))).toEqual([true, true, true]);
-  });
-
-  it("restricts wedding touches to weddings and excludes corporate planning", () => {
+  it("keeps event-type filtering in the dropdown", () => {
     expect(standardLinesForEventType("Wedding").filter(line => line.eventTypes).map(line => line.eventTypes)).toEqual(Array(5).fill(["wedding"]));
+    for (const event of ["Corporate", "Corporate Event", "Fundraiser", "Holiday Party"]) {
+      expect(standardLinesForEventType(event).filter(line => line.eventTypes).map(line => line.eventTypes)).toEqual([["corporate"], ["corporate"]]);
+    }
     expect(standardLinesForEventType("Private Event").filter(line => line.eventTypes)).toEqual([]);
-    expect(tierLinesForProposal(PRICING_TIER_SETS.Wedding, "Wedding", true).flatMap(tier => tier.items)).not.toContain("A planning call with your planner and executive sponsor.");
   });
 
-  it("preserves all preset metadata and source items while returning editable new defaults", () => {
+  it("preserves all preset metadata while returning editable new defaults", () => {
     const before = structuredClone(PRICING_TIER_SETS);
     const tiers = tierLinesForProposal(PRICING_TIER_SETS.Corporate, "Corporate Event", true);
-    expect(tiers.map(({ items, ...metadata }) => metadata)).toEqual(before.Corporate.map(({ items, ...metadata }) => metadata));
+    expect(tiers).toEqual(before.Corporate);
     tiers[0].items.push("Custom editable detail");
     expect(PRICING_TIER_SETS).toEqual(before);
   });
@@ -63,24 +43,5 @@ describe("proposal standard line rules", () => {
     expect(result).toEqual(saved);
     result[0].items.push("Editable");
     expect(saved[0].items).toEqual(["My existing custom line", "An existing keepsake promise"]);
-  });
-
-  it("builds exact wedding defaults and keeps wedding lines out of other events", () => {
-    const L = (g: string) => STANDARD_TIER_LINES.filter(l => l.group === g).map(l => l.text);
-    const [choice, weekend, rehearsal, speakeasy] = L("Wedding");
-    const closeUp = "Up to ninety minutes of close-up magic, performed among your guests during cocktails.";
-    const planning = ["A planning call with you and your planner before the event.", "I coordinate arrival and setup directly with your venue."];
-    const magic = L("The Magic");
-    const noGlow = magic.filter(t => !t.startsWith("The Afterglow:"));
-    const travel = "Anywhere in Los Angeles County, I come to you at no added cost.";
-    const tiers = tierLinesForProposal(pricingTiersForEventType("Wedding"), "Wedding", true);
-    const generic = tierLinesForProposal(pricingTiersForEventType("Private Event"), "Private Event", true);
-    expect(tiers[0].items).toEqual(generic[0].items);
-    expect(tiers[1].items).toEqual([choice, rehearsal, speakeasy, closeUp, ...planning, ...noGlow, ...L("Presentation"), ...L("Setting: Close-up setup"), ...L("Setting: Parlor half build"), travel]);
-    expect(tiers[2].items).toEqual([weekend, rehearsal, closeUp, speakeasy, ...planning, ...magic, ...L("Presentation"), ...L("Setting: Full build"), travel]);
-    expect(tiers.map(t => [t.name, t.price, !!t.recommended])).toEqual([["The Cocktail Hour", "$2,000", false], ["The Cocktail Hour and The Parlor", "$3,000", false], ["The White Rabbit Wedding", "From $5,000", true]]);
-    for (const event of ["Corporate Event", "Private Event", "Birthday"]) {
-      expect(tierLinesForProposal(pricingTiersForEventType(event), event, true).flatMap(t => t.items).filter(i => L("Wedding").includes(i))).toEqual([]);
-    }
   });
 });
