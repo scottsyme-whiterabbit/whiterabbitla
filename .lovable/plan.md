@@ -1,3 +1,20 @@
+# Approved city-page SEO cleanup
+
+## Changes
+- Add the supplied 184 exact redirects without changing their entries.
+- Register them before the dynamic blog and area routes, preserving existing redirects.
+- Filter retired paths from city-page generation, service areas, sitemap output, and internal links using exact Set membership.
+- Reuse the service pages’ existing Near You section for the seven specified kept city links.
+- Preserve editorial article data, existing copy, styling, and layouts. Empty area regions already hide automatically.
+
+## Technical details
+- Use `src/data/retiredCityRoutes.ts` as the shared exact-path source of truth.
+- Audit hardcoded links and filter only retired destinations; retain surrounding text where links occur within editorial content.
+- Add focused retirement/retention tests and run the test suite; verify public redirects and links in the browser.
+- No publication, deployment, email actions, or database changes.
+
+<!-- Previous investigation retained below for historical context only. -->
+
 # Missing "Booking Inquiry: Meeta Singh" alert — findings and proposed fix
 
 Investigation only. Nothing was edited, sent, invoked, or changed.
