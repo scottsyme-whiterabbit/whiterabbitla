@@ -5,7 +5,6 @@
 - [ ] Homepage brand logos: swap current block for actual businesses performed for (long-standing request).
 
 ## In progress
-- [ ] Approved city-page cleanup: exact redirects, generation/sitemap/link filters, kept service city links, and verification; no publication or deployment.
 - [ ] Mobile-first CRM/PWA pass: improve navigation, dense lists, forms, dialogs, and touch use across every admin screen without removing features.
 - [ ] PART A: Google sign-in for all admin pages (phase 1, alongside password)
   - [ ] Enable Google provider, disable open email signups
@@ -23,6 +22,7 @@
   - [ ] No unique constraint yet
 
 ## Done
+- Approved city-page cleanup: 184 exact redirects verified in the browser, 32 kept area cards, retired links removed, existing Near You style reused, and 309 tests passed; no publication or deployment.
 - Client-panel Emails tile uses sent plus upcoming timeline counts; tile labels wrap. Verified client Emails and Back → More → Money → Email schedule at 390 × 844 with intercepted sample responses. Network-first service worker unchanged; no deployment or data changes.
 - Replaced proposal standard line catalog and event-filtered new-draft defaults; pricing presets and saved-load behavior unchanged. 35 tests and isolated builder checks passed without real service requests; build OK. No deployment or publication.
 - Event-type buttons, selector, templates and preview defaults use shared three-tier presets with premium recommendation; line-item picker and its 33 options unchanged. 24 local tests passed and build OK. No deployment, publication, function invocation or database changes.
