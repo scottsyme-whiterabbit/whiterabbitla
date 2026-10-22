@@ -38,7 +38,7 @@ function setRedirectHead(to: string) {
 }
 
 const RemovedRouteRedirect = ({ to, title = "Redirecting…" }: Props) => {
-  const isBot = typeof navigator !== "undefined" && /bot|crawl|spider|slurp|headless|prerender|lovablehtml|encited|lighthouse/i.test(navigator.userAgent);
+  const isBot = typeof navigator !== "undefined" && (navigator.webdriver === true || /bot|crawl|spider|slurp|headless|prerender|lovablehtml|encited|lighthouse/i.test(navigator.userAgent));
   if (isBot) setRedirectHead(to);
 
   // Preserve the exact crawler signals after SEOHead's passive metadata update.
