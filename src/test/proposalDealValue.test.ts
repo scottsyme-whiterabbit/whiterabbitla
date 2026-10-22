@@ -21,3 +21,9 @@ describe("proposal deal value", () => {
     expect(shouldFillDealValue(null, null)).toBe(false);
   });
 });
+
+describe("recommended stored as string", () => {
+  it("picks the tier whose recommended is \"true\"", () => {
+    expect(proposalValueCents([{ price: "$2,000" }, { price: "$3,500", recommended: "true" }])).toBe(350000);
+  });
+});
