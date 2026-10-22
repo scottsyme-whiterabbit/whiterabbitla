@@ -55,4 +55,19 @@ describe("retired-route crawler signals", () => {
     expect(document.querySelectorAll('[data-removed-route="true"]')).toHaveLength(0);
     expect(document.querySelector('meta[name="robots"]')).toBeNull();
   });
+
+  it("treats an automated browser with a normal Chrome UA as a crawler", () => {
+    Object.defineProperty(navigator, "webdriver", { configurable: true, get: () => true });
+    vi.spyOn(navigator, "userAgent", "get").mockReturnValue(
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+    );
+    try {
+      renderToString(<RemovedRouteRedirect to="/services" />);
+      expect(document.querySelector('meta[name="prerender-status-code"]')?.getAttribute("content")).toBe("301");
+      expect(document.querySelector('meta[name="robots"]')?.getAttribute("content")).toBe("noindex");
+      expect(document.querySelectorAll('[data-removed-route="true"]')).toHaveLength(4);
+    } finally {
+      delete (navigator as unknown as Record<string, unknown>).webdriver;
+    }
+  });
 });
