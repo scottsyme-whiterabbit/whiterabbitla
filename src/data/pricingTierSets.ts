@@ -3,6 +3,8 @@
 // replaces the proposal's current tiers; every tier stays fully editable.
 // href is always empty: tier links come from the proposal's Square invoice URL
 // or are set by hand afterwards.
+// Items always start empty: Scott adds description lines himself from the
+// standard-lines dropdown in the editor.
 import type { Tier } from "@/pages/ProposalTemplate";
 
 export type PricingTierSetName = "Wedding" | "Corporate" | "General";
@@ -15,13 +17,7 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
       cta: "Reserve The Cocktail Hour",
       href: "",
       tagline: "Every guest gets their own moment. Close-up magic, in their hands, as the evening begins.",
-      items: [
-        "Up to 90 minutes of close-up magic during cocktail hour",
-        "Pre-event call with the couple and/or planner",
-        "Mind reading, mentalism, sleight of hand card magic, and magic with borrowed phones and rings",
-        "Scott weaves through guests, performing up close for small groups",
-        "Scott Syme in elegant evening attire, his signature green suit, or a tuxedo on request",
-      ],
+      items: [],
     },
     {
       name: "The Cocktail Hour and The Parlor",
@@ -29,12 +25,7 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
       cta: "Reserve The Cocktail Hour and The Parlor",
       href: "",
       tagline: "Cocktail hour for every guest, plus one more moment you choose: the rehearsal dinner or a private speakeasy show.",
-      items: [
-        "Up to 90 minutes of close-up magic during cocktail hour",
-        "Full pre-event consultation with the couple and planner",
-        "Mind reading, mentalism, sleight of hand card magic, and magic with borrowed phones and rings",
-        "Scott Syme in elegant evening attire, his signature green suit, or a tuxedo on request",
-      ],
+      items: [],
     },
     {
       name: "The White Rabbit Wedding",
@@ -43,11 +34,7 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
       cta: "Reserve The White Rabbit Wedding",
       href: "",
       tagline: "The whole weekend, hosted: the rehearsal dinner show, cocktail hour, and a private speakeasy for your inner circle.",
-      items: [
-        "Full pre-event consultation with the couple and planner",
-        "Mind reading, mentalism, sleight of hand card magic, and magic with borrowed phones and rings",
-        "Scott Syme in elegant evening attire, his signature green suit, or a tuxedo on request",
-      ],
+      items: [],
     },
   ],
   Corporate: [
@@ -57,13 +44,7 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
       cta: "Reserve The Cocktail Hour",
       href: "",
       tagline: "Every guest gets their own moment. About ninety minutes of close-up magic, in their hands, while the room fills.",
-      items: [
-        "About 90 minutes of strolling close-up magic during the reception",
-        "Pre-event call with the host or planner",
-        "Mind reading, mentalism, sleight of hand card magic, and magic with borrowed phones and rings",
-        "Scott weaves through guests, performing up close for small groups",
-        "Scott Syme in elegant evening attire, his signature green suit, or a tuxedo on request",
-      ],
+      items: [],
     },
     {
       name: "The Cocktail Hour and The Parlor",
@@ -71,14 +52,7 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
       cta: "Reserve The Cocktail Hour and The Parlor",
       href: "",
       tagline: "Strolling close-up for the whole room, then a seated show for the guests who matter most.",
-      items: [
-        "About 90 minutes of strolling close-up magic for all guests",
-        "A seated Parlor show for an inner circle chosen by the client",
-        "Music and sound through a Bose S1 Pro+ speaker, and a Neewer key light",
-        "Full pre-event consultation with the host or planner",
-        "Mind reading, mentalism, sleight of hand card magic, and magic with borrowed phones and rings",
-        "Scott Syme in elegant evening attire, his signature green suit, or a tuxedo on request",
-      ],
+      items: [],
     },
     {
       name: "The White Rabbit Evening",
@@ -87,15 +61,7 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
       cta: "Reserve The White Rabbit Evening",
       href: "",
       tagline: "The room is transformed before guests walk in, with a moment built for your honoree or brand and a keepsake to take home.",
-      items: [
-        "Full production build: emerald pipe-and-drape curtains (six velvet panels), Neewer stage lights and uplights, and a Bose S1 Pro+ soundtrack for arrival",
-        "About 90 minutes of strolling close-up magic for all guests",
-        "A seated show inside the full build",
-        "A custom moment built for the honoree or brand, designed after a short pre-event interview",
-        "A keepsake for guests to take home: a signed card, a sealed prediction, or a scroll wrapped in green ribbon",
-        "A handwritten note to the host",
-        "Full pre-event consultation with the host, planner and/or executive sponsor",
-      ],
+      items: [],
     },
   ],
   General: [
@@ -105,13 +71,7 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
       cta: "Reserve The Cocktail Hour",
       href: "",
       tagline: "Every guest gets their own moment. About ninety minutes of close-up magic, in their hands, as your evening begins.",
-      items: [
-        "About 90 minutes of strolling close-up magic during cocktail hour",
-        "Pre-event call with the host",
-        "Mind reading, mentalism, sleight of hand card magic, and magic with borrowed phones and rings",
-        "Scott weaves through guests, performing up close for small groups",
-        "Scott Syme in elegant evening attire, his signature green suit, or a tuxedo on request",
-      ],
+      items: [],
     },
     {
       name: "The Parlor",
@@ -119,14 +79,7 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
       cta: "Reserve The Parlor",
       href: "",
       tagline: "An intimate seated show in your space, with music and light to set the mood. Close enough to see every move, and still impossible to explain.",
-      items: [
-        "A seated Parlor show in your home",
-        "The Afterglow: about 30 minutes of intimate close-up magic after the show, a few guests at a time",
-        "Music and sound through a Bose S1 Pro+ speaker, and a Neewer key light",
-        "Pre-event call with the host",
-        "Mind reading, mentalism, sleight of hand card magic, and magic with borrowed phones and rings",
-        "Scott Syme in elegant evening attire, his signature green suit, or a tuxedo on request",
-      ],
+      items: [],
     },
     {
       name: "The White Rabbit Evening",
@@ -135,15 +88,7 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
       cta: "Reserve The White Rabbit Evening",
       href: "",
       tagline: "Your living room becomes a private theater. Emerald drapes, warm stage light, and a soundtrack greet your guests at the door.",
-      items: [
-        "Full production build: emerald pipe-and-drape curtains (six velvet panels), Neewer stage lights and uplights, and a Bose S1 Pro+ soundtrack for arrival",
-        "A seated show inside the build, with a custom moment for the honoree, designed after a short pre-event interview",
-        "The Afterglow: about 30 minutes of intimate close-up magic after the show, a few guests at a time",
-        "A keepsake for guests to take home: a signed card, a sealed prediction, or a scroll wrapped in green ribbon",
-        "A handwritten note to the host",
-        "Pre-event consultation with the host",
-        "Scott Syme in elegant evening attire, his signature green suit, or a tuxedo on request",
-      ],
+      items: [],
     },
   ],
 };

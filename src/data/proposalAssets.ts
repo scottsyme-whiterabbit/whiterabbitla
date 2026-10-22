@@ -523,37 +523,9 @@ export function standardLinesForEventType(eventType: string): StandardLine[] {
   return STANDARD_TIER_LINES.filter(line => !line.eventTypes || (type !== undefined && line.eventTypes.includes(type)));
 }
 
-// Replace only description items for new drafts; all pricing metadata stays intact.
-export function tierLinesForProposal<T extends { items: string[] }>(tiers: T[], eventType: string, isNew: boolean): T[] {
-  const lines = standardLinesForEventType(eventType);
-  const wedding = pricingTierSetForEventType(eventType) === "Wedding";
-  return tiers.map((tier, index) => {
-    if (!isNew || index > 2) return { ...tier, items: [...tier.items] };
-    const setting = ["Setting: Close-up setup", "Setting: Parlor half build", "Setting: Full build"][index];
-    if (wedding && index > 0) {
-      const w = lines.filter(line => line.group === "Wedding").map(line => line.text);
-      const closeUp = "Up to ninety minutes of close-up magic, performed among your guests during cocktails.";
-      const pick = (fn: (line: StandardLine) => boolean) => lines.filter(line => !line.optional && fn(line)).map(line => line.text);
-      const planning = pick(line => line.group === "Planning" && line.text !== "A certificate of insurance for your venue, on request.");
-      const magic = pick(line => line.group === "The Magic" && (index === 2 || !line.text.startsWith("The Afterglow:")));
-      const presentation = pick(line => line.group === "Presentation");
-      const travel = pick(line => line.group === "Travel" && line.text.startsWith("Anywhere in Los Angeles County"));
-      const items = index === 1
-        ? [w[0], w[2], w[3], closeUp, ...planning, ...magic, ...presentation, ...pick(line => line.group === "Setting: Close-up setup"), ...pick(line => line.group === "Setting: Parlor half build"), ...travel]
-        : [w[1], w[2], closeUp, w[3], ...planning, ...magic, ...presentation, ...pick(line => line.group === "Setting: Full build"), ...travel];
-      return { ...tier, items };
-    }
-    const items = lines.filter(line => {
-      if (line.optional) return false;
-      if (line.group === "Planning") return line.text !== "A certificate of insurance for your venue, on request.";
-      if (line.group === "Presentation") return true;
-      if (line.group === "The Magic") return index === 2 || !line.text.startsWith("The Afterglow:");
-      if (line.group === "Close-up vs Parlor") {
-        return index === 2 || (index === 0 ? line.text.startsWith("Up to ninety minutes") : line.text.startsWith("A forty-five-minute"));
-      }
-      if (line.group === setting) return true;
-      return line.group === "Travel" && line.text.startsWith("Anywhere in Los Angeles County");
-    }).map(line => line.text);
-    return { ...tier, items };
-  });
+// Tier items are never preselected: new drafts start empty and saved
+// proposals keep their stored lines. This only returns editable copies so
+// edits never leak back into the presets.
+export function tierLinesForProposal<T extends { items: string[] }>(tiers: T[], _eventType: string, _isNew: boolean): T[] {
+  return tiers.map((tier) => ({ ...tier, items: [...tier.items] }));
 }
