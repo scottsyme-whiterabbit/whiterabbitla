@@ -16,19 +16,17 @@ describe("pricing tier sets", () => {
     expect(PRICING_TIER_SETS[set].map(t => t.price)).toEqual(["$2,000", "$3,000", "From $5,000"]);
     expect(PRICING_TIER_SETS[set].map(t => Boolean(t.recommended))).toEqual([false, false, true]);
   });
-  it("Wedding preset drops the lines replaced by the wedding standard lines", () => {
+  it.each(["Wedding", "Corporate", "General"] as const)("starts every %s tier with an empty items list", set => {
+    for (const tier of PRICING_TIER_SETS[set]) expect(tier.items).toEqual([]);
+  });
+  it("keeps the wedding tier names", () => {
     expect(PRICING_TIER_SETS.Wedding.map(t => t.name)).toEqual(["The Cocktail Hour", "The Cocktail Hour and The Parlor", "The White Rabbit Wedding"]);
-    const items = PRICING_TIER_SETS.Wedding.flatMap(t => t.items);
-    expect(PRICING_TIER_SETS.Wedding.map(t => t.items.length)).toEqual([5, 4, 3]);
-    expect(items.some(i => i.startsWith("Your choice of one") || i.includes("for the seated moment") || i.startsWith("A seated show at the rehearsal") || i.startsWith("A private speakeasy"))).toBe(false);
-    expect(PRICING_TIER_SETS.Wedding[2].items).not.toContain("Up to 90 minutes of close-up magic during cocktail hour");
   });
   it("Corporate uses its event-adapted tier names", () => {
     expect(PRICING_TIER_SETS.Corporate.map(t => t.name)).toEqual(["The Cocktail Hour", "The Cocktail Hour and The Parlor", "The White Rabbit Evening"]);
   });
-  it("General replaces the extra production tier with host-focused Cocktail Hour", () => {
+  it("General uses its host-focused tier names", () => {
     expect(PRICING_TIER_SETS.General.map(t => t.name)).toEqual(["The Cocktail Hour", "The Parlor", "The White Rabbit Evening"]);
-    expect(PRICING_TIER_SETS.General[0].items).toContain("Pre-event call with the host");
   });
   it.each([["Wedding", "Wedding"], ["Corporate Event", "Corporate"], ["Private Event", "General"], ["Fundraiser", "Corporate"], ["Birthday", "General"], ["Holiday Party", "Corporate"], ["Other", "General"]] as const)("maps %s to %s", (event, set) => {
     expect(pricingTierSetForEventType(event)).toBe(set);
@@ -45,6 +43,6 @@ describe("pricing tier sets", () => {
   it("recognizes populated tiers and handles null and empty arrays", () => {
     expect(tiersHaveContent(null)).toBe(false);
     expect(tiersHaveContent([])).toBe(false);
-    expect(tiersHaveContent(PRICING_TIER_SETS.General)).toBe(true);
+    expect(tiersHaveContent([{ name: "The Parlor", tagline: "", price: "$3,000", href: "", cta: "Reserve The Parlor", items: [] }])).toBe(true);
   });
 });
