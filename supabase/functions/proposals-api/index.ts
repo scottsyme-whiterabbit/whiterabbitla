@@ -15,6 +15,32 @@ import { applyAgreementTerms } from "../_shared/agreement-terms.ts";
 import { resolveSelectedTier } from "./selected-tier.ts";
 import { safeErrorPayload } from "../_shared/safe-error.ts";
 import { publicProposal, publicSignResponse } from "./public-response.ts";
+import { proposalValueCents, shouldFillDealValue } from "./deal-value.ts";
+
+// Link a hand-built proposal to its existing deal (by email) and fill an empty
+// deal value from the recommended tier. Never creates deals, never sends email,
+// never overwrites a set value. Failures are logged and never block the save.
+async function syncDealValue(supabase: any, p: any) {
+  try {
+    if (!p?.id) return;
+    let dealId: string | null = p.deal_id || null;
+    if (!dealId && p.recipient_email) {
+      const { data: d } = await supabase.from("deals").select("id")
+        .eq("contact_email", String(p.recipient_email).trim().toLowerCase())
+        .order("created_at", { ascending: false }).limit(1).maybeSingle();
+      dealId = d?.id || null;
+      if (dealId) await supabase.from("proposals").update({ deal_id: dealId }).eq("id", p.id);
+    }
+    if (!dealId) return;
+    const cents = proposalValueCents(p.tiers);
+    const { data: deal } = await supabase.from("deals").select("deal_value").eq("id", dealId).maybeSingle();
+    if (deal && shouldFillDealValue(deal.deal_value, cents)) {
+      await supabase.from("deals").update({ deal_value: cents }).eq("id", dealId).or("deal_value.is.null,deal_value.eq.0");
+    }
+  } catch (e) {
+    console.warn("[proposals-api] syncDealValue failed", e);
+  }
+}
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -737,6 +763,7 @@ White Rabbit LA`,
         .select()
         .single();
       if (error) return fail(error);
+      await syncDealValue(supabase, data);
       return json({ proposal: data });
     }
 
@@ -752,6 +779,7 @@ White Rabbit LA`,
         .select()
         .single();
       if (error) return fail(error);
+      await syncDealValue(supabase, data);
 
       // If the date, venue or occasion moved, keep the calendar hold in step.
       try {
