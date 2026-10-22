@@ -1,11 +1,23 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { cleanup, render, screen } from "@testing-library/react";
+import { act } from "react";
+import { createRoot, type Root } from "react-dom/client";
 import { renderToString } from "react-dom/server";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import RemovedRouteRedirect from "../components/RemovedRouteRedirect";
 
+let root: Root | undefined;
+function render(element: React.ReactNode) {
+  const container = document.createElement("div");
+  document.body.appendChild(container);
+  root = createRoot(container);
+  act(() => root?.render(element));
+  return { unmount: () => act(() => root?.unmount()) };
+}
+
 afterEach(() => {
-  cleanup();
+  act(() => root?.unmount());
+  root = undefined;
+  document.body.innerHTML = "";
   document.head.innerHTML = "";
   vi.restoreAllMocks();
 });
@@ -25,7 +37,7 @@ describe("retired-route crawler signals", () => {
   it("keeps bots on the stub, preserves absolute URLs and retains tags after unmount", () => {
     vi.spyOn(navigator, "userAgent", "get").mockReturnValue("HeadlessChrome");
     const { unmount } = render(<RemovedRouteRedirect to="https://whiterabbitla.com/experience" />);
-    expect(screen.getByRole("link").getAttribute("href")).toBe("https://whiterabbitla.com/experience");
+    expect(document.querySelector("a")?.getAttribute("href")).toBe("https://whiterabbitla.com/experience");
     expect(document.querySelector('meta[name="robots"]')?.getAttribute("content")).toBe("noindex");
     expect(document.querySelector('meta[name="prerender-header"]')?.getAttribute("content")).toBe("Location: https://whiterabbitla.com/experience");
     expect(document.querySelector('meta[http-equiv="refresh"]')).toBeNull();
@@ -39,7 +51,7 @@ describe("retired-route crawler signals", () => {
       <Route path="/old" element={<RemovedRouteRedirect to="/live" />} />
       <Route path="/live" element={<div>Destination</div>} />
     </Routes></MemoryRouter>);
-    expect(screen.getByText("Destination")).toBeInTheDocument();
+    expect(document.body.textContent).toBe("Destination");
     expect(document.querySelectorAll('[data-removed-route="true"]')).toHaveLength(0);
     expect(document.querySelector('meta[name="robots"]')).toBeNull();
   });
