@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 const isMobileViewport = () =>
   typeof window !== "undefined" && window.matchMedia("(max-width: 768px)").matches;
 import { Link } from "react-router-dom";
+import { retiredCityPaths } from "@/data/retiredCityRoutes";
 import { ArrowRight, Star } from "lucide-react";
 import threeStars from "@/assets/three-stars-gold.png";
 import { motion, AnimatePresence } from "framer-motion";
@@ -419,18 +420,18 @@ const Index = () => {
         <span className="whitespace-nowrap">
           <Link to="/areas/los-angeles" className="no-underline hover:font-bold">Los Angeles</Link>
         </span>{" "}
-        <span className="whitespace-nowrap">
+        {!retiredCityPaths.has("/areas/new-york") && <span className="whitespace-nowrap">
           <span aria-hidden="true" className="mx-3 text-muted-foreground/40 hidden md:inline">·</span>
           <Link to="/areas/new-york" className="no-underline hover:font-bold">New York</Link>
-        </span>{" "}
-        <span className="whitespace-nowrap">
+        </span>}{" "}
+        {!retiredCityPaths.has("/areas/miami") && <span className="whitespace-nowrap">
           <span aria-hidden="true" className="mx-3 text-muted-foreground/40 hidden md:inline">·</span>
           <Link to="/areas/miami" className="no-underline hover:font-bold">Miami</Link>
-        </span>{" "}
-        <span className="whitespace-nowrap">
+        </span>}{" "}
+        {!retiredCityPaths.has("/areas/san-francisco") && <span className="whitespace-nowrap">
           <span aria-hidden="true" className="mx-3 text-muted-foreground/40 hidden md:inline">·</span>
           <Link to="/areas/san-francisco" className="no-underline hover:font-bold">San Francisco</Link>
-        </span>{" "}
+        </span>}{" "}
         <span className="whitespace-nowrap">
           <span aria-hidden="true" className="mx-3 text-muted-foreground/40 hidden md:inline">·</span>
           <Link to="/areas" className="no-underline hover:font-bold">By invitation elsewhere</Link>

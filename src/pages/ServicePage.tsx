@@ -44,6 +44,14 @@ const trustLogos = [
   { name: "Rivian", logo: rivianLogo },
 ];
 
+// Keep these approved city links visible in the existing Near You list.
+const keptServiceCitySlugs: Record<string, string[]> = {
+  "wedding-magician": ["burbank-wedding-magician", "santa-barbara-wedding-magician"],
+  "private-party-magician": ["palm-springs-private-party-magician", "the-hamptons-private-party-magician"],
+  "close-up-magician": ["pasadena-close-up-magician"],
+  "private-magic-show": ["san-francisco-private-magic-show", "west-hollywood-private-magic-show"],
+};
+
 interface ServiceData {
   slug: string;
   title: string;
@@ -918,6 +926,10 @@ const ServicePage = () => {
                 page.slug === "resident-event-magician" ? "Resident Events" :
                 "Private Magic Shows"
               )
+                .sort((a, b) =>
+                  Number(keptServiceCitySlugs[page.slug]?.includes(b.slug) ?? false) -
+                  Number(keptServiceCitySlugs[page.slug]?.includes(a.slug) ?? false)
+                )
                 .slice(0, 10)
                 .map((p) => (
                   <Link

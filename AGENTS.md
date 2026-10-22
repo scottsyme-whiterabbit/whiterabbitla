@@ -1,5 +1,7 @@
 # Project architecture rules
 
+- Retired city routes use the exact-path set in retiredCityRoutes for redirects, data generation, sitemap output, and independent link lists so retirement never prunes unrelated editorial content.
+
 - Client-panel Emails tile counts use the same loaded timeline records as the Sent and Upcoming sections, avoiding legacy-log count drift.
 
 - Shared inquiry-email parsing and Pacific-time rules live in `supabase/functions/_shared/inquiry-email.ts` so instant and scheduled messages make identical eligibility decisions.

@@ -1,3 +1,5 @@
+import { retiredCityPaths } from "./retiredCityRoutes";
+
 export interface FaqItem {
   question: string;
   answer: string;
@@ -3047,7 +3049,7 @@ export const seoPages: SeoPage[] = locations.flatMap((location) =>
   serviceTypes
     .filter((service) => shouldGeneratePage(location, service.key))
     .map((service) => generatePage(location, service))
-);
+).filter((page) => !retiredCityPaths.has(`/blog/${page.slug}`));
 
 export function getSeoPageBySlug(slug: string): SeoPage | undefined {
   return seoPages.find((page) => page.slug === slug);
