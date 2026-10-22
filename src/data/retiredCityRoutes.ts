@@ -1,12 +1,7 @@
 // Retired templated city pages (approved cleanup 2026-10-21). Exact paths only.
 export const retiredCityRoutes: { from: string; to: string }[] = [
-  { from: "/areas/boston", to: "/areas" },
-  { from: "/areas/miami", to: "/areas" },
-  { from: "/areas/new-york", to: "/areas" },
   { from: "/areas/palm-beach", to: "/areas" },
-  { from: "/areas/san-francisco", to: "/areas" },
   { from: "/areas/scottsdale", to: "/areas" },
-  { from: "/areas/the-hamptons", to: "/areas" },
   { from: "/blog/aspen-close-up-magician", to: "/services/close-up-magician" },
   { from: "/blog/aspen-corporate-event-magician", to: "/services/corporate-magician" },
   { from: "/blog/aspen-private-magic-show", to: "/services/private-magic-show" },

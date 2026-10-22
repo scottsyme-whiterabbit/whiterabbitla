@@ -5,9 +5,9 @@ import { serviceAreas, getAreasByRegion } from "../data/serviceAreas";
 import { blogArticles, getBlogArticleBySlug } from "../data/blogArticles";
 
 describe("approved exact city retirements", () => {
-  it("contains 184 unique paths and no retired redirect destinations", () => {
-    expect(retiredCityRoutes).toHaveLength(184);
-    expect(retiredCityPaths.size).toBe(184);
+  it("contains 179 unique paths and no retired redirect destinations", () => {
+    expect(retiredCityRoutes).toHaveLength(179);
+    expect(retiredCityPaths.size).toBe(179);
     for (const route of retiredCityRoutes) expect(retiredCityPaths.has(route.to)).toBe(false);
   });
 
@@ -19,7 +19,18 @@ describe("approved exact city retirements", () => {
   it("keeps Las Vegas, Aspen and all Southern California areas", () => {
     expect(serviceAreas.map((a) => a.slug)).toEqual(expect.arrayContaining(["las-vegas", "aspen"]));
     expect(getAreasByRegion()["Southern California"]).toHaveLength(30);
-    expect(Object.keys(getAreasByRegion())).toEqual(["Southern California", "Mountain & Resort"]);
+    expect(serviceAreas).toHaveLength(37);
+    expect(Object.keys(getAreasByRegion())).toEqual(["Southern California", "Northern California", "Mountain & Resort", "Southeast", "Northeast"]);
+  });
+
+  it.each(["boston", "miami", "new-york", "san-francisco", "the-hamptons"])("restores destination area %s", (slug) => {
+    expect(retiredCityPaths.has(`/areas/${slug}`)).toBe(false);
+    expect(serviceAreas.find((area) => area.slug === slug)?.slug).toBe(slug);
+  });
+
+  it("retires only Palm Beach and Scottsdale area paths", () => {
+    expect(retiredCityRoutes.filter((route) => route.from.startsWith("/areas/")).map((route) => route.from))
+      .toEqual(["/areas/palm-beach", "/areas/scottsdale"]);
   });
 
   it.each([
