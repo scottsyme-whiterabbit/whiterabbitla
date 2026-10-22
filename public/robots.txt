@@ -6,7 +6,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -17,7 +18,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -29,7 +31,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -40,7 +43,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -52,7 +56,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -63,7 +68,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -74,7 +80,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -86,7 +93,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -98,7 +106,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -109,7 +118,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -121,7 +131,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -133,7 +144,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -144,7 +156,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -156,7 +169,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -167,7 +181,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -179,7 +194,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -190,7 +206,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -202,7 +219,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -213,7 +231,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -225,7 +244,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -237,7 +257,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -249,7 +270,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -261,7 +283,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -273,7 +296,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -285,7 +309,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -297,7 +322,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
@@ -309,7 +335,8 @@ Disallow: /pay/
 Disallow: /proposal/
 Disallow: /proposals/
 Disallow: /residency/
-Disallow: /review
+Disallow: /review$
+Disallow: /review/
 Disallow: /unsubscribe
 
 
