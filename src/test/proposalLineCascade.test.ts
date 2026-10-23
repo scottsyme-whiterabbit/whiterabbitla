@@ -14,8 +14,8 @@ describe("proposal dropdown line cascade", () => {
     expect(addLineCascading(emptyTiers(), 2, "Planning").map(t => t.items)).toEqual([[], [], ["Planning"]]);
   });
   it("skips trimmed case-insensitive duplicates without stopping inheritance", () => {
-    const tiers = [{ items: [" planning "] }, { items: ["PLANNING", "Extra"] }, { items: ["Extra"] }];
-    expect(addLineCascading(tiers, 0, "Planning").map(t => t.items)).toEqual([[" planning "], ["PLANNING", "Extra"], ["Planning", "Extra"]]);
+    const tiers = [{ items: [" planning "] }, { items: ["PLANNING", "Extra"] }, { items: ["Top extra"] }];
+    expect(addLineCascading(tiers, 0, "Planning").map(t => t.items)).toEqual([[" planning "], ["PLANNING", "Extra"], ["Planning", "Top extra"]]);
   });
   it("inserts after the last line shared with any lower tier and before extras", () => {
     const tiers = [{ items: ["First", "Second"] }, { items: [" first ", "SECOND", "Middle extra"] }, { items: ["First", "Second", "Middle extra", "Top extra"] }];
