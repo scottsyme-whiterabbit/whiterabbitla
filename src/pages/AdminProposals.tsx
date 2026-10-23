@@ -6,7 +6,7 @@ import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type T
 import { additionalTermsBlock } from "../../supabase/functions/_shared/agreement-terms";
 import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, GALLERY_UPLOAD_PHOTOS, PROPOSAL_TEMPLATES, standardLinesForEventType, tierLinesForProposal, photoKeyToSrc, reviewsForEventType, ALL_PROPOSAL_REVIEWS, type ProposalReview } from "@/data/proposalAssets";
 import { PRICING_TIER_SETS, pricingTiersForEventType, tiersHaveContent, type PricingTierSetName } from "@/data/pricingTierSets";
-import { normalizeTiers } from "@/lib/proposalTiers";
+import { addLineCascading, normalizeTiers } from "@/lib/proposalTiers";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import AdminGate, { AdminSignOutButton } from "@/components/admin/AdminGate";
@@ -1116,7 +1116,7 @@ const ProposalEditor = ({
             <button onClick={addTier} className="text-sm text-forest-dark/70 hover:text-forest-dark flex items-center gap-1"><Plus className="w-4 h-4" /> Add Tier</button>
           </div>
           {proposal.tiers.map((tier, i) => (
-            <TierEditor key={i} eventType={proposal.event_type} tier={tier} onChange={(patch) => updateTier(i, patch)} onRemove={() => removeTier(i)} index={i} />
+            <TierEditor key={i} eventType={proposal.event_type} tier={tier} onChange={(patch) => updateTier(i, patch)} onAddStandardLine={(line) => update({ tiers: addLineCascading(proposal.tiers, i, line) })} onRemove={() => removeTier(i)} index={i} />
           ))}
         </div>
 
@@ -1223,7 +1223,7 @@ const PhotoTile = ({ photo, selected, order, onPick }: { photo: { key: string; s
   </div>
 );
 
-const TierEditor = ({ tier, onChange, onRemove, index, eventType }: { eventType: string; tier: Tier; onChange: (p: Partial<Tier>) => void; onRemove: () => void; index: number }) => {
+const TierEditor = ({ tier, onChange, onAddStandardLine, onRemove, index, eventType }: { eventType: string; tier: Tier; onChange: (p: Partial<Tier>) => void; onAddStandardLine: (line: string) => void; onRemove: () => void; index: number }) => {
   const [open, setOpen] = useState(true);
   const standardLines = standardLinesForEventType(eventType);
   const inputCls = "w-full min-h-[44px] border border-forest-dark/20 px-3 py-2 bg-white text-base";
@@ -1274,7 +1274,7 @@ const TierEditor = ({ tier, onChange, onRemove, index, eventType }: { eventType:
                   value=""
                   onChange={(e) => {
                     const line = e.target.value;
-                    if (line && !tier.items.includes(line)) onChange({ items: [...tier.items, line] });
+                    if (line) onAddStandardLine(line);
                     e.target.value = "";
                   }}
                 >
