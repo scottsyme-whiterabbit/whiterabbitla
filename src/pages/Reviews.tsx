@@ -11,6 +11,12 @@ import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
 const reviews = [
 {
+  name: "Becky G.",
+  role: "Wedding in Costa Mesa",
+  text: "We hired Scott to perform magic for our wedding cocktail hour and it was AMAZING! He was so communicative and professional leading up to the day, and on the day of. We had such a magical experience and would book him again!! Thank you!!",
+  rating: 5
+},
+{
   name: "Tanya R.",
   role: "Private Party, Hollywood Hills",
   text: "Absolutely incredible! such a fun experience and an amazing story teller. Must see!!",
