@@ -953,6 +953,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
         open={showContext}
         onOpenChange={setShowContext}
         onEditDeal={(d) => openEdit(d as Deal)}
+        onDealUpdated={loadDeals}
       />
     </div>
   );

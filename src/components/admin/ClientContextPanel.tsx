@@ -221,6 +221,8 @@ interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onEditDeal?: (deal: ContextDeal) => void;
+  /** Called after a deal save so the parent (e.g. Pipeline board) can reload its own deal list. */
+  onDealUpdated?: () => void;
   /** @deprecated auth now comes from the shared admin session. */
   adminPassword?: string;
 }
@@ -228,7 +230,7 @@ interface Props {
 const folderBtn = "flex items-center justify-center sm:justify-start gap-1.5 px-2 py-2 h-auto min-h-[44px] min-w-0 whitespace-normal rounded-none font-sans text-[11px] tracking-[0.12em] uppercase border transition-colors";
 const smallBtn = "inline-flex items-center gap-1.5 min-h-[40px] font-sans text-[11px] tracking-[0.1em] uppercase transition-colors";
 
-const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Props) => {
+const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onDealUpdated }: Props) => {
   const { requestLostReason, picker } = useLostReasonPicker();
   const email = (dealProp?.contact_email || target?.email || "").toLowerCase().trim();
   const [file, setFile] = useState<ClientFile | null>(null);
@@ -367,6 +369,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
       }
       const res = await callAdmin("update_deal", { deal_id: deal.id, fields: changed, ...(payment ? { payment } : {}) });
       if (res.deal) setDealOverride({ ...deal, ...res.deal });
+      onDealUpdated?.();
       toast.success("Deal saved");
       setEditOpen(false);
       await loadFile().catch(() => {});
@@ -394,6 +397,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange }: Prop
       });
       if (res.moved_to_contacted) {
         setDealOverride({ ...deal, stage: "contacted" });
+        onDealUpdated?.();
         toast.success("Call logged, moved to contacted");
       } else {
         toast.success(logForm === "call" ? "Call logged" : "Note added");
