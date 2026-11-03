@@ -11,6 +11,12 @@ import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
 const reviews = [
 {
+  name: "Anna O.",
+  role: "Private Event Host, Holmby Hills",
+  text: "Scott is absolutely incredible! I’ve hired him multiple times to perform walk-around magic at our parties, and every single time, he completely blows everyone’s minds! Our guests are always genuinely speechless, and they can’t stop talking about his tricks long after the party is over. He’s incredibly talented, engaging, and entertaining, and has a way of captivating everyone around him. He adds such a fun and unexpected element to every event and makes the experience truly unforgettable. I cannot recommend him highly enough!",
+  rating: 5
+},
+{
   name: "Becky G.",
   role: "Wedding in Costa Mesa",
   text: "We hired Scott to perform magic for our wedding cocktail hour and it was AMAZING! He was so communicative and professional leading up to the day, and on the day of. We had such a magical experience and would book him again!! Thank you!!",
