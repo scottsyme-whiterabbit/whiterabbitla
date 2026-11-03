@@ -350,7 +350,7 @@ const Reviews = () => {
                   <Star key={i} size={16} className="fill-accent text-accent" />
                   )}
                   </div>
-                  <blockquote className="font-serif text-lg text-card-foreground leading-relaxed flex-grow mb-6">
+                  <blockquote className="font-['Ogg_Text',Georgia,serif] text-lg text-card-foreground leading-relaxed flex-grow mb-6">
                     "{review.text}"
                   </blockquote>
                   <div>
