@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ClientFileProvider } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
-import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2, ArrowLeft, ArrowUp, ArrowDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2, ArrowLeft, ArrowUp, ArrowDown, ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type Tier, type TimelineItem, type FaqItem } from "./ProposalTemplate";
 import { additionalTermsBlock } from "../../supabase/functions/_shared/agreement-terms";
 import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, GALLERY_UPLOAD_PHOTOS, PROPOSAL_TEMPLATES, standardLinesForEventType, tierLinesForProposal, photoKeyToSrc, reviewsForEventType, ALL_PROPOSAL_REVIEWS, type ProposalReview } from "@/data/proposalAssets";
 import { PRICING_TIER_SETS, pricingTiersForEventType, tiersHaveContent, type PricingTierSetName } from "@/data/pricingTierSets";
 import { addLineCascading, normalizeTiers } from "@/lib/proposalTiers";
 import { DrivePhotoBank } from "@/components/DrivePhotoBank";
+import { ExpandableField } from "@/components/admin/MobileTextEditor";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import AdminGate, { AdminSignOutButton } from "@/components/admin/AdminGate";
 import ResidencyAdmin from "@/components/admin/ResidencyAdmin";
@@ -943,18 +944,19 @@ const ProposalEditor = ({
         <div className={sectionCls}>
           <h2 className="font-serif text-xl text-forest-dark mb-2">Opening Letter Line</h2>
           <p className="text-xs text-forest-dark/60 mb-3">Optional opening line after their name. Leave blank to skip.</p>
-          <textarea
+          <ExpandableField
+            label="Opening letter line"
             className={inputCls + " min-h-[80px]"}
             placeholder="Thank you for the time on the phone. I enjoyed it more than you know."
             value={proposal.letter_intro || ""}
-            onChange={(e) => update({ letter_intro: e.target.value })}
+            onChange={(v) => update({ letter_intro: v })}
           />
         </div>
 
         {/* Intro */}
         <div className={sectionCls}>
           <h2 className="font-serif text-xl text-forest-dark mb-4">Your Night (intro paragraph)</h2>
-          <textarea className={inputCls + " min-h-[140px]"} value={proposal.intro_paragraph} onChange={(e) => update({ intro_paragraph: e.target.value })} />
+          <ExpandableField label="Your Night (intro paragraph)" className={inputCls + " min-h-[140px]"} value={proposal.intro_paragraph} onChange={(v) => update({ intro_paragraph: v })} />
         </div>
 
         </EditorSection>
@@ -1037,9 +1039,22 @@ const ProposalEditor = ({
             {photoLibraryOpen ? "Hide photo library" : "Add photos"}
             <ChevronDown className={`h-4 w-4 transition-transform ${photoLibraryOpen ? "rotate-180" : ""}`} />
           </button>
-          <div className={photoLibraryOpen ? "" : "hidden"}>
+          <div className={photoLibraryOpen ? "max-md:fixed max-md:inset-0 max-md:z-[90] max-md:overflow-y-auto max-md:overscroll-contain max-md:bg-cream max-md:px-4 max-md:pb-32" : "hidden"}>
+          <div className="md:hidden sticky top-0 z-10 -mx-4 mb-3 border-b border-forest-dark/10 bg-cream px-4 pb-3" style={{ paddingTop: "max(0.75rem, env(safe-area-inset-top))" }}>
+            <div className="mb-2 flex items-center justify-between">
+              <h3 className="font-serif text-xl text-forest-dark">Choose photos</h3>
+              <span className="text-sm text-forest-dark/70">{galleryKeys.length} selected</span>
+            </div>
+            <div className="flex gap-2 overflow-x-auto">
+              {(["all", "brand", "drive", "uploads"] as const).map((filter) => (
+                <button key={filter} type="button" onClick={() => setPhotoFilter(filter)} className={`shrink-0 px-4 py-2 border ${photoFilter === filter ? "border-forest-dark bg-forest-dark text-cream" : "border-forest-dark/20 bg-white text-forest-dark"}`}>
+                  {filter[0].toUpperCase() + filter.slice(1)}
+                </button>
+              ))}
+            </div>
+          </div>
           {(photoFilter === "brand" || photoFilter === "uploads") && (
-            <div className="max-h-[420px] overflow-y-auto pr-1" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(110px, 1fr))", gap: "0.5rem" }}>
+            <div className="grid grid-cols-2 gap-3 md:max-h-[420px] md:overflow-y-auto md:pr-1 md:gap-2 md:[grid-template-columns:repeat(auto-fill,minmax(110px,1fr))]">
               {(photoFilter === "uploads" ? GALLERY_UPLOAD_PHOTOS : BRAND_PHOTOS.filter((photo) => !photo.key.startsWith("upload:"))).map((p) => {
                 const selected = galleryKeys.includes(p.key);
                 const order = selected ? galleryKeys.indexOf(p.key) + 1 : null;
@@ -1053,6 +1068,7 @@ const ProposalEditor = ({
             <DrivePhotoBank
               password={password}
               showManager
+              mobileLarge
               selectedFileIds={galleryKeys
                 .filter((k) => k.startsWith("drive:"))
                 .map((k) => k.slice(6))}
@@ -1064,6 +1080,11 @@ const ProposalEditor = ({
             />
           )}
 
+          <div className="md:hidden fixed inset-x-0 bottom-0 z-[95] border-t border-forest-dark/10 bg-white px-4 pt-3" style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}>
+            <button type="button" onClick={() => setPhotoLibraryOpen(false)} className="w-full min-h-[52px] bg-forest-dark text-cream text-base">
+              Done, {galleryKeys.length} photo{galleryKeys.length === 1 ? "" : "s"} selected
+            </button>
+          </div>
           </div>
         </div>
 
@@ -1188,11 +1209,12 @@ const ProposalEditor = ({
           <p className="text-xs text-forest-dark/60 mb-5 pl-9">Use when a client asks not to be photographed or filmed.</p>
 
           <label className={labelCls}>Additional terms</label>
-          <textarea
+          <ExpandableField
+            label="Additional terms"
             rows={6}
             className="w-full border border-forest-dark/20 px-3 py-2 bg-white text-base min-h-[44px]"
             value={proposal.special_terms || ""}
-            onChange={(e) => update({ special_terms: e.target.value })}
+            onChange={(v) => update({ special_terms: v })}
           />
           <p className="text-xs text-forest-dark/60 mt-1 mb-4">Appears in the signed agreement as Additional Terms Agreed, directly above your contact details. Anything written here overrides the standard terms where they conflict.</p>
 
@@ -1215,9 +1237,10 @@ const ProposalEditor = ({
 
 const PhotoTile = ({ photo, selected, order, onPick }: { photo: { key: string; src: string; label: string }; selected: boolean; order: number | null; onPick: () => void }) => (
   <div className="min-w-0">
-    <button type="button" onClick={onPick} title={photo.label} className={`relative w-full aspect-square overflow-hidden border-2 transition-all ${selected ? "border-gold ring-2 ring-gold/30" : "border-transparent hover:border-forest-dark/40"}`}>
+    <button type="button" onClick={onPick} title={photo.label} aria-pressed={selected} className={`relative w-full aspect-square overflow-hidden border-2 transition-all ${selected ? "border-gold ring-2 ring-gold/30" : "border-transparent hover:border-forest-dark/40"}`}>
       <img src={photo.src} alt={photo.label} loading="lazy" decoding="async" className="w-full h-full object-cover" />
-      {selected && order !== null && <div className="absolute top-1 right-1 bg-gold text-forest-dark w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold">{order}</div>}
+      {selected && <div className="absolute top-1.5 left-1.5 bg-forest-dark text-cream w-8 h-8 md:w-6 md:h-6 rounded-full flex items-center justify-center shadow" aria-hidden="true"><Check className="w-5 h-5 md:w-4 md:h-4" /></div>}
+      {selected && order !== null && <div className="absolute top-1.5 right-1.5 bg-gold text-forest-dark w-8 h-8 md:w-6 md:h-6 rounded-full flex items-center justify-center text-sm md:text-xs font-bold">{order}</div>}
     </button>
     <div className="mt-1 truncate text-xs text-forest-dark/60" title={photo.label}>{photo.label}</div>
   </div>
@@ -1254,8 +1277,8 @@ const TierEditor = ({ tier, onChange, onAddStandardLine, onRemove, index, eventT
       </div>
       {open && (
         <div className="p-4 grid md:grid-cols-2 gap-4">
-          <div className="md:col-span-2"><label className={labelCls}>Name</label><input className={inputCls} value={tier.name} onChange={(e) => onChange({ name: e.target.value })} /></div>
-          <div className="md:col-span-2"><label className={labelCls}>Tagline</label><input className={inputCls} value={tier.tagline} onChange={(e) => onChange({ tagline: e.target.value })} /></div>
+          <div className="md:col-span-2"><label className={labelCls}>Name</label><ExpandableField multiline={false} label="Package name" className={inputCls} value={tier.name} onChange={(v) => onChange({ name: v })} /></div>
+          <div className="md:col-span-2"><label className={labelCls}>Tagline</label><ExpandableField multiline={false} label="Package tagline" className={inputCls} value={tier.tagline} onChange={(v) => onChange({ tagline: v })} /></div>
           <div><label className={labelCls}>Price (display)</label><input className={inputCls} placeholder="$3,500" value={tier.price} onChange={(e) => onChange({ price: e.target.value })} /></div>
           <div><label className={labelCls}>CTA label</label><input className={inputCls} value={tier.cta} onChange={(e) => onChange({ cta: e.target.value })} /></div>
           <div className="md:col-span-2"><label className={labelCls}>Square checkout link</label><input className={inputCls} placeholder="https://square.link/..." value={tier.href} onChange={(e) => onChange({ href: e.target.value })} /></div>

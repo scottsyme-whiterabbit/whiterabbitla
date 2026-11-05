@@ -1,5 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
-import { Loader2, RefreshCw, Plus, Trash2, ImageIcon, X } from "lucide-react";
+import { Loader2, RefreshCw, Plus, Trash2, ImageIcon, X, Check } from "lucide-react";
 import { toast } from "sonner";
 
 const FN = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/drive-photos`;
@@ -49,6 +49,7 @@ export function DrivePhotoBank({
   selectedClassName = "border-gold ring-2 ring-gold/30",
   unselectedClassName = "border-transparent hover:border-forest-dark/40 opacity-90 hover:opacity-100",
   beforeFiles,
+  mobileLarge = false,
 }: {
   password: string;
   onPick: (fileId: string, name: string) => void;
@@ -58,6 +59,7 @@ export function DrivePhotoBank({
   selectedClassName?: string;
   unselectedClassName?: string;
   beforeFiles?: ReactNode;
+  mobileLarge?: boolean;
 }) {
   const [folders, setFolders] = useState<DriveFolder[]>([]);
   const [activeFolder, setActiveFolder] = useState<string | null>(null);
@@ -241,7 +243,10 @@ export function DrivePhotoBank({
 
       {/* Files grid */}
       {(activeFolder || beforeFiles) && (
-        <div className="max-h-[420px] overflow-y-auto pr-1" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(110px, 1fr))", gap: "0.5rem" }}>
+        <div
+          className={mobileLarge ? "grid grid-cols-2 gap-3 md:max-h-[420px] md:overflow-y-auto md:pr-1 md:gap-2 md:[grid-template-columns:repeat(auto-fill,minmax(110px,1fr))]" : "max-h-[420px] overflow-y-auto pr-1"}
+          style={mobileLarge ? undefined : { display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(110px, 1fr))", gap: "0.5rem" }}
+        >
           {beforeFiles}
           {activeFolder && loading && files.length === 0 && (
             <div className="col-span-full text-center text-xs text-forest-dark/50 py-6">
@@ -261,10 +266,14 @@ export function DrivePhotoBank({
                 <button
                   type="button"
                   onClick={() => onPick(file.id, file.name)}
+                  aria-pressed={selected}
                   title={file.name}
                   className={`relative w-full min-h-[44px] ${thumbClassName} ${selected ? selectedClassName : unselectedClassName}`}
                 >
                   <img src={THUMB(file)} onError={(e) => onThumbErr(e, file.id)} alt={file.name} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                  {selected && mobileLarge && (
+                    <div className="absolute top-1.5 left-1.5 bg-forest-dark text-cream w-8 h-8 md:w-6 md:h-6 rounded-full flex items-center justify-center shadow" aria-hidden="true"><Check className="w-5 h-5 md:w-4 md:h-4" /></div>
+                  )}
                   {selected && order !== null && (
                     <div className="absolute top-1 right-1 bg-gold text-forest-dark w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold">
                       {order}
