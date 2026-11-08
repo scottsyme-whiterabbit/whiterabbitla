@@ -9,7 +9,6 @@ import { serviceAreas } from "../src/data/serviceAreas";
 import { retiredCityPaths } from "../src/data/retiredCityRoutes";
 
 const BASE = "https://whiterabbitla.com";
-const TODAY = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
 
 // Valid /services/:slug keys (must match ServicePage.tsx servicePages record)
 const validServiceSlugs = [
@@ -26,13 +25,10 @@ const validServiceSlugs = [
   "resident-event-magician",
 ];
 
-// Find the most recent blog publish date for area pages fallback
-const latestBlogDate = blogArticles.reduce(
-  (latest, a) => (a.publishDate > latest ? a.publishDate : latest),
-  blogArticles[0]?.publishDate ?? TODAY
-);
-
-function url(path: string, lastmod: string): string {
+// lastmod only when the page has its own reliable date (article publishDate);
+// otherwise omitted so reruns never stamp unchanged pages with today's date.
+function url(path: string, lastmod?: string): string {
+  if (!lastmod) return `  <url><loc>${BASE}${path}</loc></url>`;
   return `  <url><loc>${BASE}${path}</loc><lastmod>${lastmod}</lastmod></url>`;
 }
 
@@ -40,34 +36,34 @@ const lines: string[] = [
   '<?xml version="1.0" encoding="UTF-8"?>',
   '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
   '  <!-- Core Pages -->',
-  url("/", TODAY),
-  url("/experience", TODAY),
-  url("/about", TODAY),
-  url("/reviews", TODAY),
-  url("/contact", TODAY),
-  url("/blog", TODAY),
-  url("/areas", TODAY),
-  url("/quiz", TODAY),
-  url("/deck", TODAY),
-  url("/services", TODAY),
-  url("/planners", TODAY),
-  url("/guide", TODAY),
-  url("/refer", TODAY),
-  url("/privacy", TODAY),
-  url("/terms", TODAY),
+  url("/"),
+  url("/experience"),
+  url("/about"),
+  url("/reviews"),
+  url("/contact"),
+  url("/blog"),
+  url("/areas"),
+  url("/quiz"),
+  url("/deck"),
+  url("/services"),
+  url("/planners"),
+  url("/guide"),
+  url("/refer"),
+  url("/privacy"),
+  url("/terms"),
   "",
   '  <!-- Dedicated Service Pages -->',
 ];
 
 for (const slug of validServiceSlugs) {
-  lines.push(url(`/services/${slug}`, TODAY));
+  lines.push(url(`/services/${slug}`));
 }
 
 lines.push("");
 lines.push('  <!-- Service Area Pages -->');
 for (const area of serviceAreas) {
   if (retiredCityPaths.has(`/areas/${area.slug}`)) continue;
-  lines.push(url(`/areas/${area.slug}`, latestBlogDate));
+  lines.push(url(`/areas/${area.slug}`));
 }
 
 const soft404Suffixes = [
@@ -92,7 +88,7 @@ lines.push("");
 lines.push('  <!-- SEO Landing Pages -->');
 for (const page of filteredSeoPages) {
   if (retiredCityPaths.has(`/blog/${page.slug}`)) continue;
-  lines.push(url(`/blog/${page.slug}`, TODAY));
+  lines.push(url(`/blog/${page.slug}`));
 }
 
 lines.push("");

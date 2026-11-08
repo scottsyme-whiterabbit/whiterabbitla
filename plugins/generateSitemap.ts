@@ -22,106 +22,108 @@ const validServiceSlugs = [
   "resident-event-magician",
 ];
 
-function url(path: string, lastmod: string): string {
+// lastmod is only written when the page has its own reliable date (an
+// article's publishDate). Pages without one omit lastmod entirely, so a
+// rebuild never stamps unchanged pages with the build date.
+function url(path: string, lastmod?: string): string {
+  if (!lastmod) return `  <url><loc>${BASE}${path}</loc></url>`;
   return `  <url><loc>${BASE}${path}</loc><lastmod>${lastmod}</lastmod></url>`;
+}
+
+export function buildSitemapXml(): { xml: string; count: number } {
+  const lines: string[] = [
+    '<?xml version="1.0" encoding="UTF-8"?>',
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    '  <!-- Core Pages -->',
+    url("/"),
+    url("/experience"),
+    url("/about"),
+    url("/reviews"),
+    url("/contact"),
+    url("/blog"),
+    url("/areas"),
+    url("/quiz"),
+    url("/deck"),
+    url("/services"),
+    "",
+    '  <!-- Dedicated Service Pages -->',
+  ];
+
+  for (const slug of validServiceSlugs) {
+    lines.push(url(`/services/${slug}`));
+  }
+
+  lines.push("");
+  lines.push('  <!-- Service Area Pages -->');
+  for (const area of serviceAreas) {
+    if (retiredCityPaths.has(`/areas/${area.slug}`)) continue;
+    lines.push(url(`/areas/${area.slug}`));
+  }
+
+  const soft404Suffixes = [
+    "rehearsal-dinner-magician",
+    "halloween-party-magician",
+    "christmas-party-magician",
+    "premiere-red-carpet-magician",
+    "red-carpet-magician",
+    "dmc-entertainment",
+    "resident-event-magician",
+    "trade-show-magician",
+    "holiday-party-magician",
+    "charity-gala-magician",
+    "golf-tournament-magician",
+  ];
+
+  const filteredSeoPages = seoPages.filter(
+    (page) => !soft404Suffixes.some((s) => page.slug.endsWith(s))
+  );
+
+  lines.push("");
+  lines.push('  <!-- SEO Landing Pages -->');
+  for (const page of filteredSeoPages) {
+    if (retiredCityPaths.has(`/blog/${page.slug}`)) continue;
+    lines.push(url(`/blog/${page.slug}`));
+  }
+
+  lines.push("");
+  lines.push('  <!-- Editorial Blog Articles -->');
+  const removedCityTokens = [
+    "seattle","portland","denver","vail","telluride","park-city","jackson-hole","sun-valley","lake-tahoe",
+    "napa-valley","sonoma","carmel","hillsborough","san-mateo","burlingame","atherton","palo-alto","woodside",
+    "los-altos","menlo-park","saratoga","los-gatos","tiburon","mill-valley","austin","dallas","houston",
+    "san-antonio","fort-worth","highland-park","river-oaks","nashville","atlanta","buckhead","charleston",
+    "naples","coral-gables","jupiter","sarasota","nantucket","marthas-vineyard","greenwich","washington-dc",
+    "philadelphia","short-hills","potomac","chicago","minneapolis","winnetka","paradise-valley",
+  ];
+  for (const article of blogArticles) {
+    if (retiredCityPaths.has(`/blog/${article.slug}`)) continue;
+    if (removedCityTokens.some((t) => article.slug.startsWith(`${t}-`) || article.slug.includes(`-${t}-`) || article.slug.endsWith(`-${t}`))) continue;
+    lines.push(url(`/blog/${article.slug}`, article.publishDate));
+  }
+
+  lines.push("</urlset>");
+
+  // Deduplicate URLs (blog article slugs can collide with SEO slugs)
+  const seen = new Set<string>();
+  const deduped = lines.filter((line) => {
+    const m = line.match(/<loc>([^<]+)<\/loc>/);
+    if (!m) return true;
+    if (seen.has(m[1])) return false;
+    seen.add(m[1]);
+    return true;
+  });
+
+  return { xml: deduped.join("\n"), count: seen.size };
 }
 
 export function generateSitemap(): Plugin {
   return {
     name: "generate-sitemap",
     buildStart() {
-      const TODAY = new Date().toISOString().slice(0, 10);
-
-      const latestBlogDate = blogArticles.reduce(
-        (latest, a) => (a.publishDate > latest ? a.publishDate : latest),
-        blogArticles[0]?.publishDate ?? TODAY
-      );
-
-      const lines: string[] = [
-        '<?xml version="1.0" encoding="UTF-8"?>',
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-        '  <!-- Core Pages -->',
-        url("/", TODAY),
-        url("/experience", TODAY),
-        url("/about", TODAY),
-        url("/reviews", TODAY),
-        url("/contact", TODAY),
-        url("/blog", TODAY),
-        url("/areas", TODAY),
-        url("/quiz", TODAY),
-        url("/deck", TODAY),
-        url("/services", TODAY),
-        "",
-        '  <!-- Dedicated Service Pages -->',
-      ];
-
-      for (const slug of validServiceSlugs) {
-        lines.push(url(`/services/${slug}`, TODAY));
-      }
-
-      lines.push("");
-      lines.push('  <!-- Service Area Pages -->');
-      for (const area of serviceAreas) {
-        if (retiredCityPaths.has(`/areas/${area.slug}`)) continue;
-        lines.push(url(`/areas/${area.slug}`, latestBlogDate));
-      }
-
-      const soft404Suffixes = [
-        "rehearsal-dinner-magician",
-        "halloween-party-magician",
-        "christmas-party-magician",
-        "premiere-red-carpet-magician",
-        "red-carpet-magician",
-        "dmc-entertainment",
-        "resident-event-magician",
-        "trade-show-magician",
-        "holiday-party-magician",
-        "charity-gala-magician",
-        "golf-tournament-magician",
-      ];
-
-      const filteredSeoPages = seoPages.filter(
-        (page) => !soft404Suffixes.some((s) => page.slug.endsWith(s))
-      );
-
-      lines.push("");
-      lines.push('  <!-- SEO Landing Pages -->');
-      for (const page of filteredSeoPages) {
-        if (retiredCityPaths.has(`/blog/${page.slug}`)) continue;
-        lines.push(url(`/blog/${page.slug}`, TODAY));
-      }
-
-      lines.push("");
-      lines.push('  <!-- Editorial Blog Articles -->');
-      const removedCityTokens = [
-        "seattle","portland","denver","vail","telluride","park-city","jackson-hole","sun-valley","lake-tahoe",
-        "napa-valley","sonoma","carmel","hillsborough","san-mateo","burlingame","atherton","palo-alto","woodside",
-        "los-altos","menlo-park","saratoga","los-gatos","tiburon","mill-valley","austin","dallas","houston",
-        "san-antonio","fort-worth","highland-park","river-oaks","nashville","atlanta","buckhead","charleston",
-        "naples","coral-gables","jupiter","sarasota","nantucket","marthas-vineyard","greenwich","washington-dc",
-        "philadelphia","short-hills","potomac","chicago","minneapolis","winnetka","paradise-valley",
-      ];
-      for (const article of blogArticles) {
-        if (retiredCityPaths.has(`/blog/${article.slug}`)) continue;
-        if (removedCityTokens.some((t) => article.slug.startsWith(`${t}-`) || article.slug.includes(`-${t}-`) || article.slug.endsWith(`-${t}`))) continue;
-        lines.push(url(`/blog/${article.slug}`, article.publishDate));
-      }
-
-      lines.push("</urlset>");
-
-      // Deduplicate URLs (blog article slugs can collide with SEO slugs)
-      const seen = new Set<string>();
-      const deduped = lines.filter((line) => {
-        const m = line.match(/<loc>([^<]+)<\/loc>/);
-        if (!m) return true;
-        if (seen.has(m[1])) return false;
-        seen.add(m[1]);
-        return true;
-      });
-
-      writeFileSync("public/sitemap.xml", deduped.join("\n"));
+      const { xml, count } = buildSitemapXml();
+      writeFileSync("public/sitemap.xml", xml);
       console.log(
-        `[sitemap] Generated: ${seen.size} unique URLs (${seoPages.length} SEO + ${blogArticles.length} articles + ${serviceAreas.length} areas)`
+        `[sitemap] Generated: ${count} unique URLs (${seoPages.length} SEO + ${blogArticles.length} articles + ${serviceAreas.length} areas)`
       );
     },
   };
