@@ -130,17 +130,6 @@ const Index = () => {
   const seoTitle = "White Rabbit LA, Private Magic, by Appointment";
   const seoDescription = "Close-up magic and mentalism for private events in Los Angeles and select destinations. Magic Castle member trusted by Netflix, Disney, and Morgan Stanley.";
 
-  // Homepage Person schema
-  useJsonLd("homepage-person-schema", {
-    "@type": "Person",
-    name: "Scott Syme",
-    jobTitle: "Magician & Mentalist",
-    worksFor: { "@type": "Organization", name: "White Rabbit LA" },
-    description: "Magician and mentalist, Magic Castle member, and consultant to America's Got Talent and Disney Channel performers",
-    url: "https://whiterabbitla.com/about",
-    sameAs: ["https://www.instagram.com/scottsyme_/"],
-  });
-
   useJsonLd("homepage-breadcrumb-schema", {
     "@type": "BreadcrumbList",
     itemListElement: [

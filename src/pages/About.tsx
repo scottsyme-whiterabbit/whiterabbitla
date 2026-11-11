@@ -10,7 +10,7 @@ import cardsStackImg from "@/assets/cards-stack-curtain.jpg";
 import cardsFanImg from "@/assets/cards-fan-closeup.jpg";
 import { Link } from "react-router-dom";
 import SEOHead from "@/components/SEOHead";
-import { useWebPageSchema, useSpeakableSchema } from "@/hooks/useSchemaOrg";
+import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 import threeStars from "@/assets/three-stars-gold.png";
 import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
@@ -18,8 +18,7 @@ const About = () => {
   useScrollDepth("about");
   const seoTitle = "About Scott Syme | LA Magician & Magic Castle Member";
   const seoDescription = "Meet Scott Syme, the magician behind White Rabbit LA. Magic Castle member who has performed for Netflix, Disney, Morgan Stanley, and discerning private hosts.";
-  useWebPageSchema({ name: "About Scott Syme", description: "Meet Scott Syme, the magician behind White Rabbit. A Magic Castle® member who has performed for Netflix, Disney, and Morgan Stanley.", path: "/about", type: "ProfilePage" });
-  useSpeakableSchema({ name: "About Scott Syme", path: "/about" });
+  useWebPageSchema({ name: "About Scott Syme", description: "Meet Scott Syme, the magician behind White Rabbit. A Magic Castle® member who has performed for Netflix, Disney, and Morgan Stanley.", path: "/about", type: "ProfilePage", mainEntityId: "https://whiterabbitla.com/#scott-syme", speakableSelectors: ["h1", "h2", "[data-speakable]"] });
   return (
     <main id="main-content" className="pt-20">
       <SEOHead title={seoTitle} description={seoDescription} canonical="/about" ogImage={scottPhoto} />

@@ -127,6 +127,8 @@ export function useWebPageSchema(page: {
   description: string;
   path: string;
   type?: string;
+  mainEntityId?: string;
+  speakableSelectors?: string[];
 }) {
   useJsonLd("webpage-schema", [
     {
@@ -137,6 +139,10 @@ export function useWebPageSchema(page: {
       isPartOf: { "@type": "WebSite", "@id": `${BASE_URL}/#website`, name: "White Rabbit LA", url: BASE_URL },
       publisher,
       inLanguage: "en-US",
+      ...(page.mainEntityId ? { mainEntity: { "@id": page.mainEntityId } } : {}),
+      ...(page.speakableSelectors
+        ? { speakable: { "@type": "SpeakableSpecification", cssSelector: page.speakableSelectors } }
+        : {}),
     },
     breadcrumb([
       { name: "Home", url: BASE_URL },
