@@ -127,7 +127,7 @@ const Index = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const seoTitle = "White Rabbit LA, Private Magic, by Appointment";
+  const seoTitle = "White Rabbit LA, Los Angeles Magician by Appointment";
   const seoDescription = "Close-up magic and mentalism for private events in Los Angeles and select destinations. Magic Castle member trusted by Netflix, Disney, and Morgan Stanley.";
 
   useJsonLd("homepage-breadcrumb-schema", {
