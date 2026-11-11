@@ -244,7 +244,7 @@ const Index = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.95 }}
-            className="relative mt-4 md:mt-5 font-sans text-[10px] md:text-[11px] tracking-[0.35em] uppercase text-cream/60 drop-shadow-md"
+            className="relative mt-4 md:mt-5 font-sans text-[10px] md:text-[11px] tracking-[0.35em] uppercase text-cream/60 drop-shadow-md hidden md:block"
           >
             Los Angeles · Aspen · Jackson Hole · The Hamptons · Miami
           </motion.p>
@@ -326,7 +326,7 @@ const Index = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.75 }}
-          className="text-center mt-4 font-sans text-[10px] tracking-[0.35em] uppercase text-muted-foreground/80"
+          className="text-center mt-4 font-sans text-[10px] tracking-[0.35em] uppercase text-muted-foreground/80 hidden"
         >
           Los Angeles · Aspen · Jackson Hole · The Hamptons · Miami
         </motion.p>
