@@ -10,11 +10,12 @@ import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   ArrowLeft, Mail, RefreshCw, Send, Loader2, BadgeDollarSign, BellOff, FileText, ExternalLink, Copy,
-  CalendarClock, FileSignature, Phone, Plus, History,
+  CalendarClock, FileSignature, Phone, Plus, History, PenLine,
 } from "lucide-react";
 import { LostReasonField, useLostReasonPicker } from "@/components/admin/LostReasonPicker";
 import { lostReasonError } from "@/lib/lostReason";
 import { getAdminPassword } from "@/lib/adminAuth";
+import PersonalReplyHelper from "@/components/admin/PersonalReplyHelper";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
@@ -45,7 +46,7 @@ export interface ClientTarget {
   name?: string | null;
   dealId?: string | null;
   /** Folder to open first (e.g. from the Today screen). */
-  folder?: "payments" | "email" | "documents" | "correspondence" | "proposal" | null;
+  folder?: "payments" | "email" | "documents" | "correspondence" | "proposal" | "reply" | null;
 }
 
 interface ThreadMessage {
@@ -258,6 +259,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onDeal
   const [logForm, setLogForm] = useState<"call" | "note" | null>(null);
   const [callOutcome, setCallOutcome] = useState<string | null>(null);
   const [logText, setLogText] = useState("");
+  const [replyOpen, setReplyOpen] = useState(false);
 
   const baseDeal: ContextDeal | null = dealProp || createdDeal || file?.deal || null;
   const deal: ContextDeal | null = baseDeal && dealOverride && dealOverride.id === baseDeal.id
@@ -429,7 +431,8 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onDeal
     if (!open || !email) return;
     let cancelled = false;
     setLoading(true);
-    setTab(target?.folder ?? null);
+    setTab(target?.folder && target.folder !== "reply" ? target.folder : null);
+    setReplyOpen(target?.folder === "reply");
     setFile(null);
     setCreatedDeal(null);
     setMessages([]);
@@ -741,6 +744,9 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onDeal
                     <button onClick={() => openLog("note")} className={`${smallBtn} min-h-[44px] ${logForm === "note" ? "text-accent" : "text-muted-foreground hover:text-foreground"}`}>
                       <Plus size={13} /> Add a note
                     </button>
+                    <button onClick={() => setReplyOpen((v) => !v)} className={`${smallBtn} min-h-[44px] ${replyOpen ? "text-accent" : "text-muted-foreground hover:text-foreground"}`}>
+                      <PenLine size={13} /> Personal reply
+                    </button>
                   </>
                 )}
               </div>
@@ -785,6 +791,22 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onDeal
                 </div>
               )}
             </section>
+
+            {deal && replyOpen && (
+              <PersonalReplyHelper
+                key={deal.id}
+                dealId={deal.id}
+                onClose={() => setReplyOpen(false)}
+                onSent={() => {
+                  setReplyOpen(false);
+                  if (deal.stage === "new") setDealOverride({ ...deal, stage: "contacted" });
+                  onDealUpdated?.();
+                  loadActivity(deal.id).catch(() => {});
+                  loadFile().catch(() => {});
+                  setTimeout(() => { syncGmail(deal.id, true).catch(() => {}); }, 4000);
+                }}
+              />
+            )}
 
             {deal ? (
               <>
@@ -865,7 +887,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onDeal
                 ) : (
                   <ul className="divide-y divide-border border border-border">
                     {activity.map((a) => {
-                      const loud = a.type === "call" || a.type === "note";
+                      const loud = a.type === "call" || a.type === "note" || a.type === "personal_reply";
                       const when = new Date(a.occurred_at || a.created_at);
                       return (
                         <li key={a.id} className={`p-3 ${loud ? "" : "opacity-70"}`}>

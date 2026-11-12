@@ -22,6 +22,7 @@
   - [ ] No unique constraint yet
 
 ## Done
+- Personal reply helper: Needs your reply list on Today, five templates in the client panel, full preview with Gmail signature, send on the Booking Inquiry thread. Drafting verified live; a real send not yet tried. Not published.
 - Approved city-page cleanup: 184 exact redirects verified in the browser, 32 kept area cards, retired links removed, existing Near You style reused, and 309 tests passed; no publication or deployment.
 - Client-panel Emails tile uses sent plus upcoming timeline counts; tile labels wrap. Verified client Emails and Back → More → Money → Email schedule at 390 × 844 with intercepted sample responses. Network-first service worker unchanged; no deployment or data changes.
 - Replaced proposal standard line catalog and event-filtered new-draft defaults; pricing presets and saved-load behavior unchanged. 35 tests and isolated builder checks passed without real service requests; build OK. No deployment or publication.

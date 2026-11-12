@@ -1757,6 +1757,54 @@ export type Database = {
         }
         Relationships: []
       }
+      personal_replies: {
+        Row: {
+          body: string | null
+          created_at: string
+          deal_id: string
+          gmail_message_id: string | null
+          gmail_thread_id: string | null
+          id: string
+          inquiry_id: string | null
+          reply_type: string
+          request_id: string
+          sent_at: string | null
+          status: string
+          subject: string | null
+          to_email: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          deal_id: string
+          gmail_message_id?: string | null
+          gmail_thread_id?: string | null
+          id?: string
+          inquiry_id?: string | null
+          reply_type: string
+          request_id: string
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+          to_email: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          deal_id?: string
+          gmail_message_id?: string | null
+          gmail_thread_id?: string | null
+          id?: string
+          inquiry_id?: string | null
+          reply_type?: string
+          request_id?: string
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+          to_email?: string
+        }
+        Relationships: []
+      }
       proposal_views: {
         Row: {
           id: string

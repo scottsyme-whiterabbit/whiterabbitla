@@ -126,3 +126,6 @@ verify_jwt = false
 
 [functions.email-canary]
 verify_jwt = false
+
+[functions.personal-reply]
+verify_jwt = false

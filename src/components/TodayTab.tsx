@@ -4,9 +4,11 @@ import { supabase } from "@/integrations/supabase/client";
 import { useClientFile } from "@/components/admin/ClientFileContext";
 import type { ClientTarget } from "@/components/admin/ClientContextPanel";
 import { getAdminPassword } from "@/lib/adminAuth";
-import { Phone, Check, RefreshCw, ChevronDown, ChevronUp } from "lucide-react";
+import { Phone, Check, RefreshCw, ChevronDown, ChevronUp, PenLine } from "lucide-react";
+import { callPersonalReply, PERSONAL_REPLY_SENT_EVENT } from "@/components/admin/PersonalReplyHelper";
 
 interface UnansweredRow { deal_id: string; contact_name: string | null; contact_email: string; event_date: string | null; location: string | null; days_waiting: number; }
+interface NeedsReplyRow { deal_id: string; name: string | null; email: string; event_type: string | null; location: string | null; created_at: string; }
 const DISMISS_REASONS = ["Junk", "Kids show", "Wrong fit", "Handled elsewhere"];
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -76,6 +78,19 @@ const TodayTab = ({ storedPassword }: { storedPassword: string; onOpenMoney?: ()
   }, [storedPassword]);
 
   const [unanswered, setUnanswered] = useState<UnansweredRow[]>([]);
+  const [needsReply, setNeedsReply] = useState<NeedsReplyRow[]>([]);
+  const loadNeedsReply = useCallback(() => {
+    callPersonalReply("list").then((j) => setNeedsReply(j.items || [])).catch(() => {});
+  }, []);
+  useEffect(() => {
+    const onSent = (e: Event) => {
+      const id = (e as CustomEvent<{ dealId?: string }>).detail?.dealId;
+      if (id) setNeedsReply((s) => s.filter((r) => r.deal_id !== id));
+      loadNeedsReply();
+    };
+    window.addEventListener(PERSONAL_REPLY_SENT_EVENT, onSent);
+    return () => window.removeEventListener(PERSONAL_REPLY_SENT_EVENT, onSent);
+  }, [loadNeedsReply]);
   const [dismissing, setDismissing] = useState<UnansweredRow | null>(null);
   const [reason, setReason] = useState("");
   const [dismissBusy, setDismissBusy] = useState(false);
@@ -106,12 +121,13 @@ const TodayTab = ({ storedPassword }: { storedPassword: string; onOpenMoney?: ()
   const load = useCallback(async () => {
     setLoading(true);
     unansweredApi("list").then((j) => setUnanswered(j.waiting || [])).catch(() => {});
+    loadNeedsReply();
     try {
       const j = await api("get_today");
       setCall(j.call || []); setWaiting(j.waiting || []); setOwed(j.money || []); setUpcoming(j.upcoming || []); setToday(j.today || "");
     } catch (e) { toast.error((e as Error).message); }
     setLoading(false);
-  }, [api, unansweredApi]);
+  }, [api, unansweredApi, loadNeedsReply]);
 
   useEffect(() => { load(); }, [load]);
   // The first request can race the saved sign-in being restored; reload once it is.
@@ -181,6 +197,39 @@ const TodayTab = ({ storedPassword }: { storedPassword: string; onOpenMoney?: ()
           </div>
         </section>
       )}
+
+      {(() => {
+        // People already in "Waiting on you" are not listed twice.
+        const waitingIds = new Set(unanswered.map((u) => u.deal_id));
+        const rows = needsReply.filter((r) => !waitingIds.has(r.deal_id));
+        if (!rows.length) return null;
+        return (
+          <section className="border border-accent bg-accent/5 p-4 md:p-5">
+            <h2 className="font-sans uppercase tracking-[0.2em] mb-1 flex items-center gap-2 text-accent text-base">
+              Needs your reply
+              <span className="inline-flex items-center justify-center min-w-[24px] h-6 px-1.5 rounded-full text-xs bg-accent text-accent-foreground">{rows.length}</span>
+            </h2>
+            <p className="font-sans text-xs text-muted-foreground mb-3">New inquiries with no personal email from you yet. The automatic replies do not count.</p>
+            <div className="space-y-3">
+              {rows.map((r) => (
+                <div key={r.deal_id} {...rowProps({ email: r.email, name: r.name, dealId: r.deal_id, folder: "reply" })} className="border border-border bg-background p-4 cursor-pointer hover:border-accent transition-colors">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="font-sans text-base text-foreground break-words">{r.name || r.email}</p>
+                      <p className="font-sans text-xs text-muted-foreground mt-0.5 break-words">
+                        {[r.event_type?.split("(")[0].trim(), r.location].filter(Boolean).join(" · ") || "No event details"} · {ago(r.created_at)}
+                      </p>
+                    </div>
+                    <span className="shrink-0 inline-flex items-center gap-1.5 border border-accent text-accent min-h-[44px] px-3 font-sans text-xs tracking-wider uppercase">
+                      <PenLine size={13} /> Reply
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      })()}
 
       {dismissing && (
         <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-background/80 p-4" onClick={() => !dismissBusy && setDismissing(null)}>

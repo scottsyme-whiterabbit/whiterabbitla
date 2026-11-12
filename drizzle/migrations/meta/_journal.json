@@ -64,6 +64,13 @@
       "when": 1792711786780,
       "tag": "0008_deal_value_from_proposal_no_sent_requirement",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1794476237101,
+      "tag": "0009_personal_replies",
+      "breakpoints": true
     }
   ]
 }

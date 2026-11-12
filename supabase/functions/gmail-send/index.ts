@@ -5,6 +5,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 import { isAdminRequest } from "../_shared/require-admin.ts";
 import { blockReason, cleanHeader, logEmail, readProviderResponse } from "../_shared/send-gate.ts";
+import { instagramFromSignature, signatureText } from "../_shared/personal-reply.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -53,6 +54,7 @@ const FALLBACK_SIGNATURE_HTML = `
 
 // Cache the signature for the lifetime of the function instance.
 let cachedSignature: string | null = null;
+let signatureSource: "gmail" | "fallback" = "fallback";
 async function getSignature(): Promise<string> {
   if (cachedSignature !== null) return cachedSignature;
   try {
@@ -66,8 +68,9 @@ async function getSignature(): Promise<string> {
       const data = await r.json();
       const primary = (data.sendAs || []).find((s: any) => s.isPrimary) || (data.sendAs || [])[0];
       if (primary?.signature && primary.signature.trim().length > 0) {
-        cachedSignature = primary.signature;
-        return cachedSignature;
+        signatureSource = "gmail";
+        cachedSignature = String(primary.signature);
+        return String(primary.signature);
       }
     } else {
       console.warn(`sendAs fetch ${r.status} — using fallback signature`);
@@ -170,7 +173,20 @@ serve(async (req) => {
     if (!passwordOk && !(await isAdminRequest(req, body))) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: corsHeaders });
     }
+    // Read-only: the exact signature this function appends, for the CRM preview.
+    if (body.signature_only === true) {
+      const html = await getSignature();
+      return new Response(JSON.stringify({ signature_html: html, source: signatureSource }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
     const { deal_id, body_text, html_body, gmail_thread_id, in_reply_to, skip_signature, skip_stage_update } = body;
+    // Personal replies from the CRM helper: keep "-Scott", always carry the signature once.
+    const personalReply = typeof body.personal_reply === "string" ? cleanHeader(body.personal_reply).slice(0, 60) : "";
+    const references = typeof body.references === "string" ? cleanHeader(body.references).slice(0, 4000) : "";
+    if (personalReply && (skip_signature || typeof html_body === "string")) {
+      return new Response(JSON.stringify({ error: "Personal replies always include the signature" }), { status: 400, headers: corsHeaders });
+    }
     // CR/LF stripped so nothing can inject extra headers.
     const to = cleanHeader(body.to);
     const subject = cleanHeader(body.subject);
@@ -186,12 +202,14 @@ serve(async (req) => {
       });
     }
 
-    const cleanText = skip_signature ? body_text : stripTrailingSignoff(body_text);
+    const cleanText = personalReply ? String(body_text).replace(/\s+$/, "") : skip_signature ? body_text : stripTrailingSignoff(body_text);
     const signatureHtml = skip_signature ? "" : await getSignature();
 
     // Build text + html parts. Gmail uses "-- \n" as the standard signature separator.
     const plainText = markdownLinksToPlain(cleanText);
-    const textBody = skip_signature
+    const textBody = personalReply
+      ? `${plainText}\n\n${signatureText(instagramFromSignature(signatureHtml))}`
+      : skip_signature
       ? plainText
       : `${plainText}\n\n-- \nScott Syme\nMagician · White Rabbit LA\n(424) 394-1850 · scott.syme@whiterabbitla.com\nwww.whiterabbitla.com`;
     const htmlBody = typeof html_body === "string"
@@ -208,7 +226,7 @@ serve(async (req) => {
     ];
     if (in_reply_to) {
       headers.push(`In-Reply-To: ${in_reply_to}`);
-      headers.push(`References: ${in_reply_to}`);
+      headers.push(`References: ${references || in_reply_to}`);
     }
     const rfc2822 = buildMultipart(textBody, htmlBody, headers);
     const raw = b64url(rfc2822);
@@ -240,8 +258,8 @@ serve(async (req) => {
     if (deal_id) {
       await supabase.from("deal_activity").insert({
         deal_id,
-        type: "email_out",
-        title: `Sent to ${to}`,
+        type: personalReply ? "personal_reply" : "email_out",
+        title: personalReply ? `Personal reply sent: ${personalReply}` : `Sent to ${to}`,
         body: cleanText.slice(0, 500),
         metadata: { gmail_message_id: data.id, gmail_thread_id: data.threadId, subject },
       });
