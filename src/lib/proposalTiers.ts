@@ -25,6 +25,11 @@ export function addLineCascading<T extends { items: string[] }>(tiers: T[], tier
   });
 }
 
+/** Several dropdown picks confirmed together: each line follows addLineCascading, in order. */
+export function addLinesCascading<T extends { items: string[] }>(tiers: T[], tierIndex: number, lines: string[]): T[] {
+  return lines.reduce((acc, line) => addLineCascading(acc, tierIndex, line), tiers);
+}
+
 /** Preserve intentionally empty tiers while making legacy null fields safe to edit/render. */
 export const normalizeTiers = (value: unknown): Tier[] =>
   Array.isArray(value) ? value.filter((t): t is Record<string, unknown> => Boolean(t) && typeof t === "object").map(t => ({
