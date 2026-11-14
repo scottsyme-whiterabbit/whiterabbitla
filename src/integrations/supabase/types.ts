@@ -2264,6 +2264,36 @@ export type Database = {
         }
         Relationships: []
       }
+      telegram_inquiry_alerts: {
+        Row: {
+          created_at: string
+          deal_id: string | null
+          dedupe_key: string
+          inquiry_id: string | null
+          sent_at: string | null
+          status: string
+          telegram_message_id: number | null
+        }
+        Insert: {
+          created_at?: string
+          deal_id?: string | null
+          dedupe_key: string
+          inquiry_id?: string | null
+          sent_at?: string | null
+          status?: string
+          telegram_message_id?: number | null
+        }
+        Update: {
+          created_at?: string
+          deal_id?: string | null
+          dedupe_key?: string
+          inquiry_id?: string | null
+          sent_at?: string | null
+          status?: string
+          telegram_message_id?: number | null
+        }
+        Relationships: []
+      }
       unpause_audit_log: {
         Row: {
           action: string

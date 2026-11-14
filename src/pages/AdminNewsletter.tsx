@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { ClientFileProvider } from "@/components/admin/ClientFileContext";
+import { ClientFileProvider, useClientFile } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
 import { Upload, Send, FileText, Flame, ThermometerSun, RefreshCw, Trash2, Eye, Heart, Download, LayoutGrid, DollarSign, Users, MoreHorizontal, Plus, X, ClipboardList, Search, AlertTriangle, CalendarCheck, ShieldAlert, UserMinus, Mail, ArrowRight, Sun, ChevronDown } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
@@ -100,6 +100,18 @@ const AdminNewsletter = () => {
     }
     return "today";
   });
+  // "Open in CRM" links (Telegram inquiry alert) carry ?deal=<id>&email=<address>: open that client file once.
+  const openClientFile = useClientFile();
+  const deepLinkOpened = useRef(false);
+  useEffect(() => {
+    if (deepLinkOpened.current || !openClientFile) return;
+    const params = new URLSearchParams(window.location.search);
+    const dealId = params.get("deal") || "";
+    const linkEmail = (params.get("email") || "").trim().toLowerCase();
+    if (!/^[0-9a-f-]{36}$/i.test(dealId) || !linkEmail.includes("@")) return;
+    deepLinkOpened.current = true;
+    openClientFile({ email: linkEmail, dealId });
+  }, [openClientFile]);
   const [coldCategory, setColdCategory] = useState<string>("corporate_planner");
   const [actionBadge, setActionBadge] = useState(0);
   const [showQuickAdd, setShowQuickAdd] = useState(false);

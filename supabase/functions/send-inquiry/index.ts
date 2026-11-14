@@ -3,6 +3,7 @@ import { gatedSend } from "../_shared/send-gate.ts";
 import { eventDateForAlert, eventDateIso, parseEventDate } from "../_shared/event-date.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { CALENDAR_URL, inquiryFirstName } from "../_shared/inquiry-email.ts";
+import { messageField, notifyInquiryTelegram, type AlertResult, type AlertStore } from "../_shared/telegram-inquiry.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -326,6 +327,43 @@ serve(async (req) => {
       }
     }
 
+    // Instant Telegram alert to Scott, only once the inquiry is saved. It runs
+    // alongside the emails below, never throws, and is capped by a short timeout.
+    let telegramAlert: Promise<AlertResult> | null = null;
+    let telegramInBackground = false;
+    if (supabase && inquiryId) {
+      try {
+        const db = supabase;
+        const store: AlertStore = {
+          claim: async (key) => {
+            const { error } = await db.from("telegram_inquiry_alerts").insert({ dedupe_key: key, inquiry_id: inquiryId, deal_id: dealId });
+            if (!error) return "claimed";
+            if (error.code === "23505") return "duplicate";
+            console.error("Telegram alert claim failed:", error.message);
+            return "error";
+          },
+          finish: async (key, status, messageId) => {
+            await db.from("telegram_inquiry_alerts").update({ status, telegram_message_id: messageId, sent_at: status === "sent" ? new Date().toISOString() : null }).eq("dedupe_key", key);
+          },
+          release: async (key) => {
+            await db.from("telegram_inquiry_alerts").delete().eq("dedupe_key", key).eq("status", "sending");
+          },
+        };
+        telegramAlert = notifyInquiryTelegram({
+          name, email, phone,
+          clientType: messageField(message, "Client Type") || clientType,
+          eventType, date, guestCount, budget, location,
+          foundUs: (typeof body.referralSource === "string" && body.referralSource) || messageField(message, "How They Found Us"),
+          message, dealId,
+        }, { token: Deno.env.get("TELEGRAM_BOT_TOKEN"), chatId: Deno.env.get("TELEGRAM_CHAT_ID"), store });
+        // deno-lint-ignore no-explicit-any
+        const runtime = (globalThis as any).EdgeRuntime;
+        if (runtime?.waitUntil) { runtime.waitUntil(telegramAlert); telegramInBackground = true; }
+      } catch (telegramError) {
+        console.error("Telegram inquiry alert could not start:", telegramError instanceof Error ? telegramError.message : telegramError);
+      }
+    }
+
     if (RESEND_API_KEY) {
       try {
         const sendAlert = () => gatedSend(
@@ -457,6 +495,9 @@ serve(async (req) => {
         console.error("Post-send processing failed (non-blocking):", convErr);
       }
     }
+
+    // Only reached without a background runtime; the alert is already capped by its timeout.
+    if (telegramAlert && !telegramInBackground) await telegramAlert;
 
     return new Response(
       JSON.stringify({ success: true }),

@@ -71,6 +71,13 @@
       "when": 1794476237101,
       "tag": "0009_personal_replies",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1794686634355,
+      "tag": "0010_telegram_inquiry_alerts",
+      "breakpoints": true
     }
   ]
 }
