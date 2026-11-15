@@ -1,6 +1,8 @@
 // City-specific content for enhanced SEO city pages
 // Reusable across all regions — SoCal, NorCal, Mountain, etc.
 
+import { losAngelesHirePage, type CityHirePage } from "./cityHirePages";
+
 export interface CityContentData {
   cityName: string;
   citySlug: string;
@@ -11,6 +13,8 @@ export interface CityContentData {
   nearbyLinks: string[];
   /** Unique paragraphs for "What Makes White Rabbit Different" must vary per city */
   uniqueContent: string[];
+  /** Optional dedicated "hire a magician" page; only cities that set it render differently */
+  hirePage?: CityHirePage;
 }
 
 // ─── Southern California cities ───────────────────────────────────────────────
@@ -24,6 +28,7 @@ export const cityContentMap: Record<string, CityContentData> = {
     region: "Southern California",
     venues: ["The Beverly Hilton", "SoFi Stadium", "Vibiana", "The Ebell of Los Angeles", "The Majestic Downtown"],
     nearbyLinks: ["beverly-hills", "hollywood", "west-hollywood", "santa-monica", "pasadena"],
+    hirePage: losAngelesHirePage,
     uniqueContent: [
       "As White Rabbit's home base, Los Angeles is where Scott Syme has built his reputation as the city's most sought-after private event magician. From rooftop cocktail parties in DTLA to Bel Air estate dinners overlooking the canyon, Scott brings a level of sophistication that matches the city's most discerning hosts. His membership at the Magic Castle in Hollywood, the world's most exclusive magic venue, is your assurance of world-class caliber.",
       "Los Angeles events demand entertainment that competes with the best the city has to offer. Scott's Fortune 500 client list, Netflix, Disney, Morgan Stanley, Rolls-Royce, speaks to a standard that corporate planners and private hosts trust implicitly. Whether it's a 20-person dinner in Silver Lake or a 300-person gala at Vibiana, every performance is tailored to the room, the crowd, and the moment.",

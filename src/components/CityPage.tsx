@@ -51,7 +51,7 @@ const cityMetaOverrides: Record<string, { title: string; description: string }> 
 
 const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
   const { openQuiz } = useBookingQuiz();
-  const { cityName, citySlug, state, stateFullName, region, venues, nearbyLinks, uniqueContent } = content;
+  const { cityName, citySlug, state, stateFullName, region, venues, nearbyLinks, uniqueContent, hirePage } = content;
 
   const heroVideo = getCityHeroVideo(citySlug);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -66,7 +66,7 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
 
   const metaOverride = cityMetaOverrides[citySlug];
   const seoTitle = metaOverride?.title || `${cityName} Magician for Hire | White Rabbit LA`;
-  const seoDescription = metaOverride?.description || `Close-up magic and mentalism for luxury private events, weddings and corporate evenings in ${cityName}. Magic Castle member, 5-star rated on Google.`;
+  const seoDescription = hirePage?.metaDescription || metaOverride?.description || `Close-up magic and mentalism for luxury private events, weddings and corporate evenings in ${cityName}. Magic Castle member, 5-star rated on Google.`;
 
   // JSON-LD @graph with schemas
   useJsonLd(`city-schema-${citySlug}`, {
@@ -99,7 +99,7 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
   // Nearby city areas
   const nearbyAreas = nearbyLinks.map((slug) => getAreaBySlug(slug)).filter(Boolean);
 
-  const faqs = buildFaqs(content);
+  const faqs = hirePage ? hirePage.faqs : buildFaqs(content);
 
   return (
     <main id="main-content" className="pt-20">
@@ -127,7 +127,7 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
         ) : (
           <img
             src={heroVideo ? heroVideo.poster : areaPhoto.replace("w=600&h=400", "w=1600&h=900")}
-            alt={`${cityName}, ${stateFullName}, luxury event entertainment destination`}
+            alt={hirePage ? hirePage.heroImageAlt : `${cityName}, ${stateFullName}, luxury event entertainment destination`}
             width={1600}
             height={900}
             className="absolute inset-0 w-full h-full object-cover"
@@ -142,7 +142,7 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
               </Link>
               <span className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-3 block">Private Magic · By Appointment</span>
               <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-cream mb-3">
-                Magician in {cityName}
+                {hirePage ? hirePage.h1 : <>Magician in {cityName}</>}
               </h1>
               <p className="font-sans text-base text-cream/70 max-w-lg">{areaTagline}</p>
             </AnimatedSection>
@@ -157,11 +157,11 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
         <div className="max-w-3xl mx-auto px-6">
           <AnimatedSection>
             <p className="font-sans text-base text-muted-foreground leading-relaxed mb-8" data-speakable="true">
-              White Rabbit LA brings close-up magic and mentalism to private evenings in {cityName}, {stateFullName}. Performed by Scott Syme, a member of the Magic Castle in Hollywood and consultant to performers on America's Got Talent and Disney Channel, every show is tailored to your event, whether it's a corporate gala, wedding reception, private party, or fundraiser. 5-star rated on Google with clients including Netflix, Disney, Paramount, and Hyatt.
+              {hirePage ? hirePage.intro : <>White Rabbit LA brings close-up magic and mentalism to private evenings in {cityName}, {stateFullName}. Performed by Scott Syme, a member of the Magic Castle in Hollywood and consultant to performers on America's Got Talent and Disney Channel, every show is tailored to your event, whether it's a corporate gala, wedding reception, private party, or fundraiser. 5-star rated on Google with clients including Netflix, Disney, Paramount, and Hyatt.</>}
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <button onClick={openQuiz} className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors">
-                Inquire
+                {hirePage ? hirePage.introPrimaryLabel : "Inquire"}
               </button>
               <a href="tel:+14243941850" className="font-sans text-sm tracking-[0.2em] uppercase border border-border text-foreground px-10 py-4 hover:border-accent/40 transition-colors text-center">
                 Call (424) 394-1850
@@ -171,40 +171,90 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
         </div>
       </section>
 
-      {/* What Makes White Rabbit Different */}
-      <section className="py-16 border-t border-border">
-        <div className="max-w-3xl mx-auto px-6">
-          <AnimatedSection>
-            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Why White Rabbit</p>
-            <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-8">What Makes White Rabbit Different</h2>
-          </AnimatedSection>
-          {uniqueContent.map((paragraph, i) => (
-            <AnimatedSection key={i} delay={Math.min(i * 0.1, 0.3)}>
-              <p className="font-sans text-base text-muted-foreground leading-relaxed mb-6">{paragraph}</p>
-            </AnimatedSection>
-          ))}
-        </div>
-      </section>
+      {hirePage ? (
+        <>
+          {/* Two Formats (dedicated hire page) */}
+          <section className="py-16 border-t border-border">
+            <div className="max-w-5xl mx-auto px-6">
+              <AnimatedSection>
+                <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">{hirePage.formats.eyebrow}</p>
+                <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-10">{hirePage.formats.heading}</h2>
+              </AnimatedSection>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {hirePage.formats.cards.map((card, i) => (
+                  <AnimatedSection key={card.title} delay={Math.min(i * 0.1, 0.3)}>
+                    <div className="border border-border p-6 md:p-8 h-full flex flex-col">
+                      <h3 className="font-serif text-2xl text-foreground mb-3">{card.title}</h3>
+                      <p className="font-sans text-base text-muted-foreground leading-relaxed mb-6">{card.body}</p>
+                      <Link to={card.href} className="mt-auto font-sans text-sm text-accent hover:text-accent/80 transition-colors inline-flex items-center gap-1">
+                        {card.linkLabel} <span aria-hidden="true">→</span>
+                      </Link>
+                    </div>
+                  </AnimatedSection>
+                ))}
+              </div>
+            </div>
+          </section>
 
-      {/* Types of Events */}
-      <section className="py-16 border-t border-border bg-muted/30">
-        <div className="max-w-5xl mx-auto px-6">
-          <AnimatedSection>
-            <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Event Types</p>
-            <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-10">Types of Events in {cityName}</h2>
-          </AnimatedSection>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {eventTypes.map((evt, i) => (
-              <AnimatedSection key={evt.title} delay={Math.min(i * 0.05, 0.25)}>
-                <div className="border border-border p-6 h-full bg-background">
-                  <h3 className="font-serif text-lg text-foreground mb-2">{evt.title}</h3>
-                  <p className="font-sans text-sm text-muted-foreground leading-relaxed">{evt.desc}</p>
-                </div>
+          {/* Occasions (dedicated hire page) */}
+          <section className="py-16 border-t border-border bg-muted/30">
+            <div className="max-w-5xl mx-auto px-6">
+              <AnimatedSection>
+                <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">{hirePage.occasions.eyebrow}</p>
+                <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-10">{hirePage.occasions.heading}</h2>
+              </AnimatedSection>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {hirePage.occasions.cards.map((card, i) => (
+                  <AnimatedSection key={card.title} delay={Math.min(i * 0.05, 0.25)}>
+                    <Link to={card.href} className="group block border border-border p-6 h-full bg-background hover:border-accent/40 transition-colors">
+                      <h3 className="font-serif text-lg text-foreground mb-2 group-hover:text-accent transition-colors">{card.title}</h3>
+                      <p className="font-sans text-sm text-muted-foreground leading-relaxed">{card.body}</p>
+                    </Link>
+                  </AnimatedSection>
+                ))}
+              </div>
+            </div>
+          </section>
+        </>
+      ) : (
+        <>
+        {/* What Makes White Rabbit Different */}
+        <section className="py-16 border-t border-border">
+          <div className="max-w-3xl mx-auto px-6">
+            <AnimatedSection>
+              <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Why White Rabbit</p>
+              <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-8">What Makes White Rabbit Different</h2>
+            </AnimatedSection>
+            {uniqueContent.map((paragraph, i) => (
+              <AnimatedSection key={i} delay={Math.min(i * 0.1, 0.3)}>
+                <p className="font-sans text-base text-muted-foreground leading-relaxed mb-6">{paragraph}</p>
               </AnimatedSection>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* Types of Events */}
+        <section className="py-16 border-t border-border bg-muted/30">
+          <div className="max-w-5xl mx-auto px-6">
+            <AnimatedSection>
+              <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">Event Types</p>
+              <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-10">Types of Events in {cityName}</h2>
+            </AnimatedSection>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {eventTypes.map((evt, i) => (
+                <AnimatedSection key={evt.title} delay={Math.min(i * 0.05, 0.25)}>
+                  <div className="border border-border p-6 h-full bg-background">
+                    <h3 className="font-serif text-lg text-foreground mb-2">{evt.title}</h3>
+                    <p className="font-sans text-sm text-muted-foreground leading-relaxed">{evt.desc}</p>
+                  </div>
+                </AnimatedSection>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        </>
+      )}
 
       {/* Popular Venues */}
       <section className="py-16 border-t border-border">
@@ -229,8 +279,37 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
         </div>
       </section>
 
+      {/* Host testimonials (dedicated hire page) */}
+      {hirePage && (
+        <section className="py-16 border-t border-border bg-muted/30">
+          <div className="max-w-5xl mx-auto px-6">
+            <AnimatedSection>
+              <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-2">{hirePage.testimonials.eyebrow}</p>
+              <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-10">{hirePage.testimonials.heading}</h2>
+            </AnimatedSection>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {hirePage.testimonials.items.map((t, i) => (
+                <AnimatedSection key={t.attribution} delay={Math.min(i * 0.1, 0.3)}>
+                  <figure className="border border-border p-6 md:p-8 h-full bg-background flex flex-col">
+                    <blockquote className="font-['Ogg_Text',Georgia,serif] text-lg text-foreground leading-relaxed mb-6">
+                      "{t.quote}"
+                    </blockquote>
+                    <figcaption className="mt-auto font-sans text-xs tracking-[0.2em] uppercase text-muted-foreground">{t.attribution}</figcaption>
+                  </figure>
+                </AnimatedSection>
+              ))}
+            </div>
+            <AnimatedSection>
+              <Link to={hirePage.testimonials.linkHref} className="mt-8 font-sans text-sm text-accent hover:text-accent/80 transition-colors inline-flex items-center gap-1">
+                {hirePage.testimonials.linkLabel} <span aria-hidden="true">→</span>
+              </Link>
+            </AnimatedSection>
+          </div>
+        </section>
+      )}
+
       {/* SEO Service Pages */}
-      {matchingPages.length > 0 && (
+      {!hirePage && matchingPages.length > 0 && (
         <section className="py-16 border-t border-border">
           <div className="max-w-5xl mx-auto px-6">
             <AnimatedSection>
@@ -312,7 +391,7 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
       <FAQSection
         schemaId={`city-faq-${citySlug}`}
         subtitle="Common Questions"
-        title={`Frequently Asked Questions · ${cityName}`}
+        title={hirePage ? hirePage.faqTitle : `Frequently Asked Questions · ${cityName}`}
         faqs={faqs}
       />
 
@@ -322,12 +401,12 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
           <AnimatedSection>
             <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-4">An evening in {cityName} begins with a conversation.</h2>
             <p className="font-sans text-base text-muted-foreground mb-2">
-              Ready to make your {cityName} event unforgettable? Book now or call{" "}
+              {hirePage ? hirePage.closingSentence : <>Ready to make your {cityName} event unforgettable? Book now or call</>}{" "}
               <a href="tel:+14243941850" className="text-accent hover:underline">(424) 394-1850</a>.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
               <Link to="/contact" className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-10 py-4 hover:bg-accent/80 transition-colors">
-                Inquire
+                {hirePage ? hirePage.closingPrimaryLabel : "Inquire"}
               </Link>
               <Link to="/quiz" className="font-sans text-sm tracking-[0.2em] uppercase border border-border text-foreground px-10 py-4 hover:border-accent/40 transition-colors">
                 Find Your Fit
@@ -349,7 +428,7 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
               {nearbyAreas.map((area, i) => (
                 <AnimatedSection key={area!.slug} delay={Math.min(i * 0.08, 0.3)}>
                   <Link to={`/areas/${area!.slug}`} className="group block relative overflow-hidden aspect-[3/2] rounded-sm">
-                    <img src={area!.photo} alt={`${area!.city}, magician for luxury events`} width={600} height={400} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
+                    <img src={area!.photo} alt={`${area!.city}, ${hirePage ? hirePage.nearbyAltSuffix : "magician for luxury events"}`} width={600} height={400} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-3">
                       <h3 className="font-serif text-sm text-cream leading-tight">{area!.city}</h3>

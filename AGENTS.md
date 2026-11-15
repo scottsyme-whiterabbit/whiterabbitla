@@ -1,5 +1,7 @@
 # Project architecture rules
 
+- Area pages render a dedicated "hire" layout only when their cityContent entry sets the optional `hirePage` field (see `src/data/cityHirePages.ts`); every other city keeps the default CityPage template output unchanged.
+
 - Retired city routes use the exact-path set in retiredCityRoutes for redirects, data generation, sitemap output, and independent link lists so retirement never prunes unrelated editorial content.
 
 - Client-panel Emails tile counts use the same loaded timeline records as the Sent and Upcoming sections, avoiding legacy-log count drift.
