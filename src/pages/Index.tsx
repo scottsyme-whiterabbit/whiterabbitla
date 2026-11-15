@@ -426,6 +426,13 @@ const Index = () => {
           <Link to="/areas" className="no-underline hover:font-bold">By invitation elsewhere</Link>
         </span>
       </p>
+      <p className="max-w-4xl mx-auto px-6 -mt-4 pb-10 text-center font-sans text-sm text-muted-foreground leading-relaxed">
+        Planning an evening in the city? See how to{" "}
+        <Link to="/areas/los-angeles" className="text-accent underline underline-offset-4 hover:text-accent/80 transition-colors">
+          hire a magician in Los Angeles
+        </Link>
+        .
+      </p>
 
       {/* The Experience Teaser */}
       <section className="py-28 lg:py-36">

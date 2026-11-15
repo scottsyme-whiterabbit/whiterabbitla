@@ -10,6 +10,8 @@ import QuizCTA from "@/components/QuizCTA";
 import RelatedReads from "@/components/RelatedReads";
 import WhereWePerform from "@/components/WhereWePerform";
 import NewsletterSignup from "@/components/NewsletterSignup";
+import ArticleHostCallout from "@/components/ArticleHostCallout";
+import LosAngelesHireLine from "@/components/LosAngelesHireLine";
 
 import closeupImg from "@/assets/event-closeup-cocktail.jpg";
 import parlorImg from "@/assets/event-parlor-show.jpg";
@@ -390,6 +392,15 @@ const BlogArticle = () => {
                 </AnimatedSection>
               );
 
+              // Host callout right after the first paragraph, only for articles that set it
+              if (i === 0 && article.hostCallout) {
+                elements.push(
+                  <AnimatedSection key="host-callout">
+                    <ArticleHostCallout callout={article.hostCallout} />
+                  </AnimatedSection>
+                );
+              }
+
               // Per-article inline image injection (supports multiple images)
               {const artImages = slug ? articleInlineImages[slug] : undefined;
               if (artImages) {
@@ -417,6 +428,11 @@ const BlogArticle = () => {
               return elements;
             });
           })()}
+          {!article.hostCallout && (
+            <AnimatedSection>
+              <LosAngelesHireLine className="clear-both mb-0" />
+            </AnimatedSection>
+          )}
         </div>
       </section>
 

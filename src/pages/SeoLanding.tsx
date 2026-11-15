@@ -6,6 +6,7 @@ import SEOHead from "@/components/SEOHead";
 import { useServiceSchema } from "@/hooks/useSchemaOrg";
 import { Star, CheckCircle, Clock } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
+import LosAngelesHireLine from "@/components/LosAngelesHireLine";
 import { getSeoPageBySlug, getSeoPagesByCategory, getSeoPagesByLocation } from "@/data/seoPages";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import {
@@ -380,6 +381,12 @@ const SeoLanding = () => {
               )}
             </div>
           </AnimatedSection>
+
+          {page.location !== "Los Angeles" && (
+            <AnimatedSection>
+              <LosAngelesHireLine className="mt-10" />
+            </AnimatedSection>
+          )}
         </div>
       </section>
 

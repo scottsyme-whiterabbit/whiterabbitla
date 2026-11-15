@@ -167,6 +167,15 @@ const CityPage = ({ content, areaPhoto, areaTagline }: CityPageProps) => {
                 Call (424) 394-1850
               </a>
             </div>
+            {!hirePage && (
+              <p className="font-sans text-sm text-muted-foreground leading-relaxed mt-6">
+                Hosting closer to our home base? See the{" "}
+                <Link to="/areas/los-angeles" className="text-accent underline underline-offset-4 hover:text-accent/80 transition-colors">
+                  Los Angeles magician for hire
+                </Link>{" "}
+                page.
+              </p>
+            )}
           </AnimatedSection>
         </div>
       </section>

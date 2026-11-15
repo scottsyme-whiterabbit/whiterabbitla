@@ -8,6 +8,16 @@ export interface BlogArticle {
   readTime: string;
   excerpt: string;
   content: string[];
+  /** Optional bordered callout rendered right after the first content paragraph. */
+  hostCallout?: ArticleHostCallout;
+}
+
+/** Plain text, or a piece of text linked to an internal route. */
+export type CalloutSegment = string | { text: string; to: string };
+
+export interface ArticleHostCallout {
+  heading: string;
+  body: CalloutSegment[];
 }
 
 export const blogArticles: BlogArticle[] = [
@@ -300,6 +310,16 @@ export const blogArticles: BlogArticle[] = [
     publishDate: "2026-02-12",
     readTime: "10 min read",
     excerpt: "Las Vegas is the magic capital of the world. Here's your insider guide to the shows worth seeing, from legendary residencies to hidden gems most tourists never find.",
+    hostCallout: {
+      heading: "Planning an event rather than a night out?",
+      body: [
+        "The shows below are for ticket holders. For a company evening, wedding or private party, White Rabbit LA travels from Los Angeles and performs for your guests in your own room. See the ",
+        { text: "Las Vegas magician", to: "/areas/las-vegas" },
+        " page, or how to ",
+        { text: "hire a magician in Los Angeles", to: "/areas/los-angeles" },
+        ".",
+      ],
+    },
     content: [
       "Las Vegas has more magic per square mile than anywhere on earth. Big theaters, late-night lounges, close-up rooms where you sit near enough to watch the cards move. This is a guide to the shows worth your evening. And if the night leaves you wanting that feeling at your own table, there's a note at the end on how to bring it there.",
       "The biggest change to the Strip this year takes the room David Copperfield held for 25 years. Now You See Me Live opens at the MGM Grand Theater this October, built by the team behind The Illusionists and drawn from the Now You See Me heist films. It brings the Four Horsemen to the stage: escape artist Andrew Basso, sleight-of-hand specialist Adam Trent, illusionist Enzo Weyne, and Gabriella Lester, who escaped Houdini's upside-down straitjacket at fourteen. After runs in Sydney, Perth, and Singapore, this is its U.S. debut, on stage through early January.",
@@ -345,6 +365,16 @@ export const blogArticles: BlogArticle[] = [
     publishDate: "2026-02-06",
     readTime: "7 min read",
     excerpt: "Los Angeles is home to the most famous magic venue in the world, and a thriving scene of performances that most Angelenos don't even know exists.",
+    hostCallout: {
+      heading: "Hosting, not buying a ticket?",
+      body: [
+        "Everything on this list is a night out. If you would rather bring the evening to your own home, venue or company dinner, White Rabbit LA performs close-up magic and a private parlor show for hosts across the city. See how to ",
+        { text: "hire a magician in Los Angeles", to: "/areas/los-angeles" },
+        ", or read about ",
+        { text: "the private magic show", to: "/services/private-magic-show" },
+        ".",
+      ],
+    },
     content: [
       "I get asked this all the time: where can I see magic in LA? And honestly, the answer used to be simple. The Magic Castle. That was it. But goodness, things have changed. Los Angeles has quietly become the best city in the country for live magic, and most people who live here have no idea.",
       "Let's start with the obvious one.",

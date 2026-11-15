@@ -52,6 +52,7 @@ const Footer = () => {
                 <Link to="/services/resident-event-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Resident Events</Link>
                 <Link to="/services/close-up-magician" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Close-Up Magic</Link>
                 <Link to="/services/private-magic-show" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Private Magic Show</Link>
+                <Link to="/areas/los-angeles" className="font-sans text-sm tracking-wider hover:text-cream transition-colors">Los Angeles Magician</Link>
               </div>
             </div>
             <Link to="/quiz" className="font-sans text-sm tracking-wider text-accent hover:text-cream transition-colors mt-3">Not sure? Take our quiz →</Link>

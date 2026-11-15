@@ -36,7 +36,7 @@ export const losAngelesHirePage: CityHirePage = {
   h1: "Hire a Magician in Los Angeles",
   heroImageAlt: "Scott Syme, Los Angeles magician, performing close-up magic for guests",
   intro:
-    "White Rabbit LA is Scott Syme, a Los Angeles magician and member of the Magic Castle in Hollywood. Hosts across the city invite him for two things: close-up magic that moves through the cocktail hour, and a parlor show of about 40 minutes for a seated room. Many evenings include both. He has been part of gatherings for Netflix, Disney, Paramount and Hyatt, and is rated 5.0 on Google across 50 reviews.",
+    "White Rabbit LA is Scott Syme, a Los Angeles magician and member of the Magic Castle in Hollywood. Hosts across the city invite him for two things: close-up magic that moves through the cocktail hour, and a parlor show of about 40 minutes for a seated room. Many evenings include both. He has been part of gatherings for Netflix, Disney, Paramount and Hyatt, and is rated 5.0 on Google across 45+ reviews.",
   introPrimaryLabel: "Check a Date",
   formats: {
     eyebrow: "Two Formats",
