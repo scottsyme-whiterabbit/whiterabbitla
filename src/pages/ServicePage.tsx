@@ -686,46 +686,8 @@ const ServicePage = () => {
     return () => { script.remove(); };
   }, [page]);
 
-  // Review JSON-LD (per-page testimonials)
-  // ONLY emitted when verified, named testimonials from /reviews exist
-  // (the `testimonials` array). The single `testimonial` field is reserved
-  // for generic/paraphrased pull-quotes and intentionally does NOT get
-  // Review schema — protecting structured-data trustworthiness.
-  useEffect(() => {
-    if (!page) return;
-    const list = page.testimonials ?? [];
-    if (list.length === 0) return;
-    const serviceId = `https://whiterabbitla.com/services/${page.slug}#service`;
-    const script = document.createElement("script");
-    script.type = "application/ld+json";
-    script.id = "service-review-schema";
-    const reviews = list.map((t) => ({
-      "@context": "https://schema.org",
-      "@type": "Review",
-      itemReviewed: {
-        "@type": "Service",
-        "@id": serviceId,
-        name: page.title,
-        provider: {
-          "@type": "LocalBusiness",
-          "@id": "https://whiterabbitla.com/#business",
-          name: "White Rabbit LA",
-        },
-      },
-      reviewRating: {
-        "@type": "Rating",
-        ratingValue: "5",
-        bestRating: "5",
-      },
-      author: { "@type": "Person", name: t.attribution },
-      reviewBody: t.quote,
-      ...(t.datePublished ? { datePublished: t.datePublished } : {}),
-    }));
-    script.textContent = JSON.stringify(reviews.length === 1 ? reviews[0] : reviews);
-    document.getElementById("service-review-schema")?.remove();
-    document.head.appendChild(script);
-    return () => { script.remove(); };
-  }, [page]);
+  // No standalone Review JSON-LD here: Search Console rejects a Review whose
+  // itemReviewed is a Service. Testimonials stay visible on the page only.
 
 
   if (!page) {
