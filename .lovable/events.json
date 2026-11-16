@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "events": {
+    "project.find_the_lady_email_captured": {
+      "event_schema_version": 1,
+      "description": "A visitor claimed the Find the Lady booking credit and received a code.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "event_type",
+          "found_queen",
+          "opt_in"
+        ],
+        "properties": {
+          "event_type": {
+            "type": "string",
+            "enum": [
+              "wedding",
+              "corporate",
+              "private_party",
+              "other"
+            ]
+          },
+          "found_queen": {
+            "type": "boolean"
+          },
+          "opt_in": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "project.find_the_lady_play": {
+      "event_schema_version": 1,
+      "description": "A visitor started a round of Find the Lady (pressed Shuffle the cards or Play again).",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "project.find_the_lady_reveal": {
+      "event_schema_version": 1,
+      "description": "A visitor chose a card in Find the Lady and the three cards were revealed.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "found_queen"
+        ],
+        "properties": {
+          "found_queen": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}

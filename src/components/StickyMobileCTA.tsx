@@ -10,7 +10,7 @@ const StickyMobileCTA = () => {
   const location = useLocation();
 
   // Pages where we don't show the sticky CTA
-  const excludedPaths = ["/contact", "/quiz", "/guide", "/admin"];
+  const excludedPaths = ["/contact", "/quiz", "/guide", "/admin", "/find-the-lady"];
 
   useEffect(() => {
     const isExcluded = excludedPaths.some((p) => location.pathname.startsWith(p));

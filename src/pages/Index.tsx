@@ -15,6 +15,7 @@ import FAQSection from "@/components/FAQSection";
 
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
+import { FannedCards } from "@/components/findTheLady/PlayingCard";
 import heroClip1 from "@/assets/triptych/triptych-1.mp4.asset.json";
 import heroClip2 from "@/assets/triptych/triptych-2.mp4.asset.json";
 import heroClip3 from "@/assets/triptych/triptych-3.mp4.asset.json";
@@ -694,6 +695,19 @@ const Index = () => {
       />
 
 
+
+      {/* Find the Lady invitation */}
+      <AnimatedSection>
+        <section className="py-12 lg:py-16" aria-labelledby="find-the-lady-invite">
+          <div className="max-w-md mx-auto px-6 flex flex-col items-center text-center">
+            <FannedCards className="w-36 h-[118px] mb-6" />
+            <h2 id="find-the-lady-invite" className="font-serif text-2xl md:text-3xl text-foreground mb-3">Can you find the Lady?</h2>
+            <Link to="/find-the-lady" className="inline-flex items-center gap-2 min-h-[44px] font-sans text-xs tracking-[0.3em] uppercase text-accent hover:text-accent/80 transition-colors">
+              Try your luck <ArrowRight size={14} />
+            </Link>
+          </div>
+        </section>
+      </AnimatedSection>
 
       {/* Final CTA */}
       <AnimatedSection>

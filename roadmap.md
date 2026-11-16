@@ -22,6 +22,7 @@
   - [ ] No unique constraint yet
 
 ## Done
+- Find the Lady game at /find-the-lady with the homepage invitation, $250 credit claim, CRM lead and code, single Telegram alert, tracking, noindex. Checked on phone and desktop with one test claim (removed). Waiting on Scott's OK to publish.
 - Los Angeles hire page internal links: footer, homepage line, article and city landing lines, other area pages line, two article callouts, 45+ review count. Checked in the browser on desktop and phone. Not published.
 - Telegram alert to Scott for each new website inquiry: built and tested, bot verified; waiting on Scott's OK to switch it on and publish the CRM link change.
 - Personal reply helper: Needs your reply list on Today, five templates in the client panel, full preview with Gmail signature, send on the Booking Inquiry thread. Drafting verified live; a real send not yet tried. Not published.

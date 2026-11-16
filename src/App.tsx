@@ -49,6 +49,7 @@ const ProposalTemplate = lazy(() => import("./pages/ProposalTemplate"));
 const ResidencyTemplate = lazy(() => import("./pages/ResidencyTemplate"));
 const AdminProposals = lazy(() => import("./pages/AdminProposals"));
 const BlogArticleOrSeo = lazy(() => import("./pages/BlogArticleOrSeo"));
+const FindTheLady = lazy(() => import("./pages/FindTheLady"));
 
 const PageFallback = () => <div className="bg-background min-h-screen" />;
 
@@ -89,6 +90,7 @@ const AppContent = () => {
         <Route path="/deck" element={<PitchDeck />} />
         <Route path="/review" element={<ReviewGate />} />
         <Route path="/refer" element={<Refer />} />
+        <Route path="/find-the-lady" element={<FindTheLady />} />
         <Route path="/planners" element={<Planners />} />
         <Route path="/areas" element={<ServiceAreas />} />
         <Route path="/areas/:citySlug" element={<ServiceAreaDetail />} />

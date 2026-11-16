@@ -64,7 +64,7 @@ const ExitIntentPopup = () => {
   }, []);
 
   useEffect(() => {
-    const excludedPaths = ["/contact", "/guide", "/quiz", "/consultation"];
+    const excludedPaths = ["/contact", "/guide", "/quiz", "/consultation", "/find-the-lady"];
     if (excludedPaths.some(p => location.pathname.startsWith(p))) return;
     if (typeof window !== "undefined" && (window.matchMedia("(pointer: coarse)").matches || window.innerWidth < 768)) return;
 

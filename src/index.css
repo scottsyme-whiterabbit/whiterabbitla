@@ -196,6 +196,8 @@
     --cream: 40 33% 96%;
     --forest: 160 25% 27%;
     --forest-dark: 160 25% 18%;
+    /* Playing-card hearts: a deeper rose so red pips read on cream card stock. */
+    --suit-red: 350 42% 40%;
 
     --sidebar-background: 160 25% 18%;
     --sidebar-foreground: 40 33% 96%;
