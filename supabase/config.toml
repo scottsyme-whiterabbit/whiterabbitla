@@ -129,3 +129,6 @@ verify_jwt = false
 
 [functions.personal-reply]
 verify_jwt = false
+
+[functions.find-the-lady-claim]
+verify_jwt = false

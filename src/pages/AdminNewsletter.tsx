@@ -186,6 +186,18 @@ const AdminNewsletter = () => {
     return res.json();
   }, [storedPassword]);
 
+  // Find the Lady alerts link by deal id only (no email in Telegram): look the email up, then open the file.
+  useEffect(() => {
+    if (deepLinkOpened.current || !openClientFile || !authenticated) return;
+    const params = new URLSearchParams(window.location.search);
+    const dealId = params.get("deal") || "";
+    if (!/^[0-9a-f-]{36}$/i.test(dealId) || params.get("email")) return;
+    deepLinkOpened.current = true;
+    callAdmin("get_deal_email", { deal_id: dealId })
+      .then((res: { email?: string | null }) => { if (res.email) openClientFile({ email: res.email, dealId }); })
+      .catch(() => { deepLinkOpened.current = false; });
+  }, [openClientFile, callAdmin, authenticated]);
+
   const loadData = useCallback(async () => {
       setLoading(true);
     try {

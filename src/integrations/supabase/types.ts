@@ -1389,6 +1389,68 @@ export type Database = {
           },
         ]
       }
+      find_the_lady_credits: {
+        Row: {
+          approx_event_date: string | null
+          code: string
+          created_at: string
+          credit_cents: number
+          deal_id: string | null
+          email: string
+          event_type: string
+          expires_on: string
+          first_name: string
+          found_queen: boolean
+          id: string
+          marketing_opt_in: boolean
+          min_package_cents: number
+          redeemed_at: string | null
+          status: string
+        }
+        Insert: {
+          approx_event_date?: string | null
+          code: string
+          created_at?: string
+          credit_cents?: number
+          deal_id?: string | null
+          email: string
+          event_type: string
+          expires_on: string
+          first_name: string
+          found_queen?: boolean
+          id?: string
+          marketing_opt_in?: boolean
+          min_package_cents?: number
+          redeemed_at?: string | null
+          status?: string
+        }
+        Update: {
+          approx_event_date?: string | null
+          code?: string
+          created_at?: string
+          credit_cents?: number
+          deal_id?: string | null
+          email?: string
+          event_type?: string
+          expires_on?: string
+          first_name?: string
+          found_queen?: boolean
+          id?: string
+          marketing_opt_in?: boolean
+          min_package_cents?: number
+          redeemed_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "find_the_lady_credits_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       gallery_order: {
         Row: {
           ref: string

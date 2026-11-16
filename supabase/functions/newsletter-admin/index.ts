@@ -2089,6 +2089,11 @@ serve(async (req) => {
           ...(seasonal.data || []).map((s) => ({ id: s.id, campaign_id: `${s.campaign_key}-seasonal`, campaign_subject: null, sent_at: s.sent_at, status: s.status })),
         ];
 
+        const { data: ladyRows } = await supabase.from("find_the_lady_credits")
+          .select("id, code, status, expires_on, found_queen, marketing_opt_in, approx_event_date, deal_id, created_at")
+          .ilike("email", like).order("created_at", { ascending: false });
+        const ladyCredits = ladyRows || [];
+
         const known = [...(inqRes.data || []), ...(nlRes.data || []), ...(coldRes.data || [])];
         return new Response(JSON.stringify({
           email,
@@ -2104,7 +2109,22 @@ serve(async (req) => {
           proposals,
           agreements,
           emailLog,
+          ladyCredits,
         }), { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+
+      // Telegram "Open in CRM" links for Find the Lady carry only the deal id.
+      case "get_deal_email": {
+        const dealId = typeof payload.deal_id === "string" ? payload.deal_id : "";
+        if (!/^[0-9a-f-]{36}$/i.test(dealId)) {
+          return new Response(JSON.stringify({ error: "deal_id required" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const { data } = await supabase.from("deals").select("contact_email").eq("id", dealId).maybeSingle();
+        return new Response(JSON.stringify({ email: data?.contact_email || null }), {
+          status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
       }
 
       case "agreement_pdf": {

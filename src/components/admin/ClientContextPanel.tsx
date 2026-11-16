@@ -109,6 +109,17 @@ interface ClientFile {
   proposals: Proposal[];
   agreements: Agreement[];
   emailLog: LogRow[];
+  ladyCredits?: LadyCredit[];
+}
+
+interface LadyCredit {
+  id: string;
+  code: string;
+  status: string;
+  expires_on: string;
+  found_queen: boolean;
+  marketing_opt_in: boolean;
+  approx_event_date: string | null;
 }
 
 const METHODS = [
@@ -729,6 +740,26 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onDeal
                   </div>
                 ))}
               </div>
+              {(file?.ladyCredits || []).map((c) => (
+                <div key={c.id} className="border border-accent/40 bg-accent/5 p-3 min-w-0">
+                  <p className="text-[9px] tracking-[0.1em] uppercase text-muted-foreground">Find the Lady credit</p>
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <p className="font-mono text-base text-foreground tracking-wider">{c.code}</p>
+                    <button onClick={() => { navigator.clipboard.writeText(c.code); toast.success("Code copied"); }} className={`${smallBtn} text-muted-foreground hover:text-foreground`}>
+                      <Copy size={13} /> Copy
+                    </button>
+                  </div>
+                  <p className="text-xs text-muted-foreground break-words">
+                    {[
+                      "$250 toward a package of $2,500 or more",
+                      `${c.status === "active" ? "valid until" : c.status} ${fmtDate(c.expires_on) || c.expires_on}`,
+                      c.approx_event_date ? `approx. date ${fmtDate(c.approx_event_date)}` : null,
+                      c.found_queen ? "found the Queen" : "missed the Queen",
+                      c.marketing_opt_in ? "opted in to notes" : null,
+                    ].filter(Boolean).join(" · ")}
+                  </p>
+                </div>
+              ))}
               <div className="flex flex-wrap gap-x-5">
                 <button onClick={() => { navigator.clipboard.writeText(email); toast.success("Email copied"); }} className={`${smallBtn} text-muted-foreground hover:text-foreground min-h-[44px]`}>
                   <Copy size={13} /> Copy email

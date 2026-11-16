@@ -161,6 +161,11 @@ export type AlertResult = { sent: boolean; reason?: string };
  * to the visitor. The bot token is never logged.
  */
 export async function notifyInquiryTelegram(input: InquiryAlertInput, deps: AlertDeps): Promise<AlertResult> {
+  return deliverAlert(async () => ({ text: buildInquiryAlert(input), key: await inquiryAlertKey(input) }), deps);
+}
+
+/** Shared send path: one claim per key, short timeout, never throws. */
+async function deliverAlert(build: () => Promise<{ text: string; key: string }>, deps: AlertDeps): Promise<AlertResult> {
   const log = deps.log ?? ((m: string) => console.error(m));
   const token = text(deps.token);
   const chatId = text(deps.chatId);
@@ -171,8 +176,9 @@ export async function notifyInquiryTelegram(input: InquiryAlertInput, deps: Aler
       log("Telegram inquiry alert skipped: TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is not set");
       return { sent: false, reason: "not_configured" };
     }
-    const alertText = buildInquiryAlert(input);
-    key = await inquiryAlertKey(input);
+    const built = await build();
+    const alertText = built.text;
+    key = built.key;
     const claim = await deps.store.claim(key);
     if (claim === "duplicate") {
       log("Telegram inquiry alert skipped: already sent for this inquiry");
@@ -227,4 +233,61 @@ export async function notifyInquiryTelegram(input: InquiryAlertInput, deps: Aler
     log(`Telegram inquiry alert failed: ${token ? detail.split(token).join("[token]") : detail}`);
     return { sent: false, reason: "send_exception" };
   }
+}
+
+// ── Find the Lady claims ────────────────────────────────────────────────────
+// Same bot, same chat, same one-alert-per-key claim table. The alert carries
+// no email address and no phone number, and its CRM link opens the deal by id.
+
+export interface LadyAlertInput {
+  creditId: string;
+  code: string;
+  expiresOn: string;
+  firstName: string;
+  eventType: string;
+  approxDate: string | null;
+  foundQueen: boolean;
+  optIn: boolean;
+  dealId: string | null;
+}
+
+/** CRM link by deal id only, so no email address travels in the alert. */
+export function crmDealLink(dealId: unknown): string | null {
+  const id = text(dealId);
+  return UUID.test(id) ? `${CRM_URL}?tab=today&deal=${id}` : null;
+}
+
+function longDay(iso: string): string {
+  const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return "";
+  return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])).toLocaleDateString("en-US", {
+    timeZone: "UTC", weekday: "long", month: "long", day: "numeric", year: "numeric",
+  });
+}
+
+export function buildLadyAlert(a: LadyAlertInput): string {
+  const e = escapeTelegramHtml;
+  const lines: string[] = ["🃏 <b>Find the Lady</b>"];
+  const name = field(a.firstName);
+  if (name) lines.push(`<b>${e(name)}</b>`);
+  lines.push(`Result: ${a.foundQueen ? "found the Queen" : "missed the Queen"}`);
+  const labelled: [string, string][] = [
+    ["Event", field(a.eventType)],
+    ["Approx. date", a.approxDate ? longDay(a.approxDate) : ""],
+    ["Credit", `${field(a.code)}, $250 toward $2,500 or more, valid until ${longDay(a.expiresOn).replace(/^\w+, /, "")}`],
+    ["Occasional notes", a.optIn ? "opted in" : "not opted in"],
+  ];
+  for (const [label, value] of labelled) if (value) lines.push(`${label}: ${e(value)}`);
+  const link = crmDealLink(a.dealId);
+  return lines.join("\n\n") + (link ? `\n\n<a href="${e(link)}">Open in CRM</a>` : "");
+}
+
+/** One key per credit, so a retry of the same claim alerts once. */
+export async function ladyAlertKey(a: Pick<LadyAlertInput, "creditId">): Promise<string> {
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`find_the_lady:${text(a.creditId)}`));
+  return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+export async function notifyLadyTelegram(a: LadyAlertInput, deps: AlertDeps): Promise<AlertResult> {
+  return deliverAlert(async () => ({ text: buildLadyAlert(a), key: await ladyAlertKey(a) }), deps);
 }
