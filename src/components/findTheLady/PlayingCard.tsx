@@ -122,3 +122,35 @@ export function FannedCards({ className }: { className?: string }) {
     </div>
   );
 }
+
+/**
+ * Intro accent for the Find the Queen pop-up: the Queen of Hearts, just dealt,
+ * with two face-down cards fanned behind her. Static under reduced motion.
+ * The outer layer holds each card's resting angle; the inner layer only slides in,
+ * so the entrance never fights the fan.
+ */
+export function DealtQueen({ className }: { className?: string }) {
+  const slot = "absolute top-0 left-1/2 w-[100px] md:w-[130px]";
+  const enter =
+    "animate-in fade-in slide-in-from-top-4 ease-out fill-mode-both motion-reduce:animate-none [filter:drop-shadow(var(--shadow-card-dealt))]";
+  const cards = [
+    { key: "left", transform: "translateX(-50%) translateX(-42%) translateY(6px) rotate(-5deg)", delay: "0ms", face: false },
+    { key: "right", transform: "translateX(-50%) translateX(44%) translateY(4px) rotate(3deg)", delay: "80ms", face: false },
+    { key: "queen", transform: "translateX(-50%) rotate(7deg)", delay: "160ms", face: true },
+  ];
+  return (
+    <div
+      role="img"
+      aria-label="Queen of Hearts playing card with two face-down cards."
+      className={`relative mx-auto h-[150px] w-[220px] md:h-[192px] md:w-[280px] ${className ?? ""}`}
+    >
+      {cards.map((c) => (
+        <div key={c.key} className={slot} style={{ transform: c.transform, zIndex: c.face ? 1 : 0 }}>
+          <div className={enter} style={{ animationDuration: "400ms", animationDelay: c.delay }}>
+            {c.face ? <CardFace id="queen" className="block w-full h-auto" /> : <CardBack className="block w-full h-auto" />}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}

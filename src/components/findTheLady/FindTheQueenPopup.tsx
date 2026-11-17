@@ -16,6 +16,8 @@ import {
   showCornerTab,
 } from "@/lib/findTheLadyPopup";
 
+import { DealtQueen } from "./PlayingCard";
+
 const FindTheQueenGame = lazy(() => import("./FindTheQueenGame"));
 
 type Trigger = "exit" | "scroll" | "timer" | "tab";
@@ -164,16 +166,17 @@ const FindTheQueenPopup = () => {
 
               {step === "intro" && (
                 <div className="text-center">
-                  <img src={threeStars} alt="" aria-hidden="true" width={120} height={48} className="h-9 w-auto opacity-60 mx-auto mb-5" />
-                  <DialogPrimitive.Title className="font-serif text-3xl md:text-4xl text-cream mb-5 leading-tight">
-                    Find the Queen for your chance at a complimentary White Rabbit show.
+                  <DealtQueen className="-mt-7 mb-4 sm:-mt-6" />
+                  <DialogPrimitive.Title className="font-serif text-[1.75rem] sm:text-3xl md:text-4xl text-cream mb-3 leading-tight [text-wrap:balance]">
+                    Can you find the Queen of Hearts?
                   </DialogPrimitive.Title>
+                  <p className="font-sans text-base text-cream/70 mb-5">Win a complimentary White Rabbit show.</p>
                   <p className="font-sans text-xs text-cream/55 leading-relaxed mb-8">
                     Valued at $2,500. Drawing held quarterly. No purchase necessary.{" "}
                     <a href="/official-rules" target="_blank" rel="noopener" className={smallLink}>Official Rules</a>
                   </p>
                   <button type="button" onClick={() => setStep("game")} className={`${primaryBtn} w-full sm:w-auto`}>
-                    Find the Queen <ArrowRight size={14} />
+                    Pick a Card <ArrowRight size={14} />
                   </button>
                   <div className="mt-3">
                     <button type="button" onClick={close} className={quietLink}>No thanks</button>
