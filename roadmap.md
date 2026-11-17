@@ -5,6 +5,7 @@
 - [ ] Homepage brand logos: swap current block for actual businesses performed for (long-standing request).
 
 ## In progress
+- [ ] Find the Queen pop-up from Scott's brief: 5 steps in one pop-up, $500 credit WR500 code, quarterly drawing entry, welcome email, corner tab, 14 day rest, mobile 40s timer, draft /official-rules page.
 - [ ] Mobile-first CRM/PWA pass: improve navigation, dense lists, forms, dialogs, and touch use across every admin screen without removing features.
 - [ ] PART A: Google sign-in for all admin pages (phase 1, alongside password)
   - [ ] Enable Google provider, disable open email signups
