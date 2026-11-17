@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { animate, motion, motionValue, useReducedMotion, type MotionValue } from "framer-motion";
 import { ArrowRight, Loader2 } from "lucide-react";
-import SEOHead from "@/components/SEOHead";
 import { CardBack, CardFace, CARD_LABELS, type CardId } from "@/components/findTheLady/PlayingCard";
 import threeStars from "@/assets/three-stars-gold.png";
 import { trackEvent } from "@/lib/analytics";
 import { supabase } from "@/integrations/supabase/client";
+import { LADY_CLAIM_KEY as CLAIM_KEY } from "@/lib/findTheLadyPopup";
 
 type Phase = "ready" | "showing" | "shuffling" | "pick" | "revealed";
 
@@ -14,7 +14,6 @@ const HOME: CardId[] = ["spades", "queen", "clubs"];
 /** One slot to the next, as a share of a card's own width (card 30%, gap 5% of the table). */
 const STEP = 116.667;
 const SLOT_NAMES = ["left", "middle", "right"];
-const CLAIM_KEY = "wr-find-the-lady-claim";
 
 const EVENT_TYPES = [
   { value: "wedding", label: "Wedding" },
@@ -54,7 +53,12 @@ function longDate(iso: string): string {
 const fieldCls = "w-full bg-transparent border border-cream/25 px-4 py-3 min-h-[48px] font-sans text-base text-cream placeholder:text-cream/40 focus:outline-none focus:border-accent transition-colors";
 const labelCls = "block font-sans text-[11px] tracking-[0.2em] uppercase text-cream/70 mb-2";
 
-const FindTheLady = () => {
+interface Props {
+  /** Closes the pop-up, used when the visitor follows the Book a call link. */
+  onClose?: () => void;
+}
+
+const FindTheLadyGame = ({ onClose }: Props) => {
   const reduce = useReducedMotion() ?? false;
   const motions = useRef<Record<CardId, CardMotion> | null>(null);
   if (!motions.current) {
@@ -77,8 +81,6 @@ const FindTheLady = () => {
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => { trackEvent("find_the_lady_view"); }, []);
 
   const flip = useCallback(async (up: boolean) => {
     const m = motions.current!;
@@ -229,24 +231,9 @@ const FindTheLady = () => {
   const m = motions.current;
 
   return (
-    <main id="main-content" className="pt-20 bg-forest-dark min-h-screen">
-      <SEOHead
-        title="Find the Lady | White Rabbit LA"
-        description="A small game of Find the Lady from White Rabbit LA. Follow the Queen of Hearts and receive a booking credit."
-        canonical="/find-the-lady"
-        noIndex
-      />
-
-      <section className="px-5 pt-8 pb-8 md:pt-20 md:pb-10 text-center">
-        <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">A Small Game</p>
-        <h1 className="font-serif text-4xl md:text-6xl text-cream mb-4 md:mb-5 leading-tight">Can you find the Lady?</h1>
-        <p className="font-sans text-base text-cream/70 max-w-md mx-auto leading-relaxed">
-          Three cards, one Queen of Hearts. Watch her as the cards move, then choose the one you believe is her.
-        </p>
-      </section>
-
-      <section className="px-4 pb-10" aria-label="Find the Lady game">
-        <div className="relative mx-auto w-full max-w-[560px] pt-[7%] pb-[5%]">
+    <div>
+      <section className="px-2 sm:px-4 pb-6" aria-label="Find the Lady game">
+        <div className="relative mx-auto w-full max-w-[480px] pt-[7%] pb-[5%]">
           <div className="relative w-full aspect-[100/42]" style={{ perspective: "1200px" }}>
             {m && order.map((id) => {
               const slot = order.indexOf(id);
@@ -290,7 +277,7 @@ const FindTheLady = () => {
           </div>
         </div>
 
-        <div className="max-w-md mx-auto text-center min-h-[120px]">
+        <div className="max-w-md mx-auto text-center min-h-[104px]">
           <div
             ref={resultRef}
             tabIndex={-1}
@@ -322,12 +309,12 @@ const FindTheLady = () => {
       </section>
 
       {(phase === "revealed" || (plays > 0 && claim)) && (
-        <section className="px-5 pb-24" aria-labelledby="lady-reward">
+        <section className="px-1 sm:px-4 pb-4" aria-labelledby="lady-reward">
           <motion.div
             initial={reduce ? { opacity: 0 } : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="relative max-w-lg mx-auto border border-accent/25 p-6 sm:p-10"
+            className="relative max-w-lg mx-auto border border-accent/25 p-5 sm:p-8"
           >
             <div className="absolute top-3 left-3 w-5 h-5 border-t border-l border-accent/40" />
             <div className="absolute top-3 right-3 w-5 h-5 border-t border-r border-accent/40" />
@@ -338,12 +325,13 @@ const FindTheLady = () => {
             {claim ? (
               <div className="text-center">
                 <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">Saved under your name</p>
-                <h2 id="lady-reward" className="font-serif text-2xl md:text-3xl text-cream mb-5 leading-snug">
+                <h3 id="lady-reward" className="font-serif text-2xl md:text-3xl text-cream mb-5 leading-snug">
                   Your credit is saved. Mention code <span className="whitespace-nowrap text-accent">{claim.code}</span> when you reach out, or book a call below.
-                </h2>
+                </h3>
                 <p className="font-sans text-sm text-cream/60 mb-8">Valid until {longDate(claim.expiresOn)}.</p>
                 <Link
                   to="/contact"
+                  onClick={onClose}
                   className="inline-flex items-center gap-2 font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-8 min-h-[48px] hover:bg-accent/85 transition-colors"
                 >
                   Book a call <ArrowRight size={14} />
@@ -353,7 +341,7 @@ const FindTheLady = () => {
               <>
                 <div className="text-center mb-8">
                   <p className="font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4">With our compliments</p>
-                  <h2 id="lady-reward" className="font-serif text-3xl md:text-4xl text-cream mb-4 leading-tight">A $250 credit toward your evening</h2>
+                  <h3 id="lady-reward" className="font-serif text-3xl md:text-4xl text-cream mb-4 leading-tight">A $250 credit toward your evening</h3>
                   <p className="font-sans text-sm text-cream/70 leading-relaxed">
                     Everyone who plays receives the same credit. Tell us a little about your event and we will save it under your name.
                   </p>
@@ -407,8 +395,8 @@ const FindTheLady = () => {
           </motion.div>
         </section>
       )}
-    </main>
+    </div>
   );
 };
 
-export default FindTheLady;
+export default FindTheLadyGame;

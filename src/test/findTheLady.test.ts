@@ -160,12 +160,9 @@ describe("Find the Lady claim validation", () => {
   });
 });
 
-describe("Find the Lady page stays out of search", () => {
+describe("Find the Lady stays out of search", () => {
   it("is not in the sitemap", () => {
     expect(readFileSync("public/sitemap.xml", "utf8")).not.toContain("find-the-lady");
     expect(readFileSync("scripts/generate-sitemap.ts", "utf8")).not.toContain("find-the-lady");
-  });
-  it("asks search engines not to index it", () => {
-    expect(readFileSync("src/pages/FindTheLady.tsx", "utf8")).toMatch(/<SEOHead[\s\S]*?noIndex[\s\S]*?\/>/);
   });
 });

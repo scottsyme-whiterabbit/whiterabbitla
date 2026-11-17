@@ -67,6 +67,30 @@
           }
         }
       }
+    },
+    "project.find_the_lady_view": {
+      "event_schema_version": 1,
+      "description": "The Find the Lady pop-up opened, either when the visitor moved to leave the page or scrolled halfway down.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "trigger"
+        ],
+        "properties": {
+          "trigger": {
+            "type": "string",
+            "enum": [
+              "exit",
+              "scroll"
+            ]
+          }
+        }
+      }
     }
   }
 }

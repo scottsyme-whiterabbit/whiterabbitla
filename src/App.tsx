@@ -16,7 +16,7 @@ import DynamicCanonical from "@/components/DynamicCanonical";
 import { BookingQuizProvider } from "@/contexts/BookingQuizContext";
 import BookingQuiz from "@/components/BookingQuiz";
 import CookieConsent from "@/components/CookieConsent";
-import ExitIntentPopup from "@/components/ExitIntentPopup";
+import FindTheLadyPopup from "@/components/findTheLady/FindTheLadyPopup";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
 
 import Index from "./pages/Index";
@@ -49,7 +49,6 @@ const ProposalTemplate = lazy(() => import("./pages/ProposalTemplate"));
 const ResidencyTemplate = lazy(() => import("./pages/ResidencyTemplate"));
 const AdminProposals = lazy(() => import("./pages/AdminProposals"));
 const BlogArticleOrSeo = lazy(() => import("./pages/BlogArticleOrSeo"));
-const FindTheLady = lazy(() => import("./pages/FindTheLady"));
 
 const PageFallback = () => <div className="bg-background min-h-screen" />;
 
@@ -64,7 +63,7 @@ const AppContent = () => {
       <ScrollToTop />
       <Navbar />
       <BookingQuiz />
-      <ExitIntentPopup />
+      <FindTheLadyPopup />
       <StickyMobileCTA />
       <Suspense fallback={<PageFallback />}>
       <Routes>
@@ -90,7 +89,7 @@ const AppContent = () => {
         <Route path="/deck" element={<PitchDeck />} />
         <Route path="/review" element={<ReviewGate />} />
         <Route path="/refer" element={<Refer />} />
-        <Route path="/find-the-lady" element={<FindTheLady />} />
+        <Route path="/find-the-lady" element={<RemovedRouteRedirect to="/" />} />
         <Route path="/planners" element={<Planners />} />
         <Route path="/areas" element={<ServiceAreas />} />
         <Route path="/areas/:citySlug" element={<ServiceAreaDetail />} />
