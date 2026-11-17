@@ -2090,7 +2090,7 @@ serve(async (req) => {
         ];
 
         const { data: ladyRows } = await supabase.from("find_the_lady_credits")
-          .select("id, code, status, expires_on, found_queen, marketing_opt_in, approx_event_date, deal_id, created_at")
+          .select("id, code, status, expires_on, found_queen, marketing_opt_in, approx_event_date, deal_id, created_at, credit_cents, min_package_cents, source, drawing_entry, drawing_quarter, welcome_email_status")
           .ilike("email", like).order("created_at", { ascending: false });
         const ladyCredits = ladyRows || [];
 

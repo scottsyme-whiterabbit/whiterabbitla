@@ -235,7 +235,7 @@ async function deliverAlert(build: () => Promise<{ text: string; key: string }>,
   }
 }
 
-// ── Find the Lady claims ────────────────────────────────────────────────────
+// ── Find the Queen claims (formerly Find the Lady) ──────────────────────────
 // Same bot, same chat, same one-alert-per-key claim table. The alert carries
 // no email address and no phone number, and its CRM link opens the deal by id.
 
@@ -244,10 +244,9 @@ export interface LadyAlertInput {
   code: string;
   expiresOn: string;
   firstName: string;
-  eventType: string;
-  approxDate: string | null;
-  foundQueen: boolean;
-  optIn: boolean;
+  quarter: string;
+  /** "sent", "already_sent" or "not_sent:<reason>" from the welcome email step. */
+  welcome: string;
   dealId: string | null;
 }
 
@@ -267,15 +266,14 @@ function longDay(iso: string): string {
 
 export function buildLadyAlert(a: LadyAlertInput): string {
   const e = escapeTelegramHtml;
-  const lines: string[] = ["🃏 <b>Find the Lady</b>"];
+  const lines: string[] = ["🃏 <b>Find the Queen</b>"];
   const name = field(a.firstName);
   if (name) lines.push(`<b>${e(name)}</b>`);
-  lines.push(`Result: ${a.foundQueen ? "found the Queen" : "missed the Queen"}`);
+  const welcome = a.welcome === "sent" ? "sent" : a.welcome === "already_sent" ? "already sent" : "NOT sent, please send the code yourself";
   const labelled: [string, string][] = [
-    ["Event", field(a.eventType)],
-    ["Approx. date", a.approxDate ? longDay(a.approxDate) : ""],
-    ["Credit", `${field(a.code)}, $250 toward $2,500 or more, valid until ${longDay(a.expiresOn).replace(/^\w+, /, "")}`],
-    ["Occasional notes", a.optIn ? "opted in" : "not opted in"],
+    ["Credit", `${field(a.code)}, $500, valid until ${longDay(a.expiresOn).replace(/^\w+, /, "")}`],
+    ["Drawing", `entered for ${field(a.quarter)}`],
+    ["Welcome email", welcome],
   ];
   for (const [label, value] of labelled) if (value) lines.push(`${label}: ${e(value)}`);
   const link = crmDealLink(a.dealId);

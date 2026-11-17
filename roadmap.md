@@ -5,7 +5,6 @@
 - [ ] Homepage brand logos: swap current block for actual businesses performed for (long-standing request).
 
 ## In progress
-- [ ] Find the Queen pop-up from Scott's brief: 5 steps in one pop-up, $500 credit WR500 code, quarterly drawing entry, welcome email, corner tab, 14 day rest, mobile 40s timer, draft /official-rules page.
 - [ ] Mobile-first CRM/PWA pass: improve navigation, dense lists, forms, dialogs, and touch use across every admin screen without removing features.
 - [ ] PART A: Google sign-in for all admin pages (phase 1, alongside password)
   - [ ] Enable Google provider, disable open email signups
@@ -23,7 +22,7 @@
   - [ ] No unique constraint yet
 
 ## Done
-- Find the Lady game, $250 credit claim, CRM lead and code, single Telegram alert, tracking. Now a site-wide pop-up (exit intent or 50% scroll, 30 day rest) replacing the Playbook pop-up; standalone page and homepage section removed. Waiting on Scott's OK to publish.
+- Find the Queen pop-up per Scott's brief: 5 steps, $500 WR500 credit, quarterly drawing entry, welcome email, single Telegram alert, corner tab, 14 day rest, phone 40s timer, draft /official-rules. One real test claim passed end to end and was removed. Waiting on Scott: credit minimum, rules legal review, OK to publish.
 - Los Angeles hire page internal links: footer, homepage line, article and city landing lines, other area pages line, two article callouts, 45+ review count. Checked in the browser on desktop and phone. Not published.
 - Telegram alert to Scott for each new website inquiry: built and tested, bot verified; waiting on Scott's OK to switch it on and publish the CRM link change.
 - Personal reply helper: Needs your reply list on Today, five templates in the client panel, full preview with Gmail signature, send on the Booking Inquiry thread. Drafting verified live; a real send not yet tried. Not published.

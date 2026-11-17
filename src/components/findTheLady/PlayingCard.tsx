@@ -1,4 +1,4 @@
-// Card art for Find the Lady, drawn in brand colors so it stays crisp at any size.
+// Card art for Find the Queen, drawn in brand colors so it stays crisp at any size.
 export type CardId = "queen" | "spades" | "clubs";
 
 export const CARD_LABELS: Record<CardId, string> = {
@@ -66,7 +66,7 @@ export function CardFace({ id, className }: { id: CardId; className?: string }) 
           <circle cx="125" cy="80" r="3.5" fill={GOLD} />
           <circle cx="150" cy="88" r="3.5" fill={GOLD} />
           <Pip id="queen" x={125} y={188} size={92} />
-          <text x="125" y="268" textAnchor="middle" fontFamily="Montserrat, sans-serif" fontSize="10" letterSpacing="4" fill={INK} fillOpacity="0.7">THE LADY</text>
+          <text x="125" y="268" textAnchor="middle" fontFamily="Montserrat, sans-serif" fontSize="10" letterSpacing="4" fill={INK} fillOpacity="0.7">THE QUEEN</text>
         </g>
       )}
       {id === "spades" && (

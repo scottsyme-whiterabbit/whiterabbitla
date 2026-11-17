@@ -16,7 +16,7 @@ import DynamicCanonical from "@/components/DynamicCanonical";
 import { BookingQuizProvider } from "@/contexts/BookingQuizContext";
 import BookingQuiz from "@/components/BookingQuiz";
 import CookieConsent from "@/components/CookieConsent";
-import FindTheLadyPopup from "@/components/findTheLady/FindTheLadyPopup";
+import FindTheQueenPopup from "@/components/findTheLady/FindTheQueenPopup";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
 
 import Index from "./pages/Index";
@@ -49,6 +49,7 @@ const ProposalTemplate = lazy(() => import("./pages/ProposalTemplate"));
 const ResidencyTemplate = lazy(() => import("./pages/ResidencyTemplate"));
 const AdminProposals = lazy(() => import("./pages/AdminProposals"));
 const BlogArticleOrSeo = lazy(() => import("./pages/BlogArticleOrSeo"));
+const OfficialRules = lazy(() => import("./pages/OfficialRules"));
 
 const PageFallback = () => <div className="bg-background min-h-screen" />;
 
@@ -63,7 +64,7 @@ const AppContent = () => {
       <ScrollToTop />
       <Navbar />
       <BookingQuiz />
-      <FindTheLadyPopup />
+      <FindTheQueenPopup />
       <StickyMobileCTA />
       <Suspense fallback={<PageFallback />}>
       <Routes>
@@ -90,6 +91,7 @@ const AppContent = () => {
         <Route path="/review" element={<ReviewGate />} />
         <Route path="/refer" element={<Refer />} />
         <Route path="/find-the-lady" element={<RemovedRouteRedirect to="/" />} />
+        <Route path="/official-rules" element={<OfficialRules />} />
         <Route path="/planners" element={<Planners />} />
         <Route path="/areas" element={<ServiceAreas />} />
         <Route path="/areas/:citySlug" element={<ServiceAreaDetail />} />

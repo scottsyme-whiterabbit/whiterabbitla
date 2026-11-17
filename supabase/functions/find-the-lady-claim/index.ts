@@ -1,10 +1,15 @@
-// Public endpoint for the /find-the-lady claim form. Validates the claim,
-// issues one $250 credit per email, files the lead in the CRM and starts one
-// Telegram alert to Scott in the background. Sends no email to anyone.
+// Public endpoint for the Find the Queen pop-up claim form. Validates the claim,
+// issues one $500 credit per email with a quarterly drawing entry, files the
+// lead in the CRM, then in the background sends the welcome email with the
+// code (claimed on the credit row, rolled back on failure) followed by one
+// Telegram alert to Scott.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { claimLadyCredit, validateClaim, type ClaimStore } from "../_shared/find-the-lady.ts";
+import { claimQueenCredit, validateClaim, welcomeThenAlert, type ClaimStore, type WelcomeStore } from "../_shared/find-the-lady.ts";
 import { notifyLadyTelegram, type AlertStore } from "../_shared/telegram-inquiry.ts";
+import { gatedResendFetch } from "../_shared/send-gate.ts";
 import { safeErrorPayload } from "../_shared/safe-error.ts";
+
+const PROJECT_REF = "pgjyzayvkyrftcksvncj";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -22,7 +27,7 @@ Deno.serve(async (req) => {
   try {
     const body = await req.json().catch(() => null);
     const now = new Date();
-    const checked = validateClaim(body, now);
+    const checked = validateClaim(body);
     if (!checked.ok) {
       // A filled hidden field gets a quiet success that saves nothing.
       if ("bot" in checked) return json({ ok: true, code: null });
@@ -72,7 +77,7 @@ Deno.serve(async (req) => {
       },
       logActivity: async (dealId, title, text, metadata) => {
         const { error } = await db.from("deal_activity").insert({ deal_id: dealId, type: "find_the_lady", title, body: text, metadata });
-        if (error) console.error("Find the Lady activity insert failed:", error.message);
+        if (error) console.error("Find the Queen activity insert failed:", error.message);
       },
     };
 
@@ -81,7 +86,7 @@ Deno.serve(async (req) => {
         const { error } = await db.from("telegram_inquiry_alerts").insert({ dedupe_key: k, deal_id: dealId });
         if (!error) return "claimed";
         if (error.code === "23505") return "duplicate";
-        console.error("Find the Lady alert claim failed:", error.message);
+        console.error("Find the Queen alert claim failed:", error.message);
         return "error";
       },
       finish: async (k, status, messageId) => {
@@ -92,13 +97,58 @@ Deno.serve(async (req) => {
       },
     });
 
+    const welcomeStore: WelcomeStore = {
+      claimWelcome: async (id) => {
+        const { data, error } = await db.from("find_the_lady_credits").update({ welcome_email_status: "sending" })
+          .eq("id", id).is("welcome_email_status", null).select("id");
+        if (error) throw new Error(`welcome claim failed: ${error.message}`);
+        return (data || []).length === 1;
+      },
+      markWelcomeSent: async (id) => {
+        const { error } = await db.from("find_the_lady_credits").update({ welcome_email_status: "sent", welcome_email_sent_at: new Date().toISOString() }).eq("id", id);
+        if (error) console.error("Find the Queen welcome mark failed:", error.message);
+      },
+      releaseWelcome: async (id) => {
+        const { error } = await db.from("find_the_lady_credits").update({ welcome_email_status: null }).eq("id", id).eq("welcome_email_status", "sending");
+        if (error) console.error("Find the Queen welcome release failed:", error.message);
+      },
+    };
+
+    const resendKey = Deno.env.get("RESEND_API_KEY");
     let pending = null as Promise<unknown> | null;
-    const result = await claimLadyCredit(checked.value, {
+    const result = await claimQueenCredit(checked.value, {
       store,
       now,
-      notify: (alert) => {
-        pending = notifyLadyTelegram(alert, {
-          token: Deno.env.get("TELEGRAM_BOT_TOKEN"), chatId: Deno.env.get("TELEGRAM_CHAT_ID"), store: alertStore(alert.dealId),
+      followUp: (credit) => {
+        pending = welcomeThenAlert(credit, {
+          store: welcomeStore,
+          send: async (mail) => {
+            if (!resendKey) return { sent: false, reason: "email_not_configured" };
+            const oneClick = `https://${PROJECT_REF}.supabase.co/functions/v1/unsubscribe-oneclick?email=${encodeURIComponent(mail.to)}`;
+            const res = await gatedResendFetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: { Authorization: `Bearer ${resendKey}`, "Content-Type": "application/json" },
+              body: JSON.stringify({
+                from: "Scott Syme <scott.syme@whiterabbitla.com>",
+                reply_to: "scott.syme@whiterabbitla.com",
+                to: [mail.to],
+                subject: mail.subject,
+                html: mail.html,
+                text: mail.text,
+                headers: {
+                  "List-Unsubscribe": `<mailto:unsubscribe@whiterabbitla.com?subject=unsubscribe>, <${oneClick}>`,
+                  "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+                },
+              }),
+            }, "find-the-queen-welcome");
+            if (res.ok) return { sent: true };
+            const info = await res.json().catch(() => ({}));
+            return { sent: false, reason: info?.reason || `status_${res.status}` };
+          },
+          notify: (c, welcome) => notifyLadyTelegram(
+            { creditId: c.creditId, code: c.code, expiresOn: c.expiresOn, firstName: c.firstName, quarter: c.quarter, welcome, dealId: c.dealId },
+            { token: Deno.env.get("TELEGRAM_BOT_TOKEN"), chatId: Deno.env.get("TELEGRAM_CHAT_ID"), store: alertStore(c.dealId) },
+          ),
         }).catch(() => {});
       },
     });

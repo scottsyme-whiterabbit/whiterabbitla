@@ -85,6 +85,13 @@
       "when": 1794859642092,
       "tag": "0011_0011_find_the_lady_credits",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1794878654282,
+      "tag": "0012_find_the_queen_credits",
+      "breakpoints": true
     }
   ]
 }

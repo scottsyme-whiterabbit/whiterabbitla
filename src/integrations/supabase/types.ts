@@ -1396,8 +1396,10 @@ export type Database = {
           created_at: string
           credit_cents: number
           deal_id: string | null
+          drawing_entry: boolean
+          drawing_quarter: string | null
           email: string
-          event_type: string
+          event_type: string | null
           expires_on: string
           first_name: string
           found_queen: boolean
@@ -1405,7 +1407,10 @@ export type Database = {
           marketing_opt_in: boolean
           min_package_cents: number
           redeemed_at: string | null
+          source: string | null
           status: string
+          welcome_email_sent_at: string | null
+          welcome_email_status: string | null
         }
         Insert: {
           approx_event_date?: string | null
@@ -1413,8 +1418,10 @@ export type Database = {
           created_at?: string
           credit_cents?: number
           deal_id?: string | null
+          drawing_entry?: boolean
+          drawing_quarter?: string | null
           email: string
-          event_type: string
+          event_type?: string | null
           expires_on: string
           first_name: string
           found_queen?: boolean
@@ -1422,7 +1429,10 @@ export type Database = {
           marketing_opt_in?: boolean
           min_package_cents?: number
           redeemed_at?: string | null
+          source?: string | null
           status?: string
+          welcome_email_sent_at?: string | null
+          welcome_email_status?: string | null
         }
         Update: {
           approx_event_date?: string | null
@@ -1430,8 +1440,10 @@ export type Database = {
           created_at?: string
           credit_cents?: number
           deal_id?: string | null
+          drawing_entry?: boolean
+          drawing_quarter?: string | null
           email?: string
-          event_type?: string
+          event_type?: string | null
           expires_on?: string
           first_name?: string
           found_queen?: boolean
@@ -1439,7 +1451,10 @@ export type Database = {
           marketing_opt_in?: boolean
           min_package_cents?: number
           redeemed_at?: string | null
+          source?: string | null
           status?: string
+          welcome_email_sent_at?: string | null
+          welcome_email_status?: string | null
         }
         Relationships: [
           {

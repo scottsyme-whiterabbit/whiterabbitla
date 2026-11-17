@@ -1,0 +1,10 @@
+ALTER TABLE public.find_the_lady_credits ALTER COLUMN event_type DROP NOT NULL;
+ALTER TABLE public.find_the_lady_credits DROP CONSTRAINT find_the_lady_credits_code_format;
+ALTER TABLE public.find_the_lady_credits ADD CONSTRAINT find_the_lady_credits_code_format CHECK (code ~ '^(WR-LADY-|WR500-)[A-Z0-9]{4}$');
+ALTER TABLE public.find_the_lady_credits ADD COLUMN IF NOT EXISTS source text;
+ALTER TABLE public.find_the_lady_credits ADD COLUMN IF NOT EXISTS drawing_entry boolean NOT NULL DEFAULT false;
+ALTER TABLE public.find_the_lady_credits ADD COLUMN IF NOT EXISTS drawing_quarter text;
+ALTER TABLE public.find_the_lady_credits ADD COLUMN IF NOT EXISTS welcome_email_status text;
+ALTER TABLE public.find_the_lady_credits ADD COLUMN IF NOT EXISTS welcome_email_sent_at timestamptz;
+ALTER TABLE public.find_the_lady_credits ADD CONSTRAINT find_the_lady_credits_welcome_status_check CHECK (welcome_email_status IS NULL OR welcome_email_status IN ('sending','sent'));
+COMMENT ON COLUMN public.find_the_lady_credits.event_type IS 'Only filled by the retired Find the Lady form; Find the Queen claims leave it empty.';

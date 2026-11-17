@@ -91,6 +91,58 @@
           }
         }
       }
+    },
+    "project.find_the_queen_claim": {
+      "event_schema_version": 1,
+      "description": "A visitor submitted the Find the Queen form and claimed the $500 credit.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "project.find_the_queen_play": {
+      "event_schema_version": 1,
+      "description": "A visitor pressed Find the Queen and the card game started.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
+      }
+    },
+    "project.find_the_queen_view": {
+      "event_schema_version": 1,
+      "description": "The Find the Queen pop-up opened: on exit intent, at half scroll, after 40 seconds on phones, or from the corner tab.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "trigger"
+        ],
+        "properties": {
+          "trigger": {
+            "type": "string",
+            "enum": [
+              "exit",
+              "scroll",
+              "timer",
+              "tab"
+            ]
+          }
+        }
+      }
     }
   }
 }
