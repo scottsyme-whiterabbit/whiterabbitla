@@ -92,6 +92,13 @@
       "when": 1794878654282,
       "tag": "0012_find_the_queen_credits",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1794996008271,
+      "tag": "0013_find_the_queen_drawing_and_counts",
+      "breakpoints": true
     }
   ]
 }

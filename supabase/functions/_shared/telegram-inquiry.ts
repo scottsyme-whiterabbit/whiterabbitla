@@ -235,19 +235,20 @@ async function deliverAlert(build: () => Promise<{ text: string; key: string }>,
   }
 }
 
-// ── Find the Queen claims (formerly Find the Lady) ──────────────────────────
+// ── Find the Lady claims (the Find the Queen pop-up) ────────────────────────
 // Same bot, same chat, same one-alert-per-key claim table. The alert carries
-// no email address and no phone number, and its CRM link opens the deal by id.
+// no email address and no phone number.
 
 export interface LadyAlertInput {
   creditId: string;
   code: string;
-  expiresOn: string;
   firstName: string;
-  quarter: string;
+  /** Human labels, e.g. "Wedding" and "Next 3 months". */
+  occasion: string;
+  timing: string;
+  foundQueen: boolean;
   /** "sent", "already_sent" or "not_sent:<reason>" from the welcome email step. */
   welcome: string;
-  dealId: string | null;
 }
 
 /** CRM link by deal id only, so no email address travels in the alert. */
@@ -256,28 +257,21 @@ export function crmDealLink(dealId: unknown): string | null {
   return UUID.test(id) ? `${CRM_URL}?tab=today&deal=${id}` : null;
 }
 
-function longDay(iso: string): string {
-  const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if (!m) return "";
-  return new Date(Date.UTC(+m[1], +m[2] - 1, +m[3])).toLocaleDateString("en-US", {
-    timeZone: "UTC", weekday: "long", month: "long", day: "numeric", year: "numeric",
-  });
-}
-
 export function buildLadyAlert(a: LadyAlertInput): string {
   const e = escapeTelegramHtml;
-  const lines: string[] = ["🃏 <b>Find the Queen</b>"];
+  const lines: string[] = ["🃏 <b>Find the Lady</b>"];
   const name = field(a.firstName);
   if (name) lines.push(`<b>${e(name)}</b>`);
-  const welcome = a.welcome === "sent" ? "sent" : a.welcome === "already_sent" ? "already sent" : "NOT sent, please send the code yourself";
   const labelled: [string, string][] = [
-    ["Credit", `${field(a.code)}, $500, valid until ${longDay(a.expiresOn).replace(/^\w+, /, "")}`],
-    ["Drawing", `entered for ${field(a.quarter)}`],
-    ["Welcome email", welcome],
+    ["Occasion", field(a.occasion)],
+    ["Timing", field(a.timing)],
+    ["Found the Queen", a.foundQueen ? "yes" : "no"],
+    ["Code", field(a.code)],
   ];
   for (const [label, value] of labelled) if (value) lines.push(`${label}: ${e(value)}`);
-  const link = crmDealLink(a.dealId);
-  return lines.join("\n\n") + (link ? `\n\n<a href="${e(link)}">Open in CRM</a>` : "");
+  // Only mentioned when it failed, so Scott can send the code himself.
+  if (a.welcome !== "sent" && a.welcome !== "already_sent") lines.push("Welcome email: NOT sent, please send the code yourself");
+  return lines.join("\n\n");
 }
 
 /** One key per credit, so a retry of the same claim alerts once. */

@@ -23,6 +23,7 @@ import ActivityLogTab from "@/components/ActivityLogTab";
 import CastleInvitesTab from "@/components/CastleInvitesTab";
 import ReengageTab from "@/components/ReengageTab";
 import TodayTab from "@/components/TodayTab";
+import FindTheLadyTab from "@/components/admin/FindTheLadyTab";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
 import AdminGate, { AdminSignOutButton } from "@/components/admin/AdminGate";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -92,10 +93,10 @@ const AdminNewsletter = () => {
   const { password: storedPassword, authed: authenticated } = useAdminAuth();
 
 
-  const [activeTab, setActiveTab] = useState<"today" | "dashboard" | "pipeline" | "inbox" | "actions" | "followups" | "activity" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "email_analytics" | "planner" | "apartment" | "thankyou" | "cold" | "lead_attribution" | "castle" | "reengage" | "email_schedule">(() => {
+  const [activeTab, setActiveTab] = useState<"today" | "dashboard" | "pipeline" | "inbox" | "actions" | "followups" | "activity" | "revenue" | "contacts" | "compose" | "campaigns" | "calendar" | "analytics" | "email_analytics" | "planner" | "apartment" | "thankyou" | "cold" | "lead_attribution" | "castle" | "reengage" | "email_schedule" | "find_the_lady">(() => {
     if (typeof window !== "undefined") {
       const t = new URLSearchParams(window.location.search).get("tab");
-      const allowed = ["today","reengage","dashboard","pipeline","inbox","actions","followups","activity","revenue","contacts","compose","campaigns","calendar","analytics","email_analytics","planner","apartment","thankyou","cold","lead_attribution","castle","email_schedule"];
+      const allowed = ["today","reengage","dashboard","pipeline","inbox","actions","followups","activity","revenue","contacts","compose","campaigns","calendar","analytics","email_analytics","planner","apartment","thankyou","cold","lead_attribution","castle","email_schedule","find_the_lady"];
       if (t && allowed.includes(t)) return t as any;
     }
     return "today";
@@ -600,6 +601,7 @@ const AdminNewsletter = () => {
       label: "Pipeline",
       tabs: [
         { key: "pipeline", label: "Deals" },
+        { key: "find_the_lady", label: "Find the Lady" },
         { key: "inbox", label: "Inbox" },
         { key: "actions", label: "Action List" },
         { key: "followups", label: "AI Follow-Ups" },
@@ -855,6 +857,10 @@ const AdminNewsletter = () => {
         )}
         {activeTab === "pipeline" && (
           <PipelineTab adminPassword={storedPassword} />
+        )}
+
+        {activeTab === "find_the_lady" && (
+          <FindTheLadyTab adminPassword={storedPassword} />
         )}
 
         {/* Action List */}

@@ -7,6 +7,7 @@ import { isAdminRequest } from "../_shared/require-admin.ts";
 import { computeRevenueStats, dealsToAutoBook } from "./revenue-stats.ts";
 import { eventDateRangeError } from "./event-date-range.ts";
 import { sentEmails, upcomingEmails } from "./email-timeline.ts";
+import { LADY_ACTIONS, handleLadyAction } from "./find-the-lady-admin.ts";
 import { BookingPaymentError, normalizeBookingPayment, manualInvoiceFields, type BookingPayment } from "./manual-booking.ts";
 
 const corsHeaders = {
@@ -587,6 +588,8 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
+    if (LADY_ACTIONS.has(action)) return await handleLadyAction(action, payload, supabase);
+
     switch (action) {
       case "import_contacts": {
         const { contacts } = payload;
@@ -969,6 +972,8 @@ serve(async (req) => {
         const { data, error } = await supabase
           .from("deals")
           .select("*")
+          // Find the Queen pop-up claims never sit in the New column; they live in the Find the Lady tab.
+          .or("stage.neq.new,source.is.null,source.neq.find-the-queen-popup")
           .order("created_at", { ascending: false });
         if (error) throw error;
         return new Response(JSON.stringify({ deals: data }), {
@@ -1305,7 +1310,7 @@ serve(async (req) => {
       case "get_action_list_data": {
         // Get deals, hot/warm contacts, outreach logs, and inbound form leads
         const [dealsRes, contactsRes, logsRes, inquiriesRes, quizRes, consultRes] = await Promise.all([
-          supabase.from("deals").select("*").not("stage", "in", "(completed,lost)").order("created_at", { ascending: false }),
+          supabase.from("deals").select("*").not("stage", "in", "(completed,lost)").or("source.is.null,source.neq.find-the-queen-popup").order("created_at", { ascending: false }),
           supabase.from("newsletter_contacts").select("id, email, name, company, source, drip_campaign, drip_step, engagement_status, subscribed, created_at, phone").in("engagement_status", ["hot", "warm"]).eq("subscribed", true).order("created_at", { ascending: false }),
           supabase.from("outreach_log").select("*").order("created_at", { ascending: false }).limit(1000),
           supabase.from("contact_inquiries").select("id, name, email, phone, event_type, date, location, guest_count, budget, message, client_type, source, recommendation, created_at").order("created_at", { ascending: false }).limit(500),
@@ -2090,7 +2095,7 @@ serve(async (req) => {
         ];
 
         const { data: ladyRows } = await supabase.from("find_the_lady_credits")
-          .select("id, code, status, expires_on, found_queen, marketing_opt_in, approx_event_date, deal_id, created_at, credit_cents, min_package_cents, source, drawing_entry, drawing_quarter, welcome_email_status")
+          .select("id, code, status, expires_on, found_queen, marketing_opt_in, approx_event_date, deal_id, created_at, credit_cents, min_package_cents, source, drawing_entry, drawing_quarter, welcome_email_status, event_type, event_timing, inquiry_id")
           .ilike("email", like).order("created_at", { ascending: false });
         const ladyCredits = ladyRows || [];
 

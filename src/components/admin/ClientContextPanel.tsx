@@ -1,4 +1,5 @@
 import EmailTimeline, { type EmailTimelineData } from "@/components/admin/EmailTimeline";
+import { TIMING_OPTIONS } from "@/lib/findTheLadyPopup";
 import { Button } from "@/components/ui/button";
 import { invoiceMoneyFlags } from "@/lib/invoiceMoneyFlag";
 import { useBookingPayment } from "@/components/admin/BookingPaymentModal";
@@ -126,6 +127,8 @@ interface LadyCredit {
   drawing_entry?: boolean;
   drawing_quarter?: string | null;
   welcome_email_status?: string | null;
+  event_type?: string | null;
+  event_timing?: string | null;
 }
 
 const METHODS = [
@@ -748,7 +751,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onDeal
               </div>
               {(file?.ladyCredits || []).map((c) => (
                 <div key={c.id} className="border border-accent/40 bg-accent/5 p-3 min-w-0">
-                  <p className="text-[9px] tracking-[0.1em] uppercase text-muted-foreground">{c.source === "find-the-queen-popup" ? "Find the Queen credit" : "Find the Lady credit"}</p>
+                  <p className="text-[9px] tracking-[0.1em] uppercase text-muted-foreground">Find the Lady code</p>
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                     <p className="font-mono text-base text-foreground tracking-wider">{c.code}</p>
                     <button onClick={() => { navigator.clipboard.writeText(c.code); toast.success("Code copied"); }} className={`${smallBtn} text-muted-foreground hover:text-foreground`}>
@@ -760,6 +763,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onDeal
                       `$${Math.round((c.credit_cents ?? 25000) / 100).toLocaleString("en-US")} toward a package of $${Math.round((c.min_package_cents ?? 250000) / 100).toLocaleString("en-US")} or more`,
                       `${c.status === "active" ? "valid until" : c.status} ${fmtDate(c.expires_on) || c.expires_on}`,
                       c.approx_event_date ? `approx. date ${fmtDate(c.approx_event_date)}` : null,
+                      TIMING_OPTIONS.find((t) => t.id === c.event_timing)?.label.toLowerCase() ?? null,
                       c.drawing_entry ? `in the ${c.drawing_quarter || ""} drawing`.replace("  ", " ") : (c.found_queen ? "found the Queen" : "missed the Queen"),
                       c.source === "find-the-queen-popup" ? (c.welcome_email_status === "sent" ? "welcome email sent" : "welcome email not sent") : null,
                       c.marketing_opt_in ? "opted in to notes" : null,

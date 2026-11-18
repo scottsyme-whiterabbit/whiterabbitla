@@ -101,7 +101,8 @@ const getRecommendation = (data: QuizData) => {
 const STEPS: Step[] = ["clientType", "event", "location", "guests", "date", "budget", "contact", "recommendation"];
 
 const BookingQuiz = () => {
-  const { isOpen, closeQuiz, defaultSource } = useBookingQuiz();
+  const { isOpen, closeQuiz, defaultSource, prefill } = useBookingQuiz();
+  const [queenCode, setQueenCode] = useState("");
   const { toast } = useToast();
   const [step, setStep] = useState<Step>("clientType");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -130,6 +131,13 @@ const BookingQuiz = () => {
       setData(prev => ({ ...prev, referralSource: defaultSource }));
     }
   }, [defaultSource]);
+
+  // Opened from the Find the Queen pop-up: occasion and timing filled in, code attached.
+  useEffect(() => {
+    if (!isOpen || !prefill) return;
+    setData(prev => ({ ...prev, eventType: prefill.eventType, eventLabel: prefill.eventLabel, date: prefill.date }));
+    setQueenCode(prefill.queenCode);
+  }, [isOpen, prefill]);
 
   const stepIndex = STEPS.indexOf(step);
   const progress = ((stepIndex + 1) / STEPS.length) * 100;
@@ -173,7 +181,7 @@ const BookingQuiz = () => {
           eventType: `${quizData.eventLabel} (${rec.format})`,
           date: quizData.date,
           location: quizData.location || "TBD",
-          message: `Client Type: ${quizData.clientTypeLabel}\nGuest Count: ${quizData.guestLabel}\nBudget: ${quizData.budgetLabel}\nHow They Found Us: ${quizData.referralSource}\nRecommended: ${rec.title}\n\n${quizData.message || "No additional message."}`,
+          message: `Client Type: ${quizData.clientTypeLabel}\nGuest Count: ${quizData.guestLabel}\nBudget: ${quizData.budgetLabel}\nHow They Found Us: ${quizData.referralSource}\nRecommended: ${rec.title}${queenCode ? `\nFind the Queen code: ${queenCode}` : ""}\n\n${quizData.message || "No additional message."}`,
           clientType: quizData.clientType || null,
           guestCount: (quizData.guestCount === "intimate" && quizData.exactGuestCount.trim()
             ? `Under 30 (${quizData.exactGuestCount.trim()} guests)`
@@ -181,6 +189,7 @@ const BookingQuiz = () => {
           budget: quizData.budgetLabel || null,
           recommendation: rec.title,
           source: "booking_quiz",
+          ...(queenCode ? { queenCode } : {}),
         },
       });
       if (result.error) throw result.error;
@@ -212,6 +221,7 @@ const BookingQuiz = () => {
       setStep("clientType");
       setSubmitted(false);
       setData({ clientType: "", clientTypeLabel: "", eventType: "", eventLabel: "", location: "", guestCount: "", guestLabel: "", exactGuestCount: "", date: "", budget: "", budgetLabel: "", name: "", email: "", phone: "", referralSource: "", message: "" });
+      setQueenCode("");
     }, 300);
   };
 
@@ -284,6 +294,11 @@ const BookingQuiz = () => {
 
             {/* Content */}
             <div className="p-8 overflow-y-auto flex-1">
+              {queenCode && !submitted && (
+                <p className="font-sans text-xs text-muted-foreground mb-5 pr-8">
+                  Your code <span className="font-medium text-foreground tracking-wider">{queenCode}</span> is attached.
+                </p>
+              )}
               <AnimatePresence mode="wait">
                 <motion.div
                   key={step + (submitted ? "-done" : "")}

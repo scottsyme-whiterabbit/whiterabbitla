@@ -46,14 +46,77 @@ export function reachedScrollTrigger(scrollY: number, scrollHeight: number, view
   return (scrollY / scrollable) * 100 >= SCROLL_TRIGGER_PERCENT;
 }
 
-/** Pick a card: whatever is chosen is not the Queen; she is under one of the other two. */
-export function dealFaces(picked: number, rand: () => number = Math.random): ("queen" | "spades" | "clubs")[] {
-  const others = [0, 1, 2].filter((i) => i !== picked);
-  const queenAt = others[rand() < 0.5 ? 0 : 1];
-  const aces: ("spades" | "clubs")[] = rand() < 0.5 ? ["spades", "clubs"] : ["clubs", "spades"];
-  const faces: ("queen" | "spades" | "clubs")[] = ["spades", "spades", "spades"];
-  faces[queenAt] = "queen";
-  faces[picked] = aces[0];
-  faces[others.find((i) => i !== queenAt)!] = aces[1];
-  return faces;
+// ── The five card game ──────────────────────────────────────────────────────
+// Fair by design: the Queen is placed at random, every swap really moves the
+// cards, and the card the guest taps shows its real face. Nothing steers the pick.
+
+export type GameCard = "queen" | "spades" | "clubs" | "kingSpades" | "jackClubs";
+export const GAME_CARDS: GameCard[] = ["queen", "spades", "clubs", "kingSpades", "jackClubs"];
+export const SLOT_COUNT = 5;
+export const MIN_SWAPS = 7;
+export const MAX_SWAPS = 9;
+
+/** Which card starts in each of the five slots; the Queen lands at random. */
+export function dealCards(rand: () => number = Math.random): GameCard[] {
+  const deck = [...GAME_CARDS];
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  return deck;
+}
+
+/** Seven to nine swaps of two different slots, never the same pair twice in a row. */
+export function planSwaps(rand: () => number = Math.random): [number, number][] {
+  const count = MIN_SWAPS + Math.floor(rand() * (MAX_SWAPS - MIN_SWAPS + 1));
+  const out: [number, number][] = [];
+  let last = "";
+  while (out.length < count) {
+    const a = Math.floor(rand() * SLOT_COUNT);
+    const b = (a + 1 + Math.floor(rand() * (SLOT_COUNT - 1))) % SLOT_COUNT;
+    const key = [a, b].sort().join("");
+    if (key === last) continue;
+    last = key;
+    out.push([a, b]);
+  }
+  return out;
+}
+
+/** Applies swaps to a slot layout (slot index to card) and returns the new layout. */
+export function applySwaps<T>(layout: T[], swaps: [number, number][]): T[] {
+  const next = [...layout];
+  for (const [a, b] of swaps) [next[a], next[b]] = [next[b], next[a]];
+  return next;
+}
+
+// ── After the game ──────────────────────────────────────────────────────────
+
+export const OCCASION_OPTIONS = [
+  { id: "wedding", label: "Wedding" },
+  { id: "corporate", label: "Corporate event" },
+  { id: "private_party", label: "Private party" },
+  { id: "holiday_party", label: "Holiday party" },
+  { id: "other", label: "Something else" },
+] as const;
+export type OccasionId = (typeof OCCASION_OPTIONS)[number]["id"];
+
+export const TIMING_OPTIONS = [
+  { id: "this_month", label: "This month" },
+  { id: "next_3_months", label: "Next 3 months" },
+  { id: "later_this_year", label: "Later this year" },
+  { id: "still_deciding", label: "Still deciding" },
+] as const;
+export type TimingId = (typeof TIMING_OPTIONS)[number]["id"];
+
+/** Booking quiz answers to fill in from the pop-up, with the code attached. */
+export function quizPrefill(occasion: OccasionId, timing: TimingId, code: string) {
+  const event: Record<OccasionId, { eventType: string; eventLabel: string }> = {
+    wedding: { eventType: "wedding", eventLabel: "Wedding" },
+    corporate: { eventType: "corporate", eventLabel: "Corporate Event" },
+    private_party: { eventType: "private", eventLabel: "Private Party" },
+    holiday_party: { eventType: "private", eventLabel: "Private Party" },
+    other: { eventType: "other", eventLabel: "Something Else" },
+  };
+  const date = TIMING_OPTIONS.find((t) => t.id === timing)?.label ?? "";
+  return { ...event[occasion], date, queenCode: code };
 }

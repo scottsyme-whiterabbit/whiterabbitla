@@ -31,6 +31,8 @@ async function findWaiting(supabase: any): Promise<Waiting[]> {
   const { data: deals, error } = await supabase.from("deals")
     .select("id,contact_name,contact_email,phone,event_type,event_date,location,notes,created_at")
     .eq("stage", "new").lt("created_at", cutoff).is("reply_dismissed_at", null)
+    // Find the Queen pop-up claims are not inquiries; they live in the CRM Find the Lady tab.
+    .or("source.is.null,source.neq.find-the-queen-popup")
     .order("created_at", { ascending: true }).limit(1000);
   if (error) throw error;
   const out: Waiting[] = [];

@@ -94,7 +94,7 @@
     },
     "project.find_the_queen_claim": {
       "event_schema_version": 1,
-      "description": "A visitor submitted the Find the Queen form and claimed the $500 credit.",
+      "description": "A visitor submitted the Find the Queen email form and received a LIGHTS-UP code.",
       "privacy": {
         "contains_pii": false,
         "purpose": "product_analytics"
@@ -107,7 +107,7 @@
     },
     "project.find_the_queen_play": {
       "event_schema_version": 1,
-      "description": "A visitor pressed Find the Queen and the card game started.",
+      "description": "A visitor pressed Try your luck and the five card game started.",
       "privacy": {
         "contains_pii": false,
         "purpose": "product_analytics"
@@ -142,6 +142,63 @@
             ]
           }
         }
+      }
+    },
+    "project.find_the_queen_pick": {
+      "event_schema_version": 1,
+      "description": "A visitor picked a card in the Find the Queen game.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "found": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "found"
+        ]
+      }
+    },
+    "project.find_the_queen_answer": {
+      "event_schema_version": 1,
+      "description": "A visitor answered a Find the Queen question.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "question": {
+            "type": "string",
+            "enum": [
+              "occasion",
+              "timing"
+            ]
+          }
+        },
+        "required": [
+          "question"
+        ]
+      }
+    },
+    "project.find_the_queen_reserve": {
+      "event_schema_version": 1,
+      "description": "A visitor pressed Reserve my date after receiving their Find the Queen code.",
+      "privacy": {
+        "contains_pii": false,
+        "purpose": "product_analytics"
+      },
+      "properties_schema": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {}
       }
     }
   }

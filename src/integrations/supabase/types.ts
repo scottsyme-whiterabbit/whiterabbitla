@@ -1399,13 +1399,17 @@ export type Database = {
           drawing_entry: boolean
           drawing_quarter: string | null
           email: string
+          event_timing: string | null
           event_type: string | null
           expires_on: string
           first_name: string
           found_queen: boolean
           id: string
+          inquiry_id: string | null
+          inquiry_linked_at: string | null
           marketing_opt_in: boolean
           min_package_cents: number
+          moved_to_pipeline_at: string | null
           redeemed_at: string | null
           source: string | null
           status: string
@@ -1421,13 +1425,17 @@ export type Database = {
           drawing_entry?: boolean
           drawing_quarter?: string | null
           email: string
+          event_timing?: string | null
           event_type?: string | null
           expires_on: string
           first_name: string
           found_queen?: boolean
           id?: string
+          inquiry_id?: string | null
+          inquiry_linked_at?: string | null
           marketing_opt_in?: boolean
           min_package_cents?: number
+          moved_to_pipeline_at?: string | null
           redeemed_at?: string | null
           source?: string | null
           status?: string
@@ -1443,13 +1451,17 @@ export type Database = {
           drawing_entry?: boolean
           drawing_quarter?: string | null
           email?: string
+          event_timing?: string | null
           event_type?: string | null
           expires_on?: string
           first_name?: string
           found_queen?: boolean
           id?: string
+          inquiry_id?: string | null
+          inquiry_linked_at?: string | null
           marketing_opt_in?: boolean
           min_package_cents?: number
+          moved_to_pipeline_at?: string | null
           redeemed_at?: string | null
           source?: string | null
           status?: string
@@ -1465,6 +1477,108 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      find_the_queen_alt_entries: {
+        Row: {
+          created_at: string
+          email: string
+          first_name: string
+          id: string
+          note: string | null
+          quarter: string
+          received_on: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          first_name: string
+          id?: string
+          note?: string | null
+          quarter: string
+          received_on: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          first_name?: string
+          id?: string
+          note?: string | null
+          quarter?: string
+          received_on?: string
+        }
+        Relationships: []
+      }
+      find_the_queen_drawings: {
+        Row: {
+          entry_count: number
+          id: string
+          picked_at: string
+          picked_by: string | null
+          quarter: string
+          winner_alt_entry_id: string | null
+          winner_credit_id: string | null
+          winner_email: string
+          winner_kind: string
+          winner_name: string
+        }
+        Insert: {
+          entry_count: number
+          id?: string
+          picked_at?: string
+          picked_by?: string | null
+          quarter: string
+          winner_alt_entry_id?: string | null
+          winner_credit_id?: string | null
+          winner_email: string
+          winner_kind: string
+          winner_name: string
+        }
+        Update: {
+          entry_count?: number
+          id?: string
+          picked_at?: string
+          picked_by?: string | null
+          quarter?: string
+          winner_alt_entry_id?: string | null
+          winner_credit_id?: string | null
+          winner_email?: string
+          winner_kind?: string
+          winner_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "find_the_queen_drawings_winner_alt_entry_id_fkey"
+            columns: ["winner_alt_entry_id"]
+            isOneToOne: false
+            referencedRelation: "find_the_queen_alt_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "find_the_queen_drawings_winner_credit_id_fkey"
+            columns: ["winner_credit_id"]
+            isOneToOne: false
+            referencedRelation: "find_the_lady_credits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      find_the_queen_events: {
+        Row: {
+          created_at: string
+          event: string
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          event: string
+          id?: never
+        }
+        Update: {
+          created_at?: string
+          event?: string
+          id?: never
+        }
+        Relationships: []
       }
       gallery_order: {
         Row: {

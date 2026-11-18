@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { canShowLadyPopup, dealFaces, isPopupPage, isSnoozed, reachedScrollTrigger, showCornerTab, MOBILE_TIMER_MS } from "@/lib/findTheLadyPopup";
+import { canShowLadyPopup, dealCards, planSwaps, applySwaps, quizPrefill, MIN_SWAPS, MAX_SWAPS, isPopupPage, isSnoozed, reachedScrollTrigger, showCornerTab, MOBILE_TIMER_MS } from "@/lib/findTheLadyPopup";
 
 const NOW = Date.parse("2026-11-17T00:00:00Z");
 const daysAgo = (d: number) => new Date(NOW - d * 86_400_000).toISOString();
@@ -48,14 +48,50 @@ describe("Find the Queen corner tab", () => {
 });
 
 describe("Find the Queen cards", () => {
-  it("the chosen card is never the Queen, and she is under one of the other two", () => {
-    for (let picked = 0; picked < 3; picked++) {
-      for (const r of [0, 0.3, 0.6, 0.99]) {
-        const faces = dealFaces(picked, () => r);
-        expect(faces[picked]).not.toBe("queen");
-        expect(faces.filter((f) => f === "queen")).toHaveLength(1);
-        expect(new Set(faces).size).toBe(3);
+  it("deals five cards with exactly one Queen", () => {
+    const cards = dealCards();
+    expect(cards).toHaveLength(5);
+    expect(cards.filter((c) => c === "queen")).toHaveLength(1);
+    expect(new Set(cards).size).toBe(5);
+  });
+
+  it("places the Queen at random, so she can start in any of the five spots", () => {
+    const spots = new Set<number>();
+    for (let i = 0; i < 400; i++) spots.add(dealCards().indexOf("queen"));
+    expect([...spots].sort()).toEqual([0, 1, 2, 3, 4]);
+  });
+
+  it("shuffles with 7 to 9 swaps, never the same pair twice in a row", () => {
+    expect([MIN_SWAPS, MAX_SWAPS]).toEqual([7, 9]);
+    const counts = new Set<number>();
+    for (let i = 0; i < 300; i++) {
+      const swaps = planSwaps();
+      counts.add(swaps.length);
+      for (let j = 0; j < swaps.length; j++) {
+        const [a, b] = swaps[j];
+        expect(a).not.toBe(b);
+        expect(a >= 0 && a < 5 && b >= 0 && b < 5).toBe(true);
+        if (j > 0) expect([a, b].sort().join()).not.toBe([...swaps[j - 1]].sort().join());
       }
     }
+    expect([...counts].sort()).toEqual([7, 8, 9]);
+  });
+
+  it("keeps the Queen honest: following the swaps always finds her", () => {
+    for (let i = 0; i < 200; i++) {
+      const cards = dealCards();
+      const swaps = planSwaps();
+      let queenSlot = cards.indexOf("queen");
+      for (const [a, b] of swaps) queenSlot = queenSlot === a ? b : queenSlot === b ? a : queenSlot;
+      expect(applySwaps(cards, swaps)[queenSlot]).toBe("queen");
+    }
+  });
+});
+
+describe("Reserve my date", () => {
+  it("fills the booking quiz occasion and timing and attaches the code", () => {
+    expect(quizPrefill("wedding", "next_3_months", "LIGHTS-UP-0427")).toEqual({ eventType: "wedding", eventLabel: "Wedding", date: "Next 3 months", queenCode: "LIGHTS-UP-0427" });
+    expect(quizPrefill("holiday_party", "this_month", "LIGHTS-UP-1111")).toMatchObject({ eventType: "private", date: "This month" });
+    expect(quizPrefill("corporate", "still_deciding", "LIGHTS-UP-2222")).toMatchObject({ eventType: "corporate", eventLabel: "Corporate Event" });
   });
 });

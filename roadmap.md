@@ -22,6 +22,7 @@
   - [ ] No unique constraint yet
 
 ## Done
+- Find the Queen update (Nov 18): six screens, fair five card game, $250 LIGHTS-UP code, real quarterly drawing with winner picker, Find the Lady CRM tab, Move to pipeline, booking quiz link, final rules. One test claim passed end to end and was removed. Waiting on Scott: lawyer review of the rules, OK to publish.
 - Find the Queen pop-up per Scott's brief: 5 steps, $500 WR500 credit, quarterly drawing entry, welcome email, single Telegram alert, corner tab, 14 day rest, phone 40s timer, draft /official-rules. One real test claim passed end to end and was removed. Waiting on Scott: credit minimum, rules legal review, OK to publish.
 - Los Angeles hire page internal links: footer, homepage line, article and city landing lines, other area pages line, two article callouts, 45+ review count. Checked in the browser on desktop and phone. Not published.
 - Telegram alert to Scott for each new website inquiry: built and tested, bot verified; waiting on Scott's OK to switch it on and publish the CRM link change.

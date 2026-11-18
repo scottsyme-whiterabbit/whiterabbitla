@@ -1,16 +1,34 @@
-// Find the Queen booking credit (the pop-up game, formerly Find the Lady):
+// Find the Queen booking credit (the pop-up game, shown as "Find the Lady" in the CRM):
 // pure rules plus the claim flow, with the database, the welcome email and the
 // Telegram alert injected so the whole flow is testable.
 
 export const QUEEN_SOURCE = "find-the-queen-popup";
-export const CREDIT_CENTS = 50000;
-/** Carried over from the approved Find the Lady terms until Scott says otherwise. */
+/** Lead source used when Scott moves a claim into the pipeline by hand. */
+export const PIPELINE_SOURCE = "find-the-lady";
+export const CREDIT_CENTS = 25000;
 export const MIN_PACKAGE_CENTS = 250000;
-export const DRAWING_PRIZE_DOLLARS = 2500;
-export const CODE_PREFIX = "WR500-";
-/** No 0/O or 1/I, so a code read aloud on the phone cannot be misheard. */
-export const CODE_ALPHABET = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+export const CODE_PREFIX = "LIGHTS-UP-";
 export const SITE = "https://whiterabbitla.com";
+
+export const OCCASIONS = {
+  wedding: "Wedding",
+  corporate: "Corporate event",
+  private_party: "Private party",
+  holiday_party: "Holiday party",
+  other: "Something else",
+} as const;
+export type Occasion = keyof typeof OCCASIONS;
+
+export const TIMINGS = {
+  this_month: "This month",
+  next_3_months: "Next 3 months",
+  later_this_year: "Later this year",
+  still_deciding: "Still deciding",
+} as const;
+export type Timing = keyof typeof TIMINGS;
+
+export const occasionLabel = (v: unknown): string => (typeof v === "string" && v in OCCASIONS ? OCCASIONS[v as Occasion] : "");
+export const timingLabel = (v: unknown): string => (typeof v === "string" && v in TIMINGS ? TIMINGS[v as Timing] : "");
 
 /** Today's date in Los Angeles as YYYY-MM-DD. */
 export function pacificToday(now: Date): string {
@@ -40,15 +58,19 @@ export function drawingQuarter(now: Date): string {
   return `${y} Q${Math.floor((m - 1) / 3) + 1}`;
 }
 
+/** Four random digits, e.g. LIGHTS-UP-0427. Rejection sampling keeps every number equally likely. */
 export function generateCreditCode(randomBytes: (n: number) => Uint8Array = (n) => crypto.getRandomValues(new Uint8Array(n))): string {
-  const bytes = randomBytes(4);
-  let out = "";
-  for (let i = 0; i < 4; i++) out += CODE_ALPHABET[bytes[i] % CODE_ALPHABET.length];
-  return CODE_PREFIX + out;
+  for (let i = 0; i < 16; i++) {
+    const [hi, lo] = randomBytes(2);
+    const n = (hi << 8) | lo; // 0..65535
+    if (n < 60000) return CODE_PREFIX + String(n % 10000).padStart(4, "0");
+  }
+  const [hi, lo] = randomBytes(2);
+  return CODE_PREFIX + String(((hi << 8) | lo) % 10000).padStart(4, "0");
 }
 
 export function isCreditCode(v: unknown): boolean {
-  return typeof v === "string" && new RegExp(`^${CODE_PREFIX}[${CODE_ALPHABET}]{4}$`).test(v);
+  return typeof v === "string" && /^LIGHTS-UP-[0-9]{4}$/.test(v);
 }
 
 /** "November 16, 2027" for a YYYY-MM-DD day. */
@@ -60,6 +82,12 @@ export function formatDay(isoDay: string): string {
 export interface QueenClaim {
   firstName: string;
   email: string;
+  occasion: Occasion;
+  timing: Timing;
+  /** What the guest's own pick turned up. */
+  foundQueen: boolean;
+  /** Only the optional checkbox sets this; it never affects the code or the drawing. */
+  marketingOptIn: boolean;
 }
 
 export type ClaimValidation = { ok: true; value: QueenClaim } | { ok: false; error: string } | { ok: false; bot: true };
@@ -78,51 +106,54 @@ export function validateClaim(body: unknown): ClaimValidation {
   const email = typeof b.email === "string" ? b.email.trim().toLowerCase() : "";
   if (!email || email.length > 255 || !EMAIL_RE.test(email)) return { ok: false, error: "Please check your email address." };
 
-  return { ok: true, value: { firstName, email } };
+  if (!occasionLabel(b.occasion)) return { ok: false, error: "Please choose your occasion." };
+  if (!timingLabel(b.timing)) return { ok: false, error: "Please choose when the big night is." };
+
+  return {
+    ok: true,
+    value: {
+      firstName, email,
+      occasion: b.occasion as Occasion,
+      timing: b.timing as Timing,
+      foundQueen: b.foundQueen === true,
+      marketingOptIn: b.marketingOptIn === true,
+    },
+  };
 }
 
 export interface StoredCredit {
   id: string;
   code: string;
   expires_on: string;
-  deal_id: string | null;
+  found_queen: boolean;
+  drawing_entry: boolean;
+  drawing_quarter: string | null;
 }
 
 export interface CreditRow {
   code: string;
   email: string;
   first_name: string;
-  event_type: null;
+  event_type: Occasion;
+  event_timing: Timing;
   approx_event_date: null;
-  found_queen: false;
-  /** The form's fine print says the house will write now and then; submitting accepts it. */
-  marketing_opt_in: true;
+  found_queen: boolean;
+  marketing_opt_in: boolean;
   credit_cents: number;
   min_package_cents: number;
   expires_on: string;
   source: typeof QUEEN_SOURCE;
-  drawing_entry: true;
-  drawing_quarter: string;
-}
-
-export interface QueenDealRow {
-  contact_email: string;
-  contact_name: string;
-  event_type: null;
-  event_date: null;
-  stage: "new";
-  source: typeof QUEEN_SOURCE;
-  notes: string;
+  /** Entered in the quarterly drawing only when the guest found the Queen. */
+  drawing_entry: boolean;
+  drawing_quarter: string | null;
 }
 
 export interface ClaimStore {
   findActiveCredit(email: string): Promise<StoredCredit | null>;
   expireCredit(id: string): Promise<void>;
   insertCredit(row: CreditRow): Promise<{ status: "ok"; credit: StoredCredit } | { status: "duplicate_email" } | { status: "duplicate_code" }>;
-  findOpenDeal(email: string): Promise<{ id: string } | null>;
-  createDeal(row: QueenDealRow): Promise<{ id: string }>;
-  attachDeal(creditId: string, dealId: string): Promise<void>;
-  logActivity(dealId: string, title: string, body: string, metadata: Record<string, unknown>): Promise<void>;
+  /** A returning guest who now found the Queen joins this quarter's drawing on the code they already hold. */
+  enterDrawing(id: string, quarter: string): Promise<void>;
 }
 
 export interface NewCredit {
@@ -131,103 +162,161 @@ export interface NewCredit {
   expiresOn: string;
   firstName: string;
   email: string;
+  occasion: Occasion;
+  timing: Timing;
+  foundQueen: boolean;
   quarter: string;
-  dealId: string | null;
 }
 
 export interface ClaimDeps {
   store: ClaimStore;
   now: Date;
   randomBytes?: (n: number) => Uint8Array;
-  /** Starts the welcome email and the Telegram alert for a newly issued credit. Must not throw. */
+  /** Starts the welcome email and the Telegram alert for a newly issued code. Must not throw. */
   followUp: (credit: NewCredit) => unknown;
 }
 
 export interface ClaimResult {
   code: string;
   expiresOn: string;
-  dealId: string | null;
-  /** True when this email already held a credit and it was handed back. */
+  /** True when this email already held a code and it was handed back. */
   existing: boolean;
-}
-
-export function dealNotes(code: string, expiresOn: string, quarter: string): string {
-  return [
-    `Find the Queen credit ${code}: $500 toward a White Rabbit show of $2,500 or more. Valid until ${formatDay(expiresOn)}.`,
-    `Entered in the ${quarter} drawing for a complimentary show (valued at $2,500).`,
-    "Came from the Find the Queen pop-up on the website.",
-  ].join("\n");
+  drawingEntry: boolean;
 }
 
 /**
  * Claim flow. The credit row is written first, so a double submit or a second
- * visit with the same email returns the same code and never creates a second
- * lead, a second email or a second alert.
+ * visit with the same email returns the same code and never sends a second
+ * email or a second alert. Claims never create pipeline deals; Scott moves a
+ * claim into the pipeline by hand, or a later booking quiz links to it.
  */
 export async function claimQueenCredit(claim: QueenClaim, deps: ClaimDeps): Promise<ClaimResult> {
   const { store, now } = deps;
   const today = pacificToday(now);
+  const quarter = drawingQuarter(now);
+
+  const handBack = async (c: StoredCredit): Promise<ClaimResult> => {
+    let drawingEntry = c.drawing_entry && c.drawing_quarter === quarter;
+    if (claim.foundQueen && !drawingEntry) {
+      try {
+        await store.enterDrawing(c.id, quarter);
+        drawingEntry = true;
+      } catch (err) {
+        console.error("Find the Queen drawing entry failed:", err instanceof Error ? err.message : err);
+      }
+    }
+    return { code: c.code, expiresOn: c.expires_on, existing: true, drawingEntry };
+  };
 
   const current = await store.findActiveCredit(claim.email);
-  if (current && current.expires_on >= today) {
-    return { code: current.code, expiresOn: current.expires_on, dealId: current.deal_id, existing: true };
-  }
+  if (current && current.expires_on >= today) return handBack(current);
   if (current) await store.expireCredit(current.id);
 
   const expiresOn = creditExpiry(now);
-  const quarter = drawingQuarter(now);
   let credit: StoredCredit | null = null;
-  for (let attempt = 0; attempt < 6 && !credit; attempt++) {
+  for (let attempt = 0; attempt < 12 && !credit; attempt++) {
     const res = await store.insertCredit({
       code: generateCreditCode(deps.randomBytes),
       email: claim.email,
       first_name: claim.firstName,
-      event_type: null,
+      event_type: claim.occasion,
+      event_timing: claim.timing,
       approx_event_date: null,
-      found_queen: false,
-      marketing_opt_in: true,
+      found_queen: claim.foundQueen,
+      marketing_opt_in: claim.marketingOptIn,
       credit_cents: CREDIT_CENTS,
       min_package_cents: MIN_PACKAGE_CENTS,
       expires_on: expiresOn,
       source: QUEEN_SOURCE,
-      drawing_entry: true,
-      drawing_quarter: quarter,
+      drawing_entry: claim.foundQueen,
+      drawing_quarter: claim.foundQueen ? quarter : null,
     });
     if (res.status === "ok") credit = res.credit;
     else if (res.status === "duplicate_email") {
       // A second submit landed at the same moment: hand back the code it created.
       const raced = await store.findActiveCredit(claim.email);
-      if (raced) return { code: raced.code, expiresOn: raced.expires_on, dealId: raced.deal_id, existing: true };
+      if (raced) return handBack(raced);
     }
   }
   if (!credit) throw new Error("Could not issue a unique credit code");
 
-  const notes = dealNotes(credit.code, expiresOn, quarter);
-  let dealId: string | null = null;
   try {
-    const open = await store.findOpenDeal(claim.email);
-    dealId = open ? open.id : (await store.createDeal({
-      contact_email: claim.email,
-      contact_name: claim.firstName,
-      event_type: null,
-      event_date: null,
-      stage: "new",
-      source: QUEEN_SOURCE,
-      notes,
-    })).id;
-    await store.attachDeal(credit.id, dealId);
-    await store.logActivity(dealId, `Find the Queen credit ${credit.code}`, notes, {
-      source: QUEEN_SOURCE, code: credit.code, expires_on: expiresOn, drawing_entry: true,
-      drawing_quarter: quarter, existing_deal: Boolean(open),
+    deps.followUp({
+      creditId: credit.id, code: credit.code, expiresOn, firstName: claim.firstName, email: claim.email,
+      occasion: claim.occasion, timing: claim.timing, foundQueen: claim.foundQueen, quarter,
     });
   } catch (err) {
-    // The credit is saved either way; the visitor still gets their code.
-    console.error("Find the Queen lead step failed:", err instanceof Error ? err.message : err);
+    // The claim is saved either way; the guest still gets their code.
+    console.error("Find the Queen follow up failed to start:", err instanceof Error ? err.message : err);
   }
 
-  deps.followUp({ creditId: credit.id, code: credit.code, expiresOn, firstName: claim.firstName, email: claim.email, quarter, dealId });
+  return { code: credit.code, expiresOn, existing: false, drawingEntry: claim.foundQueen };
+}
 
-  return { code: credit.code, expiresOn, dealId, existing: false };
+/** Deal Scott creates with "Move to pipeline". Uses its own source so it shows in the New column. */
+export function pipelineDealFromClaim(c: { email: string; first_name: string; code: string; expires_on: string; event_type: string | null; event_timing: string | null; found_queen: boolean }) {
+  const eventTypeMap: Record<string, string> = { wedding: "wedding", corporate: "corporate", private_party: "private_party", holiday_party: "private_party", other: "other" };
+  const notes = [
+    `Find the Lady code ${c.code}, valid until ${formatDay(c.expires_on)}.`,
+    `Occasion: ${occasionLabel(c.event_type) || "not given"}. Timing: ${timingLabel(c.event_timing) || "not given"}.`,
+    `Found the Queen: ${c.found_queen ? "yes" : "no"}.`,
+    "Moved from the Find the Lady list.",
+  ].join("\n");
+  return {
+    contact_email: c.email,
+    contact_name: c.first_name,
+    event_type: c.event_type ? eventTypeMap[c.event_type] || "other" : null,
+    stage: "new" as const,
+    source: PIPELINE_SOURCE,
+    notes,
+  };
+}
+
+// ── Quarterly drawing ───────────────────────────────────────────────────────
+
+export interface DrawingEntry {
+  kind: "claim" | "alternate";
+  id: string;
+  name: string;
+  email: string;
+}
+
+/**
+ * Everyone eligible for a quarter: guests who found the Queen that quarter plus
+ * free alternate entries. One entry per email address, whichever way it came in.
+ */
+export function drawingPool(
+  claims: { id: string; first_name: string; email: string; drawing_entry: boolean; drawing_quarter: string | null; status: string }[],
+  alternates: { id: string; first_name: string; email: string; quarter: string }[],
+  quarter: string,
+): DrawingEntry[] {
+  const seen = new Set<string>();
+  const out: DrawingEntry[] = [];
+  const add = (e: DrawingEntry) => {
+    const key = e.email.trim().toLowerCase();
+    if (!key || seen.has(key)) return;
+    seen.add(key);
+    out.push(e);
+  };
+  for (const c of claims) {
+    if (c.drawing_entry && c.drawing_quarter === quarter && c.status !== "void") add({ kind: "claim", id: c.id, name: c.first_name, email: c.email });
+  }
+  for (const a of alternates) if (a.quarter === quarter) add({ kind: "alternate", id: a.id, name: a.first_name, email: a.email });
+  return out;
+}
+
+/** Uniform random index below n from a cryptographic source (rejection sampling, no bias). */
+export function randomIndex(n: number, randomU32: () => number = () => crypto.getRandomValues(new Uint32Array(1))[0]): number {
+  if (!Number.isInteger(n) || n <= 0) throw new Error("No entries to draw from");
+  const limit = Math.floor(0x100000000 / n) * n;
+  for (;;) {
+    const r = randomU32();
+    if (r < limit) return r % n;
+  }
+}
+
+export function pickWinner(pool: DrawingEntry[], randomU32?: () => number): DrawingEntry {
+  return pool[randomIndex(pool.length, randomU32)];
 }
 
 // ── Welcome email ───────────────────────────────────────────────────────────
@@ -242,26 +331,28 @@ export interface WelcomeEmail {
 
 const esc = (v: string) => v.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 
-export const WELCOME_SUBJECT = "Your $500 White Rabbit credit";
+export const WELCOME_SUBJECT = "Your White Rabbit code";
 export const SIGNATURE = ["Scott Syme", "Magician", "(424) 394-1850", "whiterabbitla.com"];
 export const MAILING_ADDRESS = "7393 W. Manchester Ave #209, Los Angeles, CA 90045";
 
-export function welcomeParagraphs(c: Pick<NewCredit, "firstName" | "code" | "expiresOn">): string[] {
+/** No prices or dollar amounts anywhere in this email. */
+export function welcomeParagraphs(c: Pick<NewCredit, "firstName" | "code" | "expiresOn" | "foundQueen">): string[] {
   return [
     `Hi ${c.firstName},`,
-    "The Queen slipped away, but the house keeps its promises. Here is your credit.",
+    "Thank you for playing Find the Queen with White Rabbit.",
     `Your code: ${c.code}`,
-    `It is worth $500 toward your next White Rabbit show and is good until ${formatDay(c.expiresOn)}.`,
-    "When you are ready, reply to this email or plan a show at whiterabbitla.com/contact, and mention your code.",
-    `You are also entered in this quarter's drawing for a complimentary White Rabbit show, valued at $${DRAWING_PRIZE_DOLLARS.toLocaleString("en-US")}. If your name is drawn, I will write to you at this address.`,
+    `It is good until ${formatDay(c.expiresOn)}. When you are ready to reserve your date, reply to this email or plan your evening at whiterabbitla.com/contact, and mention your code.`,
+    c.foundQueen
+      ? "You found the Queen, so you are entered in this quarter's drawing for a complimentary White Rabbit show. If your name is drawn, I will write to you at this address."
+      : "The Queen got away this time, but you can still enter this quarter's drawing for a complimentary White Rabbit show for free. The Official Rules explain how.",
+    `The terms of your code and the Official Rules are at ${SITE.replace("https://", "")}/official-rules.`,
   ];
 }
 
-export function buildWelcomeEmail(c: Pick<NewCredit, "firstName" | "code" | "expiresOn" | "email">): WelcomeEmail {
+export function buildWelcomeEmail(c: Pick<NewCredit, "firstName" | "code" | "expiresOn" | "email" | "foundQueen">): WelcomeEmail {
   const unsubscribeUrl = `${SITE}/unsubscribe?email=${encodeURIComponent(c.email)}`;
   const paras = welcomeParagraphs(c);
   const footer = [
-    `Credit terms: ${SITE}/official-rules#credit-terms`,
     `Official Rules: ${SITE}/official-rules`,
     `Unsubscribe: ${unsubscribeUrl}`,
     `White Rabbit LA, ${MAILING_ADDRESS}`,
@@ -271,11 +362,12 @@ export function buildWelcomeEmail(c: Pick<NewCredit, "firstName" | "code" | "exp
   const p = (s: string) => `<p style="margin:0 0 18px;font-family:Georgia,serif;font-size:16px;line-height:1.65;color:#223D34;">${s}</p>`;
   const body = paras.map((s, i) => {
     if (i === 2) return `<p style="margin:0 0 18px;font-family:Georgia,serif;font-size:22px;letter-spacing:2px;color:#223D34;">${esc(c.code)}</p>`;
-    if (i === 4) return p(`When you are ready, reply to this email or <a href="${SITE}/contact" style="color:#223D34;">plan a show</a>, and mention your code.`);
+    if (i === 3) return p(`It is good until ${esc(formatDay(c.expiresOn))}. When you are ready to reserve your date, reply to this email or <a href="${SITE}/contact" style="color:#223D34;">plan your evening</a>, and mention your code.`);
+    if (i === 5) return p(`The terms of your code and the <a href="${SITE}/official-rules" style="color:#223D34;">Official Rules</a> are on our site.`);
     return p(esc(s));
   }).join("");
   const sig = `<p style="margin:24px 0 0;font-family:Georgia,serif;font-size:15px;line-height:1.5;color:#223D34;">${SIGNATURE.slice(0, 3).map(esc).join("<br>")}<br><a href="${SITE}" style="color:#223D34;">whiterabbitla.com</a></p>`;
-  const foot = `<p style="margin:32px 0 0;font-family:Arial,sans-serif;font-size:11px;line-height:1.6;color:#6b7a73;"><a href="${SITE}/official-rules#credit-terms" style="color:#6b7a73;">Credit terms</a> &middot; <a href="${SITE}/official-rules" style="color:#6b7a73;">Official Rules</a> &middot; <a href="${esc(unsubscribeUrl)}" style="color:#6b7a73;">Unsubscribe</a><br>White Rabbit LA, ${esc(MAILING_ADDRESS)}</p>`;
+  const foot = `<p style="margin:32px 0 0;font-family:Arial,sans-serif;font-size:11px;line-height:1.6;color:#6b7a73;"><a href="${SITE}/official-rules" style="color:#6b7a73;">Official Rules</a> &middot; <a href="${esc(unsubscribeUrl)}" style="color:#6b7a73;">Unsubscribe</a><br>White Rabbit LA, ${esc(MAILING_ADDRESS)}</p>`;
   const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body style="margin:0;padding:0;background:#F8F5F0;"><table width="100%" cellpadding="0" cellspacing="0" style="background:#F8F5F0;padding:32px 16px;"><tr><td align="center"><table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;"><tr><td style="padding:8px 4px;">${body}${sig}${foot}</td></tr></table></td></tr></table></body></html>`;
 
   return { to: c.email, subject: WELCOME_SUBJECT, html, text, unsubscribeUrl };

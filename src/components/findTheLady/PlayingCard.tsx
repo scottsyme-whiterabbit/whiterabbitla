@@ -1,11 +1,17 @@
 // Card art for Find the Queen, drawn in brand colors so it stays crisp at any size.
-export type CardId = "queen" | "spades" | "clubs";
+export type CardId = "queen" | "spades" | "clubs" | "kingSpades" | "jackClubs";
 
 export const CARD_LABELS: Record<CardId, string> = {
   queen: "Queen of Hearts",
   spades: "Ace of Spades",
   clubs: "Ace of Clubs",
+  kingSpades: "King of Spades",
+  jackClubs: "Jack of Clubs",
 };
+
+const RANK: Record<CardId, string> = { queen: "Q", spades: "A", clubs: "A", kingSpades: "K", jackClubs: "J" };
+type Suit = "heart" | "spade" | "club";
+const SUIT: Record<CardId, Suit> = { queen: "heart", spades: "spade", clubs: "club", kingSpades: "spade", jackClubs: "club" };
 
 const INK = "hsl(var(--forest-dark))";
 const RED = "hsl(var(--suit-red))";
@@ -29,9 +35,10 @@ function Club({ fill }: { fill: string }) {
 
 function Pip({ id, x, y, size }: { id: CardId; x: number; y: number; size: number }) {
   const s = size / 100;
+  const suit = SUIT[id];
   return (
     <g transform={`translate(${x - size / 2} ${y - size / 2}) scale(${s})`}>
-      {id === "queen" ? <path d={HEART} fill={RED} /> : id === "spades" ? <path d={SPADE} fill={INK} /> : <Club fill={INK} />}
+      {suit === "heart" ? <path d={HEART} fill={RED} /> : suit === "spade" ? <path d={SPADE} fill={INK} /> : <Club fill={INK} />}
     </g>
   );
 }
@@ -41,7 +48,7 @@ function Index({ id }: { id: CardId }) {
   return (
     <g>
       <text x="26" y="50" textAnchor="middle" fontFamily="Ogg, Georgia, serif" fontSize="34" fill={color}>
-        {id === "queen" ? "Q" : "A"}
+        {RANK[id]}
       </text>
       <Pip id={id} x={26} y={70} size={20} />
     </g>
@@ -78,6 +85,13 @@ export function CardFace({ id, className }: { id: CardId; className?: string }) 
         </g>
       )}
       {id === "clubs" && <Pip id="clubs" x={125} y={175} size={88} />}
+      {(id === "kingSpades" || id === "jackClubs") && (
+        <g>
+          <rect x="62" y="78" width="126" height="194" rx="8" fill="none" stroke={GOLD} strokeOpacity="0.6" strokeWidth="1.5" />
+          <text x="125" y="150" textAnchor="middle" fontFamily="Ogg, Georgia, serif" fontSize="58" fill={INK}>{RANK[id]}</text>
+          <Pip id={id} x={125} y={212} size={58} />
+        </g>
+      )}
     </svg>
   );
 }

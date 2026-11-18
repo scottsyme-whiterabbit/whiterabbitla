@@ -1,6 +1,6 @@
 import SEOHead from "@/components/SEOHead";
 
-/** Find the Queen drawing rules. Draft wording, pending legal review; bracketed items are placeholders to confirm. */
+/** Find the Queen game, quarterly drawing and LIGHTS-UP credit rules. */
 const SECTIONS: { id: string; title: string; body: string[] }[] = [
   {
     id: "no-purchase",
@@ -13,7 +13,7 @@ const SECTIONS: { id: string; title: string; body: string[] }[] = [
     id: "eligibility",
     title: "Eligibility",
     body: [
-      "[To confirm] Open to legal residents of the United States who are at least 18 years old at the time of entry. Employees of White Rabbit LA and members of their immediate households are not eligible.",
+      "Open to legal residents of the 50 United States and the District of Columbia who are at least 18 years old at the time of entry. Employees of White Rabbit LA and members of their immediate households are not eligible.",
     ],
   },
   {
@@ -27,9 +27,25 @@ const SECTIONS: { id: string; title: string; body: string[] }[] = [
     id: "how-to-enter",
     title: "How to enter",
     body: [
-      "Online: play Find the Queen on whiterabbitla.com and submit your first name and email address on the claim form. Every completed form is entered, whatever card you choose.",
-      "Free entry by email, without playing: send an email to events@whiterabbitla.com with the subject line \"Find the Queen entry\" and your first name in the message. Email entries have the same chance of winning as online entries.",
-      "[To confirm] Limit one entry per person, per household, per quarter, whichever way you enter.",
+      "By playing: play Find the Queen on whiterabbitla.com. If the card you pick is the Queen of Hearts and you then submit your first name and email address on the claim form, you are entered in the drawing for that quarter.",
+      "Free alternate entry, without playing: send an email to events@whiterabbitla.com with the subject line \"Find the Queen entry\" and your first name in the message. Each eligible email received during a quarter is entered in that quarter's drawing and has the same chance of winning as an entry from the game.",
+      "Limit one entry per person and per email address each quarter, whichever way you enter.",
+    ],
+  },
+  {
+    id: "the-game",
+    title: "The game and its odds",
+    body: [
+      "Find the Queen uses five cards: the Queen of Hearts and four black cards. The Queen is placed at random and shown to you, then the cards are shuffled in plain view. The card you pick turns over to show its true face, and nothing in the game stops you from finding her.",
+      "A guest who picks at random has a 1 in 5 chance of finding the Queen. Following the shuffle closely may improve your chances.",
+    ],
+  },
+  {
+    id: "drawing",
+    title: "Drawing and winner notification",
+    body: [
+      "Within 15 days after each quarter ends, White Rabbit LA selects one winner at random, by computer, from all eligible entries for that quarter. Odds of winning the drawing depend on the number of eligible entries received that quarter.",
+      "The winner is notified by email at the address used to enter, within 7 days of the drawing, and must reply within 14 days to claim the prize. If the winner does not reply in time, is found ineligible, or declines the prize, an alternate winner may be selected at random from the remaining entries for that quarter.",
     ],
   },
   {
@@ -37,29 +53,30 @@ const SECTIONS: { id: string; title: string; body: string[] }[] = [
     title: "Prize and approximate value",
     body: [
       "One winner each quarter receives one complimentary White Rabbit show. Approximate retail value: $2,500.",
-      "[To confirm] The show must be scheduled within 12 months of notification, subject to availability, and within the Los Angeles area unless otherwise agreed. The prize is not transferable and cannot be exchanged for cash. Travel, venue and any other costs not stated are the winner's responsibility.",
-    ],
-  },
-  {
-    id: "odds",
-    title: "Odds",
-    body: [
-      "Odds of winning depend on the number of eligible entries received during the quarter.",
-    ],
-  },
-  {
-    id: "drawing",
-    title: "Drawing date and winner notification",
-    body: [
-      "[To confirm] The winner is selected at random from all eligible entries within 15 days after each quarter ends. The winner will be notified by email at the address used to enter and must reply within 14 days to claim the prize, or an alternate winner may be drawn.",
+      "The show must be scheduled within 12 months of notification, subject to availability, and takes place in the Los Angeles area unless otherwise agreed. Travel, venue and any other costs not stated here are the winner's responsibility, as are any taxes on the prize. The prize is not transferable and cannot be exchanged for cash.",
     ],
   },
   {
     id: "credit-terms",
     title: "Credit terms",
     body: [
-      "Everyone who completes the Find the Queen claim form receives a $500 credit toward a White Rabbit show. The credit is separate from the drawing.",
-      "[To confirm] One credit per household. Valid 12 months from the day it is issued. Applies to new bookings of $2,500 or more. Non-transferable, no cash value, and not combinable with other offers.",
+      "Every guest who completes the Find the Queen claim form receives a code in the form LIGHTS-UP-XXXX for a $250 credit toward a White Rabbit show, whether or not they found the Queen. The credit is separate from the drawing.",
+      "The credit is valid only on packages of $2,500 or more, one per event, on new bookings only, for 12 months from the day it is issued. It is non-transferable, has no cash value and cannot be combined with other offers.",
+      "An email address is required to receive the code. The optional box to receive the occasional note from White Rabbit does not affect the credit or the drawing.",
+    ],
+  },
+  {
+    id: "privacy",
+    title: "Privacy",
+    body: [
+      "Information you share is used to send your code, run the drawing and contact the winner, and is held under our Privacy Policy at whiterabbitla.com/privacy.",
+    ],
+  },
+  {
+    id: "general",
+    title: "General conditions",
+    body: [
+      "White Rabbit LA may disqualify entries made by automated means or in breach of these rules, and may suspend or modify the game or the drawing if fraud or a technical problem affects its fairness. By entering, you agree to these rules and to the decisions of White Rabbit LA, which are final.",
     ],
   },
   {
@@ -75,17 +92,14 @@ const OfficialRules = () => (
   <main id="main-content" className="pt-20">
     <SEOHead
       title="Find the Queen Official Rules | White Rabbit LA"
-      description="Official rules for the Find the Queen quarterly drawing and the $500 White Rabbit credit."
+      description="Official rules for the Find the Queen game, the quarterly drawing for a complimentary White Rabbit show, and the LIGHTS-UP credit."
       canonical="/official-rules"
       noIndex
     />
     <section className="bg-forest-dark py-20 md:py-24">
       <div className="max-w-3xl mx-auto px-6 text-center">
-        <p className="inline-block font-sans text-[11px] tracking-[0.2em] uppercase text-accent border border-accent/40 px-3 py-1.5 mb-6">
-          Draft, pending legal review
-        </p>
         <h1 className="font-serif text-4xl md:text-5xl text-cream mb-4">Find the Queen Official Rules</h1>
-        <p className="font-sans text-sm text-cream/60">Quarterly drawing for a complimentary White Rabbit show</p>
+        <p className="font-sans text-sm text-cream/60">The five card game, the quarterly drawing for a complimentary White Rabbit show, and the credit terms</p>
       </div>
     </section>
     <section className="py-14 md:py-20">

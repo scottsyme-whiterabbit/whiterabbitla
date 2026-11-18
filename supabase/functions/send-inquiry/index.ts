@@ -322,6 +322,32 @@ serve(async (req) => {
         }).select("id").single();
         if (dealErr) console.error("Deal insert failed:", dealErr);
         dealId = deal?.id || null;
+
+        // Booking quiz opened from the Find the Queen pop-up: link this inquiry to that claim.
+        const queenCode = typeof body.queenCode === "string" ? body.queenCode.trim().toUpperCase() : "";
+        if (inquiryId && /^LIGHTS-UP-[0-9]{4}$/.test(queenCode)) {
+          try {
+            const { data: credit } = await supabase.from("find_the_lady_credits")
+              .select("id, deal_id").eq("code", queenCode).maybeSingle();
+            if (credit) {
+              const { error: linkErr } = await supabase.from("find_the_lady_credits").update({
+                inquiry_id: inquiryId,
+                inquiry_linked_at: new Date().toISOString(),
+                ...(credit.deal_id || !dealId ? {} : { deal_id: dealId }),
+              }).eq("id", credit.id);
+              if (linkErr) console.error("Find the Queen claim link failed:", linkErr.message);
+              if (dealId) {
+                await supabase.from("deal_activity").insert({
+                  deal_id: dealId, type: "find_the_lady", title: `Find the Lady code ${queenCode}`,
+                  body: `Booked through the booking quiz from the Find the Queen pop-up with code ${queenCode}.`,
+                  metadata: { code: queenCode, credit_id: credit.id, inquiry_id: inquiryId },
+                });
+              }
+            }
+          } catch (linkError) {
+            console.error("Find the Queen claim link failed:", linkError instanceof Error ? linkError.message : linkError);
+          }
+        }
       } catch (insertError) {
         console.error("Inquiry or deal insert failed:", insertError);
       }

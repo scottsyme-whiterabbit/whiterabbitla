@@ -1,10 +1,10 @@
 // Public endpoint for the Find the Queen pop-up claim form. Validates the claim,
-// issues one $500 credit per email with a quarterly drawing entry, files the
-// lead in the CRM, then in the background sends the welcome email with the
-// code (claimed on the credit row, rolled back on failure) followed by one
-// Telegram alert to Scott.
+// issues one LIGHTS-UP code per email (a drawing entry only when the guest
+// found the Queen), saves it to the Find the Lady list (never the pipeline),
+// then in the background sends the welcome email with the code (claimed on the
+// credit row, rolled back on failure) followed by one Telegram alert to Scott.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { claimQueenCredit, validateClaim, welcomeThenAlert, type ClaimStore, type WelcomeStore } from "../_shared/find-the-lady.ts";
+import { claimQueenCredit, occasionLabel, timingLabel, validateClaim, welcomeThenAlert, type ClaimStore, type WelcomeStore } from "../_shared/find-the-lady.ts";
 import { notifyLadyTelegram, type AlertStore } from "../_shared/telegram-inquiry.ts";
 import { gatedResendFetch } from "../_shared/send-gate.ts";
 import { safeErrorPayload } from "../_shared/safe-error.ts";
@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
     const store: ClaimStore = {
       findActiveCredit: async (email) => {
         const { data, error } = await db.from("find_the_lady_credits")
-          .select("id, code, expires_on, deal_id").ilike("email", email.replace(/[\\%_]/g, (c) => `\\${c}`))
+          .select("id, code, expires_on, found_queen, drawing_entry, drawing_quarter").ilike("email", email.replace(/[\\%_]/g, (c) => `\\${c}`))
           .eq("status", "active").order("created_at", { ascending: false }).limit(1).maybeSingle();
         if (error) throw new Error(`credit lookup failed: ${error.message}`);
         return data;
@@ -52,38 +52,22 @@ Deno.serve(async (req) => {
         if (error) throw new Error(`credit expire failed: ${error.message}`);
       },
       insertCredit: async (row) => {
-        const { data, error } = await db.from("find_the_lady_credits").insert(row).select("id, code, expires_on, deal_id").single();
+        const { data, error } = await db.from("find_the_lady_credits").insert(row).select("id, code, expires_on, found_queen, drawing_entry, drawing_quarter").single();
         if (!error && data) return { status: "ok", credit: data };
         if (error?.code === "23505") {
           return { status: /one_active_per_email/.test(error.message) ? "duplicate_email" : "duplicate_code" };
         }
         throw new Error(`credit insert failed: ${error?.message}`);
       },
-      findOpenDeal: async (email) => {
-        const { data, error } = await db.from("deals").select("id")
-          .ilike("contact_email", email.replace(/[\\%_]/g, (c) => `\\${c}`))
-          .not("stage", "in", "(lost,completed)").order("updated_at", { ascending: false }).limit(1).maybeSingle();
-        if (error) throw new Error(`deal lookup failed: ${error.message}`);
-        return data;
-      },
-      createDeal: async (row) => {
-        const { data, error } = await db.from("deals").insert(row).select("id").single();
-        if (error || !data) throw new Error(`deal insert failed: ${error?.message}`);
-        return data;
-      },
-      attachDeal: async (creditId, dealId) => {
-        const { error } = await db.from("find_the_lady_credits").update({ deal_id: dealId }).eq("id", creditId);
-        if (error) throw new Error(`credit link failed: ${error.message}`);
-      },
-      logActivity: async (dealId, title, text, metadata) => {
-        const { error } = await db.from("deal_activity").insert({ deal_id: dealId, type: "find_the_lady", title, body: text, metadata });
-        if (error) console.error("Find the Queen activity insert failed:", error.message);
+      enterDrawing: async (id, quarter) => {
+        const { error } = await db.from("find_the_lady_credits").update({ drawing_entry: true, drawing_quarter: quarter, found_queen: true }).eq("id", id);
+        if (error) throw new Error(`drawing entry failed: ${error.message}`);
       },
     };
 
-    const alertStore = (dealId: string | null): AlertStore => ({
+    const alertStore: AlertStore = {
       claim: async (k) => {
-        const { error } = await db.from("telegram_inquiry_alerts").insert({ dedupe_key: k, deal_id: dealId });
+        const { error } = await db.from("telegram_inquiry_alerts").insert({ dedupe_key: k });
         if (!error) return "claimed";
         if (error.code === "23505") return "duplicate";
         console.error("Find the Queen alert claim failed:", error.message);
@@ -95,7 +79,7 @@ Deno.serve(async (req) => {
       release: async (k) => {
         await db.from("telegram_inquiry_alerts").delete().eq("dedupe_key", k).eq("status", "sending");
       },
-    });
+    };
 
     const welcomeStore: WelcomeStore = {
       claimWelcome: async (id) => {
@@ -146,10 +130,10 @@ Deno.serve(async (req) => {
             return { sent: false, reason: info?.reason || `status_${res.status}` };
           },
           notify: (c, welcome) => notifyLadyTelegram(
-            { creditId: c.creditId, code: c.code, expiresOn: c.expiresOn, firstName: c.firstName, quarter: c.quarter, welcome, dealId: c.dealId },
-            { token: Deno.env.get("TELEGRAM_BOT_TOKEN"), chatId: Deno.env.get("TELEGRAM_CHAT_ID"), store: alertStore(c.dealId) },
+            { creditId: c.creditId, code: c.code, firstName: c.firstName, occasion: occasionLabel(c.occasion), timing: timingLabel(c.timing), foundQueen: c.foundQueen, welcome },
+            { token: Deno.env.get("TELEGRAM_BOT_TOKEN"), chatId: Deno.env.get("TELEGRAM_CHAT_ID"), store: alertStore },
           ),
-        }).catch(() => {});
+        }).catch((err) => console.error("Find the Queen email or alert step failed:", err instanceof Error ? err.message : err));
       },
     });
     if (pending) {
@@ -159,7 +143,7 @@ Deno.serve(async (req) => {
       else await pending;
     }
 
-    return json({ ok: true, code: result.code, expiresOn: result.expiresOn, existing: result.existing });
+    return json({ ok: true, code: result.code, expiresOn: result.expiresOn, existing: result.existing, drawingEntry: result.drawingEntry });
   } catch (err) {
     return json(safeErrorPayload(err, requestId), 500);
   }
