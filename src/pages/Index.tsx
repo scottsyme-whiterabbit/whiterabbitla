@@ -227,8 +227,12 @@ const Index = () => {
         </div>
 
         {/* Centered text stack over the three videos. Its box ends above the space the cookie
-            banner takes (about 300px on phones, 264px on desktop) so the button and proof line stay clear. */}
-        <div className="absolute inset-x-0 top-20 bottom-[18.75rem] md:top-[120px] md:bottom-[16.5rem] z-10 flex flex-col items-center [justify-content:safe_center] px-6 text-center">
+            banner takes (about 300px on phones, 264px on desktop) so the button and proof line stay clear.
+            The top edge is pushed below the 80px menu by a reserved breathing gap: 32px on phones,
+            48px on desktop. Those reserves only apply on viewports tall enough to hold them, since on
+            shorter windows the stack is already full and pushing it down would drop the proof line
+            behind the cookie banner. */}
+        <div className="absolute inset-x-0 top-20 bottom-[18.75rem] max-md:[@media(min-height:640px)]:top-[112px] md:top-[120px] md:bottom-[16.5rem] md:[@media(min-height:800px)]:top-[128px] z-10 flex flex-col items-center [justify-content:safe_center] px-6 text-center">
           <motion.p
             {...enter(0.2)}
             className="font-sans text-[10px] md:text-[11px] uppercase tracking-[0.42em] text-accent mb-4 max-md:[@media(max-height:700px)]:mb-2.5 md:mb-5 [text-shadow:0_2px_20px_rgba(0,0,0,0.6)]"
