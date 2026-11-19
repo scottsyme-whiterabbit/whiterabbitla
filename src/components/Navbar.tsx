@@ -57,8 +57,8 @@ const Navbar = () => {
             <img src={wrLogo} alt="White Rabbit Los Angeles, luxury magician" width={48} height={48} className="h-12 w-auto invert brightness-200" fetchPriority="high" />
           </Link>
 
-          {/* Desktop nav */}
-          <div className="hidden md:flex items-center gap-8">
+          {/* Desktop nav: shown from 1280px, where every link fits between the logo and the edge */}
+          <div className="hidden xl:flex items-center gap-5 min-[1440px]:gap-8">
             {navLinks.map((link) =>
               link.dropdown ? (
                 <div
@@ -69,7 +69,7 @@ const Navbar = () => {
                 >
                   <Link
                     to={link.to}
-                    className="font-sans text-sm tracking-[0.2em] uppercase transition-colors duration-300 text-cream/80 hover:text-cream inline-flex items-center gap-1.5"
+                    className="font-sans text-sm tracking-[0.16em] min-[1440px]:tracking-[0.2em] uppercase transition-colors duration-300 text-cream/80 hover:text-cream inline-flex items-center gap-1.5"
                     aria-haspopup="true"
                     aria-expanded={servicesOpen}
                   >
@@ -107,7 +107,7 @@ const Navbar = () => {
                 <Link
                   key={link.to}
                   to={link.to}
-                  className="font-sans text-sm tracking-[0.2em] uppercase transition-colors duration-300 text-cream/80 hover:text-cream"
+                  className="font-sans text-sm tracking-[0.16em] min-[1440px]:tracking-[0.2em] uppercase transition-colors duration-300 text-cream/80 hover:text-cream"
                 >
                   {link.label}
                 </Link>
@@ -115,7 +115,7 @@ const Navbar = () => {
             )}
             <button
               onClick={openQuiz}
-              className="font-sans text-sm tracking-[0.2em] uppercase bg-accent text-accent-foreground px-6 py-2 hover:bg-accent/80 transition-colors"
+              className="font-sans text-sm tracking-[0.16em] min-[1440px]:tracking-[0.2em] uppercase bg-accent text-accent-foreground px-6 py-2 hover:bg-accent/80 transition-colors"
             >
               Inquire
             </button>
@@ -124,7 +124,7 @@ const Navbar = () => {
           {/* Mobile toggle */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="absolute right-6 md:hidden text-cream p-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-forest-dark"
+            className="absolute right-6 xl:hidden text-cream p-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-forest-dark"
             aria-label={isOpen ? "Close menu" : "Open menu"}
             aria-expanded={isOpen}
             aria-controls="mobile-menu"
@@ -143,7 +143,7 @@ const Navbar = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-forest-dark/95 backdrop-blur-sm overflow-hidden"
+            className="xl:hidden bg-forest-dark/95 backdrop-blur-sm overflow-hidden"
           >
             <div className="px-6 py-8 flex flex-col gap-6">
               {navLinks.map((link) =>
