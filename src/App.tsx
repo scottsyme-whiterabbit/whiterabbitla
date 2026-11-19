@@ -16,6 +16,7 @@ import DynamicCanonical from "@/components/DynamicCanonical";
 import { BookingQuizProvider } from "@/contexts/BookingQuizContext";
 import BookingQuiz from "@/components/BookingQuiz";
 import CookieConsent from "@/components/CookieConsent";
+import PostHogRouteSync from "@/components/PostHogRouteSync";
 import FindTheQueenPopup from "@/components/findTheLady/FindTheQueenPopup";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
 import { FIND_THE_QUEEN_ENABLED } from "@/lib/featureFlags";
@@ -122,6 +123,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <PostHogRouteSync />
           <Suspense fallback={<PageFallback />}>
           <Routes>
             <Route path="/card" element={<><DigitalCard /></>} />

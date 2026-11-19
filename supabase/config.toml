@@ -132,3 +132,6 @@ verify_jwt = false
 
 [functions.find-the-lady-claim]
 verify_jwt = false
+
+[functions.posthog-config]
+verify_jwt = false

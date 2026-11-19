@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import SEOHead from "@/components/SEOHead";
 import { useWebPageSchema } from "@/hooks/useSchemaOrg";
 import { trackFormSubmit } from "@/lib/analytics";
+import { track, contactEventType } from "@/lib/posthog";
 import GoogleReviewsBadge from "@/components/GoogleReviewsBadge";
 import ServicesFooterBlock from "@/components/ServicesFooterBlock";
 
@@ -54,6 +55,8 @@ const Contact = () => {
       }
       // GA4: track contact form submission
       trackFormSubmit("Contact Form", formData.eventType || "General Inquiry");
+      // PostHog: fixed buckets only; the Contact form does not ask for a guest count.
+      track("inquiry_submitted", { event_type: contactEventType(formData.eventType), guest_count_range: "unknown" });
       toast({
         title: "Inquiry sent",
         description: "Scott replies personally, usually the same day.",

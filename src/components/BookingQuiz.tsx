@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ArrowRight, ArrowLeft, Check, Sparkles } from "lucide-react";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { trackQuizStart, trackQuizComplete, trackFormSubmit } from "@/lib/analytics";
+import { track, guestCountRange, quizEventType } from "@/lib/posthog";
 import threeStars from "@/assets/three-stars-gold.png";
 
 const CLIENT_TYPES = [
@@ -100,6 +101,18 @@ const getRecommendation = (data: QuizData) => {
 
 const STEPS: Step[] = ["clientType", "event", "location", "guests", "date", "budget", "contact", "recommendation"];
 
+/** Step names sent to PostHog (step numbers are 1 to 8, in STEPS order). */
+const QUIZ_STEP_NAMES: Record<Step, string> = {
+  clientType: "client_type",
+  event: "event_type",
+  location: "location",
+  guests: "guest_count",
+  date: "date",
+  budget: "budget",
+  contact: "contact_details",
+  recommendation: "recommendation",
+};
+
 const BookingQuiz = () => {
   const { isOpen, closeQuiz, defaultSource, prefill } = useBookingQuiz();
   const [queenCode, setQueenCode] = useState("");
@@ -141,6 +154,24 @@ const BookingQuiz = () => {
 
   const stepIndex = STEPS.indexOf(step);
   const progress = ((stepIndex + 1) / STEPS.length) * 100;
+
+  // PostHog: one quiz_step_viewed per step shown, quiz_abandoned if the visitor
+  // closes the quiz or leaves the page before sending it.
+  const stepInfo = { step_number: stepIndex + 1, step_name: QUIZ_STEP_NAMES[step] };
+  const openUnsentRef = useRef<typeof stepInfo | null>(null);
+  openUnsentRef.current = isOpen && !submitted ? stepInfo : null;
+
+  useEffect(() => {
+    if (isOpen && !submitted) track("quiz_step_viewed", { step_number: stepIndex + 1, step_name: QUIZ_STEP_NAMES[step] });
+  }, [isOpen, submitted, step, stepIndex]);
+
+  useEffect(() => {
+    const onPageHide = () => {
+      if (openUnsentRef.current) track("quiz_abandoned", openUnsentRef.current, { beacon: true });
+    };
+    window.addEventListener("pagehide", onPageHide);
+    return () => window.removeEventListener("pagehide", onPageHide);
+  }, []);
 
   const canAdvance = () => {
     switch (step) {
@@ -203,6 +234,8 @@ const BookingQuiz = () => {
       // GA4: track booking quiz completion
       trackQuizComplete("booking", quizData.eventLabel);
       trackFormSubmit("Booking Quiz", quizData.eventLabel);
+      // PostHog: fixed buckets only, never the exact typed guest count.
+      track("inquiry_submitted", { event_type: quizEventType(quizData.eventType), guest_count_range: guestCountRange(quizData.guestCount) });
       setSubmitted(true);
     } catch {
       toast({
@@ -216,6 +249,7 @@ const BookingQuiz = () => {
   };
 
   const handleClose = () => {
+    if (!submitted) track("quiz_abandoned", stepInfo);
     closeQuiz();
     setTimeout(() => {
       setStep("clientType");

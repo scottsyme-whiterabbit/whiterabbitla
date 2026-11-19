@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { trackQuizStart } from "@/lib/analytics";
+import { track } from "@/lib/posthog";
 
 /** Answers handed over by the Find the Queen pop-up, plus the code to attach. */
 export interface QuizPrefill {
@@ -37,7 +38,7 @@ export const BookingQuizProvider = ({ children }: { children: ReactNode }) => {
         isOpen,
         defaultSource,
         prefill,
-        openQuiz: (source?: string | unknown, pre?: QuizPrefill) => { if (typeof source === 'string') setDefaultSource(source); setPrefill(pre ?? null); trackQuizStart("booking"); setIsOpen(true); },
+        openQuiz: (source?: string | unknown, pre?: QuizPrefill) => { if (typeof source === 'string') setDefaultSource(source); setPrefill(pre ?? null); trackQuizStart("booking"); track("quiz_started"); setIsOpen(true); },
         closeQuiz: () => { setIsOpen(false); setDefaultSource(""); setPrefill(null); },
       }}
     >

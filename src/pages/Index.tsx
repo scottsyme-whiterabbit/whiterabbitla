@@ -27,6 +27,7 @@ import heroPoster3 from "@/assets/triptych/triptych-3-poster.jpg.asset.json";
 
 import SEOHead from "@/components/SEOHead";
 import { useJsonLd } from "@/hooks/useSchemaOrg";
+import { track } from "@/lib/posthog";
 
 import heroImage from "@/assets/hero-magic-cinematic.jpg";
 import experienceImg from "@/assets/experience-closeup.jpg";
@@ -256,7 +257,7 @@ const Index = () => {
           <motion.div {...enter(0.85)} className="relative mt-6 max-md:[@media(max-height:700px)]:mt-4 md:mt-8">
             <button
               type="button"
-              onClick={() => openQuiz()}
+              onClick={() => { track("hero_cta_clicked", { label: "Check your date" }); openQuiz(); }}
               className="inline-block font-sans text-sm md:text-[15px] tracking-[0.22em] uppercase border border-accent text-cream px-12 py-[1.125rem] max-md:[@media(max-height:700px)]:py-3 md:px-14 md:py-5 hover:bg-accent/15 hover:border-accent focus-visible:bg-accent/15 transition-colors duration-500"
             >
               Check your date

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { optInPostHog, optOutPostHog } from "@/lib/posthog";
 
 const CookieConsent = () => {
   const [visible, setVisible] = useState(false);
@@ -15,11 +16,13 @@ const CookieConsent = () => {
 
   const accept = () => {
     localStorage.setItem("wr-cookie-consent", "accepted");
+    optInPostHog();
     setVisible(false);
   };
 
   const decline = () => {
     localStorage.setItem("wr-cookie-consent", "declined");
+    optOutPostHog();
     setVisible(false);
   };
 

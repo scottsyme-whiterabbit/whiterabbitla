@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { track } from "@/lib/posthog";
 
 const GOOGLE_REVIEW_URL = "https://g.page/r/CXLCQWnGrGWrEAE/review";
 
@@ -33,6 +34,7 @@ const ReviewGate = () => {
   const handlePositive = () => {
     setStep("positive");
     flagReviewCompleted();
+    track("review_link_clicked", { destination: "google" });
     setTimeout(() => {
       window.open(GOOGLE_REVIEW_URL, "_blank", "noopener,noreferrer");
     }, 1500);
