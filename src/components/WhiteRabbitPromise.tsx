@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
 interface Props {
   /** "light" on cream backgrounds (default), "dark" on forest-dark sections. */
   variant?: "light" | "dark";
@@ -14,6 +17,17 @@ const WhiteRabbitPromise = ({ variant = "light" }: Props) => {
   const seal = isDark ? "text-accent" : "text-primary";
   const heading = isDark ? "text-cream" : "text-foreground";
   const body = isDark ? "text-cream/75" : "text-muted-foreground";
+
+  // Links such as /contact#wr-promise-heading land on this section. The page
+  // loads after the route change scrolls to the top, so scroll here once mounted.
+  const { hash } = useLocation();
+  useEffect(() => {
+    if (hash !== "#wr-promise-heading") return;
+    const timer = window.setTimeout(() => {
+      document.getElementById("wr-promise-heading")?.scrollIntoView({ block: "start" });
+    }, 150);
+    return () => window.clearTimeout(timer);
+  }, [hash]);
 
   return (
     <section aria-labelledby="wr-promise-heading" className="py-14">
@@ -32,7 +46,7 @@ const WhiteRabbitPromise = ({ variant = "light" }: Props) => {
         </svg>
         <h2
           id="wr-promise-heading"
-          className={`font-serif text-2xl md:text-3xl mb-4 ${heading}`}
+          className={`scroll-mt-32 font-serif text-2xl md:text-3xl mb-4 ${heading}`}
         >
           The White Rabbit Promise
         </h2>

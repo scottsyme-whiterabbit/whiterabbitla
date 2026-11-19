@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { retiredCityPaths } from "@/data/retiredCityRoutes";
 import { ArrowRight, Star } from "lucide-react";
 import threeStars from "@/assets/three-stars-gold.png";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import QuizCTA from "@/components/QuizCTA";
@@ -98,6 +98,12 @@ const heroReviews = [
 
 const Index = () => {
   const { openQuiz } = useBookingQuiz();
+  // Visitors who ask for reduced motion see the still posters instead of the videos.
+  const reduceMotion = useReducedMotion();
+  const enter = (delay: number) =>
+    reduceMotion
+      ? {}
+      : { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { duration: 1, delay } };
   const [heroReviewIndex, setHeroReviewIndex] = useState(0);
   const [heroRotation, setHeroRotation] = useState(0);
   const [heroFading, setHeroFading] = useState(false);
@@ -115,6 +121,7 @@ const Index = () => {
 
   // Rotate triptych column positions every ~12s with a brief crossfade
   useEffect(() => {
+    if (reduceMotion) return;
     const ROTATE_MS = 12000;
     const FADE_MS = 700;
     const interval = setInterval(() => {
@@ -125,7 +132,7 @@ const Index = () => {
       }, FADE_MS);
     }, ROTATE_MS);
     return () => clearInterval(interval);
-  }, []);
+  }, [reduceMotion]);
 
   const seoTitle = "White Rabbit LA, Los Angeles Magician by Appointment";
   const seoDescription = "Close-up magic and mentalism for private events in Los Angeles and select destinations. Magic Castle member trusted by Netflix, Disney, and Morgan Stanley.";
@@ -141,9 +148,9 @@ const Index = () => {
     <main id="main-content">
       <SEOHead title={seoTitle} description={seoDescription} canonical="/" ogImage="/og-image.jpg" />
       {/* Hero */}
-      <section className="relative overflow-hidden md:h-screen pt-32 md:pt-0 bg-forest-dark">
+      <section className="relative overflow-hidden h-[100svh] min-h-[560px] md:h-screen bg-forest-dark">
         {/* Triptych video container */}
-        <div className="relative w-full h-full md:h-[calc(100vh-120px)] md:absolute md:top-[120px] md:left-0 md:right-0 md:bottom-0 bg-forest-dark">
+        <div className="absolute inset-x-0 top-20 bottom-0 md:top-[120px] bg-forest-dark">
           <div className="grid grid-cols-3 w-full h-full">
             {[
               { src: heroClip2.url, mobileSrc: heroClip2Mobile.url, poster: heroPoster2.url, offset: 0 },
@@ -156,34 +163,46 @@ const Index = () => {
                 <div
                   key={clip.src}
                   style={{ order: position }}
-                  className={`relative aspect-[9/16] md:aspect-auto md:h-full overflow-hidden bg-black transition-[border-color] duration-700 ${
+                  className={`relative h-full overflow-hidden bg-black transition-[border-color] duration-700 ${
                     position > 0 ? "border-l border-accent/20" : "border-l border-transparent"
                   }`}
                 >
-                  <video
-                    src={isMobileViewport() ? clip.mobileSrc : clip.src}
-                    poster={clip.poster}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                    width={1080}
-                    height={1920}
-                    className="w-full h-full object-cover transition-opacity duration-700"
-                    style={{ opacity: heroFading ? 0.35 : 1 }}
-                    onLoadedMetadata={(e) => {
-                      const v = e.currentTarget;
-                      v.playbackRate = 0.85;
-                      if (v.duration && isFinite(v.duration)) {
-                        v.currentTime = clip.offset % v.duration;
-                      }
-                    }}
-                  />
+                  {reduceMotion ? (
+                    <img
+                      src={clip.poster}
+                      alt=""
+                      width={1080}
+                      height={1920}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <video
+                      src={isMobileViewport() ? clip.mobileSrc : clip.src}
+                      poster={clip.poster}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="metadata"
+                      width={1080}
+                      height={1920}
+                      className="w-full h-full object-cover transition-opacity duration-700"
+                      style={{ opacity: heroFading ? 0.35 : 1 }}
+                      onLoadedMetadata={(e) => {
+                        const v = e.currentTarget;
+                        v.playbackRate = 0.85;
+                        if (v.duration && isFinite(v.duration)) {
+                          v.currentTime = clip.offset % v.duration;
+                        }
+                      }}
+                    />
+                  )}
                 </div>
               );
             })}
           </div>
+          {/* Mobile overlay for headline contrast: deep at the top where the text sits */}
+          <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/90 via-forest-dark/60 to-forest-dark/25 pointer-events-none md:hidden" />
           {/* Diagonal emerald overlay for headline contrast: deep at bottom-left, light at top-right */}
           <div className="absolute inset-0 bg-gradient-to-tr from-[#1B3A2DA6] via-[#1B3A2D4D] to-[#1B3A2D33] pointer-events-none hidden md:block" />
           {/* Bottom reinforcement for CTA and quote bar */}
@@ -200,54 +219,48 @@ const Index = () => {
           <div className="hero-wisp hero-wisp-4 hidden md:block" />
         </div>
 
-        {/* Text overlaid, bottom-left aligned (desktop only) */}
-        <div className="hidden md:flex absolute inset-0 z-10 flex-col items-start justify-end pb-28 md:pb-24 pl-6 md:pl-[10vw] pr-6 text-left">
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.35 }}
-            className="relative mb-4 md:mb-5 font-sans text-xs tracking-[0.3em] uppercase text-accent drop-shadow-lg"
-            style={{ textShadow: "0 0 40px hsl(var(--accent) / 0.35), 0 0 80px hsl(var(--accent) / 0.15)" }}
-          >
-            Private Magic · Los Angeles & Beyond
-          </motion.p>
+        {/* Text overlaid on the video, placed above the space the cookie banner takes: near the top on phones, centered left on desktop */}
+        <div className="absolute inset-x-0 top-20 md:top-[120px] md:bottom-[16.5rem] z-10 flex flex-col items-start justify-start md:justify-center pt-10 [@media(max-height:700px)]:pt-5 md:pt-0 px-6 md:pl-[10vw] md:pr-6 text-left">
           <motion.h1
-            className="relative text-2xl md:text-[1.875rem] lg:text-[2.5rem] text-cream/90 tracking-wide font-bold font-serif drop-shadow-lg max-w-4xl"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            style={{ textShadow: "0 0 60px hsl(var(--accent) / 0.35), 0 0 120px hsl(var(--accent) / 0.15)" }}>
-            Some evenings are catered.<br />
-            <span className="block mt-2 md:mt-3">Some are staged.</span>
-            <span className="block mt-2 md:mt-3">The best are conjured.</span>
+            {...enter(0.35)}
+            className="relative font-serif font-bold text-[2.375rem] [@media(max-height:700px)]:text-4xl leading-[1.05] md:text-6xl lg:text-[4.25rem] text-cream tracking-wide drop-shadow-lg"
+            style={{ textShadow: "0 0 60px hsl(var(--accent) / 0.35), 0 0 120px hsl(var(--accent) / 0.15)" }}
+          >
+            Magic. Of course.
           </motion.h1>
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.85 }}
-            className="relative mt-5 md:mt-7 max-w-xl font-sans text-sm md:text-base text-cream/75 italic"
+            {...enter(0.6)}
+            className="relative mt-4 [@media(max-height:700px)]:mt-3 md:mt-6 max-w-[21rem] md:max-w-xl font-sans text-[15px] [@media(max-height:700px)]:text-sm md:text-lg leading-relaxed text-cream/85 drop-shadow-md"
           >
-            Experience magic that makes you feel truly alive.
+            By reservation only, for the finest weddings, private parties and corporate events in Los Angeles and beyond.
           </motion.p>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.95 }}
-            className="relative mt-4 md:mt-5 font-sans text-[10px] md:text-[11px] tracking-[0.35em] uppercase text-cream/60 drop-shadow-md hidden md:block"
-          >
-            Los Angeles · Aspen · Jackson Hole · The Hamptons · Miami
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 1 }}
-            className="relative mt-6 md:mt-8">
+          <motion.div {...enter(0.85)} className="relative mt-6 [@media(max-height:700px)]:mt-4 md:mt-8">
             <button
-              onClick={openQuiz}
-              className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-10 py-4 hover:bg-accent hover:text-accent-foreground transition-colors">
-              Inquire
+              type="button"
+              onClick={() => openQuiz()}
+              className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-10 py-4 hover:bg-accent hover:text-accent-foreground transition-colors"
+            >
+              Check your date
             </button>
           </motion.div>
+          <motion.p
+            {...enter(1)}
+            className="relative mt-4 [@media(max-height:700px)]:mt-3 md:mt-5 max-w-full font-sans text-[11px] md:text-xs tracking-[0.06em] leading-relaxed text-cream/70 drop-shadow-md"
+          >
+            <span className="whitespace-nowrap">
+              <a href="https://g.co/kgs/MbQh3xN" target="_blank" rel="noopener noreferrer" className="underline-offset-4 hover:text-cream hover:underline transition-colors">5.0 on Google</a>
+              <span aria-hidden="true" className="mx-1.5 text-accent/80">·</span>
+            </span>{" "}
+            <span className="whitespace-nowrap">
+              <a href="https://g.co/kgs/MbQh3xN" target="_blank" rel="noopener noreferrer" className="underline-offset-4 hover:text-cream hover:underline transition-colors">45+ five-star reviews</a>
+              <span aria-hidden="true" className="mx-1.5 text-accent/80">·</span>
+            </span>{" "}
+            <span className="whitespace-nowrap">
+              Magic Castle® member
+              <span aria-hidden="true" className="mx-1.5 text-accent/80">·</span>
+            </span>{" "}
+            <Link to="/contact#wr-promise-heading" className="whitespace-nowrap underline-offset-4 hover:text-cream hover:underline transition-colors">The White Rabbit Promise</Link>
+          </motion.p>
         </div>
 
         {/* Rolling reviews, pinned to bottom of hero (desktop only) */}
@@ -283,56 +296,7 @@ const Index = () => {
         </motion.div>
       </section>
 
-      {/* Mobile text section */}
-      <section className="md:hidden bg-cream py-8 px-6">
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.15 }}
-          className="text-center font-sans text-xs tracking-[0.3em] uppercase text-accent mb-4"
-        >
-          Private Magic · Los Angeles & Beyond
-        </motion.p>
-        <motion.h2
-          className="text-center text-2xl text-foreground tracking-wide font-bold font-serif max-w-lg mx-auto"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.3 }}
-        >
-          Some evenings are catered.<br />
-          <span className="block mt-2">Some are staged.</span>
-          <span className="block mt-2">The best are conjured.</span>
-        </motion.h2>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.6 }}
-          className="text-center mt-5 max-w-md mx-auto font-sans text-sm text-muted-foreground italic"
-        >
-          Experience magic that makes you feel truly alive.
-        </motion.p>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.75 }}
-          className="text-center mt-4 font-sans text-[10px] tracking-[0.35em] uppercase text-muted-foreground/80 hidden"
-        >
-          Los Angeles · Aspen · Jackson Hole · The Hamptons · Miami
-        </motion.p>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.9 }}
-          className="flex justify-center mt-6">
-          <button
-            onClick={openQuiz}
-            className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-accent px-6 py-2 hover:bg-accent hover:text-accent-foreground transition-colors max-w-[280px] w-full text-center">
-            Inquire
-          </button>
-        </motion.div>
-      </section>
-
-      {/* Rolling reviews, mobile placement after text section */}
+      {/* Rolling reviews, mobile placement just below the hero */}
       <motion.div
         className="md:hidden bg-forest-dark/80 backdrop-blur-sm py-4 border-t border-accent/10"
         initial={{ opacity: 0 }}
