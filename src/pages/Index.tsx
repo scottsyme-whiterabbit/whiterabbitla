@@ -145,7 +145,7 @@ const Index = () => {
       {/* Hero */}
       <section className="relative overflow-hidden h-[100svh] min-h-[560px] md:h-screen bg-forest-dark">
         {/* Triptych video container */}
-        <div className="absolute inset-x-0 top-20 bottom-0 md:top-[120px] bg-forest-dark">
+        <div className="absolute inset-x-0 top-20 bottom-0 md:top-[120px] xl:top-20 bg-forest-dark">
           <div className="grid grid-cols-3 w-full h-full">
             {[
               { src: heroClip2.url, mobileSrc: heroClip2Mobile.url, poster: heroPoster2.url, offset: 0 },
@@ -226,8 +226,9 @@ const Index = () => {
             The top edge is pushed below the 80px menu by a reserved breathing gap: 32px on phones,
             48px on desktop. Those reserves only apply on viewports tall enough to hold them, since on
             shorter windows the stack is already full and pushing it down would drop the proof line
-            behind the cookie banner. */}
-        <div className="absolute inset-x-0 top-20 bottom-[18.75rem] max-md:[@media(min-height:640px)]:top-[112px] md:top-[120px] md:bottom-[16.5rem] md:[@media(min-height:800px)]:top-[128px] z-10 flex flex-col items-center [justify-content:safe_center] px-6 text-center">
+            behind the cookie banner. From 1280px up the videos start right under the menu and the
+            stack starts 48px below the top of the videos instead of being centred. */}
+        <div className="absolute inset-x-0 top-20 bottom-[18.75rem] max-md:[@media(min-height:640px)]:top-[112px] md:top-[120px] md:bottom-[16.5rem] md:[@media(min-height:800px)]:top-[128px] xl:!top-32 z-10 flex flex-col items-center [justify-content:safe_center] xl:![justify-content:flex-start] px-6 text-center">
           <motion.p
             {...enter(0.2)}
             className="font-sans text-[10px] md:text-[11px] uppercase tracking-[0.42em] text-accent mb-4 max-md:[@media(max-height:700px)]:mb-2.5 md:mb-5 [text-shadow:0_2px_20px_rgba(0,0,0,0.6)]"
