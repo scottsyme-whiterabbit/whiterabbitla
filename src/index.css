@@ -335,6 +335,22 @@ html {
   will-change: transform;
 }
 
+/* Homepage hero review bar: slow seamless right-to-left loop */
+.review-marquee-track {
+  animation: marquee-logos 50s linear infinite;
+  will-change: transform;
+}
+
+@media (hover: hover) {
+  .review-marquee:hover .review-marquee-track {
+    animation-play-state: paused;
+  }
+}
+
+.review-marquee[data-held] .review-marquee-track {
+  animation-play-state: paused;
+}
+
 /* Accessibility: visible focus rings for keyboard navigation */
 *:focus-visible {
   outline: 2px solid hsl(var(--accent));

@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 import { retiredCityPaths } from "@/data/retiredCityRoutes";
 import { ArrowRight, Star } from "lucide-react";
 import threeStars from "@/assets/three-stars-gold.png";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import HeroReviewMarquee from "@/components/HeroReviewMarquee";
 import AnimatedSection from "@/components/AnimatedSection";
 import { useBookingQuiz } from "@/contexts/BookingQuizContext";
 import QuizCTA from "@/components/QuizCTA";
@@ -105,7 +106,6 @@ const Index = () => {
     reduceMotion
       ? {}
       : { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { duration: 1, delay } };
-  const [heroReviewIndex, setHeroReviewIndex] = useState(0);
   const [heroRotation, setHeroRotation] = useState(0);
   const [heroFading, setHeroFading] = useState(false);
 
@@ -113,12 +113,6 @@ const Index = () => {
 
 
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setHeroReviewIndex((prev) => (prev + 1) % heroReviews.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
 
   // Rotate triptych column positions every ~12s with a brief crossfade
   useEffect(() => {
@@ -287,30 +281,7 @@ const Index = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.5 }}>
-          <div className="max-w-3xl mx-auto px-6">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={heroReviewIndex}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.4 }}
-                className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-6"
-              >
-                <div className="flex gap-0.5">
-                  {[...Array(5)].map((_, i) =>
-                    <Star key={i} size={14} className="fill-accent text-accent" />
-                  )}
-                </div>
-                <p className="font-serif text-sm md:text-base text-cream/90 text-center">
-                  "{heroReviews[heroReviewIndex].text}"
-                </p>
-                <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-cream/60 whitespace-nowrap">
-{heroReviews[heroReviewIndex].name}{heroReviews[heroReviewIndex].role ? `, ${heroReviews[heroReviewIndex].role}` : ""}
-                </p>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+          <HeroReviewMarquee reviews={heroReviews} variant="desktop" />
         </motion.div>
       </section>
 
@@ -320,30 +291,7 @@ const Index = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 1.2 }}>
-        <div className="max-w-3xl mx-auto px-6">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={heroReviewIndex}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.4 }}
-              className="flex flex-col items-center justify-center gap-3"
-            >
-              <div className="flex gap-0.5">
-                {[...Array(5)].map((_, i) =>
-                  <Star key={i} size={14} className="fill-accent text-accent" />
-                )}
-              </div>
-              <p className="font-serif text-sm text-cream/90 text-center">
-                "{heroReviews[heroReviewIndex].text}"
-              </p>
-              <p className="font-sans text-[10px] tracking-[0.2em] uppercase text-cream/60 whitespace-nowrap">
-{heroReviews[heroReviewIndex].name}{heroReviews[heroReviewIndex].role ? `, ${heroReviews[heroReviewIndex].role}` : ""}
-              </p>
-            </motion.div>
-          </AnimatePresence>
-        </div>
+        <HeroReviewMarquee reviews={heroReviews} variant="mobile" />
       </motion.div>
 
       {/* Client Logos · static stacked block */}
