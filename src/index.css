@@ -1,7 +1,7 @@
 
 @font-face {
   font-family: 'Ogg';
-  src: url('/fonts/Ogg-Thin.ttf') format('truetype');
+  src: url('/fonts/Ogg-Thin.woff2') format('woff2');
   font-weight: 100;
   font-style: normal;
   font-display: swap;
@@ -9,7 +9,7 @@
 
 @font-face {
   font-family: 'Ogg';
-  src: url('/fonts/Ogg-ThinItalic.ttf') format('truetype');
+  src: url('/fonts/Ogg-ThinItalic.woff2') format('woff2');
   font-weight: 100;
   font-style: italic;
   font-display: swap;
@@ -17,7 +17,7 @@
 
 @font-face {
   font-family: 'Ogg';
-  src: url('/fonts/Ogg-Light.ttf') format('truetype');
+  src: url('/fonts/Ogg-Light.woff2') format('woff2');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -25,7 +25,7 @@
 
 @font-face {
   font-family: 'Ogg';
-  src: url('/fonts/Ogg-LightItalic.ttf') format('truetype');
+  src: url('/fonts/Ogg-LightItalic.woff2') format('woff2');
   font-weight: 300;
   font-style: italic;
   font-display: swap;
@@ -33,7 +33,7 @@
 
 @font-face {
   font-family: 'Ogg';
-  src: url('/fonts/Ogg-Regular.ttf') format('truetype');
+  src: url('/fonts/Ogg-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -41,7 +41,7 @@
 
 @font-face {
   font-family: 'Ogg';
-  src: url('/fonts/Ogg-RegularItalic.ttf') format('truetype');
+  src: url('/fonts/Ogg-RegularItalic.woff2') format('woff2');
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -49,7 +49,7 @@
 
 @font-face {
   font-family: 'Ogg';
-  src: url('/fonts/Ogg-Medium.ttf') format('truetype');
+  src: url('/fonts/Ogg-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -57,7 +57,7 @@
 
 @font-face {
   font-family: 'Ogg';
-  src: url('/fonts/Ogg-MediumItalic.ttf') format('truetype');
+  src: url('/fonts/Ogg-MediumItalic.woff2') format('woff2');
   font-weight: 500;
   font-style: italic;
   font-display: swap;
@@ -65,7 +65,7 @@
 
 @font-face {
   font-family: 'Ogg';
-  src: url('/fonts/Ogg-Bold.ttf') format('truetype');
+  src: url('/fonts/Ogg-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -73,7 +73,7 @@
 
 @font-face {
   font-family: 'Ogg';
-  src: url('/fonts/Ogg-BoldItalic.ttf') format('truetype');
+  src: url('/fonts/Ogg-BoldItalic.woff2') format('woff2');
   font-weight: 700;
   font-style: italic;
   font-display: swap;
@@ -81,7 +81,7 @@
 
 @font-face {
   font-family: 'Ogg Text';
-  src: url('/fonts/OggText-Bold.ttf') format('truetype');
+  src: url('/fonts/OggText-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -89,7 +89,7 @@
 
 @font-face {
   font-family: 'Ogg Text';
-  src: url('/fonts/OggText-BoldItalic.ttf') format('truetype');
+  src: url('/fonts/OggText-BoldItalic.woff2') format('woff2');
   font-weight: 700;
   font-style: italic;
   font-display: swap;
@@ -97,7 +97,7 @@
 
 @font-face {
   font-family: 'Ogg Text';
-  src: url('/fonts/OggText-Extrabold.ttf') format('truetype');
+  src: url('/fonts/OggText-Extrabold.woff2') format('woff2');
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -105,7 +105,7 @@
 
 @font-face {
   font-family: 'Ogg Text';
-  src: url('/fonts/OggText-ExtraboldItalic.ttf') format('truetype');
+  src: url('/fonts/OggText-ExtraboldItalic.woff2') format('woff2');
   font-weight: 800;
   font-style: italic;
   font-display: swap;
@@ -113,7 +113,7 @@
 
 @font-face {
   font-family: 'Ogg Text';
-  src: url('/fonts/OggText-Light.ttf') format('truetype');
+  src: url('/fonts/OggText-Light.woff2') format('woff2');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -121,7 +121,7 @@
 
 @font-face {
   font-family: 'Ogg Text';
-  src: url('/fonts/OggText-LightItalic.ttf') format('truetype');
+  src: url('/fonts/OggText-LightItalic.woff2') format('woff2');
   font-weight: 300;
   font-style: italic;
   font-display: swap;
@@ -129,7 +129,7 @@
 
 @font-face {
   font-family: 'Ogg Text';
-  src: url('/fonts/OggText-Book.otf') format('opentype');
+  src: url('/fonts/OggText-Book.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -137,7 +137,7 @@
 
 @font-face {
   font-family: 'Ogg Text';
-  src: url('/fonts/OggText-Medium.ttf') format('truetype');
+  src: url('/fonts/OggText-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -145,7 +145,7 @@
 
 @font-face {
   font-family: 'Ogg Text';
-  src: url('/fonts/OggText-MediumItalic.ttf') format('truetype');
+  src: url('/fonts/OggText-MediumItalic.woff2') format('woff2');
   font-weight: 500;
   font-style: italic;
   font-display: swap;
