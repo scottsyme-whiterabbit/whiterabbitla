@@ -201,8 +201,8 @@ const Index = () => {
               );
             })}
           </div>
-          {/* Mobile overlay for headline contrast: deep at the top where the text sits */}
-          <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/90 via-forest-dark/60 to-forest-dark/25 pointer-events-none md:hidden" />
+          {/* Mobile overlay: an even light wash so the videos stay visible; the vignette behind the text does the heavy lifting */}
+          <div className="absolute inset-0 bg-forest-dark/35 pointer-events-none md:hidden" />
           {/* Diagonal emerald overlay for headline contrast: deep at bottom-left, light at top-right */}
           <div className="absolute inset-0 bg-gradient-to-tr from-[#1B3A2DA6] via-[#1B3A2D4D] to-[#1B3A2D33] pointer-events-none hidden md:block" />
           {/* Bottom reinforcement for CTA and quote bar */}
@@ -219,47 +219,57 @@ const Index = () => {
           <div className="hero-wisp hero-wisp-4 hidden md:block" />
         </div>
 
-        {/* Text overlaid on the video, placed above the space the cookie banner takes: near the top on phones, centered left on desktop */}
-        <div className="absolute inset-x-0 top-20 md:top-[120px] md:bottom-[16.5rem] z-10 flex flex-col items-start justify-start md:justify-center pt-10 [@media(max-height:700px)]:pt-5 md:pt-0 px-6 md:pl-[10vw] md:pr-6 text-left">
+        {/* Centered text stack over the three videos. Its box ends above the space the cookie
+            banner takes (about 300px on phones, 264px on desktop) so the button and proof line stay clear. */}
+        <div className="absolute inset-x-0 top-20 bottom-[18.75rem] md:top-[120px] md:bottom-[16.5rem] z-10 flex flex-col items-center [justify-content:safe_center] px-6 text-center">
+          {/* Soft dark vignette: darkest behind the words, fading out toward the edges */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 -inset-y-10 -z-10 bg-[radial-gradient(ellipse_closest-side_at_center,hsl(var(--forest-dark)/0.78)_0%,hsl(var(--forest-dark)/0.5)_45%,hsl(var(--forest-dark)/0)_100%)]"
+          />
+          <motion.span
+            {...enter(0.2)}
+            aria-hidden="true"
+            className="block h-px w-12 bg-accent mb-5 max-md:[@media(max-height:700px)]:mb-2.5 md:mb-6"
+          />
           <motion.h1
             {...enter(0.35)}
-            className="relative font-serif font-bold text-[2.375rem] [@media(max-height:700px)]:text-4xl leading-[1.05] md:text-6xl lg:text-[4.25rem] text-cream tracking-wide drop-shadow-lg"
-            style={{ textShadow: "0 0 60px hsl(var(--accent) / 0.35), 0 0 120px hsl(var(--accent) / 0.15)" }}
+            className="relative font-serif font-medium text-6xl max-md:[@media(max-height:700px)]:text-[2.5rem] md:text-[clamp(4.5rem,10.5vh,6rem)] lg:text-[clamp(5rem,11vh,8rem)] leading-[0.92] tracking-tight drop-shadow-lg"
+            style={{ textShadow: "0 0 60px hsl(var(--accent) / 0.3), 0 0 120px hsl(var(--accent) / 0.12)" }}
           >
-            Magic. Of course.
+            <span className="block text-cream">Magic.</span>{" "}
+            <span className="block text-accent">Of course.</span>
           </motion.h1>
           <motion.p
             {...enter(0.6)}
-            className="relative mt-4 [@media(max-height:700px)]:mt-3 md:mt-6 max-w-[21rem] md:max-w-xl font-sans text-[15px] [@media(max-height:700px)]:text-sm md:text-lg leading-relaxed text-cream/85 drop-shadow-md"
+            className="relative mx-auto mt-5 max-md:[@media(max-height:700px)]:mt-3 md:mt-6 max-w-xl font-sans text-[15px] max-md:[@media(max-height:700px)]:text-[13px] max-md:[@media(max-height:700px)]:leading-snug md:text-lg leading-relaxed tracking-[0.04em] md:tracking-[0.06em] text-cream/85 drop-shadow-md"
           >
             By reservation only, for the finest weddings, private parties and corporate events in Los Angeles and beyond.
           </motion.p>
-          <motion.div {...enter(0.85)} className="relative mt-6 [@media(max-height:700px)]:mt-4 md:mt-8">
+          <motion.div {...enter(0.85)} className="relative mt-6 max-md:[@media(max-height:700px)]:mt-4 md:mt-8">
             <button
               type="button"
               onClick={() => openQuiz()}
-              className="inline-block font-sans text-sm tracking-[0.2em] uppercase border border-accent text-cream px-10 py-4 hover:bg-accent hover:text-accent-foreground transition-colors"
+              className="inline-block font-sans text-sm md:text-[15px] tracking-[0.22em] uppercase border border-accent text-cream px-12 py-[1.125rem] max-md:[@media(max-height:700px)]:py-3 md:px-14 md:py-5 hover:bg-accent/15 hover:border-accent focus-visible:bg-accent/15 transition-colors duration-500"
             >
               Check your date
             </button>
           </motion.div>
           <motion.p
             {...enter(1)}
-            className="relative mt-4 [@media(max-height:700px)]:mt-3 md:mt-5 max-w-full font-sans text-[11px] md:text-xs tracking-[0.06em] leading-relaxed text-cream/70 drop-shadow-md"
+            className="relative mt-4 max-md:[@media(max-height:700px)]:mt-3 md:mt-5 font-sans text-[11px] md:text-xs tracking-[0.06em] leading-relaxed text-cream/70 drop-shadow-md"
           >
-            <span className="whitespace-nowrap">
+            <span className="block md:inline">
               <a href="https://g.co/kgs/MbQh3xN" target="_blank" rel="noopener noreferrer" className="underline-offset-4 hover:text-cream hover:underline transition-colors">5.0 on Google</a>
-              <span aria-hidden="true" className="mx-1.5 text-accent/80">·</span>
-            </span>{" "}
-            <span className="whitespace-nowrap">
+              <span aria-hidden="true" className="mx-2 text-accent">·</span>
               <a href="https://g.co/kgs/MbQh3xN" target="_blank" rel="noopener noreferrer" className="underline-offset-4 hover:text-cream hover:underline transition-colors">45+ five-star reviews</a>
-              <span aria-hidden="true" className="mx-1.5 text-accent/80">·</span>
-            </span>{" "}
-            <span className="whitespace-nowrap">
+            </span>
+            <span aria-hidden="true" className="hidden md:inline mx-2 text-accent">·</span>{" "}
+            <span className="block md:inline">
               Magic Castle® member
-              <span aria-hidden="true" className="mx-1.5 text-accent/80">·</span>
-            </span>{" "}
-            <Link to="/contact#wr-promise-heading" className="whitespace-nowrap underline-offset-4 hover:text-cream hover:underline transition-colors">The White Rabbit Promise</Link>
+              <span aria-hidden="true" className="mx-2 text-accent">·</span>
+              <Link to="/contact#wr-promise-heading" className="underline-offset-4 hover:text-cream hover:underline transition-colors">The White Rabbit Promise</Link>
+            </span>
           </motion.p>
         </div>
 

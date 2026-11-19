@@ -22,6 +22,7 @@
   - [ ] No unique constraint yet
 
 ## Done
+- Homepage hero refined (Nov 19): centered stack, two line gold headline, hairline, vignette.
 - Homepage hero (Nov 19): "Magic. Of course." headline, Check your date button, proof line, reduced motion posters, clear of the cookie banner. Waiting on Scott: OK to publish.
 - Find the Queen switched off (Nov 19) with one switch; code, tables and functions kept for later.
 - Find the Queen update (Nov 18): six screens, fair five card game, $250 LIGHTS-UP code, real quarterly drawing with winner picker, Find the Lady CRM tab, Move to pipeline, booking quiz link, final rules. One test claim passed end to end and was removed. Waiting on Scott: lawyer review of the rules, OK to publish.
