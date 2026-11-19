@@ -267,9 +267,9 @@ const Index = () => {
             className="relative mt-4 max-md:[@media(max-height:700px)]:mt-3 md:mt-5 font-sans text-[11px] md:text-xs tracking-[0.06em] leading-relaxed text-cream/70 [text-shadow:0_2px_20px_rgba(0,0,0,0.6)]"
           >
             <span className="block md:inline">
-              <a href="https://g.co/kgs/MbQh3xN" target="_blank" rel="noopener noreferrer" className="underline-offset-4 hover:text-cream hover:underline transition-colors">5.0 on Google</a>
+              <a href="https://g.page/r/CXLCQWnGrGWrEAE" target="_blank" rel="noopener noreferrer" className="underline-offset-4 hover:text-cream hover:underline transition-colors">5.0 on Google</a>
               <span aria-hidden="true" className="mx-2 text-accent">·</span>
-              <a href="https://g.co/kgs/MbQh3xN" target="_blank" rel="noopener noreferrer" className="underline-offset-4 hover:text-cream hover:underline transition-colors">45+ five-star reviews</a>
+              <Link to="/reviews" className="underline-offset-4 hover:text-cream hover:underline transition-colors">45+ five-star reviews</Link>
             </span>
             <span aria-hidden="true" className="hidden md:inline mx-2 text-accent">·</span>{" "}
             <span className="block md:inline">

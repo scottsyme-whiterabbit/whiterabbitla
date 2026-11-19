@@ -11,7 +11,7 @@ const GoogleReviewsBadge = ({ variant = "dark", className = "" }: GoogleReviewsB
 
   return (
     <a
-      href="https://g.co/kgs/MbQh3xN"
+      href="https://g.page/r/CXLCQWnGrGWrEAE"
       target="_blank"
       rel="noopener noreferrer"
       className={`inline-flex items-center gap-2 group ${className}`}
