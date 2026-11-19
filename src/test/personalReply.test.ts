@@ -155,3 +155,195 @@ describe("signature", () => {
     expect(s).toContain("Instagram: https://www.instagram.com/whiterabbit.la");
   });
 });
+
+// ---------- Five follow-up replies ----------
+import {
+  REPLY_TYPES, isFollowUpType, copyRuleProblems, sendProblems, quietReengageCheck, proposalCheckinCheck, formatIsoDay,
+  redactForAi, smartDraftContext, assembleSmartDraft, smartDraftProblems, SMART_DRAFT_ENDING,
+} from "../../supabase/functions/_shared/personal-reply";
+
+const NEW_TYPES = ["quiet_reengage", "proposal_checkin", "date_still_open", "castle_invite", "smart_draft"] as const;
+
+describe("follow-up reply list", () => {
+  it("keeps the original five first, in order, and adds five follow-ups with Scott's labels", () => {
+    expect(REPLY_TYPES.filter((r) => r.group === "reply").map((r) => r.key)).toEqual(["voicemail", "schedule_call", "date_open", "booked", "proposal_followup"]);
+    expect(REPLY_TYPES.filter((r) => r.group === "followup").map((r) => [r.key, r.label])).toEqual([
+      ["quiet_reengage", "Re-engage quiet lead"],
+      ["proposal_checkin", "Proposal check-in"],
+      ["date_still_open", "Date still open nudge"],
+      ["castle_invite", "Stay in touch / Magic Castle invite"],
+      ["smart_draft", "Smart AI draft"],
+    ]);
+    for (const t of NEW_TYPES) expect(isFollowUpType(t)).toBe(true);
+    expect(isFollowUpType("schedule_call")).toBe(false);
+  });
+});
+
+describe("follow-up templates", () => {
+  it("re-engage uses the occasion when known", () => {
+    expect(buildReplyBody("quiet_reengage", facts())).toBe(
+      "Hello Jessica,\n\nChecking in here to see if there is anything I can do for you. Have you found a magician yet for your wedding in Hollywood? I would still like to be considered.\n\nBest,\n-Scott",
+    );
+  });
+  it("re-engage drops 'for your ...' cleanly when nothing is known", () => {
+    expect(buildReplyBody("quiet_reengage", facts({ event: "", location: "" }))).toContain("Have you found a magician yet? I would still like");
+  });
+  it("proposal check-in mentions the hold only when one is active, and has no link or price", () => {
+    const held = buildReplyBody("proposal_checkin", facts({ holdUntil: "Saturday, December 5" }));
+    expect(held).toContain("Your date is currently held for you through Saturday, December 5.");
+    expect(held.endsWith("Please let me know if there is anything I can do for you.\n\nBest,\n-Scott")).toBe(true);
+    const none = buildReplyBody("proposal_checkin", facts());
+    expect(none).not.toMatch(/held/i);
+    expect(none).not.toMatch(/https?:|www\.|\$/);
+  });
+  it("date still open needs a checked date and never mentions a voicemail", () => {
+    expect(() => buildReplyBody("date_still_open", facts())).toThrow();
+    const b = buildReplyBody("date_still_open", facts({ date: "Saturday, December 5" }));
+    expect(b).toBe(
+      "Hello Jessica,\n\nSaturday, December 5 is still open and available for me. I would love to talk with you about the details of your upcoming event. Let me know some good times that work for you.\n\nPlease let me know if there is anything I can do for you.\n\nTalk soon,\n-Scott",
+    );
+    expect(b).not.toMatch(/voice|message/i);
+  });
+  it("castle invite offers up to 5 guests and invents nothing else", () => {
+    const b = buildReplyBody("castle_invite", facts());
+    expect(b).toContain("Magic Castle in Hollywood");
+    expect(b).toContain("up to 5 guests on my guest list");
+    expect(b).not.toMatch(/last show|decline|team/i);
+  });
+  it("smart draft has no template", () => {
+    expect(() => buildReplyBody("smart_draft", facts())).toThrow();
+  });
+  it("every new template passes all send checks", () => {
+    for (const t of ["quiet_reengage", "proposal_checkin", "castle_invite"] as const) {
+      expect(sendProblems(t, buildReplyBody(t, facts()))).toEqual([]);
+      expect(sendProblems(t, buildReplyBody(t, facts({ firstName: "", event: "", location: "" })))).toEqual([]);
+    }
+    expect(sendProblems("date_still_open", buildReplyBody("date_still_open", facts({ date: "Friday, December 4" })))).toEqual([]);
+    expect(sendProblems("proposal_checkin", buildReplyBody("proposal_checkin", facts({ holdUntil: "Friday, December 4" })))).toEqual([]);
+  });
+  it("the original five templates are unchanged by the new checks", () => {
+    for (const t of ["voicemail", "schedule_call", "booked", "proposal_followup"] as const) {
+      expect(sendProblems(t, buildReplyBody(t, facts()))).toEqual([]);
+    }
+  });
+});
+
+describe("dash and phrase rules", () => {
+  it("blocks a hyphen used as punctuation but keeps -Scott and hyphenated words", () => {
+    expect(replyBodyProblems("Hello - there\n\nBest,\n-Scott")).toHaveLength(1);
+    expect(replyBodyProblems("It was great -- truly")).toHaveLength(1);
+    expect(replyBodyProblems("A well-known follow-up.\n\nBest,\n-Scott")).toEqual([]);
+  });
+  it("blocks the banned phrases, links and 'not X, but Y' on follow-ups only", () => {
+    expect(copyRuleProblems("Hi, just checking in.")).toHaveLength(1);
+    expect(copyRuleProblems("Thanks for reaching out!")).toHaveLength(1);
+    expect(copyRuleProblems("It is not a show, but an experience.")).toHaveLength(1);
+    expect(copyRuleProblems("See https://whiterabbitla.com")).toHaveLength(1);
+    expect(sendProblems("quiet_reengage", "Hello,\n\njust checking in\n\nBest,\n-Scott").length).toBeGreaterThan(0);
+    // The approved "schedule_call" copy keeps its opening line.
+    expect(sendProblems("schedule_call", "Hi,\n\nThank you so much for reaching out.\n\n-Scott")).toEqual([]);
+  });
+  it("blocks prices on follow-ups", () => {
+    expect(sendProblems("castle_invite", "Hello,\n\nIt is $2,500.\n\nBest,\n-Scott").length).toBeGreaterThan(0);
+  });
+});
+
+describe("Re-engage quiet lead check", () => {
+  const now = new Date("2026-11-20T18:00:00Z");
+  it("refuses when Scott never wrote", () => {
+    const r = quietReengageCheck({ lastOutboundAt: null, lastInboundAt: null, now });
+    expect(r.ok).toBe(false);
+  });
+  it("refuses when the client replied after Scott's last email", () => {
+    const r = quietReengageCheck({ lastOutboundAt: "2026-11-01T18:00:00Z", lastInboundAt: "2026-11-03T18:00:00Z", now });
+    expect(r).toMatchObject({ ok: false });
+    expect((r as { reason?: string }).reason).toMatch(/wrote back/);
+  });
+  it("refuses before 7 full days have passed", () => {
+    expect(quietReengageCheck({ lastOutboundAt: "2026-11-14T18:00:01Z", lastInboundAt: null, now }).ok).toBe(false);
+  });
+  it("allows at 7 days with no reply since", () => {
+    expect(quietReengageCheck({ lastOutboundAt: "2026-11-13T18:00:00Z", lastInboundAt: "2026-11-10T00:00:00Z", now }).ok).toBe(true);
+  });
+});
+
+describe("Proposal check-in check", () => {
+  const today = { year: 2026, month: 11, day: 20 };
+  it("refuses when no proposal was sent", () => {
+    expect(proposalCheckinCheck({ proposal: null, viewCount: 0, today }).ok).toBe(false);
+    expect(proposalCheckinCheck({ proposal: { sent_at: null, hold_until: "2026-12-01" }, viewCount: 0, today }).ok).toBe(false);
+  });
+  it("reports an active hold through today or later", () => {
+    const r = proposalCheckinCheck({ proposal: { sent_at: "2026-11-10T18:00:00Z", hold_until: "2026-12-05" }, viewCount: 0, today });
+    expect(r).toMatchObject({ ok: true, holdUntil: "Saturday, December 5", viewCount: 0 });
+    expect(proposalCheckinCheck({ proposal: { sent_at: "2026-11-10T18:00:00Z", hold_until: "2026-11-20" }, viewCount: 2, today })).toMatchObject({ ok: true, holdUntil: "Friday, November 20" });
+  });
+  it("never claims a hold that has passed or is missing", () => {
+    expect(proposalCheckinCheck({ proposal: { sent_at: "2026-11-10T18:00:00Z", hold_until: "2026-11-19" }, viewCount: 3, today })).toMatchObject({ ok: true, holdUntil: "" });
+    expect(proposalCheckinCheck({ proposal: { sent_at: "2026-11-10T18:00:00Z", hold_until: null }, viewCount: 3, today })).toMatchObject({ ok: true, holdUntil: "" });
+  });
+  it("formats ISO days", () => {
+    expect(formatIsoDay("2026-12-05")).toBe("Saturday, December 5");
+    expect(formatIsoDay("nope")).toBe("");
+  });
+});
+
+describe("Date still open nudge check", () => {
+  it("uses the same date check as Date is open", () => {
+    const today = { year: 2026, month: 11, day: 20 };
+    expect(dateOpenCheck({ date: { year: 2026, month: 11, day: 1 }, today, bookedOnDate: 0, formatted: "Sunday, November 1" }).ok).toBe(false);
+    expect(dateOpenCheck({ date: { year: 2026, month: 12, day: 5 }, today, bookedOnDate: 1, formatted: "Saturday, December 5" }).ok).toBe(false);
+    expect(dateOpenCheck({ date: null, today, bookedOnDate: 0, formatted: "" }).ok).toBe(false);
+  });
+});
+
+describe("Smart AI draft", () => {
+  const input = {
+    firstName: "Jessica",
+    stage: "contacted",
+    notes: "Budget: Go All Out\nHow They Found Us: Google Search\nGuest Count: 75 to 150\nWants strolling magic at the Vibiana cocktail hour. Call me at 310 555 1234 or jess@example.com. Quoted $3,000.",
+    activities: [
+      { type: "call", title: "Call", body: "Talked about the cocktail hour at Vibiana", occurred_at: "2026-11-10T18:00:00Z" },
+      { type: "stage_change", title: "Stage", body: "new to contacted", occurred_at: "2026-11-09T18:00:00Z" },
+    ],
+    proposal: { sentOn: "November 12", holdUntil: "", viewCount: 0 },
+    inquiry: { name: "Jessica Alamo", eventType: "Wedding (Wedding)", location: "Los Angeles, CA", message: "Budget: Go All Out\nGuest Count: 120 guests\n\nCocktail hour magic at Vibiana for 120 guests" },
+  };
+  const ctx = smartDraftContext(input);
+
+  it("context never carries budget, source, guest count, price, phone or email", () => {
+    expect(ctx).not.toMatch(/go all out|google search|75 to 150|120|\$|3,000|555|jess@example/i);
+    expect(ctx).toContain("Vibiana");
+    expect(ctx).not.toContain("new to contacted");
+    expect(ctx).toContain("No date hold is active");
+  });
+  it("redacts prices and guest counts", () => {
+    expect(redactForAi("We have 120 guests and $5k")).toBe("We have [guest count removed] and [price removed]");
+  });
+  it("assembles Scott's opening and closing around the AI sentences", () => {
+    const b = assembleSmartDraft("Hi Jessica,\n\nIt was lovely talking about the cocktail hour at Vibiana. I would be glad to help with any details.\n\nBest,\n-Scott", "Jessica");
+    expect(b).toBe(`Hi Jessica,\n\nIt was lovely talking about the cocktail hour at Vibiana. I would be glad to help with any details.\n\n${SMART_DRAFT_ENDING}`);
+    expect(smartDraftProblems(b, { firstName: "Jessica", context: ctx })).toEqual([]);
+  });
+  const draft = (mid: string) => assembleSmartDraft(mid, "Jessica");
+  it("rejects dashes, banned phrases and prices", () => {
+    expect(smartDraftProblems(draft("It was lovely to talk — truly. I would be glad to help."), { firstName: "Jessica", context: ctx }).length).toBeGreaterThan(0);
+    expect(smartDraftProblems(draft("Just checking in on the cocktail hour. I would be glad to help."), { firstName: "Jessica", context: ctx }).length).toBeGreaterThan(0);
+    expect(smartDraftProblems(draft("The show is $3,000. I would be glad to help."), { firstName: "Jessica", context: ctx }).length).toBeGreaterThan(0);
+  });
+  it("rejects invented venues, dates and numbers", () => {
+    expect(smartDraftProblems(draft("I loved hearing about the Beverly Hilton. I would be glad to help."), { firstName: "Jessica", context: ctx })[0]).toMatch(/Beverly/);
+    expect(smartDraftProblems(draft("I can hold Saturday for you. I would be glad to help."), { firstName: "Jessica", context: ctx }).length).toBeGreaterThan(0);
+    expect(smartDraftProblems(draft("I can bring 3 performers. I would be glad to help."), { firstName: "Jessica", context: ctx }).length).toBeGreaterThan(0);
+  });
+  it("rejects a draft that is too short or too long", () => {
+    expect(smartDraftProblems(draft("I would be glad to help."), { firstName: "Jessica", context: ctx })).toContain("The draft must be 2 to 4 sentences.");
+    expect(smartDraftProblems(draft("One. Two. Three. Four. Five."), { firstName: "Jessica", context: ctx })).toContain("The draft must be 2 to 4 sentences.");
+  });
+  it("rejects a draft without the required opening or ending", () => {
+    const bad = "Dear Jessica,\n\nIt was lovely to talk. I would be glad to help.\n\nCheers";
+    const p = smartDraftProblems(bad, { firstName: "Jessica", context: ctx });
+    expect(p.some((x) => /open with/.test(x))).toBe(true);
+    expect(p.some((x) => /closing/.test(x))).toBe(true);
+  });
+});

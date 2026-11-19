@@ -8,8 +8,9 @@ import { streamText } from "npm:ai@7";
 import { isAdminRequest } from "../_shared/require-admin.ts";
 import { formatEventDate, parseEventDate, todayPacific } from "../_shared/event-date.ts";
 import {
-  buildReplyBody, dateOpenCheck, detailIsGrounded, eventPhrase, freeMessage, isReplyType, locationPhrase,
-  pickAlertMessage, replyBodyProblems, replyFirstName, replySubject, replyTypeLabel,
+  assembleSmartDraft, buildReplyBody, dateOpenCheck, detailIsGrounded, eventPhrase, freeMessage, isReplyType, locationPhrase,
+  pickAlertMessage, proposalCheckinCheck, quietReengageCheck, replyFirstName, replySubject, replyTypeLabel, sendProblems,
+  SMART_DRAFT_ACTIVITY_TYPES, SMART_DRAFT_INSTRUCTIONS, smartDraftContext, smartDraftProblems, smartDraftPrompt,
   type AlertMessage, type ReplyFacts, type ReplyType,
 } from "../_shared/personal-reply.ts";
 
@@ -50,7 +51,7 @@ const hdr = (headers: Row[] | undefined, name: string) =>
 /** The inquiry behind a deal: the one that created it, else the newest by email. */
 async function loadDealAndInquiry(dealId: string) {
   const { data: deal, error } = await supabase.from("deals")
-    .select("id,contact_email,contact_name,event_type,event_date,location,stage,source_id,created_at")
+    .select("id,contact_email,contact_name,event_type,event_date,location,stage,source_id,created_at,last_inbound_at,notes")
     .eq("id", dealId).maybeSingle();
   if (error) throw error;
   if (!deal) return { deal: null, inquiry: null };
@@ -112,6 +113,78 @@ async function dateCheckFor(deal: Row, inquiry: Row | null) {
   return dateOpenCheck({ date: parsed, today: todayPacific(), bookedOnDate: booked, formatted: parsed ? formatEventDate(parsed) : "" });
 }
 
+/** Scott's last personal email to this client: a sent personal reply, or any outbound Gmail message that was not automated. */
+async function lastOutboundAt(deal: Row): Promise<string | null> {
+  const [{ data: pr, error: prErr }, { data: outbound, error: obErr }] = await Promise.all([
+    supabase.from("personal_replies").select("sent_at").eq("deal_id", deal.id).eq("status", "sent")
+      .not("sent_at", "is", null).order("sent_at", { ascending: false }).limit(1),
+    supabase.from("deal_email_messages").select("gmail_message_id,sent_at").eq("deal_id", deal.id)
+      .eq("direction", "outbound").order("sent_at", { ascending: false }).limit(50),
+  ]);
+  if (prErr) throw prErr;
+  if (obErr) throw obErr;
+  let latest: string | null = pr?.[0]?.sent_at || null;
+  const ids = (outbound || []).map((m: Row) => m.gmail_message_id).filter(Boolean);
+  let autoSet = new Set<string>();
+  if (ids.length) {
+    const { data: auto, error } = await supabase.from("automated_gmail_sends").select("gmail_message_id").in("gmail_message_id", ids);
+    if (error) throw error;
+    autoSet = new Set((auto || []).map((a: Row) => a.gmail_message_id));
+  }
+  const manual = (outbound || []).find((m: Row) => m.sent_at && !autoSet.has(m.gmail_message_id));
+  if (manual && (!latest || new Date(manual.sent_at) > new Date(latest))) latest = manual.sent_at;
+  return latest;
+}
+
+/** The client's last message: the deal's last inbound time, or the newest inbound Gmail message. */
+async function lastInboundAt(deal: Row): Promise<string | null> {
+  const { data, error } = await supabase.from("deal_email_messages").select("sent_at").eq("deal_id", deal.id)
+    .eq("direction", "inbound").order("sent_at", { ascending: false }).limit(1);
+  if (error) throw error;
+  const fromMsgs: string | null = data?.[0]?.sent_at || null;
+  const fromDeal: string | null = deal.last_inbound_at || null;
+  if (!fromMsgs) return fromDeal;
+  if (!fromDeal) return fromMsgs;
+  return new Date(fromMsgs) > new Date(fromDeal) ? fromMsgs : fromDeal;
+}
+
+/** The latest proposal actually sent for this deal, with its view count (venue pitch views excluded). */
+async function proposalCheckFor(deal: Row) {
+  const { data, error } = await supabase.from("proposals").select("id,sent_at,hold_until").eq("deal_id", deal.id)
+    .not("sent_at", "is", null).order("sent_at", { ascending: false }).limit(1);
+  if (error) throw error;
+  const proposal = data?.[0] || null;
+  let views = 0;
+  if (proposal) {
+    const { count, error: vErr } = await supabase.from("proposal_views").select("id", { count: "exact", head: true })
+      .eq("proposal_id", proposal.id).is("venue_pitch_id", null);
+    if (vErr) throw vErr;
+    views = count || 0;
+  }
+  return proposalCheckinCheck({ proposal, viewCount: views, today: todayPacific() });
+}
+
+/** Guard for the replies that only make sense in a certain situation. Runs before drafting and again before sending. */
+async function guardFor(type: ReplyType, deal: Row, inquiry: Row | null):
+  Promise<{ ok: true; date: string; holdUntil: string } | { ok: false; reason: string }> {
+  if (type === "date_open" || type === "date_still_open") {
+    const check = await dateCheckFor(deal, inquiry);
+    if (!check.ok) return { ok: false, reason: check.reason };
+    return { ok: true, date: check.text, holdUntil: "" };
+  }
+  if (type === "quiet_reengage") {
+    const [out, inb] = await Promise.all([lastOutboundAt(deal), lastInboundAt(deal)]);
+    const check = quietReengageCheck({ lastOutboundAt: out, lastInboundAt: inb, now: new Date() });
+    if (!check.ok) return check;
+  }
+  if (type === "proposal_checkin") {
+    const check = await proposalCheckFor(deal);
+    if (!check.ok) return check;
+    return { ok: true, date: "", holdUntil: check.holdUntil };
+  }
+  return { ok: true, date: "", holdUntil: "" };
+}
+
 /** Resends the gateway-issued run id on follow-up calls in the same request. */
 function createLovableAiGatewayRunIdFetch(initialRunId?: string) {
   let runId = initialRunId?.trim() || undefined;
@@ -168,6 +241,88 @@ async function extractDetail(message: string, event: string, location: string, r
     return "";
   }
 }
+
+type SmartResult = { ok: true; body: string } | { ok: false; status: number; error: string };
+
+/** Smart AI draft: the AI writes 2 to 4 sentences from the client record only; anything unsafe is refused, never patched. */
+async function writeSmartDraft(deal: Row, inquiry: Row | null, firstName: string, signal: AbortSignal): Promise<SmartResult> {
+  if (!LOVABLE_API_KEY) return { ok: false, status: 503, error: "Smart AI draft is not set up on the server, so no draft was written. Use one of the other replies." };
+  const [{ data: acts, error: aErr }, proposal] = await Promise.all([
+    supabase.from("deal_activity").select("type,title,body,occurred_at").eq("deal_id", deal.id)
+      .in("type", SMART_DRAFT_ACTIVITY_TYPES).order("occurred_at", { ascending: false }).limit(8),
+    proposalCheckFor(deal),
+  ]);
+  if (aErr) throw aErr;
+  const context = smartDraftContext({
+    firstName,
+    stage: deal.stage,
+    notes: deal.notes,
+    activities: (acts || []) as SmartDraftActivity[],
+    proposal: proposal.ok ? { sentOn: proposal.sentOn, holdUntil: proposal.holdUntil, viewCount: proposal.viewCount } : null,
+    inquiry: inquiry ? { name: inquiry.name, eventType: inquiry.event_type, location: inquiry.location, message: inquiry.message } : null,
+  });
+
+  let failStatus = 0;
+  let failMessage = "";
+  let streamError: unknown = null;
+  const runIdFetch = createLovableAiGatewayRunIdFetch();
+  const provider = createOpenAI({
+    baseURL: "https://ai.gateway.lovable.dev/v1",
+    apiKey: LOVABLE_API_KEY,
+    headers: { "Lovable-API-Key": LOVABLE_API_KEY, "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
+    fetch: async (input: RequestInfo | URL, init?: RequestInit) => {
+      const r = await runIdFetch.fetch(input, init);
+      if (!r.ok) {
+        failStatus = r.status;
+        try {
+          const j = await r.clone().json();
+          failMessage = String(j?.error?.message || j?.message || "").slice(0, 300);
+        } catch { /* not JSON */ }
+      }
+      return r;
+    },
+  });
+  let text = "";
+  try {
+    const result = streamText({
+      model: provider.responses("openai/gpt-6-astra"),
+      instructions: SMART_DRAFT_INSTRUCTIONS,
+      messages: [{ role: "user", content: smartDraftPrompt(context) }],
+      abortSignal: signal,
+      onError: ({ error }) => { streamError = error; },
+      providerOptions: {
+        openai: {
+          forceReasoning: true,
+          reasoningEffort: "low",
+          reasoningSummary: "auto",
+          store: false,
+          include: ["reasoning.encrypted_content"],
+        },
+      },
+    });
+    text = (await result.text).trim();
+  } catch (e) {
+    streamError = streamError || e;
+  }
+  if (!text) {
+    if (streamError) console.error("[personal-reply] smart draft failed", failStatus, streamError instanceof Error ? streamError.message : streamError);
+    if (failStatus === 402) return { ok: false, status: 402, error: failMessage || "Your AI credits have run out, so the Smart AI draft could not be written. Use one of the other replies." };
+    if (failStatus === 429) return { ok: false, status: 429, error: "The AI is busy right now. Wait a minute, then press Smart AI draft again." };
+    if (failStatus === 403) return { ok: false, status: 403, error: failMessage || "The AI service refused this request, so no draft was written." };
+    if (failStatus === 401) return { ok: false, status: 503, error: "Smart AI draft is not set up correctly on the server, so no draft was written." };
+    if (streamError || failStatus) return { ok: false, status: 502, error: "The AI could not be reached, so no draft was written. Try again in a minute or use one of the other replies." };
+    return { ok: false, status: 502, error: "The AI returned an empty draft, so nothing was written. Try again or use one of the other replies." };
+  }
+  const body = assembleSmartDraft(text, firstName);
+  const problems = smartDraftProblems(body, { firstName, context });
+  if (problems.length) {
+    console.warn("[personal-reply] smart draft rejected", problems);
+    return { ok: false, status: 422, error: `The AI draft did not pass the safety checks (${problems[0]}), so it was not shown. Press Smart AI draft again or use one of the other replies.` };
+  }
+  return { ok: true, body };
+}
+
+type SmartDraftActivity = { type: string; title: string | null; body: string | null; occurred_at: string };
 
 async function signatureHtml(): Promise<string> {
   const r = await fetch(`${SUPABASE_URL}/functions/v1/gmail-send`, {
@@ -241,18 +396,24 @@ serve(async (req) => {
     if (!to.includes("@")) return json({ error: "This deal has no client email" }, 400);
 
     if (action === "draft") {
-      let date = "";
-      if (type === "date_open") {
-        const check = await dateCheckFor(deal, inquiry);
-        if (!check.ok) return json({ error: check.reason }, 409);
-        date = check.text;
-      }
+      const guard = await guardFor(type, deal, inquiry);
+      if (!guard.ok) return json({ error: guard.reason }, 409);
       const event = eventPhrase(inquiry?.event_type || deal.event_type);
       const location = locationPhrase(inquiry?.location || deal.location);
-      const detail = type === "voicemail" || type === "schedule_call"
+      const detail = ["voicemail", "schedule_call", "quiet_reengage", "proposal_checkin"].includes(type)
         ? await extractDetail(freeMessage(inquiry?.message), event, location, String(inquiry?.event_type || ""))
         : "";
-      const facts: ReplyFacts = { firstName: replyFirstName(inquiry?.name || deal.contact_name), event, location, detail, date };
+      const facts: ReplyFacts = {
+        firstName: replyFirstName(inquiry?.name || deal.contact_name), event, location, detail, date: guard.date, holdUntil: guard.holdUntil,
+      };
+      let draftBody = "";
+      if (type === "smart_draft") {
+        const smart = await writeSmartDraft(deal, inquiry, facts.firstName, req.signal);
+        if (!smart.ok) return json({ error: smart.error }, smart.status);
+        draftBody = smart.body;
+      } else {
+        draftBody = buildReplyBody(type, facts);
+      }
       const [thread, signature] = await Promise.all([
         findBookingThread(inquiry, to).catch(() => ({ ok: false as const, reason: "Gmail could not be reached. Try again in a minute." })),
         signatureHtml().catch(() => ""),
@@ -260,7 +421,7 @@ serve(async (req) => {
       return json({
         to,
         reply_type: type,
-        body: buildReplyBody(type, facts),
+        body: draftBody,
         facts,
         thread: thread.ok ? { found: true, subject: thread.subject } : { found: false, reason: thread.reason },
         signature_html: signature,
@@ -269,14 +430,12 @@ serve(async (req) => {
 
     if (action === "send") {
       const text = typeof body.body === "string" ? body.body.replace(/\r\n/g, "\n").slice(0, 8000) : "";
-      const problems = replyBodyProblems(text);
+      const problems = sendProblems(type, text);
       if (problems.length) return json({ error: problems[0] }, 400);
       const requestId = typeof body.request_id === "string" ? body.request_id : "";
       if (!UUID.test(requestId)) return json({ error: "request_id is required" }, 400);
-      if (type === "date_open") {
-        const check = await dateCheckFor(deal, inquiry);
-        if (!check.ok) return json({ error: check.reason }, 409);
-      }
+      const guard = await guardFor(type, deal, inquiry);
+      if (!guard.ok) return json({ error: guard.reason }, 409);
       const thread = await findBookingThread(inquiry, to);
       if (!thread.ok) return json({ error: thread.reason }, 404);
 

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import { Loader2, Send, X } from "lucide-react";
-import { REPLY_TYPES, replyBodyProblems, type ReplyType } from "@/lib/personalReply";
+import { FOLLOWUP_GROUP_LABEL, REPLY_TYPES, sendProblems, type ReplyType } from "@/lib/personalReply";
 import { getAdminPassword } from "@/lib/adminAuth";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
@@ -47,7 +47,7 @@ export default function PersonalReplyHelper({ dealId, onClose, onSent }: { dealI
   const frame = useRef<HTMLIFrameElement>(null);
   const [frameH, setFrameH] = useState(320);
 
-  const problems = useMemo(() => (draft ? replyBodyProblems(body) : []), [draft, body]);
+  const problems = useMemo(() => (draft ? sendProblems(draft.reply_type, body) : []), [draft, body]);
   const doc = useMemo(() => (draft ? previewDoc(body, draft.signature_html) : ""), [draft, body]);
 
   useEffect(() => { setConfirming(false); }, [body]);
@@ -105,22 +105,34 @@ export default function PersonalReplyHelper({ dealId, onClose, onSent }: { dealI
         </button>
       </div>
 
-      <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-2">
-        {REPLY_TYPES.map((r) => (
-          <button
-            key={r.key}
-            onClick={() => choose(r.key)}
-            disabled={loading || sending}
-            aria-pressed={type === r.key}
-            className={`border px-3 min-h-[48px] text-left font-sans text-sm transition-colors disabled:opacity-60 ${type === r.key ? "border-accent text-accent bg-accent/5" : "border-border text-foreground hover:border-accent"}`}
-          >
-            {r.label}
-          </button>
-        ))}
-      </div>
-
-      {loading && <p className="text-sm text-muted-foreground flex items-center gap-2"><Loader2 size={14} className="animate-spin" /> Writing the draft...</p>}
-      {error && <p className="text-sm text-destructive" role="alert">{error}</p>}
+      {(["reply", "followup"] as const).map((group) => {
+        const items = REPLY_TYPES.filter((r) => r.group === group);
+        const chosenHere = !!type && items.some((r) => r.key === type);
+        return (
+          <div key={group} className="space-y-2" role="group" aria-label={group === "followup" ? FOLLOWUP_GROUP_LABEL : "First replies"}>
+            {group === "followup" && <p className={`${label} text-muted-foreground pt-1`}>{FOLLOWUP_GROUP_LABEL}</p>}
+            <div className="grid grid-cols-1 min-[420px]:grid-cols-2 gap-2">
+              {items.map((r) => (
+                <button
+                  key={r.key}
+                  onClick={() => choose(r.key)}
+                  disabled={loading || sending}
+                  aria-pressed={type === r.key}
+                  className={`border px-3 min-h-[48px] text-left font-sans text-sm transition-colors disabled:opacity-60 ${type === r.key ? "border-accent text-accent bg-accent/5" : "border-border text-foreground hover:border-accent"}`}
+                >
+                  {r.label}
+                </button>
+              ))}
+            </div>
+            {chosenHere && loading && <p className="text-sm text-muted-foreground flex items-center gap-2"><Loader2 size={14} className="animate-spin" /> Writing the draft...</p>}
+            {chosenHere && error && (
+              <p className="text-sm text-destructive border border-destructive/40 px-3 py-2" role="alert">
+                <span className="font-medium">{REPLY_TYPES.find((r) => r.key === type)?.label}:</span> {error}
+              </p>
+            )}
+          </div>
+        );
+      })}
 
       {draft && (
         <div className="space-y-3">
