@@ -22,6 +22,7 @@
   - [ ] No unique constraint yet
 
 ## Done
+- Homepage hero copy and readability pass (Nov 19): gold "By reservation only" eyebrow, subline without the reservation phrase, radial dark overlay (65% behind the words to 35% at the edges) plus a vignette behind the stack and a bottom fade, soft text shadow on headline, subline and proof line. Measured WCAG AA on the brightest video frames at desktop and phone sizes. Not published.
 - Homepage hero refined (Nov 19): centered stack, two line gold headline, hairline, vignette.
 - Homepage hero (Nov 19): "Magic. Of course." headline, Check your date button, proof line, reduced motion posters, clear of the cookie banner. Waiting on Scott: OK to publish.
 - Find the Queen switched off (Nov 19) with one switch; code, tables and functions kept for later.

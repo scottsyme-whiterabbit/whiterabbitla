@@ -201,12 +201,19 @@ const Index = () => {
               );
             })}
           </div>
-          {/* Mobile overlay: an even light wash so the videos stay visible; the vignette behind the text does the heavy lifting */}
-          <div className="absolute inset-0 bg-forest-dark/35 pointer-events-none md:hidden" />
-          {/* Diagonal emerald overlay for headline contrast: deep at bottom-left, light at top-right */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-[#1B3A2DA6] via-[#1B3A2D4D] to-[#1B3A2D33] pointer-events-none hidden md:block" />
-          {/* Bottom reinforcement for CTA and quote bar */}
-          <div className="absolute bottom-0 left-0 right-0 h-[35%] bg-gradient-to-t from-[#1B3A2D80] via-[#1B3A2D1A] to-transparent pointer-events-none hidden md:block" />
+          {/* Readability overlay: about 65% black behind the words, fading to about 35% at the edges.
+              The ellipse is centred on the text block (50% / 28%) so the whole stack sits in the dark zone. */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-[radial-gradient(95%_75%_at_50%_28%,rgba(0,0,0,0.65)_0%,rgba(0,0,0,0.60)_55%,rgba(0,0,0,0.35)_100%)] pointer-events-none"
+          />
+          {/* Soft vignette directly behind the headline stack: lifts the words to WCAG AA on bright frames */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 bg-[radial-gradient(60%_50%_at_50%_28%,rgba(0,0,0,0.60)_0%,rgba(0,0,0,0.40)_62%,rgba(0,0,0,0)_100%)] pointer-events-none"
+          />
+          {/* Soft fade along the bottom edge into the next section */}
+          <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
           {/* Ambient warm glow behind hero text */}
           <div className="absolute bottom-0 left-[10vw] w-[500px] h-[300px] bg-[radial-gradient(ellipse_at_center,_hsl(var(--accent)/0.08)_0%,_transparent_70%)] pointer-events-none hidden md:block" />
         </div>
@@ -222,29 +229,25 @@ const Index = () => {
         {/* Centered text stack over the three videos. Its box ends above the space the cookie
             banner takes (about 300px on phones, 264px on desktop) so the button and proof line stay clear. */}
         <div className="absolute inset-x-0 top-20 bottom-[18.75rem] md:top-[120px] md:bottom-[16.5rem] z-10 flex flex-col items-center [justify-content:safe_center] px-6 text-center">
-          {/* Soft dark vignette: darkest behind the words, fading out toward the edges */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-x-0 -inset-y-10 -z-10 bg-[radial-gradient(ellipse_closest-side_at_center,hsl(var(--forest-dark)/0.78)_0%,hsl(var(--forest-dark)/0.5)_45%,hsl(var(--forest-dark)/0)_100%)]"
-          />
-          <motion.span
+          <motion.p
             {...enter(0.2)}
-            aria-hidden="true"
-            className="block h-px w-12 bg-accent mb-5 max-md:[@media(max-height:700px)]:mb-2.5 md:mb-6"
-          />
+            className="font-sans text-[10px] md:text-[11px] uppercase tracking-[0.42em] text-accent mb-4 max-md:[@media(max-height:700px)]:mb-2.5 md:mb-5 [text-shadow:0_2px_20px_rgba(0,0,0,0.6)]"
+          >
+            By reservation only
+          </motion.p>
           <motion.h1
             {...enter(0.35)}
-            className="relative font-serif font-medium text-6xl max-md:[@media(max-height:700px)]:text-[2.5rem] md:text-[clamp(4.5rem,10.5vh,6rem)] lg:text-[clamp(5rem,11vh,8rem)] leading-[0.92] tracking-tight drop-shadow-lg"
-            style={{ textShadow: "0 0 60px hsl(var(--accent) / 0.3), 0 0 120px hsl(var(--accent) / 0.12)" }}
+            className="relative font-serif font-medium text-6xl max-md:[@media(max-height:700px)]:text-[2.5rem] md:text-[clamp(4.5rem,10.5vh,6rem)] lg:text-[clamp(5rem,11vh,8rem)] leading-[0.92] tracking-tight"
+            style={{ textShadow: "0 2px 20px rgba(0,0,0,0.6), 0 0 60px hsl(var(--accent) / 0.25)" }}
           >
             <span className="block text-cream">Magic.</span>{" "}
             <span className="block text-accent">Of course.</span>
           </motion.h1>
           <motion.p
             {...enter(0.6)}
-            className="relative mx-auto mt-5 max-md:[@media(max-height:700px)]:mt-3 md:mt-6 max-w-xl font-sans text-[15px] max-md:[@media(max-height:700px)]:text-[13px] max-md:[@media(max-height:700px)]:leading-snug md:text-lg leading-relaxed tracking-[0.04em] md:tracking-[0.06em] text-cream/85 drop-shadow-md"
+            className="relative mx-auto mt-5 max-md:[@media(max-height:700px)]:mt-3 md:mt-6 max-w-xl font-sans text-[15px] max-md:[@media(max-height:700px)]:text-[13px] max-md:[@media(max-height:700px)]:leading-snug md:text-lg leading-relaxed tracking-[0.04em] md:tracking-[0.06em] text-cream/85 [text-shadow:0_2px_20px_rgba(0,0,0,0.6)]"
           >
-            By reservation only, for the finest weddings, private parties and corporate events in Los Angeles and beyond.
+            For the finest weddings, private parties and corporate events in Los Angeles and beyond.
           </motion.p>
           <motion.div {...enter(0.85)} className="relative mt-6 max-md:[@media(max-height:700px)]:mt-4 md:mt-8">
             <button
@@ -257,7 +260,7 @@ const Index = () => {
           </motion.div>
           <motion.p
             {...enter(1)}
-            className="relative mt-4 max-md:[@media(max-height:700px)]:mt-3 md:mt-5 font-sans text-[11px] md:text-xs tracking-[0.06em] leading-relaxed text-cream/70 drop-shadow-md"
+            className="relative mt-4 max-md:[@media(max-height:700px)]:mt-3 md:mt-5 font-sans text-[11px] md:text-xs tracking-[0.06em] leading-relaxed text-cream/70 [text-shadow:0_2px_20px_rgba(0,0,0,0.6)]"
           >
             <span className="block md:inline">
               <a href="https://g.co/kgs/MbQh3xN" target="_blank" rel="noopener noreferrer" className="underline-offset-4 hover:text-cream hover:underline transition-colors">5.0 on Google</a>
