@@ -8,6 +8,7 @@ import { claimQueenCredit, occasionLabel, timingLabel, validateClaim, welcomeThe
 import { notifyLadyTelegram, type AlertStore } from "../_shared/telegram-inquiry.ts";
 import { gatedResendFetch } from "../_shared/send-gate.ts";
 import { safeErrorPayload } from "../_shared/safe-error.ts";
+import { findTheQueenClosed } from "../_shared/feature-flags.ts";
 
 const PROJECT_REF = "pgjyzayvkyrftcksvncj";
 
@@ -22,6 +23,10 @@ const json = (body: unknown, status = 200) =>
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
+  // Feature switch: while Find the Queen is off, refuse before reading the request,
+  // so no code, deal, welcome email or Telegram alert can be created.
+  const closed = findTheQueenClosed();
+  if (closed) return json(closed.body, closed.status);
   const requestId = crypto.randomUUID();
 
   try {

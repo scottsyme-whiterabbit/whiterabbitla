@@ -18,6 +18,7 @@ import BookingQuiz from "@/components/BookingQuiz";
 import CookieConsent from "@/components/CookieConsent";
 import FindTheQueenPopup from "@/components/findTheLady/FindTheQueenPopup";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
+import { FIND_THE_QUEEN_ENABLED } from "@/lib/featureFlags";
 
 import Index from "./pages/Index";
 const Experience = lazy(() => import("./pages/Experience"));
@@ -64,7 +65,7 @@ const AppContent = () => {
       <ScrollToTop />
       <Navbar />
       <BookingQuiz />
-      <FindTheQueenPopup />
+      {FIND_THE_QUEEN_ENABLED && <FindTheQueenPopup />}
       <StickyMobileCTA />
       <Suspense fallback={<PageFallback />}>
       <Routes>
@@ -91,7 +92,7 @@ const AppContent = () => {
         <Route path="/review" element={<ReviewGate />} />
         <Route path="/refer" element={<Refer />} />
         <Route path="/find-the-lady" element={<RemovedRouteRedirect to="/" />} />
-        <Route path="/official-rules" element={<OfficialRules />} />
+        <Route path="/official-rules" element={FIND_THE_QUEEN_ENABLED ? <OfficialRules /> : <NotFound />} />
         <Route path="/planners" element={<Planners />} />
         <Route path="/areas" element={<ServiceAreas />} />
         <Route path="/areas/:citySlug" element={<ServiceAreaDetail />} />
