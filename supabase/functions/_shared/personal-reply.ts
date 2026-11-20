@@ -212,7 +212,7 @@ export function buildReplyBody(type: ReplyType, f: ReplyFacts): string {
       return [
         greet("Hello", first),
         "",
-        `${clean(f.date)} is still open and available for me. I would love to talk with you about the details of your upcoming event. Let me know some good times that work for you.`,
+        `${clean(f.date)} is still open and available for me. I would love to talk with you about the details of your ${occasion || "upcoming event"}. Let me know some good times that work for you.`,
         "",
         CLOSING_LINE,
         "",
@@ -350,6 +350,8 @@ export interface SmartDraftInput {
   activities: { type: string; title: string | null; body: string | null; occurred_at: string }[];
   proposal: { sentOn: string; holdUntil: string; viewCount: number } | null;
   inquiry: { name: string | null; eventType: string | null; location: string | null; message: string | null } | null;
+  company?: string | null;
+  eventDate?: string | null;
 }
 
 export const SMART_DRAFT_ACTIVITY_TYPES = ["call", "note", "personal_reply", "email_out"];
@@ -359,6 +361,8 @@ export function smartDraftContext(i: SmartDraftInput): string {
   const lines: string[] = [];
   lines.push(`Client first name: ${clean(i.firstName) || "unknown"}`);
   if (clean(i.stage)) lines.push(`Deal stage: ${clean(i.stage)}`);
+  if (clean(i.company)) lines.push(`Company or organization: ${clean(i.company)}`);
+  if (clean(i.eventDate)) lines.push(`Event date from their record: ${clean(i.eventDate)}`);
   if (i.inquiry) {
     const ev = eventPhrase(i.inquiry.eventType);
     const loc = locationPhrase(i.inquiry.location);
@@ -393,10 +397,12 @@ export const SMART_DRAFT_INSTRUCTIONS = [
   "Never mention prices, budgets, how they found him or guest counts. Never include links.",
   "Never use em dashes, en dashes or hyphens as punctuation. Never use the phrases \"just checking in\", \"thanks for reaching out\" or \"thank you so much for reaching out\". Never write a \"not this, but that\" sentence.",
   "Never say Scott performs while guests are eating. Do not scold the client for not replying or not opening anything.",
+  "Whenever their inquiry includes specific details (such as an event type, venue, milestone, company, or location), naturally reference one or two of those concrete details so the reply clearly picks up from what they originally wrote.",
+  "Never claim a date is open or available.",
 ].join(" ");
 
 export function smartDraftPrompt(context: string): string {
-  return `Context about this client:\n${context}\n\nWrite the 2 to 4 middle sentences of Scott's reply now, picking up naturally from where things stand.`;
+  return `Context about this client:\n${context}\n\nWrite the 2 to 4 middle sentences of Scott's reply now, anchoring on the specific details they shared in their original inquiry and picking up naturally from where things stand.`;
 }
 
 /** Puts Scott's fixed opening and ending around the AI's middle sentences. */
@@ -408,6 +414,9 @@ export function assembleSmartDraft(aiText: string, firstName: string): string {
   mid = mid.replace(/[ \t]+/g, " ").replace(/\n{2,}/g, "\n\n").trim();
   return `${greet("Hi", clean(firstName))}\n\n${mid}\n\n${SMART_DRAFT_ENDING}`;
 }
+
+/** Smart drafts never check the calendar, so any "your date is open" style claim is refused. */
+const AVAILABILITY_CLAIM = /\b(?:is|are|remains?|looks?|still)\s+(?:still\s+)?(?:wide\s+)?(?:open|available|free)\b|\bavailab(?:le|ility)\s+(?:on|for)\s+(?:that|your|the)\s+(?:date|day|night|evening|weekend)\b|\b(?:have|has)\s+(?:that|your|the)\s+(?:date|day|night|evening)\s+(?:open|free)\b/i;
 
 const MONTHS_DAYS = /\b(january|february|march|april|may|june|july|august|september|october|november|december|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/gi;
 
@@ -425,6 +434,7 @@ export function smartDraftProblems(body: string, o: { firstName: string; context
   const ctx = norm(o.context || "");
   for (const n of mid.match(/\d+/g) || []) if (!ctx.includes(n)) { out.push("The draft mentions a number that is not in the client record."); break; }
   for (const w of mid.match(MONTHS_DAYS) || []) if (!ctx.includes(w.toLowerCase())) { out.push("The draft mentions a date that is not in the client record."); break; }
+  if (AVAILABILITY_CLAIM.test(mid)) out.push("The draft says a date is open or available, which the Smart AI draft never checks.");
   // Capitalised words in the middle of a sentence are names; each must come from the record.
   const allowed = new Set(["i", "scott", norm(first)]);
   for (const sentence of sentences) {

@@ -159,7 +159,7 @@ describe("signature", () => {
 // ---------- Five follow-up replies ----------
 import {
   REPLY_TYPES, isFollowUpType, copyRuleProblems, sendProblems, quietReengageCheck, proposalCheckinCheck, formatIsoDay,
-  redactForAi, smartDraftContext, assembleSmartDraft, smartDraftProblems, SMART_DRAFT_ENDING,
+  redactForAi, smartDraftContext, assembleSmartDraft, smartDraftProblems, SMART_DRAFT_ENDING, SMART_DRAFT_INSTRUCTIONS, smartDraftPrompt,
 } from "../../supabase/functions/_shared/personal-reply";
 
 const NEW_TYPES = ["quiet_reengage", "proposal_checkin", "date_still_open", "castle_invite", "smart_draft"] as const;
@@ -200,9 +200,19 @@ describe("follow-up templates", () => {
     expect(() => buildReplyBody("date_still_open", facts())).toThrow();
     const b = buildReplyBody("date_still_open", facts({ date: "Saturday, December 5" }));
     expect(b).toBe(
-      "Hello Jessica,\n\nSaturday, December 5 is still open and available for me. I would love to talk with you about the details of your upcoming event. Let me know some good times that work for you.\n\nPlease let me know if there is anything I can do for you.\n\nTalk soon,\n-Scott",
+      "Hello Jessica,\n\nSaturday, December 5 is still open and available for me. I would love to talk with you about the details of your wedding in Hollywood. Let me know some good times that work for you.\n\nPlease let me know if there is anything I can do for you.\n\nTalk soon,\n-Scott",
     );
     expect(b).not.toMatch(/voice|message/i);
+  });
+  it("date still open uses the client's own detail when one was found", () => {
+    const b = buildReplyBody("date_still_open", facts({ date: "Saturday, December 5", detail: "50th birthday at the Jonathan Club" }));
+    expect(b).toContain("I would love to talk with you about the details of your 50th birthday at the Jonathan Club. Let me know");
+  });
+  it("date still open falls back to 'upcoming event' when nothing is known", () => {
+    const b = buildReplyBody("date_still_open", facts({ date: "Saturday, December 5", event: "", location: "" }));
+    expect(b).toContain("I would love to talk with you about the details of your upcoming event. Let me know");
+    expect(b.endsWith("Please let me know if there is anything I can do for you.\n\nTalk soon,\n-Scott")).toBe(true);
+    expect(sendProblems("date_still_open", b)).toEqual([]);
   });
   it("castle invite offers up to 5 guests and invents nothing else", () => {
     const b = buildReplyBody("castle_invite", facts());
@@ -339,6 +349,41 @@ describe("Smart AI draft", () => {
   it("rejects a draft that is too short or too long", () => {
     expect(smartDraftProblems(draft("I would be glad to help."), { firstName: "Jessica", context: ctx })).toContain("The draft must be 2 to 4 sentences.");
     expect(smartDraftProblems(draft("One. Two. Three. Four. Five."), { firstName: "Jessica", context: ctx })).toContain("The draft must be 2 to 4 sentences.");
+  });
+  it("context includes the company and event date only when present", () => {
+    const withBoth = smartDraftContext({ ...input, company: "Acme Studios", eventDate: "Saturday, December 5" });
+    expect(withBoth).toContain("Company or organization: Acme Studios");
+    expect(withBoth).toContain("Event date from their record: Saturday, December 5");
+    expect(ctx).not.toMatch(/Company or organization|Event date from their record/);
+    const blank = smartDraftContext({ ...input, company: "  ", eventDate: null });
+    expect(blank).not.toMatch(/Company or organization|Event date from their record/);
+  });
+  it("allows the company and event date from the record, and blocks ones that are not there", () => {
+    const rich = smartDraftContext({ ...input, company: "Acme Studios", eventDate: "Saturday, December 5" });
+    const ok = draft("It would be a joy to be part of the Acme Studios evening on Saturday, December 5. I would be glad to help with any details.");
+    expect(smartDraftProblems(ok, { firstName: "Jessica", context: rich })).toEqual([]);
+    expect(smartDraftProblems(ok, { firstName: "Jessica", context: ctx }).length).toBeGreaterThan(0);
+    const otherCo = draft("It would be a joy to be part of the Globex evening. I would be glad to help with any details.");
+    expect(smartDraftProblems(otherCo, { firstName: "Jessica", context: rich })[0]).toMatch(/Globex/);
+    const otherDay = draft("It would be a joy to be part of your evening on Friday, January 9. I would be glad to help.");
+    expect(smartDraftProblems(otherDay, { firstName: "Jessica", context: rich }).length).toBeGreaterThan(0);
+  });
+  it("never lets the AI claim a date is open or available", () => {
+    const rich = smartDraftContext({ ...input, company: "Acme Studios", eventDate: "Saturday, December 5" });
+    for (const mid of [
+      "Good news, Saturday, December 5 is open. I would be glad to help.",
+      "Your date is still available. I would be glad to help.",
+      "I have that date free for you. I would be glad to help.",
+      "I am available on that night. I would be glad to help.",
+    ]) {
+      expect(smartDraftProblems(draft(mid), { firstName: "Jessica", context: rich }).some((p) => /open or available/.test(p))).toBe(true);
+    }
+  });
+  it("tells the AI to anchor on their inquiry and never claim availability", () => {
+    expect(SMART_DRAFT_INSTRUCTIONS).toContain("naturally reference one or two of those concrete details");
+    expect(SMART_DRAFT_INSTRUCTIONS).toContain("Never claim a date is open or available.");
+    expect(SMART_DRAFT_INSTRUCTIONS).toContain("Never mention prices, budgets, how they found him or guest counts.");
+    expect(smartDraftPrompt("X")).toContain("anchoring on the specific details they shared in their original inquiry");
   });
   it("rejects a draft without the required opening or ending", () => {
     const bad = "Dear Jessica,\n\nIt was lovely to talk. I would be glad to help.\n\nCheers";

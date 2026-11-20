@@ -51,7 +51,7 @@ const hdr = (headers: Row[] | undefined, name: string) =>
 /** The inquiry behind a deal: the one that created it, else the newest by email. */
 async function loadDealAndInquiry(dealId: string) {
   const { data: deal, error } = await supabase.from("deals")
-    .select("id,contact_email,contact_name,event_type,event_date,location,stage,source_id,created_at,last_inbound_at,notes")
+    .select("id,contact_email,contact_name,company,event_type,event_date,location,stage,source_id,created_at,last_inbound_at,notes")
     .eq("id", dealId).maybeSingle();
   if (error) throw error;
   if (!deal) return { deal: null, inquiry: null };
@@ -253,6 +253,9 @@ async function writeSmartDraft(deal: Row, inquiry: Row | null, firstName: string
     proposalCheckFor(deal),
   ]);
   if (aErr) throw aErr;
+  // Date is shown for context only; availability is never checked or claimed here.
+  const parsedDate = parseEventDate(deal.event_date) || parseEventDate(inquiry?.date);
+  const eventDate = parsedDate ? formatEventDate(parsedDate) : "";
   const context = smartDraftContext({
     firstName,
     stage: deal.stage,
@@ -260,6 +263,8 @@ async function writeSmartDraft(deal: Row, inquiry: Row | null, firstName: string
     activities: (acts || []) as SmartDraftActivity[],
     proposal: proposal.ok ? { sentOn: proposal.sentOn, holdUntil: proposal.holdUntil, viewCount: proposal.viewCount } : null,
     inquiry: inquiry ? { name: inquiry.name, eventType: inquiry.event_type, location: inquiry.location, message: inquiry.message } : null,
+    company: deal.company,
+    eventDate,
   });
 
   let failStatus = 0;
@@ -400,7 +405,7 @@ serve(async (req) => {
       if (!guard.ok) return json({ error: guard.reason }, 409);
       const event = eventPhrase(inquiry?.event_type || deal.event_type);
       const location = locationPhrase(inquiry?.location || deal.location);
-      const detail = ["voicemail", "schedule_call", "quiet_reengage", "proposal_checkin"].includes(type)
+      const detail = ["voicemail", "schedule_call", "quiet_reengage", "proposal_checkin", "date_still_open"].includes(type)
         ? await extractDetail(freeMessage(inquiry?.message), event, location, String(inquiry?.event_type || ""))
         : "";
       const facts: ReplyFacts = {

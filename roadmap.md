@@ -23,6 +23,7 @@
 
 ## Done
 - Personal reply follow-ups (Nov 19): five more one-click replies in the client panel (Re-engage quiet lead, Proposal check-in, Date still open nudge, Stay in touch / Magic Castle invite, Smart AI draft) with their situation checks, still Booking Inquiry thread only. Drafts tried on real clients; nothing sent. Not published.
+- Personal reply upgrade (Nov 20): Date still open nudge names their occasion; Smart AI draft sees company and event date, leans on their inquiry details, and is refused if it says a date is open. Tests pass. Server copy not yet updated; not published.
 - PostHog on the public site (Nov 19): loads only after Accept, never on internal pages, seven custom events, page addresses cleaned. Waiting on Scott: turn on session replay in PostHog settings, OK to publish.
 - Homepage hero copy and readability pass (Nov 19): gold "By reservation only" eyebrow, subline without the reservation phrase, radial dark overlay (65% behind the words to 35% at the edges) plus a vignette behind the stack and a bottom fade, soft text shadow on headline, subline and proof line. Measured WCAG AA on the brightest video frames at desktop and phone sizes. Not published.
 - Homepage hero refined (Nov 19): centered stack, two line gold headline, hairline, vignette.
