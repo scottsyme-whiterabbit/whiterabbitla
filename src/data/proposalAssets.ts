@@ -261,7 +261,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
   "Corporate Event": {
     letter_intro: "Thank you for the time today. I enjoyed hearing about what you're building.",
     intro_paragraph:
-      "Your guests have been to a hundred corporate dinners. What they haven't been to is the one they're still telling stories about on Monday. That's the night we build together, quiet wonder during cocktails, then a parlor moment after dinner that resets the whole room.",
+      "When the lights dim and there is a feeling of anticipation in the air, that is when the magic happens. Your guests will be delighted by magic that happens so close to them that they will remember the excitement long after your event is over. My goal is to represent you well to your guests and to be a warm host who keeps them enchanted throughout the evening.",
     hero_image: "corporate",
     gallery_photos: ["scott-performing", "closeup-cocktail", "crowd-reaction", "gallery-setup", "parlor-audience", "group-photo", "cards-emerald", "gallery-6"],
     timeline: [
@@ -283,7 +283,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
   "Private Event": {
     letter_intro: "Thank you for reaching out. I enjoyed our conversation.",
     intro_paragraph:
-      "A private evening should feel like a secret kept beautifully. What we're building together isn't an act inserted into your night, it's a thread that runs through it, drawing your guests closer to one another and to the room.",
+      "When the lights dim and there is a feeling of anticipation in the air, that is when the magic happens. Your guests will be delighted by magic that happens so close to them that they will remember the excitement long after your event is over. My goal is to represent you well to your guests and to be a warm host who keeps them enchanted throughout the evening.",
     hero_image: "private",
     gallery_photos: ["penthouse", "scott-couch", "closeup-cocktail", "guest-reaction", "parlor-stage", "cu-magic", "cards-fan", "gallery-7"],
     timeline: [
@@ -301,7 +301,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
   Fundraiser: {
     letter_intro: "Thank you for the time, and for the work you're doing.",
     intro_paragraph:
-      "Galas live and die by energy. Magic resets the room, breaks the ice between strangers, and gives your donors a moment they'll attach to your cause for years. The goal isn't a show, it's atmosphere that opens wallets.",
+      "When the lights dim and there is a feeling of anticipation in the air, that is when the magic happens. Your guests will be delighted by magic that happens so close to them that they will remember the excitement long after your event is over. My goal is to represent you well to your guests and to be a warm host who keeps them enchanted throughout the evening.",
     hero_image: "corporate",
     gallery_photos: ["crowd-reaction", "parlor-audience", "scott-performing", "group-photo", "gallery-setup", "cu-magic", "gallery-6", "curtain-greeting"],
     timeline: [
@@ -322,7 +322,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
   Birthday: {
     letter_intro: "Thank you for thinking of us for this, sounds like a special one.",
     intro_paragraph:
-      "Birthdays are the easiest night to phone in and the hardest to get right. The version your guest of honor will remember isn't bigger, it's more personal. Quiet wonder, woven into the room, with a moment built just for them.",
+      "When the lights dim and there is a feeling of anticipation in the air, that is when the magic happens. Your guests will be delighted by magic that happens so close to them that they will remember the excitement long after your event is over. My goal is to represent you well to your guests and to be a warm host who keeps them enchanted throughout the evening.",
     hero_image: "private",
     gallery_photos: ["guest-reaction", "scott-couch", "cu-magic", "closeup-cocktail", "parlor-stage", "crowd-reaction", "cards-fan", "group-photo"],
     timeline: [
@@ -339,7 +339,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
   "Holiday Party": {
     letter_intro: "Thanks for thinking of us for the holidays.",
     intro_paragraph:
-      "Holiday parties are crowded, generous, and easy to forget. The ones people remember are the ones where something quiet and unexpected happened. Magic during cocktails resets the room, strangers turn into friends, phones go down, and the night actually starts.",
+      "When the lights dim and there is a feeling of anticipation in the air, that is when the magic happens. Your guests will be delighted by magic that happens so close to them that they will remember the excitement long after your event is over. My goal is to represent you well to your guests and to be a warm host who keeps them enchanted throughout the evening.",
     hero_image: "corporate",
     gallery_photos: ["cards-emerald", "scott-performing", "closeup-cocktail", "crowd-reaction", "parlor-audience", "gallery-setup", "group-photo", "gallery-6"],
     timeline: [
