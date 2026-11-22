@@ -254,7 +254,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
       { q: "What's your weather contingency for outdoor events?", a: "We move indoors. I'll work with your planner on the indoor backup so it's ready before it's needed." },
       ...COMMON_FAQS,
     ],
-    closing_quote: "In those moments, the magic feels close enough to touch. And maybe, for the guests who were there, it stays with them afterward.",
+    closing_quote: "In those moments, nothing feels impossible. And maybe, for the guests who were there, nothing quite does afterward either.",
     closing_attribution: "",
   },
 
@@ -294,7 +294,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
     ],
     tiers: pricingTiersForEventType("Private Event"),
     faqs: COMMON_FAQS,
-    closing_quote: "In those moments, the magic feels close enough to touch. And maybe, for the guests who were there, it stays with them afterward.",
+    closing_quote: "In those moments, nothing feels impossible. And maybe, for the guests who were there, nothing quite does afterward either.",
     closing_attribution: "",
   },
 
