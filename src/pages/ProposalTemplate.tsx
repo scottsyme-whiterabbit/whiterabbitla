@@ -108,7 +108,7 @@ export const DEFAULT_PROPOSAL: ProposalData = {
   hero_image: "wedding",
   timeline: [
     { time: "6:30 PM", desc: "I arrive, set quietly, full environment built before guests arrive." },
-    { time: "7:30 PM", desc: "Greeting every guest as they walk in." },
+    { time: "7:30 PM", desc: "Greeting every guest as they arrive." },
     { time: "8:45 PM", desc: "40-minute parlor experience after dinner." },
     { time: "9:30 PM", desc: "I stay through dessert, walk out last." },
   ],
@@ -122,7 +122,7 @@ export const DEFAULT_PROPOSAL: ProposalData = {
     { q: "Do you travel?", a: "Yes. Standard pricing covers Los Angeles County. For events outside LA County, travel is included in your quote, so there are no surprise line items." },
     { q: "What happens after I reserve the date?", a: "A 50% deposit holds your date. The remaining 50% is due before the performance. Two weeks before, we hop on a final call to walk through the night together." },
   ],
-  closing_quote: "In those moments, nothing feels impossible. And maybe, for the guests who were there, nothing quite does afterward either.",
+  closing_quote: "In those moments, the magic feels close enough to touch. And maybe, for the guests who were there, it stays with them afterward.",
   closing_attribution: "",
 };
 

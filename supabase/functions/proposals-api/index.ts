@@ -1011,7 +1011,7 @@ White Rabbit LA — Luxury Magic
       const finalSubject = subject || "Your White Rabbit LA Proposal";
 
       const messageText = (message || "").trim() ||
-        "Here's the proposal we discussed. Take your time with it — call me anytime.\n\nBest,\n-Scott";
+        "Here's the proposal we discussed. Take your time with it, call me anytime.\n\nBest,\n-Scott";
       // Escape, then convert paragraph breaks to <br/><br/> and single newlines to <br/>
       const safeMessageHtml = messageText
         .replace(/&/g, "&amp;")

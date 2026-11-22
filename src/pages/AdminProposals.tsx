@@ -1156,8 +1156,6 @@ const ProposalEditor = ({
           <h2 className="font-serif text-xl text-forest-dark mb-4">Closing</h2>
           <label className={labelCls}>Closing quote (optional)</label>
           <input className={inputCls + " mb-3"} value={proposal.closing_quote || ""} onChange={(e) => update({ closing_quote: e.target.value })} />
-          <label className={labelCls}>Attribution (optional)</label>
-          <input className={inputCls} value={proposal.closing_attribution || ""} onChange={(e) => update({ closing_attribution: e.target.value })} />
         </div>
 
         {/* Agreement terms */}

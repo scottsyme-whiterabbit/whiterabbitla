@@ -60,7 +60,7 @@ export const PRICING_TIER_SETS: Record<PricingTierSetName, Tier[]> = {
       recommended: true,
       cta: "Reserve The White Rabbit Evening",
       href: "",
-      tagline: "The room is transformed before guests walk in, with a moment built for your honoree or brand and a keepsake to take home.",
+      tagline: "The room is transformed before guests arrive, with a moment built for your honoree or brand.",
       items: [],
     },
   ],

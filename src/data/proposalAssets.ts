@@ -245,7 +245,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
     gallery_photos: ["curtain-greeting", "closeup-cocktail", "guest-reaction", "gallery-1", "crowd-reaction", "group-photo", "gallery-7", "proposal-cards-detail"],
     timeline: [
       { time: "5:30 PM", desc: "I arrive, set quietly, full environment built before guests arrive." },
-      { time: "6:00 PM", desc: "Greeting every guest as they walk in to cocktail hour." },
+      { time: "6:00 PM", desc: "Greeting every guest as they arrive at cocktail hour." },
       { time: "7:00 PM", desc: "Guests move to dinner. I step away." },
       { time: "9:30 PM", desc: "Optional Speakeasy lounge moment after the reception." },
     ],
@@ -254,7 +254,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
       { q: "What's your weather contingency for outdoor events?", a: "We move indoors. I'll work with your planner on the indoor backup so it's ready before it's needed." },
       ...COMMON_FAQS,
     ],
-    closing_quote: "In those moments, nothing feels impossible. And maybe, for the guests who were there, nothing quite does afterward either.",
+    closing_quote: "In those moments, the magic feels close enough to touch. And maybe, for the guests who were there, it stays with them afterward.",
     closing_attribution: "",
   },
 
@@ -294,7 +294,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
     ],
     tiers: pricingTiersForEventType("Private Event"),
     faqs: COMMON_FAQS,
-    closing_quote: "In those moments, nothing feels impossible. And maybe, for the guests who were there, nothing quite does afterward either.",
+    closing_quote: "In those moments, the magic feels close enough to touch. And maybe, for the guests who were there, it stays with them afterward.",
     closing_attribution: "",
   },
 
