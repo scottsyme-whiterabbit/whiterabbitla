@@ -2,8 +2,8 @@
  * Preview-only copy of the proposal email the server sends.
  *
  * KEEP IN SYNC WITH: supabase/functions/proposals-api/index.ts,
- * the `action === "send"` block (default message, escaping and the `html`
- * template). That server copy is what actually goes out; this file only
+ * the `action === "send"` block (default message, escaping, the `html`
+ * and `text` templates and the fallback subject). That server copy is what actually goes out; this file only
  * renders the same body for the admin send preview. Do not reword anything
  * here without changing the server in the same way.
  * src/test/proposalSendEmail.test.ts compares the two.
@@ -18,6 +18,12 @@ export const PROPOSAL_SEND_DEFAULT_MESSAGE =
 
 export const defaultProposalSubject = (firstName: string) =>
   `Your White Rabbit LA Proposal, ${firstName}`;
+
+/** Subject the server will actually use (blank falls back to this). */
+export const PROPOSAL_SEND_FALLBACK_SUBJECT = "Your White Rabbit LA Proposal";
+
+export const effectiveProposalSubject = (subject: string | null | undefined) =>
+  subject || PROPOSAL_SEND_FALLBACK_SUBJECT;
 
 /** The message the server will actually send (blank falls back to the default). */
 export const effectiveProposalMessage = (message: string | null | undefined) =>
@@ -112,4 +118,28 @@ You're receiving this because you requested a proposal from White Rabbit LA.
 </td></tr></table>
 </center>
 </body></html>`;
+}
+
+/** Plain-text body, same as the server's `text` in the proposals-api send action. */
+export function renderProposalSendEmailText(input: {
+  firstName?: string | null;
+  message?: string | null;
+  link: string;
+}): string {
+  const link = input.link;
+  const greetingName = (input.firstName || "").toString().trim();
+  const messageText = effectiveProposalMessage(input.message);
+  return `Hello${greetingName ? ` ${greetingName}` : ""},
+
+${messageText}
+
+Scott Syme
+White Rabbit LA — Luxury Magic & Entertainment
+(424) 394-1850
+scott.syme@whiterabbitla.com · https://whiterabbitla.com
+
+View your proposal: ${link}
+
+—
+White Rabbit LA · 7393 W. Manchester Ave #209, Los Angeles, CA 90045`;
 }
