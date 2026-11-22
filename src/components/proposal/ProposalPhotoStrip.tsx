@@ -1,24 +1,24 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
-import wrArchLogo from "@/assets/wr-arch-logo.png";
 
 /**
- * First photo strip on the client proposal page. When the strip is clearly on
- * screen, the two outer photos each turn over once: photo, then a White Rabbit
- * card back, then a card face (Ace of Spades left, Queen of Hearts right).
- * The middle photo never moves. Decorative only; reduced motion shows the
- * finished state at once.
+ * First photo strip on the client proposal page. The two outer photos turn
+ * over to a card face (Ace of Spades left, Queen of Hearts right) when the
+ * strip comes into view while scrolling down, and turn back to the photos
+ * once the strip leaves out the bottom (scrolling back up). It replays every
+ * time. The middle photo never moves. Decorative only; reduced motion keeps
+ * the photos with no animation.
  */
 
 export type StripPhoto = { src: string; mirror?: boolean };
 type CardId = "spades" | "queen";
-type Phase = "photo" | "back" | "face";
 
 const FLIP_MS = 800;
-const PAUSE_MS = 400;
 const STAGGER_MS = 300;
 const EASE = "cubic-bezier(0.45, 0, 0.55, 1)";
+/** Share of the strip that must be visible (while scrolling down) before it flips to the cards. */
+const SHOW_RATIO = 0.55;
 
-/** Which tiles flip, which card each reveals, and its start delay. */
+/** Which tiles flip, which card each reveals, and its delay (left first in both directions). */
 const FLIPS: { index: number; card: CardId; delay: number }[] = [
   { index: 0, card: "spades", delay: 0 },
   { index: 2, card: "queen", delay: STAGGER_MS },
@@ -29,18 +29,12 @@ const prefersReducedMotion = () =>
   typeof window.matchMedia === "function" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-const allFaces = (): Record<number, Phase> =>
-  Object.fromEntries(FLIPS.map((f) => [f.index, "face" as Phase]));
-const allPhotos = (): Record<number, Phase> =>
-  Object.fromEntries(FLIPS.map((f) => [f.index, "photo" as Phase]));
-
 const HIDDEN_BACKFACE: CSSProperties = { backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" };
-const CARD_RADIUS = "7% / 5.25%"; // equal round corners on a 3:4 tile
 
 export default function ProposalPhotoStrip({ photos }: { photos: StripPhoto[] }) {
   const gridRef = useRef<HTMLDivElement>(null);
   const [reduced, setReduced] = useState(prefersReducedMotion);
-  const [phases, setPhases] = useState<Record<number, Phase>>(() => (prefersReducedMotion() ? allFaces() : allPhotos()));
+  const [flipped, setFlipped] = useState<Record<number, boolean>>({});
 
   // Same reduced-motion pattern as CityPage.
   useEffect(() => {
@@ -52,37 +46,54 @@ export default function ProposalPhotoStrip({ photos }: { photos: StripPhoto[] })
   }, []);
 
   useEffect(() => {
-    if (reduced) {
-      setPhases(allFaces());
-      return;
-    }
+    setFlipped({});
     const el = gridRef.current;
-    if (!el) return;
-    if (typeof IntersectionObserver === "undefined") {
-      setPhases(allFaces());
-      return;
-    }
-    const timers: number[] = [];
-    let started = false;
-    const setPhase = (index: number, phase: Phase) => setPhases((p) => ({ ...p, [index]: phase }));
+    if (reduced || !el || typeof IntersectionObserver === "undefined") return;
+
+    let target = false;
+    let ratio = 0;
+    let lastY = window.scrollY;
+    let scrollingDown = false;
+    let timers: number[] = [];
+
+    const setTarget = (next: boolean) => {
+      if (next === target) return;
+      target = next;
+      timers.forEach((t) => window.clearTimeout(t));
+      timers = FLIPS.map((f) =>
+        window.setTimeout(() => setFlipped((p) => ({ ...p, [f.index]: next })), f.delay),
+      );
+    };
+
+    // Cards come up only on the way down, once the strip is solidly on screen.
+    const maybeShowCards = () => {
+      if (scrollingDown && ratio >= SHOW_RATIO) setTarget(true);
+    };
+
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (y !== lastY) scrollingDown = y > lastY;
+      lastY = y;
+      maybeShowCards();
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
-        if (started || !entries.some((e) => e.isIntersecting)) return;
-        started = true;
-        observer.disconnect();
-        for (const f of FLIPS) {
-          timers.push(window.setTimeout(() => setPhase(f.index, "back"), f.delay));
-          timers.push(window.setTimeout(() => setPhase(f.index, "face"), f.delay + FLIP_MS + PAUSE_MS));
+        for (const entry of entries) {
+          ratio = entry.isIntersecting ? entry.intersectionRatio : 0;
+          // Back to the photos only once the strip has fully left out the bottom.
+          if (!entry.isIntersecting && entry.boundingClientRect.top > 0) setTarget(false);
+          maybeShowCards();
         }
       },
-      { threshold: 0.6 },
+      { threshold: [0, SHOW_RATIO] },
     );
     observer.observe(el);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       observer.disconnect();
+      window.removeEventListener("scroll", onScroll);
       timers.forEach((t) => window.clearTimeout(t));
-      // If the sequence was cut short, settle on the finished faces.
-      if (started) setPhases(allFaces());
     };
   }, [reduced]);
 
@@ -90,7 +101,7 @@ export default function ProposalPhotoStrip({ photos }: { photos: StripPhoto[] })
     <div ref={gridRef} className="max-w-5xl mx-auto mt-10 grid grid-cols-3 gap-3 md:gap-4 overflow-x-clip">
       {photos.map((photo, i) => {
         const flip = FLIPS.find((f) => f.index === i);
-        if (!flip) {
+        if (!flip || reduced) {
           return (
             <div key={i} className="aspect-[3/4] overflow-hidden bg-forest-dark/60 group">
               <img
@@ -102,54 +113,35 @@ export default function ProposalPhotoStrip({ photos }: { photos: StripPhoto[] })
             </div>
           );
         }
-        return <FlipTile key={i} photo={photo} card={flip.card} phase={phases[i] ?? "photo"} animate={!reduced} />;
+        return <FlipTile key={i} photo={photo} card={flip.card} flipped={Boolean(flipped[i])} />;
       })}
     </div>
   );
 }
 
-/**
- * One card that turns twice: 0deg (photo) to 180deg (card back), then to 360deg.
- * While the front is facing away at 180deg, its photo is swapped for the card
- * face, so the second turn lands on the face and the photo never returns.
- */
-function FlipTile({ photo, card, phase, animate }: { photo: StripPhoto; card: CardId; phase: Phase; animate: boolean }) {
-  const rotation = phase === "photo" ? 0 : phase === "back" ? 180 : 360;
+/** Photo on the front at 0deg, card face on the back at 180deg; one turn each way. */
+function FlipTile({ photo, card, flipped }: { photo: StripPhoto; card: CardId; flipped: boolean }) {
+  // Hover zoom only while the photo is showing, so it never fights the turn.
+  const zoom = flipped
+    ? photo.mirror ? "scale-x-[-1]" : ""
+    : photo.mirror ? "scale-x-[-1] group-hover:scale-x-[-1.1] group-hover:scale-y-110" : "group-hover:scale-110";
   return (
-    <div className="aspect-[3/4]" style={{ perspective: "1000px" }}>
+    <div className="aspect-[3/4] group" style={{ perspective: "1000px" }}>
       <div
         className="relative w-full h-full"
         style={{
           transformStyle: "preserve-3d",
-          transform: `rotateY(${rotation}deg)`,
-          transition: animate ? `transform ${FLIP_MS}ms ${EASE}` : "none",
+          transform: `rotateY(${flipped ? 180 : 0}deg)`,
+          transition: `transform ${FLIP_MS}ms ${EASE}`,
         }}
       >
-        <div className="absolute inset-0" style={HIDDEN_BACKFACE}>
-          {phase === "face" ? (
-            <CardFace card={card} />
-          ) : (
-            <div className="w-full h-full overflow-hidden bg-forest-dark/60">
-              <img src={photo.src} alt="" loading="lazy" className={`w-full h-full object-cover ${photo.mirror ? "scale-x-[-1]" : ""}`} />
-            </div>
-          )}
+        <div className="absolute inset-0 overflow-hidden bg-forest-dark/60" style={HIDDEN_BACKFACE}>
+          <img src={photo.src} alt="" loading="lazy" className={`w-full h-full object-cover transition-transform duration-700 ease-out ${zoom}`} />
         </div>
         <div className="absolute inset-0" style={{ ...HIDDEN_BACKFACE, transform: "rotateY(180deg)" }}>
-          <CardBack />
+          <CardFace card={card} />
         </div>
       </div>
-    </div>
-  );
-}
-
-function CardBack() {
-  return (
-    <div
-      className="relative w-full h-full bg-forest-dark border border-gold/70 flex items-center justify-center"
-      style={{ borderRadius: CARD_RADIUS }}
-    >
-      <div className="absolute inset-[5%] border border-gold/30" style={{ borderRadius: "4% / 3%" }} />
-      <img src={wrArchLogo} alt="" draggable={false} className="relative w-[38%] h-auto" />
     </div>
   );
 }
