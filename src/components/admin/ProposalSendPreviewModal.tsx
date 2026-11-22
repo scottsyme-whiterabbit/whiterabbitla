@@ -6,6 +6,8 @@ export interface ProposalSendDraft {
   to: string;
   subject: string;
   message: string;
+  /** What the server sends if the message is left blank (the filled-in default). */
+  defaultMessage: string;
 }
 
 interface Props {
@@ -20,8 +22,8 @@ interface Props {
 
 export default function ProposalSendPreviewModal({ draft, firstName, link, sending, onChange, onSend, onCancel }: Props) {
   const html = useMemo(
-    () => renderProposalSendEmailHtml({ firstName, message: draft.message, link }),
-    [firstName, draft.message, link],
+    () => renderProposalSendEmailHtml({ firstName, message: draft.message.trim() || draft.defaultMessage, link }),
+    [firstName, draft.message, draft.defaultMessage, link],
   );
 
   useEffect(() => {

@@ -59,3 +59,4 @@
 - [x] Proposal photo strip 1: one-time card flip (Ace of Spades, Queen of Hearts)
 - [x] Sign form start time, package-aware booked calendar timing, reserved state on the client proposal page (migration 0015 adds signed_agreements.event_start_time)
 - [x] Proposal send: in-page preview with full rendered email replaces the three prompt boxes (frontend only)
+- [x] Proposal email: Scott's new body (event, date, hold), Hi greeting, whiterabbitla.com link, comma signature; old default auto-upgraded on the server

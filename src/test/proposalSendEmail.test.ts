@@ -2,120 +2,210 @@ import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
-  PROPOSAL_SEND_DEFAULT_MESSAGE,
+  LEGACY_PROPOSAL_SEND_MESSAGE,
   PROPOSAL_SEND_FALLBACK_SUBJECT,
   PROPOSAL_SEND_LOGO_URL,
+  buildProposalSendMessage,
+  defaultHoldUntilIso,
   defaultProposalSubject,
   effectiveProposalSubject,
+  formatHoldDate,
+  isLegacyDefaultProposalMessage,
+  proposalLinkFromPosted,
+  proposalPublicLink,
   renderProposalSendEmailHtml,
   renderProposalSendEmailText,
+  resolveProposalSendMessage,
 } from "@/lib/proposalSendEmail";
+import * as shared from "../../supabase/functions/_shared/proposal-send-email";
 
 const serverSource = readFileSync(
   resolve(__dirname, "../../supabase/functions/proposals-api/index.ts"),
   "utf8",
 );
-const sendBlock = serverSource.slice(serverSource.indexOf('if (action === "send" && req.method === "POST")'));
+const sendStart = serverSource.indexOf('if (action === "send" && req.method === "POST")');
+const sendBlock = serverSource.slice(sendStart, serverSource.indexOf("return json({ ok: true });", sendStart));
 
-/** Fill the server's html template with the same values the preview used. */
-function serverHtml(greeting: string, messageHtml: string, link: string) {
-  const start = sendBlock.indexOf("const html = `") + "const html = `".length;
-  const end = sendBlock.indexOf("</body></html>`;", start) + "</body></html>".length;
-  return sendBlock
-    .slice(start, end)
-    .split("${LOGO_URL}").join(PROPOSAL_SEND_LOGO_URL)
-    .split('${safeGreeting ? ` ${safeGreeting}` : ""}').join(greeting ? ` ${greeting}` : "")
-    .split("${safeMessageHtml}").join(messageHtml)
-    .split("${link}").join(link);
-}
+// Sunday Nov 22 2026, 10 AM in Los Angeles.
+const NOW = new Date("2026-11-22T18:00:00Z");
+const LINK = "https://whiterabbitla.com/proposal/ana-smith-ab12cd";
 
-/** Fill the server's plain-text template with the same values. */
-function serverText(greeting: string, messageText: string, link: string) {
-  const start = sendBlock.indexOf("const text = `") + "const text = `".length;
-  const end = sendBlock.indexOf("`;", start);
-  return sendBlock
-    .slice(start, end)
-    .split('${greetingName ? ` ${greetingName}` : ""}').join(greeting ? ` ${greeting}` : "")
-    .split("${messageText}").join(messageText)
-    .split("${link}").join(link);
-}
+const WEDDING_MARCH_14 =
+  "Thank you so much for thinking of White Rabbit for your wedding! I've put together a proposal for Sunday, March 14. Feel free to share it with anyone helping you plan.\n\n" +
+  "Your date is held for seven days, through November 29. If you'd like to talk anything through, I'm happy to hop on a call.\n\n" +
+  "Please let me know if there is anything I can do for you.\n\n" +
+  "Best,\n-Scott";
 
-const LINK = "https://whiterabbitla.com/proposal/ana-smith";
-
-describe("proposal send preview", () => {
-  it("matches the server email body exactly", () => {
-    const html = renderProposalSendEmailHtml({ firstName: "Ana", message: "Line one\nLine two", link: LINK });
-    expect(html).toBe(serverHtml("Ana", "Line one<br/>Line two", LINK));
+describe("proposal send email: server and preview stay in lockstep", () => {
+  it("the preview uses the exact module the send action uses", () => {
+    expect(renderProposalSendEmailHtml).toBe(shared.renderProposalSendEmailHtml);
+    expect(renderProposalSendEmailText).toBe(shared.renderProposalSendEmailText);
+    expect(buildProposalSendMessage).toBe(shared.buildProposalSendMessage);
+    expect(resolveProposalSendMessage).toBe(shared.resolveProposalSendMessage);
   });
 
-  it("uses the same default message as the server", () => {
-    expect(sendBlock).toContain(JSON.stringify(PROPOSAL_SEND_DEFAULT_MESSAGE));
-    expect(PROPOSAL_SEND_DEFAULT_MESSAGE).toBe(
-      "Here's the proposal we discussed. Take your time with it, call me anytime.\n\nBest,\n-Scott",
-    );
+  it("the send action builds its body from the shared module, not its own copy", () => {
+    expect(serverSource).toContain('from "../_shared/proposal-send-email.ts"');
+    expect(sendBlock).toContain("resolveProposalSendMessage(message, {");
+    expect(sendBlock).toContain("const html = renderProposalSendEmailHtml(emailInput);");
+    expect(sendBlock).toContain("const text = renderProposalSendEmailText(emailInput);");
+    expect(sendBlock).not.toContain("<!DOCTYPE html>");
+    expect(sendBlock).not.toContain("Hello");
+    expect(sendBlock).not.toContain("window.location");
   });
 
-  it("shows the default message when the personal message is blank", () => {
-    const html = renderProposalSendEmailHtml({ firstName: "Ana", message: "   ", link: LINK });
-    expect(html).toContain("Here's the proposal we discussed. Take your time with it, call me anytime.<br/><br/>Best,<br/>-Scott");
+  it("the send action links to whiterabbitla.com from the stored slug, posted link only as fallback", () => {
+    expect(sendBlock).toContain("stored?.slug ? proposalPublicLink(stored.slug) : proposalLinkFromPosted(link)");
+    expect(sendBlock).toContain("link: proposalLink");
   });
 
-  it("escapes the message and the name like the server", () => {
-    const html = renderProposalSendEmailHtml({ firstName: "<b>Ana", message: "a & <b>", link: LINK });
-    expect(html).toContain("Hello &lt;b>Ana,");
-    expect(html).toContain("a &amp; &lt;b&gt;");
+  it("the hold named in the email is the hold the send action stores", () => {
+    expect(sendBlock).toContain("const newHoldUntil = defaultHoldUntilIso(sendNow);");
+    expect(sendBlock).toContain("holdUntil: stored?.hold_until || newHoldUntil");
+    expect(sendBlock).toContain('.update({ hold_until: newHoldUntil })\n            .eq("id", id)\n            .is("hold_until", null);');
   });
 
-  it("greets with Hello, when there is no first name", () => {
-    expect(renderProposalSendEmailHtml({ firstName: "", message: "x", link: LINK })).toContain(">Hello,</p>");
-  });
-
-  it("keeps the existing default subject", () => {
-    expect(defaultProposalSubject("Ana")).toBe("Your White Rabbit LA Proposal, Ana");
-  });
-
-  it("matches the server plain-text body exactly", () => {
-    const text = renderProposalSendEmailText({ firstName: "Ana", message: "Line one\nLine two", link: LINK });
-    expect(text).toBe(serverText("Ana", "Line one\nLine two", LINK));
-    expect(renderProposalSendEmailText({ firstName: "", message: "", link: LINK })).toBe(
-      serverText("", PROPOSAL_SEND_DEFAULT_MESSAGE, LINK),
-    );
-  });
-
-  it("falls back to the same subject as the server when blank", () => {
+  it("keeps the subject fallback", () => {
     expect(sendBlock).toContain('const finalSubject = subject || "Your White Rabbit LA Proposal";');
     expect(PROPOSAL_SEND_FALLBACK_SUBJECT).toBe("Your White Rabbit LA Proposal");
     expect(effectiveProposalSubject("")).toBe("Your White Rabbit LA Proposal");
     expect(effectiveProposalSubject("Custom")).toBe("Custom");
+    expect(defaultProposalSubject("Ana")).toBe("Your White Rabbit LA Proposal, Ana");
+  });
+});
+
+describe("proposal send message", () => {
+  it("wedding on a parseable date", () => {
+    expect(buildProposalSendMessage({ eventType: " Wedding ", eventDate: "2027-03-14", holdUntil: null, now: NOW }))
+      .toBe(WEDDING_MARCH_14);
   });
 
-  it("keeps the default subject template when the first name is empty", () => {
-    expect(defaultProposalSubject("")).toBe("Your White Rabbit LA Proposal, ");
+  it("formats a free-text date like Saturday, December 5", () => {
+    const m = buildProposalSendMessage({ eventType: "Corporate Event", eventDate: "December 5th", now: NOW });
+    expect(m).toContain("for your corporate event! I've put together a proposal for Saturday, December 5.");
   });
 
-  it("keeps the current wording of every fixed line", () => {
-    const html = renderProposalSendEmailHtml({ firstName: "Ana", message: "", link: LINK });
-    const text = renderProposalSendEmailText({ firstName: "Ana", message: "", link: LINK });
+  it("no parseable date says a proposal for you", () => {
+    for (const eventDate of ["", null, "june-ish", "2926-01-01"]) {
+      const m = buildProposalSendMessage({ eventType: "Private Event", eventDate, now: NOW });
+      expect(m.startsWith(
+        "Thank you so much for thinking of White Rabbit for your private event! I've put together a proposal for you. Feel free to share",
+      )).toBe(true);
+    }
+  });
+
+  it("blank event type falls back to event", () => {
+    expect(buildProposalSendMessage({ eventType: "   ", now: NOW })).toContain("for your event! I've put together");
+    expect(buildProposalSendMessage({ eventType: null, now: NOW })).toContain("for your event! I've put together");
+  });
+
+  it("hold date reads like December 1", () => {
+    expect(formatHoldDate("2026-12-01")).toBe("December 1");
+    expect(buildProposalSendMessage({ holdUntil: "2026-12-01", now: NOW }))
+      .toContain("Your date is held for seven days, through December 1. If you'd like");
+  });
+
+  it("uses an existing hold_until instead of a new one", () => {
+    expect(buildProposalSendMessage({ holdUntil: "2027-01-15", now: NOW })).toContain("through January 15.");
+  });
+
+  it("a new hold is seven days from today in Los Angeles, even late evening", () => {
+    expect(defaultHoldUntilIso(NOW)).toBe("2026-11-29");
+    // 11 PM Pacific on Nov 22 is already Nov 23 in UTC.
+    expect(defaultHoldUntilIso(new Date("2026-11-23T07:00:00Z"))).toBe("2026-11-29");
+    expect(buildProposalSendMessage({ now: NOW })).toContain("through November 29.");
+  });
+
+  it("detects the old default message in any spacing, with or without the sign-off", () => {
+    expect(isLegacyDefaultProposalMessage(LEGACY_PROPOSAL_SEND_MESSAGE)).toBe(true);
+    expect(isLegacyDefaultProposalMessage("  Here's the proposal we discussed. Take your time with it, call me anytime.  ")).toBe(true);
+    expect(isLegacyDefaultProposalMessage("Here\u2019s the proposal we discussed. Take your time with it, call me anytime.\r\n\r\nBest,\r\n-Scott\n")).toBe(true);
+    expect(isLegacyDefaultProposalMessage("Here's the proposal we discussed. Take your time with it, call me anytime. P.S. Love the venue.")).toBe(false);
+    expect(isLegacyDefaultProposalMessage("")).toBe(false);
+  });
+
+  it("replaces empty or old default messages with the new body", () => {
+    const ctx = { eventType: "Wedding", eventDate: "2027-03-14", holdUntil: null, now: NOW };
+    expect(resolveProposalSendMessage(LEGACY_PROPOSAL_SEND_MESSAGE, ctx)).toBe(WEDDING_MARCH_14);
+    expect(resolveProposalSendMessage("Here's the proposal we discussed. Take your time with it, call me anytime.", ctx)).toBe(WEDDING_MARCH_14);
+    expect(resolveProposalSendMessage("   ", ctx)).toBe(WEDDING_MARCH_14);
+    expect(resolveProposalSendMessage(undefined, ctx)).toBe(WEDDING_MARCH_14);
+  });
+
+  it("leaves a custom message intact", () => {
+    const custom = "Great talking today.\n\nHere is the plan we sketched out. Call me with questions.\n\nScott";
+    expect(resolveProposalSendMessage(`\n${custom}  `, { eventType: "Wedding", now: NOW })).toBe(custom);
+    const html = renderProposalSendEmailHtml({ firstName: "Ana", message: custom, link: LINK });
+    expect(html).toContain("Great talking today.<br/><br/>Here is the plan we sketched out. Call me with questions.<br/><br/>Scott");
+    expect(html).toContain(">Hi Ana,</p>");
+  });
+});
+
+describe("proposal send link", () => {
+  it("is always https://whiterabbitla.com/proposal/{slug}", () => {
+    expect(proposalPublicLink("ana-smith-ab12cd")).toBe(LINK);
+    expect(proposalLinkFromPosted("https://id-preview--x.lovable.app/proposal/ana-smith-ab12cd")).toBe(LINK);
+    expect(proposalLinkFromPosted("http://localhost:8080/proposal/ana-smith-ab12cd/?x=1#y")).toBe(LINK);
+    expect(proposalLinkFromPosted("https://evil.example/phish")).toBeNull();
+    expect(proposalLinkFromPosted("https://whiterabbitla.com/proposal/a/b")).toBeNull();
+    expect(proposalLinkFromPosted("")).toBeNull();
+  });
+
+  it("puts the same link on the button, the browser line and the text version", () => {
+    const html = renderProposalSendEmailHtml({ firstName: "Ana", message: "x", link: LINK });
+    expect(html.split(`href="${LINK}"`).length - 1).toBe(2);
+    expect(html).toContain(`>${LINK}</a></p>`);
+    expect(renderProposalSendEmailText({ firstName: "Ana", message: "x", link: LINK })).toContain(`View your proposal: ${LINK}`);
+  });
+});
+
+describe("proposal send template", () => {
+  const html = renderProposalSendEmailHtml({ firstName: "Ana", message: WEDDING_MARCH_14, link: LINK });
+  const text = renderProposalSendEmailText({ firstName: "Ana", message: WEDDING_MARCH_14, link: LINK });
+
+  it("greets with Hi once, never Hello", () => {
+    expect(html.split("Hi Ana,").length - 1).toBe(1);
+    expect(text.split("Hi Ana,").length - 1).toBe(1);
+    expect(html).not.toContain("Hello");
+    expect(text).not.toContain("Hello");
+    expect(text.startsWith("Hi Ana,\n\nThank you so much for thinking of White Rabbit for your wedding!")).toBe(true);
+    expect(renderProposalSendEmailHtml({ firstName: "  ", message: "x", link: LINK })).toContain(">Hi,</p>");
+    expect(renderProposalSendEmailText({ firstName: null, message: "x", link: LINK }).startsWith("Hi,\n\nx")).toBe(true);
+  });
+
+  it("escapes the greeting and message", () => {
+    const h = renderProposalSendEmailHtml({ firstName: "<b>Ana", message: "a & <b>\nnext", link: LINK });
+    expect(h).toContain(">Hi &lt;b>Ana,</p>");
+    expect(h).toContain("a &amp; &lt;b&gt;<br/>next");
+  });
+
+  it("renders the full approved body in the HTML", () => {
+    expect(html).toContain(
+      "Thank you so much for thinking of White Rabbit for your wedding! I've put together a proposal for Sunday, March 14. Feel free to share it with anyone helping you plan.<br/><br/>" +
+      "Your date is held for seven days, through November 29. If you'd like to talk anything through, I'm happy to hop on a call.<br/><br/>" +
+      "Please let me know if there is anything I can do for you.<br/><br/>Best,<br/>-Scott</p>",
+    );
+  });
+
+  it("signature uses a comma and no em dash remains anywhere", () => {
+    expect(html).toContain("White Rabbit LA, Luxury Magic &amp; Entertainment<br/>");
+    expect(text).toContain("Scott Syme\nWhite Rabbit LA, Luxury Magic & Entertainment\n(424) 394-1850\nscott.syme@whiterabbitla.com · https://whiterabbitla.com");
+    expect(html).not.toContain("\u2014");
+    expect(text).not.toContain("\u2014");
+    expect(text.endsWith(`View your proposal: ${LINK}\n\nWhite Rabbit LA · 7393 W. Manchester Ave #209, Los Angeles, CA 90045`)).toBe(true);
+  });
+
+  it("keeps every other fixed line", () => {
     expect(html).toContain(">Your White Rabbit LA proposal is ready to view.</div>");
-    expect(html).toContain(">Hello Ana,</p>");
     expect(html).toContain(">View Your Proposal</a>");
     expect(html).toContain("Or open in your browser:<br/>");
     expect(html).toContain(">Scott Syme</span><br/>");
-    expect(html).toContain("White Rabbit LA — Luxury Magic &amp; Entertainment<br/>");
     expect(html).toContain(">(424) 394-1850</a>");
     expect(html).toContain(">scott.syme@whiterabbitla.com</a> · <a");
     expect(html).toContain(">whiterabbitla.com</a>");
     expect(html).toContain("White Rabbit · Los Angeles<br/>\n7393 W. Manchester Ave #209, Los Angeles, CA 90045");
     expect(html).toContain("You're receiving this because you requested a proposal from White Rabbit LA.");
     expect(html).toContain(PROPOSAL_SEND_LOGO_URL);
-    expect(PROPOSAL_SEND_LOGO_URL).toBe(
-      "https://pgjyzayvkyrftcksvncj.supabase.co/storage/v1/object/public/email-assets/wr-email-logo.png",
-    );
-    expect(html).toContain("background-color:#335747;");
     expect(html).toContain("background-color:#223D34;");
-    expect(html).toContain("color:#C9A3A8;");
-    expect(html).toContain("font-family:Georgia,serif;");
-    expect(text).toContain("Scott Syme\nWhite Rabbit LA — Luxury Magic & Entertainment\n(424) 394-1850\nscott.syme@whiterabbitla.com · https://whiterabbitla.com");
-    expect(text).toContain(`View your proposal: ${LINK}`);
   });
 });

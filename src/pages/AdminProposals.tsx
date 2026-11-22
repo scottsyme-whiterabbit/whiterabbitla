@@ -16,7 +16,7 @@ import ResidencyAdmin from "@/components/admin/ResidencyAdmin";
 import SignedAgreementsTab from "@/components/admin/SignedAgreementsTab";
 import PaymentsTab from "@/components/admin/PaymentsTab";
 import ProposalSendPreviewModal, { type ProposalSendDraft } from "@/components/admin/ProposalSendPreviewModal";
-import { PROPOSAL_SEND_DEFAULT_MESSAGE, defaultProposalSubject } from "@/lib/proposalSendEmail";
+import { buildProposalSendMessage, defaultProposalSubject, proposalPublicLink } from "@/lib/proposalSendEmail";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const FN = `${SUPABASE_URL}/functions/v1/proposals-api`;
@@ -264,10 +264,16 @@ const AdminProposals = () => {
   const sendEmail = (proposal: FullProposal | ProposalRow) => {
     if (sendingRef.current) return;
     setSendTarget(proposal);
+    const defaultMessage = buildProposalSendMessage({
+      eventType: proposal.event_type,
+      eventDate: proposal.event_date,
+      holdUntil: "hold_until" in proposal ? proposal.hold_until : null,
+    });
     setSendDraft({
       to: proposal.recipient_email || "",
       subject: defaultProposalSubject(proposal.first_name),
-      message: PROPOSAL_SEND_DEFAULT_MESSAGE,
+      message: defaultMessage,
+      defaultMessage,
     });
   };
 
@@ -288,7 +294,7 @@ const AdminProposals = () => {
     sendingRef.current = true;
     setSending(true);
     const proposal = sendTarget;
-    const link = `${window.location.origin}/proposal/${proposal.slug}`;
+    const link = proposalPublicLink(proposal.slug);
     try {
       await apiCall("send", "POST", { id: proposal.id, to, subject, message, link, firstName: proposal.first_name });
       toast.success("Email sent");
@@ -509,7 +515,7 @@ const AdminProposals = () => {
         <ProposalSendPreviewModal
           draft={sendDraft}
           firstName={sendTarget.first_name}
-          link={`${window.location.origin}/proposal/${sendTarget.slug}`}
+          link={proposalPublicLink(sendTarget.slug)}
           sending={sending}
           onChange={setSendDraft}
           onSend={confirmSend}
