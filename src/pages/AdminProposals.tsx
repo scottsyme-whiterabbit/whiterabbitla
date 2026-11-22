@@ -15,6 +15,8 @@ import AdminGate, { AdminSignOutButton } from "@/components/admin/AdminGate";
 import ResidencyAdmin from "@/components/admin/ResidencyAdmin";
 import SignedAgreementsTab from "@/components/admin/SignedAgreementsTab";
 import PaymentsTab from "@/components/admin/PaymentsTab";
+import ProposalSendPreviewModal, { type ProposalSendDraft } from "@/components/admin/ProposalSendPreviewModal";
+import { PROPOSAL_SEND_DEFAULT_MESSAGE, defaultProposalSubject } from "@/lib/proposalSendEmail";
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const FN = `${SUPABASE_URL}/functions/v1/proposals-api`;
@@ -89,6 +91,8 @@ const AdminProposals = () => {
   const [sending, setSending] = useState(false);
   const savingRef = useRef(false);
   const sendingRef = useRef(false);
+  const [sendTarget, setSendTarget] = useState<FullProposal | ProposalRow | null>(null);
+  const [sendDraft, setSendDraft] = useState<ProposalSendDraft | null>(null);
   const [editing, setEditing] = useState<FullProposal | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [activeTab, setActiveTab] = useState<"client" | "residency" | "signed" | "payments">("client");
@@ -257,20 +261,39 @@ const AdminProposals = () => {
     toast.success("Link copied");
   };
 
-  const sendEmail = async (proposal: FullProposal | ProposalRow) => {
+  const sendEmail = (proposal: FullProposal | ProposalRow) => {
     if (sendingRef.current) return;
+    setSendTarget(proposal);
+    setSendDraft({
+      to: proposal.recipient_email || "",
+      subject: defaultProposalSubject(proposal.first_name),
+      message: PROPOSAL_SEND_DEFAULT_MESSAGE,
+    });
+  };
+
+  const closeSendPreview = () => {
+    if (sendingRef.current) return;
+    setSendTarget(null);
+    setSendDraft(null);
+  };
+
+  const confirmSend = async () => {
+    if (!sendTarget || !sendDraft) return;
+    if (sendingRef.current) return;
+    const to = sendDraft.to.trim();
+    const subject = sendDraft.subject;
+    const message = sendDraft.message;
+    if (!to) { toast.error("Add a recipient email"); return; }
+    if (!subject.trim()) { toast.error("Add a subject"); return; }
     sendingRef.current = true;
     setSending(true);
-    const to = prompt("Recipient email:", proposal.recipient_email || "");
-    if (!to) { sendingRef.current = false; setSending(false); return; }
-    const subject = prompt("Subject:", `Your White Rabbit LA Proposal, ${proposal.first_name}`);
-    if (!subject) { sendingRef.current = false; setSending(false); return; }
-    const message = prompt("Personal message (greeting and signature are added automatically):", `Here's the proposal we discussed. Take your time with it, call me anytime.\n\nBest,\n-Scott`);
-    if (message === null) { sendingRef.current = false; setSending(false); return; }
+    const proposal = sendTarget;
     const link = `${window.location.origin}/proposal/${proposal.slug}`;
     try {
       await apiCall("send", "POST", { id: proposal.id, to, subject, message, link, firstName: proposal.first_name });
       toast.success("Email sent");
+      setSendTarget(null);
+      setSendDraft(null);
       loadList();
     } catch (e) { toast.error((e as Error).message); }
     finally { sendingRef.current = false; setSending(false); }
@@ -482,6 +505,17 @@ const AdminProposals = () => {
           </>
         )}
       </div>
+      {sendTarget && sendDraft && (
+        <ProposalSendPreviewModal
+          draft={sendDraft}
+          firstName={sendTarget.first_name}
+          link={`${window.location.origin}/proposal/${sendTarget.slug}`}
+          sending={sending}
+          onChange={setSendDraft}
+          onSend={confirmSend}
+          onCancel={closeSendPreview}
+        />
+      )}
     </div>
   );
 };
