@@ -1,7 +1,7 @@
 import { pricingTiersForEventType } from "@/data/pricingTierSets";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Phone, Plus, Instagram, Linkedin } from "lucide-react";
+import { Plus, Instagram, Linkedin } from "lucide-react";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
 import SignAgreementModal from "@/components/SignAgreementModal";
 import threeStars from "@/assets/three-stars-gold.png";
@@ -549,12 +549,13 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
               );
             })}
           </div>
-          <div className="mt-12 flex items-center justify-center gap-2 text-cream/70">
-            <Phone className="w-4 h-4 text-gold" />
-            <span className="text-sm">Prefer to talk it through?</span>
-            <a href="tel:+14243941850" className="text-cream hover:text-gold transition-colors text-sm font-medium">(424) 394-1850</a>
-            <span className="text-sm">or</span>
-            <a href="mailto:scott.syme@whiterabbitla.com" className="text-cream hover:text-gold transition-colors text-sm font-medium">scott.syme@whiterabbitla.com</a>
+          <div className="mt-12 text-center text-cream/70">
+            <span className="block text-sm">Prefer to talk it through?</span>
+            <span className="text-sm">
+              <a href="tel:+14243941850" className="text-cream hover:text-gold transition-colors text-sm font-medium whitespace-nowrap">(424) 394-1850</a>
+              {" "}or{" "}
+              <a href="mailto:scott.syme@whiterabbitla.com" className="text-cream hover:text-gold transition-colors text-sm font-medium whitespace-nowrap">scott.syme@whiterabbitla.com</a>
+            </span>
           </div>
         </div>
       </section>
