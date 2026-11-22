@@ -115,9 +115,8 @@ export const DEFAULT_PROPOSAL: ProposalData = {
   ],
   tiers: pricingTiersForEventType("Wedding"),
   faqs: [
-    { q: "How much space do you need?", a: "For close-up walk-around, none. I move through the room the way a host does, and only need a small spot for my bag. For the parlor experience, an 8 by 10 foot area is plenty for the emerald lobby curtains and lighting. Beyond that, staging is flexible." },
+    { q: "What do you need from the venue?", a: "For close-up walk-around, nothing. I move through the room the way a host does, and only need a small spot for my bag. For the parlor experience, an 8 by 10 foot area is plenty for the emerald lobby curtains and lighting. For events with more than 50 guests, please provide an over-ear microphone, speakers, and the connections for playlists and sound." },
     { q: "What if a guest doesn't want to participate?", a: "No one is ever pulled in who doesn't want to be. The night is built around making your guests feel hosted, not put on the spot." },
-    { q: "Do you need a stage, microphone, or special lighting?", a: "For most experiences, no. I bring what I need. For special occasions or events with more than 50 guests, please provide an over-ear microphone, speakers, and the connections for playlists and sound." },
     { q: "What's your weather contingency for outdoor events?", a: "We move indoors. I'll work with your planner on the indoor backup so it's ready before it's needed." },
     { q: "How early do you arrive?", a: "For close-up walk-around, 15 to 30 minutes before showtime is plenty. For the parlor experience, I arrive about 40 minutes early to prep the space and set the lighting." },
     { q: "Do you travel?", a: "Yes. Standard pricing covers Los Angeles County. For events outside LA County, travel is included in your quote, so there are no surprise line items." },
@@ -311,9 +310,9 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
           <OrnamentalDivider />
           <div className="grid md:grid-cols-3 gap-6 md:gap-8 mt-10 text-left">
             {[
-              { n: "One", t: "Choose your accommodations", d: "Pick the experience that fits your night. One click opens the agreement, already filled in." },
-              { n: "Two", t: "Sign in a minute", d: "Read it, type your name, done. Your copy arrives by email the moment you sign." },
-              { n: "Three", t: "Deposit holds the date", d: "A 50% deposit locks it in. The balance is due before the performance, and I take it from there." },
+              { n: "One", t: "Choose your accommodations", d: "One click opens the agreement." },
+              { n: "Two", t: "Sign in a minute", d: "Your copy arrives by email." },
+              { n: "Three", t: "Deposit holds the date", d: "The balance is due before the performance." },
             ].map((s) => (
               <div key={s.n} className="relative border border-forest-dark/10 p-6 bg-cream">
                 <span className="absolute top-0 left-0 w-4 h-px bg-gold/70" />
@@ -349,11 +348,8 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
           </p>
           <div className="grid sm:grid-cols-2 gap-x-8 gap-y-4 text-left max-w-2xl mx-auto">
             {[
-              "$2 million liability insurance, certificate on request",
               "Fully self-contained, I bring my own lighting, drapes and sound",
               "W-9, COI and vendor forms returned same day",
-              "Load in, set and strike handled without your crew",
-              "Elegant attire, matched to your dress code",
               "One pre-event call so your run of show is exact",
             ].map((line) => (
               <div key={line} className="flex gap-3 font-sans text-sm text-cream/85 leading-relaxed">
@@ -473,7 +469,7 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
       <section className="relative bg-cream text-forest-dark py-16 md:py-20 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">Curious What It Looks Like?</p>
-          <h2 className="font-serif font-light text-3xl md:text-4xl mb-4">Do You Want to See Past Work?</h2>
+          <h2 className="font-serif font-light text-3xl md:text-4xl mb-4">Past Evenings</h2>
           <div className="flex items-center justify-center gap-3 mb-6">
             <span className="w-10 h-px bg-gold/60" />
             <span className="text-gold text-xs">✦</span>

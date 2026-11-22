@@ -228,9 +228,8 @@ export interface ProposalTemplate {
 }
 
 const COMMON_FAQS: { q: string; a: string }[] = [
-  { q: "How much space do you need?", a: "For close-up walk-around, none. I move through the room the way a host does, and only need a small spot for my bag. For the parlor experience, an 8 by 10 foot area is plenty for the emerald lobby curtains and lighting. Beyond that, staging is flexible." },
+  { q: "What do you need from the venue?", a: "For close-up walk-around, nothing. I move through the room the way a host does, and only need a small spot for my bag. For the parlor experience, an 8 by 10 foot area is plenty for the emerald lobby curtains and lighting. For events with more than 50 guests, please provide an over-ear microphone, speakers, and the connections for playlists and sound." },
   { q: "What if a guest doesn't want to participate?", a: "No one is ever pulled in who doesn't want to be. The night is built around making your guests feel hosted, not put on the spot." },
-  { q: "Do you need a stage, microphone, or special lighting?", a: "For most experiences, no. I bring what I need. For special occasions or events with more than 50 guests, please provide an over-ear microphone, speakers, and the connections for playlists and sound." },
   { q: "How early do you arrive?", a: "For close-up walk-around, 15 to 30 minutes before showtime is plenty. For the parlor experience, I arrive about 40 minutes early to prep the space and set the lighting." },
   { q: "Do you travel?", a: "Yes. Standard pricing covers Los Angeles County. For events outside LA County, travel is included in your quote, so there are no surprise line items." },
   { q: "What happens after I reserve the date?", a: "A 50% deposit holds your date. The remaining 50% is due before the performance. Two weeks before, we hop on a final call to walk through the night together." },
