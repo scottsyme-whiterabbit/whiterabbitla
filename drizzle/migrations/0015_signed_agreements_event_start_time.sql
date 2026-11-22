@@ -1,0 +1,1 @@
+ALTER TABLE public.signed_agreements ADD COLUMN IF NOT EXISTS event_start_time text;

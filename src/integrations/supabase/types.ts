@@ -2314,6 +2314,7 @@ export type Database = {
           created_at: string
           deal_id: string | null
           event_date: string | null
+          event_start_time: string | null
           event_type: string | null
           id: string
           invoice_sent_at: string | null
@@ -2335,6 +2336,7 @@ export type Database = {
           created_at?: string
           deal_id?: string | null
           event_date?: string | null
+          event_start_time?: string | null
           event_type?: string | null
           id?: string
           invoice_sent_at?: string | null
@@ -2356,6 +2358,7 @@ export type Database = {
           created_at?: string
           deal_id?: string | null
           event_date?: string | null
+          event_start_time?: string | null
           event_type?: string | null
           id?: string
           invoice_sent_at?: string | null

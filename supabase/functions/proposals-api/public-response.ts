@@ -25,3 +25,25 @@ export function publicProposal(row: Record<string, unknown>) {
 export function publicSignResponse(row: Record<string, unknown>) {
   return pick(row, ["pay_token", "total_cents", "deposit_cents", "pay_url"]);
 }
+const RESERVATION_START_TIME = /^([01][0-9]|2[0-3]):[0-5][0-9]$/;
+const INACTIVE_STATUSES = ["void", "cancelled", "canceled"];
+
+// Signed state for the public proposal page. Exactly three fields, so no
+// email, IP, agreement text, pay token or amount can leak through it.
+export function publicReservation(
+  agreement: Record<string, unknown> | null | undefined,
+  invoices: Array<Record<string, unknown>> | null | undefined,
+) {
+  if (!agreement) return null;
+  const start = typeof agreement.event_start_time === "string" ? agreement.event_start_time.trim().slice(0, 5) : "";
+  const depositPaid = (invoices || []).some((inv) => {
+    const status = typeof inv?.status === "string" ? inv.status : "";
+    if (INACTIVE_STATUSES.includes(status)) return false;
+    return status === "deposit_paid" || status === "paid" || !!inv?.deposit_paid_at;
+  });
+  return {
+    tier_name: typeof agreement.tier_name === "string" ? agreement.tier_name : "",
+    start_time: RESERVATION_START_TIME.test(start) ? start : null,
+    deposit_paid: depositPaid,
+  };
+}

@@ -57,3 +57,4 @@
 - Phase 2 (remove password path) pending Scott's confirmation on laptop + phone.
 - [x] Payment wording 'before the performance' + invoice-reminders holiday shift
 - [x] Proposal photo strip 1: one-time card flip (Ace of Spades, Queen of Hearts)
+- [x] Sign form start time, package-aware booked calendar timing, reserved state on the client proposal page (migration 0015 adds signed_agreements.event_start_time)

@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { INACTIVE_INVOICE_STATUS_FILTER } from "../_shared/invoice-status.ts";
+import { formatStartTime12h, packageEventWindow, packageTiming, type PackageTiming } from "../_shared/package-timing.ts";
 import { safeErrorPayload } from "../_shared/safe-error.ts";
 import { lostReasonError } from "../_shared/lost-reason.ts";
 import { isAdminRequest } from "../_shared/require-admin.ts";
@@ -156,10 +157,12 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
     // The proposal (if any) gives us the tier, the pricing and a link to open.
     let proposalSlug: string | null = null;
     let proposalHoldUntil: string | null = null;
-    let proposalTiers: Array<{ name?: string; price?: string; recommended?: boolean }> = [];
+    let proposalTiers: Array<{ name?: string; price?: string; recommended?: boolean; tagline?: string; items?: string[] }> = [];
     let signedTier: string | null = null;
     let performanceTime: string | null = null;
     let arrivalTime: string | null = null;
+    let agreementTierName: string | null = null;
+    let agreementStartTime: string | null = null;
     let invoice: {
       total_cents: number;
       amount_paid_cents: number;
@@ -181,7 +184,7 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
       }
       const { data: agreement } = await supabase
         .from("signed_agreements")
-        .select("tier_name, tier_price, signed_at, performance_time, arrival_time")
+        .select("tier_name, tier_price, signed_at, performance_time, arrival_time, event_start_time")
         .eq("deal_id", deal.id)
         .order("signed_at", { ascending: false })
         .limit(1)
@@ -190,6 +193,10 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
         signedTier = [agreement.tier_name, agreement.tier_price].filter(Boolean).join(" ") || null;
         performanceTime = agreement.performance_time || null;
         arrivalTime = agreement.arrival_time || null;
+        agreementTierName = agreement.tier_name || null;
+        agreementStartTime = typeof agreement.event_start_time === "string" && agreement.event_start_time.trim()
+          ? agreement.event_start_time.trim()
+          : null;
       }
       const { data: inv } = await supabase
         .from("event_invoices")
@@ -202,7 +209,46 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
       if (inv) invoice = inv;
     } catch (_e) { /* enrichment is best effort */ }
 
-    const times = computeEventTimes(deal.event_date, deal.event_time, performanceTime);
+    let times: Record<string, unknown> = computeEventTimes(deal.event_date, deal.event_time, performanceTime);
+
+    // Package-aware timing. Only for booked deals whose latest agreement was
+    // signed with a start time (the new sign form). Every other deal, every
+    // HOLD and every older signing keeps the behavior above.
+    let packageTimed = false;
+    let packageTimingInfo: PackageTiming | null = null;
+    let clientStart: string | null = null;
+    if (isBooked && agreementStartTime) {
+      try {
+        clientStart = deal.event_time && /^\d{2}:\d{2}/.test(String(deal.event_time))
+          ? String(deal.event_time).slice(0, 5)
+          : agreementStartTime.slice(0, 5);
+        const wanted = (agreementTierName || "").trim().toLowerCase();
+        const storedTier = proposalTiers.find((t) => (t?.name || "").trim().toLowerCase() === wanted);
+        packageTimingInfo = packageTiming(storedTier || { name: agreementTierName || "" });
+        const win = packageEventWindow(String(deal.event_date).slice(0, 10), clientStart, packageTimingInfo);
+        if (win) {
+          times = {
+            start: { dateTime: win.start, timeZone: GCAL_TZ },
+            end: { dateTime: win.end, timeZone: GCAL_TZ },
+          };
+          packageTimed = true;
+        }
+      } catch (e) {
+        console.error("[gcal-push] package timing failed, keeping default timing", e);
+      }
+    }
+    const clientStart12 = packageTimed ? formatStartTime12h(clientStart) : null;
+    const packageTimingLines = packageTimed && packageTimingInfo
+      ? [
+        `Client start time: ${clientStart12 || clientStart} (approximate, to be confirmed closer to the date)`,
+        packageTimingInfo.kind === "show"
+          ? `Setup: ${packageTimingInfo.setupMinutes} minutes before (show)`
+          : `Setup: ${packageTimingInfo.setupMinutes} minutes before (walk-around)`,
+        packageTimingInfo.performanceMinutes !== null
+          ? `Performance length: ${packageTimingInfo.performanceMinutes} minutes`
+          : "Performance length: not set by the package, blocked 2 hours after start",
+      ]
+      : [];
     const dollars = (cents: number) => `$${Math.round((cents || 0) / 100).toLocaleString()}`;
     const paymentLines = invoice
       ? [
@@ -234,6 +280,7 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
       deal.event_time ? `Start time: ${String(deal.event_time).slice(0, 5)}` : "Start time: to be confirmed",
       performanceTime ? `Performance: ${performanceTime}` : null,
       arrivalTime ? `Arrival: ${arrivalTime}` : null,
+      ...packageTimingLines,
       deal.location ? `Venue: ${deal.location}` : "Venue: to be confirmed",
       deal.guest_count ? `Guests: ${deal.guest_count}` : null,
       "",
@@ -293,6 +340,15 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
     const url = isUpdate
       ? `${GCAL_GATEWAY}/calendars/primary/events/${encodeURIComponent(deal.calendar_event_id)}`
       : `${GCAL_GATEWAY}/calendars/primary/events`;
+    // Turning an all-day HOLD into a timed event: clear the old all-day date
+    // fields explicitly so Google converts the event instead of keeping it all-day.
+    const sendBody = isUpdate && packageTimed
+      ? {
+        ...body,
+        start: { ...(times.start as Record<string, unknown>), date: null },
+        end: { ...(times.end as Record<string, unknown>), date: null },
+      }
+      : body;
     const res = await fetch(url, {
       method: isUpdate ? "PATCH" : "POST",
       headers: {
@@ -300,7 +356,7 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
         "X-Connection-Api-Key": GCAL_API_KEY,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(sendBody),
     });
     const respBody = await res.json().catch(() => ({}));
     if (!res.ok) {

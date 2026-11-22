@@ -3,6 +3,7 @@ import { X, Loader2, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { getStripeEnvironment } from "@/lib/stripe";
 import { applyAgreementTerms } from "../../supabase/functions/_shared/agreement-terms";
+import { START_TIME_RE, formatStartTime12h } from "../../supabase/functions/_shared/package-timing";
 
 import type { Tier, ProposalData } from "@/pages/ProposalTemplate";
 
@@ -23,6 +24,7 @@ interface Props {
   onClose: () => void;
   tier: Tier | null;
   proposal: ProposalData & { id?: string; slug?: string };
+  onSigned?: (info: { tierName: string; startTime: string }) => void;
 }
 
 const detectDefaultArrival = (tier: Tier): string => {
@@ -56,7 +58,7 @@ Client Name: ${clientName}${clientEmail ? ` <${clientEmail}>` : ""}
 Event Name: ${eventType}
 Event Date: ${eventDate}
 Event Location: ${eventLocation || "TBA"}
-Performance Time: ${performanceTime || "TBA"}
+Performance Time: Start time ${performanceTime || "TBA"}
 Arrival Time: ${arrivalTime}
 
 Package Selected: ${tier.name}, ${tier.price}
@@ -113,7 +115,7 @@ DATE: ${signedDate}
 `;
 };
 
-const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
+const SignAgreementModal = ({ open, onClose, tier, proposal, onSigned }: Props) => {
   const [clientName, setClientName] = useState(
     `${proposal.first_name || ""} ${proposal.last_name || ""}`.trim()
   );
@@ -128,7 +130,9 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
   const [arrivalTime, setArrivalTime] = useState(() =>
     tier ? detectDefaultArrival(tier) : "30 minutes before show time"
   );
-  const [performanceTime, setPerformanceTime] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [signedInfo, setSignedInfo] = useState<{ tierName: string; startTime: string } | null>(null);
+  const startTime12 = formatStartTime12h(startTime) || "";
   const [eventLocation, setEventLocation] = useState(proposal.venue || "");
 
   const signedDate = useMemo(
@@ -168,6 +172,12 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
 
   if (!open || !tier) return null;
 
+  // After a signing, closing the modal lets the page show its reserved state.
+  const handleClose = () => {
+    if (done && signedInfo) onSigned?.(signedInfo);
+    onClose();
+  };
+
   const agreementText = applyAgreementTerms(buildAgreement({
     clientName: clientName || "____________________",
     clientEmail,
@@ -175,7 +185,7 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
     proposal,
     signedDate,
     arrivalTime: arrivalTime.trim() || detectDefaultArrival(tier),
-    performanceTime: performanceTime.trim(),
+    performanceTime: startTime12,
     eventLocation: eventLocation.trim(),
   }), {
     omit_photography: proposal.omit_photography === true,
@@ -184,6 +194,7 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
 
   const submit = async () => {
     if (!clientName.trim()) return toast.error("Please type your full name.");
+    if (!startTime || !START_TIME_RE.test(startTime)) return toast.error("Please choose a start time.");
     if (!agreed) return toast.error("Please check the box to agree to the terms.");
     setSubmitting(true);
     try {
@@ -201,7 +212,8 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
           event_date: proposal.event_date,
           venue: proposal.venue,
           agreement_text: agreementText,
-          performance_time: performanceTime.trim() || null,
+          performance_time: startTime12 || null,
+          event_start_time: startTime,
           arrival_time: arrivalTime.trim() || detectDefaultArrival(tier),
         }),
       });
@@ -213,6 +225,7 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
         deposit_cents: j.deposit_cents ?? null,
         pay_url: j.pay_url ?? null,
       });
+      setSignedInfo({ tierName: tier.name, startTime });
       setDone(true);
       toast.success("Agreement signed, check your email for a copy.");
     } catch (e) {
@@ -225,7 +238,7 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
     <div className="fixed inset-0 z-[100] bg-forest-dark/80 backdrop-blur-sm flex items-start md:items-center justify-center p-4 overflow-y-auto">
       <div className="bg-cream text-forest-dark w-full max-w-2xl my-8 relative">
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute top-4 right-4 text-forest-dark/60 hover:text-forest-dark"
           aria-label="Close"
         >
@@ -276,7 +289,7 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
               to lock the date., Scott
             </p>
             <button
-              onClick={onClose}
+              onClick={handleClose}
               className="bg-forest-dark text-cream px-6 py-3 text-xs tracking-[0.2em] uppercase hover:opacity-90"
             >
               Close
@@ -339,16 +352,18 @@ const SignAgreementModal = ({ open, onClose, tier, proposal }: Props) => {
               </label>
               <label className="block">
                 <span className="text-xs uppercase tracking-wider text-forest-dark/60">
-                  Performance Time
+                  Start time
                 </span>
                 <input
-                  type="text"
-                  value={performanceTime}
-                  onChange={(e) => setPerformanceTime(e.target.value)}
+                  type="time"
+                  required
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
                   className="mt-1 w-full border border-forest-dark/20 bg-white px-3 py-2.5 text-sm"
-                  placeholder="e.g. 7:30 to 9:00 PM or TBA"
-                  maxLength={120}
                 />
+                <span className="mt-1 block text-[11px] text-forest-dark/50">
+                  An approximate time is perfect. We can confirm closer to the date.
+                </span>
               </label>
             </div>
 

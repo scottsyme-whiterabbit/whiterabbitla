@@ -1,6 +1,6 @@
 import { pricingTiersForEventType } from "@/data/pricingTierSets";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { Plus, Instagram, Linkedin } from "lucide-react";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
 import SignAgreementModal from "@/components/SignAgreementModal";
@@ -10,6 +10,7 @@ import wrScriptLogo from "@/assets/wr-wordmark-cream.png";
 import { DEFAULT_GALLERY_KEYS, photoKeyToSrc, reviewsForEventType, reviewsForProposal, type ProposalReview } from "@/data/proposalAssets";
 import { adminViewHeaders } from "@/lib/adminAuth";
 import { normalizeTiers } from "@/lib/proposalTiers";
+import { formatStartTime12h } from "../../supabase/functions/_shared/package-timing";
 
 import disneyLogo from "@/assets/logos/normalized/disney.png";
 import rollsroyceLogo from "@/assets/logos/normalized/rollsroyce.png";
@@ -94,6 +95,13 @@ interface Props {
   preview?: boolean;
 }
 
+// Signed state returned next to a saved proposal. Not part of ProposalData.
+export interface ProposalReservation {
+  tier_name: string;
+  start_time: string | null;
+  deposit_paid: boolean;
+}
+
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
@@ -126,10 +134,13 @@ export const DEFAULT_PROPOSAL: ProposalData = {
   closing_attribution: "",
 };
 
-export const ProposalView = ({ data: input }: { data: ProposalData }) => {
+export const ProposalView = ({ data: input, reservation: loadedReservation }: { data: ProposalData; reservation?: ProposalReservation | null }) => {
   const data = { ...input, tiers: normalizeTiers(input.tiers) };
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [signTier, setSignTier] = useState<Tier | null>(null);
+  const [justSigned, setJustSigned] = useState<ProposalReservation | null>(null);
+  const reservation = justSigned ?? loadedReservation ?? null;
+  const reservedStart = reservation ? formatStartTime12h(reservation.start_time) : null;
   const fullName = `${data.first_name} ${data.last_name}`.trim();
   const reserveLabel = "Sign & Reserve";
 
@@ -252,8 +263,51 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
         );
       })()}
 
+      {/* RESERVED: replaces packages and next steps once signed */}
+      {reservation && (
+        <section className="relative bg-cream py-20 md:py-28 px-6">
+          <div className="max-w-2xl mx-auto text-center">
+            <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">Your Reservation</p>
+            <OrnamentalDivider />
+            <h2 className="font-serif font-light text-4xl md:text-5xl text-forest-dark mt-6 mb-10">Your date is reserved</h2>
+            <div className="relative border border-forest-dark/10 bg-cream p-6 md:p-8 max-w-md mx-auto text-left">
+              <span className="absolute top-0 left-0 w-4 h-px bg-gold/70" />
+              <span className="absolute top-0 left-0 w-px h-4 bg-gold/70" />
+              <span className="absolute bottom-0 right-0 w-4 h-px bg-gold/70" />
+              <span className="absolute bottom-0 right-0 w-px h-4 bg-gold/70" />
+              <dl className="space-y-4">
+                {data.event_date && (
+                  <div>
+                    <dt className="text-[10px] tracking-[0.35em] uppercase text-gold mb-1">Date</dt>
+                    <dd className="font-serif text-xl md:text-2xl text-forest-dark">{data.event_date}</dd>
+                  </div>
+                )}
+                {reservedStart && (
+                  <div>
+                    <dt className="text-[10px] tracking-[0.35em] uppercase text-gold mb-1">Start time</dt>
+                    <dd className="font-serif text-xl md:text-2xl text-forest-dark">{reservedStart}</dd>
+                  </div>
+                )}
+                {reservation.tier_name && (
+                  <div>
+                    <dt className="text-[10px] tracking-[0.35em] uppercase text-gold mb-1">Package</dt>
+                    <dd className="font-serif text-xl md:text-2xl text-forest-dark">{reservation.tier_name}</dd>
+                  </div>
+                )}
+              </dl>
+            </div>
+            {reservedStart && (
+              <p className="font-sans text-sm text-forest-dark/70 mt-8">We will confirm the time closer to the date.</p>
+            )}
+            {!reservation.deposit_paid && (
+              <p className={`font-sans text-sm text-forest-dark/70 ${reservedStart ? "mt-2" : "mt-8"}`}>Your deposit is still due. The payment link is in your confirmation email.</p>
+            )}
+          </div>
+        </section>
+      )}
+
       {/* TIERS */}
-      {data.tiers.length > 0 && <section className="relative bg-forest-dark text-cream py-20 md:py-32 px-6 overflow-hidden">
+      {!reservation && data.tiers.length > 0 && <section className="relative bg-forest-dark text-cream py-20 md:py-32 px-6 overflow-hidden">
         <Flourishes tone="cream" size="md" />
         <div className="max-w-6xl mx-auto relative">
           <div className="text-center mb-12">
@@ -304,7 +358,7 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
 
       }
       {/* WHAT HAPPENS NEXT */}
-      <section className="relative bg-cream py-14 md:py-20 px-6">
+      {!reservation && <section className="relative bg-cream py-14 md:py-20 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">What Happens Next</p>
           <OrnamentalDivider />
@@ -331,7 +385,7 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
             </p>
           )}
         </div>
-      </section>
+      </section>}
 
       {/* FOR PLANNERS */}
       <section className="relative bg-forest-dark text-cream py-14 md:py-20 px-6">
@@ -520,7 +574,7 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
               : "This proposal, and your date, is held for seven days from the day I sent it."} If you need more time, tell me in writing or on a call and I will happily extend the hold.</p>
 
           </div>
-          <div className="grid md:grid-cols-3 gap-3 mt-10 max-w-4xl mx-auto">
+          {!reservation && <div className="grid md:grid-cols-3 gap-3 mt-10 max-w-4xl mx-auto">
             {data.tiers.map((tier, i) => {
               const rec = tier.recommended;
               return (
@@ -534,7 +588,7 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
                 </button>
               );
             })}
-          </div>
+          </div>}
           <div className="mt-12 text-center text-cream/70">
             <span className="block text-sm">Prefer to talk it through?</span>
             <span className="text-sm">
@@ -598,6 +652,9 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
         onClose={() => setSignTier(null)}
         tier={signTier}
         proposal={data as ProposalData & { id?: string; slug?: string }}
+        onSigned={({ tierName, startTime }) =>
+          setJustSigned({ tier_name: tierName, start_time: startTime, deposit_paid: false })
+        }
       />
     </div>
   );
@@ -605,7 +662,9 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
 
 const ProposalTemplate = ({ data: dataProp, preview }: Props) => {
   const { slug } = useParams<{ slug: string }>();
+  const [searchParams] = useSearchParams();
   const [data, setData] = useState<ProposalData | null>(dataProp || (preview ? DEFAULT_PROPOSAL : null));
+  const [reservation, setReservation] = useState<ProposalReservation | null>(null);
   const [loading, setLoading] = useState(!dataProp && !preview);
   const [error, setError] = useState<string | null>(null);
 
@@ -631,6 +690,7 @@ const ProposalTemplate = ({ data: dataProp, preview }: Props) => {
         const j = await res.json();
         if (!res.ok) throw new Error(j.error || "Failed to load");
         setData(j.proposal);
+        setReservation(j.reservation ?? null);
       } catch (e) {
         setError((e as Error).message);
       } finally {
@@ -648,7 +708,19 @@ const ProposalTemplate = ({ data: dataProp, preview }: Props) => {
   if (loading) return <div className="min-h-screen bg-cream flex items-center justify-center text-forest-dark/60">Loading proposal…</div>;
   if (error || !data) return <div className="min-h-screen bg-cream flex items-center justify-center text-forest-dark">Proposal not found.</div>;
 
-  return <ProposalView data={data} />;
+  // Template route only (no slug): ?reserved=1 previews the reserved state
+  // with sample values, and &paid=1 hides the deposit line.
+  if (!dataProp && !slug && searchParams.get("reserved") === "1") {
+    const sample = { ...data, event_date: "June 12, 2027" };
+    const sampleReservation: ProposalReservation = {
+      tier_name: normalizeTiers(data.tiers)[0]?.name || "",
+      start_time: "19:00",
+      deposit_paid: searchParams.get("paid") === "1",
+    };
+    return <ProposalView data={sample} reservation={sampleReservation} />;
+  }
+
+  return <ProposalView data={data} reservation={reservation} />;
 };
 
 export default ProposalTemplate;

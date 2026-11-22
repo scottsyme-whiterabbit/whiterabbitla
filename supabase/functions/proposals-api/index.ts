@@ -14,7 +14,8 @@ import { buildAgreementPdf } from "../_shared/agreement-pdf.ts";
 import { applyAgreementTerms } from "../_shared/agreement-terms.ts";
 import { resolveSelectedTier } from "./selected-tier.ts";
 import { safeErrorPayload } from "../_shared/safe-error.ts";
-import { publicProposal, publicSignResponse } from "./public-response.ts";
+import { publicProposal, publicReservation, publicSignResponse } from "./public-response.ts";
+import { INACTIVE_INVOICE_STATUS_FILTER } from "../_shared/invoice-status.ts";
 import { proposalValueCents, shouldFillDealValue } from "./deal-value.ts";
 
 // Link a hand-built proposal to its existing deal (by email) and fill an empty
@@ -347,7 +348,31 @@ Deno.serve(async (req) => {
         })();
       }
 
-      return json({ proposal: admin ? data : publicProposal(data) });
+      // Signed state for the page. Best effort: a failed lookup shows the
+      // proposal as unsigned rather than blocking the page.
+      let reservation: ReturnType<typeof publicReservation> = null;
+      try {
+        const { data: agreements } = await supabase
+          .from("signed_agreements")
+          .select("id, tier_name, event_start_time")
+          .eq("proposal_id", data.id)
+          .order("signed_at", { ascending: true })
+          .limit(1);
+        const first = agreements?.[0];
+        if (first) {
+          const { data: invoices } = await supabase
+            .from("event_invoices")
+            .select("status, deposit_paid_at")
+            .eq("agreement_id", first.id)
+            .not("status", "in", INACTIVE_INVOICE_STATUS_FILTER)
+            .limit(10);
+          reservation = publicReservation(first, invoices || []);
+        }
+      } catch (e) {
+        console.error("reservation lookup failed", e);
+      }
+
+      return json({ proposal: admin ? data : publicProposal(data), reservation });
     }
 
     // PUBLIC: get venue pitch by slug
@@ -375,6 +400,7 @@ Deno.serve(async (req) => {
         proposal_id, proposal_slug, tier_name, tier_price,
         client_name, client_email, event_type, event_date, venue,
         agreement_text: submittedAgreementText, performance_time, arrival_time,
+        event_start_time,
       } = body || {};
       let agreement_text = submittedAgreementText;
       if (!tier_name || !client_name || !agreement_text) {
@@ -396,6 +422,14 @@ Deno.serve(async (req) => {
       if (client_email && !plausibleEmail(client_email)) {
         return json({ error: "Please enter a valid email address." }, 400);
       }
+
+      // Optional start time (HH:MM, 24 hour). Older pages do not send it and
+      // are accepted exactly as before.
+      const hasStartTime = event_start_time !== undefined && event_start_time !== null && event_start_time !== "";
+      if (hasStartTime && (typeof event_start_time !== "string" || !/^([01][0-9]|2[0-3]):[0-5][0-9]$/.test(event_start_time))) {
+        return json({ error: "Please choose a valid start time." }, 400);
+      }
+      const startTime: string | null = hasStartTime ? (event_start_time as string) : null;
 
       // Look up the STORED proposal (via proposal_id or proposal_slug). Nothing is
       // written, invoiced or emailed unless a real stored proposal is found, and
@@ -475,6 +509,7 @@ Deno.serve(async (req) => {
         agreement_text: trim(agreement_text, 20000),
         performance_time: trim(performance_time, 120),
         arrival_time: trim(arrival_time, 120),
+        event_start_time: startTime,
         user_agent: ua.slice(0, 500),
         signer_ip: ip.slice(0, 64),
       }).select().single();
@@ -530,6 +565,20 @@ Deno.serve(async (req) => {
       // Runs only AFTER the real invoice exists, so newsletter-admin never
       // creates a placeholder "external paid" invoice for this deal.
       // Auto-move linked deal to Booked so the Google Calendar sync fires
+      // Give the deal the client's start time so the calendar sync below can
+      // build a timed event. Only fills an empty time, never overwrites one
+      // Scott set, and never blocks signing.
+      if (linkedDealId && startTime) {
+        try {
+          const { error: timeErr } = await supabase
+            .from("deals")
+            .update({ event_time: startTime })
+            .eq("id", linkedDealId)
+            .is("event_time", null);
+          if (timeErr) console.error("deal start time update failed", timeErr);
+        } catch (e) { console.error("deal start time update failed", e); }
+      }
+
       if (linkedDealId) {
         try {
           await supabase.from("deals").update({ stage: "booked" }).eq("id", linkedDealId);
