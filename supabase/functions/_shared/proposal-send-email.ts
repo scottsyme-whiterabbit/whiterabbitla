@@ -176,23 +176,23 @@ body { margin: 0; padding: 0; width: 100% !important; background-color: #335747;
 </td></tr>
 
 <tr><td style="padding: 0 40px 32px; text-align:center;" class="padding-mobile">
-<a href="${link}" target="_blank" style="display:inline-block; padding:14px 36px; font-family:Georgia,serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#C9A3A8; text-decoration:none; font-weight:bold; border:1px solid #C9A3A8; border-radius:2px;">View Your Proposal</a>
+<a href="${link}" target="_blank" style="display:inline-block; padding:14px 36px; font-family:Georgia,serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:#C79A54; text-decoration:none; font-weight:bold; border:1px solid #C79A54; border-radius:2px;">View Your Proposal</a>
 </td></tr>
 
 <tr><td style="padding: 0 40px 28px; text-align:center;" class="padding-mobile">
-<p style="margin:0; font-family:Georgia,serif; font-size:12px; color:rgba(245,240,232,0.4);">Or open in your browser:<br/><a href="${link}" style="color:rgba(201,163,168,0.7); word-break:break-all; text-decoration:none;">${link}</a></p>
+<p style="margin:0; font-family:Georgia,serif; font-size:12px; color:rgba(245,240,232,0.4);">Or open in your browser:<br/><a href="${link}" style="color:rgba(199,154,84,0.7); word-break:break-all; text-decoration:none;">${link}</a></p>
 </td></tr>
 
 <tr><td style="padding: 0 40px;" class="padding-mobile">
-<hr style="border:none; border-top:1px solid rgba(201,163,168,0.15); margin:0 0 24px;" />
+<hr style="border:none; border-top:1px solid rgba(199,154,84,0.15); margin:0 0 24px;" />
 </td></tr>
 
 <tr><td style="padding: 0 40px 28px; font-family:Georgia,serif; font-size:13px; line-height:1.7; color:rgba(245,240,232,0.55);" class="padding-mobile">
 <p style="margin:0;">
 <span style="color:rgba(245,240,232,0.85);">Scott Syme</span><br/>
 White Rabbit LA, Luxury Magic &amp; Entertainment<br/>
-<a href="tel:+14243941850" style="color:rgba(201,163,168,0.85); text-decoration:none;">(424) 394-1850</a><br/>
-<a href="mailto:scott.syme@whiterabbitla.com" style="color:rgba(201,163,168,0.85); text-decoration:none;">scott.syme@whiterabbitla.com</a> · <a href="https://whiterabbitla.com" style="color:rgba(201,163,168,0.85); text-decoration:none;">whiterabbitla.com</a>
+<a href="tel:+14243941850" style="color:rgba(199,154,84,0.85); text-decoration:none;">(424) 394-1850</a><br/>
+<a href="mailto:scott.syme@whiterabbitla.com" style="color:rgba(199,154,84,0.85); text-decoration:none;">scott.syme@whiterabbitla.com</a> · <a href="https://whiterabbitla.com" style="color:rgba(199,154,84,0.85); text-decoration:none;">whiterabbitla.com</a>
 </p>
 </td></tr>
 
