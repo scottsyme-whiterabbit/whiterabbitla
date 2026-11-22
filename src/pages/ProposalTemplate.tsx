@@ -224,8 +224,8 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
         <section className="relative bg-cream pb-16 md:pb-24 px-6">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-10">
-              <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-3">The Shape of It</p>
-              <h2 className="font-serif font-light text-3xl md:text-4xl text-forest-dark">Your Evening, Hour by Hour</h2>
+              <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-3">The Itinerary</p>
+              <h2 className="font-serif font-light text-3xl md:text-4xl text-forest-dark">Your Event, Hour by Hour</h2>
             </div>
             <div className="relative pl-8 border-l border-gold/40">
               {data.timeline.map((t, i) => (
@@ -269,7 +269,7 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
         <div className="max-w-6xl mx-auto relative">
           <div className="text-center mb-12">
             <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">{data.tiers.length === 1 ? "Your Option" : data.tiers.length === 2 ? "Two Options" : "Three Options"}</p>
-            <h2 className="font-serif font-light text-4xl md:text-5xl text-cream mb-3">Choose Your Evening</h2>
+            <h2 className="font-serif font-light text-4xl md:text-5xl text-cream mb-3">Your Accommodations</h2>
             <div className="flex items-center justify-center gap-3 mt-4">
               <span className="w-8 h-px bg-gold/50" />
               <span className="text-gold text-xs">✦</span>
@@ -321,7 +321,7 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
           <OrnamentalDivider />
           <div className="grid md:grid-cols-3 gap-6 md:gap-8 mt-10 text-left">
             {[
-              { n: "One", t: "Choose your evening", d: "Pick the experience that fits your night. One click opens the agreement, already filled in." },
+              { n: "One", t: "Choose your accommodations", d: "Pick the experience that fits your night. One click opens the agreement, already filled in." },
               { n: "Two", t: "Sign in a minute", d: "Read it, type your name, done. Your copy arrives by email the moment you sign." },
               { n: "Three", t: "Deposit holds the date", d: "A 50% deposit locks it in. The balance is due before the performance, and I take it from there." },
             ].map((s) => (
@@ -348,7 +348,7 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
       <section className="relative bg-forest-dark text-cream py-14 md:py-20 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">For Planners and Producers</p>
-          <h2 className="font-serif font-light text-3xl md:text-4xl mb-6">Nothing For You To Manage</h2>
+          <h2 className="font-serif font-light text-3xl md:text-4xl mb-6">Consider It Handled</h2>
           <div className="flex items-center justify-center gap-3 mb-8">
             <span className="w-10 h-px bg-gold/60" />
             <span className="text-gold text-xs">✦</span>
@@ -408,7 +408,7 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
       <section className="relative bg-cream py-16 md:py-24 px-6">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">What Hosts Say</p>
+            <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">The Guest Book</p>
             <OrnamentalDivider />
             <h2 className="font-serif font-light text-3xl md:text-4xl text-forest-dark mt-6">A Few Words From the Room</h2>
           </div>
@@ -459,7 +459,7 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-10">
               <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-3">Before You Decide</p>
-              <h2 className="font-serif font-light text-3xl md:text-4xl text-forest-dark">A Few Questions</h2>
+              <h2 className="font-serif font-light text-3xl md:text-4xl text-forest-dark">A Few Things of Housekeeping</h2>
             </div>
             <div className="divide-y divide-gold/25 border-t border-b border-gold/25">
               {data.faqs.map((f, i) => {
@@ -521,7 +521,7 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
         <Flourishes tone="cream" size="md" />
         <div className="max-w-3xl mx-auto relative">
           <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">Reserving the Date</p>
-          <h2 className="font-serif font-light text-4xl md:text-5xl mb-3">When You're Ready</h2>
+          <h2 className="font-serif font-light text-4xl md:text-5xl mb-3">Confirming Your Reservation</h2>
           <div className="flex items-center justify-center gap-3 mt-4 mb-8">
             <span className="w-10 h-px bg-gold/60" />
             <span className="text-gold text-xs">✦</span>
