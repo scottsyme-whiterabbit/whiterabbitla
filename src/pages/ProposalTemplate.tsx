@@ -141,6 +141,11 @@ export const ProposalView = ({ data: input, reservation: loadedReservation }: { 
   const [justSigned, setJustSigned] = useState<ProposalReservation | null>(null);
   const reservation = justSigned ?? loadedReservation ?? null;
   const reservedStart = reservation ? formatStartTime12h(reservation.start_time) : null;
+  // The signed package's full details live on the proposal's stored tiers;
+  // match by trimmed, case-insensitive name so the reserved card can show them.
+  const signedTier = reservation
+    ? data.tiers.find((t) => t.name.trim().toLowerCase() === reservation.tier_name.trim().toLowerCase()) ?? null
+    : null;
   const fullName = `${data.first_name} ${data.last_name}`.trim();
   const reserveLabel = "Sign & Reserve";
 
@@ -292,6 +297,17 @@ export const ProposalView = ({ data: input, reservation: loadedReservation }: { 
                   <div>
                     <dt className="text-[10px] tracking-[0.35em] uppercase text-gold mb-1">Package</dt>
                     <dd className="font-serif text-xl md:text-2xl text-forest-dark">{reservation.tier_name}</dd>
+                    {signedTier && (
+                      <div className="mt-3">
+                        {signedTier.tagline && <p className="font-sans text-sm text-forest-dark/65 mb-3">{signedTier.tagline}</p>}
+                        <div className="w-10 h-px bg-gold/60 mb-3" />
+                        <ul className="space-y-2.5 text-sm text-forest-dark/85 leading-relaxed">
+                          {signedTier.items.map((it, j) => (
+                            <li key={j} className="flex gap-2.5"><span className="text-gold mt-1 text-[10px]">✦</span><span>{it}</span></li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                   </div>
                 )}
               </dl>
@@ -569,9 +585,9 @@ export const ProposalView = ({ data: input, reservation: loadedReservation }: { 
           </div>
           <div className="font-sans text-base leading-relaxed text-cream/80 max-w-2xl mx-auto space-y-4">
             <p>A 50% deposit holds your date and locks the booking. The remaining 50% is due before the performance.</p>
-            <p>{holdUntil
+            {!reservation && <p>{holdUntil
               ? `This proposal, and your date, is held through ${holdUntil}, seven days from the day I sent it.`
-              : "This proposal, and your date, is held for seven days from the day I sent it."} If you need more time, tell me in writing or on a call and I will happily extend the hold.</p>
+              : "This proposal, and your date, is held for seven days from the day I sent it."} If you need more time, tell me in writing or on a call and I will happily extend the hold.</p>}
 
           </div>
           {!reservation && <div className="grid md:grid-cols-3 gap-3 mt-10 max-w-4xl mx-auto">
