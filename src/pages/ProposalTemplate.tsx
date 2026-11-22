@@ -34,24 +34,6 @@ const galleryPhotos: { src: string; mirror?: boolean }[] = [
   { src: proposalCardsBw, mirror: true },
 ];
 
-const HERO_MAP: Record<string, string> = {
-  wedding: heroMain,
-  corporate: heroMain,
-  private: heroMain,
-  parlor: heroMain,
-  cocktail: heroMain,
-  evening: heroMain,
-};
-
-export const HERO_OPTIONS = [
-  { value: "wedding", label: "Wedding" },
-  { value: "corporate", label: "Corporate" },
-  { value: "private", label: "Private Event" },
-  { value: "parlor", label: "Parlor" },
-  { value: "cocktail", label: "Cocktail" },
-  { value: "evening", label: "Evening (dark)" },
-];
-
 // Same treatment as the homepage logo wall: normalized (trimmed) logos,
 // per-logo render height in px for optical balance, forest-green tint.
 const logos = [
@@ -148,7 +130,6 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
   const data = { ...input, tiers: normalizeTiers(input.tiers) };
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [signTier, setSignTier] = useState<Tier | null>(null);
-  const heroSrc = HERO_MAP[data.hero_image] || HERO_MAP.wedding;
   const fullName = `${data.first_name} ${data.last_name}`.trim();
   const reserveLabel = "Sign & Reserve";
 
@@ -171,7 +152,7 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
       {/* HERO */}
       <section className="relative bg-forest-dark text-cream overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroSrc} alt="" fetchPriority="high" decoding="async" className="w-full h-full object-cover opacity-90" />
+          <img src={heroMain} alt="" fetchPriority="high" decoding="async" className="w-full h-full object-cover opacity-90" />
           <div className="absolute inset-0 bg-gradient-to-b from-forest-dark/70 via-forest-dark/55 to-forest-dark/90" />
         </div>
         <Flourishes size="lg" />

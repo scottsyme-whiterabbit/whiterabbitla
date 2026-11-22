@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ClientFileProvider } from "@/components/admin/ClientFileContext";
 import { toast } from "sonner";
 import { Plus, Trash2, Copy, Send, Eye, ChevronDown, ChevronUp, X, Sparkles, Loader2, ArrowLeft, ArrowUp, ArrowDown, ChevronLeft, ChevronRight, Check } from "lucide-react";
-import { ProposalView, DEFAULT_PROPOSAL, HERO_OPTIONS, type ProposalData, type Tier, type TimelineItem, type FaqItem } from "./ProposalTemplate";
+import { ProposalView, DEFAULT_PROPOSAL, type ProposalData, type Tier, type TimelineItem, type FaqItem } from "./ProposalTemplate";
 import { additionalTermsBlock } from "../../supabase/functions/_shared/agreement-terms";
 import { BRAND_PHOTOS, DEFAULT_GALLERY_KEYS, GALLERY_UPLOAD_PHOTOS, PROPOSAL_TEMPLATES, standardLinesForEventType, tierLinesForProposal, photoKeyToSrc, reviewsForEventType, ALL_PROPOSAL_REVIEWS, type ProposalReview } from "@/data/proposalAssets";
 import { PRICING_TIER_SETS, pricingTiersForEventType, tiersHaveContent, type PricingTierSetName } from "@/data/pricingTierSets";
@@ -960,25 +960,6 @@ const ProposalEditor = ({
           <ExpandableField label="Your Reservation (intro paragraph)" className={inputCls + " min-h-[140px]"} value={proposal.intro_paragraph} onChange={(v) => update({ intro_paragraph: v })} />
         </div>
 
-        </EditorSection>
-
-        <EditorSection id="hero" title="Hero image" summary={HERO_OPTIONS.find((option) => option.value === proposal.hero_image)?.label || "None chosen"} openId={openId} setOpenId={setOpenId}>
-            <div className="md:col-span-2">
-              <label className={labelCls}>Hero photo</label>
-              <div className="mb-3 overflow-hidden border border-forest-dark/15 bg-cream aspect-[16/7]">
-                <img src={photoKeyToSrc(proposal.hero_image === "corporate" ? "experience-corporate" : proposal.hero_image === "wedding" ? "gallery-1" : proposal.hero_image === "private" ? "experience-private" : proposal.hero_image === "parlor" ? "parlor-stage" : proposal.hero_image === "cocktail" ? "closeup-cocktail" : "silhouette") || undefined} alt={`${HERO_OPTIONS.find((option) => option.value === proposal.hero_image)?.label || "Current"} hero preview`} className="h-full w-full object-cover" />
-              </div>
-              <div className="flex gap-3 overflow-x-auto pb-2">
-                {HERO_OPTIONS.map((option) => {
-                  const previewKey = option.value === "corporate" ? "experience-corporate" : option.value === "wedding" ? "gallery-1" : option.value === "private" ? "experience-private" : option.value === "parlor" ? "parlor-stage" : option.value === "cocktail" ? "closeup-cocktail" : "silhouette";
-                  const selected = proposal.hero_image === option.value;
-                  return <button key={option.value} type="button" onClick={() => update({ hero_image: option.value })} className={`shrink-0 w-28 border-2 bg-white text-left ${selected ? "border-gold ring-2 ring-gold/30" : "border-transparent"}`} aria-pressed={selected}>
-                    <img src={photoKeyToSrc(previewKey) || undefined} alt="" className="h-20 w-full object-cover" loading="lazy" decoding="async" />
-                    <span className="block px-2 py-2 text-base text-forest-dark">{option.label}</span>
-                  </button>;
-                })}
-              </div>
-            </div>
         </EditorSection>
 
         <EditorSection id="photos" title="Photos" summary={`${galleryKeys.length} selected`} openId={openId} setOpenId={setOpenId}>
