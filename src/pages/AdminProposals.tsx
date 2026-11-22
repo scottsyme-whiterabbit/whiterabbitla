@@ -956,8 +956,8 @@ const ProposalEditor = ({
 
         {/* Intro */}
         <div className={sectionCls}>
-          <h2 className="font-serif text-xl text-forest-dark mb-4">Your Night (intro paragraph)</h2>
-          <ExpandableField label="Your Night (intro paragraph)" className={inputCls + " min-h-[140px]"} value={proposal.intro_paragraph} onChange={(v) => update({ intro_paragraph: v })} />
+          <h2 className="font-serif text-xl text-forest-dark mb-4">Your Reservation (intro paragraph)</h2>
+          <ExpandableField label="Your Reservation (intro paragraph)" className={inputCls + " min-h-[140px]"} value={proposal.intro_paragraph} onChange={(v) => update({ intro_paragraph: v })} />
         </div>
 
         </EditorSection>

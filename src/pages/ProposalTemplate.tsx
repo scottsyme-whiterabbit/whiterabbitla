@@ -228,10 +228,10 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
         </div>
       </section>
 
-      {/* YOUR NIGHT */}
+      {/* YOUR RESERVATION */}
       <section className="relative bg-cream py-20 md:py-28 px-6">
         <div className="max-w-2xl mx-auto text-center">
-          <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">Your Night</p>
+          <p className="text-[11px] tracking-[0.4em] uppercase text-gold mb-4">Your Reservation</p>
           <OrnamentalDivider />
           <h2 className="font-serif font-light text-4xl md:text-5xl text-forest-dark mt-6 mb-8">An Evening, Composed</h2>
           <p className="font-sans text-base md:text-lg leading-relaxed text-forest-dark/85 whitespace-pre-wrap text-left">{data.intro_paragraph}</p>
