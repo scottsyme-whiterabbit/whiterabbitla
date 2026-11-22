@@ -1092,22 +1092,6 @@ const ProposalEditor = ({
         </EditorSection>
 
         <EditorSection id="pricing" title="Pricing" summary={proposal.tiers?.find((tier) => tier.recommended)?.name ? `${proposal.tiers?.length ?? 0} tiers · ${proposal.tiers?.find((tier) => tier.recommended)?.name}` : `${proposal.tiers?.length ?? 0} tiers`} openId={openId} setOpenId={setOpenId}>
-        {/* Square Invoice URL (proposal-level) */}
-        <div className={sectionCls}>
-          <h2 className="font-serif text-xl text-forest-dark mb-2">Square Invoice URL</h2>
-          <p className="text-xs text-forest-dark/60 mb-3">
-            Paste the public payment link from the Square invoice you prepared for this client (looks like <code>https://squareup.com/pay-invoice/...</code>).
-            When set, every <strong>Reserve</strong> button on the proposal opens this invoice so they can pay the 50% deposit right there. Button text becomes "Pay Deposit &amp; Reserve."
-            Leave blank to keep the per-tier links below.
-          </p>
-          <input
-            className={inputCls}
-            placeholder="https://squareup.com/pay-invoice/..."
-            value={proposal.square_invoice_url || ""}
-            onChange={(e) => update({ square_invoice_url: e.target.value })}
-          />
-        </div>
-
         {/* Load pricing tiers */}
         <div className={sectionCls}>
           <h2 className="font-serif text-xl text-forest-dark mb-2">Load pricing tiers</h2>
@@ -1282,7 +1266,6 @@ const TierEditor = ({ tier, onChange, onAddStandardLines, onRemove, index, event
           <div className="md:col-span-2"><label className={labelCls}>Tagline</label><ExpandableField multiline={false} label="Package tagline" className={inputCls} value={tier.tagline} onChange={(v) => onChange({ tagline: v })} /></div>
           <div><label className={labelCls}>Price (display)</label><input className={inputCls} placeholder="$3,500" value={tier.price} onChange={(e) => onChange({ price: e.target.value })} /></div>
           <div><label className={labelCls}>CTA label</label><input className={inputCls} value={tier.cta} onChange={(e) => onChange({ cta: e.target.value })} /></div>
-          <div className="md:col-span-2"><label className={labelCls}>Square checkout link</label><input className={inputCls} placeholder="https://square.link/..." value={tier.href} onChange={(e) => onChange({ href: e.target.value })} /></div>
           <div className="md:col-span-2">
             <label className="flex items-center gap-2 text-sm text-forest-dark">
               <input type="checkbox" checked={!!tier.recommended} onChange={(e) => onChange({ recommended: e.target.checked })} />
