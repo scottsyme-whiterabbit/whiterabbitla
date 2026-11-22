@@ -122,7 +122,7 @@ export const DEFAULT_PROPOSAL: ProposalData = {
   venue: "",
   letter_intro: "",
   intro_paragraph:
-    "What you described isn't a magic act dropped into your evening. It is an entire texture woven through the night. Quiet conversation that turns into wide-eyed silence, then laughter, then the kind of story your guests will still be telling on Monday.",
+    "When the lights dim and there is a feeling of anticipation in the air, that is when the magic happens. Your guests will be delighted by magic that happens so close to them that they will remember the excitement long after your event is over. My goal is to represent you well to your guests and to be a warm host who keeps them enchanted throughout the evening.",
   hero_image: "wedding",
   timeline: [
     { time: "6:30 PM", desc: "I arrive, set quietly, full environment built before guests arrive." },

@@ -240,7 +240,7 @@ export const PROPOSAL_TEMPLATES: Record<string, ProposalTemplate> = {
   Wedding: {
     letter_intro: "Thank you for the time on the phone. I enjoyed it more than you know.",
     intro_paragraph:
-      "What you described isn't a magic act dropped into your evening, it's an entire texture woven through the night. Quiet conversation that turns into wide-eyed silence, then laughter, then the kind of story your guests will still be telling on Monday.",
+      "When the lights dim and there is a feeling of anticipation in the air, that is when the magic happens. Your guests will be delighted by magic that happens so close to them that they will remember the excitement long after your event is over. My goal is to represent you well to your guests and to be a warm host who keeps them enchanted throughout the evening.",
     hero_image: "wedding",
     gallery_photos: ["curtain-greeting", "closeup-cocktail", "guest-reaction", "gallery-1", "crowd-reaction", "group-photo", "gallery-7", "proposal-cards-detail"],
     timeline: [
