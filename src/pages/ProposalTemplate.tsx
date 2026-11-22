@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { Plus, Instagram, Linkedin } from "lucide-react";
 import OrnamentalDivider from "@/components/OrnamentalDivider";
 import SignAgreementModal from "@/components/SignAgreementModal";
+import ProposalPhotoStrip from "@/components/proposal/ProposalPhotoStrip";
 import threeStars from "@/assets/three-stars-gold.png";
 import wrScriptLogo from "@/assets/wr-wordmark-cream.png";
 import { DEFAULT_GALLERY_KEYS, photoKeyToSrc, reviewsForEventType, reviewsForProposal, type ProposalReview } from "@/data/proposalAssets";
@@ -195,18 +196,7 @@ export const ProposalView = ({ data: input }: { data: ProposalData }) => {
         </div>
 
         {/* Gallery grid */}
-        <div className="max-w-5xl mx-auto mt-10 grid grid-cols-3 gap-3 md:gap-4">
-          {galleryPhotos.map((photo, i) => (
-            <div key={i} className="aspect-[3/4] overflow-hidden bg-forest-dark/60 group">
-              <img
-                src={photo.src}
-                alt=""
-                loading="lazy"
-                className={`w-full h-full object-cover transition-transform duration-700 ease-out ${photo.mirror ? "scale-x-[-1] group-hover:scale-x-[-1.1] group-hover:scale-y-110" : "group-hover:scale-110"}`}
-              />
-            </div>
-          ))}
-        </div>
+        <ProposalPhotoStrip photos={galleryPhotos} />
       </section>
 
       {/* YOUR RESERVATION */}

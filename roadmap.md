@@ -56,3 +56,4 @@
 - Password path kept in memory only; biometric unlock removed (it persisted the password).
 - Phase 2 (remove password path) pending Scott's confirmation on laptop + phone.
 - [x] Payment wording 'before the performance' + invoice-reminders holiday shift
+- [x] Proposal photo strip 1: one-time card flip (Ace of Spades, Queen of Hearts)
