@@ -247,7 +247,7 @@ const Index = () => {
             {...enter(0.6)}
             className="relative mx-auto mt-5 max-md:[@media(max-height:700px)]:mt-3 md:mt-6 max-w-xl font-sans text-[15px] max-md:[@media(max-height:700px)]:text-[13px] max-md:[@media(max-height:700px)]:leading-snug md:text-lg leading-relaxed tracking-[0.04em] md:tracking-[0.06em] text-cream/85 [text-shadow:0_2px_20px_rgba(0,0,0,0.6)]"
           >
-            For the finest weddings, private parties and corporate events in Los Angeles and beyond.
+            For the finest private parties, corporate events and weddings in Los Angeles and beyond.
           </motion.p>
           <motion.div {...enter(0.85)} className="relative mt-6 max-md:[@media(max-height:700px)]:mt-4 md:mt-8">
             <button
