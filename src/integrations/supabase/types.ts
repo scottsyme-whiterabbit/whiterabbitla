@@ -7,11 +7,6 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: "14.1"
-  }
   public: {
     Tables: {
       action_log: {
@@ -763,6 +758,7 @@ export type Database = {
       }
       deals: {
         Row: {
+          arrival_time: string | null
           calendar_event_id: string | null
           company: string | null
           consultation_event_id: string | null
@@ -786,8 +782,11 @@ export type Database = {
           lost_reason: string | null
           next_follow_up: string | null
           notes: string | null
+          on_site_contact_name: string | null
+          on_site_contact_phone: string | null
           outreach_notes: string | null
           outreach_status: string | null
+          parking_access: string | null
           phone: string | null
           post_show_last_sent_at: string | null
           post_show_started_at: string | null
@@ -801,8 +800,10 @@ export type Database = {
           source_id: string | null
           stage: string
           updated_at: string
+          venue_address: string | null
         }
         Insert: {
+          arrival_time?: string | null
           calendar_event_id?: string | null
           company?: string | null
           consultation_event_id?: string | null
@@ -826,8 +827,11 @@ export type Database = {
           lost_reason?: string | null
           next_follow_up?: string | null
           notes?: string | null
+          on_site_contact_name?: string | null
+          on_site_contact_phone?: string | null
           outreach_notes?: string | null
           outreach_status?: string | null
+          parking_access?: string | null
           phone?: string | null
           post_show_last_sent_at?: string | null
           post_show_started_at?: string | null
@@ -841,8 +845,10 @@ export type Database = {
           source_id?: string | null
           stage?: string
           updated_at?: string
+          venue_address?: string | null
         }
         Update: {
+          arrival_time?: string | null
           calendar_event_id?: string | null
           company?: string | null
           consultation_event_id?: string | null
@@ -866,8 +872,11 @@ export type Database = {
           lost_reason?: string | null
           next_follow_up?: string | null
           notes?: string | null
+          on_site_contact_name?: string | null
+          on_site_contact_phone?: string | null
           outreach_notes?: string | null
           outreach_status?: string | null
+          parking_access?: string | null
           phone?: string | null
           post_show_last_sent_at?: string | null
           post_show_started_at?: string | null
@@ -881,6 +890,7 @@ export type Database = {
           source_id?: string | null
           stage?: string
           updated_at?: string
+          venue_address?: string | null
         }
         Relationships: []
       }
@@ -2766,3 +2776,4 @@ export const Constants = {
     Enums: {},
   },
 } as const
+

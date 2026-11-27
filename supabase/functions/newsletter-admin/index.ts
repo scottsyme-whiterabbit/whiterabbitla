@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { INACTIVE_INVOICE_STATUS_FILTER } from "../_shared/invoice-status.ts";
 import { formatStartTime12h, packageEventWindow, packageTiming, type PackageTiming } from "../_shared/package-timing.ts";
+import { clockArrival } from "../_shared/invoice-email.ts";
 import { safeErrorPayload } from "../_shared/safe-error.ts";
 import { lostReasonError } from "../_shared/lost-reason.ts";
 import { isAdminRequest } from "../_shared/require-admin.ts";
@@ -88,7 +89,7 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
 
     const { data: deal } = await supabase
       .from("deals")
-      .select("id, stage, event_type, event_date, event_time, location, contact_name, contact_email, phone, company, guest_count, deal_value, notes, next_follow_up, calendar_event_id")
+      .select("id, stage, event_type, event_date, event_time, location, arrival_time, on_site_contact_name, on_site_contact_phone, parking_access, venue_address, contact_name, contact_email, phone, company, guest_count, deal_value, notes, next_follow_up, calendar_event_id")
       .eq("id", dealId)
       .maybeSingle();
     if (!deal) return;
@@ -192,7 +193,9 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
       if (agreement) {
         signedTier = [agreement.tier_name, agreement.tier_price].filter(Boolean).join(" ") || null;
         performanceTime = agreement.performance_time || null;
-        arrivalTime = agreement.arrival_time || null;
+        // Agreement arrival only counts when it is a real clock time, never
+        // the default "30 minutes before show time" phrase.
+        arrivalTime = clockArrival(agreement.arrival_time) ? agreement.arrival_time : null;
         agreementTierName = agreement.tier_name || null;
         agreementStartTime = typeof agreement.event_start_time === "string" && agreement.event_start_time.trim()
           ? agreement.event_start_time.trim()
@@ -269,6 +272,8 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
         ? `Quoted: ${proposalTiers.map((t) => `${t?.name || "Option"}${t?.price ? ` ${t.price}` : ""}`).join(" / ")}`
         : null;
 
+    const dealArrival12 = clockArrival(deal.arrival_time);
+    const calendarVenue = (typeof deal.venue_address === "string" && deal.venue_address.trim()) || deal.location || null;
     const descLines = [
       isBooked
         ? "Confirmed show. Everything below is pulled live from the White Rabbit CRM."
@@ -279,9 +284,13 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
       `Occasion: ${eventLabel}`,
       deal.event_time ? `Start time: ${String(deal.event_time).slice(0, 5)}` : "Start time: to be confirmed",
       performanceTime ? `Performance: ${performanceTime}` : null,
-      arrivalTime ? `Arrival: ${arrivalTime}` : null,
+      dealArrival12 ? `Arrival: ${dealArrival12}` : arrivalTime ? `Arrival: ${arrivalTime}` : null,
       ...packageTimingLines,
-      deal.location ? `Venue: ${deal.location}` : "Venue: to be confirmed",
+      calendarVenue ? `Venue: ${calendarVenue}` : "Venue: to be confirmed",
+      deal.on_site_contact_name || deal.on_site_contact_phone
+        ? `On-site contact: ${[deal.on_site_contact_name, deal.on_site_contact_phone].filter(Boolean).join(", ")}`
+        : null,
+      deal.parking_access ? `Parking / load-in: ${deal.parking_access}` : null,
       deal.guest_count ? `Guests: ${deal.guest_count}` : null,
       "",
       `Client: ${who}`,
@@ -301,7 +310,7 @@ async function syncDealToGoogleCalendar(supabase: any, dealId: string) {
 
     const body: Record<string, unknown> = {
       summary,
-      location: deal.location || undefined,
+      location: calendarVenue || undefined,
       description: descLines,
       colorId: isBooked ? "10" : "5",
       transparency: "opaque",
@@ -1055,6 +1064,11 @@ serve(async (req) => {
             event_date: deal.event_date || null,
             event_time: deal.event_time || null,
             location: deal.location || null,
+            arrival_time: deal.arrival_time || null,
+            on_site_contact_name: deal.on_site_contact_name || null,
+            on_site_contact_phone: deal.on_site_contact_phone || null,
+            parking_access: deal.parking_access || null,
+            venue_address: deal.venue_address || null,
             guest_count: deal.guest_count || null,
             deal_value: deal.deal_value || null,
             stage: deal.stage || "new",
@@ -1102,7 +1116,7 @@ serve(async (req) => {
           });
           const dealId = String(payload.deal_id);
           const fields = (payload.fields || {}) as Record<string, unknown>;
-          const ALLOWED = ["contact_name", "company", "phone", "event_type", "event_date", "event_time", "location", "guest_count", "deal_value", "stage", "notes", "next_follow_up", "lost_reason"];
+          const ALLOWED = ["contact_name", "company", "phone", "event_type", "event_date", "event_time", "location", "arrival_time", "on_site_contact_name", "on_site_contact_phone", "parking_access", "venue_address", "guest_count", "deal_value", "stage", "notes", "next_follow_up", "lost_reason"];
           const STAGES = ["new", "contacted", "proposal_sent", "on_hold", "booked", "completed", "lost"];
           const update: Record<string, unknown> = {};
           for (const key of ALLOWED) {
@@ -1165,6 +1179,11 @@ serve(async (req) => {
             event_date: deal.event_date || null,
             event_time: deal.event_time || null,
             location: deal.location || null,
+            arrival_time: deal.arrival_time || null,
+            on_site_contact_name: deal.on_site_contact_name || null,
+            on_site_contact_phone: deal.on_site_contact_phone || null,
+            parking_access: deal.parking_access || null,
+            venue_address: deal.venue_address || null,
             guest_count: deal.guest_count || null,
             deal_value: deal.deal_value || null,
             stage: deal.stage || "new",

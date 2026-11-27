@@ -38,6 +38,11 @@ export interface ContextDeal {
   event_type: string | null;
   event_date: string | null;
   location: string | null;
+  arrival_time?: string | null;
+  on_site_contact_name?: string | null;
+  on_site_contact_phone?: string | null;
+  parking_access?: string | null;
+  venue_address?: string | null;
   phone?: string | null;
   gmail_thread_id?: string | null;
 }
@@ -223,6 +228,11 @@ const EDIT_FIELDS: { key: string; label: string; type: string }[] = [
   { key: "event_date", label: "Event date", type: "date" },
   { key: "event_time", label: "Event time", type: "text" },
   { key: "location", label: "Location", type: "text" },
+  { key: "arrival_time", label: "Arrival time", type: "time" },
+  { key: "on_site_contact_name", label: "On-site contact", type: "text" },
+  { key: "on_site_contact_phone", label: "On-site contact phone", type: "tel" },
+  { key: "parking_access", label: "Parking / load-in", type: "text" },
+  { key: "venue_address", label: "Venue address", type: "text" },
   { key: "guest_count", label: "Guest count", type: "number" },
   { key: "deal_value", label: "Deal value (dollars)", type: "number" },
   { key: "stage", label: "Stage", type: "select" },
@@ -356,6 +366,7 @@ const ClientContextPanel = ({ deal: dealProp, target, open, onOpenChange, onDeal
       init[f.key] = v === null || v === undefined ? "" : String(v);
     }
     if (init.event_date) init.event_date = init.event_date.slice(0, 10);
+    if (init.arrival_time) init.arrival_time = init.arrival_time.slice(0, 5);
     if (init.next_follow_up) init.next_follow_up = init.next_follow_up.slice(0, 10);
     // deal_value is stored in cents; the field is edited in dollars.
     if (init.deal_value) init.deal_value = String(Number(init.deal_value) / 100);

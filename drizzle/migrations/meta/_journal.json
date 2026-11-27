@@ -113,6 +113,13 @@
       "when": 1795341052780,
       "tag": "0015_signed_agreements_event_start_time",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1795804170269,
+      "tag": "0016_deals_day_of_logistics",
+      "breakpoints": true
     }
   ]
 }

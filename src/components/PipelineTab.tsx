@@ -24,6 +24,11 @@ interface Deal {
   event_time: string | null;
   location: string | null;
   guest_count: string | null;
+  arrival_time?: string | null;
+  on_site_contact_name?: string | null;
+  on_site_contact_phone?: string | null;
+  parking_access?: string | null;
+  venue_address?: string | null;
   deal_value: number | null;
   stage: string;
   lost_reason: string | null;
@@ -134,6 +139,11 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
     event_time: "",
     location: "",
     guest_count: "",
+    arrival_time: "",
+    on_site_contact_name: "",
+    on_site_contact_phone: "",
+    parking_access: "",
+    venue_address: "",
     deal_value: "",
     stage: "new",
     notes: "",
@@ -249,7 +259,7 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
 
   const resetForm = () => {
     setFormPayment(null);
-    setForm({ contact_email: "", contact_name: "", company: "", phone: "", event_type: "corporate", event_date: "", event_time: "", location: "", guest_count: "", deal_value: "", stage: "new", notes: "", next_follow_up: "", source: "manual", lost_reason: "", skip_thank_you: false });
+    setForm({ contact_email: "", contact_name: "", company: "", phone: "", event_type: "corporate", event_date: "", event_time: "", location: "", guest_count: "", arrival_time: "", on_site_contact_name: "", on_site_contact_phone: "", parking_access: "", venue_address: "", deal_value: "", stage: "new", notes: "", next_follow_up: "", source: "manual", lost_reason: "", skip_thank_you: false });
   };
 
   const openEdit = (deal: Deal) => {
@@ -265,6 +275,11 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
       event_time: deal.event_time || "",
       location: deal.location || "",
       guest_count: deal.guest_count || "",
+      arrival_time: (deal.arrival_time || "").slice(0, 5),
+      on_site_contact_name: deal.on_site_contact_name || "",
+      on_site_contact_phone: deal.on_site_contact_phone || "",
+      parking_access: deal.parking_access || "",
+      venue_address: deal.venue_address || "",
       deal_value: deal.deal_value ? (deal.deal_value / 100).toString() : "",
       stage: deal.stage,
       notes: deal.notes || "",
@@ -747,6 +762,31 @@ const PipelineTab = ({ adminPassword }: PipelineTabProps) => {
               <div>
                 <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Guests</label>
                 <input value={form.guest_count} onChange={e => setForm(f => ({ ...f, guest_count: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+              </div>
+            </div>
+            <div>
+              <p className="font-sans text-[10px] tracking-[0.15em] uppercase text-accent mb-2">Day-of logistics</p>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Arrival time</label>
+                  <input type="time" value={form.arrival_time} onChange={e => setForm(f => ({ ...f, arrival_time: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+                </div>
+                <div>
+                  <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">On-site contact</label>
+                  <input type="text" value={form.on_site_contact_name} onChange={e => setForm(f => ({ ...f, on_site_contact_name: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+                </div>
+                <div>
+                  <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">On-site contact phone</label>
+                  <input type="tel" value={form.on_site_contact_phone} onChange={e => setForm(f => ({ ...f, on_site_contact_phone: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+                </div>
+                <div>
+                  <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Parking / load-in</label>
+                  <input type="text" value={form.parking_access} onChange={e => setForm(f => ({ ...f, parking_access: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+                </div>
+                <div className="col-span-2">
+                  <label className="font-sans text-[10px] tracking-[0.15em] uppercase text-muted-foreground">Venue address</label>
+                  <input type="text" value={form.venue_address} onChange={e => setForm(f => ({ ...f, venue_address: e.target.value }))} className="w-full bg-muted/20 border border-border text-foreground px-3 py-2 text-sm focus:outline-none focus:border-accent" />
+                </div>
               </div>
             </div>
             <div className="grid grid-cols-3 gap-3">

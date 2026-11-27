@@ -15,7 +15,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 import { invoiceDecisions, isShiftHoliday, pacificYmd as pacificYmdAt } from "../_shared/email-schedule.ts";
 import {
-  type Invoice, anticipationEmail, balanceReminderEmail, reminderEmail, sendEmail,
+  type Invoice, type DealLogistics, anticipationEmail, balanceReminderEmail, reminderEmail, sendEmail,
 } from "../_shared/invoice-email.ts";
 
 const corsHeaders = {
@@ -130,7 +130,17 @@ Deno.serve(async (req) => {
           results.unpaid_reminders++;
         } else if (d.kind === "anticipation") {
           if (!dryRun) {
-            const { subject, html } = anticipationEmail(inv, d.days);
+            let logistics: DealLogistics | null = null;
+            const dealId = (inv as unknown as { deal_id?: string | null }).deal_id;
+            if (d.days >= 7 && dealId) {
+              const { data: dl } = await supabase
+                .from("deals")
+                .select("arrival_time, on_site_contact_name, on_site_contact_phone, parking_access, venue_address, location")
+                .eq("id", dealId)
+                .maybeSingle();
+              if (dl) logistics = { ...dl, venueName: inv.venue || dl.location || null };
+            }
+            const { subject, html } = anticipationEmail(inv, d.days, logistics);
             const ok = await sendEmail(inv.client_email, subject, html);
             if (ok) {
               await supabase.from("event_invoices").update({
