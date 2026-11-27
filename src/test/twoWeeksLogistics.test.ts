@@ -1,14 +1,8 @@
-import { describe, it, expect, vi } from "vitest";
-vi.mock("../../supabase/functions/_shared/send-gate.ts", () => ({ gatedSend: vi.fn() }));
+import { describe, it, expect } from "vitest";
 import {
-  anticipationEmail, clockArrival, isCityOnlyVenue, twoWeeksLogisticsText,
-} from "../../supabase/functions/_shared/invoice-email";
+  clockArrival, isCityOnlyVenue, twoWeeksLogisticsText,
+} from "../../supabase/functions/_shared/day-of-logistics";
 
-const inv = {
-  id: "i", pay_token: "t", client_name: "Ana Lopez", client_email: "a@example.com",
-  event_type: "wedding", event_date: "2026-12-12", venue: "Los Angeles, CA",
-  tier_name: null, total_cents: 0, deposit_percent: 50, amount_paid_cents: 0, status: "paid",
-};
 
 describe("clock arrival", () => {
   it("formats real clock times", () => {
@@ -45,14 +39,8 @@ describe("two weeks to go body", () => {
     expect(twoWeeksLogisticsText({ venueName: "Henry's Ocean View Dining" })).toBe(
       "I'll head to Henry's Ocean View Dining. Could you send me what time I should arrive, who my contact on site will be that evening (name and phone), and any notes on parking or load-in?");
   });
-  it("city only venue shows date alone and asks for everything", () => {
-    const { subject, html } = anticipationEmail(inv, 13, { venueName: "Los Angeles, CA" });
-    expect(subject).toBe("Two weeks to go");
-    expect(html).toContain("Hi Ana,");
-    expect(html).toContain("the full venue address");
-    expect(html).not.toContain("Los Angeles, CA");
-    expect(html).toContain("Please let me know if there is anything I can do for you.");
-    expect((html.replace(/<!/g, "").match(/!/g) || []).length).toBe(1);
-    expect(html).not.toMatch(/—|–/);
+  it("nothing usable asks for everything", () => {
+    expect(twoWeeksLogisticsText({ venueName: "Los Angeles, CA", arrival_time: "30 minutes before show time" })).toBe(
+      "To make the evening seamless, could you send me a few details: what time I should arrive, who my contact on site will be (name and phone), the full venue address, and any notes on parking or load-in?");
   });
 });

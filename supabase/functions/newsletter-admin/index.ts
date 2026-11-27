@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { INACTIVE_INVOICE_STATUS_FILTER } from "../_shared/invoice-status.ts";
 import { formatStartTime12h, packageEventWindow, packageTiming, type PackageTiming } from "../_shared/package-timing.ts";
-import { clockArrival } from "../_shared/invoice-email.ts";
+import { clockArrival } from "../_shared/day-of-logistics.ts";
 import { safeErrorPayload } from "../_shared/safe-error.ts";
 import { lostReasonError } from "../_shared/lost-reason.ts";
 import { isAdminRequest } from "../_shared/require-admin.ts";
